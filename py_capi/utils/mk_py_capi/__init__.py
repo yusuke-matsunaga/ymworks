@@ -1,0 +1,32 @@
+#! /usr/bin/env python3
+
+""" mk_py_capi モジュールの初期化ファイル
+
+:file: __init__.py
+:author: Yusuke Matsunaga (松永 裕介)
+:copyright: Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.
+"""
+
+import os
+
+from .module_gen import ModuleGen, YmAddObjectLibraryTarget, AddExecutableTarget, AddLibraryTarget
+from .pyobj_gen import PyObjGen
+from .enum_gen import EnumGen, EnumInfo
+from .arg import OptArg, KwdArg
+from .arg import CharArg
+from .arg import IntArg, Int32Arg, Int64Arg
+from .arg import UintArg, Uint32Arg, Uint64Arg
+from .arg import LongArg, UlongArg, DoubleArg
+from .arg import BoolArg, StringArg
+from .arg import RawObjArg, TypedRawObjArg, TypedObjRefArg
+from .arg import ObjConvArgBase, ObjConvArg, TypedObjConvArg
+from .number_gen import Op, Iop
+from .number_gen import AddOp, SubOp, MulOp, DivOp, RemOp
+from .number_gen import AddIop, SubIop, MulIop, DivIop, RemIop
+from .number_gen import LsftOp, RsftOp
+from .number_gen import LsftIop, RsftIop
+from .number_gen import AndOp, XorOp, OrOp
+from .number_gen import AndIop, XorIop, OrIop
+
+# py_capi のルートディレクトリ
+root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))

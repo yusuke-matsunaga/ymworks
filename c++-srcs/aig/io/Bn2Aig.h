@@ -1,0 +1,66 @@
+#ifndef BN2AIG_H
+#define BN2AIG_H
+
+/// @file Bn2Aig.h
+/// @brief Bn2Aig のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "ym/BnModel.h"
+#include "ym/AigMgr.h"
+#include "AigEdge.h"
+
+
+BEGIN_NAMESPACE_YM_AIG
+
+//////////////////////////////////////////////////////////////////////
+/// @class Bn2Aig Bn2Aig.h "Bn2Aig.h"
+/// @brief BnModel を AigMgr に変換するクラス
+//////////////////////////////////////////////////////////////////////
+class Bn2Aig
+{
+public:
+
+  /// @brief コンストラクタ
+  Bn2Aig(
+    const BnModel& model,
+    AigMgr& mgr
+  );
+
+  /// @brief デストラクタ
+  ~Bn2Aig() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief BnNode に対応する AigLiteral を取り出す．
+  AigLiteral
+  node2aig(
+    const BnNode& node
+  ) const;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // BnNode のNode番号をキーにして対応する AigLiteral を保持する辞書
+  std::unordered_map<SizeType, AigLiteral> mAigMap;
+
+};
+
+END_NAMESPACE_YM_AIG
+
+#endif // BN2AIG_H

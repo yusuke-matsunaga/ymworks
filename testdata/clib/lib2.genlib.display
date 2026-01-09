@@ -1,0 +1,2136 @@
+Library(lib2.genlib)
+  technology: cmos
+  delay_model: generic_cmos
+  bus_naming_style: 
+  date: 
+  revision: 
+  comment: 
+  time_unit: 
+  voltage_unit: 
+  current_unit: 
+  pulling_resistance_unit: 
+  capacitive_load_unit: 0
+  leakage_power_unit: 
+
+inv1x: Cell#0(Group#3)
+  type = Combinational Logic
+  area = 928
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.0514
+    Rise Capacitance = 0.0514
+    Fall Capacitance = 0.0514
+  Pin#1[ O ]: Output# 0
+    Logic            = ~a
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.42
+    Rise Resistance  = 4.71
+    Fall Intrinsic   = 0.42
+    Fall Resistance  = 3.6
+
+inv2x: Cell#1(Group#3)
+  type = Combinational Logic
+  area = 928
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.1009
+    Rise Capacitance = 0.1009
+    Fall Capacitance = 0.1009
+  Pin#1[ O ]: Output# 0
+    Logic            = ~a
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.3
+    Rise Resistance  = 1.98
+    Fall Intrinsic   = 0.29
+    Fall Resistance  = 1.82
+
+inv4x: Cell#2(Group#3)
+  type = Combinational Logic
+  area = 1392
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.1897
+    Rise Capacitance = 0.1897
+    Fall Capacitance = 0.1897
+  Pin#1[ O ]: Output# 0
+    Logic            = ~a
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.23
+    Rise Resistance  = 1.08
+    Fall Intrinsic   = 0.27
+    Fall Resistance  = 0.85
+
+xor: Cell#3(Group#16)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.1442
+    Rise Capacitance = 0.1442
+    Fall Capacitance = 0.1442
+  Pin#1[ b ]: Input#1
+    Capacitance      = 0.1381
+    Rise Capacitance = 0.1381
+    Fall Capacitance = 0.1381
+  Pin#2[ O ]: Output# 0
+    Logic            = ( ( ~a & b ) | ( a & ~b ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = positive unate
+    Rise Intrinsic   = 1.77
+    Rise Resistance  = 5.23
+    Fall Intrinsic   = 0.96
+    Fall Resistance  = 4.64
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.77
+    Rise Resistance  = 5.23
+    Fall Intrinsic   = 0.96
+    Fall Resistance  = 4.64
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = positive unate
+    Rise Intrinsic   = 1.94
+    Rise Resistance  = 4.65
+    Fall Intrinsic   = 1.14
+    Fall Resistance  = 5.22
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.94
+    Rise Resistance  = 4.65
+    Fall Intrinsic   = 1.14
+    Fall Resistance  = 5.22
+
+xnor: Cell#4(Group#17)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.1502
+    Rise Capacitance = 0.1502
+    Fall Capacitance = 0.1502
+  Pin#1[ b ]: Input#1
+    Capacitance      = 0.1352
+    Rise Capacitance = 0.1352
+    Fall Capacitance = 0.1352
+  Pin#2[ O ]: Output# 0
+    Logic            = ( ( ~a & ~b ) | ( a & b ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = positive unate
+    Rise Intrinsic   = 1.11
+    Rise Resistance  = 4.86
+    Fall Intrinsic   = 1.07
+    Fall Resistance  = 3.39
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.11
+    Rise Resistance  = 4.86
+    Fall Intrinsic   = 1.07
+    Fall Resistance  = 3.39
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = positive unate
+    Rise Intrinsic   = 1.55
+    Rise Resistance  = 4.87
+    Fall Intrinsic   = 1.07
+    Fall Resistance  = 3.39
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.55
+    Rise Resistance  = 4.87
+    Fall Intrinsic   = 1.07
+    Fall Resistance  = 3.39
+
+nand2: Cell#5(Group#5)
+  type = Combinational Logic
+  area = 1392
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.0777
+    Rise Capacitance = 0.0777
+    Fall Capacitance = 0.0777
+  Pin#1[ b ]: Input#1
+    Capacitance      = 0.0716
+    Rise Capacitance = 0.0716
+    Fall Capacitance = 0.0716
+  Pin#2[ O ]: Output# 0
+    Logic            = ( ~a | ~b )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.64
+    Rise Resistance  = 4.09
+    Fall Intrinsic   = 0.4
+    Fall Resistance  = 2.57
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.46
+    Rise Resistance  = 4.1
+    Fall Intrinsic   = 0.37
+    Fall Resistance  = 2.57
+
+nand3: Cell#6(Group#9)
+  type = Combinational Logic
+  area = 1856
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.1
+    Rise Capacitance = 0.1
+    Fall Capacitance = 0.1
+  Pin#1[ b ]: Input#1
+    Capacitance      = 0.0828
+    Rise Capacitance = 0.0828
+    Fall Capacitance = 0.0828
+  Pin#2[ c ]: Input#2
+    Capacitance      = 0.0777
+    Rise Capacitance = 0.0777
+    Fall Capacitance = 0.0777
+  Pin#3[ O ]: Output# 0
+    Logic            = ( ~a | ~b | ~c )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.89
+    Rise Resistance  = 3.6
+    Fall Intrinsic   = 0.51
+    Fall Resistance  = 2.49
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.71
+    Rise Resistance  = 4.11
+    Fall Intrinsic   = 0.42
+    Fall Resistance  = 2.5
+  Timing:
+    Type             = combinational
+    Input Pin        = c
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.56
+    Rise Resistance  = 4.39
+    Fall Intrinsic   = 0.35
+    Fall Resistance  = 2.49
+
+nand4: Cell#7(Group#13)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.103
+    Rise Capacitance = 0.103
+    Fall Capacitance = 0.103
+  Pin#1[ b ]: Input#1
+    Capacitance      = 0.098
+    Rise Capacitance = 0.098
+    Fall Capacitance = 0.098
+  Pin#2[ c ]: Input#2
+    Capacitance      = 0.098
+    Rise Capacitance = 0.098
+    Fall Capacitance = 0.098
+  Pin#3[ d ]: Input#3
+    Capacitance      = 0.105
+    Rise Capacitance = 0.105
+    Fall Capacitance = 0.105
+  Pin#4[ O ]: Output# 0
+    Logic            = ( ~a | ~b | ~c | ~d )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.27
+    Rise Resistance  = 3.62
+    Fall Intrinsic   = 0.67
+    Fall Resistance  = 2.39
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.09
+    Rise Resistance  = 3.61
+    Fall Intrinsic   = 0.61
+    Fall Resistance  = 2.39
+  Timing:
+    Type             = combinational
+    Input Pin        = c
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.82
+    Rise Resistance  = 3.62
+    Fall Intrinsic   = 0.55
+    Fall Resistance  = 2.4
+  Timing:
+    Type             = combinational
+    Input Pin        = d
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.58
+    Rise Resistance  = 3.62
+    Fall Intrinsic   = 0.38
+    Fall Resistance  = 2.39
+
+nor2: Cell#8(Group#7)
+  type = Combinational Logic
+  area = 1392
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.0736
+    Rise Capacitance = 0.0736
+    Fall Capacitance = 0.0736
+  Pin#1[ b ]: Input#1
+    Capacitance      = 0.0968
+    Rise Capacitance = 0.0968
+    Fall Capacitance = 0.0968
+  Pin#2[ O ]: Output# 0
+    Logic            = ( ~a & ~b )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.33
+    Rise Resistance  = 3.64
+    Fall Intrinsic   = 0.45
+    Fall Resistance  = 3.64
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.5
+    Rise Resistance  = 3.64
+    Fall Intrinsic   = 0.7
+    Fall Resistance  = 3.66
+
+nor3: Cell#9(Group#11)
+  type = Combinational Logic
+  area = 1856
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.0856
+    Rise Capacitance = 0.0856
+    Fall Capacitance = 0.0856
+  Pin#1[ b ]: Input#1
+    Capacitance      = 0.0806
+    Rise Capacitance = 0.0806
+    Fall Capacitance = 0.0806
+  Pin#2[ c ]: Input#2
+    Capacitance      = 0.0826
+    Rise Capacitance = 0.0826
+    Fall Capacitance = 0.0826
+  Pin#3[ O ]: Output# 0
+    Logic            = ( ~a & ~b & ~c )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.84
+    Rise Resistance  = 5.04
+    Fall Intrinsic   = 1.3
+    Fall Resistance  = 3.45
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.78
+    Rise Resistance  = 5.03
+    Fall Intrinsic   = 1.14
+    Fall Resistance  = 3.43
+  Timing:
+    Type             = combinational
+    Input Pin        = c
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.52
+    Rise Resistance  = 5.03
+    Fall Intrinsic   = 0.84
+    Fall Resistance  = 3.44
+
+nor4: Cell#10(Group#15)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a ]: Input#0
+    Capacitance      = 0.0887
+    Rise Capacitance = 0.0887
+    Fall Capacitance = 0.0887
+  Pin#1[ b ]: Input#1
+    Capacitance      = 0.0867
+    Rise Capacitance = 0.0867
+    Fall Capacitance = 0.0867
+  Pin#2[ c ]: Input#2
+    Capacitance      = 0.0867
+    Rise Capacitance = 0.0867
+    Fall Capacitance = 0.0867
+  Pin#3[ d ]: Input#3
+    Capacitance      = 0.0887
+    Rise Capacitance = 0.0887
+    Fall Capacitance = 0.0887
+  Pin#4[ O ]: Output# 0
+    Logic            = ( ~a & ~b & ~c & ~d )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.41
+    Rise Resistance  = 5.91
+    Fall Intrinsic   = 1.16
+    Fall Resistance  = 3.2
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.85
+    Rise Resistance  = 5.91
+    Fall Intrinsic   = 1.53
+    Fall Resistance  = 3.18
+  Timing:
+    Type             = combinational
+    Input Pin        = c
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.11
+    Rise Resistance  = 5.92
+    Fall Intrinsic   = 1.75
+    Fall Resistance  = 3.19
+  Timing:
+    Type             = combinational
+    Input Pin        = d
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.27
+    Rise Resistance  = 5.91
+    Fall Intrinsic   = 1.94
+    Fall Resistance  = 3.2
+
+aoi21: Cell#11(Group#24)
+  type = Combinational Logic
+  area = 1856
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1029
+    Rise Capacitance = 0.1029
+    Fall Capacitance = 0.1029
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.0908
+    Rise Capacitance = 0.0908
+    Fall Capacitance = 0.0908
+  Pin#2[ b ]: Input#2
+    Capacitance      = 0.111
+    Rise Capacitance = 0.111
+    Fall Capacitance = 0.111
+  Pin#3[ O ]: Output# 0
+    Logic            = ( ( ~a1 | ~a2 ) & ~b )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.75
+    Rise Resistance  = 3.52
+    Fall Intrinsic   = 0.67
+    Fall Resistance  = 2.53
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.67
+    Rise Resistance  = 3.64
+    Fall Intrinsic   = 0.62
+    Fall Resistance  = 2.52
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.58
+    Rise Resistance  = 3.64
+    Fall Intrinsic   = 0.21
+    Fall Resistance  = 1.28
+
+aoi31: Cell#12(Group#25)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1009
+    Rise Capacitance = 0.1009
+    Fall Capacitance = 0.1009
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.1049
+    Rise Capacitance = 0.1049
+    Fall Capacitance = 0.1049
+  Pin#2[ a3 ]: Input#2
+    Capacitance      = 0.1059
+    Rise Capacitance = 0.1059
+    Fall Capacitance = 0.1059
+  Pin#3[ b ]: Input#3
+    Capacitance      = 0.0979
+    Rise Capacitance = 0.0979
+    Fall Capacitance = 0.0979
+  Pin#4[ O ]: Output# 0
+    Logic            = ( ( ~a1 | ~a2 | ~a3 ) & ~b )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.91
+    Rise Resistance  = 4.04
+    Fall Intrinsic   = 0.81
+    Fall Resistance  = 2.86
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.05
+    Rise Resistance  = 3.93
+    Fall Intrinsic   = 0.87
+    Fall Resistance  = 2.87
+  Timing:
+    Type             = combinational
+    Input Pin        = a3
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.15
+    Rise Resistance  = 3.94
+    Fall Intrinsic   = 0.94
+    Fall Resistance  = 2.86
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.89
+    Rise Resistance  = 4.06
+    Fall Intrinsic   = 0.25
+    Fall Resistance  = 1.28
+
+aoi22: Cell#13(Group#26)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1019
+    Rise Capacitance = 0.1019
+    Fall Capacitance = 0.1019
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.0908
+    Rise Capacitance = 0.0908
+    Fall Capacitance = 0.0908
+  Pin#2[ b1 ]: Input#2
+    Capacitance      = 0.0958
+    Rise Capacitance = 0.0958
+    Fall Capacitance = 0.0958
+  Pin#3[ b2 ]: Input#3
+    Capacitance      = 0.0988
+    Rise Capacitance = 0.0988
+    Fall Capacitance = 0.0988
+  Pin#4[ O ]: Output# 0
+    Logic            = ( ( ~a1 | ~a2 ) & ( ~b1 | ~b2 ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.92
+    Rise Resistance  = 3.46
+    Fall Intrinsic   = 0.94
+    Fall Resistance  = 2.79
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.84
+    Rise Resistance  = 3.64
+    Fall Intrinsic   = 0.85
+    Fall Resistance  = 2.79
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.61
+    Rise Resistance  = 3.64
+    Fall Intrinsic   = 0.49
+    Fall Resistance  = 2.93
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.7
+    Rise Resistance  = 3.64
+    Fall Intrinsic   = 0.54
+    Fall Resistance  = 2.93
+
+aoi32: Cell#14(Group#27)
+  type = Combinational Logic
+  area = 2784
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1029
+    Rise Capacitance = 0.1029
+    Fall Capacitance = 0.1029
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.1009
+    Rise Capacitance = 0.1009
+    Fall Capacitance = 0.1009
+  Pin#2[ a3 ]: Input#2
+    Capacitance      = 0.106
+    Rise Capacitance = 0.106
+    Fall Capacitance = 0.106
+  Pin#3[ b1 ]: Input#3
+    Capacitance      = 0.0979
+    Rise Capacitance = 0.0979
+    Fall Capacitance = 0.0979
+  Pin#4[ b2 ]: Input#4
+    Capacitance      = 0.1049
+    Rise Capacitance = 0.1049
+    Fall Capacitance = 0.1049
+  Pin#5[ O ]: Output# 0
+    Logic            = ( ( ~a1 | ~a2 | ~a3 ) & ( ~b1 | ~b2 ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.06
+    Rise Resistance  = 3.81
+    Fall Intrinsic   = 0.96
+    Fall Resistance  = 2.91
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.2
+    Rise Resistance  = 3.81
+    Fall Intrinsic   = 1.03
+    Fall Resistance  = 2.9
+  Timing:
+    Type             = combinational
+    Input Pin        = a3
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.29
+    Rise Resistance  = 3.69
+    Fall Intrinsic   = 1.06
+    Fall Resistance  = 2.91
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.91
+    Rise Resistance  = 3.81
+    Fall Intrinsic   = 0.43
+    Fall Resistance  = 2.12
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.78
+    Rise Resistance  = 3.59
+    Fall Intrinsic   = 0.43
+    Fall Resistance  = 2.12
+
+aoi33: Cell#15(Group#28)
+  type = Combinational Logic
+  area = 3248
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1029
+    Rise Capacitance = 0.1029
+    Fall Capacitance = 0.1029
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.1029
+    Rise Capacitance = 0.1029
+    Fall Capacitance = 0.1029
+  Pin#2[ a3 ]: Input#2
+    Capacitance      = 0.112
+    Rise Capacitance = 0.112
+    Fall Capacitance = 0.112
+  Pin#3[ b1 ]: Input#3
+    Capacitance      = 0.1029
+    Rise Capacitance = 0.1029
+    Fall Capacitance = 0.1029
+  Pin#4[ b2 ]: Input#4
+    Capacitance      = 0.0949
+    Rise Capacitance = 0.0949
+    Fall Capacitance = 0.0949
+  Pin#5[ b3 ]: Input#5
+    Capacitance      = 0.1039
+    Rise Capacitance = 0.1039
+    Fall Capacitance = 0.1039
+  Pin#6[ O ]: Output# 0
+    Logic            = ( ( ~a1 | ~a2 | ~a3 ) & ( ~b1 | ~b2 | ~b3 ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.33
+    Rise Resistance  = 3.91
+    Fall Intrinsic   = 1.3
+    Fall Resistance  = 2.91
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.46
+    Rise Resistance  = 3.84
+    Fall Intrinsic   = 1.41
+    Fall Resistance  = 2.91
+  Timing:
+    Type             = combinational
+    Input Pin        = a3
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.47
+    Rise Resistance  = 3.65
+    Fall Intrinsic   = 1.41
+    Fall Resistance  = 2.91
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.11
+    Rise Resistance  = 3.59
+    Fall Intrinsic   = 0.76
+    Fall Resistance  = 2.9
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.04
+    Rise Resistance  = 3.91
+    Fall Intrinsic   = 0.68
+    Fall Resistance  = 2.91
+  Timing:
+    Type             = combinational
+    Input Pin        = b3
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.84
+    Rise Resistance  = 3.58
+    Fall Intrinsic   = 0.64
+    Fall Resistance  = 2.9
+
+aoi211: Cell#16(Group#29)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1039
+    Rise Capacitance = 0.1039
+    Fall Capacitance = 0.1039
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.109
+    Rise Capacitance = 0.109
+    Fall Capacitance = 0.109
+  Pin#2[ b ]: Input#2
+    Capacitance      = 0.108
+    Rise Capacitance = 0.108
+    Fall Capacitance = 0.108
+  Pin#3[ c ]: Input#3
+    Capacitance      = 0.1008
+    Rise Capacitance = 0.1008
+    Fall Capacitance = 0.1008
+  Pin#4[ O ]: Output# 0
+    Logic            = ( ( ~a1 | ~a2 ) & ~b & ~c )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.12
+    Rise Resistance  = 4.81
+    Fall Intrinsic   = 1.03
+    Fall Resistance  = 2.38
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.29
+    Rise Resistance  = 4.81
+    Fall Intrinsic   = 1.03
+    Fall Resistance  = 2.38
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.04
+    Rise Resistance  = 4.83
+    Fall Intrinsic   = 0.52
+    Fall Resistance  = 1.4
+  Timing:
+    Type             = combinational
+    Input Pin        = c
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.68
+    Rise Resistance  = 4.83
+    Fall Intrinsic   = 0.51
+    Fall Resistance  = 1.79
+
+aoi221: Cell#17(Group#30)
+  type = Combinational Logic
+  area = 2784
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1089
+    Rise Capacitance = 0.1089
+    Fall Capacitance = 0.1089
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.0948
+    Rise Capacitance = 0.0948
+    Fall Capacitance = 0.0948
+  Pin#2[ b1 ]: Input#2
+    Capacitance      = 0.1029
+    Rise Capacitance = 0.1029
+    Fall Capacitance = 0.1029
+  Pin#3[ b2 ]: Input#3
+    Capacitance      = 0.1049
+    Rise Capacitance = 0.1049
+    Fall Capacitance = 0.1049
+  Pin#4[ c ]: Input#4
+    Capacitance      = 0.111
+    Rise Capacitance = 0.111
+    Fall Capacitance = 0.111
+  Pin#5[ O ]: Output# 0
+    Logic            = ( ( ~a1 | ~a2 ) & ( ~b1 | ~b2 ) & ~c )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.48
+    Rise Resistance  = 4.43
+    Fall Intrinsic   = 1.33
+    Fall Resistance  = 2.78
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.42
+    Rise Resistance  = 4.56
+    Fall Intrinsic   = 1.4
+    Fall Resistance  = 2.75
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.76
+    Rise Resistance  = 4.47
+    Fall Intrinsic   = 0.79
+    Fall Resistance  = 2.89
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.73
+    Rise Resistance  = 4.58
+    Fall Intrinsic   = 0.78
+    Fall Resistance  = 2.91
+  Timing:
+    Type             = combinational
+    Input Pin        = c
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.39
+    Rise Resistance  = 4.56
+    Fall Intrinsic   = 0.7
+    Fall Resistance  = 1.51
+
+aoi222: Cell#18(Group#31)
+  type = Combinational Logic
+  area = 3712
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1019
+    Rise Capacitance = 0.1019
+    Fall Capacitance = 0.1019
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.0958
+    Rise Capacitance = 0.0958
+    Fall Capacitance = 0.0958
+  Pin#2[ b1 ]: Input#2
+    Capacitance      = 0.1039
+    Rise Capacitance = 0.1039
+    Fall Capacitance = 0.1039
+  Pin#3[ b2 ]: Input#3
+    Capacitance      = 0.1039
+    Rise Capacitance = 0.1039
+    Fall Capacitance = 0.1039
+  Pin#4[ c1 ]: Input#4
+    Capacitance      = 0.0958
+    Rise Capacitance = 0.0958
+    Fall Capacitance = 0.0958
+  Pin#5[ c2 ]: Input#5
+    Capacitance      = 0.1039
+    Rise Capacitance = 0.1039
+    Fall Capacitance = 0.1039
+  Pin#6[ O ]: Output# 0
+    Logic            = ( ( ~a1 | ~a2 ) & ( ~b1 | ~b2 ) & ( ~c1 | ~c2 ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.77
+    Rise Resistance  = 4.58
+    Fall Intrinsic   = 1.56
+    Fall Resistance  = 2.95
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.73
+    Rise Resistance  = 4.69
+    Fall Intrinsic   = 1.6
+    Fall Resistance  = 2.93
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.34
+    Rise Resistance  = 4.68
+    Fall Intrinsic   = 1.21
+    Fall Resistance  = 2.92
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.5
+    Rise Resistance  = 4.69
+    Fall Intrinsic   = 1.22
+    Fall Resistance  = 2.92
+  Timing:
+    Type             = combinational
+    Input Pin        = c1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.92
+    Rise Resistance  = 4.67
+    Fall Intrinsic   = 0.81
+    Fall Resistance  = 2.92
+  Timing:
+    Type             = combinational
+    Input Pin        = c2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.77
+    Rise Resistance  = 4.47
+    Fall Intrinsic   = 0.76
+    Fall Resistance  = 2.92
+
+oai21: Cell#19(Group#32)
+  type = Combinational Logic
+  area = 1856
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1019
+    Rise Capacitance = 0.1019
+    Fall Capacitance = 0.1019
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.0979
+    Rise Capacitance = 0.0979
+    Fall Capacitance = 0.0979
+  Pin#2[ b ]: Input#2
+    Capacitance      = 0.0998
+    Rise Capacitance = 0.0998
+    Fall Capacitance = 0.0998
+  Pin#3[ O ]: Output# 0
+    Logic            = ( ( ~a1 & ~a2 ) | ~b )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.69
+    Rise Resistance  = 3.94
+    Fall Intrinsic   = 0.53
+    Fall Resistance  = 2.47
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.87
+    Rise Resistance  = 3.93
+    Fall Intrinsic   = 0.63
+    Fall Resistance  = 2.47
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.37
+    Rise Resistance  = 2.05
+    Fall Intrinsic   = 0.57
+    Fall Resistance  = 2.51
+
+oai31: Cell#20(Group#33)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1089
+    Rise Capacitance = 0.1089
+    Fall Capacitance = 0.1089
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.1049
+    Rise Capacitance = 0.1049
+    Fall Capacitance = 0.1049
+  Pin#2[ a3 ]: Input#2
+    Capacitance      = 0.109
+    Rise Capacitance = 0.109
+    Fall Capacitance = 0.109
+  Pin#3[ b ]: Input#3
+    Capacitance      = 0.1059
+    Rise Capacitance = 0.1059
+    Fall Capacitance = 0.1059
+  Pin#4[ O ]: Output# 0
+    Logic            = ( ( ~a1 & ~a2 & ~a3 ) | ~b )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.27
+    Rise Resistance  = 4.71
+    Fall Intrinsic   = 1.03
+    Fall Resistance  = 2.43
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.11
+    Rise Resistance  = 4.71
+    Fall Intrinsic   = 1.04
+    Fall Resistance  = 2.57
+  Timing:
+    Type             = combinational
+    Input Pin        = a3
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.85
+    Rise Resistance  = 4.71
+    Fall Intrinsic   = 0.69
+    Fall Resistance  = 2.38
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.38
+    Rise Resistance  = 1.86
+    Fall Intrinsic   = 0.81
+    Fall Resistance  = 2.73
+
+oai22: Cell#21(Group#34)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1009
+    Rise Capacitance = 0.1009
+    Fall Capacitance = 0.1009
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.1029
+    Rise Capacitance = 0.1029
+    Fall Capacitance = 0.1029
+  Pin#2[ b1 ]: Input#2
+    Capacitance      = 0.0958
+    Rise Capacitance = 0.0958
+    Fall Capacitance = 0.0958
+  Pin#3[ b2 ]: Input#3
+    Capacitance      = 0.1039
+    Rise Capacitance = 0.1039
+    Fall Capacitance = 0.1039
+  Pin#4[ O ]: Output# 0
+    Logic            = ( ( ~a1 & ~a2 ) | ( ~b1 & ~b2 ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.1
+    Rise Resistance  = 4.06
+    Fall Intrinsic   = 0.9
+    Fall Resistance  = 2.5
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.99
+    Rise Resistance  = 4.06
+    Fall Intrinsic   = 0.68
+    Fall Resistance  = 2.36
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.69
+    Rise Resistance  = 3.66
+    Fall Intrinsic   = 0.74
+    Fall Resistance  = 2.53
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.61
+    Rise Resistance  = 3.66
+    Fall Intrinsic   = 0.56
+    Fall Resistance  = 2.06
+
+oai32: Cell#22(Group#35)
+  type = Combinational Logic
+  area = 2784
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.113
+    Rise Capacitance = 0.113
+    Fall Capacitance = 0.113
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.1069
+    Rise Capacitance = 0.1069
+    Fall Capacitance = 0.1069
+  Pin#2[ a3 ]: Input#2
+    Capacitance      = 0.114
+    Rise Capacitance = 0.114
+    Fall Capacitance = 0.114
+  Pin#3[ b1 ]: Input#3
+    Capacitance      = 0.1059
+    Rise Capacitance = 0.1059
+    Fall Capacitance = 0.1059
+  Pin#4[ b2 ]: Input#4
+    Capacitance      = 0.113
+    Rise Capacitance = 0.113
+    Fall Capacitance = 0.113
+  Pin#5[ O ]: Output# 0
+    Logic            = ( ( ~a1 & ~a2 & ~a3 ) | ( ~b1 & ~b2 ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.39
+    Rise Resistance  = 4.46
+    Fall Intrinsic   = 1.04
+    Fall Resistance  = 2.46
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.25
+    Rise Resistance  = 4.46
+    Fall Intrinsic   = 1.09
+    Fall Resistance  = 2.63
+  Timing:
+    Type             = combinational
+    Input Pin        = a3
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.99
+    Rise Resistance  = 4.46
+    Fall Intrinsic   = 0.74
+    Fall Resistance  = 2.42
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.58
+    Rise Resistance  = 3.2
+    Fall Intrinsic   = 0.79
+    Fall Resistance  = 2.71
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.68
+    Rise Resistance  = 3.21
+    Fall Intrinsic   = 0.83
+    Fall Resistance  = 2.34
+
+oai33: Cell#23(Group#36)
+  type = Combinational Logic
+  area = 3248
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.117
+    Rise Capacitance = 0.117
+    Fall Capacitance = 0.117
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.1089
+    Rise Capacitance = 0.1089
+    Fall Capacitance = 0.1089
+  Pin#2[ a3 ]: Input#2
+    Capacitance      = 0.1079
+    Rise Capacitance = 0.1079
+    Fall Capacitance = 0.1079
+  Pin#3[ b1 ]: Input#3
+    Capacitance      = 0.117
+    Rise Capacitance = 0.117
+    Fall Capacitance = 0.117
+  Pin#4[ b2 ]: Input#4
+    Capacitance      = 0.1089
+    Rise Capacitance = 0.1089
+    Fall Capacitance = 0.1089
+  Pin#5[ b3 ]: Input#5
+    Capacitance      = 0.1109
+    Rise Capacitance = 0.1109
+    Fall Capacitance = 0.1109
+  Pin#6[ O ]: Output# 0
+    Logic            = ( ( ~a1 & ~a2 & ~a3 ) | ( ~b1 & ~b2 & ~b3 ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.58
+    Rise Resistance  = 4.3
+    Fall Intrinsic   = 1.48
+    Fall Resistance  = 2.47
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.5
+    Rise Resistance  = 4.31
+    Fall Intrinsic   = 1.42
+    Fall Resistance  = 2.63
+  Timing:
+    Type             = combinational
+    Input Pin        = a3
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.24
+    Rise Resistance  = 4.31
+    Fall Intrinsic   = 1.17
+    Fall Resistance  = 2.65
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.8
+    Rise Resistance  = 4.3
+    Fall Intrinsic   = 0.82
+    Fall Resistance  = 2.27
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0
+    Rise Resistance  = 4.3
+    Fall Intrinsic   = 1.17
+    Fall Resistance  = 2.64
+  Timing:
+    Type             = combinational
+    Input Pin        = b3
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.13
+    Rise Resistance  = 4.31
+    Fall Intrinsic   = 1.35
+    Fall Resistance  = 2.65
+
+oai211: Cell#24(Group#37)
+  type = Combinational Logic
+  area = 2320
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.107
+    Rise Capacitance = 0.107
+    Fall Capacitance = 0.107
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.1131
+    Rise Capacitance = 0.1131
+    Fall Capacitance = 0.1131
+  Pin#2[ b ]: Input#2
+    Capacitance      = 0.105
+    Rise Capacitance = 0.105
+    Fall Capacitance = 0.105
+  Pin#3[ c ]: Input#3
+    Capacitance      = 0.105
+    Rise Capacitance = 0.105
+    Fall Capacitance = 0.105
+  Pin#4[ O ]: Output# 0
+    Logic            = ( ( ~a1 & ~a2 ) | ~b | ~c )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.12
+    Rise Resistance  = 4.17
+    Fall Intrinsic   = 0.59
+    Fall Resistance  = 2.31
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.3
+    Rise Resistance  = 4.16
+    Fall Intrinsic   = 0.79
+    Fall Resistance  = 2.36
+  Timing:
+    Type             = combinational
+    Input Pin        = b
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.51
+    Rise Resistance  = 2.13
+    Fall Intrinsic   = 0.69
+    Fall Resistance  = 2.4
+  Timing:
+    Type             = combinational
+    Input Pin        = c
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.5
+    Rise Resistance  = 2.46
+    Fall Intrinsic   = 0.52
+    Fall Resistance  = 2.41
+
+oai221: Cell#25(Group#38)
+  type = Combinational Logic
+  area = 2784
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1039
+    Rise Capacitance = 0.1039
+    Fall Capacitance = 0.1039
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.105
+    Rise Capacitance = 0.105
+    Fall Capacitance = 0.105
+  Pin#2[ b1 ]: Input#2
+    Capacitance      = 0.108
+    Rise Capacitance = 0.108
+    Fall Capacitance = 0.108
+  Pin#3[ b2 ]: Input#3
+    Capacitance      = 0.106
+    Rise Capacitance = 0.106
+    Fall Capacitance = 0.106
+  Pin#4[ c ]: Input#4
+    Capacitance      = 0.1019
+    Rise Capacitance = 0.1019
+    Fall Capacitance = 0.1019
+  Pin#5[ O ]: Output# 0
+    Logic            = ( ( ~a1 & ~a2 ) | ( ~b1 & ~b2 ) | ~c )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.58
+    Rise Resistance  = 4.17
+    Fall Intrinsic   = 1.11
+    Fall Resistance  = 2.47
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.48
+    Rise Resistance  = 4.17
+    Fall Intrinsic   = 0.86
+    Fall Resistance  = 2.36
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.94
+    Rise Resistance  = 4.03
+    Fall Intrinsic   = 0.81
+    Fall Resistance  = 2.5
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.76
+    Rise Resistance  = 4.03
+    Fall Intrinsic   = 0.64
+    Fall Resistance  = 2.5
+  Timing:
+    Type             = combinational
+    Input Pin        = c
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.78
+    Rise Resistance  = 2.28
+    Fall Intrinsic   = 0.9
+    Fall Resistance  = 2.54
+
+oai222: Cell#26(Group#39)
+  type = Combinational Logic
+  area = 3248
+  Pin#0[ a1 ]: Input#0
+    Capacitance      = 0.1161
+    Rise Capacitance = 0.1161
+    Fall Capacitance = 0.1161
+  Pin#1[ a2 ]: Input#1
+    Capacitance      = 0.111
+    Rise Capacitance = 0.111
+    Fall Capacitance = 0.111
+  Pin#2[ b1 ]: Input#2
+    Capacitance      = 0.1009
+    Rise Capacitance = 0.1009
+    Fall Capacitance = 0.1009
+  Pin#3[ b2 ]: Input#3
+    Capacitance      = 0.1191
+    Rise Capacitance = 0.1191
+    Fall Capacitance = 0.1191
+  Pin#4[ c1 ]: Input#4
+    Capacitance      = 0.106
+    Rise Capacitance = 0.106
+    Fall Capacitance = 0.106
+  Pin#5[ c2 ]: Input#5
+    Capacitance      = 0.114
+    Rise Capacitance = 0.114
+    Fall Capacitance = 0.114
+  Pin#6[ O ]: Output# 0
+    Logic            = ( ( ~a1 & ~a2 ) | ( ~b1 & ~b2 ) | ( ~c1 & ~c2 ) )
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+  Timing:
+    Type             = combinational
+    Input Pin        = a1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.77
+    Rise Resistance  = 3.75
+    Fall Intrinsic   = 1.21
+    Fall Resistance  = 2.47
+  Timing:
+    Type             = combinational
+    Input Pin        = a2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.62
+    Rise Resistance  = 3.75
+    Fall Intrinsic   = 1.13
+    Fall Resistance  = 2.48
+  Timing:
+    Type             = combinational
+    Input Pin        = b1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.17
+    Rise Resistance  = 3.58
+    Fall Intrinsic   = 1.07
+    Fall Resistance  = 2.48
+  Timing:
+    Type             = combinational
+    Input Pin        = b2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 1.35
+    Rise Resistance  = 3.58
+    Fall Intrinsic   = 1.1
+    Fall Resistance  = 2.35
+  Timing:
+    Type             = combinational
+    Input Pin        = c1
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.99
+    Rise Resistance  = 3.59
+    Fall Intrinsic   = 0.93
+    Fall Resistance  = 2.49
+  Timing:
+    Type             = combinational
+    Input Pin        = c2
+    Output Pin       = O
+    Sense            = negative unate
+    Rise Intrinsic   = 0.82
+    Rise Resistance  = 3.58
+    Fall Intrinsic   = 0.79
+    Fall Resistance  = 2.48
+
+zero: Cell#27(Group#0)
+  type = Combinational Logic
+  area = 0
+  Pin#0[ O ]: Output# 0
+    Logic            = 0
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+
+one: Cell#28(Group#1)
+  type = Combinational Logic
+  area = 0
+  Pin#0[ O ]: Output# 0
+    Logic            = 1
+    Max Fanout       = 1.79769e+308
+    Min Fanout       = 0
+    Max Capacitance  = 1.79769e+308
+    Min Capacitance  = 0
+    Max Transition   = 1.79769e+308
+    Min Transition   = 0
+
+Group#0(Class#0)
+  Name = Const0
+  Cell = zero
+
+Group#1(Class#0)
+  Name = Const1
+  Cell = one
+
+Group#3(Class#1)
+  Name = Inverter
+  Cell = inv1x inv2x inv4x
+
+Group#5(Class#2)
+  Name = Nand2
+  Cell = nand2
+
+Group#7(Class#2)
+  Name = Nor2
+  Cell = nor2
+
+Group#9(Class#3)
+  Name = Nand3
+  Cell = nand3
+
+Group#11(Class#3)
+  Name = Nor3
+  Cell = nor3
+
+Group#13(Class#4)
+  Name = Nand4
+  Cell = nand4
+
+Group#15(Class#4)
+  Name = Nor4
+  Cell = nor4
+
+Group#16(Class#5)
+  Name = Xor2
+  Cell = xor
+
+Group#17(Class#5)
+  Name = Xnor2
+  Cell = xnor
+
+Group#24(Class#10)
+  Cell = aoi21
+
+Group#25(Class#11)
+  Cell = aoi31
+
+Group#26(Class#12)
+  Cell = aoi22
+
+Group#27(Class#13)
+  Cell = aoi32
+
+Group#28(Class#14)
+  Cell = aoi33
+
+Group#29(Class#15)
+  Cell = aoi211
+
+Group#30(Class#16)
+  Cell = aoi221
+
+Group#31(Class#17)
+  Cell = aoi222
+
+Group#32(Class#10)
+  Cell = oai21
+
+Group#33(Class#11)
+  Cell = oai31
+
+Group#34(Class#12)
+  Cell = oai22
+
+Group#35(Class#13)
+  Cell = oai32
+
+Group#36(Class#14)
+  Cell = oai33
+
+Group#37(Class#15)
+  Cell = oai211
+
+Group#38(Class#16)
+  Cell = oai221
+
+Group#39(Class#17)
+  Cell = oai222
+
+Class#0
+  Name = Const
+  Idmap List:
+         Input[], Output[ 0]
+
+  Group#0: Map = Input[], Output[ 0]
+  Group#1: Map = Input[], Output[ 0~]
+
+Class#1
+  Name = Buffer
+  Idmap List:
+         Input[ 0], Output[ 0]
+
+  Group#3: Map = Input[ 0~], Output[ 0]
+
+Class#2
+  Name = And2
+  Idmap List:
+         Input[ 0 1], Output[ 0]
+
+  Group#5: Map = Input[ 0 1], Output[ 0~]
+  Group#7: Map = Input[ 0~ 1~], Output[ 0]
+
+Class#3
+  Name = And3
+  Idmap List:
+         Input[ 0 1 2], Output[ 0]
+
+  Group#9: Map = Input[ 0 1 2], Output[ 0~]
+  Group#11: Map = Input[ 0~ 1~ 2~], Output[ 0]
+
+Class#4
+  Name = And4
+  Idmap List:
+         Input[ 0 1 2 3], Output[ 0]
+
+  Group#13: Map = Input[ 0 1 2 3], Output[ 0~]
+  Group#15: Map = Input[ 0~ 1~ 2~ 3~], Output[ 0]
+
+Class#5
+  Name = Xor2
+  Idmap List:
+         Input[ 0 1], Output[ 0]
+
+  Group#16: Map = Input[ 0 1], Output[ 0]
+  Group#17: Map = Input[ 0 1], Output[ 0~]
+
+Class#10
+  Idmap List:
+         Input[ 0 1 2], Output[ 0]
+
+  Group#24: Map = Input[ 0~ 1~ 2~], Output[ 0]
+  Group#32: Map = Input[ 0 1 2], Output[ 0~]
+
+Class#11
+  Idmap List:
+         Input[ 0 1 2 3], Output[ 0]
+
+  Group#25: Map = Input[ 0~ 1~ 2~ 3~], Output[ 0]
+  Group#33: Map = Input[ 0 1 2 3], Output[ 0~]
+
+Class#12
+  Idmap List:
+         Input[ 0 1 2 3], Output[ 0]
+         Input[ 2 3 0 1], Output[ 0]
+
+  Group#26: Map = Input[ 0 1 2 3], Output[ 0~]
+  Group#34: Map = Input[ 0~ 1~ 2~ 3~], Output[ 0]
+
+Class#13
+  Idmap List:
+         Input[ 0 1 2 3 4], Output[ 0]
+
+  Group#27: Map = Input[ 0 1 2 3 4], Output[ 0~]
+  Group#35: Map = Input[ 0~ 1~ 2~ 3~ 4~], Output[ 0]
+
+Class#14
+  Idmap List:
+         Input[ 0 1 2 3 4 5], Output[ 0]
+         Input[ 3 4 5 0 1 2], Output[ 0]
+
+  Group#28: Map = Input[ 0 1 2 3 4 5], Output[ 0~]
+  Group#36: Map = Input[ 0~ 1~ 2~ 3~ 4~ 5~], Output[ 0]
+
+Class#15
+  Idmap List:
+         Input[ 0 1 2 3], Output[ 0]
+
+  Group#29: Map = Input[ 0~ 1~ 2~ 3~], Output[ 0]
+  Group#37: Map = Input[ 0 1 2 3], Output[ 0~]
+
+Class#16
+  Idmap List:
+         Input[ 0 1 2 3 4], Output[ 0]
+         Input[ 2 3 0 1 4], Output[ 0]
+
+  Group#30: Map = Input[ 0~ 1~ 2~ 3~ 4~], Output[ 0]
+  Group#38: Map = Input[ 0 1 2 3 4], Output[ 0~]
+
+Class#17
+  Idmap List:
+         Input[ 0 1 2 3 4 5], Output[ 0]
+         Input[ 0 1 4 5 2 3], Output[ 0]
+         Input[ 2 3 0 1 4 5], Output[ 0]
+         Input[ 4 5 0 1 2 3], Output[ 0]
+         Input[ 2 3 4 5 0 1], Output[ 0]
+         Input[ 4 5 2 3 0 1], Output[ 0]
+
+  Group#31: Map = Input[ 0~ 1~ 2~ 3~ 4~ 5~], Output[ 0]
+  Group#39: Map = Input[ 0 1 2 3 4 5], Output[ 0~]
+
+==== PatMgr dump start ====
+Node#0: INPUT#0
+Node#1: INPUT#1
+Node#2: AND
+Node#3: INPUT#2
+Node#4: AND
+Node#5: AND
+Node#6: AND
+Node#7: INPUT#3
+Node#8: AND
+Node#9: AND
+Node#10: AND
+Node#11: AND
+Node#12: AND
+Node#13: AND
+Node#14: AND
+Node#15: AND
+Node#16: XOR
+Node#17: AND
+Node#18: AND
+Node#19: AND
+Node#20: AND
+Node#21: AND
+Node#22: AND
+Node#23: AND
+Node#24: AND
+Node#25: AND
+Node#26: AND
+Node#27: AND
+Node#28: INPUT#4
+Node#29: AND
+Node#30: AND
+Node#31: AND
+Node#32: AND
+Node#33: AND
+Node#34: INPUT#5
+Node#35: AND
+Node#36: AND
+Node#37: AND
+Node#38: AND
+Node#39: AND
+Node#40: AND
+Node#41: AND
+Node#42: AND
+Node#43: AND
+Node#44: AND
+Node#45: AND
+Node#46: AND
+Node#47: AND
+Node#48: AND
+Node#49: AND
+Node#50: AND
+Node#51: AND
+Node#52: AND
+Node#53: AND
+Node#54: AND
+Node#55: AND
+Node#56: AND
+Node#57: AND
+Node#58: AND
+Node#59: AND
+Node#60: AND
+Node#61: AND
+Node#62: AND
+Node#63: AND
+Node#64: AND
+Node#65: AND
+Node#66: AND
+Node#67: AND
+
+Edge#0: 0 -> 0(0)
+Edge#1: 0 -> 0(1)
+Edge#2: 0 -> 1(0)
+Edge#3: 0 -> 1(1)
+Edge#4: 0 -> 2(0)
+Edge#5: 1 -> 2(1)
+Edge#6: 0 -> 3(0)
+Edge#7: 0 -> 3(1)
+Edge#8: 1 -> 4(0)
+Edge#9: 3 -> 4(1)
+Edge#10: 0 -> 5(0)
+Edge#11: 4 -> 5(1)
+Edge#12: 2 -> 6(0)
+Edge#13: 3 -> 6(1)
+Edge#14: 0 -> 7(0)
+Edge#15: 0 -> 7(1)
+Edge#16: 3 -> 8(0)
+Edge#17: 7 -> 8(1)
+Edge#18: 1 -> 9(0)
+Edge#19: 8 -> 9(1)
+Edge#20: 0 -> 10(0)
+Edge#21: 9 -> 10(1)
+Edge#22: 4 -> 11(0)
+Edge#23: 7 -> 11(1)
+Edge#24: 0 -> 12(0)
+Edge#25: 11 -> 12(1)
+Edge#26: 2 -> 13(0)
+Edge#27: 8 -> 13(1)
+Edge#28: 5 -> 14(0)
+Edge#29: 7 -> 14(1)
+Edge#30: 6 -> 15(0)
+Edge#31: 7 -> 15(1)
+Edge#32: 0 -> 16(0)
+Edge#33: 1 -> 16(1)
+Edge#34: 0 -> 17(0) ***
+Edge#35: 1 -> 17(1) ***
+Edge#36: 17 -> 18(0) ***
+Edge#37: 3 -> 18(1)
+Edge#38: 3 -> 19(0)
+Edge#39: 17 -> 19(1) ***
+Edge#40: 1 -> 20(0) ***
+Edge#41: 3 -> 20(1) ***
+Edge#42: 0 -> 21(0) ***
+Edge#43: 20 -> 21(1)
+Edge#44: 17 -> 22(0)
+Edge#45: 3 -> 22(1) ***
+Edge#46: 21 -> 23(0) ***
+Edge#47: 7 -> 23(1)
+Edge#48: 7 -> 24(0)
+Edge#49: 21 -> 24(1) ***
+Edge#50: 22 -> 25(0) ***
+Edge#51: 7 -> 25(1)
+Edge#52: 7 -> 26(0)
+Edge#53: 22 -> 26(1) ***
+Edge#54: 2 -> 27(0) ***
+Edge#55: 8 -> 27(1) ***
+Edge#56: 0 -> 28(0)
+Edge#57: 0 -> 28(1)
+Edge#58: 7 -> 29(0)
+Edge#59: 28 -> 29(1)
+Edge#60: 5 -> 30(0) ***
+Edge#61: 29 -> 30(1) ***
+Edge#62: 29 -> 31(0) ***
+Edge#63: 5 -> 31(1) ***
+Edge#64: 6 -> 32(0) ***
+Edge#65: 29 -> 32(1) ***
+Edge#66: 29 -> 33(0) ***
+Edge#67: 6 -> 33(1) ***
+Edge#68: 0 -> 34(0)
+Edge#69: 0 -> 34(1)
+Edge#70: 28 -> 35(0)
+Edge#71: 34 -> 35(1)
+Edge#72: 7 -> 36(0)
+Edge#73: 35 -> 36(1)
+Edge#74: 29 -> 37(0)
+Edge#75: 34 -> 37(1)
+Edge#76: 5 -> 38(0) ***
+Edge#77: 36 -> 38(1) ***
+Edge#78: 5 -> 39(0) ***
+Edge#79: 37 -> 39(1) ***
+Edge#80: 37 -> 40(0) ***
+Edge#81: 5 -> 40(1) ***
+Edge#82: 6 -> 41(0) ***
+Edge#83: 36 -> 41(1) ***
+Edge#84: 36 -> 42(0) ***
+Edge#85: 6 -> 42(1) ***
+Edge#86: 6 -> 43(0) ***
+Edge#87: 37 -> 43(1) ***
+Edge#88: 17 -> 44(0) ***
+Edge#89: 8 -> 44(1)
+Edge#90: 18 -> 45(0)
+Edge#91: 7 -> 45(1)
+Edge#92: 17 -> 46(0) ***
+Edge#93: 7 -> 46(1)
+Edge#94: 3 -> 47(0)
+Edge#95: 46 -> 47(1)
+Edge#96: 19 -> 48(0)
+Edge#97: 7 -> 48(1)
+Edge#98: 7 -> 49(0)
+Edge#99: 17 -> 49(1) ***
+Edge#100: 3 -> 50(0)
+Edge#101: 49 -> 50(1)
+Edge#102: 8 -> 51(0)
+Edge#103: 17 -> 51(1) ***
+Edge#104: 3 -> 52(0) ***
+Edge#105: 7 -> 52(1) ***
+Edge#106: 52 -> 53(0) ***
+Edge#107: 28 -> 53(1)
+Edge#108: 17 -> 54(0) ***
+Edge#109: 53 -> 54(1)
+Edge#110: 17 -> 55(0) ***
+Edge#111: 52 -> 55(1) ***
+Edge#112: 55 -> 56(0)
+Edge#113: 28 -> 56(1)
+Edge#114: 28 -> 57(0)
+Edge#115: 52 -> 57(1) ***
+Edge#116: 17 -> 58(0) ***
+Edge#117: 57 -> 58(1)
+Edge#118: 17 -> 59(0) ***
+Edge#119: 28 -> 59(1)
+Edge#120: 59 -> 60(0)
+Edge#121: 52 -> 60(1) ***
+Edge#122: 28 -> 61(0)
+Edge#123: 55 -> 61(1)
+Edge#124: 28 -> 62(0)
+Edge#125: 17 -> 62(1) ***
+Edge#126: 62 -> 63(0)
+Edge#127: 52 -> 63(1) ***
+Edge#128: 28 -> 64(0) ***
+Edge#129: 34 -> 64(1) ***
+Edge#130: 52 -> 65(0) ***
+Edge#131: 64 -> 65(1) ***
+Edge#132: 17 -> 66(0) ***
+Edge#133: 65 -> 66(1)
+Edge#134: 55 -> 67(0)
+Edge#135: 64 -> 67(1) ***
+
+Pat#0: Rep#2: (2),  4 5
+Pat#1: Rep#3: (3),  10 11 8 9
+Pat#2: Rep#3: (3),  12 4 5 13
+Pat#3: Rep#4: (4),  20 21 18 19 16 17
+Pat#4: Rep#4: (4),  24 25 22 8 9 23
+Pat#5: Rep#4: (4),  26 4 5 27 16 17
+Pat#6: Rep#4: (4),  28 10 11 8 9 29
+Pat#7: Rep#4: (4),  30 12 4 5 13 31
+Pat#8: Rep#5: (2),  32 33
+Pat#9: Rep#10: (3),  36 34 35 37
+Pat#10: Rep#10: (3),  38 39 34 35
+Pat#11: Rep#11: (4),  46 42 43 40 41 47
+Pat#12: Rep#11: (4),  48 49 42 43 40 41
+Pat#13: Rep#11: (4),  50 44 34 35 45 51
+Pat#14: Rep#11: (4),  52 53 44 34 35 45
+Pat#15: Rep#12: [inv](4),  54 4 5 55 16 17
+Pat#16: Rep#13: [inv](5),  60 10 11 8 9 61 58 59
+Pat#17: Rep#13: [inv](5),  62 58 59 63 10 11 8 9
+Pat#18: Rep#13: [inv](5),  64 12 4 5 13 65 58 59
+Pat#19: Rep#13: [inv](5),  66 58 59 67 12 4 5 13
+Pat#20: Rep#14: [inv](6),  76 10 11 8 9 77 72 73 70 71
+Pat#21: Rep#14: [inv](6),  78 10 11 8 9 79 74 58 59 75
+Pat#22: Rep#14: [inv](6),  80 74 58 59 75 81 10 11 8 9
+Pat#23: Rep#14: [inv](6),  82 12 4 5 13 83 72 73 70 71
+Pat#24: Rep#14: [inv](6),  84 72 73 70 71 85 12 4 5 13
+Pat#25: Rep#14: [inv](6),  86 12 4 5 13 87 74 58 59 75
+Pat#26: Rep#15: (4),  88 34 35 89 16 17
+Pat#27: Rep#15: (4),  90 36 34 35 37 91
+Pat#28: Rep#15: (4),  94 95 92 34 35 93
+Pat#29: Rep#15: (4),  96 38 39 34 35 97
+Pat#30: Rep#15: (4),  100 101 98 99 34 35
+Pat#31: Rep#15: (4),  102 16 17 103 34 35
+Pat#32: Rep#16: (5),  108 34 35 109 106 104 105 107
+Pat#33: Rep#16: (5),  112 110 34 35 111 104 105 113
+Pat#34: Rep#16: (5),  116 34 35 117 114 115 104 105
+Pat#35: Rep#16: (5),  120 118 34 35 119 121 104 105
+Pat#36: Rep#16: (5),  122 123 110 34 35 111 104 105
+Pat#37: Rep#16: (5),  126 124 125 34 35 127 104 105
+Pat#38: Rep#17: (6),  132 34 35 133 130 104 105 131 128 129
+Pat#39: Rep#17: (6),  134 110 34 35 111 104 105 135 128 129
+==== PatMgr dump end ====

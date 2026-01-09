@@ -1,0 +1,60 @@
+#ifndef GATELEAKAGEHANDLER_H
+#define GATELEAKAGEHANDLER_H
+
+/// @file GateLeakageHandler.h
+/// @brief GateLeakageHandler のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2018 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "dotlib/Str1GroupHandler.h"
+
+
+BEGIN_NAMESPACE_YM_DOTLIB
+
+//////////////////////////////////////////////////////////////////////
+/// @class GateLeakageHandler GateLeakageHandler.h "GateLeakageHandler.h"
+/// @brief 'gate_leakage' Group Statement 用のハンドラ
+///
+/// 参考文献 : Library Compiler Reference Manual, Section 2
+///           "cell and model Group Description and Syntax"
+/// * ヘッダ名はピン名を表す．
+/// * Simple Attributes
+///   - input_low_values : float ;
+///   - input_high_value : float ;
+//////////////////////////////////////////////////////////////////////
+class GateLeakageHandler
+{
+public:
+
+  /// @brief コンストラクタ
+  GateLeakageHandler();
+
+  /// @brief デストラクタ
+  ~GateLeakageHandler();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+
+};
+
+END_NAMESPACE_YM_DOTLIB
+
+#endif // GATELEAKAGEHANDLER_H

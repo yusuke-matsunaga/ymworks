@@ -1,0 +1,154 @@
+﻿#ifndef PARSER_SIMPLEALLOC_H
+#define PARSER_SIMPLEALLOC_H
+
+/// @file SimpleAlloc.h
+/// @brief SimpleAlloc のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "alloc/Alloc.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class SimpleAlloc SimpleAlloc.h "parser/SimpleAlloc.h"
+/// @brief 単純なメモリ管理
+//////////////////////////////////////////////////////////////////////
+class SimpleAlloc :
+  public Alloc
+{
+public:
+
+  /// @brief コンストラクタ
+  ///
+  /// page_size 以上のメモリ領域はデフォルトのアロケーターを使用する．
+  explicit
+  SimpleAlloc(
+    SizeType page_size = 4096 ///< [in] このオブジェクトが管理するメモリ量の単位
+  );
+
+  /// @brief デストラクタ
+  ~SimpleAlloc();
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // AllocBase の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief n バイトの領域を確保する．
+  void*
+  _get_memory(
+    SizeType n ///< [in] 確保するメモリ量(単位はバイト)
+  ) override;
+
+  /// @brief n バイトの領域を開放する．
+  void
+  _put_memory(
+    SizeType n, ///< [in] 確保したメモリ量(単位はバイト)
+    void* blk   ///< [in] 開放するメモリ領域の先頭番地
+  ) override;
+
+  /// @brief 今までに確保した全ての領域を破棄する．
+  ///
+  /// 個々のオブジェクトのデストラクタなどは起動されない
+  /// ので使用には注意が必要
+  void
+  _destroy() override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる下請け関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief アラインメントを考慮してサイズを調節する．
+  static
+  SizeType
+  align(
+    SizeType req_size
+  );
+
+  /// @brief 利用可能なブロックを見つける．
+  void*
+  find_block(
+    SizeType alloc_size
+  );
+
+  /// @brief 通常ページの実際のメモリサイズ
+  SizeType
+  page_size() const;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられるデータ構造
+  //////////////////////////////////////////////////////////////////////
+
+  // mPageSize のメモリブロックを管理するための構造体
+  // 実際には mPageSize + sizeof(Page) のメモリを確保する．
+  struct Page
+  {
+    // size のメモリを確保する．
+    void*
+    alloc(
+      SizeType size
+    )
+    {
+      auto p{static_cast<void*>(&mDummy[mNextPos])};
+      mNextPos += size;
+      return p;
+    }
+
+    // 利用可能な先頭番地
+    SizeType mNextPos;
+
+    // 実際にはこの後に確保したメモリ領域がある．
+    char mDummy[1];
+  };
+
+  // mPageSize 以上のメモリブロックを管理するための構造体
+  // size のメモリブロックを確保する場合，実際には
+  // sizeof(BigBlock) + size - 1 のメモリを確保する．
+  struct BigBlock
+  {
+    // 実際に確保したメモリサイズを返す．
+    SizeType
+    alloc_size() const
+    {
+      return sizeof(BigBlock) + mSize - 1;
+    }
+
+    // サイズ
+    SizeType mSize;
+
+    // 実際にはこの後に確保したメモリ領域がある．
+    char mDummy[1];
+  };
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 一度に確保するメモリの単位
+  SizeType mPageSize;
+
+  // ページのリスト
+  std::vector<Page*> mPageList;
+
+  // 確保されたメモリブロックのリスト
+  std::vector<char*> mUsedList;
+
+  // BigBlock のリスト
+  std::vector<BigBlock*> mBigBlockList;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // PARSER_SIMPLEALLOC_H

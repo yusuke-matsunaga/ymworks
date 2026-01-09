@@ -1,0 +1,97 @@
+﻿
+/// @file SelCS.cc
+/// @brief SelCS の実装ファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2014, 2022 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "SelCS.h"
+#include "mincov/McMatrix.h"
+
+
+BEGIN_NAMESPACE_YM_MINCOV
+
+//////////////////////////////////////////////////////////////////////
+// クラス SelCS
+//////////////////////////////////////////////////////////////////////
+
+// @brief 次の列を選ぶ．
+SizeType
+SelCS::select(
+  const McMatrix& matrix
+)
+{
+  // 各行にカバーしている列数に応じた重みをつけ，
+  // その重みの和が最大となる列を選ぶ．
+  auto nr = matrix.row_size();
+  std::vector<double> row_weights(nr);
+  for ( auto row_pos: matrix.row_head_list() ) {
+    auto min_cost = DBL_MAX;
+    for ( auto col_pos: matrix.row_list(row_pos) ) {
+      auto col_cost = static_cast<double>(matrix.col_cost(col_pos)) / matrix.col_elem_num(col_pos);
+      if ( min_cost > col_cost ) {
+	min_cost = col_cost;
+      }
+    }
+    row_weights[row_pos] = min_cost;
+  }
+
+  auto min_delta = DBL_MAX;
+  SizeType min_col = 0;
+  for ( auto col_pos: matrix.col_head_list() ) {
+    auto col_cost = matrix.col_cost(col_pos);
+
+    std::vector<SizeType> col_delta(matrix.col_size(), 0);
+    std::vector<SizeType> col_list;
+    for ( auto row_pos: matrix.col_list(col_pos) ) {
+      for ( auto col_pos1: matrix.row_list(row_pos) ) {
+	if ( col_delta[col_pos1] == 0 ) {
+	  col_list.push_back(col_pos1);
+	}
+	++ col_delta[col_pos1];
+      }
+    }
+
+    std::vector<bool> row_mark(matrix.row_size(), false);
+    std::vector<SizeType> row_list;
+    for ( auto col_pos1: col_list ) {
+      auto cost1 = matrix.col_cost(col_pos1);
+      auto num = matrix.col_elem_num(col_pos1);
+      cost1 /= num;
+      for ( auto row_pos: matrix.col_list(col_pos) ) {
+	if ( row_weights[row_pos] < cost1 ) {
+	  continue;
+	}
+	if ( row_mark[row_pos] ) {
+	  continue;
+	}
+	row_mark[row_pos] = true;
+	row_list.push_back(row_pos);
+      }
+    }
+
+    auto delta_sum = 0.0;
+    for ( auto row_pos: row_list ) {
+      auto min_weight = DBL_MAX;
+      for ( auto col_pos1: matrix.row_list(row_pos) ) {
+	auto n = matrix.col_elem_num(col_pos1) - col_delta[col_pos1];
+	auto cost1 = matrix.col_cost(col_pos1) / n;
+	if ( min_weight > cost1 ) {
+	  min_weight = cost1;
+	}
+      }
+      auto delta = min_weight - row_weights[row_pos];
+      delta_sum += delta;
+    }
+
+    //cout << "Col#" << col->pos() << ": " << delta_sum << endl;
+    if ( min_delta > delta_sum ) {
+      min_delta = delta_sum;
+      min_col = col_pos;
+    }
+  }
+  return min_col;
+}
+
+END_NAMESPACE_YM_MINCOV

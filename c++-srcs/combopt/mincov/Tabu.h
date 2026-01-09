@@ -1,0 +1,70 @@
+﻿#ifndef TABU_H
+#define TABU_H
+
+/// @file Tabu.h
+/// @brief Tabu のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2005-2011, 2014, 2018 Yusuke Matsunaga
+/// All rights reserved.
+
+
+#include "ym/mincov_nsdef.h"
+
+
+BEGIN_NAMESPACE_YM_MINCOV
+
+//////////////////////////////////////////////////////////////////////
+/// @class Tabu Tabu.h "Tabu.h"
+/// @brief Minimum Covering 問題を tabu search で解くクラス
+///
+/// 実はクラスである必要はほとんどない．
+//////////////////////////////////////////////////////////////////////
+class Tabu
+{
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 最小被覆問題を解く．
+  /// @param[in] matrix 対象の行列
+  /// @param[in] selector 列を選ぶ関数オブジェクト
+  /// @param[out] solution 選ばれた列集合
+  static
+  void
+  solve(
+    const McMatrix& matrix,
+    Selector& selector,
+    std::vector<int>& solution
+  );
+
+  /// @brief デバッグフラグをセットする．
+  /// @param[in] flag セットする値
+  static
+  void
+  set_debug_flag(
+    bool flag
+  );
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // デバッグフラグ
+  static
+  bool mDebug;
+
+};
+
+END_NAMESPACE_YM_MINCOV
+
+#endif // TABU_H

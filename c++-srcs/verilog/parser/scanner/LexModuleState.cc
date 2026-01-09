@@ -1,0 +1,343 @@
+﻿
+/// @file LexModuleState.cc
+/// @brief LexModuleState の実装ファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "LexModuleState.h"
+
+#include "ym/MsgMgr.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+// @class LexModuleState
+// @ingroup VlParser
+// @brief 標準の compiler directive 用状態を表すクラス
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+LexModuleState::LexModuleState(
+  RawLex& lex
+) : LexState(lex)
+{
+  resetall(FileRegion());
+}
+
+// @brief デストラクタ
+LexModuleState::~LexModuleState()
+{
+}
+
+// @brief cell_define の状態を設定する．
+void
+LexModuleState::set_cell_define(
+  bool val,
+  const FileRegion& file_region
+)
+{
+  mCellDefine = val;
+
+  if ( debug() ) {
+    std::ostringstream buf;
+    buf << "celldefine is ";
+    if ( val ) {
+      buf << "ON";
+    }
+    else {
+      buf << "OFF";
+    }
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    file_region,
+		    MsgType::Debug,
+		    "LEX",
+		    buf.str());
+  }
+}
+
+// @brief cell_define の状態を取得する
+bool
+LexModuleState::cell_define() const
+{
+  return mCellDefine;
+}
+
+// @brief net_type を設定する．
+void
+LexModuleState::set_default_nettype(
+  VpiNetType val,
+  const FileRegion& file_region
+)
+{
+  mDefaultNetType = val;
+
+  if ( debug() ) {
+    std::ostringstream buf;
+    buf << "default_nettype is set to "
+	<< nettype2str(val) << ".";
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    file_region,
+		    MsgType::Debug,
+		    "LEX",
+		    buf.str());
+  }
+}
+
+// @brief net_type を取得する．
+VpiNetType
+LexModuleState::default_nettype() const
+{
+  return mDefaultNetType;
+}
+
+// @brief time_unit の設定
+void
+LexModuleState::set_time_unit(
+  int unit,
+  const FileRegion& file_region
+)
+{
+  mTimeUnit = unit;
+
+  if ( debug() ) {
+    std::ostringstream buf;
+    buf << "time_unit is set to " << unit2str(unit) << ".";
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    file_region,
+		    MsgType::Debug,
+		    "LEX",
+		    buf.str());
+  }
+}
+
+// @brief time_precision の設定
+void
+LexModuleState::set_time_precision(
+  int precision,
+  const FileRegion& file_region
+)
+{
+  mTimePrecision = precision;
+
+  if ( debug() ) {
+    std::ostringstream buf;
+    buf << "time_precision is set to " << unit2str(precision) << ".";
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    file_region,
+		    MsgType::Debug,
+		    "LEX",
+		    buf.str());
+  }
+}
+
+// @brief time_unit の取得
+int
+LexModuleState::time_unit() const
+{
+  return mTimeUnit;
+}
+
+// @brief time_precision の取得
+int
+LexModuleState::time_precision() const
+{
+  return mTimePrecision;
+}
+
+// @brief unconnected_drive の値を設定する．
+void
+LexModuleState::set_unconnected_drive(
+  VpiUnconnDrive val,
+  const FileRegion& file_region
+)
+{
+  mUnconnDrive = val;
+
+  if ( debug() ) {
+    std::ostringstream buf;
+    buf << "unconnected_drive is set to ";
+    switch ( val ) {
+    case VpiUnconnDrive::HighZ: buf << "none"; break;
+    case VpiUnconnDrive::Pull0: buf << "pull0"; break;
+    case VpiUnconnDrive::Pull1: buf << "pull1"; break;
+    }
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    file_region,
+		    MsgType::Debug,
+		    "LEX",
+		    buf.str());
+  }
+}
+
+// @brief unconnected_drive の値を取得する．
+VpiUnconnDrive
+LexModuleState::unconnected_drive() const
+{
+  return mUnconnDrive;
+}
+
+// @brief decay_time の値を設定する．
+void
+LexModuleState::set_default_decay_time(
+  int val,
+  const FileRegion& file_region
+)
+{
+  mDecayTime = val;
+
+  if ( debug() ) {
+    std::ostringstream buf;
+    buf << "default_decay_time is set to ";
+    if ( val != -1 ) {
+      buf << val;
+    }
+    else {
+      buf << "\"infinite\"";
+    }
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    file_region,
+		    MsgType::Debug,
+		    "LEX",
+		    buf.str());
+  }
+}
+
+// @brief decay_time の値を取得する．
+int
+LexModuleState::default_decay_time() const
+{
+  return mDecayTime;
+}
+
+// @brief trireg_strength の値を設定する．
+void
+LexModuleState::set_default_trireg_strength(
+  int val,
+  const FileRegion& file_region
+)
+{
+  mTriregStrength = val;
+
+  if ( debug() ) {
+    std::ostringstream buf;
+    buf << "default_trireg_strength is set to " << val << ".";
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    file_region,
+		    MsgType::Debug,
+		    "LEX",
+		    buf.str());
+  }
+}
+
+// @brief trireg_strength の値を取得する．
+int
+LexModuleState::default_trireg_strength() const
+{
+  return mTriregStrength;
+}
+
+// @brief delay_mode の値を設定する．
+void
+LexModuleState::set_delay_mode(
+  VpiDefDelayMode val,
+  const FileRegion& file_region
+)
+{
+  mDelayMode = val;
+
+  if ( debug() ) {
+    std::ostringstream buf;
+    buf << "delay_mode is set to ";
+    switch ( val ) {
+    case VpiDefDelayMode::Distrib: buf << "\"distributed\""; break;
+    case VpiDefDelayMode::Path:    buf << "\"path\""; break;
+    case VpiDefDelayMode::Unit:    buf << "\"unit\""; break;
+    case VpiDefDelayMode::Zero:    buf << "\"zero\""; break;
+    case VpiDefDelayMode::MTM:     buf << "\"MTM\""; break;
+    case VpiDefDelayMode::None:    buf << "\"none\""; break;
+    }
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    file_region,
+		    MsgType::Debug,
+		    "LEX",
+		    buf.str());
+  }
+}
+
+// @brief delay_mode の値を取得する．
+VpiDefDelayMode
+LexModuleState::delay_mode() const
+{
+  return mDelayMode;
+}
+
+// @brief 状態を初期化する．
+void
+LexModuleState::resetall(
+  const FileRegion& file_region
+)
+{
+  set_cell_define(false, file_region);
+  set_default_nettype(VpiNetType::Wire, file_region);
+  set_time_unit(-16, file_region);
+  set_time_precision(-16, file_region);
+  set_unconnected_drive(VpiUnconnDrive::HighZ, file_region);
+  set_default_decay_time(-1, file_region);
+  set_default_trireg_strength(0, file_region);
+  set_delay_mode(VpiDefDelayMode::None, file_region);
+}
+
+const char*
+LexModuleState::nettype2str(
+  VpiNetType nettype
+)
+{
+  switch ( nettype ) {
+  case VpiNetType::Wire:    return "wire";
+  case VpiNetType::Tri:     return "tri";
+  case VpiNetType::Tri0:    return "tri0";
+  case VpiNetType::Tri1:    return "tri1";
+  case VpiNetType::Wand:    return "wand";
+  case VpiNetType::TriAnd:  return "triand";
+  case VpiNetType::Wor:     return "wor";
+  case VpiNetType::TriOr:   return "trior";
+  case VpiNetType::TriReg:  return "trireg";
+  case VpiNetType::Supply0: return "supply0";
+  case VpiNetType::Supply1: return "supply1";
+  case VpiNetType::None:    return "none";
+  }
+  return "-- internal error : undefined nettype --";
+}
+
+// @brief time unit を表す整数から文字列を得る．
+std::string
+LexModuleState::unit2str(
+  int unit
+)
+{
+  if ( unit > 2 || unit < -15 ) {
+    return "illegal time unit";
+  }
+
+  unit += 15;
+  std::string ans;
+  switch ( unit % 3 ) {
+  case 0: ans = "1"; break;
+  case 1: ans = "10"; break;
+  case 2: ans = "100"; break;
+  }
+  switch ( unit / 3 ) {
+  case 5: ans += "s"; break;
+  case 4: ans += "ms"; break;
+  case 3: ans += "us"; break;
+  case 2: ans += "ns"; break;
+  case 1: ans += "ps"; break;
+  case 0: ans += "fs"; break;
+  }
+  return ans;
+}
+
+END_NAMESPACE_YM_VERILOG

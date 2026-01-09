@@ -1,0 +1,88 @@
+﻿#ifndef EXACT_H
+#define EXACT_H
+
+/// @file Exact.h
+/// @brief Exact のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "Solver.h"
+
+
+BEGIN_NAMESPACE_YM_MINCOV
+
+//////////////////////////////////////////////////////////////////////
+/// @class Exact Exact.h "Exact.h"
+/// @brief 最小被覆問題の厳密解を求めるクラス
+//////////////////////////////////////////////////////////////////////
+class Exact :
+  public Solver
+{
+public:
+
+  /// @brief コンストラクタ
+  Exact(
+    McMatrix& matrix,        ///< [in] 問題の行列
+    const JsonValue& opt_obj ///< [in] オプションを表す JSON オブジェクト
+  );
+
+  /// @brief デストラクタ
+  ~Exact();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 最小被覆問題を解く．
+  /// @return 解のコスト
+  SizeType
+  solve(
+    std::vector<SizeType>& solution ///< [out] 選ばれた列集合
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 解を求める再帰関数
+  bool
+  _solve(
+    int lb,
+    int depth
+  );
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 下界の計算クラス
+  std::unique_ptr<LbCalc> mLbCalc;
+
+  // 列を選択するクラス
+  std::unique_ptr<Selector> mSelector;
+
+  // 現在のベスト
+  int mBest;
+
+  // 現在のベスト解
+  std::vector<SizeType> mBestSolution;
+
+  // 現在の解
+  std::vector<SizeType> mCurSolution;
+
+  // block_partition を行うとき true にするフラグ
+  bool mDoPartition;
+
+};
+
+END_NAMESPACE_YM_MINCOV
+
+#endif // EXACT_H

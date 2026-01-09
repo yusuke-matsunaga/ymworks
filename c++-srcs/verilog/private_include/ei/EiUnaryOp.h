@@ -1,0 +1,316 @@
+﻿#ifndef EIUNARYOP_H
+#define EIUNARYOP_H
+
+/// @file EiUnaryOp.h
+/// @brief EiUnaryOp のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+//////////////////////////////////////////////////////////////////////
+// expression を表すクラス
+// IEEE Std 1364-2001 26.6.25 Simple expressions
+// IEEE Std 1364-2001 26.6.26 Expressions
+//
+// operation の分類
+// オペランドの数
+//
+// - 1個
+//   - 返り値 scalar, オペランド scalar
+//     - NotOp
+//   - 返り値 scalar, オペランド bitvector
+//     - UnaryAndOp, UnaryNandOp, UnaryOrOp, UnaryNorOp,
+//       UnaryXorOp, UnaryXNorOp
+//   - 返り値 オペランドと同一, オペランド bitvector
+//     - BitNegOp
+//   - 返り値 オペランドと同一, オペランド any
+//     - PlusOp, MinusOp
+//   - 返り値 none, オペランド none
+//     - PosedgeOp, NegedgeOp
+//////////////////////////////////////////////////////////////////////
+
+#include "EiOperation.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiUnaryOp EiUnaryOp.h "EiUnaryOp.h"
+/// @brief 単項演算子を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiUnaryOp :
+  public EiOperation
+{
+public:
+
+  /// @brief コンストラクタ
+  EiUnaryOp(
+    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1          ///< [in] オペランド
+  );
+
+  /// @brief デストラクタ
+  ~EiUnaryOp();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 定数の時 true を返す．
+  bool
+  is_const() const override;
+
+  /// @brief オペランド数を返す．
+  SizeType
+  operand_num() const override;
+
+  /// @brief オペランドを返す．
+  const VlExpr*
+  operand(
+    SizeType pos
+  ) const override;
+
+  /// @brief オペランドのリストを返す．
+  std::vector<const VlExpr*>
+  operand_list() const override;
+
+
+protected:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // オペランド
+  ElbExpr* mOpr1;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiNotOp EiUnaryOp.h "EiUnaryOp.h"
+/// @note 論理否定演算子
+//////////////////////////////////////////////////////////////////////
+class EiNotOp :
+  public EiUnaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiNotOp(
+    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1          ///< [in] オペランド
+  );
+
+  /// @brief デストラクタ
+  ~EiNotOp();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiBitNeg EiUnaryOp.h "EiUnaryOp.h"
+/// @brief ビットワイズ反転演算子
+//////////////////////////////////////////////////////////////////////
+class EiBitNegOp :
+  public EiUnaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiBitNegOp(
+    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1          ///< [in] オペランド
+  );
+
+  /// @brief デストラクタ
+  ~EiBitNegOp();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の設定用の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 式の型
+  VlValueType mType;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiReductionOp EiUnaryOp.h "EiUnaryOp.h"
+/// @note リダクション演算子の基底クラス
+//////////////////////////////////////////////////////////////////////
+class EiReductionOp :
+  public EiUnaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiReductionOp(
+    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1          ///< [in] オペランド
+  );
+
+  /// @brief デストラクタ
+  ~EiReductionOp();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiUnaryArithOp EiUnaryOp.h "EiUnaryOp.h"
+//////////////////////////////////////////////////////////////////////
+class EiUnaryArithOp :
+  public EiUnaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiUnaryArithOp(
+    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1	   ///< [in] オペランド
+  );
+
+  /// @brief デストラクタ
+  ~EiUnaryArithOp();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の設定用の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiEventEdgeOp EiUnaryOp.h "EiUnaryOp.h"
+/// @brief posdedge / negaedge 演算子の基底クラス
+//////////////////////////////////////////////////////////////////////
+class EiEventEdgeOp :
+  public EiUnaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiEventEdgeOp(
+    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1	   ///< [in] オペランド
+  );
+
+  /// @brief デストラクタ
+  ~EiEventEdgeOp();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の設定用の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // EIUNARYOP_H

@@ -1,0 +1,72 @@
+#ifndef TVDEC2BC_H
+#define TVDEC2BC_H
+
+/// @file TvDec2Bc.h
+/// @brief TvDec2Bc のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "ym/DjDec.h"
+#include "ym/BcGraph.h"
+
+
+BEGIN_NAMESPACE_YM_DJDEC
+
+class TvDecEdge;
+
+//////////////////////////////////////////////////////////////////////
+/// @class TvDec2Bc TvDec2Bc.h "TvDec2Bc.h"
+/// @brief Decomposition Graph を BcGraph に変換するクラス
+//////////////////////////////////////////////////////////////////////
+class TvDec2Bc
+{
+public:
+
+  /// @brief コンストラクタ
+  TvDec2Bc(
+    SizeType input_num ///< [in] 入力数
+  );
+
+  /// @brief デストラクタ
+  ~TvDec2Bc() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief BcGraph に変換する．
+  BcGraph
+  make_bcgraph(
+    TvDecEdge root ///< [in] Decomposition Graph の根の枝
+  );
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief make_bcgraph の下請け関数
+  BcEdge
+  convert(
+    TvDecEdge edge
+  );
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 結果のグラフ
+  BcGraph mG;
+
+};
+
+END_NAMESPACE_YM_DJDEC
+
+#endif // TVDEC2BC_H

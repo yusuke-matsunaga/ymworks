@@ -1,0 +1,250 @@
+﻿
+/// @file VlMgr.cc
+/// @brief VlMgr の実装ファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "ym/VlMgr.h"
+
+#include "parser/Parser.h"
+#include "parser/PtMgr.h"
+#include "parser/PtiFactory.h"
+
+#include "elaborator/Elaborator.h"
+#include "elaborator/ElbMgr.h"
+#include "elaborator/ElbFactory.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+// @brief コンストラクタ
+VlMgr::VlMgr() :
+  mPtMgr{new PtMgr},
+  mElbMgr{new ElbMgr()}
+{
+}
+
+// @brief デストラクタ
+VlMgr::~VlMgr()
+{ // PtMgr と ElbMgr の定義が必要なので
+} // ヘッダファイル中でインラインにはできない．
+
+// @brief 内容をクリアする．
+void
+VlMgr::clear()
+{
+  mPtMgr->clear();
+  mElbMgr->clear();
+}
+
+// @brief ファイルを読み込む．
+bool
+VlMgr::read_file(
+  const std::string& filename,
+  const PathList& searchpath,
+  const std::vector<VlLineWatcher*> watcher_list
+)
+{
+  Parser parser(*mPtMgr);
+
+  return parser.read_file(filename, searchpath, watcher_list);
+}
+
+// @brief 登録されているモジュールのリストを返す．
+const std::vector<const PtModule*>&
+VlMgr::pt_module_list() const
+{
+  return mPtMgr->pt_module_list();
+}
+
+// @brief 登録されている UDP のリストを返す．
+// @return 登録されている UDP のリスト
+const std::vector<const PtUdp*>&
+VlMgr::pt_udp_list() const
+{
+  return mPtMgr->pt_udp_list();
+}
+
+// @brief attribute instance のリストを表す構文木要素を返す．
+std::vector<const PtAttrInst*>
+VlMgr::pt_attr_list(
+  const PtBase* pt_obj
+) const
+{
+  return mPtMgr->find_attr_list(pt_obj);
+}
+
+// @brief エラボレーションを行う．
+int
+VlMgr::elaborate(
+  const ClibCellLibrary& cell_library
+)
+{
+  Elaborator elab(*mElbMgr, cell_library);
+
+  return elab(*mPtMgr);
+}
+
+// @brief UDP 定義のリストを返す．
+const std::vector<const VlUdpDefn*>&
+VlMgr::udp_list() const
+{
+  return mElbMgr->udp_list();
+}
+
+// @brief 名前から UDP 定義を取出す．
+const VlUdpDefn*
+VlMgr::find_udp(
+  const char* name
+) const
+{
+  return mElbMgr->find_udp(name);
+}
+
+// @brief topmodule のリストを返す．
+const std::vector<const VlModule*>&
+VlMgr::topmodule_list() const
+{
+  return mElbMgr->topmodule_list();
+}
+
+// @brief 名前から UserSystf を取出す．
+const VlUserSystf*
+VlMgr::find_user_systf(
+  const char* name
+) const
+{
+  return mElbMgr->find_user_systf(name);
+}
+
+// @brief スコープに属する internal scope のリストを取り出す．
+std::vector<const VlScope*>
+VlMgr::find_internalscope_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_internalscope_list(parent);
+}
+
+// @brief スコープとタグから宣言要素を取り出す．
+std::vector<const VlDecl*>
+VlMgr::find_decl_list(
+  const VlScope* parent,
+  int tag
+) const
+{
+  return mElbMgr->find_decl_list(parent, tag);
+}
+
+// @brief スコープとタグから宣言要素の配列を取り出す．
+std::vector<const VlDeclArray*>
+VlMgr::find_declarray_list(
+  const VlScope* parent,
+  int tag
+) const
+{
+  return mElbMgr->find_declarray_list(parent, tag);
+}
+
+// @brief スコープに属する defparam のリストを取り出す．
+std::vector<const VlDefParam*>
+VlMgr::find_defparam_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_defparam_list(parent);
+}
+
+// @brief スコープに属する param assign のリストを取り出す．
+std::vector<const VlParamAssign*>
+VlMgr::find_paramassign_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_paramassign_list(parent);
+}
+
+// @brief スコープに属する module のリストを取り出す．
+std::vector<const VlModule*>
+VlMgr::find_module_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_module_list(parent);
+}
+
+// @brief スコープに属する module arrayのリストを取り出す．
+std::vector<const VlModuleArray*>
+VlMgr::find_modulearray_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_modulearray_list(parent);
+}
+
+// @brief スコープに属する primitive のリストを取り出す．
+std::vector<const VlPrimitive*>
+VlMgr::find_primitive_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_primitive_list(parent);
+}
+
+// @brief スコープに属する primitive array のリストを取り出す．
+std::vector<const VlPrimArray*>
+VlMgr::find_primarray_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_primarray_list(parent);
+}
+
+// @brief スコープに属するタスクのリストを取り出す．
+std::vector<const VlTaskFunc*>
+VlMgr::find_task_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_task_list(parent);
+}
+
+// @brief スコープに属する関数のリストを取り出す．
+std::vector<const VlTaskFunc*>
+VlMgr::find_function_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_function_list(parent);
+}
+
+// @brief スコープに属する continuous assignment のリストを取り出す．
+std::vector<const VlContAssign*>
+VlMgr::find_contassign_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_contassign_list(parent);
+}
+
+// @brief スコープに属する process のリストを取り出す．
+std::vector<const VlProcess*>
+VlMgr::find_process_list(
+  const VlScope* parent
+) const
+{
+  return mElbMgr->find_process_list(parent);
+}
+
+// @brief 属性リストを得る．
+std::vector<const VlAttribute*>
+VlMgr::find_attr(
+  const VlObj* obj
+) const
+{
+  return mElbMgr->find_attr(obj);
+}
+
+END_NAMESPACE_YM_VERILOG

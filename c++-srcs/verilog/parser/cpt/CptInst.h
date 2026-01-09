@@ -1,0 +1,610 @@
+﻿#ifndef CPTINST_H
+#define CPTINST_H
+
+/// @file CptInst.h
+/// @brief CptInst のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "CptItem.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @brief gate header のベース実装クラス
+//////////////////////////////////////////////////////////////////////
+class CptGateH :
+  public CptItem
+{
+public:
+
+  /// @brief コンストラクタ
+  CptGateH(
+    const FileRegion& file_region,
+    VpiPrimType prim_type,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptGateH();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtItem の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+  /// @brief 型を返す．
+  PtItemType
+  type() const override;
+
+  /// @brief プリミティブタイプを返す．
+  VpiPrimType
+  prim_type() const override;
+
+  /// @brief module/UDP/gate instance の要素数の取得
+  SizeType
+  inst_num() const override;
+
+  /// @brief module/UDP/gate instance の取得
+  const PtInst*
+  inst(
+    SizeType pos ///< [in] 位置 ( 0 <= pos < inst_num() )
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+  // プリミティブタイプ
+  VpiPrimType mPrimType;
+
+  // 要素の配列
+  PtiInstArray mInstArray;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief strength をもつ gate instance のヘッダを表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptGateHS :
+  public CptGateH
+{
+public:
+
+  /// @brief コンストラクタ
+  CptGateHS(
+    const FileRegion& file_region,
+    VpiPrimType prim_type,
+    const PtStrength* strength,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptGateHS();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtGateH の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief strength を返す．
+  const PtStrength*
+  strength() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // strength
+  const PtStrength* mStrength;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief delay をもつ gate instance のヘッダを表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptGateHD :
+  public CptGateH
+{
+public:
+
+  /// @brief コンストラクタ
+  CptGateHD(
+    const FileRegion& file_region,
+    VpiPrimType prim_type,
+    const PtDelay* delay,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptGateHD();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtGateH の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief delay を返す．
+  const PtDelay*
+  delay() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // delay
+  const PtDelay* mDelay;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief strength と delay をもつ gate instance のヘッダを表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptGateHSD :
+  public CptGateH
+{
+public:
+
+  /// @brief コンストラクタ
+  CptGateHSD(
+    const FileRegion& file_region,
+    VpiPrimType prim_type,
+    const PtStrength* strength,
+    const PtDelay* delay,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptGateHSD();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtGateH の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief strength を返す．
+  const PtStrength*
+  strength() const override;
+
+  /// @brief delay を返す．
+  const PtDelay*
+  delay() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // strength
+  const PtStrength* mStrength;
+
+  // delay
+  const PtDelay* mDelay;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief module/udp header のベース実装クラス
+//////////////////////////////////////////////////////////////////////
+class CptMuH :
+  public CptItem
+{
+public:
+
+  /// @brief コンストラクタ
+  CptMuH(
+    const FileRegion& file_region,
+    const char* def_name,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptMuH() override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtItem の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+  /// @brief 型を返す．
+  PtItemType
+  type() const override;
+
+  /// @brief 定義名を返す．
+  const char*
+  name() const override;
+
+  /// @brief module/UDP/gate instance の要素数の取得
+  SizeType
+  inst_num() const override;
+
+  /// @brief module/UDP/gate instance の取得
+  const PtInst*
+  inst(
+    SizeType pos ///< [in] 位置 ( 0 <= pos < inst_num() )
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+  // 定義名
+  const char* mName;
+
+  // 要素の配列
+  PtiInstArray mInstArray;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief パラメータ割り当てつきの CptMuH
+//////////////////////////////////////////////////////////////////////
+class CptMuHP :
+  public CptMuH
+{
+public:
+
+  /// @brief コンストラクタ
+  CptMuHP(
+    const FileRegion& file_region,
+    const char* def_name,
+    PtiConnectionArray&& con_array,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptMuHP();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtItem の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief パラメータ割り当て数の取得
+  SizeType
+  paramassign_num() const override;
+
+  /// @brief パラメータ割り当ての取得
+  const PtConnection*
+  paramassign(
+    SizeType pos ///< [in] 位置 ( 0 <= pos < paramassign_num() )
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // パラメータ割り当ての配列
+  PtiConnectionArray mParamAssignArray;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief strength を持つ MuH
+//////////////////////////////////////////////////////////////////////
+class CptMuHS :
+  public CptMuH
+{
+public:
+
+  /// @brief コンストラクタ
+  CptMuHS(
+    const FileRegion& file_region,
+    const char* def_name,
+    const PtStrength* strength,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptMuHS();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtMuH の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief strength を返す．
+  const PtStrength*
+  strength() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // strength
+  const PtStrength* mStrength;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief delay を持つ MuH
+//////////////////////////////////////////////////////////////////////
+class CptMuHD :
+  public CptMuH
+{
+public:
+
+  /// @brief コンストラクタ
+  CptMuHD(
+    const FileRegion& file_region,
+    const char* def_name,
+    const PtDelay* delay,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptMuHD();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtMuH の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief delay を返す．
+  const PtDelay*
+  delay() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // delay
+  const PtDelay* mDelay;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief strength と delay を持つ MuH
+//////////////////////////////////////////////////////////////////////
+class CptMuHSD :
+  public CptMuH
+{
+public:
+
+  /// @brief コンストラクタ
+  CptMuHSD(
+    const FileRegion& file_region,
+    const char* def_name,
+    const PtStrength* strength,
+    const PtDelay* delay,
+    PtiInstArray&& inst_array
+  );
+
+  /// @brief デストラクタ
+  ~CptMuHSD();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtMuH の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief strength を返す．
+  const PtStrength*
+  strength() const override;
+
+  /// @brief delay を返す．
+  const PtDelay*
+  delay() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // strength
+  const PtStrength* mStrength;
+
+  // delay
+  const PtDelay* mDelay;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief module instance/UDP/gate instance のベース実装クラス
+//////////////////////////////////////////////////////////////////////
+class CptInst :
+  public PtInst
+{
+public:
+
+  /// @brief コンストラクタ
+  CptInst(
+    const FileRegion& file_region,
+    PtiConnectionArray&& con_array
+  );
+
+  /// @brief デストラクタ
+  ~CptInst();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtMuInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+  /// @brief 名前の取得
+  /// @return 名前
+  const char*
+  name() const override;
+
+  /// @brief 範囲の左側の式の取得
+  /// @return 範囲の左側の式
+  const PtExpr*
+  left_range() const override;
+
+  /// @brief 範囲の右側の式の取得
+  /// @return 範囲の右側の式
+  const PtExpr*
+  right_range() const override;
+
+  /// @brief ポートの要素数の取得
+  SizeType
+  port_num() const override;
+
+  /// @brief ポートの取得
+  const PtConnection*
+  port(
+    SizeType pos ///< [in] 位置 ( 0 <= pos < port_num() )
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+  // ポート割り当ての配列
+  PtiConnectionArray mPortArray;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 名前を持つ CptInst
+//////////////////////////////////////////////////////////////////////
+class CptInstN :
+  public CptInst
+{
+public:
+
+  /// @brief コンストラクタ
+  CptInstN(
+    const FileRegion& file_region,
+    const char* name,
+    PtiConnectionArray&& con_array
+  );
+
+  /// @brief デストラクタ
+  ~CptInstN();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 名前を返す．
+  const char*
+  name() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 名前
+  const char* mName;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 名前と範囲指定を持つ CptInst
+//////////////////////////////////////////////////////////////////////
+class CptInstR :
+  public CptInstN
+{
+public:
+
+  /// @brief コンストラクタ
+  CptInstR(
+    const FileRegion& file_region,
+    const char* name,
+    const PtExpr* left,
+    const PtExpr* right,
+    PtiConnectionArray&& con_array
+  );
+
+  /// @brief デストラクタ
+  ~CptInstR();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief range の MSB を取出す．
+  const PtExpr*
+  left_range() const override;
+
+  /// @brief range の LSB を取出す．
+  const PtExpr*
+  right_range() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 範囲のMSB
+  const PtExpr* mLeftRange;
+
+  // 範囲のLSB
+  const PtExpr* mRightRange;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // CPTINST_H

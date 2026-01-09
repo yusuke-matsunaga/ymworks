@@ -1,0 +1,197 @@
+﻿#ifndef PTMGR_H
+#define PTMGR_H
+
+/// @file PtMgr.h
+/// @brief PtMgr のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "ym/pt/PtP.h"
+#include "alloc/Alloc.h"
+#include "parser/PtrList.h"
+#include "PtiAttrInfo.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class PtMgr PtMgr.h <ym/PtMgr.h>
+/// @ingroup PtMgr
+/// @brief Verilog のパース木を管理するクラス
+//////////////////////////////////////////////////////////////////////
+class PtMgr
+{
+  friend class Parser;
+
+public:
+
+  /// @brief コンストラクタ
+  PtMgr();
+
+  /// @brief デストラクタ
+  ~PtMgr();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 情報を取得する関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 登録されているモジュールのリストを返す．
+  /// @return 登録されているモジュールのリスト
+  const std::vector<const PtModule*>&
+  pt_module_list() const;
+
+  /// @brief 登録されている UDP のリストを返す．
+  /// @return 登録されている UDP のリスト
+  const std::vector<const PtUdp*>&
+  pt_udp_list() const;
+
+  /// @brief インスタンス記述で用いられている名前かどうか調べる．
+  /// @return 用いられていたら true を返す．
+  bool
+  check_def_name(
+    const std::string& name ///< [in] 調べる名前
+  ) const;
+
+  /// @brief 関数を探す．
+  ///
+  /// なければ nullptr を返す．
+  const PtItem*
+  find_function(
+    const PtModule* module, ///< [in] 親のモジュール
+    const std::string& name ///< [in] 関数名
+  ) const;
+
+  /// @brief attribute instance を取り出す．
+  /// @return PtAttrInst のリスト
+  ///
+  /// 空の場合もある．
+  std::vector<const PtAttrInst*>
+  find_attr_list(
+    const PtBase* pt_obj ///< [in] 対象の構文木の要素
+  ) const;
+
+  /// @brief 全ての属性リストのリストを返す．
+  std::vector<PtiAttrInfo>
+  all_attr_list() const;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // データをセットする関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 今までに生成したインスタンスをすべて破壊する．
+  void
+  clear();
+
+  /// @brief UDP 定義を追加する．
+  ///
+  /// 内部で reg_pt() を呼んでいる．
+  void
+  reg_udp(
+    const PtUdp* udp
+  );
+
+  /// @brief モジュール定義を追加する．
+  ///
+  /// 内部で reg_pt() を呼んでいる．
+  void
+  reg_module(
+    const PtModule* module
+  );
+
+  /// @brief インスタンス定義名を追加する．
+  void
+  reg_defname(
+    const std::string& name
+  );
+
+  /// @brief attribute instance を登録する．
+  void
+  reg_attrinst(
+    const PtBase* pt_obj,
+    PtrList<const PtAttrInst>* ai_list,
+    bool def = false
+  );
+
+  /// @brief 文字列領域を確保する．
+  /// @param[in] str 文字列
+  /// @return 文字列を返す．
+  ///
+  /// 同一の文字列は共有する．
+  const char*
+  save_string(
+    const std::string& str
+  );
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // メンバにアクセスする関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief メモリアロケーターを返す．
+  Alloc&
+  alloc();
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // メモリアロケーター
+  std::unique_ptr<Alloc> mAlloc;
+
+  // UDP 定義のリスト
+  std::vector<const PtUdp*> mUdpList;
+
+  // モジュール定義のリスト
+  std::vector<const PtModule*> mModuleList;
+
+  // インスタンス記述で用いられている名前
+  // たぶんモジュール名か UDP名のはず
+  std::unordered_set<std::string> mDefNames;
+
+  // 文字列の辞書
+  std::unordered_set<std::string> mStringPool;
+
+  // ハッシュ関数
+  struct AttrHash
+  {
+    SizeType
+    operator()(
+      const PtiAttrInfo& attr_info
+    ) const
+    {
+      auto tmp = reinterpret_cast<SizeType>(attr_info.obj());
+      return (tmp * tmp) >> 16;
+    }
+  };
+
+  // 等価比較関数
+  struct AttrEq
+  {
+    bool
+    operator()(
+      const PtiAttrInfo& attr_info1,
+      const PtiAttrInfo& attr_info2
+    ) const
+    {
+      return attr_info1.obj() == attr_info2.obj();
+    }
+  };
+
+  // 属性リストの辞書
+  // PtAttrInfo をキーにする．
+  std::unordered_set<PtiAttrInfo, AttrHash, AttrEq> mAttrDict;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // PTMGR_H

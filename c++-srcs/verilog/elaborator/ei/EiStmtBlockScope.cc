@@ -1,0 +1,63 @@
+
+/// @file EiStmtBlockScope.cc
+/// @brief EiStmtBlockScope の実装ファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "ei/EiFactory.h"
+#include "ei/EiStmtBlockScope.h"
+#include "ym/pt/PtStmt.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+// EiFactory の生成関数
+//////////////////////////////////////////////////////////////////////
+
+// @breif statement block を生成する．
+const VlScope*
+EiFactory::new_StmtBlockScope(
+  const VlScope* parent,
+  const PtStmt* pt_stmt
+)
+{
+  auto scope = new EiStmtBlockScope(parent, pt_stmt);
+  return scope;
+}
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiStmtBlockScope
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+EiStmtBlockScope::EiStmtBlockScope(
+  const VlScope* parent,
+  const PtStmt* pt_stmt
+) : EiScope{parent},
+    mPtStmt{pt_stmt}
+{
+}
+
+// @brief デストラクタ
+EiStmtBlockScope::~EiStmtBlockScope()
+{
+}
+
+// @brief ファイル位置の取得
+FileRegion
+EiStmtBlockScope::file_region() const
+{
+  return mPtStmt->file_region();
+}
+
+// @brief 名前の取得
+std::string
+EiStmtBlockScope::name() const
+{
+  return mPtStmt->name();
+}
+
+END_NAMESPACE_YM_VERILOG
