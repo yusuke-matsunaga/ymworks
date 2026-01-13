@@ -202,6 +202,13 @@ TEST( BnModelTest, new_primitive )
   }
   EXPECT_EQ( fanin_list, node.fanin_list() );
 
+  {
+    SizeType i = 0;
+    for ( auto iter = node.fanin_list().iter(); iter.has_next(); ++ i ) {
+      auto node1 = iter.next();
+      EXPECT_EQ( fanin_list[i], node1 );
+    }
+  }
 }
 
 TEST( BnModelTest, new_cover )
