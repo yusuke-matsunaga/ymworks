@@ -1,0 +1,858 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>clib package &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">clib package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="clib-package">
+<h1>clib package<a class="headerlink" href="#clib-package" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="この見出しへのパーマリンク">¶</a></h2>
+</section>
+<section id="module-clib.clib_arg">
+<span id="clib-clib-arg-module"></span><h2>clib.clib_arg module<a class="headerlink" href="#module-clib.clib_arg" title="この見出しへのパーマリンク">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clib_arg.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibAreaArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibAreaArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibAreaArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibBundleArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibBundleArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibBundleArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibBusArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibBusArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibBusArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibBusTypeArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibBusTypeArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibBusTypeArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibCPVArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibCPVArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibCPVArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibCapacitanceArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibCapacitanceArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibCapacitanceArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibCellArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibCellArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibCellArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibCellClassArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibCellClassArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibCellClassArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibCellGroupArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibCellGroupArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibCellGroupArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibCellLibraryArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibCellLibraryArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibCellLibraryArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibCellTypeArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibCellTypeArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibCellTypeArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibDelayModelArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibDelayModelArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibDelayModelArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibDirectionArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibDirectionArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibDirectionArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibIOMapArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibIOMapArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibIOMapArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibLutArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibLutArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibLutArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibPatGraphArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibPatGraphArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibPatGraphArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibPatTypeArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibPatTypeArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibPatTypeArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibPinArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibPinArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibPinArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibPinMapArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibPinMapArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibPinMapArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibResistanceArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibResistanceArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibResistanceArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibSeqAttrArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibSeqAttrArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibSeqAttrArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibTechnologyArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibTechnologyArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibTechnologyArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibTimeArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibTimeArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibTimeArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibTimingArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibTimingArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibTimingArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibTimingSenseArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibTimingSenseArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibTimingSenseArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibTimingTypeArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibTimingTypeArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibTimingTypeArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clib_arg.ClibVarTypeArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clib_arg.</span></span><span class="sig-name descname"><span class="pre">ClibVarTypeArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#clib.clib_arg.ClibVarTypeArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibarea_gen">
+<span id="clib-clibarea-gen-module"></span><h2>clib.clibarea_gen module<a class="headerlink" href="#module-clib.clibarea_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibArea を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibarea_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibarea_gen.ClibAreaGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibarea_gen.</span></span><span class="sig-name descname"><span class="pre">ClibAreaGen</span></span><a class="headerlink" href="#clib.clibarea_gen.ClibAreaGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibbundle_gen">
+<span id="clib-clibbundle-gen-module"></span><h2>clib.clibbundle_gen module<a class="headerlink" href="#module-clib.clibbundle_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibBundle を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibbundle_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibbundle_gen.ClibBundleGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibbundle_gen.</span></span><span class="sig-name descname"><span class="pre">ClibBundleGen</span></span><a class="headerlink" href="#clib.clibbundle_gen.ClibBundleGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibbus_gen">
+<span id="clib-clibbus-gen-module"></span><h2>clib.clibbus_gen module<a class="headerlink" href="#module-clib.clibbus_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibBus を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibbus_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibbus_gen.ClibBusGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibbus_gen.</span></span><span class="sig-name descname"><span class="pre">ClibBusGen</span></span><a class="headerlink" href="#clib.clibbus_gen.ClibBusGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibbustype_gen">
+<span id="clib-clibbustype-gen-module"></span><h2>clib.clibbustype_gen module<a class="headerlink" href="#module-clib.clibbustype_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibBusType を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibbustype_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibbustype_gen.ClibBusTypeGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibbustype_gen.</span></span><span class="sig-name descname"><span class="pre">ClibBusTypeGen</span></span><a class="headerlink" href="#clib.clibbustype_gen.ClibBusTypeGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibcapacitance_gen">
+<span id="clib-clibcapacitance-gen-module"></span><h2>clib.clibcapacitance_gen module<a class="headerlink" href="#module-clib.clibcapacitance_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibCapacitance を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibcapacitance_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibcapacitance_gen.ClibCapacitanceGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibcapacitance_gen.</span></span><span class="sig-name descname"><span class="pre">ClibCapacitanceGen</span></span><a class="headerlink" href="#clib.clibcapacitance_gen.ClibCapacitanceGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibcell_gen">
+<span id="clib-clibcell-gen-module"></span><h2>clib.clibcell_gen module<a class="headerlink" href="#module-clib.clibcell_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibCell を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibcell_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibcell_gen.ClibCellGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibcell_gen.</span></span><span class="sig-name descname"><span class="pre">ClibCellGen</span></span><a class="headerlink" href="#clib.clibcell_gen.ClibCellGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibcellclass_gen">
+<span id="clib-clibcellclass-gen-module"></span><h2>clib.clibcellclass_gen module<a class="headerlink" href="#module-clib.clibcellclass_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibCellClass を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibcellclass_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibcellclass_gen.ClibCellClassGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibcellclass_gen.</span></span><span class="sig-name descname"><span class="pre">ClibCellClassGen</span></span><a class="headerlink" href="#clib.clibcellclass_gen.ClibCellClassGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibcellgroup_gen">
+<span id="clib-clibcellgroup-gen-module"></span><h2>clib.clibcellgroup_gen module<a class="headerlink" href="#module-clib.clibcellgroup_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibCellGroup を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibcellgroup_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibcellgroup_gen.ClibCellGroupGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibcellgroup_gen.</span></span><span class="sig-name descname"><span class="pre">ClibCellGroupGen</span></span><a class="headerlink" href="#clib.clibcellgroup_gen.ClibCellGroupGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibcelllibrary_gen">
+<span id="clib-clibcelllibrary-gen-module"></span><h2>clib.clibcelllibrary_gen module<a class="headerlink" href="#module-clib.clibcelllibrary_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibCellLibrary を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibcelllibrary_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibcelllibrary_gen.ClibCellLibraryGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibcelllibrary_gen.</span></span><span class="sig-name descname"><span class="pre">ClibCellLibraryGen</span></span><a class="headerlink" href="#clib.clibcelllibrary_gen.ClibCellLibraryGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibenum_gen">
+<span id="clib-clibenum-gen-module"></span><h2>clib.clibenum_gen module<a class="headerlink" href="#module-clib.clibenum_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>clib の列挙型の Python クラスを生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibenum_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibCPVGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibCPVGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibCPVGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibCellTypeGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibCellTypeGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibCellTypeGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibDelayModelGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibDelayModelGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibDelayModelGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibDirectionGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibDirectionGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibDirectionGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibPatTypeGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibPatTypeGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibPatTypeGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibTechnologyGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibTechnologyGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibTechnologyGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibTimingSenseGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibTimingSenseGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibTimingSenseGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibTimingTypeGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibTimingTypeGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibTimingTypeGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibenum_gen.ClibVarTypeGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibenum_gen.</span></span><span class="sig-name descname"><span class="pre">ClibVarTypeGen</span></span><a class="headerlink" href="#clib.clibenum_gen.ClibVarTypeGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen" title="mk_py_capi.enum_gen.EnumGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">EnumGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibiomap_gen">
+<span id="clib-clibiomap-gen-module"></span><h2>clib.clibiomap_gen module<a class="headerlink" href="#module-clib.clibiomap_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibCellLibrary を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibiomap_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibiomap_gen.ClibIOMapGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibiomap_gen.</span></span><span class="sig-name descname"><span class="pre">ClibIOMapGen</span></span><a class="headerlink" href="#clib.clibiomap_gen.ClibIOMapGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.cliblut_gen">
+<span id="clib-cliblut-gen-module"></span><h2>clib.cliblut_gen module<a class="headerlink" href="#module-clib.cliblut_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibLut を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cliblut_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.cliblut_gen.ClibLutGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.cliblut_gen.</span></span><span class="sig-name descname"><span class="pre">ClibLutGen</span></span><a class="headerlink" href="#clib.cliblut_gen.ClibLutGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibpatgraph_gen">
+<span id="clib-clibpatgraph-gen-module"></span><h2>clib.clibpatgraph_gen module<a class="headerlink" href="#module-clib.clibpatgraph_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibPatGraph を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibpatgraph_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibpatgraph_gen.ClibPatGraphGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibpatgraph_gen.</span></span><span class="sig-name descname"><span class="pre">ClibPatGraphGen</span></span><a class="headerlink" href="#clib.clibpatgraph_gen.ClibPatGraphGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibpin_gen">
+<span id="clib-clibpin-gen-module"></span><h2>clib.clibpin_gen module<a class="headerlink" href="#module-clib.clibpin_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibPin を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibpin_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibpin_gen.ClibPinGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibpin_gen.</span></span><span class="sig-name descname"><span class="pre">ClibPinGen</span></span><a class="headerlink" href="#clib.clibpin_gen.ClibPinGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibpinmap_gen">
+<span id="clib-clibpinmap-gen-module"></span><h2>clib.clibpinmap_gen module<a class="headerlink" href="#module-clib.clibpinmap_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibPinMap を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibpinmap_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibpinmap_gen.ClibPinMapGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibpinmap_gen.</span></span><span class="sig-name descname"><span class="pre">ClibPinMapGen</span></span><a class="headerlink" href="#clib.clibpinmap_gen.ClibPinMapGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibresistance_gen">
+<span id="clib-clibresistance-gen-module"></span><h2>clib.clibresistance_gen module<a class="headerlink" href="#module-clib.clibresistance_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibResistance を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibresistance_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibresistance_gen.ClibResistanceGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibresistance_gen.</span></span><span class="sig-name descname"><span class="pre">ClibResistanceGen</span></span><a class="headerlink" href="#clib.clibresistance_gen.ClibResistanceGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibseqattr_gen">
+<span id="clib-clibseqattr-gen-module"></span><h2>clib.clibseqattr_gen module<a class="headerlink" href="#module-clib.clibseqattr_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibSeqAttr を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibseqattr_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibseqattr_gen.ClibSeqAttrGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibseqattr_gen.</span></span><span class="sig-name descname"><span class="pre">ClibSeqAttrGen</span></span><a class="headerlink" href="#clib.clibseqattr_gen.ClibSeqAttrGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibtime_gen">
+<span id="clib-clibtime-gen-module"></span><h2>clib.clibtime_gen module<a class="headerlink" href="#module-clib.clibtime_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibTime を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibtime_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibtime_gen.ClibTimeGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibtime_gen.</span></span><span class="sig-name descname"><span class="pre">ClibTimeGen</span></span><a class="headerlink" href="#clib.clibtime_gen.ClibTimeGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib.clibtiming_gen">
+<span id="clib-clibtiming-gen-module"></span><h2>clib.clibtiming_gen module<a class="headerlink" href="#module-clib.clibtiming_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>PyClibTiming を生成するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clibtiming_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="clib.clibtiming_gen.ClibTimingGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">clib.clibtiming_gen.</span></span><span class="sig-name descname"><span class="pre">ClibTimingGen</span></span><a class="headerlink" href="#clib.clibtiming_gen.ClibTimingGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-clib">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-clib" title="この見出しへのパーマリンク">¶</a></h2>
+<p>clib サブモジュール生成用初期化スクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>__init__.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">clib package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-clib.clib_arg">clib.clib_arg module</a><ul>
+<li><a class="reference internal" href="#clib.clib_arg.ClibAreaArg"><code class="docutils literal notranslate"><span class="pre">ClibAreaArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibBundleArg"><code class="docutils literal notranslate"><span class="pre">ClibBundleArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibBusArg"><code class="docutils literal notranslate"><span class="pre">ClibBusArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibBusTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibBusTypeArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibCPVArg"><code class="docutils literal notranslate"><span class="pre">ClibCPVArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibCapacitanceArg"><code class="docutils literal notranslate"><span class="pre">ClibCapacitanceArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibCellArg"><code class="docutils literal notranslate"><span class="pre">ClibCellArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibCellClassArg"><code class="docutils literal notranslate"><span class="pre">ClibCellClassArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibCellGroupArg"><code class="docutils literal notranslate"><span class="pre">ClibCellGroupArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibCellLibraryArg"><code class="docutils literal notranslate"><span class="pre">ClibCellLibraryArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibCellTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibCellTypeArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibDelayModelArg"><code class="docutils literal notranslate"><span class="pre">ClibDelayModelArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibDirectionArg"><code class="docutils literal notranslate"><span class="pre">ClibDirectionArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibIOMapArg"><code class="docutils literal notranslate"><span class="pre">ClibIOMapArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibLutArg"><code class="docutils literal notranslate"><span class="pre">ClibLutArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibPatGraphArg"><code class="docutils literal notranslate"><span class="pre">ClibPatGraphArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibPatTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibPatTypeArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibPinArg"><code class="docutils literal notranslate"><span class="pre">ClibPinArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibPinMapArg"><code class="docutils literal notranslate"><span class="pre">ClibPinMapArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibResistanceArg"><code class="docutils literal notranslate"><span class="pre">ClibResistanceArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibSeqAttrArg"><code class="docutils literal notranslate"><span class="pre">ClibSeqAttrArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibTechnologyArg"><code class="docutils literal notranslate"><span class="pre">ClibTechnologyArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibTimeArg"><code class="docutils literal notranslate"><span class="pre">ClibTimeArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibTimingArg"><code class="docutils literal notranslate"><span class="pre">ClibTimingArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibTimingSenseArg"><code class="docutils literal notranslate"><span class="pre">ClibTimingSenseArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibTimingTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibTimingTypeArg</span></code></a></li>
+<li><a class="reference internal" href="#clib.clib_arg.ClibVarTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibVarTypeArg</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibarea_gen">clib.clibarea_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibarea_gen.ClibAreaGen"><code class="docutils literal notranslate"><span class="pre">ClibAreaGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibbundle_gen">clib.clibbundle_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibbundle_gen.ClibBundleGen"><code class="docutils literal notranslate"><span class="pre">ClibBundleGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibbus_gen">clib.clibbus_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibbus_gen.ClibBusGen"><code class="docutils literal notranslate"><span class="pre">ClibBusGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibbustype_gen">clib.clibbustype_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibbustype_gen.ClibBusTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibBusTypeGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibcapacitance_gen">clib.clibcapacitance_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibcapacitance_gen.ClibCapacitanceGen"><code class="docutils literal notranslate"><span class="pre">ClibCapacitanceGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibcell_gen">clib.clibcell_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibcell_gen.ClibCellGen"><code class="docutils literal notranslate"><span class="pre">ClibCellGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibcellclass_gen">clib.clibcellclass_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibcellclass_gen.ClibCellClassGen"><code class="docutils literal notranslate"><span class="pre">ClibCellClassGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibcellgroup_gen">clib.clibcellgroup_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibcellgroup_gen.ClibCellGroupGen"><code class="docutils literal notranslate"><span class="pre">ClibCellGroupGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibcelllibrary_gen">clib.clibcelllibrary_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibcelllibrary_gen.ClibCellLibraryGen"><code class="docutils literal notranslate"><span class="pre">ClibCellLibraryGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibenum_gen">clib.clibenum_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibCPVGen"><code class="docutils literal notranslate"><span class="pre">ClibCPVGen</span></code></a></li>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibCellTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibCellTypeGen</span></code></a></li>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibDelayModelGen"><code class="docutils literal notranslate"><span class="pre">ClibDelayModelGen</span></code></a></li>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibDirectionGen"><code class="docutils literal notranslate"><span class="pre">ClibDirectionGen</span></code></a></li>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibPatTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibPatTypeGen</span></code></a></li>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibTechnologyGen"><code class="docutils literal notranslate"><span class="pre">ClibTechnologyGen</span></code></a></li>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibTimingSenseGen"><code class="docutils literal notranslate"><span class="pre">ClibTimingSenseGen</span></code></a></li>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibTimingTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibTimingTypeGen</span></code></a></li>
+<li><a class="reference internal" href="#clib.clibenum_gen.ClibVarTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibVarTypeGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibiomap_gen">clib.clibiomap_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibiomap_gen.ClibIOMapGen"><code class="docutils literal notranslate"><span class="pre">ClibIOMapGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.cliblut_gen">clib.cliblut_gen module</a><ul>
+<li><a class="reference internal" href="#clib.cliblut_gen.ClibLutGen"><code class="docutils literal notranslate"><span class="pre">ClibLutGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibpatgraph_gen">clib.clibpatgraph_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibpatgraph_gen.ClibPatGraphGen"><code class="docutils literal notranslate"><span class="pre">ClibPatGraphGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibpin_gen">clib.clibpin_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibpin_gen.ClibPinGen"><code class="docutils literal notranslate"><span class="pre">ClibPinGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibpinmap_gen">clib.clibpinmap_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibpinmap_gen.ClibPinMapGen"><code class="docutils literal notranslate"><span class="pre">ClibPinMapGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibresistance_gen">clib.clibresistance_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibresistance_gen.ClibResistanceGen"><code class="docutils literal notranslate"><span class="pre">ClibResistanceGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibseqattr_gen">clib.clibseqattr_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibseqattr_gen.ClibSeqAttrGen"><code class="docutils literal notranslate"><span class="pre">ClibSeqAttrGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibtime_gen">clib.clibtime_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibtime_gen.ClibTimeGen"><code class="docutils literal notranslate"><span class="pre">ClibTimeGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib.clibtiming_gen">clib.clibtiming_gen module</a><ul>
+<li><a class="reference internal" href="#clib.clibtiming_gen.ClibTimingGen"><code class="docutils literal notranslate"><span class="pre">ClibTimingGen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-clib">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/py_capi/clib.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">clib package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

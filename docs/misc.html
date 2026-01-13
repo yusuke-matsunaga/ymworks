@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>misc package &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">misc package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="misc-package">
+<h1>misc package<a class="headerlink" href="#misc-package" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="この見出しへのパーマリンク">¶</a></h2>
+</section>
+<section id="module-misc.jsonvalue_gen">
+<span id="misc-jsonvalue-gen-module"></span><h2>misc.jsonvalue_gen module<a class="headerlink" href="#module-misc.jsonvalue_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>JsonValueGen の定義ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>jsonvalue_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.JsonValueGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">JsonValueGen</span></span><a class="headerlink" href="#misc.jsonvalue_gen.JsonValueGen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_check_func">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_check_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_check_func" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_get_array">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_get_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_get_array" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_get_bool">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_get_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_get_bool" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_get_float">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_get_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_get_float" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_get_int">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_get_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_get_int" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_get_string">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_get_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_get_string" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_has_key">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_has_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_has_key" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_is_array">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_is_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_is_array" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_is_bool">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_is_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_is_bool" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_is_float">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_is_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_is_float" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_is_int">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_is_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_is_int" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_is_null">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_is_null</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_is_null" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_is_number">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_is_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_is_number" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_is_object">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_is_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_is_object" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_is_string">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_is_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_is_string" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_mp_length">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_mp_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_mp_length" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_mp_subscript">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_mp_subscript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_mp_subscript" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_null">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_null</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_null" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_parse">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_parse" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_preamble">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_preamble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_preamble" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_read">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_read" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.gen_write">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">gen_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.gen_write" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.item_list_gen">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">item_list_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.item_list_gen" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.key_list_gen">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">key_list_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.key_list_gen" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.new_gen">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">new_gen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.new_gen" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="misc.jsonvalue_gen.repr_func">
+<span class="sig-prename descclassname"><span class="pre">misc.jsonvalue_gen.</span></span><span class="sig-name descname"><span class="pre">repr_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.jsonvalue_gen.repr_func" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-misc.misc_arg">
+<span id="misc-misc-arg-module"></span><h2>misc.misc_arg module<a class="headerlink" href="#module-misc.misc_arg" title="この見出しへのパーマリンク">¶</a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>misc_arg.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="misc.misc_arg.InStreamArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">misc.misc_arg.</span></span><span class="sig-name descname"><span class="pre">InStreamArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.misc_arg.InStreamArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjRefArg" title="mk_py_capi.arg.TypedObjRefArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjRefArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="misc.misc_arg.JsonValueArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">misc.misc_arg.</span></span><span class="sig-name descname"><span class="pre">JsonValueArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.misc_arg.JsonValueArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ObjConvArg" title="mk_py_capi.arg.ObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="misc.misc_arg.Mt19937Arg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">misc.misc_arg.</span></span><span class="sig-name descname"><span class="pre">Mt19937Arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.misc_arg.Mt19937Arg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg" title="mk_py_capi.arg.TypedObjConvArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="misc.misc_arg.OutStreamArg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">misc.misc_arg.</span></span><span class="sig-name descname"><span class="pre">OutStreamArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvarname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#misc.misc_arg.OutStreamArg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjRefArg" title="mk_py_capi.arg.TypedObjRefArg"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypedObjRefArg</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-misc.mt19937_gen">
+<span id="misc-mt19937-gen-module"></span><h2>misc.mt19937_gen module<a class="headerlink" href="#module-misc.mt19937_gen" title="この見出しへのパーマリンク">¶</a></h2>
+<p>Mt19937Gen の定義ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mt19937_gen.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="misc.mt19937_gen.Mt19937Gen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">misc.mt19937_gen.</span></span><span class="sig-name descname"><span class="pre">Mt19937Gen</span></span><a class="headerlink" href="#misc.mt19937_gen.Mt19937Gen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen" title="mk_py_capi.pyobj_gen.PyObjGen"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyObjGen</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-misc">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-misc" title="この見出しへのパーマリンク">¶</a></h2>
+<p>モジュールのセットアップスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>__init__.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2025 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">misc package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-misc.jsonvalue_gen">misc.jsonvalue_gen module</a><ul>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.JsonValueGen"><code class="docutils literal notranslate"><span class="pre">JsonValueGen</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_check_func"><code class="docutils literal notranslate"><span class="pre">gen_check_func()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_get_array"><code class="docutils literal notranslate"><span class="pre">gen_get_array()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_get_bool"><code class="docutils literal notranslate"><span class="pre">gen_get_bool()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_get_float"><code class="docutils literal notranslate"><span class="pre">gen_get_float()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_get_int"><code class="docutils literal notranslate"><span class="pre">gen_get_int()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_get_string"><code class="docutils literal notranslate"><span class="pre">gen_get_string()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_has_key"><code class="docutils literal notranslate"><span class="pre">gen_has_key()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_is_array"><code class="docutils literal notranslate"><span class="pre">gen_is_array()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_is_bool"><code class="docutils literal notranslate"><span class="pre">gen_is_bool()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_is_float"><code class="docutils literal notranslate"><span class="pre">gen_is_float()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_is_int"><code class="docutils literal notranslate"><span class="pre">gen_is_int()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_is_null"><code class="docutils literal notranslate"><span class="pre">gen_is_null()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_is_number"><code class="docutils literal notranslate"><span class="pre">gen_is_number()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_is_object"><code class="docutils literal notranslate"><span class="pre">gen_is_object()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_is_string"><code class="docutils literal notranslate"><span class="pre">gen_is_string()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_mp_length"><code class="docutils literal notranslate"><span class="pre">gen_mp_length()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_mp_subscript"><code class="docutils literal notranslate"><span class="pre">gen_mp_subscript()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_null"><code class="docutils literal notranslate"><span class="pre">gen_null()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_parse"><code class="docutils literal notranslate"><span class="pre">gen_parse()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_preamble"><code class="docutils literal notranslate"><span class="pre">gen_preamble()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_read"><code class="docutils literal notranslate"><span class="pre">gen_read()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.gen_write"><code class="docutils literal notranslate"><span class="pre">gen_write()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.item_list_gen"><code class="docutils literal notranslate"><span class="pre">item_list_gen()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.key_list_gen"><code class="docutils literal notranslate"><span class="pre">key_list_gen()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.new_gen"><code class="docutils literal notranslate"><span class="pre">new_gen()</span></code></a></li>
+<li><a class="reference internal" href="#misc.jsonvalue_gen.repr_func"><code class="docutils literal notranslate"><span class="pre">repr_func()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-misc.misc_arg">misc.misc_arg module</a><ul>
+<li><a class="reference internal" href="#misc.misc_arg.InStreamArg"><code class="docutils literal notranslate"><span class="pre">InStreamArg</span></code></a></li>
+<li><a class="reference internal" href="#misc.misc_arg.JsonValueArg"><code class="docutils literal notranslate"><span class="pre">JsonValueArg</span></code></a></li>
+<li><a class="reference internal" href="#misc.misc_arg.Mt19937Arg"><code class="docutils literal notranslate"><span class="pre">Mt19937Arg</span></code></a></li>
+<li><a class="reference internal" href="#misc.misc_arg.OutStreamArg"><code class="docutils literal notranslate"><span class="pre">OutStreamArg</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-misc.mt19937_gen">misc.mt19937_gen module</a><ul>
+<li><a class="reference internal" href="#misc.mt19937_gen.Mt19937Gen"><code class="docutils literal notranslate"><span class="pre">Mt19937Gen</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-misc">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/misc.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">misc package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

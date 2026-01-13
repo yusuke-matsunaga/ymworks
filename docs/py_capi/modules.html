@@ -1,0 +1,1079 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>utils &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="aig package" href="aig.html" />
+    <link rel="prev" title="Welcome to ymworks&#39;s documentation!" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="aig.html" title="aig package"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to ymworks&#39;s documentation!"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">utils</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="utils">
+<h1>utils<a class="headerlink" href="#utils" title="この見出しへのパーマリンク">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="aig.html">aig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aig.html#module-aig.aig_arg">aig.aig_arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="aig.html#aig.aig_arg.AigLiteralArg"><code class="docutils literal notranslate"><span class="pre">AigLiteralArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="aig.html#aig.aig_arg.AigLiteralListArg"><code class="docutils literal notranslate"><span class="pre">AigLiteralListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="aig.html#aig.aig_arg.AigMgrArg"><code class="docutils literal notranslate"><span class="pre">AigMgrArg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aig.html#module-aig.aigliteral_gen">aig.aigliteral_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="aig.html#aig.aigliteral_gen.AigLiteralGen"><code class="docutils literal notranslate"><span class="pre">AigLiteralGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aig.html#module-aig.aigmgr_gen">aig.aigmgr_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="aig.html#aig.aigmgr_gen.AigMgrGen"><code class="docutils literal notranslate"><span class="pre">AigMgrGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="aig.html#module-aig">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bn.html">bn package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bn_arg">bn.bn_arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bn_arg.BnDffArg"><code class="docutils literal notranslate"><span class="pre">BnDffArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bn_arg.BnDffListArg"><code class="docutils literal notranslate"><span class="pre">BnDffListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bn_arg.BnFuncArg"><code class="docutils literal notranslate"><span class="pre">BnFuncArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bn_arg.BnModelArg"><code class="docutils literal notranslate"><span class="pre">BnModelArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bn_arg.BnModelRefArg"><code class="docutils literal notranslate"><span class="pre">BnModelRefArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bn_arg.BnNodeArg"><code class="docutils literal notranslate"><span class="pre">BnNodeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bn_arg.BnNodeListArg"><code class="docutils literal notranslate"><span class="pre">BnNodeListArg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bndff_gen">bn.bndff_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bndff_gen.BnDffGen"><code class="docutils literal notranslate"><span class="pre">BnDffGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bndffiter2_gen">bn.bndffiter2_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bndffiter2_gen.BnDffIter2Gen"><code class="docutils literal notranslate"><span class="pre">BnDffIter2Gen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bndfflist_gen">bn.bndfflist_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bndfflist_gen.BnDffListGen"><code class="docutils literal notranslate"><span class="pre">BnDffListGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bnfunc_gen">bn.bnfunc_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bnfunc_gen.BnFuncGen"><code class="docutils literal notranslate"><span class="pre">BnFuncGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bnmodel_gen">bn.bnmodel_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bnmodel_gen.BnModelGen"><code class="docutils literal notranslate"><span class="pre">BnModelGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bnnode_gen">bn.bnnode_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bnnode_gen.BnNodeGen"><code class="docutils literal notranslate"><span class="pre">BnNodeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bnnodeiter2_gen">bn.bnnodeiter2_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bnnodeiter2_gen.BnNodeIter2Gen"><code class="docutils literal notranslate"><span class="pre">BnNodeIter2Gen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn.bnnodelist_gen">bn.bnnodelist_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="bn.html#bn.bnnodelist_gen.BnNodeListGen"><code class="docutils literal notranslate"><span class="pre">BnNodeListGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bn.html#module-bn">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clib.html">clib package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clib_arg">clib.clib_arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibAreaArg"><code class="docutils literal notranslate"><span class="pre">ClibAreaArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibBundleArg"><code class="docutils literal notranslate"><span class="pre">ClibBundleArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibBusArg"><code class="docutils literal notranslate"><span class="pre">ClibBusArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibBusTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibBusTypeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibCPVArg"><code class="docutils literal notranslate"><span class="pre">ClibCPVArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibCapacitanceArg"><code class="docutils literal notranslate"><span class="pre">ClibCapacitanceArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibCellArg"><code class="docutils literal notranslate"><span class="pre">ClibCellArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibCellClassArg"><code class="docutils literal notranslate"><span class="pre">ClibCellClassArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibCellGroupArg"><code class="docutils literal notranslate"><span class="pre">ClibCellGroupArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibCellLibraryArg"><code class="docutils literal notranslate"><span class="pre">ClibCellLibraryArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibCellTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibCellTypeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibDelayModelArg"><code class="docutils literal notranslate"><span class="pre">ClibDelayModelArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibDirectionArg"><code class="docutils literal notranslate"><span class="pre">ClibDirectionArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibIOMapArg"><code class="docutils literal notranslate"><span class="pre">ClibIOMapArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibLutArg"><code class="docutils literal notranslate"><span class="pre">ClibLutArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibPatGraphArg"><code class="docutils literal notranslate"><span class="pre">ClibPatGraphArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibPatTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibPatTypeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibPinArg"><code class="docutils literal notranslate"><span class="pre">ClibPinArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibPinMapArg"><code class="docutils literal notranslate"><span class="pre">ClibPinMapArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibResistanceArg"><code class="docutils literal notranslate"><span class="pre">ClibResistanceArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibSeqAttrArg"><code class="docutils literal notranslate"><span class="pre">ClibSeqAttrArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibTechnologyArg"><code class="docutils literal notranslate"><span class="pre">ClibTechnologyArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibTimeArg"><code class="docutils literal notranslate"><span class="pre">ClibTimeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibTimingArg"><code class="docutils literal notranslate"><span class="pre">ClibTimingArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibTimingSenseArg"><code class="docutils literal notranslate"><span class="pre">ClibTimingSenseArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibTimingTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibTimingTypeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clib_arg.ClibVarTypeArg"><code class="docutils literal notranslate"><span class="pre">ClibVarTypeArg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibarea_gen">clib.clibarea_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibarea_gen.ClibAreaGen"><code class="docutils literal notranslate"><span class="pre">ClibAreaGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibbundle_gen">clib.clibbundle_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibbundle_gen.ClibBundleGen"><code class="docutils literal notranslate"><span class="pre">ClibBundleGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibbus_gen">clib.clibbus_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibbus_gen.ClibBusGen"><code class="docutils literal notranslate"><span class="pre">ClibBusGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibbustype_gen">clib.clibbustype_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibbustype_gen.ClibBusTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibBusTypeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibcapacitance_gen">clib.clibcapacitance_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibcapacitance_gen.ClibCapacitanceGen"><code class="docutils literal notranslate"><span class="pre">ClibCapacitanceGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibcell_gen">clib.clibcell_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibcell_gen.ClibCellGen"><code class="docutils literal notranslate"><span class="pre">ClibCellGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibcellclass_gen">clib.clibcellclass_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibcellclass_gen.ClibCellClassGen"><code class="docutils literal notranslate"><span class="pre">ClibCellClassGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibcellgroup_gen">clib.clibcellgroup_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibcellgroup_gen.ClibCellGroupGen"><code class="docutils literal notranslate"><span class="pre">ClibCellGroupGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibcelllibrary_gen">clib.clibcelllibrary_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibcelllibrary_gen.ClibCellLibraryGen"><code class="docutils literal notranslate"><span class="pre">ClibCellLibraryGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibenum_gen">clib.clibenum_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibCPVGen"><code class="docutils literal notranslate"><span class="pre">ClibCPVGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibCellTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibCellTypeGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibDelayModelGen"><code class="docutils literal notranslate"><span class="pre">ClibDelayModelGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibDirectionGen"><code class="docutils literal notranslate"><span class="pre">ClibDirectionGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibPatTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibPatTypeGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibTechnologyGen"><code class="docutils literal notranslate"><span class="pre">ClibTechnologyGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibTimingSenseGen"><code class="docutils literal notranslate"><span class="pre">ClibTimingSenseGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibTimingTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibTimingTypeGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibenum_gen.ClibVarTypeGen"><code class="docutils literal notranslate"><span class="pre">ClibVarTypeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibiomap_gen">clib.clibiomap_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibiomap_gen.ClibIOMapGen"><code class="docutils literal notranslate"><span class="pre">ClibIOMapGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.cliblut_gen">clib.cliblut_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.cliblut_gen.ClibLutGen"><code class="docutils literal notranslate"><span class="pre">ClibLutGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibpatgraph_gen">clib.clibpatgraph_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibpatgraph_gen.ClibPatGraphGen"><code class="docutils literal notranslate"><span class="pre">ClibPatGraphGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibpin_gen">clib.clibpin_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibpin_gen.ClibPinGen"><code class="docutils literal notranslate"><span class="pre">ClibPinGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibpinmap_gen">clib.clibpinmap_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibpinmap_gen.ClibPinMapGen"><code class="docutils literal notranslate"><span class="pre">ClibPinMapGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibresistance_gen">clib.clibresistance_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibresistance_gen.ClibResistanceGen"><code class="docutils literal notranslate"><span class="pre">ClibResistanceGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibseqattr_gen">clib.clibseqattr_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibseqattr_gen.ClibSeqAttrGen"><code class="docutils literal notranslate"><span class="pre">ClibSeqAttrGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibtime_gen">clib.clibtime_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibtime_gen.ClibTimeGen"><code class="docutils literal notranslate"><span class="pre">ClibTimeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib.clibtiming_gen">clib.clibtiming_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="clib.html#clib.clibtiming_gen.ClibTimingGen"><code class="docutils literal notranslate"><span class="pre">ClibTimingGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clib.html#module-clib">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="combopt.html">combopt package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="combopt.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="combopt.html#module-combopt.combopt_arg">combopt.combopt_arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="combopt.html#combopt.combopt_arg.MinCovArg"><code class="docutils literal notranslate"><span class="pre">MinCovArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="combopt.html#combopt.combopt_arg.UdEdgeArg"><code class="docutils literal notranslate"><span class="pre">UdEdgeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="combopt.html#combopt.combopt_arg.UdEdgeListArg"><code class="docutils literal notranslate"><span class="pre">UdEdgeListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="combopt.html#combopt.combopt_arg.UdGraphArg"><code class="docutils literal notranslate"><span class="pre">UdGraphArg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="combopt.html#module-combopt.mincov_gen">combopt.mincov_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="combopt.html#combopt.mincov_gen.MinCovGen"><code class="docutils literal notranslate"><span class="pre">MinCovGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="combopt.html#module-combopt.udedge_gen">combopt.udedge_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="combopt.html#combopt.udedge_gen.UdEdgeGen"><code class="docutils literal notranslate"><span class="pre">UdEdgeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="combopt.html#module-combopt.udgraph_gen">combopt.udgraph_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="combopt.html#combopt.udgraph_gen.UdGraphGen"><code class="docutils literal notranslate"><span class="pre">UdGraphGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="combopt.html#module-combopt">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fraig.html">fraig package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fraig.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fraig.html#module-fraig.fraig_arg">fraig.fraig_arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fraig.html#fraig.fraig_arg.FraigLiteralArg"><code class="docutils literal notranslate"><span class="pre">FraigLiteralArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fraig.html#fraig.fraig_arg.FraigLiteralListArg"><code class="docutils literal notranslate"><span class="pre">FraigLiteralListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="fraig.html#fraig.fraig_arg.FraigMgrArg"><code class="docutils literal notranslate"><span class="pre">FraigMgrArg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fraig.html#module-fraig.fraigliteral_gen">fraig.fraigliteral_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fraig.html#fraig.fraigliteral_gen.FraigLiteralGen"><code class="docutils literal notranslate"><span class="pre">FraigLiteralGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fraig.html#module-fraig.fraigmgr_gen">fraig.fraigmgr_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fraig.html#fraig.fraigmgr_gen.FraigMgrGen"><code class="docutils literal notranslate"><span class="pre">FraigMgrGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fraig.html#module-fraig">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logic.html">logic package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bcedge_gen">logic.bcedge_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bcedge_gen.BcEdgeGen"><code class="docutils literal notranslate"><span class="pre">BcEdgeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bcgraph_gen">logic.bcgraph_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bcgraph_gen.BcGraphGen"><code class="docutils literal notranslate"><span class="pre">BcGraphGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bcop_gen">logic.bcop_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bcop_gen.BcOpGen"><code class="docutils literal notranslate"><span class="pre">BcOpGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bcoptype_gen">logic.bcoptype_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bcoptype_gen.BcOpTypeGen"><code class="docutils literal notranslate"><span class="pre">BcOpTypeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bdd_gen">logic.bdd_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bdd_gen.BddGen"><code class="docutils literal notranslate"><span class="pre">BddGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bddcompmap_gen">logic.bddcompmap_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bddcompmap_gen.BddCompMapGen"><code class="docutils literal notranslate"><span class="pre">BddCompMapGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bddcube_gen">logic.bddcube_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bddcube_gen.BddCubeGen"><code class="docutils literal notranslate"><span class="pre">BddCubeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bddlit_gen">logic.bddlit_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bddlit_gen.BddLitGen"><code class="docutils literal notranslate"><span class="pre">BddLitGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bddmgr_gen">logic.bddmgr_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bddmgr_gen.BddMgrGen"><code class="docutils literal notranslate"><span class="pre">BddMgrGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bddvar_gen">logic.bddvar_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bddvar_gen.BddVarArg"><code class="docutils literal notranslate"><span class="pre">BddVarArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bddvar_gen.BddVarGen"><code class="docutils literal notranslate"><span class="pre">BddVarGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bddvarmap_gen">logic.bddvarmap_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bddvarmap_gen.BddVarMapGen"><code class="docutils literal notranslate"><span class="pre">BddVarMapGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.bddvarset_gen">logic.bddvarset_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.bddvarset_gen.BddVarSetGen"><code class="docutils literal notranslate"><span class="pre">BddVarSetGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.djdec_gen">logic.djdec_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.djdec_gen.DjDecGen"><code class="docutils literal notranslate"><span class="pre">DjDecGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.expr_gen">logic.expr_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.expr_gen.ExprGen"><code class="docutils literal notranslate"><span class="pre">ExprGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.literal_gen">logic.literal_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.literal_gen.LiteralGen"><code class="docutils literal notranslate"><span class="pre">LiteralGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.logic_arg">logic.logic_arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BcBvListArg"><code class="docutils literal notranslate"><span class="pre">BcBvListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BcEdgeArg"><code class="docutils literal notranslate"><span class="pre">BcEdgeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BcEdgeListArg"><code class="docutils literal notranslate"><span class="pre">BcEdgeListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BcOpTypeArg"><code class="docutils literal notranslate"><span class="pre">BcOpTypeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddArg"><code class="docutils literal notranslate"><span class="pre">BddArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddCompMapArg"><code class="docutils literal notranslate"><span class="pre">BddCompMapArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddCubeArg"><code class="docutils literal notranslate"><span class="pre">BddCubeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddListArg"><code class="docutils literal notranslate"><span class="pre">BddListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddLitArg"><code class="docutils literal notranslate"><span class="pre">BddLitArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddLitListArg"><code class="docutils literal notranslate"><span class="pre">BddLitListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddMgrArg"><code class="docutils literal notranslate"><span class="pre">BddMgrArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddVarArg"><code class="docutils literal notranslate"><span class="pre">BddVarArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddVarListArg"><code class="docutils literal notranslate"><span class="pre">BddVarListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddVarMapArg"><code class="docutils literal notranslate"><span class="pre">BddVarMapArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.BddVarSetArg"><code class="docutils literal notranslate"><span class="pre">BddVarSetArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.ExprArg"><code class="docutils literal notranslate"><span class="pre">ExprArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.ExprListArg"><code class="docutils literal notranslate"><span class="pre">ExprListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.LiteralArg"><code class="docutils literal notranslate"><span class="pre">LiteralArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.LiteralListArg"><code class="docutils literal notranslate"><span class="pre">LiteralListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.NpnMapArg"><code class="docutils literal notranslate"><span class="pre">NpnMapArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.PrimTypeArg"><code class="docutils literal notranslate"><span class="pre">PrimTypeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.SopCoverArg"><code class="docutils literal notranslate"><span class="pre">SopCoverArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.SopCoverListArg"><code class="docutils literal notranslate"><span class="pre">SopCoverListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.SopCubeArg"><code class="docutils literal notranslate"><span class="pre">SopCubeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.SopCubeListArg"><code class="docutils literal notranslate"><span class="pre">SopCubeListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.TruthTableArg"><code class="docutils literal notranslate"><span class="pre">TruthTableArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.TvFuncArg"><code class="docutils literal notranslate"><span class="pre">TvFuncArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.logic_arg.Val3Arg"><code class="docutils literal notranslate"><span class="pre">Val3Arg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.npnmap_gen">logic.npnmap_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.npnmap_gen.NpnMapGen"><code class="docutils literal notranslate"><span class="pre">NpnMapGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.primtype_gen">logic.primtype_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.primtype_gen.PrimTypeGen"><code class="docutils literal notranslate"><span class="pre">PrimTypeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.sopcover_gen">logic.sopcover_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.sopcover_gen.SopCoverGen"><code class="docutils literal notranslate"><span class="pre">SopCoverGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.sopcube_gen">logic.sopcube_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.sopcube_gen.SopCubeGen"><code class="docutils literal notranslate"><span class="pre">SopCubeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.truthtable_gen">logic.truthtable_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.truthtable_gen.TruthTableGen"><code class="docutils literal notranslate"><span class="pre">TruthTableGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.tvfunc_gen">logic.tvfunc_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.tvfunc_gen.TvFuncGen"><code class="docutils literal notranslate"><span class="pre">TvFuncGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic.val3_gen">logic.val3_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="logic.html#logic.val3_gen.Val3Gen"><code class="docutils literal notranslate"><span class="pre">Val3Gen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="logic.html#module-logic">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">misc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="misc.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html#module-misc.jsonvalue_gen">misc.jsonvalue_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.JsonValueGen"><code class="docutils literal notranslate"><span class="pre">JsonValueGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_check_func"><code class="docutils literal notranslate"><span class="pre">gen_check_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_get_array"><code class="docutils literal notranslate"><span class="pre">gen_get_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_get_bool"><code class="docutils literal notranslate"><span class="pre">gen_get_bool()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_get_float"><code class="docutils literal notranslate"><span class="pre">gen_get_float()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_get_int"><code class="docutils literal notranslate"><span class="pre">gen_get_int()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_get_string"><code class="docutils literal notranslate"><span class="pre">gen_get_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_has_key"><code class="docutils literal notranslate"><span class="pre">gen_has_key()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_is_array"><code class="docutils literal notranslate"><span class="pre">gen_is_array()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_is_bool"><code class="docutils literal notranslate"><span class="pre">gen_is_bool()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_is_float"><code class="docutils literal notranslate"><span class="pre">gen_is_float()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_is_int"><code class="docutils literal notranslate"><span class="pre">gen_is_int()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_is_null"><code class="docutils literal notranslate"><span class="pre">gen_is_null()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_is_number"><code class="docutils literal notranslate"><span class="pre">gen_is_number()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_is_object"><code class="docutils literal notranslate"><span class="pre">gen_is_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_is_string"><code class="docutils literal notranslate"><span class="pre">gen_is_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_mp_length"><code class="docutils literal notranslate"><span class="pre">gen_mp_length()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_mp_subscript"><code class="docutils literal notranslate"><span class="pre">gen_mp_subscript()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_null"><code class="docutils literal notranslate"><span class="pre">gen_null()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_parse"><code class="docutils literal notranslate"><span class="pre">gen_parse()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_preamble"><code class="docutils literal notranslate"><span class="pre">gen_preamble()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_read"><code class="docutils literal notranslate"><span class="pre">gen_read()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.gen_write"><code class="docutils literal notranslate"><span class="pre">gen_write()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.item_list_gen"><code class="docutils literal notranslate"><span class="pre">item_list_gen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.key_list_gen"><code class="docutils literal notranslate"><span class="pre">key_list_gen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.new_gen"><code class="docutils literal notranslate"><span class="pre">new_gen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.jsonvalue_gen.repr_func"><code class="docutils literal notranslate"><span class="pre">repr_func()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html#module-misc.misc_arg">misc.misc_arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.misc_arg.InStreamArg"><code class="docutils literal notranslate"><span class="pre">InStreamArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.misc_arg.JsonValueArg"><code class="docutils literal notranslate"><span class="pre">JsonValueArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.misc_arg.Mt19937Arg"><code class="docutils literal notranslate"><span class="pre">Mt19937Arg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.misc_arg.OutStreamArg"><code class="docutils literal notranslate"><span class="pre">OutStreamArg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html#module-misc.mt19937_gen">misc.mt19937_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="misc.html#misc.mt19937_gen.Mt19937Gen"><code class="docutils literal notranslate"><span class="pre">Mt19937Gen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html#module-misc">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mk_all.html">mk_all module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mk_py_capi.html">mk_py_capi package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.arg">mk_py_capi.arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ArgBase"><code class="docutils literal notranslate"><span class="pre">ArgBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ArgBase.gen_conv"><code class="docutils literal notranslate"><span class="pre">ArgBase.gen_conv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.BoolArg"><code class="docutils literal notranslate"><span class="pre">BoolArg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.BoolArg.conv_body"><code class="docutils literal notranslate"><span class="pre">BoolArg.conv_body()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.CharArg"><code class="docutils literal notranslate"><span class="pre">CharArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ConvArg"><code class="docutils literal notranslate"><span class="pre">ConvArg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ConvArg.gen_conv"><code class="docutils literal notranslate"><span class="pre">ConvArg.gen_conv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ConvFunc"><code class="docutils literal notranslate"><span class="pre">ConvFunc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.DoubleArg"><code class="docutils literal notranslate"><span class="pre">DoubleArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.Int32Arg"><code class="docutils literal notranslate"><span class="pre">Int32Arg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.Int64Arg"><code class="docutils literal notranslate"><span class="pre">Int64Arg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.IntArg"><code class="docutils literal notranslate"><span class="pre">IntArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.KwdArg"><code class="docutils literal notranslate"><span class="pre">KwdArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.LongArg"><code class="docutils literal notranslate"><span class="pre">LongArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ObjConvArg"><code class="docutils literal notranslate"><span class="pre">ObjConvArg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ObjConvArg.conv_body"><code class="docutils literal notranslate"><span class="pre">ObjConvArg.conv_body()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ObjConvArgBase"><code class="docutils literal notranslate"><span class="pre">ObjConvArgBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ObjConvArgBase.conv_body"><code class="docutils literal notranslate"><span class="pre">ObjConvArgBase.conv_body()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.ObjConvArgBase.gen_conv"><code class="docutils literal notranslate"><span class="pre">ObjConvArgBase.gen_conv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.OptArg"><code class="docutils literal notranslate"><span class="pre">OptArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.RawArg"><code class="docutils literal notranslate"><span class="pre">RawArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.RawObjArg"><code class="docutils literal notranslate"><span class="pre">RawObjArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.StringArg"><code class="docutils literal notranslate"><span class="pre">StringArg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.StringArg.conv_body"><code class="docutils literal notranslate"><span class="pre">StringArg.conv_body()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg"><code class="docutils literal notranslate"><span class="pre">TypedObjConvArg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjConvArg.gen_conv"><code class="docutils literal notranslate"><span class="pre">TypedObjConvArg.gen_conv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjRefArg"><code class="docutils literal notranslate"><span class="pre">TypedObjRefArg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedObjRefArg.gen_conv"><code class="docutils literal notranslate"><span class="pre">TypedObjRefArg.gen_conv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.TypedRawObjArg"><code class="docutils literal notranslate"><span class="pre">TypedRawObjArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.Uint32Arg"><code class="docutils literal notranslate"><span class="pre">Uint32Arg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.Uint64Arg"><code class="docutils literal notranslate"><span class="pre">Uint64Arg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.UintArg"><code class="docutils literal notranslate"><span class="pre">UintArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.UlongArg"><code class="docutils literal notranslate"><span class="pre">UlongArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.make_vardef"><code class="docutils literal notranslate"><span class="pre">make_vardef()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.arg.make_varref"><code class="docutils literal notranslate"><span class="pre">make_varref()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.cmwriter">mk_py_capi.cmwriter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cmwriter.CmWriter"><code class="docutils literal notranslate"><span class="pre">CmWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cmwriter.CmWriter.gen_add_subdirectory"><code class="docutils literal notranslate"><span class="pre">CmWriter.gen_add_subdirectory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cmwriter.CmWriter.gen_include_directories"><code class="docutils literal notranslate"><span class="pre">CmWriter.gen_include_directories()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.cxxwriter">mk_py_capi.cxxwriter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CodeBlock"><code class="docutils literal notranslate"><span class="pre">CodeBlock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter"><code class="docutils literal notranslate"><span class="pre">CxxWriter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_arg_parser"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_arg_parser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_array_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_array_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_assign"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_assign()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_auto_assign"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_auto_assign()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_autoref_assign"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_autoref_assign()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_catch_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_catch_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_catch_exception"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_catch_exception()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_catch_invalid_argument"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_catch_invalid_argument()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_catch_logic_error"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_catch_logic_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_catch_out_of_range"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_catch_out_of_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_comment"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_comment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_comments"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_comments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_dox_comment"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_dox_comment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_dox_comments"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_dox_comments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_else_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_else_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_elseif_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_elseif_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_error"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_for_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_for_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_foreach_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_foreach_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_foreach_sequence_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_foreach_sequence_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_func_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_func_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_func_declaration"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_func_declaration()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_func_header"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_func_header()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_goto"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_goto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_if_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_if_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_include"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_include()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_label"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_label()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_mapping"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_buildvalue"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_buildvalue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_bool"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_bool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_float"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_float()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_int"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_int()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_int32"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_int32()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_int64"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_int64()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_long"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_long()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_none"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_none()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_notimplemented"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_notimplemented()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_string"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_uint"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_uint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_uint32"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_uint32()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_uint64"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_uint64()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_py_ulong"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_py_ulong()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_pyobject"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_pyobject()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_return_self"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_return_self()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_sequence"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_sequence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_stmt"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_stmt()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_struct_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_struct_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_struct_init_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_struct_init_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_switch_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_switch_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_tp_alloc"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_tp_alloc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_try_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_try_block()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_type_error"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_type_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_value_error"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_value_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_vardecl"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_vardecl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.cxxwriter.CxxWriter.gen_while_block"><code class="docutils literal notranslate"><span class="pre">CxxWriter.gen_while_block()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.enum_gen">mk_py_capi.enum_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumGen"><code class="docutils literal notranslate"><span class="pre">EnumGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumInfo"><code class="docutils literal notranslate"><span class="pre">EnumInfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumInfo.cval"><code class="docutils literal notranslate"><span class="pre">EnumInfo.cval</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumInfo.pyname"><code class="docutils literal notranslate"><span class="pre">EnumInfo.pyname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.enum_gen.EnumInfo.strname"><code class="docutils literal notranslate"><span class="pre">EnumInfo.strname</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.funcgen">mk_py_capi.funcgen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.BinaryFuncGen"><code class="docutils literal notranslate"><span class="pre">BinaryFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg"><code class="docutils literal notranslate"><span class="pre">CArg</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg.Args"><code class="docutils literal notranslate"><span class="pre">CArg.Args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg.Closure"><code class="docutils literal notranslate"><span class="pre">CArg.Closure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg.GenArg"><code class="docutils literal notranslate"><span class="pre">CArg.GenArg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg.Kwds"><code class="docutils literal notranslate"><span class="pre">CArg.Kwds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg.Other"><code class="docutils literal notranslate"><span class="pre">CArg.Other()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg.PyArg"><code class="docutils literal notranslate"><span class="pre">CArg.PyArg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg.Self"><code class="docutils literal notranslate"><span class="pre">CArg.Self()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CArg.Type"><code class="docutils literal notranslate"><span class="pre">CArg.Type()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.CallFuncGen"><code class="docutils literal notranslate"><span class="pre">CallFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.ConvGen"><code class="docutils literal notranslate"><span class="pre">ConvGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.ConvGen.gen_decl"><code class="docutils literal notranslate"><span class="pre">ConvGen.gen_decl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.ConvGen.gen_tofunc"><code class="docutils literal notranslate"><span class="pre">ConvGen.gen_tofunc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.DeallocGen"><code class="docutils literal notranslate"><span class="pre">DeallocGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.DeconvGen"><code class="docutils literal notranslate"><span class="pre">DeconvGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.DeconvGen.gen_decl"><code class="docutils literal notranslate"><span class="pre">DeconvGen.gen_decl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.DeconvGen.gen_fromfunc"><code class="docutils literal notranslate"><span class="pre">DeconvGen.gen_fromfunc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.FuncBase"><code class="docutils literal notranslate"><span class="pre">FuncBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.FuncBase.gen_tp"><code class="docutils literal notranslate"><span class="pre">FuncBase.gen_tp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.FuncWithArgs"><code class="docutils literal notranslate"><span class="pre">FuncWithArgs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.HashFuncGen"><code class="docutils literal notranslate"><span class="pre">HashFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.InitProcGen"><code class="docutils literal notranslate"><span class="pre">InitProcGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.InquiryGen"><code class="docutils literal notranslate"><span class="pre">InquiryGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.IterFuncGen"><code class="docutils literal notranslate"><span class="pre">IterFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.IterNextFuncGen"><code class="docutils literal notranslate"><span class="pre">IterNextFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.LenFuncGen"><code class="docutils literal notranslate"><span class="pre">LenFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.NewFuncGen"><code class="docutils literal notranslate"><span class="pre">NewFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.ObjObjArgProcGen"><code class="docutils literal notranslate"><span class="pre">ObjObjArgProcGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.ObjObjProcGen"><code class="docutils literal notranslate"><span class="pre">ObjObjProcGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.ReprFuncGen"><code class="docutils literal notranslate"><span class="pre">ReprFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.RichcmpFuncGen"><code class="docutils literal notranslate"><span class="pre">RichcmpFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.SsizeArgFuncGen"><code class="docutils literal notranslate"><span class="pre">SsizeArgFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.SsizeObjArgProcGen"><code class="docutils literal notranslate"><span class="pre">SsizeObjArgProcGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.StrFuncGen"><code class="docutils literal notranslate"><span class="pre">StrFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.TernaryFuncGen"><code class="docutils literal notranslate"><span class="pre">TernaryFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.UnaryFuncGen"><code class="docutils literal notranslate"><span class="pre">UnaryFuncGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.funcgen.mk_varname"><code class="docutils literal notranslate"><span class="pre">mk_varname()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.genbase">mk_py_capi.genbase module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.BeginNamespaceGen"><code class="docutils literal notranslate"><span class="pre">BeginNamespaceGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.EndNamespaceGen"><code class="docutils literal notranslate"><span class="pre">EndNamespaceGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.GenBase"><code class="docutils literal notranslate"><span class="pre">GenBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.GenBase.check_name"><code class="docutils literal notranslate"><span class="pre">GenBase.check_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.GenBase.complete_name"><code class="docutils literal notranslate"><span class="pre">GenBase.complete_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.GenBase.make_file"><code class="docutils literal notranslate"><span class="pre">GenBase.make_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.GenBase.template_file"><code class="docutils literal notranslate"><span class="pre">GenBase.template_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.GenBase.year"><code class="docutils literal notranslate"><span class="pre">GenBase.year()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.IncludesGen"><code class="docutils literal notranslate"><span class="pre">IncludesGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.genbase.PatGen"><code class="docutils literal notranslate"><span class="pre">PatGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.getset_gen">mk_py_capi.getset_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.Attr"><code class="docutils literal notranslate"><span class="pre">Attr</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.Attr.closure"><code class="docutils literal notranslate"><span class="pre">Attr.closure</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.Attr.doc_str"><code class="docutils literal notranslate"><span class="pre">Attr.doc_str</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.Attr.getter_name"><code class="docutils literal notranslate"><span class="pre">Attr.getter_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.Attr.name"><code class="docutils literal notranslate"><span class="pre">Attr.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.Attr.setter_name"><code class="docutils literal notranslate"><span class="pre">Attr.setter_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSet"><code class="docutils literal notranslate"><span class="pre">GetSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSet.body"><code class="docutils literal notranslate"><span class="pre">GetSet.body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSet.gen"><code class="docutils literal notranslate"><span class="pre">GetSet.gen</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSet.has_catch_block"><code class="docutils literal notranslate"><span class="pre">GetSet.has_catch_block</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSet.has_closure"><code class="docutils literal notranslate"><span class="pre">GetSet.has_closure</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSet.name"><code class="docutils literal notranslate"><span class="pre">GetSet.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSetGen"><code class="docutils literal notranslate"><span class="pre">GetSetGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSetGen.add_attr"><code class="docutils literal notranslate"><span class="pre">GetSetGen.add_attr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSetGen.add_getter"><code class="docutils literal notranslate"><span class="pre">GetSetGen.add_getter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSetGen.add_setter"><code class="docutils literal notranslate"><span class="pre">GetSetGen.add_setter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.getset_gen.GetSetGen.gen_tp"><code class="docutils literal notranslate"><span class="pre">GetSetGen.gen_tp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.mapping_gen">mk_py_capi.mapping_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.mapping_gen.Mapping"><code class="docutils literal notranslate"><span class="pre">Mapping</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.mapping_gen.Mapping.mp_ass_subscript"><code class="docutils literal notranslate"><span class="pre">Mapping.mp_ass_subscript</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.mapping_gen.Mapping.mp_length"><code class="docutils literal notranslate"><span class="pre">Mapping.mp_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.mapping_gen.Mapping.mp_subscript"><code class="docutils literal notranslate"><span class="pre">Mapping.mp_subscript</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.mapping_gen.MappingGen"><code class="docutils literal notranslate"><span class="pre">MappingGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.mapping_gen.MappingGen.gen_tp"><code class="docutils literal notranslate"><span class="pre">MappingGen.gen_tp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.method_gen">mk_py_capi.method_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.DefaultParser"><code class="docutils literal notranslate"><span class="pre">DefaultParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.DefaultParser.has_args"><code class="docutils literal notranslate"><span class="pre">DefaultParser.has_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.DefaultParser.has_keywords"><code class="docutils literal notranslate"><span class="pre">DefaultParser.has_keywords()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method"><code class="docutils literal notranslate"><span class="pre">Method</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method.arg_parser"><code class="docutils literal notranslate"><span class="pre">Method.arg_parser</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method.doc_str"><code class="docutils literal notranslate"><span class="pre">Method.doc_str</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method.func_body"><code class="docutils literal notranslate"><span class="pre">Method.func_body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method.func_name"><code class="docutils literal notranslate"><span class="pre">Method.func_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method.gen"><code class="docutils literal notranslate"><span class="pre">Method.gen</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method.has_catch_block"><code class="docutils literal notranslate"><span class="pre">Method.has_catch_block</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method.is_static"><code class="docutils literal notranslate"><span class="pre">Method.is_static</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.Method.name"><code class="docutils literal notranslate"><span class="pre">Method.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.MethodGen"><code class="docutils literal notranslate"><span class="pre">MethodGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.MethodGen.add"><code class="docutils literal notranslate"><span class="pre">MethodGen.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.MethodGen.gen_tp"><code class="docutils literal notranslate"><span class="pre">MethodGen.gen_tp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.NullParser"><code class="docutils literal notranslate"><span class="pre">NullParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.NullParser.has_args"><code class="docutils literal notranslate"><span class="pre">NullParser.has_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.method_gen.NullParser.has_keywords"><code class="docutils literal notranslate"><span class="pre">NullParser.has_keywords()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.module_gen">mk_py_capi.module_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.AddExecutableTarget"><code class="docutils literal notranslate"><span class="pre">AddExecutableTarget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.AddLibraryTarget"><code class="docutils literal notranslate"><span class="pre">AddLibraryTarget</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen"><code class="docutils literal notranslate"><span class="pre">ModuleGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.add_method"><code class="docutils literal notranslate"><span class="pre">ModuleGen.add_method()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.add_submodule"><code class="docutils literal notranslate"><span class="pre">ModuleGen.add_submodule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_add_subdirectory"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_add_subdirectory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_all"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_all()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_cmakefile"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_cmakefile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_extra_code"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_extra_code()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_header"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_header()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_include_directories"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_include_directories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_init_code"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_init_code()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_set_sources"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_set_sources()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_source"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_source()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.ModuleGen.make_targets"><code class="docutils literal notranslate"><span class="pre">ModuleGen.make_targets()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.module_gen.YmAddObjectLibraryTarget"><code class="docutils literal notranslate"><span class="pre">YmAddObjectLibraryTarget</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.number_gen">mk_py_capi.number_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.AddIop"><code class="docutils literal notranslate"><span class="pre">AddIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.AddOp"><code class="docutils literal notranslate"><span class="pre">AddOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.AndIop"><code class="docutils literal notranslate"><span class="pre">AndIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.AndOp"><code class="docutils literal notranslate"><span class="pre">AndOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.BinOpGen"><code class="docutils literal notranslate"><span class="pre">BinOpGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.DivIop"><code class="docutils literal notranslate"><span class="pre">DivIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.DivOp"><code class="docutils literal notranslate"><span class="pre">DivOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.Iop"><code class="docutils literal notranslate"><span class="pre">Iop</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.Iop.body"><code class="docutils literal notranslate"><span class="pre">Iop.body()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.LsftIop"><code class="docutils literal notranslate"><span class="pre">LsftIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.LsftOp"><code class="docutils literal notranslate"><span class="pre">LsftOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.MulIop"><code class="docutils literal notranslate"><span class="pre">MulIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.MulOp"><code class="docutils literal notranslate"><span class="pre">MulOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen"><code class="docutils literal notranslate"><span class="pre">NumberGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_absolute"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_absolute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_add"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_and"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_and()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_bool"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_bool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_divmod"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_divmod()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_float"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_float()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_floor_divide"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_floor_divide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_index"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_add"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_and"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_and()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_floor_divide"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_floor_divide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_lshift"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_lshift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_matrix_multiply"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_matrix_multiply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_multiply"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_multiply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_or"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_or()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_power"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_power()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_remainder"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_remainder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_rshift"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_rshift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_subtract"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_subtract()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_true_divide"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_true_divide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_inplace_xor"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_inplace_xor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_int"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_int()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_invert"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_invert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_lshift"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_lshift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_matrix_multiply"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_matrix_multiply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_multiply"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_multiply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_negative"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_negative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_or"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_or()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_positive"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_positive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_power"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_power()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_remainder"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_remainder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_rshift"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_rshift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_subtract"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_subtract()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_true_divide"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_true_divide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.add_xor"><code class="docutils literal notranslate"><span class="pre">NumberGen.add_xor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.NumberGen.gen_tp"><code class="docutils literal notranslate"><span class="pre">NumberGen.gen_tp()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.Op"><code class="docutils literal notranslate"><span class="pre">Op</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.Op.body"><code class="docutils literal notranslate"><span class="pre">Op.body()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.OpBase"><code class="docutils literal notranslate"><span class="pre">OpBase</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.OrIop"><code class="docutils literal notranslate"><span class="pre">OrIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.OrOp"><code class="docutils literal notranslate"><span class="pre">OrOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.RemIop"><code class="docutils literal notranslate"><span class="pre">RemIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.RemOp"><code class="docutils literal notranslate"><span class="pre">RemOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.RsftIop"><code class="docutils literal notranslate"><span class="pre">RsftIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.RsftOp"><code class="docutils literal notranslate"><span class="pre">RsftOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.SubIop"><code class="docutils literal notranslate"><span class="pre">SubIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.SubOp"><code class="docutils literal notranslate"><span class="pre">SubOp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.XorIop"><code class="docutils literal notranslate"><span class="pre">XorIop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.number_gen.XorOp"><code class="docutils literal notranslate"><span class="pre">XorOp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.pyobj_gen">mk_py_capi.pyobj_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.ConvCodeGen"><code class="docutils literal notranslate"><span class="pre">ConvCodeGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.ConvDefGen"><code class="docutils literal notranslate"><span class="pre">ConvDefGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.ExInitGen"><code class="docutils literal notranslate"><span class="pre">ExInitGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.ExtraCodeGen"><code class="docutils literal notranslate"><span class="pre">ExtraCodeGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.GetDefGen"><code class="docutils literal notranslate"><span class="pre">GetDefGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen"><code class="docutils literal notranslate"><span class="pre">PyObjGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_attr"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_attr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_call"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_call()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_conv"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_conv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_dealloc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_dealloc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_deconv"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_deconv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_ex_init"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_ex_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_getter"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_getter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_hash"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_hash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_init"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_iter"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_iter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_iternext"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_iternext()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_mapping"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_method"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_method()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_method_with_parser"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_method_with_parser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_absolute"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_absolute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_add"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_and"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_and()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_bool"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_bool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_divmod"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_divmod()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_float"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_float()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_floor_divide"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_floor_divide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_index"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_add"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_and"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_and()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_floor_divide"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_floor_divide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_lshift"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_lshift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_matrix_multiply"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_matrix_multiply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_multiply"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_multiply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_or"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_or()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_power"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_power()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_remainder"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_remainder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_rshift"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_rshift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_subtract"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_subtract()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_true_divide"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_true_divide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_inplace_xor"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_inplace_xor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_int"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_int()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_invert"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_invert()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_lshift"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_lshift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_matrix_multiply"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_matrix_multiply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_multiply"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_multiply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_negative"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_negative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_or"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_or()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_positive"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_positive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_power"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_power()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_remainder"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_remainder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_rshift"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_rshift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_subtract"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_subtract()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_true_divide"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_true_divide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_nb_xor"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_nb_xor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_new"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_new()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_preamble"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_preamble()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_repr"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_repr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_richcompare"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_richcompare()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_sequence"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_sequence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_setter"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_setter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_static_method"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_static_method()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_static_method_with_parser"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_static_method_with_parser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.add_str"><code class="docutils literal notranslate"><span class="pre">PyObjGen.add_str()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.gen_alloc_code"><code class="docutils literal notranslate"><span class="pre">PyObjGen.gen_alloc_code()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.gen_obj_conv"><code class="docutils literal notranslate"><span class="pre">PyObjGen.gen_obj_conv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.gen_raw_conv"><code class="docutils literal notranslate"><span class="pre">PyObjGen.gen_raw_conv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.gen_ref_conv"><code class="docutils literal notranslate"><span class="pre">PyObjGen.gen_ref_conv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.make_conv_code"><code class="docutils literal notranslate"><span class="pre">PyObjGen.make_conv_code()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.make_ex_init"><code class="docutils literal notranslate"><span class="pre">PyObjGen.make_ex_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.make_extra_code"><code class="docutils literal notranslate"><span class="pre">PyObjGen.make_extra_code()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.make_get_def"><code class="docutils literal notranslate"><span class="pre">PyObjGen.make_get_def()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.make_header"><code class="docutils literal notranslate"><span class="pre">PyObjGen.make_header()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.make_source"><code class="docutils literal notranslate"><span class="pre">PyObjGen.make_source()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.make_tp_init"><code class="docutils literal notranslate"><span class="pre">PyObjGen.make_tp_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_binaryfunc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_binaryfunc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_binop"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_binop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_inquiry"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_inquiry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_lenfunc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_lenfunc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_nb_ternaryfunc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_nb_ternaryfunc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_objobjargproc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_objobjargproc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_objobjproc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_objobjproc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_ssizeargfunc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_ssizeargfunc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_ssizeobjargproc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_ssizeobjargproc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_ternaryfunc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_ternaryfunc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.PyObjGen.new_unaryfunc"><code class="docutils literal notranslate"><span class="pre">PyObjGen.new_unaryfunc()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.ToDefGen"><code class="docutils literal notranslate"><span class="pre">ToDefGen</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.pyobj_gen.TpInitGen"><code class="docutils literal notranslate"><span class="pre">TpInitGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.sequence_gen">mk_py_capi.sequence_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence"><code class="docutils literal notranslate"><span class="pre">Sequence</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence.sq_ass_item"><code class="docutils literal notranslate"><span class="pre">Sequence.sq_ass_item</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence.sq_concat"><code class="docutils literal notranslate"><span class="pre">Sequence.sq_concat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence.sq_contains"><code class="docutils literal notranslate"><span class="pre">Sequence.sq_contains</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence.sq_inplace_concat"><code class="docutils literal notranslate"><span class="pre">Sequence.sq_inplace_concat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence.sq_inplace_repeat"><code class="docutils literal notranslate"><span class="pre">Sequence.sq_inplace_repeat</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence.sq_item"><code class="docutils literal notranslate"><span class="pre">Sequence.sq_item</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence.sq_length"><code class="docutils literal notranslate"><span class="pre">Sequence.sq_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.Sequence.sq_repeat"><code class="docutils literal notranslate"><span class="pre">Sequence.sq_repeat</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.SequenceGen"><code class="docutils literal notranslate"><span class="pre">SequenceGen</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.sequence_gen.SequenceGen.gen_tp"><code class="docutils literal notranslate"><span class="pre">SequenceGen.gen_tp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.utils">mk_py_capi.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.utils.add_member_def"><code class="docutils literal notranslate"><span class="pre">add_member_def()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.utils.analyze_args"><code class="docutils literal notranslate"><span class="pre">analyze_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.utils.gen_func"><code class="docutils literal notranslate"><span class="pre">gen_func()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi.writer">mk_py_capi.writer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.writer.Writer"><code class="docutils literal notranslate"><span class="pre">Writer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.writer.Writer.gen_CRLF"><code class="docutils literal notranslate"><span class="pre">Writer.gen_CRLF()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.writer.Writer.indent_dec"><code class="docutils literal notranslate"><span class="pre">Writer.indent_dec()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.writer.Writer.indent_inc"><code class="docutils literal notranslate"><span class="pre">Writer.indent_inc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.writer.Writer.indent_set"><code class="docutils literal notranslate"><span class="pre">Writer.indent_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.writer.Writer.write_line"><code class="docutils literal notranslate"><span class="pre">Writer.write_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mk_py_capi.html#mk_py_capi.writer.Writer.write_lines"><code class="docutils literal notranslate"><span class="pre">Writer.write_lines()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mk_py_capi.html#module-mk_py_capi">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sat.html">sat package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.cnfsize_gen">sat.cnfsize_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.cnfsize_gen.CnfSizeGen"><code class="docutils literal notranslate"><span class="pre">CnfSizeGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#sat-mk-all-module">sat.mk_all module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.sat_arg">sat.sat_arg module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.CnfSizeArg"><code class="docutils literal notranslate"><span class="pre">CnfSizeArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.SatBool3Arg"><code class="docutils literal notranslate"><span class="pre">SatBool3Arg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.SatInitParamArg"><code class="docutils literal notranslate"><span class="pre">SatInitParamArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.SatLiteralArg"><code class="docutils literal notranslate"><span class="pre">SatLiteralArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.SatLiteralListArg"><code class="docutils literal notranslate"><span class="pre">SatLiteralListArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.SatLiteralMapArg"><code class="docutils literal notranslate"><span class="pre">SatLiteralMapArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.SatModelArg"><code class="docutils literal notranslate"><span class="pre">SatModelArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.SatSolverRefArg"><code class="docutils literal notranslate"><span class="pre">SatSolverRefArg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.sat_arg.SatStatsArg"><code class="docutils literal notranslate"><span class="pre">SatStatsArg</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.satbool3_gen">sat.satbool3_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satbool3_gen.SatBool3Gen"><code class="docutils literal notranslate"><span class="pre">SatBool3Gen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.satcondblock_gen">sat.satcondblock_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satcondblock_gen.SatCondBlockGen"><code class="docutils literal notranslate"><span class="pre">SatCondBlockGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.satinitparam_gen">sat.satinitparam_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satinitparam_gen.SatInitParamGen"><code class="docutils literal notranslate"><span class="pre">SatInitParamGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.satliteral_gen">sat.satliteral_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satliteral_gen.SatLiteralGen"><code class="docutils literal notranslate"><span class="pre">SatLiteralGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.satliteralmap_gen">sat.satliteralmap_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satliteralmap_gen.SatLiteralMapGen"><code class="docutils literal notranslate"><span class="pre">SatLiteralMapGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.satmodel_gen">sat.satmodel_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satmodel_gen.SatModelGen"><code class="docutils literal notranslate"><span class="pre">SatModelGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.satsolver_gen">sat.satsolver_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satsolver_gen.LitLitsParser"><code class="docutils literal notranslate"><span class="pre">LitLitsParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sat.html#sat.satsolver_gen.LitLitsParser.has_args"><code class="docutils literal notranslate"><span class="pre">LitLitsParser.has_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sat.html#sat.satsolver_gen.LitLitsParser.has_keywords"><code class="docutils literal notranslate"><span class="pre">LitLitsParser.has_keywords()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satsolver_gen.LitsParser"><code class="docutils literal notranslate"><span class="pre">LitsParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sat.html#sat.satsolver_gen.LitsParser.has_args"><code class="docutils literal notranslate"><span class="pre">LitsParser.has_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sat.html#sat.satsolver_gen.LitsParser.has_keywords"><code class="docutils literal notranslate"><span class="pre">LitsParser.has_keywords()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satsolver_gen.SatSolverGen"><code class="docutils literal notranslate"><span class="pre">SatSolverGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat.satstats_gen">sat.satstats_gen module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sat.html#sat.satstats_gen.SatStatsGen"><code class="docutils literal notranslate"><span class="pre">SatStatsGen</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sat.html#module-sat">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../index.html"
+                          title="前の章へ">Welcome to ymworks's documentation!</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="aig.html"
+                          title="次の章へ">aig package</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/py_capi/modules.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="aig.html" title="aig package"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to ymworks&#39;s documentation!"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">utils</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
