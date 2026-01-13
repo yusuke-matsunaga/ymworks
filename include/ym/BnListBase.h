@@ -23,6 +23,10 @@ class BnIterBase :
 {
 public:
 
+  using IdIter = std::vector<SizeType>::const_iterator;
+
+public:
+
   /// @brief 空のコンストラクタ
   ///
   /// 不正な値となる．
@@ -32,7 +36,7 @@ public:
   explicit
   BnIterBase(
     const std::shared_ptr<ModelImpl>& model,
-    std::vector<SizeType>::const_iterator iter
+    IdIter iter
   ) : BnBase(model),
       mIdIter{iter}
   {
@@ -92,7 +96,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // mIdList の反復子
-  std::vector<SizeType>::const_iterator mIdIter;
+  IdIter mIdIter;
 
 };
 
@@ -106,6 +110,10 @@ class BnIterBase2 :
 {
 public:
 
+  using IdIter = std::vector<SizeType>::const_iterator;
+
+public:
+
   /// @brief 空のコンストラクタ
   ///
   /// 不正な値となる．
@@ -115,8 +123,8 @@ public:
   explicit
   BnIterBase2(
     const std::shared_ptr<ModelImpl>& model,
-    std::vector<SizeType>::const_iterator iter,
-    std::vector<SizeType>::const_iterator end
+    IdIter iter,
+    IdIter end
   ) : BnBase(model),
       mIdIter{iter},
       mEnd{end}
@@ -166,10 +174,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // mIdList の反復子
-  std::vector<SizeType>::const_iterator mIdIter;
+  IdIter mIdIter;
 
   // 末尾の反復子
-  std::vector<SizeType>::const_iterator mEnd;
+  IdIter mEnd;
 
 };
 
@@ -183,6 +191,11 @@ class BnListBase :
 {
 public:
 
+  using IdList = std::vector<SizeType>;
+  using IdIter = IdList::const_iterator;
+
+public:
+
   /// @brief 空のコンストラクタ
   BnListBase() = default;
 
@@ -190,7 +203,7 @@ public:
   explicit
   BnListBase(
     const std::shared_ptr<ModelImpl>& model, ///< [in] 親のモデル．
-    const std::vector<SizeType>& id_list     ///< [in] ノード番号のリスト
+    const IdList& id_list                    ///< [in] ノード番号のリスト
     = {}
   ) : BnBase(model),
       mIdList{id_list}
@@ -200,8 +213,8 @@ public:
   /// @brief 値を指定したコンストラクタ
   explicit
   BnListBase(
-    const BnBase& base,                  ///< [in] 親のモデル．
-    const std::vector<SizeType>& id_list ///< [in] ノード番号のリスト
+    const BnBase& base,   ///< [in] 親のモデル．
+    const IdList& id_list ///< [in] ノード番号のリスト
     = {}
   ) : BnBase(base),
       mIdList{id_list}
@@ -232,7 +245,7 @@ public:
   }
 
   /// @brief ID番号のリストを返す．
-  const std::vector<SizeType>&
+  const IdList&
   id_list() const
   {
     return mIdList;
@@ -272,20 +285,6 @@ protected:
     return mIdList[index];
   }
 
-  /// @brief mIdList の先頭の反復子を返す．
-  std::vector<SizeType>::const_iterator
-  begin_iter() const
-  {
-    return mIdList.begin();
-  }
-
-  /// @brief mIdList の末尾の反復子を返す．
-  std::vector<SizeType>::const_iterator
-  end_iter() const
-  {
-    return mIdList.end();
-  }
-
   /// @brief IDを末尾に追加する．
   void
   put_id(
@@ -320,7 +319,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ID番号のリスト
-  std::vector<SizeType> mIdList;
+  IdList mIdList;
 
 };
 

@@ -31,7 +31,7 @@ public:
   explicit
   BnDffIter(
     const std::shared_ptr<ModelImpl>& model,
-    std::vector<SizeType>::const_iterator iter
+    IdIter iter
   ) : BnIterBase(model, iter)
   {
   }
@@ -71,8 +71,8 @@ public:
   explicit
   BnDffIter2(
     const std::shared_ptr<ModelImpl>& model,
-    std::vector<SizeType>::const_iterator iter,
-    std::vector<SizeType>::const_iterator end
+    IdIter iter,
+    IdIter end
   ) : BnIterBase2(model, iter, end)
   {
   }
@@ -121,7 +121,7 @@ public:
   explicit
   BnDffList(
     const std::shared_ptr<ModelImpl>& model, ///< [in] 親のモデル
-    const std::vector<SizeType>& id_list     ///< [in] ID番号のリスト
+    const IdList& id_list                    ///< [in] ID番号のリスト
     = {}
   ) : BnListBase(model, id_list)
   {
@@ -161,21 +161,21 @@ public:
   iterator
   begin() const
   {
-    return iterator(_model(), begin_iter());
+    return iterator(_model(), id_list().begin());
   }
 
   /// @brief 末尾の反復子を返す．
   iterator
   end() const
   {
-    return iterator(_model(), end_iter());
+    return iterator(_model(), id_list().end());
   }
 
   /// @brief Python 用の反復子を返す．
   iterator2
   iter() const
   {
-    return iterator2(_model(), begin_iter(), end_iter());
+    return iterator2(_model(), id_list().begin(), id_list().end());
   }
 
   /// @brief 要素を末尾に追加する．
