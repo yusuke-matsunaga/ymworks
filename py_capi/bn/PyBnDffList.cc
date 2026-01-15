@@ -112,54 +112,6 @@ iter_func(
   }
 }
 
-// new 関数
-PyObject*
-new_func(
-  PyTypeObject* type,
-  PyObject* args,
-  PyObject* kwds
-)
-{
-  static const char* kwlist[] = {
-    "",
-    nullptr
-  };
-  PyObject* obj = nullptr;
-  if ( !PyArg_ParseTupleAndKeywords(args, kwds, "|O",
-                                    const_cast<char**>(kwlist),
-                                    &obj) ) {
-    return nullptr;
-  }
-  try {
-    auto self = type->tp_alloc(type, 0);
-    auto my_obj = reinterpret_cast<BnDffList_Object*>(self);
-    if ( obj != nullptr ) {
-      BnDffList dff_list;
-      if ( !PyBnDffList::FromPyObject(obj, dff_list) ) {
-        PyErr_SetString(PyExc_TypeError, "argument 1 must be a BnDffList or a list of BnDff");
-        return nullptr;
-      }
-      new (&my_obj->mVal) BnDffList(dff_list);
-    }
-    else {
-      new (&my_obj->mVal) BnDffList();
-    }
-    return self;
-  }
-  catch ( std::invalid_argument err ) {
-    std::ostringstream buf;
-    buf << "invalid argument" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-  catch ( std::out_of_range err ) {
-    std::ostringstream buf;
-    buf << "out of range" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
 END_NONAMESPACE
 
 
@@ -177,7 +129,6 @@ PyBnDffList::init(
   BnDffList_Type.tp_flags = Py_TPFLAGS_DEFAULT;
   BnDffList_Type.tp_doc = PyDoc_STR("Python extended object for BnDffList");
   BnDffList_Type.tp_iter = iter_func;
-  BnDffList_Type.tp_new = new_func;
   if ( !PyModule::reg_type(m, "BnDffList", &BnDffList_Type) ) {
     goto error;
   }
@@ -200,28 +151,6 @@ PyBnDffList::Conv::operator()(
   auto my_obj = reinterpret_cast<BnDffList_Object*>(obj);
   new (&my_obj->mVal) BnDffList(val);
   return obj;
-}
-
-// PyObject を BnDffList に変換する．
-bool
-PyBnDffList::Deconv::operator()(
-  PyObject* obj, ///< [in] Python のオブジェクト
-  ElemType& val  ///< [out] 結果を格納する変数
-)
-{
-  if ( PyBnDffList::Check(obj) ) {
-    val = PyBnDffList::_get_ref(obj);
-    return true;
-  }
-
-  {
-    std::vector<BnDff> dff_list;
-    if ( PyList<BnDff, PyBnDff>::FromPyObject(obj, dff_list) ) {
-      val = BnDffList(dff_list);
-      return true;
-    }
-  }
-  return false;
 }
 
 // @brief PyObject が BnDffList タイプか調べる．

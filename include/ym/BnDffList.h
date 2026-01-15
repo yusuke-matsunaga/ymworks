@@ -14,8 +14,6 @@
 
 BEGIN_NAMESPACE_YM_BN
 
-class DffImpl;
-
 //////////////////////////////////////////////////////////////////////
 /// @class BnDffIter BnDffList.h "ym/BnDffList.h"
 /// @brief BnDffList の反復子
@@ -24,7 +22,8 @@ class BnDffIter
 {
 public:
 
-  using PtrIter = std::vector<const DffImpl*>::const_iterator;
+  using PtrList = std::vector<const DffImpl*>;
+  using PtrIter = PtrList::const_iterator;
 
 public:
 
@@ -112,10 +111,10 @@ public:
   /// @brief 値を指定したコンストラクタ
   explicit
   BnDffIter2(
-    const PtrList& ptr_list
-  ) : mPtrList{ptr_list},
-      mCurIter{mPtrList.begin()},
-      mEndIter{mPtrList.end()}
+    PtrIter cur,
+    PtrIter end
+  ) : mCurIter{cur},
+      mEndIter{end}
   {
   }
 
@@ -152,9 +151,6 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 元のリスト
-  PtrList mPtrList;
-
   // 現在の反復子
   PtrIter mCurIter;
 
@@ -177,27 +173,12 @@ public:
 
 public:
 
-  /// @brief 空のコンストラクタ
-  BnDffList() = default;
-
-  /// @brief 値を指定したコンストラクタ
+  /// @brief コンストラクタ
   explicit
   BnDffList(
     const std::vector<const DffImpl*>& ptr_list ///< [in] ポインタのリスト
   ) : mPtrList{ptr_list}
   {
-  }
-
-  /// @brief 値を指定したコンストラクタ
-  explicit
-  BnDffList(
-    const std::vector<BnDff>& dff_list ///< [in] ノードのリスト
-  )
-  {
-    mPtrList.reserve(dff_list.size());
-    for ( auto& dff: dff_list ) {
-      push_back(dff);
-    }
   }
 
   /// @brief デストラクタ
@@ -225,7 +206,8 @@ public:
     if ( index >= size() ) {
       throw std::out_of_range{"index is out of range"};
     }
-    return BnDff(mPtrList[index]);
+    auto ptr = mPtrList[index];
+    return BnDff(ptr);
   }
 
   /// @brief 先頭の反復子を返す．
@@ -246,16 +228,19 @@ public:
   iterator2
   iter() const
   {
-    return iterator2(mPtrList);
+    return iterator2(mPtrList.begin(), mPtrList.end());
   }
 
-  /// @brief 要素を末尾に追加する．
-  void
-  push_back(
-    const BnDff& dff
-  )
+  /// @brief std::vector<BnDff> に変換する．
+  std::vector<BnDff>
+  to_vector() const
   {
-    mPtrList.push_back(dff.mPtr);
+    std::vector<BnDff> dff_list;
+    dff_list.reserve(size());
+    for ( auto ptr: mPtrList ) {
+      dff_list.push_back(BnDff(ptr));
+    }
+    return dff_list;
   }
 
   /// @brief 等価比較演算子
@@ -283,7 +268,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ポインタのリスト
-  std::vector<const DffImpl*> mPtrList;
+  const std::vector<const DffImpl*>& mPtrList;
 
 };
 

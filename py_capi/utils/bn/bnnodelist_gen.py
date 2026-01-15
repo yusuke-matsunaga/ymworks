@@ -24,23 +24,6 @@ class BnNodeListGen(PyObjGen):
                                                'pym/PyList.h',
                                                'pym/PyUlong.h'])
 
-        def new_body(writer):
-            writer.gen_auto_assign('self', 'type->tp_alloc(type, 0)')
-            self.gen_obj_conv(writer, objname='self', varname='my_obj')
-            with writer.gen_if_block('obj != nullptr'):
-                writer.gen_vardecl(typename='BnNodeList',
-                                   varname='node_list')
-                with writer.gen_if_block('!PyBnNodeList::FromPyObject(obj, node_list)'):
-                    writer.gen_type_error('"argument 1 must be a BnNodeList or a list of BnNode"')
-                writer.gen_stmt('new (&my_obj->mVal) BnNodeList(node_list)')
-            with writer.gen_else_block():
-                writer.gen_stmt('new (&my_obj->mVal) BnNodeList()')
-            writer.gen_return_self()
-        self.add_new(new_body,
-                     arg_list=[OptArg(),
-                               RawObjArg(cvarname='obj',
-                                         cvardefault='nullptr')])
-
         self.add_dealloc('default')
 
         def sq_length(writer):
@@ -57,14 +40,3 @@ class BnNodeListGen(PyObjGen):
         self.add_iter(iter_func)
 
         self.add_conv('default')
-
-        def deconv_func(writer):
-            self.gen_raw_conv(writer)
-            with writer.gen_block():
-                writer.gen_vardecl(typename='std::vector<BnNode>',
-                                   varname='node_list')
-                with writer.gen_if_block('PyList<BnNode, PyBnNode>::FromPyObject(obj, node_list)'):
-                    writer.gen_assign('val', 'BnNodeList(node_list)')
-                    writer.gen_return('true')
-            writer.gen_return('false')
-        self.add_deconv(deconv_func)

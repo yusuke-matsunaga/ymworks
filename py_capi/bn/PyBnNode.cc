@@ -190,7 +190,7 @@ fanin_list(
 {
   auto& val = PyBnNode::_get_ref(self);
   try {
-    return PyList<BnNode, PyBnNode>::ToPyObject(val.fanin_list());
+    return PyBnNodeList::ToPyObject(val.fanin_list());
   }
   catch ( std::exception err ) {
     std::ostringstream buf;

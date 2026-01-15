@@ -22,7 +22,8 @@ class BnNodeIter
 {
 public:
 
-  using PtrIter = std::vector<const NodeImpl*>::const_iterator;
+  using PtrList = std::vector<const NodeImpl*>;
+  using PtrIter = PtrList::const_iterator;
 
 public:
 
@@ -110,10 +111,10 @@ public:
   /// @brief 対象のリストを指定したコンストラクタ
   explicit
   BnNodeIter2(
-    const PtrList& ptr_list
-  ) : mPtrList{ptr_list},
-      mCurIter{mPtrList.begin()},
-      mEndIter{mPtrList.end()}
+    PtrIter cur,
+    PtrIter end
+  ) : mCurIter{cur},
+      mEndIter{end}
   {
   }
 
@@ -150,9 +151,6 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // ポインタのリスト
-  PtrList mPtrList;
-
   // 現在の反復子
   PtrIter mCurIter;
 
@@ -160,7 +158,6 @@ private:
   PtrIter mEndIter;
 
 };
-
 
 
 //////////////////////////////////////////////////////////////////////
@@ -177,27 +174,12 @@ public:
 
 public:
 
-  /// @brief 空のコンストラクタ
-  BnNodeList() = default;
-
-  /// @brief ポインタのリストを指定したコンストラクタ
+  /// @brief コンストラクタ
   explicit
   BnNodeList(
-    const std::vector<const NodeImpl*> ptr_list ///< [in] ポインタのリスト
+    const std::vector<const NodeImpl*>& ptr_list ///< [in] ノードのポインタのリスト
   ) : mPtrList{ptr_list}
   {
-  }
-
-  /// @brief ノードのリストを指定したコンストラクタ
-  explicit
-  BnNodeList(
-    const std::vector<BnNode>& node_list ///< [in] ノードのリスト
-  )
-  {
-    mPtrList.reserve(node_list.size());
-    for ( auto& node: node_list ) {
-      push_back(node);
-    }
   }
 
   /// @brief デストラクタ
@@ -223,9 +205,10 @@ public:
   ) const
   {
     if ( index >= size() ) {
-      throw std::out_of_range{"index is out of range"};
+      throw std::out_of_range{"id is out of range"};
     }
-    return BnNode(mPtrList[index]);
+    auto ptr = mPtrList[index];
+    return BnNode(ptr);
   }
 
   /// @brief 先頭の反復子を返す．
@@ -246,26 +229,20 @@ public:
   iterator2
   iter() const
   {
-    return iterator2(mPtrList);
+    return iterator2(mPtrList.begin(), mPtrList.end());
   }
 
-  /// @brief 要素を末尾に追加する．
-  void
-  push_back(
-    const BnNode& node
-  );
-#if 0
+  /// @brief std::vector<BnNode> に変換する．
+  std::vector<BnNode>
+  to_vector() const
   {
-    {
-      std::cout << "BnNodeList::push_back(node)" << std::endl
-		<< "model = " << std::hex << node.mPtr->_model()
-		<< std::dec << std::endl
-		<< "input_num() = " << node.mPtr->_model()->input_num()
-		<< std::endl;
+    std::vector<BnNode> node_list;
+    node_list.reserve(size());
+    for ( auto ptr: mPtrList ) {
+      node_list.push_back(BnNode(ptr));
     }
-    mPtrList.push_back(node.mPtr);
+    return node_list;
   }
-#endif
 
   /// @brief 等価比較演算子
   bool
@@ -288,24 +265,11 @@ public:
 
 private:
   //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-#if 0
-  /// @brief ポインタのリストを返す．
-  const std::vector<const NodeImpl*>&
-  ptr_list() const
-  {
-    return mPtrList;
-  }
-#endif
-
-private:
-  //////////////////////////////////////////////////////////////////////
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // ポインタのリスト
-  std::vector<const NodeImpl*> mPtrList;
+  // ノードのポインタのリスト
+  const std::vector<const NodeImpl*>& mPtrList;
 
 };
 

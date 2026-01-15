@@ -38,14 +38,7 @@ public:
     );
   };
 
-  /// @brief PyObject* から BnNodeList を取り出すファンクタクラス
-  struct Deconv {
-    bool
-    operator()(
-      PyObject* obj, ///< [in] Python のオブジェクト
-      ElemType& val  ///< [out] 結果を格納する変数
-    );
-  };
+  // このクラスは Deconv を持たない．
 
 
 public:
@@ -75,40 +68,12 @@ public:
     return conv(val);
   }
 
-  /// @brief PyObject から BnNodeList を取り出す．
-  /// @return 正しく変換できた時に true を返す．
-  static
-  bool
-  FromPyObject(
-    PyObject* obj, ///< [in] Python のオブジェクト
-    ElemType& val  ///< [out] 結果を格納する変数
-  )
-  {
-    Deconv deconv;
-    return deconv(obj, val);
-  }
-
   /// @brief PyObject が BnNodeList タイプか調べる．
   static
   bool
   Check(
     PyObject* obj ///< [in] 対象の PyObject
   );
-
-  /// @brief PyObject から BnNodeList を取り出す．
-  static
-  ElemType
-  Get(
-    PyObject* obj ///< [in] 対象の Python オブジェクト
-  )
-  {
-    ElemType val;
-    if ( PyBnNodeList::FromPyObject(obj, val) ) {
-      return val;
-    }
-    PyErr_SetString(PyExc_TypeError, "Could not convert to BnNodeList");
-    return val;
-  }
 
   /// @brief BnNodeList を表す PyObject から BnNodeList を取り出す．
   /// @return BnNodeList を返す．

@@ -194,7 +194,7 @@ public:
   ///
   /// - is_logic() が true の時のみ意味を持つ．
   /// - is_logic() が false の時は空リストを返す．
-  std::vector<BnNode>
+  BnNodeList
   fanin_list() const;
 
 

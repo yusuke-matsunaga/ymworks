@@ -112,7 +112,7 @@ TEST( BnModelTest, new_input )
   EXPECT_EQ( 0, node.fanin_num() );
   EXPECT_THROW( node.fanin(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<BnNode>{}, node.fanin_list() );
+  EXPECT_EQ( 0, node.fanin_list().size() );
 }
 
 TEST( BnModelTest, new_dff)
@@ -147,7 +147,7 @@ TEST( BnModelTest, new_dff)
   EXPECT_EQ( 0, node.fanin_num() );
   EXPECT_THROW( node.fanin(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<BnNode>{}, node.fanin_list() );
+  EXPECT_EQ( 0, node.fanin_list().size() );
 }
 
 TEST( BnModelTest, new_primitive )
@@ -198,7 +198,7 @@ TEST( BnModelTest, new_primitive )
     auto node1 = fanin_list[i];
     EXPECT_EQ( node1, node.fanin(i) );
   }
-  EXPECT_EQ( fanin_list, node.fanin_list() );
+  EXPECT_EQ( fanin_list, node.fanin_list().to_vector() );
 }
 
 TEST( BnModelTest, new_cover )
@@ -253,7 +253,7 @@ TEST( BnModelTest, new_cover )
     auto node1 = fanin_list[i];
     EXPECT_EQ( node1, node.fanin(i) );
   }
-  EXPECT_EQ( fanin_list, node.fanin_list() );
+  EXPECT_EQ( fanin_list, node.fanin_list().to_vector() );
 }
 
 TEST( BnModelTest, new_cover_bad )
@@ -327,7 +327,7 @@ TEST( BnModelTest, new_expr )
     auto node1 = fanin_list[i];
     EXPECT_EQ( node1, node.fanin(i) );
   }
-  EXPECT_EQ( fanin_list, node.fanin_list() );
+  EXPECT_EQ( fanin_list, node.fanin_list().to_vector() );
 
 }
 
@@ -403,7 +403,7 @@ TEST( BnModelTest, new_tvfunc )
     auto node1 = fanin_list[i];
     EXPECT_EQ( node1, node.fanin(i) );
   }
-  EXPECT_EQ( fanin_list, node.fanin_list() );
+  EXPECT_EQ( fanin_list, node.fanin_list().to_vector() );
 
 }
 
@@ -527,6 +527,11 @@ TEST( BnModelTest, fsm1 )
   auto and_node = model.new_primitive(PrimType::And, fanin_list);
   model.set_dff_src(dff1, and_node);
   model.new_output(dff1_output);
+
+  EXPECT_EQ( std::vector<BnNode>{input1}, model.input_list().to_vector() );
+  EXPECT_EQ( std::vector<BnNode>{dff1_output}, model.output_list().to_vector() );
+  EXPECT_EQ( std::vector<BnNode>{and_node}, model.logic_list().to_vector() );
+  EXPECT_EQ( std::vector<BnDff>{dff1}, model.dff_list().to_vector() );
 
   std::ostringstream buf;
   model.write(buf);

@@ -153,16 +153,11 @@ BnNode::fanin(
 }
 
 // @brief ノードのファンインのノードのリストを返す．
-std::vector<BnNode>
+BnNodeList
 BnNode::fanin_list() const
 {
   auto& ptr_list = _node_impl().fanin_list();
-  std::vector<BnNode> node_list;
-  node_list.reserve(ptr_list.size());
-  for ( auto ptr: ptr_list ) {
-    node_list.push_back(BnNode(ptr));
-  }
-  return node_list;
+  return BnNodeList(ptr_list);
 }
 
 // @brief ノードの実体を返す．
@@ -173,14 +168,6 @@ BnNode::_node_impl() const
     throw std::logic_error{"BnNode: invalid data"};
   }
   return *mPtr;
-}
-
-void
-BnNodeList::push_back(
-  const BnNode& node
-)
-{
-  mPtrList.push_back(node.mPtr);
 }
 
 END_NAMESPACE_YM_BN

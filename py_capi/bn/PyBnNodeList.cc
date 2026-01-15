@@ -112,54 +112,6 @@ iter_func(
   }
 }
 
-// new 関数
-PyObject*
-new_func(
-  PyTypeObject* type,
-  PyObject* args,
-  PyObject* kwds
-)
-{
-  static const char* kwlist[] = {
-    "",
-    nullptr
-  };
-  PyObject* obj = nullptr;
-  if ( !PyArg_ParseTupleAndKeywords(args, kwds, "|O",
-                                    const_cast<char**>(kwlist),
-                                    &obj) ) {
-    return nullptr;
-  }
-  try {
-    auto self = type->tp_alloc(type, 0);
-    auto my_obj = reinterpret_cast<BnNodeList_Object*>(self);
-    if ( obj != nullptr ) {
-      BnNodeList node_list;
-      if ( !PyBnNodeList::FromPyObject(obj, node_list) ) {
-        PyErr_SetString(PyExc_TypeError, "argument 1 must be a BnNodeList or a list of BnNode");
-        return nullptr;
-      }
-      new (&my_obj->mVal) BnNodeList(node_list);
-    }
-    else {
-      new (&my_obj->mVal) BnNodeList();
-    }
-    return self;
-  }
-  catch ( std::invalid_argument err ) {
-    std::ostringstream buf;
-    buf << "invalid argument" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-  catch ( std::out_of_range err ) {
-    std::ostringstream buf;
-    buf << "out of range" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
 END_NONAMESPACE
 
 
@@ -177,7 +129,6 @@ PyBnNodeList::init(
   BnNodeList_Type.tp_flags = Py_TPFLAGS_DEFAULT;
   BnNodeList_Type.tp_doc = PyDoc_STR("Python extended object for BnNodeList");
   BnNodeList_Type.tp_iter = iter_func;
-  BnNodeList_Type.tp_new = new_func;
   if ( !PyModule::reg_type(m, "BnNodeList", &BnNodeList_Type) ) {
     goto error;
   }
@@ -200,28 +151,6 @@ PyBnNodeList::Conv::operator()(
   auto my_obj = reinterpret_cast<BnNodeList_Object*>(obj);
   new (&my_obj->mVal) BnNodeList(val);
   return obj;
-}
-
-// PyObject を BnNodeList に変換する．
-bool
-PyBnNodeList::Deconv::operator()(
-  PyObject* obj, ///< [in] Python のオブジェクト
-  ElemType& val  ///< [out] 結果を格納する変数
-)
-{
-  if ( PyBnNodeList::Check(obj) ) {
-    val = PyBnNodeList::_get_ref(obj);
-    return true;
-  }
-
-  {
-    std::vector<BnNode> node_list;
-    if ( PyList<BnNode, PyBnNode>::FromPyObject(obj, node_list) ) {
-      val = BnNodeList(node_list);
-      return true;
-    }
-  }
-  return false;
 }
 
 // @brief PyObject が BnNodeList タイプか調べる．
