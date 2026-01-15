@@ -300,9 +300,11 @@ ModelImpl::write(
     if ( !name.empty() ) {
       s << "[" << name << "]";
     }
-    s << ": output = " << node_name(node)
-      << ", src = N#" << src->id()
-      << std::endl;
+    s << ": output = " << node_name(node);
+    if ( src != nullptr ) {
+      s << ", src = N#" << src->id();
+    }
+    s << std::endl;
   }
   for ( auto node: logic_list() ) {
     s << node_name(node)
