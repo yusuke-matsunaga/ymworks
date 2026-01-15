@@ -25,6 +25,8 @@ public:
 
   /// @brief コンストラクタ
   FuncImpl_Cover(
+    const ModelImpl* model,      ///< [in] 親のモデル
+    SizeType id,                 ///< [in] ID番号
     const SopCover& input_cover, ///< [in] 入力カバー
     bool output_inv              ///< [in] 出力の反転属性
   );

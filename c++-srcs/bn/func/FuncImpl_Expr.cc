@@ -19,10 +19,12 @@ BEGIN_NAMESPACE_YM_BN
 // @brief 論理式型のインスタンスを作る．
 FuncImpl*
 FuncImpl::new_expr(
+  const ModelImpl* model,
+  SizeType id,
   const Expr& expr
 )
 {
-  return new FuncImpl_Expr(expr);
+  return new FuncImpl_Expr(model, id, expr);
 }
 
 
@@ -32,8 +34,11 @@ FuncImpl::new_expr(
 
 // @brief コンストラクタ
 FuncImpl_Expr::FuncImpl_Expr(
+  const ModelImpl* model,
+  SizeType id,
   const Expr& expr
-) : mExpr{expr}
+) : FuncImpl(model, id),
+    mExpr{expr}
 {
 }
 

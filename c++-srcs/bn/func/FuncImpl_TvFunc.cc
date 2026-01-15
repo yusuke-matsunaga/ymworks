@@ -19,10 +19,12 @@ BEGIN_NAMESPACE_YM_BN
 // @brief 真理値表型のインスタンスを作る．
 FuncImpl*
 FuncImpl::new_tvfunc(
+  const ModelImpl* model,
+  SizeType id,
   const TvFunc& func
 )
 {
-  return new FuncImpl_TvFunc(func);
+  return new FuncImpl_TvFunc(model, id, func);
 }
 
 
@@ -32,8 +34,11 @@ FuncImpl::new_tvfunc(
 
 // @brief コンストラクタ
 FuncImpl_TvFunc::FuncImpl_TvFunc(
+  const ModelImpl* model,
+  SizeType id,
   const TvFunc& func
-) : mTvFunc{func}
+) : FuncImpl(model, id),
+    mTvFunc{func}
 {
 }
 

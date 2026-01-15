@@ -35,7 +35,7 @@ BnModel::read_truth(
 
   BnModel model;
   TruthReader reader;
-  reader.read(s, model._model_impl());
+  reader.read(s, *model.mPtr);
   return model;
 }
 
@@ -85,16 +85,15 @@ TruthReader::read(
   // 論理ノードの生成
   // 注意が必要なのは .truth フォーマットでは最上位の変数が
   // 最後の変数だということ．
-  std::vector<SizeType> fanin_list(ni);
+  std::vector<const NodeImpl*> fanin_list(ni);
   for ( SizeType i = 0; i < ni; ++ i ) {
-    fanin_list[i] = ni - i - 1;
+    fanin_list[i] = model.input(ni - i - 1);
   }
   for ( auto& tvfunc: func_vect ) {
-    auto func_id = model.reg_tvfunc(tvfunc);
-    auto id = model.new_logic(func_id, fanin_list);
-    model.new_output(id);
+    auto func = model.reg_tvfunc(tvfunc);
+    auto node = model.new_logic(func, fanin_list);
+    model.new_output(node);
   }
-  model.make_logic_list();
 }
 
 END_NAMESPACE_YM_BN

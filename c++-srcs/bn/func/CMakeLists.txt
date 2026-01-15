@@ -45,7 +45,6 @@ add_subdirectory ( gtest )
 # ===================================================================
 
 set ( func_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/BnFunc.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/FuncImpl.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/FuncImpl_Bdd.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/FuncImpl_Cover.cc

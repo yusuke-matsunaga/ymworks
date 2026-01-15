@@ -10,7 +10,6 @@
 
 #include "ym/bn.h"
 #include "ym/logic.h"
-#include "ym/BnBase.h"
 
 
 BEGIN_NAMESPACE_YM_BN
@@ -50,10 +49,13 @@ class NodeImpl;
 ///
 /// 通常は BnModel のみが生成/設定を行う．
 //////////////////////////////////////////////////////////////////////
-class BnNode :
-  public BnBase
+class BnNode
 {
-  friend class BnBase;
+  friend class BnModel;
+  friend class BnNodeList;
+  friend class BnNodeIter;
+  friend class BnNodeIter2;
+  friend class BnDff;
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -75,6 +77,11 @@ public:
   /// 不正な値となる．
   BnNode() = default;
 
+  /// @brief コピーコンストラクタ
+  BnNode(
+    const BnNode& src ///< [in] コピー元のオブジェクト
+  );
+
   /// @brief デストラクタ
   ~BnNode();
 
@@ -84,12 +91,23 @@ public:
   // 共通なインターフェイス
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 適正な値を持っている時に true を返す．
+  bool
+  is_valid() const
+  {
+    return mPtr != nullptr;
+  }
+
+  /// @brief 適正な値を持っていない時に true を返す．
+  bool
+  is_invalid() const
+  {
+    return !is_valid();
+  }
+
   /// @brief ノード番号を返す．
   SizeType
-  id() const
-  {
-    return mId;
-  }
+  id() const;
 
   /// @brief ノードの種類を返す．
   Type
@@ -170,7 +188,7 @@ public:
   ///
   /// - is_logic() が true の時のみ意味を持つ．
   /// - is_logic() が false の時は空リストを返す．
-  BnNodeList
+  std::vector<BnNode>
   fanin_list() const;
 
 
@@ -185,7 +203,7 @@ public:
     const BnNode& right ///< [in] 比較対象のオブジェクト
   ) const
   {
-    return BnBase::operator==(right) && mId == right.mId;
+    return mPtr == right.mPtr;
   }
 
   /// @brief 非等価比較演算子
@@ -204,11 +222,8 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容を指定したコンストラクタ
-  ///
-  /// これは BnBase のみが使用する．
   BnNode(
-    const std::shared_ptr<ModelImpl>& model, ///< [in] 親のモデル．
-    SizeType id                              ///< [in] ノード番号
+    const NodeImpl* ptr ///< [in] 実装オブジェクトへのポインタ
   );
 
   /// @brief ノードの実体を返す．
@@ -221,8 +236,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // ノード番号
-  SizeType mId{BAD_ID};
+  // 実装オブジェクトへのポインタ
+  const NodeImpl* mPtr{nullptr};
 
 };
 

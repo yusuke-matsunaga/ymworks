@@ -20,10 +20,12 @@ BEGIN_NAMESPACE_YM_BN
 // @brief BDD型のインスタンスを作る．
 FuncImpl*
 FuncImpl::new_bdd(
+  const ModelImpl* model,
+  SizeType id,
   const Bdd& bdd
 )
 {
-  return new FuncImpl_Bdd(bdd);
+  return new FuncImpl_Bdd(model, id, bdd);
 }
 
 
@@ -33,8 +35,11 @@ FuncImpl::new_bdd(
 
 // @brief コンストラクタ
 FuncImpl_Bdd::FuncImpl_Bdd(
+  const ModelImpl* model, ///< [in] 親のモデル
+  SizeType id,
   Bdd bdd
-) : mBdd{bdd}
+) : FuncImpl(model, id),
+    mBdd{bdd}
 {
 }
 
@@ -76,7 +81,7 @@ FuncImpl_Bdd::copy(
 ) const
 {
   auto my_bdd = bdd_mgr.copy(mBdd);
-  return std::unique_ptr<FuncImpl>{new FuncImpl_Bdd{my_bdd}};
+  return std::unique_ptr<FuncImpl>{new FuncImpl_Bdd{_model(), id(), my_bdd}};
 }
 
 // @brief ハッシュ用のユニークな文字列を返す．

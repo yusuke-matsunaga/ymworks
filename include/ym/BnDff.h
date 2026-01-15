@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "ym/bn.h"
-#include "ym/BnBase.h"
 
 
 BEGIN_NAMESPACE_YM_BN
@@ -36,10 +35,13 @@ class DffImpl;
 ///
 /// 通常は BnModel のみが生成/設定を行う．
 //////////////////////////////////////////////////////////////////////
-class BnDff :
-  public BnBase
+class BnDff
 {
-  friend class BnBase;
+  friend class BnModel;
+  friend class BnNode;
+  friend class BnDffIter;
+  friend class BnDffIter2;
+  friend class BnDffList;
 
 public:
 
@@ -47,6 +49,11 @@ public:
   ///
   /// 不正な値となる．
   BnDff() = default;
+
+  /// @brief コピーコンストラクタ
+  BnDff(
+    const BnDff& src ///< [in] コピー元のオブジェクト
+  );
 
   /// @brief デストラクタ
   ~BnDff();
@@ -57,12 +64,23 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 適正な値を持つ時 true を返す．
+  bool
+  is_valid() const
+  {
+    return mPtr != nullptr;
+  }
+
+  /// @brief 適正な値を持たないとき true を返す．
+  bool
+  is_invalid() const
+  {
+    return !is_valid();
+  }
+
   /// @brief ノード番号を返す．
   SizeType
-  id() const
-  {
-    return mId;
-  }
+  id() const;
 
   /// @brief 名前を返す．
   const std::string&
@@ -92,7 +110,7 @@ public:
     const BnDff& right ///< [in] 比較対象のオブジェクト
   ) const
   {
-    return BnBase::operator==(right) && mId == right.mId;
+    return mPtr == right.mPtr;
   }
 
   /// @brief 非等価比較演算子
@@ -111,11 +129,8 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容を指定したコンストラクタ
-  ///
-  /// これは BnBase のみが使用する．
   BnDff(
-    const std::shared_ptr<ModelImpl>& model, ///< [in] 親のモデル．
-    SizeType id                              ///< [in] ノード番号
+    const DffImpl* ptr ///< [in] 実装オブジェクトのポインタ
   );
 
   /// @brief DFFの実体を返す．
@@ -128,8 +143,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // ノード番号
-  SizeType mId{BAD_ID};
+  // 実装オブジェクトのポインタ
+  const DffImpl* mPtr{nullptr};
 
 };
 

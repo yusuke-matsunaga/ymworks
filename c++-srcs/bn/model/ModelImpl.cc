@@ -22,16 +22,41 @@ ModelImpl::ModelImpl(
   const ModelImpl& src
 ) : mName{src.mName},
     mCommentList{src.mCommentList},
-    mNodeArray(src.mNodeArray.size()),
-    mInputList{src.mInputList},
-    mOutputList{src.mOutputList},
-    mDffList{src.mDffList},
-    mLogicList{src.mLogicList},
+    mOutputNameList{src.mOutputNameList},
     mNameDict{src.mNameDict},
     mFuncMgr{src.mFuncMgr}
 {
-  for ( SizeType i = 0; i < src.mNodeArray.size(); ++ i ) {
-    mNodeArray[i] = src.mNodeArray[i]->copy();
+  // NodeImpl は単純にはコピーできない．
+  mNodeArray.reserve(src.mNodeArray.size());
+  mNodeList.reserve(src.mNodeList.size());
+  mInputList.reserve(src.mInputList.size());
+  mOutputList.reserve(src.mOutputList.size());
+  mDffArray.reserve(src.mDffArray.size());
+  mDffList.reserve(src.mDffList.size());
+  mLogicList.reserve(src.mLogicList.size());
+  // mNodeArray, mNodeList のコピー
+  for ( auto src_node: src.mNodeList ) {
+    mNodeArray.push_back(src_node->copy());
+    mNodeList.push_back(mNodeArray.back().get());
+  }
+  // mInputList のコピー
+  for ( auto src_node: src.mInputList ) {
+    auto node = mNodeList[src_node->id()];
+    mInputList.push_back(node);
+  }
+  // mOutputList のコピー
+  for ( auto src_node: src.mOutputList ) {
+    auto node = mNodeList[src_node->id()];
+    mOutputList.push_back(node);
+  }
+  // mDffArray, mDffList のコピー
+  for ( auto src_dff: src.mDffList ) {
+    auto output = mNodeList[src_dff->output()->id()];
+    auto src = mNodeList[src_dff->src()->id()];
+    auto new_dff = new DffImpl(this, src_dff->id(), src_dff->name(),
+			       output, src, src_dff->reset_val());
+    mDffArray.push_back(std::unique_ptr<DffImpl>{new_dff});
+    mDffList.push_back(mDffArray.back().get());
   }
 }
 
@@ -77,7 +102,7 @@ ModelImpl::option() const
       }
     }
     for ( SizeType i = 0; i < dff_num(); ++ i ) {
-      auto name = mDffList[i].name;
+      auto name = dff_impl(i)->name();
       if ( !name.empty() ) {
 	std::ostringstream buf;
 	buf << "q" << i;
@@ -99,7 +124,10 @@ ModelImpl::clear()
 {
   mName = std::string{};
   mCommentList.clear();
+  mDffArray.clear();
+  mDffList.clear();
   mNodeArray.clear();
+  mNodeList.clear();
   mInputList.clear();
   mOutputList.clear();
   mOutputNameList.clear();
@@ -166,118 +194,65 @@ ModelImpl::set_option(
   }
 }
 
-// @brief 対応するID番号に入力用の印を付ける．
-void
-ModelImpl::set_input(
-  SizeType id,
+// @brief 新しい入力ノードを作る．
+const NodeImpl*
+ModelImpl::new_input(
   const std::string& name
 )
 {
-  if ( mNodeArray[id].get() != nullptr ) {
-    throw std::invalid_argument{"id has already been used"};
-  }
-  auto iid = mInputList.size();
-  auto node = NodeImpl::new_primary_input(iid);
-  mNodeArray[id] = std::unique_ptr<NodeImpl>{node};
-  mInputList.push_back(id);
+  auto node = new_node(
+    [&](SizeType id) {
+      auto iid = mInputList.size();
+      return NodeImpl::new_primary_input(this, id, iid);
+    });
+  mInputList.push_back(node);
   if ( name != "" ) {
-    mNameDict.emplace(id, name);
+    mNameDict.emplace(node->id(), name);
   }
+  return node;
 }
 
-
-// @brief DFFの情報をセットする．
-void
-ModelImpl::set_dff_output(
-  SizeType id,
+// @brief 新しいDFF出力ノードを作る．
+const NodeImpl*
+ModelImpl::new_dff_output(
   SizeType dff_id
 )
 {
-  if ( mNodeArray[id].get() != nullptr ) {
-    throw std::invalid_argument{"id has already been used"};
-  }
   _check_dff_id(dff_id, "set_dff_output");
-  auto node = NodeImpl::new_dff_output(dff_id);
-  mNodeArray[id] = std::unique_ptr<NodeImpl>{node};
-  mDffList[dff_id].id = id;
+  auto node = new_node(
+    [&](SizeType id) {
+      return NodeImpl::new_dff_output(this, id, dff_id);
+    });
+  mDffArray[dff_id]->mOutput = node;
+  return node;
 }
 
-// @brief 論理ノードの情報をセットする．
-void
-ModelImpl::set_logic(
-  SizeType id,
-  SizeType func_id,
-  const std::vector<SizeType>& fanin_list
-)
-{
-  if ( mNodeArray[id].get() != nullptr ) {
-    throw std::invalid_argument{"id has already been used"};
-  }
-  auto node = NodeImpl::new_logic(func_id, fanin_list);
-  mNodeArray[id] = std::unique_ptr<NodeImpl>{node};
-  // mLogicList には追加しない．
-}
-
-// @brief ノード名をセットする．
-void
-ModelImpl::set_node_name(
-  SizeType id,
+// @brief 新しい出力ノードを作る．
+SizeType
+ModelImpl::new_output(
+  const NodeImpl* src,
   const std::string& name
 )
 {
-  mNameDict.emplace(id, name);
+  auto oid = mOutputList.size();
+  mOutputList.push_back(src);
+  mOutputNameList.push_back(name);
+  return oid;
 }
 
-// @brief 論理ノードのリストを作る．
-void
-ModelImpl::make_logic_list()
-{
-  std::unordered_set<SizeType> mark;
-
-  // 入力ノードに印をつける．
-  for ( auto id: mInputList ) {
-    mark.emplace(id);
-  }
-
-  // DFFの出力に印を作る．
-  for ( auto& dff: mDffList ) {
-    mark.emplace(dff.id);
-  }
-
-  // 出力ノードからファンインをたどり
-  // post-order で番号をつける．
-  // 結果としてノードは入力からのトポロジカル順
-  // に整列される．
-  for ( auto id: mOutputList ) {
-    order_node(id, mark);
-  }
-
-  // DFFのファンインに番号をつける．
-  for ( auto& dff: mDffList ) {
-    auto src_id = dff.src_id;
-    order_node(src_id, mark);
-  }
-}
-
-// @brief トポロジカルソートを行い mLogicList にセットする．
-void
-ModelImpl::order_node(
-  SizeType id,
-  std::unordered_set<SizeType>& mark
+// @brief 新しい論理ノードを作る．
+const NodeImpl*
+ModelImpl::new_logic(
+  const FuncImpl* func,
+  const std::vector<const NodeImpl*>& fanin_list
 )
 {
-  if ( mark.count(id) > 0 ) {
-    return;
-  }
-  auto node = mNodeArray[id].get();
-  if ( !node->is_logic() ) {
-    throw std::logic_error{"node->is_logic() == false"};
-  }
-  for ( auto iid: node->fanin_id_list() ) {
-    order_node(iid, mark);
-  }
-  mLogicList.push_back(id);
-  mark.emplace(id);
+  auto node = new_node(
+    [&](SizeType id) {
+      return NodeImpl::new_logic(this, id, func, fanin_list);
+    });
+  mLogicList.push_back(node);
+  return node;
 }
 
 // @brief 内容を出力する．
@@ -295,49 +270,48 @@ ModelImpl::write(
       << std::endl;
   }
   for ( SizeType i = 0;i < input_num(); ++ i ) {
-    auto id = input_id(i);
+    auto node = input(i);
     s << "I#" << i;
     auto name = input_name(i);
     if ( !name.empty() ) {
       s << "[" << name << "]";
     }
     s << ": "
-      << node_name(id)
+      << node_name(node)
       << std::endl;
   }
   for ( SizeType i = 0; i < output_num(); ++ i ) {
-    auto id = output_id(i);
+    auto node = output(i);
     s << "O#" << i;
     auto name = output_name(i);
     if ( !name.empty() ) {
       s << "[" << name << "]";
     }
     s << ": "
-      << node_name(id)
+      << node_name(node)
       << std::endl;
   }
   for ( SizeType i = 0; i < dff_num(); ++ i ) {
-    auto& dff = dff_impl(i);
-    auto id = dff.id;
-    auto src_id = dff.src_id;
+    auto dff = dff_impl(i);
+    auto node = dff->output();
+    auto src = dff->src();
     s << "Q#" << i;
-    auto name = dff.name;
+    auto name = dff->name();
     if ( !name.empty() ) {
       s << "[" << name << "]";
     }
-    s << ": output = " << node_name(id)
-      << ", src = N#" << src_id
+    s << ": output = " << node_name(node)
+      << ", src = N#" << src->id()
       << std::endl;
   }
-  for ( auto id: logic_id_list() ) {
-    auto& node = node_impl(id);
-    s << node_name(id)
+  for ( auto node: logic_list() ) {
+    s << node_name(node)
       << " = "
-      << "F#" << node.func_id()
+      << "F#" << node->func()->id()
       << "(";
     const char* comma = "";
-    for ( auto iid: node.fanin_id_list() ) {
-      s << comma << "N#" << iid;
+    for ( auto inode: node->fanin_list() ) {
+      s << comma << "N#" << inode->id();
       comma = ", ";
     }
     s << ")"
@@ -346,8 +320,8 @@ ModelImpl::write(
   if ( func_num() > 0 ) {
     for ( SizeType id = 0; id < func_num(); ++ id ) {
       s << "F#" << id << ": ";
-      auto& func = func_impl(id);
-      func.print(s);
+      auto func = func_impl(id);
+      func->print(s);
     }
   }
 }
@@ -355,15 +329,46 @@ ModelImpl::write(
 // @brief print() 中でノード名を出力する関数
 std::string
 ModelImpl::node_name(
-  SizeType id
+  const NodeImpl* node
 ) const
 {
   std::ostringstream buf;
+  auto id = node->id();
   buf << "N#" << id;
   if ( mNameDict.count(id) > 0 ) {
     buf << "[" << mNameDict.at(id) << "]";
   }
   return buf.str();
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス ImplBase
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+ImplBase::ImplBase(
+  const ModelImpl* model
+) : mModel{model}
+{
+}
+
+// @brief 参照を増やす
+void
+ImplBase::inc_ref() const
+{
+  if ( _model() != nullptr ) {
+    _model()->inc_ref();
+  }
+}
+
+// @brief 参照を減らす
+void
+ImplBase::dec_ref() const
+{
+  if ( _model() != nullptr ) {
+    _model()->dec_ref();
+  }
 }
 
 END_NAMESPACE_YM_BN

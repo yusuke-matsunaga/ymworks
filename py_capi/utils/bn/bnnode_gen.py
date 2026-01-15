@@ -61,7 +61,8 @@ class BnNodeGen(PyObjGen):
                         doc_str='return fanin node')
 
         def meth_fanin_list(writer):
-            writer.gen_return_pyobject('PyBnNodeList', 'val.fanin_list()')
+            writer.gen_return_pyobject('PyList<BnNode, PyBnNode>',
+                                       'val.fanin_list()')
         self.add_method('fanin_list',
                         func_body=meth_fanin_list,
                         doc_str='return list of fanin nodes')

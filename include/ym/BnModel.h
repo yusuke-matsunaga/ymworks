@@ -11,7 +11,6 @@
 #include "ym/bn.h"
 #include "ym/logic.h"
 #include "ym/json.h"
-#include "ym/BnBase.h"
 #include "ym/BnDff.h"
 #include "ym/BnDffList.h"
 #include "ym/BnNode.h"
@@ -20,6 +19,8 @@
 
 
 BEGIN_NAMESPACE_YM_BN
+
+class ModelImpl;
 
 //////////////////////////////////////////////////////////////////////
 /// @class BnModel BnModel.h "BnModel.h"
@@ -69,13 +70,17 @@ BEGIN_NAMESPACE_YM_BN
 /// - 実装は本体の ModelImpl を指す共有ポインタのみを持つ．
 ///   ただし，ModelImpl は同一の BnModel に属する BnNode 内でしか共有しない．
 //////////////////////////////////////////////////////////////////////
-class BnModel :
-  public BnBase
+class BnModel
 {
 public:
 
   /// @brief 空のコンストラクタ
   BnModel();
+
+  /// @brief コピーコンストラクタ
+  BnModel(
+    const BnModel& src ///< [in] コピー元のオブジェクト
+  );
 
   /// @brief デストラクタ
   ~BnModel();
@@ -312,10 +317,6 @@ public:
   void
   clear();
 
-  /// @brief 設定情報を確定する．
-  void
-  wrap_up();
-
   /// @brief オプション情報をセットする．
   void
   set_option(
@@ -372,8 +373,8 @@ public:
   /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_primitive(
-    PrimType primitive_type,     ///< [in] プリミティブの種類
-    const BnNodeList& fanin_list ///< [in] ファンインのリスト
+    PrimType primitive_type,              ///< [in] プリミティブの種類
+    const std::vector<BnNode>& fanin_list ///< [in] ファンインのリスト
   );
 
   /// @brief カバー型の論理ノードを登録する．
@@ -384,9 +385,9 @@ public:
   /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_cover(
-    const SopCover& input_cover, ///< [in] 入力カバー
-    bool output_inv,             ///< [in] 出力の反転属性
-    const BnNodeList& fanin_list ///< [in] ファンインのリスト
+    const SopCover& input_cover,          ///< [in] 入力カバー
+    bool output_inv,                      ///< [in] 出力の反転属性
+    const std::vector<BnNode>& fanin_list ///< [in] ファンインのリスト
   );
 
   /// @brief 論理式型の論理ノードを登録する．
@@ -397,8 +398,8 @@ public:
   /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_expr(
-    const Expr& expr,            ///< [in] 論理式
-    const BnNodeList& fanin_list ///< [in] ファンインのリスト
+    const Expr& expr,                     ///< [in] 論理式
+    const std::vector<BnNode>& fanin_list ///< [in] ファンインのリスト
   );
 
   /// @brief 真理値表型の論理ノードを登録する．
@@ -409,8 +410,8 @@ public:
   /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_tvfunc(
-    const TvFunc& func,          ///< [in] 真理値表型の関数
-    const BnNodeList& fanin_list ///< [in] ファンインのリスト
+    const TvFunc& func,                   ///< [in] 真理値表型の関数
+    const std::vector<BnNode>& fanin_list ///< [in] ファンインのリスト
   );
 
   /// @brief BDD型の論理ノードを登録する．
@@ -421,12 +422,36 @@ public:
   /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_bdd(
-    const Bdd& bdd,              ///< [in] BDD
-    const BnNodeList& fanin_list ///< [in] ファンインのリスト
+    const Bdd& bdd,                       ///< [in] BDD
+    const std::vector<BnNode>& fanin_list ///< [in] ファンインのリスト
   );
 
   /// @}
   //////////////////////////////////////////////////////////////////////
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 比較演算子
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 等価比較演算子
+  bool
+  operator==(
+    const BnModel& right ///< [in] オペランド
+  ) const
+  {
+    return mPtr == right.mPtr;
+  }
+
+  /// @brief 非等価比較演算子
+  bool
+  operator!=(
+    const BnModel& right ///< [in] オペランド
+  ) const
+  {
+    return !operator==(right);
+  }
 
 
 private:
@@ -438,6 +463,29 @@ private:
   BnModel(
     ModelImpl* impl
   );
+
+  /// @brief ノードのリストをポインタのリストに変換する．
+  static
+  std::vector<const NodeImpl*>
+  make_ptr_list(
+    const std::vector<BnNode>& node_list
+  )
+  {
+    std::vector<const NodeImpl*> ptr_list;
+    ptr_list.reserve(node_list.size());
+    for ( auto& node: node_list ) {
+      ptr_list.push_back(node.mPtr);
+    }
+    return ptr_list;
+  }
+
+  /// @brief ModelImpl を返す．
+  const ModelImpl&
+  _model_impl() const;
+
+  /// @brief ModelImpl を返す．
+  ModelImpl&
+  _model_impl();
 
   /// @brief 入力番号のチェックを行う．
   void
@@ -462,6 +510,15 @@ private:
   _check_dff_id(
     SizeType dff_id
   ) const;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 実装オブジェクトのポインタ
+  ModelImpl* mPtr;
 
 };
 

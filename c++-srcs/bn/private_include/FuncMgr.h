@@ -50,40 +50,45 @@ public:
   clear();
 
   /// @brief プリミティブ型を登録する．
-  /// @return 関数番号を返す．
-  SizeType
+  /// @return 関数を返す．
+  const FuncImpl*
   reg_primitive(
+    const ModelImpl* model, ///< [in] 親のモデル
     SizeType input_num,     ///< [in] 入力数
     PrimType primitive_type ///< [in] プリミティブの種類
   );
 
   /// @brief カバー型を登録する．
-  /// @return 関数番号を返す．
-  SizeType
+  /// @return 関数を返す．
+  const FuncImpl*
   reg_cover(
+    const ModelImpl* model,      ///< [in] 親のモデル
     const SopCover& input_cover, ///< [in] 入力カバー
     bool output_inv              ///< [in] 出力の反転構造
   );
 
   /// @brief 論理式型を登録する．
-  /// @return 関数番号を返す．
-  SizeType
+  /// @return 関数を返す．
+  const FuncImpl*
   reg_expr(
-    const Expr& expr ///< [in] 論理式
+    const ModelImpl* model, ///< [in] 親のモデル
+    const Expr& expr        ///< [in] 論理式
   );
 
   /// @brief 真理値表型を登録する．
-  /// @return 関数番号を返す．
-  SizeType
+  /// @return 関数を返す．
+  const FuncImpl*
   reg_tvfunc(
-    const TvFunc& tvfunc ///< [in] 真理値表
+    const ModelImpl* model, ///< [in] 親のモデル
+    const TvFunc& tvfunc    ///< [in] 真理値表
   );
 
   /// @brief BDD型を登録する．
-  /// @return 関数番号を返す．
-  SizeType
+  /// @return 関数を返す．
+  const FuncImpl*
   reg_bdd(
-    const Bdd& bdd ///< [in] BDD
+    const ModelImpl* model, ///< [in] 親のモデル
+    const Bdd& bdd          ///< [in] BDD
   );
 
   /// @brief 登録されている関数情報の数を返す．
@@ -94,7 +99,7 @@ public:
   }
 
   /// @brief 関数情報を取り出す．
-  const FuncImpl&
+  const FuncImpl*
   func(
     SizeType func_id ///< [in] 関数番号 ( 0 <= func_id < func_num() );
   ) const
@@ -102,7 +107,7 @@ public:
     if ( func_id >= func_num() ) {
       throw std::out_of_range{"func_id is out of range"};
     }
-    return *mFuncArray[func_id];
+    return mFuncArray[func_id].get();
   }
 
 
@@ -112,10 +117,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 関数情報を登録する．
-  /// @return 関数番号を返す．
-  SizeType
+  /// @return 関数を返す．
+  const FuncImpl*
   reg_func(
-    FuncImpl* func
+    std::function<FuncImpl*(SizeType id)> new_func ///< [in] 生成関数
   );
 
 

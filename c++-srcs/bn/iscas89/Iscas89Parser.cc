@@ -28,7 +28,7 @@ BnModel::read_iscas89(
 {
   BnModel model;
 
-  Iscas89Parser parser(model._model_impl());
+  Iscas89Parser parser(*model.mPtr);
   if ( !parser.read(filename) ) {
     std::ostringstream buf;
     buf << "BnModel::read_iscas89(\"" << filename << "\") failed.";
@@ -141,8 +141,8 @@ Iscas89Parser::read(
   }
 
   {
-    for ( auto& p: mRefLocDict ) {
-      auto id = p.first;
+    auto n = mRefLocArray.size();
+    for ( SizeType id = 0; id < n; ++ id ) {
       if ( !is_defined(id) ) {
 	std::ostringstream buf;
 	buf << id2str(id) << ": Undefined.";
@@ -152,9 +152,18 @@ Iscas89Parser::read(
 	return false;
       }
     }
+    // 出力のノードを作る．
+    for ( auto id: mOutputList ) {
+      auto node = make_node(id);
+      auto name = id2str(id);
+      mModel.new_output(node, name);
+    }
+    // DFFの入力のノードを作る．
+    for ( auto& dff_info: mDffInfoList ) {
+      auto node = make_node(dff_info.src_id);
+      mModel.set_dff_src(dff_info.dff_id, node);
+    }
   }
-
-  mModel.make_logic_list();
 
   return !has_error;
 }
@@ -186,10 +195,8 @@ Iscas89Parser::read_input(
   }
 
   set_defined(name_id, loc);
-  auto iid = mModel.input_num();
-  mModel.set_input(name_id);
-  mModel.set_input_name(iid, name);
-
+  auto node = mModel.new_input(name);
+  mNodeDict.emplace(name_id, node);
   return true;
 }
 
@@ -205,11 +212,7 @@ Iscas89Parser::read_output(
     return false;
   }
   FileRegion loc{first_loc, last_loc};
-  auto oid = mModel.output_num();
-  mModel.new_output(name_id);
-  auto name = id2str(name_id);
-  mModel.set_output_name(oid, name);
-
+  mOutputList.push_back(name_id);
   return true;
 }
 
@@ -248,9 +251,9 @@ Iscas89Parser::read_gate(
       return false;
     }
     FileRegion loc{first_loc, last_loc};
-    set_gate(name_id, loc, gate_token.gate_type(), iname_id_list);
-    auto name = id2str(name_id);
-    mModel.set_node_name(name_id, name);
+    set_defined(name_id, loc);
+    auto gate_type = gate_token.gate_type();
+    mGateInfoDict.emplace(name_id, GateInfo{gate_type, iname_id_list});
     return true;
   }
   if ( gate_token.type() == Iscas89Token::DFF ) {
@@ -263,9 +266,9 @@ Iscas89Parser::read_gate(
     set_defined(name_id, loc);
     auto name = id2str(name_id);
     auto dff_id = mModel.new_dff(name);
-    mModel.set_dff_output(name_id, dff_id);
-    mModel.set_dff_src(dff_id, iname_id);
-    mModel.set_node_name(name_id, name);
+    auto node = mModel.new_dff_output(dff_id);
+    mNodeDict.emplace(name_id, node);
+    mDffInfoList.push_back({dff_id, iname_id});
     return true;
   }
 #if 0
@@ -409,6 +412,34 @@ Iscas89Parser::read_token(
     name_id = find_id(name, token.loc());
   }
   return token;
+}
+
+// @brief ID番号のノードを作る．
+const NodeImpl*
+Iscas89Parser::make_node(
+  SizeType id
+)
+{
+  if ( mNodeDict.count(id) > 0 ) {
+    // すでに作成済み
+    return mNodeDict.at(id);
+  }
+  if ( mGateInfoDict.count(id) > 0 ) {
+    auto& gate_info = mGateInfoDict.at(id);
+    auto n = gate_info.fanin_id_list.size();
+    auto func = mModel.reg_primitive(n, gate_info.gate_type);
+    std::vector<const NodeImpl*> fanin_list;
+    fanin_list.reserve(n);
+    for ( auto iid: gate_info.fanin_id_list ) {
+      auto inode = make_node(iid);
+      fanin_list.push_back(inode);
+    }
+    auto node = mModel.new_logic(func, fanin_list);
+    mNodeDict.emplace(id, node);
+    return node;
+  }
+  throw std::logic_error{"id is undefined"};
+  return nullptr;
 }
 
 END_NAMESPACE_YM_BN

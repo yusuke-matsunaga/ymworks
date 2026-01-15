@@ -12,6 +12,7 @@
 #include "ym/logic.h"
 #include "ym/BnFunc.h"
 #include "ym/BddMgr.h"
+#include "ImplBase.h"
 
 
 BEGIN_NAMESPACE_YM_BN
@@ -25,12 +26,19 @@ BEGIN_NAMESPACE_YM_BN
 /// - ただし，派生クラスの生成関数をクラスメソッドとして用意したので
 ///   個々の派生クラスについて知る必要はない．
 //////////////////////////////////////////////////////////////////////
-class FuncImpl
+class FuncImpl:
+  public ImplBase
 {
 public:
 
   /// @brief コンストラクタ
-  FuncImpl() = default;
+  FuncImpl(
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id             ///< [in] ID番号
+  ) : ImplBase(model),
+      mId{id}
+  {
+  }
 
   /// @brief デストラクタ
   virtual
@@ -46,6 +54,8 @@ public:
   static
   FuncImpl*
   new_primitive(
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
     SizeType input_num,     ///< [in] 入力数
     PrimType primitive_type ///< [in] プリミティブの種類
   );
@@ -54,6 +64,8 @@ public:
   static
   FuncImpl*
   new_cover(
+    const ModelImpl* model,      ///< [in] 親のモデル
+    SizeType id,                 ///< [in] ID番号
     const SopCover& input_cover, ///< [in] 入力カバー
     bool output_inv              ///< [in] 出力の反転属性
   );
@@ -62,21 +74,27 @@ public:
   static
   FuncImpl*
   new_expr(
-    const Expr& expr ///< [in] 論理式
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    const Expr& expr        ///< [in] 論理式
   );
 
   /// @brief 真理値表型のインスタンスを作る．
   static
   FuncImpl*
   new_tvfunc(
-    const TvFunc& func ///< [in] 真理値表
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    const TvFunc& func      ///< [in] 真理値表
   );
 
   /// @brief BDD型のインスタンスを作る．
   static
   FuncImpl*
   new_bdd(
-    const Bdd& bdd ///< [in] BDD
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    const Bdd& bdd          ///< [in] BDD
   );
 
 
@@ -85,6 +103,13 @@ public:
   // 種類を取り出す関数
   // この関数は例外を創出しない．
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief ID番号を返す．
+  SizeType
+  id() const
+  {
+    return mId;
+  }
 
   /// @brief 関数の種類を返す．
   virtual
@@ -200,6 +225,15 @@ public:
   print(
     std::ostream& s ///< [in] 出力先のストリーム
   ) const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ID番号
+  SizeType mId;
 
 };
 

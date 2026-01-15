@@ -64,8 +64,8 @@ private:
     if ( mIdDict.count(name) > 0 ) {
       return mIdDict.at(name);
     }
+    auto id = mRefLocArray.size();
     mRefLocArray.push_back(loc);
-    auto id = mModel.alloc_node();
     mIdDict.emplace(name, id);
     mNameDict.emplace(id, name);
     return id;
@@ -86,7 +86,9 @@ private:
     SizeType id ///< [in] ID番号
   )
   {
-    ASSERT_COND( 0 <= id && id < mRefLocArray.size() );
+    if ( id >= mRefLocArray.size() ) {
+      throw std::out_of_range{"id is out of range"};
+    }
     return mRefLocArray[id];
   }
 
@@ -126,6 +128,12 @@ private:
   //////////////////////////////////////////////////////////////////////
   // 内部で用いられる関数
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief ID番号に対応するノードを作る．
+  const NodeImpl*
+  make_node(
+    SizeType id
+  );
 
   /// @brief .model 文の読み込みを行う．
   /// @retval true 正しく読み込んだ．
@@ -213,17 +221,46 @@ private:
   // モデル名
   std::string mModelName;
 
-  // 名前をキーにしたノード番号の辞書
+  // 名前をキーにしたID番号の辞書
   std::unordered_map<std::string, SizeType> mIdDict;
 
   // ID番号をキーにした名前の辞書
   std::unordered_map<SizeType, std::string> mNameDict;
 
   // ノードを参照している箇所の配列
+  // キーはID番号
   std::vector<FileRegion> mRefLocArray;
 
   // ノードを定義している箇所の辞書
+  // キーはID番号
   std::unordered_map<SizeType, FileRegion> mDefLocDict;
+
+  // 出力のID番号のリスト
+  std::vector<SizeType> mOutputList;
+
+  // .names の情報
+  struct NamesInfo
+  {
+    const FuncImpl* func;                // 関数情報
+    std::vector<SizeType> fanin_id_list; // ファンインのID番号のリスト
+  };
+
+  // .names の情報の辞書
+  // キーはID番号
+  std::unordered_map<SizeType, NamesInfo> mNamesInfoDict;
+
+  // .latch の情報
+  struct LatchInfo
+  {
+    SizeType dff_id; // DFF番号
+    SizeType src;    // 入力のID番号
+  };
+
+  // .latch の情報のリスト
+  std::vector<LatchInfo> mLatchInfoList;
+
+  // ID番号に対応するノードの辞書
+  std::unordered_map<SizeType, const NodeImpl*> mNodeDict;
 
 };
 

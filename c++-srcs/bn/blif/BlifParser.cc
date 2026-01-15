@@ -27,7 +27,7 @@ BnModel::read_blif(
 {
   BnModel model;
 
-  BlifParser parser(model._model_impl());
+  BlifParser parser(*model.mPtr);
   if ( !parser.read(filename) ) {
     std::ostringstream buf;
     buf << "BnModel::read_blif(\"" << filename << "\") failed.";
@@ -252,6 +252,7 @@ BlifParser::read(
 
  ST_NORMAL_EXIT:
   {
+    // 参照されているIDが定義済みか調べる．
     SizeType n = mRefLocArray.size();
     for ( auto id = 0; id < n; ++ id ) {
       if ( !is_defined(id) ) {
@@ -263,9 +264,18 @@ BlifParser::read(
 	goto ST_ERROR_EXIT;
       }
     }
+    // 出力のノードを作る．
+    for ( auto id: mOutputList ) {
+      auto node = make_node(id);
+      auto name = id2str(id);
+      mModel.new_output(node, name);
+    }
+    // DFFの入力のノードを作る．
+    for ( auto& latch_info: mLatchInfoList ) {
+      auto node = make_node(latch_info.src);
+      mModel.set_dff_src(latch_info.dff_id, node);
+    }
   }
-
-  mModel.make_logic_list();
 
   return true;
 
@@ -280,6 +290,34 @@ BlifParser::read(
  ST_ERROR_EXIT:
 
   return false;
+}
+
+// @brief ID番号に対応するノードを作る．
+const NodeImpl*
+BlifParser::make_node(
+  SizeType id
+)
+{
+  if ( mNodeDict.count(id) > 0 ) {
+    // 既に作成済み
+    return mNodeDict.at(id);
+  }
+  if ( mNamesInfoDict.count(id) > 0 ) {
+    auto& names_info = mNamesInfoDict.at(id);
+    auto n = names_info.fanin_id_list.size();
+    std::vector<const NodeImpl*> fanin_list;
+    fanin_list.reserve(n);
+    for ( auto iid: names_info.fanin_id_list ) {
+      auto inode = make_node(iid);
+      fanin_list.push_back(inode);
+    }
+    auto node = mModel.new_logic(names_info.func, fanin_list);
+    mNodeDict.emplace(id, node);
+    return node;
+  }
+  // 未定義IDのチェックはしているのでここに来ることはないはず．
+  throw std::logic_error{"undefined ID"};
+  return nullptr;
 }
 
 // @brief .model 文の読み込みを行う．
@@ -371,10 +409,8 @@ BlifParser::read_inputs()
       }
 
       set_defined(id, name_loc);
-      auto iid = mModel.input_num();
-      mModel.set_input(id);
-      mModel.set_input_name(iid, name);
-
+      auto node = mModel.new_input(name);
+      mNodeDict.emplace(id, node);
       ++ n_token;
     }
     else if ( tk == BlifToken::NL ) {
@@ -406,9 +442,7 @@ BlifParser::read_outputs()
       auto name = cur_string();
       auto name_loc = cur_loc();
       auto id = find_id(name, name_loc);
-      auto oid = mModel.output_num();
-      mModel.new_output(id);
-      mModel.set_output_name(oid, name);
+      mOutputList.push_back(id);
       ++ n_token;
     }
     else if ( tk == BlifToken::NL ) {
@@ -632,13 +666,11 @@ BlifParser::read_names()
   // カバーを作る．
   auto input_cover = SopCover(ni, cube_list);
   auto output_inv = opat_char == '0';
-  auto func_id = mModel.reg_cover(input_cover, output_inv);
+  auto func = mModel.reg_cover(input_cover, output_inv);
 
+  // 登録する．
+  mNamesInfoDict.emplace(oid, NamesInfo{func, names_id_list});
   set_defined(oid, names_loc);
-  mModel.set_logic(oid, func_id, names_id_list);
-  auto oname = id2str(oid);
-  mModel.set_node_name(oid, oname);
-
   return true;
 }
 
@@ -867,9 +899,9 @@ BlifParser::read_latch()
 
     set_defined(id2, name2_loc);
     auto dff_id = mModel.new_dff(name2, rval);
-    mModel.set_dff_output(id2, dff_id);
-    mModel.set_dff_src(dff_id, id1);
-
+    auto node = mModel.new_dff_output(dff_id);
+    mNodeDict.emplace(id2, node);
+    mLatchInfoList.push_back({dff_id, id1});
     return true;
   }
   else {

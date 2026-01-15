@@ -112,7 +112,7 @@ TEST( BnModelTest, new_input )
   EXPECT_EQ( 0, node.fanin_num() );
   EXPECT_THROW( node.fanin(0),
 		std::out_of_range );
-  EXPECT_EQ( BnNodeList{}, node.fanin_list() );
+  EXPECT_EQ( std::vector<BnNode>{}, node.fanin_list() );
 }
 
 TEST( BnModelTest, new_dff)
@@ -147,7 +147,7 @@ TEST( BnModelTest, new_dff)
   EXPECT_EQ( 0, node.fanin_num() );
   EXPECT_THROW( node.fanin(0),
 		std::out_of_range );
-  EXPECT_EQ( BnNodeList{}, node.fanin_list() );
+  EXPECT_EQ( std::vector<BnNode>{}, node.fanin_list() );
 }
 
 TEST( BnModelTest, new_primitive )
@@ -158,9 +158,7 @@ TEST( BnModelTest, new_primitive )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
-  auto input_num = fanin_list.size();
-
+  auto fanin_list = std::vector<BnNode>{input1, input2};
   auto node = model.new_primitive(type, fanin_list);
 
   ASSERT_TRUE( node.is_valid() );
@@ -175,7 +173,7 @@ TEST( BnModelTest, new_primitive )
 		std::logic_error );
 
   auto func = node.func();
-  EXPECT_EQ( input_num, func.input_num() );
+  EXPECT_EQ( fanin_list.size(), func.input_num() );
   EXPECT_EQ( BnFunc::PRIMITIVE, func.type() );
   EXPECT_EQ( "PRIMITIVE", func.type_str() );
   EXPECT_TRUE ( func.is_primitive() );
@@ -201,14 +199,6 @@ TEST( BnModelTest, new_primitive )
     EXPECT_EQ( node1, node.fanin(i) );
   }
   EXPECT_EQ( fanin_list, node.fanin_list() );
-
-  {
-    SizeType i = 0;
-    for ( auto iter = node.fanin_list().iter(); iter.has_next(); ++ i ) {
-      auto node1 = iter.next();
-      EXPECT_EQ( fanin_list[i], node1 );
-    }
-  }
 }
 
 TEST( BnModelTest, new_cover )
@@ -217,7 +207,7 @@ TEST( BnModelTest, new_cover )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
+  auto fanin_list = std::vector<BnNode>{input1, input2};
   auto input_num = fanin_list.size();
 
   auto lit0 = Literal{0, false};
@@ -273,7 +263,7 @@ TEST( BnModelTest, new_cover_bad )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
+  auto fanin_list = std::vector<BnNode>{input1, input2};
 
   auto lit0 = Literal{0, false};
   auto lit1 = Literal{1, false};
@@ -291,7 +281,7 @@ TEST( BnModelTest, new_expr )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
+  auto fanin_list = std::vector<BnNode>{input1, input2};
   auto input_num = fanin_list.size();
 
   auto v0 = Expr::literal(0);
@@ -348,7 +338,7 @@ TEST( BnModelTest, new_expr_bad )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
+  auto fanin_list = std::vector<BnNode>{input1, input2};
 
   auto v0 = Expr::literal(0);
   auto v1 = Expr::literal(1);
@@ -366,7 +356,7 @@ TEST( BnModelTest, new_tvfunc )
   auto input1 = model.new_input();
   auto input2 = model.new_input();
   auto input3 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2, input3});
+  auto fanin_list = std::vector<BnNode>{input1, input2, input3};
   auto input_num = fanin_list.size();
 
   auto v0 = TvFunc::positive_literal(input_num, 0);
@@ -424,7 +414,7 @@ TEST( BnModelTest, new_tvfunc_bad )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
+  auto fanin_list = std::vector<BnNode>{input1, input2};
 
   auto v0 = TvFunc::positive_literal(3, 0);
   auto v1 = TvFunc::positive_literal(3, 1);
@@ -446,7 +436,7 @@ TEST( BnModelTest, new_bdd )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
+  auto fanin_list = std::vector<BnNode>{input1, input2};
   auto input_num = fanin_list.size();
 
   auto node = model.new_bdd(bdd, fanin_list);
@@ -497,7 +487,7 @@ TEST( BnModelTest, new_bdd_bad )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
+  auto fanin_list = std::vector<BnNode>{input1, input2};
   auto input_num = fanin_list.size();
 
   EXPECT_THROW( model.new_bdd(bdd, fanin_list),
@@ -510,12 +500,10 @@ TEST( BnModelTest, clear )
 
   auto input1 = model.new_input();
   auto input2 = model.new_input();
-  auto fanin_list = BnNodeList({input1, input2});
+  auto fanin_list = std::vector<BnNode>{input1, input2};
   auto type = PrimType::And;
   auto node = model.new_primitive(type, fanin_list);
   auto output = model.new_output(node);
-
-  model.wrap_up();
 
   EXPECT_EQ( 2, model.input_num() );
   EXPECT_EQ( 1, model.output_num() );
@@ -535,11 +523,10 @@ TEST( BnModelTest, fsm1 )
   auto input1 = model.new_input();
   auto dff1 = model.new_dff();
   auto dff1_output = dff1.output();
-  auto fanin_list = BnNodeList({input1, dff1_output});
+  auto fanin_list = std::vector<BnNode>{input1, dff1_output};
   auto and_node = model.new_primitive(PrimType::And, fanin_list);
   model.set_dff_src(dff1, and_node);
   model.new_output(dff1_output);
-  model.wrap_up();
 
   std::ostringstream buf;
   model.write(buf);

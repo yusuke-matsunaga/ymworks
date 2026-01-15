@@ -19,11 +19,13 @@ BEGIN_NAMESPACE_YM_BN
 // @brief カバー型のインスタンスを作る．
 FuncImpl*
 FuncImpl::new_cover(
+  const ModelImpl* model,
+  SizeType id,
   const SopCover& input_cover,
   bool output_inv
 )
 {
-  return new FuncImpl_Cover(input_cover, output_inv);
+  return new FuncImpl_Cover(model, id, input_cover, output_inv);
 }
 
 
@@ -33,9 +35,12 @@ FuncImpl::new_cover(
 
 // @brief コンストラクタ
 FuncImpl_Cover::FuncImpl_Cover(
+  const ModelImpl* model,
+  SizeType id,
   const SopCover& input_cover,
   bool output_inv
-) : mInputCover{input_cover},
+) : FuncImpl(model, id),
+    mInputCover{input_cover},
     mOutputInv{output_inv}
 {
 }

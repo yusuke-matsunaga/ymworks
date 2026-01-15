@@ -65,24 +65,15 @@ TEST( ModelImplTest, set_output_name )
   EXPECT_EQ( name, model.output_name(oid) );
 }
 
-TEST( ModelImplTest, alloc_node )
-{
-  ModelImpl model;
-
-  auto id = model.alloc_node();
-  EXPECT_EQ( 0, id );
-}
-
 TEST( ModelImplTest, new_input )
 {
   ModelImpl model;
 
-  auto id = model.new_input();
-  auto& node = model.node_impl(id);
-  EXPECT_EQ( BnNode::INPUT, node.type() );
-  EXPECT_TRUE( node.is_input() );
-  EXPECT_TRUE( node.is_primary_input() );
-  EXPECT_FALSE( node.is_dff_output() );
+  auto node = model.new_input();
+  EXPECT_EQ( BnNode::INPUT, node->type() );
+  EXPECT_TRUE( node->is_input() );
+  EXPECT_TRUE( node->is_primary_input() );
+  EXPECT_FALSE( node->is_dff_output() );
 }
 
 TEST( ModelImplTest, new_dff_output )
@@ -90,24 +81,23 @@ TEST( ModelImplTest, new_dff_output )
   ModelImpl model;
 
   auto dff_id = model.new_dff();
-  auto id = model.new_dff_output(dff_id);
-  auto& node = model.node_impl(id);
-  EXPECT_EQ( BnNode::INPUT, node.type() );
-  EXPECT_TRUE( node.is_input() );
-  EXPECT_FALSE( node.is_primary_input() );
-  EXPECT_TRUE( node.is_dff_output() );
+  auto node = model.new_dff_output(dff_id);
+  EXPECT_EQ( BnNode::INPUT, node->type() );
+  EXPECT_TRUE( node->is_input() );
+  EXPECT_FALSE( node->is_primary_input() );
+  EXPECT_TRUE( node->is_dff_output() );
 }
 
 TEST( ModelImplTest, new_output )
 {
   ModelImpl model;
 
-  auto id = model.new_input();
+  auto node = model.new_input();
 
-  auto oid = model.new_output(id);
+  auto oid = model.new_output(node);
 
   EXPECT_EQ( 1, model.output_num() );
-  EXPECT_EQ( id, model.output_id(oid) );
+  EXPECT_EQ( node, model.output(oid) );
 }
 
 TEST( ModelImplTest, new_logic )
@@ -116,54 +106,20 @@ TEST( ModelImplTest, new_logic )
 
   auto id1 = model.new_input();
   auto id2 = model.new_input();
-  std::vector<SizeType> fanin_list{id1, id2};
+  std::vector<const NodeImpl*> fanin_list{id1, id2};
   auto input_num = fanin_list.size();
   auto type = PrimType::Xor;
-  auto func_id = model.reg_primitive(input_num, type);
-  auto id3 = model.new_logic(func_id, fanin_list);
+  auto func = model.reg_primitive(input_num, type);
+  auto node = model.new_logic(func, fanin_list);
 
-  auto& node = model.node_impl(id3);
-  EXPECT_EQ( BnNode::LOGIC, node.type() );
-  auto func_id1 = node.func_id();
-  EXPECT_EQ( func_id, func_id1 );
-  EXPECT_EQ( input_num, node.fanin_num() );
+  EXPECT_EQ( BnNode::LOGIC, node->type() );
+  auto func1 = node->func();
+  EXPECT_EQ( func, func1 );
+  EXPECT_EQ( input_num, node->fanin_num() );
   for ( SizeType i = 0; i < fanin_list.size(); ++ i ) {
-    EXPECT_EQ( fanin_list[i], node.fanin_id(i) );
+    EXPECT_EQ( fanin_list[i], node->fanin(i) );
   }
-  EXPECT_EQ( fanin_list, node.fanin_id_list() );
-}
-
-TEST( ModelImplTest, set_input )
-{
-  ModelImpl model;
-
-  auto id = model.alloc_node();
-  model.set_input(id);
-  auto& node = model.node_impl(id);
-  EXPECT_EQ( BnNode::INPUT, node.type() );
-}
-
-TEST( ModelImplTest, set_logic )
-{
-  ModelImpl model;
-
-  auto id1 = model.new_input();
-  auto id2 = model.new_input();
-  auto id3 = model.alloc_node();
-  auto fanin_list = std::vector<SizeType>{id1, id2};
-  auto input_num = fanin_list.size();
-  auto prim_type = PrimType::Xor;
-  auto func_id = model.reg_primitive(input_num, prim_type);
-  model.set_logic(id3, func_id, fanin_list);
-
-  auto& node = model.node_impl(id3);
-  EXPECT_EQ( BnNode::LOGIC, node.type() );
-  EXPECT_EQ( fanin_list.size(), node.fanin_num() );
-  for ( SizeType i = 0; i < fanin_list.size(); ++ i ) {
-    EXPECT_EQ( fanin_list[i], node.fanin_id(i) );
-  }
-  EXPECT_EQ( fanin_list, node.fanin_id_list() );
-  EXPECT_EQ( func_id, node.func_id() );
+  EXPECT_EQ( fanin_list, node->fanin_list() );
 }
 
 TEST( ModelImplTest, set_dff_name )
@@ -182,11 +138,11 @@ TEST( ModelImplTest, set_dff_src )
 {
   ModelImpl model;
 
-  SizeType src_id = 10;
+  auto src = model.new_input();
   auto dff_id = model.new_dff();
-  model.set_dff_src(dff_id, src_id);
-  auto& dff = model.dff_impl(dff_id);
-  EXPECT_EQ( src_id, dff.src_id );
+  model.set_dff_src(dff_id, src);
+  auto dff = model.dff_impl(dff_id);
+  EXPECT_EQ( src, dff->src() );
 }
 
 END_NAMESPACE_YM_BN

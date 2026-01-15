@@ -19,19 +19,41 @@ BEGIN_NAMESPACE_YM_BN
 
 // @brief 内容を指定したコンストラクタ
 BnFunc::BnFunc(
-  const std::shared_ptr<ModelImpl>& model,
-  SizeType id
-) : BnBase(model),
-    mId{id}
+  const FuncImpl* ptr
+) : mPtr{ptr}
 {
-  if ( is_invalid() ) {
-    mId = BAD_ID;
+  if ( is_valid() ) {
+    mPtr->inc_ref();
   }
+}
+
+// @brief コピーコンストラクタ
+BnFunc::BnFunc(
+  const BnFunc& src
+) : BnFunc(src.mPtr)
+{
 }
 
 // @brief デストラクタ
 BnFunc::~BnFunc()
 {
+  if ( is_valid() ) {
+    mPtr->dec_ref();
+  }
+}
+
+// @brief 関数番号を返す．
+SizeType
+BnFunc::id() const
+{
+  return _func_impl().id();
+}
+
+// @brief 入力数を返す．
+SizeType
+BnFunc::input_num() const
+{
+  return _func_impl().input_num();
 }
 
 // @brief 種類を返す．
@@ -88,13 +110,6 @@ bool
 BnFunc::is_bdd() const
 {
   return _func_impl().is_bdd();
-}
-
-// @brief 入力数を返す．
-SizeType
-BnFunc::input_num() const
-{
-  return _func_impl().input_num();
 }
 
 // @brief プリミティブ型を返す．
@@ -155,7 +170,7 @@ BnFunc::_func_impl() const
   if ( !is_valid() ) {
     throw std::invalid_argument{"BnFunc: invalid data"};
   }
-  return _model_impl().func_impl(mId);
+  return *mPtr;
 }
 
 END_NAMESPACE_YM_BN

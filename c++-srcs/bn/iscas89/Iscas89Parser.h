@@ -88,35 +88,6 @@ public:
   // Iscas89Handler から用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief ゲートの設定を行う．
-  void
-  set_gate(
-    SizeType id,                            ///< [in] ID番号
-    const FileRegion& loc,                  ///< [in] ファイル上の位置
-    PrimType gate_type,                     ///< [in] ゲートの種類
-    const std::vector<SizeType>& fanin_list ///< [in] ファンインのIDのリスト
-  )
-  {
-    set_defined(id, loc);
-    auto input_num = fanin_list.size();
-    auto func_id = mModel.reg_primitive(input_num, gate_type);
-    mModel.set_logic(id, func_id, fanin_list);
-  }
-
-  /// @brief 複合ゲートの設定を行う．
-  void
-  set_complex(
-    SizeType id,                            ///< [in] ID番号
-    const FileRegion& loc,                  ///< [in] ファイル上の位置
-    const Expr& expr,                       ///< [in] 論理式
-    const std::vector<SizeType>& fanin_list ///< [in] ファンインのIDのリスト
-  )
-  {
-    set_defined(id, loc);
-    auto func_id = mModel.reg_expr(expr);
-    mModel.set_logic(id, func_id, fanin_list);
-  }
-
   /// @brief '(' ')' で囲まれた名前を読み込む．
   /// @retval true 読み込みが成功した．
   /// @retval false 読み込みが失敗した．
@@ -213,18 +184,6 @@ private:
     SizeType& name_id
   );
 
-  /// @brief 新しいノードを確保する．
-  /// @return ID番号を返す．
-  SizeType
-  new_node(
-    const FileRegion& loc ///< [in] ファイル上の位置
-  )
-  {
-    auto id = mModel.alloc_node();
-    mRefLocDict.emplace(id, loc);
-    return id;
-  }
-
   /// @brief 識別子番号を得る．
   ///
   /// 登録されていなければ新しく作る．
@@ -237,7 +196,8 @@ private:
     if ( mIdDict.count(name) > 0 ) {
       return mIdDict.at(name);
     }
-    auto id = new_node(loc);
+    auto id = mRefLocArray.size();
+    mRefLocArray.push_back(loc);
     mIdDict.emplace(name, id);
     mNameDict.emplace(id, name);
     return id;
@@ -262,14 +222,28 @@ private:
     return mDefLocDict.count(id) > 0;
   }
 
+  /// @brief ID番号のノードを作る．
+  const NodeImpl*
+  make_node(
+    SizeType id
+  );
+
+  /// @brief ID番号のリストをノードのリストに変換する．
+  std::vector<const NodeImpl*>
+  make_node_list(
+    const std::vector<SizeType>& id_list ///< [in] ID番号のリスト
+  );
+
   /// @brief ID 番号から参照されている位置情報を得る．
   const FileRegion&
   ref_loc(
     SizeType id ///< [in] ID番号
   ) const
   {
-    ASSERT_COND( mRefLocDict.count(id) > 0 );
-    return mRefLocDict.at(id);
+    if ( id >= mRefLocArray.size() ) {
+      throw std::out_of_range{"id is out of range"};
+    }
+    return mRefLocArray[id];
   }
 
   /// @brief ID 番号から定義されている位置情報を得る．
@@ -307,14 +281,43 @@ private:
   // ID をキーにして名前を格納する辞書
   std::unordered_map<SizeType, std::string> mNameDict;
 
-  // 参照された位置を記録する配列
-  std::unordered_map<SizeType, FileRegion> mRefLocDict;
+  // 参照された位置のリスト
+  // キーはID番号
+  std::vector<FileRegion> mRefLocArray;
 
   // 定義された位置を記録する辞書
+  // キーはID番号
   std::unordered_map<SizeType, FileRegion> mDefLocDict;
 
   // 処理済みの印
   std::unordered_set<SizeType> mMark;
+
+  // 出力ノードのID番号のリスト
+  std::vector<SizeType> mOutputList;
+
+  // ゲートの情報
+  struct GateInfo
+  {
+    PrimType gate_type;                  // ゲートの種類
+    std::vector<SizeType> fanin_id_list; // ファンインのID番号のリスト
+  };
+
+  // ゲートの情報の辞書
+  // キーはID番号
+  std::unordered_map<SizeType, GateInfo> mGateInfoDict;
+
+  // DFFの情報
+  struct DffInfo
+  {
+    SizeType dff_id; // DFF番号
+    SizeType src_id; // ソースのID番号
+  };
+
+  // DFFの情報のリスト
+  std::vector<DffInfo> mDffInfoList;
+
+  // ID番号をキーにしてノードを格納する辞書
+  std::unordered_map<SizeType, const NodeImpl*> mNodeDict;
 
 };
 

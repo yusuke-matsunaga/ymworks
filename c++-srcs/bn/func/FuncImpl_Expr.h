@@ -25,7 +25,9 @@ public:
 
   /// @brief コンストラクタ
   FuncImpl_Expr(
-    const Expr& expr ///< [in] 論理式
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    const Expr& expr        ///< [in] 論理式
   );
 
   /// @brief デストラクタ

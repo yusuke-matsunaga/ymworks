@@ -41,16 +41,25 @@ BnModel::BnModel(
 {
 }
 
+// @brief コピーコンストラクタ
+BnModel::BnModel(
+  const BnModel& src
+) : BnModel(src.mPtr)
+{
+}
+
 // @brief 内容を指定したコンストラクタ
 BnModel::BnModel(
   ModelImpl* impl
-) : BnBase(std::shared_ptr<ModelImpl>{impl})
+) : mPtr{impl}
 {
+  mPtr->inc_ref();
 }
 
 // @brief デストラクタ
 BnModel::~BnModel()
 {
+  mPtr->dec_ref();
 }
 
 // @brief '深い'コピーを作る．
@@ -74,14 +83,16 @@ BnModel::dff(
   SizeType dff_id
 ) const
 {
-  return _id2dff(dff_id);
+  auto ptr = _model_impl().dff_impl(dff_id);
+  return BnDff(ptr);
 }
 
 // @brief DFFのリストを返す．
 BnDffList
 BnModel::dff_list() const
 {
-  return _id2dff_list(make_id_list(dff_num()));
+  auto& ptr_list = _model_impl().dff_list();
+  return BnDffList(ptr_list);
 }
 
 // @brief ノード数を返す．
@@ -97,7 +108,8 @@ BnModel::node(
   SizeType id
 ) const
 {
-  return _id2node(id);
+  auto ptr = _model_impl().node_impl(id);
+  return BnNode(ptr);
 }
 
 // @brief 入力数を返す．
@@ -114,15 +126,15 @@ BnModel::input(
 ) const
 {
   _check_input_id(input_id);
-  auto id = _model_impl().input_id(input_id);
-  return _id2node(id);
+  auto ptr = _model_impl().input(input_id);
+  return BnNode(ptr);
 }
 
 // @brief 入力のノードのリストを返す．
 BnNodeList
 BnModel::input_list() const
 {
-  return _id2node_list(_model_impl().input_id_list());
+  return BnNodeList(_model_impl().input_list());
 }
 
 // @brief 出力数を返す．
@@ -139,15 +151,15 @@ BnModel::output(
 ) const
 {
   _check_output_id(output_id);
-  auto id = _model_impl().output_id(output_id);
-  return _id2node(id);
+  auto ptr = _model_impl().output(output_id);
+  return BnNode(ptr);
 }
 
 // @brief 出力のノードのリストを返す．
 BnNodeList
 BnModel::output_list() const
 {
-  return _id2node_list(_model_impl().output_id_list());
+  return BnNodeList(_model_impl().output_list());
 }
 
 // @brief 論理ノード数を返す．
@@ -164,15 +176,15 @@ BnModel::logic(
 ) const
 {
   _check_logic_id(pos);
-  auto id = _model_impl().logic_id(pos);
-  return _id2node(id);
+  auto ptr = _model_impl().logic(pos);
+  return BnNode(ptr);
 }
 
 // @brief 論理ノードのリストを返す．
 BnNodeList
 BnModel::logic_list() const
 {
-  return _id2node_list(_model_impl().logic_id_list());
+  return BnNodeList(_model_impl().logic_list());
 }
 
 // @brief 関数情報の数を返す．
@@ -188,12 +200,8 @@ BnModel::func(
   SizeType func_id
 ) const
 {
-  if ( func_id < 0 || func_num() <= func_id ) {
-    std::ostringstream buf;
-    buf << "'func_id'(" << func_id << ") is out of range";
-    throw std::out_of_range{buf.str()};
-  }
-  return _id2func(func_id);
+  auto func = _model_impl().func_impl(func_id);
+  return BnFunc(func);
 }
 
 // @brief オプション情報を表す JSON オブジェクトを返す．
@@ -298,68 +306,24 @@ BnModel::read(
   throw std::invalid_argument{buf.str()};
 }
 
-
-//////////////////////////////////////////////////////////////////////
-// クラス BnDff
-//////////////////////////////////////////////////////////////////////
-
-// @brief 内容を指定したコンストラクタ
-BnDff::BnDff(
-  const std::shared_ptr<ModelImpl>& model,
-  SizeType id
-) : BnBase(model),
-    mId{id}
+// @brief ModelImpl を返す．
+const ModelImpl&
+BnModel::_model_impl() const
 {
-  if ( is_invalid() ) {
-    mId = BAD_ID;
+  if ( mPtr == nullptr ) {
+    throw std::logic_error{"invalid data"};
   }
+  return *mPtr;
 }
 
-// @brief デストラクタ
-BnDff::~BnDff()
+// @brief ModelImpl を返す．
+ModelImpl&
+BnModel::_model_impl()
 {
-}
-
-// @brief 名前を返す．
-const std::string&
-BnDff::name() const
-{
-  auto& dff = _dff_impl();
-  return dff.name;
-}
-
-// @brief 出力ノードを返す．
-BnNode
-BnDff::output() const
-{
-  auto& dff = _dff_impl();
-  return _id2node(dff.id);
-}
-
-// @brief 入力ノードを返す．
-BnNode
-BnDff::input() const
-{
-  auto& dff = _dff_impl();
-  return _id2node(dff.src_id);
-}
-
-// @brief リセット値
-char
-BnDff::reset_val() const
-{
-  auto& dff = _dff_impl();
-  return dff.reset_val;
-}
-
-// @brief DFFの実体を返す．
-const DffImpl&
-BnDff::_dff_impl() const
-{
-  if ( !is_valid() ) {
-    throw std::logic_error{"BnDff: invalid data"};
+  if ( mPtr == nullptr ) {
+    throw std::logic_error{"invalid data"};
   }
-  return _model_impl().dff_impl(mId);
+  return *mPtr;
 }
 
 END_NAMESPACE_YM_BN

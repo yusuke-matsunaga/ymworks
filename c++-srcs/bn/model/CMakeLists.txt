@@ -45,10 +45,6 @@ add_subdirectory ( gtest )
 # ===================================================================
 
 set ( model_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/BnBase.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/BnModel.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/BnModel_modify.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/BnModel_check.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ModelImpl.cc
   PARENT_SCOPE
   )

@@ -379,7 +379,6 @@ def test_fsm1(capfd):
     and_node = model.new_primitive(PrimType.And, [input1, dff1_output])
     model.set_dff_src(dff1, and_node)
     model.new_output(dff1_output)
-    model.wrap_up()
 
     model.write(sys.stdout)
 

@@ -660,26 +660,6 @@ clear(
   }
 }
 
-// wrap up
-PyObject*
-wrap_up(
-  PyObject* self,
-  PyObject* Py_UNUSED(args)
-)
-{
-  auto& val = PyBnModel::_get_ref(self);
-  try {
-    val.wrap_up();
-    Py_RETURN_NONE;
-  }
-  catch ( std::exception err ) {
-    std::ostringstream buf;
-    buf << "exception" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
 // set option
 PyObject*
 set_option(
@@ -909,10 +889,10 @@ new_primitive(
       return nullptr;
     }
   }
-  BnNodeList fanin_list;
+  std::vector<BnNode> fanin_list;
   if ( fanin_list_obj != nullptr ) {
-    if ( !PyBnNodeList::FromPyObject(fanin_list_obj, fanin_list) ) {
-      PyErr_SetString(PyExc_ValueError, "could not convert to BnNodeList");
+    if ( !PyList<BnNode, PyBnNode>::FromPyObject(fanin_list_obj, fanin_list) ) {
+      PyErr_SetString(PyExc_ValueError, "could not convert to std::vector<BnNode>");
       return nullptr;
     }
   }
@@ -963,10 +943,10 @@ new_cover(
   if ( output_inv_tmp != -1 ) {
     output_inv = static_cast<bool>(output_inv_tmp);
   }
-  BnNodeList fanin_list;
+  std::vector<BnNode> fanin_list;
   if ( fanin_list_obj != nullptr ) {
-    if ( !PyBnNodeList::FromPyObject(fanin_list_obj, fanin_list) ) {
-      PyErr_SetString(PyExc_ValueError, "could not convert to BnNodeList");
+    if ( !PyList<BnNode, PyBnNode>::FromPyObject(fanin_list_obj, fanin_list) ) {
+      PyErr_SetString(PyExc_ValueError, "could not convert to std::vector<BnNode>");
       return nullptr;
     }
   }
@@ -1010,10 +990,10 @@ new_expr(
       return nullptr;
     }
   }
-  BnNodeList fanin_list;
+  std::vector<BnNode> fanin_list;
   if ( fanin_list_obj != nullptr ) {
-    if ( !PyBnNodeList::FromPyObject(fanin_list_obj, fanin_list) ) {
-      PyErr_SetString(PyExc_ValueError, "could not convert to BnNodeList");
+    if ( !PyList<BnNode, PyBnNode>::FromPyObject(fanin_list_obj, fanin_list) ) {
+      PyErr_SetString(PyExc_ValueError, "could not convert to std::vector<BnNode>");
       return nullptr;
     }
   }
@@ -1057,10 +1037,10 @@ new_tvfunc(
       return nullptr;
     }
   }
-  BnNodeList fanin_list;
+  std::vector<BnNode> fanin_list;
   if ( fanin_list_obj != nullptr ) {
-    if ( !PyBnNodeList::FromPyObject(fanin_list_obj, fanin_list) ) {
-      PyErr_SetString(PyExc_ValueError, "could not convert to BnNodeList");
+    if ( !PyList<BnNode, PyBnNode>::FromPyObject(fanin_list_obj, fanin_list) ) {
+      PyErr_SetString(PyExc_ValueError, "could not convert to std::vector<BnNode>");
       return nullptr;
     }
   }
@@ -1104,10 +1084,10 @@ new_bdd(
       return nullptr;
     }
   }
-  BnNodeList fanin_list;
+  std::vector<BnNode> fanin_list;
   if ( fanin_list_obj != nullptr ) {
-    if ( !PyBnNodeList::FromPyObject(fanin_list_obj, fanin_list) ) {
-      PyErr_SetString(PyExc_ValueError, "could not convert to BnNodeList");
+    if ( !PyList<BnNode, PyBnNode>::FromPyObject(fanin_list_obj, fanin_list) ) {
+      PyErr_SetString(PyExc_ValueError, "could not convert to std::vector<BnNode>");
       return nullptr;
     }
   }
@@ -1209,10 +1189,6 @@ PyMethodDef methods[] = {
    clear,
    METH_NOARGS,
    PyDoc_STR("clear")},
-  {"wrap_up",
-   wrap_up,
-   METH_NOARGS,
-   PyDoc_STR("wrap up")},
   {"set_option",
    reinterpret_cast<PyCFunction>(set_option),
    METH_VARARGS | METH_KEYWORDS,

@@ -19,11 +19,13 @@ BEGIN_NAMESPACE_YM_BN
 // @brief プリミティブ型のインスタンスを作る．
 FuncImpl*
 FuncImpl::new_primitive(
+  const ModelImpl* model,
+  SizeType id,
   SizeType input_num,
   PrimType primitive_type
 )
 {
-  return new FuncImpl_Primitive(input_num, primitive_type);
+  return new FuncImpl_Primitive(model, id, input_num, primitive_type);
 }
 
 
@@ -33,9 +35,12 @@ FuncImpl::new_primitive(
 
 // @brief コンストラクタ
 FuncImpl_Primitive::FuncImpl_Primitive(
+  const ModelImpl* model,
+  SizeType id,
   SizeType input_num,
   PrimType primitive_type
-) : mInputNum{input_num},
+) : FuncImpl(model, id),
+    mInputNum{input_num},
     mPrimType{primitive_type}
 {
 }

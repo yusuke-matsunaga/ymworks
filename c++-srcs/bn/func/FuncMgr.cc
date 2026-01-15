@@ -33,74 +33,98 @@ FuncMgr::clear()
 }
 
 // @brief プリミティブ型を登録する．
-SizeType
+const FuncImpl*
 FuncMgr::reg_primitive(
+  const ModelImpl* model,
   SizeType input_num,
   PrimType primitive_type
 )
 {
-  auto func = FuncImpl::new_primitive(input_num, primitive_type);
-  return reg_func(func);
+  return reg_func(
+    [&](SizeType id)
+    {
+      return FuncImpl::new_primitive(model, id, input_num, primitive_type);
+    });
 }
 
 // @brief カバー型を登録する．
-SizeType
+const FuncImpl*
 FuncMgr::reg_cover(
+  const ModelImpl* model,
   const SopCover& input_cover,
   bool output_inv
 )
 {
-  auto func = FuncImpl::new_cover(input_cover, output_inv);
-  return reg_func(func);
+  return reg_func(
+    [&](SizeType id)
+    {
+      return FuncImpl::new_cover(model, id, input_cover, output_inv);
+    });
 }
 
 // @brief 論理式型を登録する．
-SizeType
+const FuncImpl*
 FuncMgr::reg_expr(
+  const ModelImpl* model,
   const Expr& expr
 )
 {
-  auto func = FuncImpl::new_expr(expr);
-  return reg_func(func);
+  return reg_func(
+    [&](SizeType id)
+    {
+      return FuncImpl::new_expr(model, id, expr);
+    });
 }
 
 // @brief 真理値表型を登録する．
-SizeType
+const FuncImpl*
 FuncMgr::reg_tvfunc(
+  const ModelImpl* model,
   const TvFunc& tvfunc
 )
 {
-  auto func = FuncImpl::new_tvfunc(tvfunc);
-  return reg_func(func);
+  return reg_func(
+    [&](SizeType id)
+    {
+      return FuncImpl::new_tvfunc(model, id, tvfunc);
+    });
 }
 
 // @brief BDD型を登録する．
-SizeType
+const FuncImpl*
 FuncMgr::reg_bdd(
+  const ModelImpl* model,
   const Bdd& bdd
 )
 {
-  auto func = FuncImpl::new_bdd(mBddMgr.copy(bdd));
-  return reg_func(func);
+  return reg_func(
+    [&](SizeType id)
+    {
+      return FuncImpl::new_bdd(model, id, mBddMgr.copy(bdd));
+    });
 }
 
 // @brief 関数情報を登録する．
-SizeType
+const FuncImpl*
 FuncMgr::reg_func(
-  FuncImpl* func
+  std::function<FuncImpl*(SizeType id)> new_func
 )
 {
+  // 関数情報を生成する．
+  auto id = mFuncArray.size();
+  auto func = new_func(id);
+  // 重複のチェック
   auto p = mFuncMap.find(func);
   if ( p != mFuncMap.end() ) {
     // 既に同じ関数が登録されていた．
     delete func;
-    return p->second;
+    id = p->second;
+    return mFuncArray[id].get();
   }
   // 新規に登録する．
-  auto id = mFuncArray.size();
   mFuncArray.push_back(std::unique_ptr<FuncImpl>{func});
   mFuncMap.emplace(func, id);
-  return id;
+  return func;
 }
 
 END_NAMESPACE_YM_BN

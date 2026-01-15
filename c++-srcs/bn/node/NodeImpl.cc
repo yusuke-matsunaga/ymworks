@@ -8,6 +8,7 @@
 
 #include "NodeImpl.h"
 #include "NodeImpl_sub.h"
+#include "ModelImpl.h"
 
 
 BEGIN_NAMESPACE_YM_BN
@@ -19,29 +20,35 @@ BEGIN_NAMESPACE_YM_BN
 // @brief 外部入力ノードを作る．
 NodeImpl*
 NodeImpl::new_primary_input(
+  const ModelImpl* model,
+  SizeType id,
   SizeType input_id
 )
 {
-  return new NodeImpl_PrimaryInput(input_id);
+  return new NodeImpl_PrimaryInput(model, id, input_id);
 }
 
 // @brief DFF出力ノードを作る．
 NodeImpl*
 NodeImpl::new_dff_output(
+  const ModelImpl* model,
+  SizeType id,
   SizeType dff_id
 )
 {
-  return new NodeImpl_DffOutput(dff_id);
+  return new NodeImpl_DffOutput(model, id, dff_id);
 }
 
 // @brief 論理ノードを作る．
 NodeImpl*
 NodeImpl::new_logic(
-  SizeType func_id,
-  const std::vector<SizeType>& fanin_list
+  const ModelImpl* model,
+  SizeType id,
+  const FuncImpl* func,
+  const std::vector<const NodeImpl*>& fanin_list
 )
 {
-  return new NodeImpl_Logic(func_id, fanin_list);
+  return new NodeImpl_Logic(model, id, func, fanin_list);
 }
 
 // @brief 入力ノードの時 true を返す．
@@ -86,9 +93,9 @@ NodeImpl::dff_id() const
   throw std::logic_error{"not a DFF output."};
 }
 
-// @brief 関数番号を返す．
-SizeType
-NodeImpl::func_id() const
+// @brief 関数を返す．
+const FuncImpl*
+NodeImpl::func() const
 {
   throw std::logic_error{"not a logic node."};
 }
@@ -100,21 +107,21 @@ NodeImpl::fanin_num() const
   return 0;
 }
 
-// @brief ファンインのノード番号を返す．
-SizeType
-NodeImpl::fanin_id(
+// @brief ファンインのノードを返す．
+const NodeImpl*
+NodeImpl::fanin(
   SizeType pos
 ) const
 {
   throw std::out_of_range{"index out of range"};
 }
 
-// @brief ファンイン番号のリストを返す．
-const std::vector<SizeType>&
-NodeImpl::fanin_id_list() const
+// @brief ファンインのリストを返す．
+const std::vector<const NodeImpl*>&
+NodeImpl::fanin_list() const
 {
   // 空のダミー
-  static std::vector<SizeType> _;
+  static std::vector<const NodeImpl*> _;
   return _;
 }
 
@@ -124,7 +131,10 @@ NodeImpl::fanin_id_list() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-NodeImpl_Input::NodeImpl_Input()
+NodeImpl_Input::NodeImpl_Input(
+  const ModelImpl* model,
+  SizeType id
+) : NodeImpl(model, id)
 {
 }
 
@@ -154,8 +164,11 @@ NodeImpl_Input::is_input() const
 
 // @brief コンストラクタ
 NodeImpl_PrimaryInput::NodeImpl_PrimaryInput(
+  const ModelImpl* model,
+  SizeType id,
   SizeType iid
-) : mInputId{iid}
+) : NodeImpl_Input(model, id),
+    mInputId{iid}
 {
 }
 
@@ -182,7 +195,8 @@ NodeImpl_PrimaryInput::input_id() const
 std::unique_ptr<NodeImpl>
 NodeImpl_PrimaryInput::copy() const
 {
-  return std::unique_ptr<NodeImpl>{new NodeImpl_PrimaryInput{mInputId}};
+  auto new_node = new NodeImpl_PrimaryInput(_model(), id(), input_id());
+  return std::unique_ptr<NodeImpl>{new_node};
 }
 
 
@@ -192,8 +206,11 @@ NodeImpl_PrimaryInput::copy() const
 
 // @brief コンストラクタ
 NodeImpl_DffOutput::NodeImpl_DffOutput(
+  const ModelImpl* model,
+  SizeType id,
   SizeType dff_id
-) : mDffId{dff_id}
+) : NodeImpl_Input(model, id),
+    mDffId{dff_id}
 {
 }
 
@@ -220,7 +237,8 @@ NodeImpl_DffOutput::dff_id() const
 std::unique_ptr<NodeImpl>
 NodeImpl_DffOutput::copy() const
 {
-  return std::unique_ptr<NodeImpl>{new NodeImpl_DffOutput{*this}};
+  auto new_node = new NodeImpl_DffOutput(_model(), id(), dff_id());
+  return std::unique_ptr<NodeImpl>{new_node};
 }
 
 
@@ -230,9 +248,12 @@ NodeImpl_DffOutput::copy() const
 
 // @brief コンストラクタ
 NodeImpl_Logic::NodeImpl_Logic(
-  SizeType func_id,
-  const std::vector<SizeType>& fanin_list
-) : mFuncId{func_id},
+  const ModelImpl* model,
+  SizeType id,
+  const FuncImpl* func,
+  const std::vector<const NodeImpl*>& fanin_list
+) : NodeImpl(model, id),
+    mFunc{func},
     mFaninList{fanin_list}
 {
 }
@@ -256,11 +277,11 @@ NodeImpl_Logic::is_logic() const
   return true;
 }
 
-// @brief 関数番号を返す．
-SizeType
-NodeImpl_Logic::func_id() const
+// @brief 関数を返す．
+const FuncImpl*
+NodeImpl_Logic::func() const
 {
-  return mFuncId;
+  return mFunc;
 }
 
 // @brief ファンイン数を返す．
@@ -271,8 +292,8 @@ NodeImpl_Logic::fanin_num() const
 }
 
 // @brief ファンインのノード番号を返す．
-SizeType
-NodeImpl_Logic::fanin_id(
+const NodeImpl*
+NodeImpl_Logic::fanin(
   SizeType pos
 ) const
 {
@@ -283,8 +304,8 @@ NodeImpl_Logic::fanin_id(
 }
 
 // @brief ファンイン番号のリストを返す．
-const std::vector<SizeType>&
-NodeImpl_Logic::fanin_id_list() const
+const std::vector<const NodeImpl*>&
+NodeImpl_Logic::fanin_list() const
 {
   return mFaninList;
 }
@@ -293,7 +314,8 @@ NodeImpl_Logic::fanin_id_list() const
 std::unique_ptr<NodeImpl>
 NodeImpl_Logic::copy() const
 {
-  return std::unique_ptr<NodeImpl>{new NodeImpl_Logic{*this}};
+  auto new_node = new NodeImpl_Logic(_model(), id(), func(), fanin_list());
+  return std::unique_ptr<NodeImpl>{new_node};
 }
 
 END_NAMESPACE_YM_BN

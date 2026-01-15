@@ -25,7 +25,9 @@ public:
 
   /// @brief コンストラクタ
   FuncImpl_Bdd(
-    Bdd bdd ///< [in] BDD
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    Bdd bdd                 ///< [in] BDD
   );
 
   /// @brief デストラクタ

@@ -41,8 +41,8 @@ include_directories (
 # サブディレクトリの設定
 # ===================================================================
 
-#add_subdirectory ( aig )
 add_subdirectory ( blif )
+add_subdirectory ( bn )
 add_subdirectory ( func )
 add_subdirectory ( iscas89 )
 add_subdirectory ( model )
@@ -62,6 +62,7 @@ add_subdirectory ( truth )
 ym_add_object_library ( ym_bn
   ${aig_SOURCES}
   ${blif_SOURCES}
+  ${bn_SOURCES}
   ${func_SOURCES}
   ${iscas89_SOURCES}
   ${model_SOURCES}

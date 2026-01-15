@@ -44,8 +44,13 @@ add_subdirectory ( gtest )
 #  ソースの設定
 # ===================================================================
 
-set ( node_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/NodeImpl.cc
+set ( bn_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/BnDff.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/BnFunc.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/BnModel.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/BnModel_modify.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/BnModel_check.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/BnNode.cc
   PARENT_SCOPE
   )
 

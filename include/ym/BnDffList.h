@@ -10,18 +10,22 @@
 
 #include "ym/bn.h"
 #include "ym/BnDff.h"
-#include "ym/BnListBase.h"
 
 
 BEGIN_NAMESPACE_YM_BN
+
+class DffImpl;
 
 //////////////////////////////////////////////////////////////////////
 /// @class BnDffIter BnDffList.h "ym/BnDffList.h"
 /// @brief BnDffList の反復子
 //////////////////////////////////////////////////////////////////////
-class BnDffIter :
-  public BnIterBase
+class BnDffIter
 {
+public:
+
+  using PtrIter = std::vector<const DffImpl*>::const_iterator;
+
 public:
 
   /// @brief 空のコンストラクタ
@@ -30,9 +34,8 @@ public:
   /// @brief 値を指定したコンストラクタ
   explicit
   BnDffIter(
-    const std::shared_ptr<ModelImpl>& model,
-    IdIter iter
-  ) : BnIterBase(model, iter)
+    PtrIter ptr_iter
+  ) : mPtrIter{ptr_iter}
   {
   }
 
@@ -49,8 +52,43 @@ public:
   BnDff
   operator*() const
   {
-    return BnBase::_id2dff(get_id());
+    return BnDff(*mPtrIter);
   }
+
+  /// @brief 次の要素に進む．
+  BnDffIter&
+  operator++()
+  {
+    ++ mPtrIter;
+    return *this;
+  }
+
+  /// @brief 等価比較演算子
+  bool
+  operator==(
+    const BnDffIter& right ///< [in] オペランド
+  ) const
+  {
+    return mPtrIter == right.mPtrIter;
+  }
+
+  /// @brief 非等価比較演算子
+  bool
+  operator!=(
+    const BnDffIter& right ///< [in] オペランド
+  ) const
+  {
+    return !operator==(right);
+  }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ポインタの反復子
+  PtrIter mPtrIter;
 
 };
 
@@ -59,9 +97,13 @@ public:
 /// @class BnDffIter2 BnDffList.h "ym/BnDffList.h"
 /// @brief BnDffList の反復子2(Python用)
 //////////////////////////////////////////////////////////////////////
-class BnDffIter2 :
-  public BnIterBase2
+class BnDffIter2
 {
+public:
+
+  using PtrList = std::vector<const DffImpl*>;
+  using PtrIter = PtrList::const_iterator;
+
 public:
 
   /// @brief 空のコンストラクタ
@@ -70,10 +112,10 @@ public:
   /// @brief 値を指定したコンストラクタ
   explicit
   BnDffIter2(
-    const std::shared_ptr<ModelImpl>& model,
-    IdIter iter,
-    IdIter end
-  ) : BnIterBase2(model, iter, end)
+    const PtrList& ptr_list
+  ) : mPtrList{ptr_list},
+      mCurIter{mPtrList.begin()},
+      mEndIter{mPtrList.end()}
   {
   }
 
@@ -86,16 +128,38 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 有効な値を持っているか調べる．
+  bool
+  has_next() const
+  {
+    return mCurIter != mEndIter;
+  }
+
   /// @brief 次の要素を返す．
   ///
   /// has_next() == true と仮定している．
   BnDff
   next()
   {
-    auto id = get_id();
-    _next();
-    return BnBase::_id2dff(id);
+    auto ptr = *mCurIter;
+    ++ mCurIter;
+    return BnDff(ptr);
   }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 元のリスト
+  PtrList mPtrList;
+
+  // 現在の反復子
+  PtrIter mCurIter;
+
+  // 末尾の反復子
+  PtrIter mEndIter;
 
 };
 
@@ -104,8 +168,7 @@ public:
 /// @class BnDffList BnDffList.h "BnDffList.h"
 /// @brief BnDff のリスト
 //////////////////////////////////////////////////////////////////////
-class BnDffList :
-  public BnListBase
+class BnDffList
 {
 public:
 
@@ -120,10 +183,8 @@ public:
   /// @brief 値を指定したコンストラクタ
   explicit
   BnDffList(
-    const std::shared_ptr<ModelImpl>& model, ///< [in] 親のモデル
-    const IdList& id_list                    ///< [in] ID番号のリスト
-    = {}
-  ) : BnListBase(model, id_list)
+    const std::vector<const DffImpl*>& ptr_list ///< [in] ポインタのリスト
+  ) : mPtrList{ptr_list}
   {
   }
 
@@ -133,7 +194,7 @@ public:
     const std::vector<BnDff>& dff_list ///< [in] ノードのリスト
   )
   {
-    reserve(dff_list.size());
+    mPtrList.reserve(dff_list.size());
     for ( auto& dff: dff_list ) {
       push_back(dff);
     }
@@ -148,34 +209,44 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 要素数を返す．
+  SizeType
+  size() const
+  {
+    return mPtrList.size();
+  }
+
   /// @brief 要素を返す．
   BnDff
   operator[](
     SizeType index ///< [in] インデックス ( 0 <= index < size() )
   ) const
   {
-    return BnBase::_id2dff(get_id(index));
+    if ( index >= size() ) {
+      throw std::out_of_range{"index is out of range"};
+    }
+    return BnDff(mPtrList[index]);
   }
 
   /// @brief 先頭の反復子を返す．
   iterator
   begin() const
   {
-    return iterator(_model(), id_list().begin());
+    return iterator(mPtrList.begin());
   }
 
   /// @brief 末尾の反復子を返す．
   iterator
   end() const
   {
-    return iterator(_model(), id_list().end());
+    return iterator(mPtrList.end());
   }
 
   /// @brief Python 用の反復子を返す．
   iterator2
   iter() const
   {
-    return iterator2(_model(), id_list().begin(), id_list().end());
+    return iterator2(mPtrList);
   }
 
   /// @brief 要素を末尾に追加する．
@@ -184,7 +255,7 @@ public:
     const BnDff& dff
   )
   {
-    put_id(dff, dff.id());
+    mPtrList.push_back(dff.mPtr);
   }
 
   /// @brief 等価比較演算子
@@ -193,7 +264,7 @@ public:
     const BnDffList& right
   ) const
   {
-    return check(right);
+    return mPtrList == right.mPtrList;
   }
 
   /// @brief 非等価比較演算子
@@ -204,6 +275,15 @@ public:
   {
     return !operator==(right);
   }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ポインタのリスト
+  std::vector<const DffImpl*> mPtrList;
 
 };
 

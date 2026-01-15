@@ -51,9 +51,9 @@ class BnNodeListArg(ObjConvArg):
                  cvarname):
         super().__init__(name=name,
                          cvarname=cvarname,
-                         cvartype='BnNodeList',
+                         cvartype='std::vector<BnNode>',
                          cvardefault=None,
-                         pyclassname='PyBnNodeList')
+                         pyclassname='PyList<BnNode, PyBnNode>')
 
 
 

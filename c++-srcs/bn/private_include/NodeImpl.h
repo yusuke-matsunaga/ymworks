@@ -11,24 +11,36 @@
 #include "ym/bn.h"
 #include "ym/logic.h"
 #include "ym/BnNode.h"
+#include "ImplBase.h"
 
 
 BEGIN_NAMESPACE_YM_BN
+
+class FuncImpl;
 
 //////////////////////////////////////////////////////////////////////
 /// @class NodeImpl NodeImpl.h "NodeImpl.h"
 /// @brief BnNode の実装クラス
 //////////////////////////////////////////////////////////////////////
-class NodeImpl
+class NodeImpl :
+  public ImplBase
 {
 public:
 
   /// @brief コンストラクタ
-  NodeImpl() = default;
+  NodeImpl(
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id             ///< [in] ID番号
+  ) : ImplBase(model),
+      mId{id}
+  {
+  }
 
   /// @brief デストラクタ
   virtual
-  ~NodeImpl() {}
+  ~NodeImpl()
+  {
+  }
 
 
 public:
@@ -40,22 +52,28 @@ public:
   static
   NodeImpl*
   new_primary_input(
-    SizeType input_id ///< [in] 入力番号
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    SizeType input_id       ///< [in] 入力番号
   );
 
   /// @brief DFF出力ノードを作る．
   static
   NodeImpl*
   new_dff_output(
-    SizeType dff_id ///< [in] DFF番号
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    SizeType dff_id         ///< [in] DFF番号
   );
 
   /// @brief 論理ノードを作る．
   static
   NodeImpl*
   new_logic(
-    SizeType func_id,                       ///< [in] 関数番号
-    const std::vector<SizeType>& fanin_list ///< [in] ファンインのノード番号のりスト
+    const ModelImpl* model,                        ///< [in] 親のモデル
+    SizeType id,                                   ///< [in] ID番号
+    const FuncImpl* func,                          ///< [in] 関数
+    const std::vector<const NodeImpl*>& fanin_list ///< [in] ファンインのリスト
   );
 
 
@@ -63,6 +81,13 @@ public:
   //////////////////////////////////////////////////////////////////////
   // 共通のインターフェイス
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief ID番号を返す．
+  SizeType
+  id() const
+  {
+    return mId;
+  }
 
   /// @brief ノードの種類を返す．
   virtual
@@ -118,27 +143,36 @@ public:
   // 論理ノードのインターフェイス
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 関数番号を返す．
+  /// @brief 関数を返す．
   virtual
-  SizeType
-  func_id() const;
+  const FuncImpl*
+  func() const;
 
   /// @brief ファンイン数を返す．
   virtual
   SizeType
   fanin_num() const;
 
-  /// @brief ファンインのノード番号を返す．
+  /// @brief ファンインのノードを返す．
   virtual
-  SizeType
-  fanin_id(
+  const NodeImpl*
+  fanin(
     SizeType pos ///< [in] 位置 ( 0 <= pos < fanin_num() )
   ) const;
 
-  /// @brief ファンイン番号のリストを返す．
+  /// @brief ファンインのリストを返す．
   virtual
-  const std::vector<SizeType>&
-  fanin_id_list() const;
+  const std::vector<const NodeImpl*>&
+  fanin_list() const;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ID番号
+  SizeType mId;
 
 };
 

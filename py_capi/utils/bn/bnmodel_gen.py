@@ -267,13 +267,6 @@ class BnModelGen(PyObjGen):
                         func_body=meth_clear,
                         doc_str='clear')
 
-        def meth_wrap_up(writer):
-            writer.gen_stmt('val.wrap_up()')
-            writer.gen_return_py_none()
-        self.add_method('wrap_up',
-                        func_body=meth_wrap_up,
-                        doc_str='wrap up')
-
         def meth_set_option(writer):
             writer.gen_stmt('val.set_option(option)')
             writer.gen_return_py_none()

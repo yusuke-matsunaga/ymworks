@@ -23,7 +23,10 @@ class NodeImpl_Input :
 public:
 
   /// @brief コンストラクタ
-  NodeImpl_Input();
+  NodeImpl_Input(
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id             ///< [in] ID番号
+  );
 
   /// @brief デストラクタ
   ~NodeImpl_Input();
@@ -58,7 +61,9 @@ public:
 
   /// @brief コンストラクタ
   NodeImpl_PrimaryInput(
-    SizeType iid ///< [in] 入力番号
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    SizeType iid            ///< [in] 入力番号
   );
 
   /// @brief デストラクタ
@@ -105,7 +110,9 @@ public:
 
   /// @brief コンストラクタ
   NodeImpl_DffOutput(
-    SizeType dff_id ///< [in] DFF番号
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    SizeType dff_id         ///< [in] DFF番号
   );
 
   /// @brief デストラクタ
@@ -152,8 +159,10 @@ public:
 
   /// @brief コンストラクタ
   NodeImpl_Logic(
-    SizeType func_id,                       ///< [in] 関数番号
-    const std::vector<SizeType>& fanin_list ///< [in] ファンインのリスト
+    const ModelImpl* model,                        ///< [in] 親のモデル
+    SizeType id,                                   ///< [in] ID番号
+    const FuncImpl* func,                          ///< [in] 関数番号
+    const std::vector<const NodeImpl*>& fanin_list ///< [in] ファンインのリスト
   );
 
   /// @brief デストラクタ
@@ -173,23 +182,23 @@ public:
   bool
   is_logic() const override;
 
-  /// @brief 関数番号を返す．
-  SizeType
-  func_id() const override;
+  /// @brief 関数を返す．
+  const FuncImpl*
+  func() const override;
 
   /// @brief ファンイン数を返す．
   SizeType
   fanin_num() const override;
 
-  /// @brief ファンインのノード番号を返す．
-  SizeType
-  fanin_id(
+  /// @brief ファンインのノードを返す．
+  const NodeImpl*
+  fanin(
     SizeType pos ///< [in] 位置 ( 0 <= pos < fanin_num() )
   ) const override;
 
-  /// @brief ファンイン番号のリストを返す．
-  const std::vector<SizeType>&
-  fanin_id_list() const override;
+  /// @brief ファンインのリストを返す．
+  const std::vector<const NodeImpl*>&
+  fanin_list() const override;
 
   /// @brief 複製を作る．
   std::unique_ptr<NodeImpl>
@@ -201,11 +210,11 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 関数番号
-  SizeType mFuncId;
+  // 関数
+  const FuncImpl* mFunc;
 
   // ファンインのリスト
-  std::vector<SizeType> mFaninList;
+  std::vector<const NodeImpl*> mFaninList;
 
 };
 

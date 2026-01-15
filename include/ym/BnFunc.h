@@ -12,12 +12,10 @@
 #include "ym/Expr.h"
 #include "ym/TvFunc.h"
 #include "ym/Bdd.h"
-#include "ym/BnBase.h"
 
 
 BEGIN_NAMESPACE_YM_BN
 
-class ModelImpl;
 class FuncImpl;
 
 //////////////////////////////////////////////////////////////////////
@@ -42,10 +40,10 @@ class FuncImpl;
 /// - BDD型(BDD)
 ///   Bdd を持つ．
 //////////////////////////////////////////////////////////////////////
-class BnFunc :
-  public BnBase
+class BnFunc
 {
-  friend class BnBase;
+  friend class BnModel;
+  friend class BnNode;
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -70,6 +68,11 @@ public:
   /// 不正な値となる．
   BnFunc() = default;
 
+  /// @brief コピーコンストラクタ
+  BnFunc(
+    const BnFunc& src ///< [in] コピー元のオブジェクト
+  );
+
   /// @brief デストラクタ
   ~BnFunc();
 
@@ -79,12 +82,23 @@ public:
   // 共通なインターフェイス
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 適正な値を持つ時 true を返す．
+  bool
+  is_valid() const
+  {
+    return mPtr != nullptr;
+  }
+
+  /// @brief 適正な値を持たないとき true を返す．
+  bool
+  is_invalid() const
+  {
+    return !is_valid();
+  }
+
   /// @brief 関数番号を返す．
   SizeType
-  id() const
-  {
-    return mId;
-  }
+  id() const;
 
   /// @brief 入力数を返す．
   SizeType
@@ -192,7 +206,7 @@ public:
     const BnFunc& right ///< [in] 比較対象のオブジェクト
   ) const
   {
-    return BnBase::operator==(right) && mId == right.mId;
+    return mPtr == right.mPtr;
   }
 
   /// @brief 非等価比較演算子
@@ -211,11 +225,8 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容を指定したコンストラクタ
-  ///
-  /// この関数は BnBase のみが使用する．
   BnFunc(
-    const std::shared_ptr<ModelImpl>& model, ///< [in] 親のモデル
-    SizeType id                              ///< [in] 関数番号
+    const FuncImpl* ptr ///< [in] 実装オブジェクトのポインタ
   );
 
   /// @brief 実装を取り出す．
@@ -228,8 +239,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 関数番号
-  SizeType mId{BAD_ID};
+  // 実装オブジェクトのポインタ
+  const FuncImpl* mPtr{nullptr};
 
 };
 

@@ -25,7 +25,9 @@ public:
 
   /// @brief コンストラクタ
   FuncImpl_TvFunc(
-    const TvFunc& func ///< [in] 真理値表
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
+    const TvFunc& func      ///< [in] 真理値表
   );
 
   /// @brief デストラクタ

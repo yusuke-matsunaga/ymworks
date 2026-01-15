@@ -25,6 +25,8 @@ public:
 
   /// @brief コンストラクタ
   FuncImpl_Primitive(
+    const ModelImpl* model, ///< [in] 親のモデル
+    SizeType id,            ///< [in] ID番号
     SizeType input_num,     ///< [in] 入力数
     PrimType primitive_type ///< [in] プリミティブの種類
   );

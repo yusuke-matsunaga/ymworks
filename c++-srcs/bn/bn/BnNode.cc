@@ -8,7 +8,8 @@
 
 #include "ym/BnNode.h"
 #include "ym/BnNodeList.h"
-#include "ym/BnModel.h"
+#include "ym/BnFunc.h"
+#include "NodeImpl.h"
 #include "ModelImpl.h"
 
 
@@ -20,19 +21,34 @@ BEGIN_NAMESPACE_YM_BN
 
 // @brief コンストラクタ
 BnNode::BnNode(
-  const std::shared_ptr<ModelImpl>& model,
-  SizeType id
-) : BnBase(model),
-    mId{id}
+  const NodeImpl* ptr
+) : mPtr{ptr}
 {
-  if ( is_invalid() ) {
-    mId = BAD_ID;
+  if ( is_valid() ) {
+    mPtr->inc_ref();
   }
+}
+
+// @brief コピーコンストラクタ
+BnNode::BnNode(
+  const BnNode& src
+) : BnNode(src.mPtr)
+{
 }
 
 // @brief デストラクタ
 BnNode::~BnNode()
 {
+  if ( is_valid() ) {
+    mPtr->dec_ref();
+  }
+}
+
+// @brief ノード番号を返す．
+SizeType
+BnNode::id() const
+{
+  return _node_impl().id();
 }
 
 // @brief ノードの種類を返す．
@@ -99,8 +115,8 @@ BnNode::dff_id() const
 BnFunc
 BnNode::func() const
 {
-  auto id = _node_impl().func_id();
-  return _id2func(id);
+  auto func= _node_impl().func();
+  return BnFunc(func);
 }
 
 // @brief ノードのファンイン数を返す．
@@ -116,16 +132,20 @@ BnNode::fanin(
   SizeType pos
 ) const
 {
-  auto id = _node_impl().fanin_id(pos);
-  return _id2node(id);
+  return _node_impl().fanin(pos);
 }
 
 // @brief ノードのファンインのノードのリストを返す．
-BnNodeList
+std::vector<BnNode>
 BnNode::fanin_list() const
 {
-  auto& id_list = _node_impl().fanin_id_list();
-  return _id2node_list(id_list);
+  auto& ptr_list = _node_impl().fanin_list();
+  std::vector<BnNode> node_list;
+  node_list.reserve(ptr_list.size());
+  for ( auto ptr: ptr_list ) {
+    node_list.push_back(BnNode(ptr));
+  }
+  return node_list;
 }
 
 // @brief ノードの実体を返す．
@@ -135,7 +155,15 @@ BnNode::_node_impl() const
   if ( !is_valid() ) {
     throw std::logic_error{"BnNode: invalid data"};
   }
-  return _model_impl().node_impl(mId);
+  return *mPtr;
+}
+
+void
+BnNodeList::push_back(
+  const BnNode& node
+)
+{
+  mPtrList.push_back(node.mPtr);
 }
 
 END_NAMESPACE_YM_BN
