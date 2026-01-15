@@ -48,6 +48,19 @@ BnModel::BnModel(
 {
 }
 
+// @brief コピー代入演算子
+BnModel&
+BnModel::operator=(
+  const BnModel& src
+)
+{
+  // mPtr == src.mPtr でも正しく動く
+  src.mPtr->inc_ref();
+  mPtr->dec_ref();
+  mPtr = src.mPtr;
+  return *this;
+}
+
 // @brief 内容を指定したコンストラクタ
 BnModel::BnModel(
   ModelImpl* impl

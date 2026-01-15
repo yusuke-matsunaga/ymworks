@@ -55,6 +55,12 @@ public:
     const BnDff& src ///< [in] コピー元のオブジェクト
   );
 
+  /// @brief コピー代入演算子
+  BnDff&
+  operator=(
+    const BnDff& src ///< [in] コピー元のオブジェクト
+  );
+
   /// @brief デストラクタ
   ~BnDff();
 

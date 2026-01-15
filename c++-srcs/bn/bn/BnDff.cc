@@ -34,6 +34,23 @@ BnDff::BnDff(
 {
 }
 
+// @brief コピー代入演算子
+BnDff&
+BnDff::operator=(
+  const BnDff& src
+)
+{
+  // mPtr == src.mPtr でも正しく動く
+  if ( src.is_valid() ) {
+    src.mPtr->inc_ref();
+  }
+  if ( is_valid() ) {
+    mPtr->dec_ref();
+  }
+  mPtr = src.mPtr;
+  return *this;
+}
+
 // @brief デストラクタ
 BnDff::~BnDff()
 {

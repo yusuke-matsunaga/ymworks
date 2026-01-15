@@ -36,6 +36,23 @@ BnNode::BnNode(
 {
 }
 
+// @brief コピーコンストラクタ
+BnNode&
+BnNode::operator=(
+  const BnNode& src
+)
+{
+  // mPtr == src.mPtr でも正しく動く
+  if ( src.is_valid() ) {
+    src.mPtr->inc_ref();
+  }
+  if ( is_valid() ) {
+    mPtr->dec_ref();
+  }
+  mPtr = src.mPtr;
+  return *this;
+}
+
 // @brief デストラクタ
 BnNode::~BnNode()
 {

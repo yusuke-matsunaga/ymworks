@@ -82,6 +82,12 @@ public:
     const BnNode& src ///< [in] コピー元のオブジェクト
   );
 
+  /// @brief コピー代入演算子
+  BnNode&
+  operator=(
+    const BnNode& src ///< [in] コピー元のオブジェクト
+  );
+
   /// @brief デストラクタ
   ~BnNode();
 

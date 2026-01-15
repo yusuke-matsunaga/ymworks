@@ -82,6 +82,12 @@ public:
     const BnModel& src ///< [in] コピー元のオブジェクト
   );
 
+  /// @brief コピー代入演算子
+  BnModel&
+  operator=(
+    const BnModel& src ///< [in] コピー元のオブジェクト
+  );
+
   /// @brief デストラクタ
   ~BnModel();
 
