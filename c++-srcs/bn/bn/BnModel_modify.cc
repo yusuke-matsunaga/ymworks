@@ -19,13 +19,6 @@ BEGIN_NAMESPACE_YM_BN
 // クラス BnModel
 //////////////////////////////////////////////////////////////////////
 
-// @brief 内容をクリアする．
-void
-BnModel::clear()
-{
-  _model_impl().clear();
-}
-
 // @brief オプション情報をセットする．
 void
 BnModel::set_option(
@@ -33,6 +26,24 @@ BnModel::set_option(
 )
 {
   _model_impl().set_option(option);
+}
+
+// @brief 名前を設定する．
+void
+BnModel::set_name(
+  const std::string& name
+)
+{
+  _model_impl().set_name(name);
+}
+
+// @brief コメントを追加する．
+void
+BnModel::add_comment(
+  const std::string& comment
+)
+{
+  _model_impl().add_comment(comment);
 }
 
 // @brief DFFを作る．

@@ -494,28 +494,6 @@ TEST( BnModelTest, new_bdd_bad )
 		std::invalid_argument );
 }
 
-TEST( BnModelTest, clear )
-{
-  BnModel model;
-
-  auto input1 = model.new_input();
-  auto input2 = model.new_input();
-  auto fanin_list = std::vector<BnNode>{input1, input2};
-  auto type = PrimType::And;
-  auto node = model.new_primitive(type, fanin_list);
-  auto output = model.new_output(node);
-
-  EXPECT_EQ( 2, model.input_num() );
-  EXPECT_EQ( 1, model.output_num() );
-  EXPECT_EQ( 1, model.logic_num() );
-
-  model.clear();
-
-  EXPECT_EQ( 0, model.input_num() );
-  EXPECT_EQ( 0, model.output_num() );
-  EXPECT_EQ( 0, model.logic_num() );
-}
-
 TEST( BnModelTest, fsm1 )
 {
   auto model = BnModel();

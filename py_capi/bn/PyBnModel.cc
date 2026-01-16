@@ -640,26 +640,6 @@ comment_list(
   }
 }
 
-// clear
-PyObject*
-clear(
-  PyObject* self,
-  PyObject* Py_UNUSED(args)
-)
-{
-  auto& val = PyBnModel::_get_ref(self);
-  try {
-    val.clear();
-    Py_RETURN_NONE;
-  }
-  catch ( std::exception err ) {
-    std::ostringstream buf;
-    buf << "exception" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
 // set option
 PyObject*
 set_option(
@@ -688,6 +668,76 @@ set_option(
   auto& val = PyBnModel::_get_ref(self);
   try {
     val.set_option(option);
+    Py_RETURN_NONE;
+  }
+  catch ( std::exception err ) {
+    std::ostringstream buf;
+    buf << "exception" << ": " << err.what();
+    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
+    return nullptr;
+  }
+}
+
+// set name
+PyObject*
+set_name(
+  PyObject* self,
+  PyObject* args,
+  PyObject* kwds
+)
+{
+  static const char* kwlist[] = {
+    "name",
+    nullptr
+  };
+  const char* name_tmp = nullptr;
+  if ( !PyArg_ParseTupleAndKeywords(args, kwds, "s",
+                                    const_cast<char**>(kwlist),
+                                    &name_tmp) ) {
+    return nullptr;
+  }
+  std::string name;
+  if ( name_tmp != nullptr ) {
+    name = std::string(name_tmp);
+  }
+  auto& val = PyBnModel::_get_ref(self);
+  try {
+    val.set_name(name);
+    Py_RETURN_NONE;
+  }
+  catch ( std::exception err ) {
+    std::ostringstream buf;
+    buf << "exception" << ": " << err.what();
+    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
+    return nullptr;
+  }
+}
+
+// add comment
+PyObject*
+add_comment(
+  PyObject* self,
+  PyObject* args,
+  PyObject* kwds
+)
+{
+  static const char* kwlist[] = {
+    "comment",
+    nullptr
+  };
+  const char* comment_tmp = nullptr;
+  if ( !PyArg_ParseTupleAndKeywords(args, kwds, "s",
+                                    const_cast<char**>(kwlist),
+                                    &comment_tmp) ) {
+    return nullptr;
+  }
+  std::string comment;
+  if ( comment_tmp != nullptr ) {
+    comment = std::string(comment_tmp);
+  }
+  auto& val = PyBnModel::_get_ref(self);
+  try {
+    val.add_comment(comment);
     Py_RETURN_NONE;
   }
   catch ( std::exception err ) {
@@ -1185,14 +1235,18 @@ PyMethodDef methods[] = {
    comment_list,
    METH_NOARGS,
    PyDoc_STR("return list of comment lines")},
-  {"clear",
-   clear,
-   METH_NOARGS,
-   PyDoc_STR("clear")},
   {"set_option",
    reinterpret_cast<PyCFunction>(set_option),
    METH_VARARGS | METH_KEYWORDS,
    PyDoc_STR("set option")},
+  {"set_name",
+   reinterpret_cast<PyCFunction>(set_name),
+   METH_VARARGS | METH_KEYWORDS,
+   PyDoc_STR("set name")},
+  {"add_comment",
+   reinterpret_cast<PyCFunction>(add_comment),
+   METH_VARARGS | METH_KEYWORDS,
+   PyDoc_STR("add comment")},
   {"new_dff",
    reinterpret_cast<PyCFunction>(new_dff),
    METH_VARARGS | METH_KEYWORDS,

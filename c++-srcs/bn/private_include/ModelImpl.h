@@ -280,10 +280,6 @@ public:
     }
   }
 
-  /// @brief 内容をクリアする．
-  void
-  clear();
-
   /// @brief オプション情報をセットする．
   void
   set_option(

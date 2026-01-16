@@ -260,13 +260,6 @@ class BnModelGen(PyObjGen):
                       getter_name='get_func_num',
                       doc_str='number of functions')
 
-        def meth_clear(writer):
-            writer.gen_stmt('val.clear()')
-            writer.gen_return_py_none()
-        self.add_method('clear',
-                        func_body=meth_clear,
-                        doc_str='clear')
-
         def meth_set_option(writer):
             writer.gen_stmt('val.set_option(option)')
             writer.gen_return_py_none()
@@ -275,6 +268,24 @@ class BnModelGen(PyObjGen):
                         arg_list=[JsonValueArg(name='option',
                                                cvarname='option')],
                         doc_str='set option')
+
+        def meth_set_name(writer):
+            writer.gen_stmt('val.set_name(name)')
+            writer.gen_return_py_none()
+        self.add_method('set_name',
+                        func_body=meth_set_name,
+                        arg_list=[StringArg(name='name',
+                                            cvarname='name')],
+                        doc_str='set name')
+
+        def meth_add_comment(writer):
+            writer.gen_stmt('val.add_comment(comment)')
+            writer.gen_return_py_none()
+        self.add_method('add_comment',
+                        func_body=meth_add_comment,
+                        arg_list=[StringArg(name='comment',
+                                            cvarname='comment')],
+                        doc_str='add comment')
 
         def meth_new_dff(writer):
             writer.gen_return_pyobject('PyBnDff',

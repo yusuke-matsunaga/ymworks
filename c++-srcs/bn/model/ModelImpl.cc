@@ -118,24 +118,6 @@ ModelImpl::option() const
   return JsonValue(src_dict);
 }
 
-// @brief 内容をクリアする．
-void
-ModelImpl::clear()
-{
-  mName = std::string{};
-  mCommentList.clear();
-  mDffArray.clear();
-  mDffList.clear();
-  mNodeArray.clear();
-  mNodeList.clear();
-  mInputList.clear();
-  mOutputList.clear();
-  mOutputNameList.clear();
-  mLogicList.clear();
-  mNameDict.clear();
-  mFuncMgr.clear();
-}
-
 BEGIN_NONAMESPACE
 
 // symbol_dict のキーをデコードする．
