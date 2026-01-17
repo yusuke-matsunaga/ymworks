@@ -63,10 +63,8 @@ BnDff::~BnDff()
 SizeType
 BnDff::id() const
 {
-  if ( is_valid() ) {
-    return mPtr->id();
-  }
-  return BAD_ID;
+  auto& dff = _dff_impl();
+  return dff.id();
 }
 
 // @brief 名前を返す．

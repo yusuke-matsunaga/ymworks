@@ -68,7 +68,6 @@ std::string
 BnFunc::type_str() const
 {
   switch ( type() ) {
-  case NONE:      return "NONE";
   case PRIMITIVE: return "PRIMITIVE";
   case COVER:     return "COVER";
   case EXPR:      return "EXPR";

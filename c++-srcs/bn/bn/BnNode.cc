@@ -36,7 +36,7 @@ BnNode::BnNode(
 {
 }
 
-// @brief コピーコンストラクタ
+// @brief コピー代入演算子
 BnNode&
 BnNode::operator=(
   const BnNode& src
@@ -65,14 +65,16 @@ BnNode::~BnNode()
 SizeType
 BnNode::id() const
 {
-  return _node_impl().id();
+  auto& node = _node_impl();
+  return node.id();
 }
 
 // @brief ノードの種類を返す．
 BnNode::Type
 BnNode::type() const
 {
-  return _node_impl().type();
+  auto& node = _node_impl();
+  return node.type();
 }
 
 // @brief ノードの種類を表す文字列を返す．
@@ -80,7 +82,6 @@ std::string
 BnNode::type_str() const
 {
   switch ( type() ) {
-  case NONE:  return "NONE";
   case INPUT: return "INPUT";
   case LOGIC: return "LOGIC";
   }
@@ -90,49 +91,56 @@ BnNode::type_str() const
 bool
 BnNode::is_input() const
 {
-  return _node_impl().is_input();
+  auto& node = _node_impl();
+  return node.is_input();
 }
 
 // @brief 論理ノードの時 true を返す．
 bool
 BnNode::is_logic() const
 {
-  return _node_impl().is_logic();
+  auto& node = _node_impl();
+  return node.is_logic();
 }
 
 // @brief 外部入力ノードの時 true を返す．
 bool
 BnNode::is_primary_input() const
 {
-  return _node_impl().is_primary_input();
+  auto& node = _node_impl();
+  return node.is_primary_input();
 }
 
 // @brief DFFの出力ノードの時 true を返す．
 bool
 BnNode::is_dff_output() const
 {
-  return _node_impl().is_dff_output();
+  auto& node = _node_impl();
+  return node.is_dff_output();
 }
 
 // @brief 入力番号を返す．
 SizeType
 BnNode::input_id() const
 {
-  return _node_impl().input_id();
+  auto& node = _node_impl();
+  return node.input_id();
 }
 
 // @brief DFF番号を返す．
 SizeType
 BnNode::dff_id() const
 {
-  return _node_impl().dff_id();
+  auto& node = _node_impl();
+  return node.dff_id();
 }
 
 // @brief 関数情報を返す．
 BnFunc
 BnNode::func() const
 {
-  auto func= _node_impl().func();
+  auto& node = _node_impl();
+  auto func= node.func();
   return BnFunc(func);
 }
 
@@ -140,7 +148,8 @@ BnNode::func() const
 SizeType
 BnNode::fanin_num() const
 {
-  return _node_impl().fanin_num();
+  auto& node = _node_impl();
+  return node.fanin_num();
 }
 
 // @brief ノードのファンインのノードを返す．
@@ -149,14 +158,16 @@ BnNode::fanin(
   SizeType pos
 ) const
 {
-  return _node_impl().fanin(pos);
+  auto& node = _node_impl();
+  return node.fanin(pos);
 }
 
 // @brief ノードのファンインのノードのリストを返す．
 BnNodeList
 BnNode::fanin_list() const
 {
-  auto& ptr_list = _node_impl().fanin_list();
+  auto& node = _node_impl();
+  auto& ptr_list = node.fanin_list();
   return BnNodeList(ptr_list);
 }
 
