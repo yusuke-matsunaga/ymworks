@@ -27,7 +27,14 @@ release = '1.0.0'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
+    'breathe',
 ]
+
+breathe_projects = {
+    "ymworks": "/Users/yusuke/var/build/ymw-test/ymworks/dox-src/xml"
+}
+
+breathe_default_project = "ymworks"
 
 source_suffix = {
     '.rst': 'restructuredtext'

@@ -57,6 +57,7 @@ add_subdirectory ( programs )
 if ( Python3_FOUND )
   add_subdirectory( py_capi )
 endif ()
+add_subdirectory ( dox-src )
 
 
 # ===================================================================

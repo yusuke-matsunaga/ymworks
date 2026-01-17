@@ -578,13 +578,13 @@ public:
   );
 
   /// @brief エラーが起きた場合にそのもととなったオプション文字列を返す．
+  ///
+  /// フラグに使用可能な値は以下のとおり
+  /// -  0 なにもしない．
+  /// -  POPT_BADOPTION_NOALIAS もっとも外側(outermost)のオプションを返す．
   const char*
   bad_option(
     int flags ///< [in] フラグ
-              ///<
-              ///< フラグに使用可能な値は以下のとおり
-	      ///<  - 0 なにもしない．
-	      ///<  - POPT_BADOPTION_NOALIAS もっとも外側(outermost)のオプションを返す．
   );
 
   /// @brief alias 用のデフォルト設定を読み込む．
