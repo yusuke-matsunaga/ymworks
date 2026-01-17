@@ -14,10 +14,9 @@
 
 BEGIN_NAMESPACE_YM_DD
 
-class DdEdge;
-
 //////////////////////////////////////////////////////////////////////
 /// @class BddVar BddVar.h "BddVar.h"
+/// @ingroup DdGroup
 /// @brief BDD の変数を表すクラス
 ///
 /// - 実際には正のリテラル関数を表す BDD

@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>BnModel &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">BnModel</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="bnmodel">
+<h1>BnModel<a class="headerlink" href="#bnmodel" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv47BnModel">
+<span id="_CPPv37BnModel"></span><span id="_CPPv27BnModel"></span><span id="BnModel"></span><span class="target" id="d3/dc6/classBnModel"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BnModel</span></span></span><br /></dt>
+<dd><p>Boolean Network を表すクラス </p>
+<p>以下の情報を持つ．<ul class="simple">
+<li><p>入力ノードのリスト</p></li>
+<li><p>出力ノードのリスト</p></li>
+<li><p>論理ノードのリスト</p></li>
+<li><p>DFFのリスト</p></li>
+</ul>
+</p>
+<p>入力ノードには以下の2種類がある．<ul class="simple">
+<li><p>外部入力: 入力番号を持つ．</p></li>
+<li><p>DFF出力: DFF番号を持つ</p></li>
+</ul>
+</p>
+<p>論理ノードは以下のいずれかの論理関数情報を持つ．<ul class="simple">
+<li><p>プリミティブ(PrimType)</p></li>
+<li><p>カバー(SopCover)</p></li>
+<li><p>論理式(Expr)</p></li>
+<li><p>関数(TvFunc)</p></li>
+<li><p>BDD(Bdd) いずれの場合にファンインのノードのリストを持つ．</p></li>
+</ul>
+</p>
+<p>出力ノードは実際にはノードではなく他のノードの参照である．</p>
+<p>それ意外に付加的な情報として以下の情報を持つ．<ul class="simple">
+<li><p>名前</p></li>
+<li><p>入力ノード名</p></li>
+<li><p>出力ノード名</p></li>
+<li><p>DFF名</p></li>
+<li><p>コメント</p></li>
+</ul>
+</p>
+<p>これらの情報は与えられたものをそのまま保持するだけで動作には影響しない．</p>
+<p>純粋な Boolean Network は抽象化した組み合わせ論理回路を表すものであるが、 DFFの入力ノードと出力ノードをそれぞれ疑似外部出力、疑似外部入力とみなすことで 同期式順序回路を表すことができる． そこでDFF出力(を表す入力ノード)とDFF入力ノードへの参照を持ったDFFクラスを用意する． ただし、クロックや非同期リセットなどの制御は表せない．</p>
+<p>扱えるファイルタイプは以下の通り<ul class="simple">
+<li><p>blif(.blif)</p></li>
+<li><p>iscas89(.bench)</p></li>
+<li><p>truth(IWLS2022)</p></li>
+</ul>
+</p>
+<p>実装は ModelImpl が提供する． </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-生成と破壊">生成と破壊</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel7BnModelEv">
+<span id="_CPPv3N7BnModel7BnModelEv"></span><span id="_CPPv2N7BnModel7BnModelEv"></span><span id="BnModel::BnModel"></span><span class="target" id="d3/dc6/classBnModel_1a9d9d70661e21e179954452c2b10ff981"></span><span class="sig-name descname"><span class="n"><span class="pre">BnModel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>空のコンストラクタ </p>
+<p>空のネットワークとなる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel7BnModelERK7BnModel">
+<span id="_CPPv3N7BnModel7BnModelERK7BnModel"></span><span id="_CPPv2N7BnModel7BnModelERK7BnModel"></span><span id="BnModel::BnModel__BnModelCR"></span><span class="target" id="d3/dc6/classBnModel_1a200b1621c05d7b8a3a9d380f87c50bf3"></span><span class="sig-name descname"><span class="n"><span class="pre">BnModel</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4N7BnModel7BnModelERK7BnModel" title="BnModel::BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>コピーコンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModelaSERK7BnModel">
+<span id="_CPPv3N7BnModelaSERK7BnModel"></span><span id="_CPPv2N7BnModelaSERK7BnModel"></span><span id="BnModel::assign-operator__BnModelCR"></span><span class="target" id="d3/dc6/classBnModel_1aba8d283227b07cc020f855cc94ad3af9"></span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>コピー代入演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModelD0Ev">
+<span id="_CPPv3N7BnModelD0Ev"></span><span id="_CPPv2N7BnModelD0Ev"></span><span id="BnModel::~BnModel"></span><span class="target" id="d3/dc6/classBnModel_1aff59cad1402791b43d4d297bb5918229"></span><span class="sig-name descname"><span class="n"><span class="pre">~BnModel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-書き出しを行う関数">書き出しを行う関数</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel5writeERNSt7ostreamE">
+<span id="_CPPv3NK7BnModel5writeERNSt7ostreamE"></span><span id="_CPPv2NK7BnModel5writeERNSt7ostreamE"></span><span id="BnModel::write__osRC"></span><span class="target" id="d3/dc6/classBnModel_1a73965b648d092c0cd038a5cfc632dfa1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>内容を出力する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-内容を読み出す関数">内容を読み出す関数</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel4copyEv">
+<span id="_CPPv3NK7BnModel4copyEv"></span><span id="_CPPv2NK7BnModel4copyEv"></span><span id="BnModel::copyC"></span><span class="target" id="d3/dc6/classBnModel_1ac6a37249db35d80c789cb2c2778dec65"></span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>'深い'コピーを作る． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel7dff_numEv">
+<span id="_CPPv3NK7BnModel7dff_numEv"></span><span id="_CPPv2NK7BnModel7dff_numEv"></span><span id="BnModel::dff_numC"></span><span class="target" id="d3/dc6/classBnModel_1ad21c431cb56c0b3d33e4a7e13c4a33c1"></span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dff_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>DFF数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel3dffE8SizeType">
+<span id="_CPPv3NK7BnModel3dffE8SizeType"></span><span id="_CPPv2NK7BnModel3dffE8SizeType"></span><span id="BnModel::dff__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a5ee24df9bfbf92fb8eb3798236d1547e"></span><a class="reference internal" href="../index.html#_CPPv45BnDff" title="BnDff"><span class="n"><span class="pre">BnDff</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dff</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dff_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>DFFを返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dff_id</strong> -- [in] DFF番号 ( 0 &lt;= dff_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1ad21c431cb56c0b3d33e4a7e13c4a33c1"><span class="std std-ref">dff_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel8dff_listEv">
+<span id="_CPPv3NK7BnModel8dff_listEv"></span><span id="_CPPv2NK7BnModel8dff_listEv"></span><span id="BnModel::dff_listC"></span><span class="target" id="d3/dc6/classBnModel_1a45d2bd5bdeea31e92b67bdebd123f3aa"></span><a class="reference internal" href="../index.html#_CPPv49BnDffList" title="BnDffList"><span class="n"><span class="pre">BnDffList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dff_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>DFFのリストを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel8node_numEv">
+<span id="_CPPv3NK7BnModel8node_numEv"></span><span id="_CPPv2NK7BnModel8node_numEv"></span><span id="BnModel::node_numC"></span><span class="target" id="d3/dc6/classBnModel_1a18b01ba29be0cdc2e33fecb6d8bad44b"></span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">node_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>ノード数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel4nodeE8SizeType">
+<span id="_CPPv3NK7BnModel4nodeE8SizeType"></span><span id="_CPPv2NK7BnModel4nodeE8SizeType"></span><span id="BnModel::node__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a7289011513c5627d6ba77e0a2ef17629"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">node</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>ノードを返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> -- [in] ノード番号 ( 0 &lt;= id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1a18b01ba29be0cdc2e33fecb6d8bad44b"><span class="std std-ref">node_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel9input_numEv">
+<span id="_CPPv3NK7BnModel9input_numEv"></span><span id="_CPPv2NK7BnModel9input_numEv"></span><span id="BnModel::input_numC"></span><span class="target" id="d3/dc6/classBnModel_1a88f47bc7ae394ac6394f7e7ecd39229e"></span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>入力数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel5inputE8SizeType">
+<span id="_CPPv3NK7BnModel5inputE8SizeType"></span><span id="_CPPv2NK7BnModel5inputE8SizeType"></span><span id="BnModel::input__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a7cb977109790e4d7f241a88f295d4ec4"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>入力ノードを返す． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_id</strong> -- [in] 入力番号 ( 0 &lt;= input_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1a88f47bc7ae394ac6394f7e7ecd39229e"><span class="std std-ref">input_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel10input_listEv">
+<span id="_CPPv3NK7BnModel10input_listEv"></span><span id="_CPPv2NK7BnModel10input_listEv"></span><span id="BnModel::input_listC"></span><span class="target" id="d3/dc6/classBnModel_1a784efcb04b68ec2a7a84a78cf5c7152b"></span><a class="reference internal" href="../index.html#_CPPv410BnNodeList" title="BnNodeList"><span class="n"><span class="pre">BnNodeList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>入力ノードのリストを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel10output_numEv">
+<span id="_CPPv3NK7BnModel10output_numEv"></span><span id="_CPPv2NK7BnModel10output_numEv"></span><span id="BnModel::output_numC"></span><span class="target" id="d3/dc6/classBnModel_1a0ccb43f5c9f9e67d2c820d16f1da09eb"></span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>出力数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel6outputE8SizeType">
+<span id="_CPPv3NK7BnModel6outputE8SizeType"></span><span id="_CPPv2NK7BnModel6outputE8SizeType"></span><span id="BnModel::output__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a53a5444f035d10c88a757ae863712b72"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>出力ノードを返す． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_id</strong> -- [in] 出力番号 ( 0 &lt;= output_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1a0ccb43f5c9f9e67d2c820d16f1da09eb"><span class="std std-ref">output_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel11output_listEv">
+<span id="_CPPv3NK7BnModel11output_listEv"></span><span id="_CPPv2NK7BnModel11output_listEv"></span><span id="BnModel::output_listC"></span><span class="target" id="d3/dc6/classBnModel_1add19f96cbce736ac89a6b596332e2599"></span><a class="reference internal" href="../index.html#_CPPv410BnNodeList" title="BnNodeList"><span class="n"><span class="pre">BnNodeList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>出力のノードのリストを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel9logic_numEv">
+<span id="_CPPv3NK7BnModel9logic_numEv"></span><span id="_CPPv2NK7BnModel9logic_numEv"></span><span id="BnModel::logic_numC"></span><span class="target" id="d3/dc6/classBnModel_1ad5200ff0b718c2ec6152ee7221f3f7ca"></span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">logic_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>論理ノード数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel5logicE8SizeType">
+<span id="_CPPv3NK7BnModel5logicE8SizeType"></span><span id="_CPPv2NK7BnModel5logicE8SizeType"></span><span id="BnModel::logic__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a24ae08ac5008f9e369bed53905dc5f32"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">logic</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">pos</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>論理ノードを返す． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pos</strong> -- [in] 位置番号 ( 0 &lt;= pos &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1ad5200ff0b718c2ec6152ee7221f3f7ca"><span class="std std-ref">logic_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel10logic_listEv">
+<span id="_CPPv3NK7BnModel10logic_listEv"></span><span id="_CPPv2NK7BnModel10logic_listEv"></span><span id="BnModel::logic_listC"></span><span class="target" id="d3/dc6/classBnModel_1a3a1ca5685bf4af639f271902494c13a4"></span><a class="reference internal" href="../index.html#_CPPv410BnNodeList" title="BnNodeList"><span class="n"><span class="pre">BnNodeList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">logic_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>論理ノードのリストを返す． </p>
+<p>入力からのトポロジカル順になっている． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel8func_numEv">
+<span id="_CPPv3NK7BnModel8func_numEv"></span><span id="_CPPv2NK7BnModel8func_numEv"></span><span id="BnModel::func_numC"></span><span class="target" id="d3/dc6/classBnModel_1a780444ee7cbad64512b8c7880b3dcd50"></span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">func_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>関数情報の数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel4funcE8SizeType">
+<span id="_CPPv3NK7BnModel4funcE8SizeType"></span><span id="_CPPv2NK7BnModel4funcE8SizeType"></span><span id="BnModel::func__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a91feeba97e0c1c2a22aa08ee28b99dcb"></span><a class="reference internal" href="../index.html#_CPPv46BnFunc" title="BnFunc"><span class="n"><span class="pre">BnFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">func</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">func_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>関数情報を取り出す． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func_id</strong> -- [in] 関数番号 ( 0 &lt;= func_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1a780444ee7cbad64512b8c7880b3dcd50"><span class="std std-ref">func_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-オプション情報を取得する関数">オプション情報を取得する関数</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel6optionEv">
+<span id="_CPPv3NK7BnModel6optionEv"></span><span id="_CPPv2NK7BnModel6optionEv"></span><span id="BnModel::optionC"></span><span class="target" id="d3/dc6/classBnModel_1afc94a2d5d270c7720bc7c7ec2713ae6f"></span><a class="reference internal" href="../index.html#_CPPv49JsonValue" title="JsonValue"><span class="n"><span class="pre">JsonValue</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">option</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>オプション情報を表す JSON オブジェクトを返す． </p>
+<p>以下の情報を持つ．<ul class="simple">
+<li><p>'name': &lt;名前の文字列&gt;</p></li>
+<li><p>'comment': &lt;コメント文字列のリスト&gt;</p></li>
+<li><p>'symbol_dict': &lt;入力名，出力名, DFF名の辞書&gt;</p></li>
+</ul>
+</p>
+<p>symbol_dict は以下のキーを持つ．<ul class="simple">
+<li><p>'i&lt;n&gt;': n 番目の入力名</p></li>
+<li><p>'o&lt;n&gt;': n 番目の出力名</p></li>
+<li><p>'q&lt;n&gt;': n 番目のDFF名 </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel4nameEv">
+<span id="_CPPv3NK7BnModel4nameEv"></span><span id="_CPPv2NK7BnModel4nameEv"></span><span id="BnModel::nameC"></span><span class="target" id="d3/dc6/classBnModel_1ae0a52a1d2db4ba2db5ddff2a303fb4f7"></span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>名前を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel12comment_listEv">
+<span id="_CPPv3NK7BnModel12comment_listEv"></span><span id="_CPPv2NK7BnModel12comment_listEv"></span><span id="BnModel::comment_listC"></span><span class="target" id="d3/dc6/classBnModel_1a6acdb2e8c1e1a495a1a63215bf93713c"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">comment_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>コメントを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel10input_nameE8SizeType">
+<span id="_CPPv3NK7BnModel10input_nameE8SizeType"></span><span id="_CPPv2NK7BnModel10input_nameE8SizeType"></span><span id="BnModel::input_name__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a93832a6fdf021858252f50fb818d066b"></span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>入力名を返す． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_id</strong> -- [in] 入力番号 ( 0 &lt;= input_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1a88f47bc7ae394ac6394f7e7ecd39229e"><span class="std std-ref">input_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel11output_nameE8SizeType">
+<span id="_CPPv3NK7BnModel11output_nameE8SizeType"></span><span id="_CPPv2NK7BnModel11output_nameE8SizeType"></span><span id="BnModel::output_name__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a484f6097fb511de472bc7cab3b5d1078"></span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>出力名を返す． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_id</strong> -- [in] 出力番号 ( 0 &lt;= output_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1a0ccb43f5c9f9e67d2c820d16f1da09eb"><span class="std std-ref">output_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModel8dff_nameE8SizeType">
+<span id="_CPPv3NK7BnModel8dff_nameE8SizeType"></span><span id="_CPPv2NK7BnModel8dff_nameE8SizeType"></span><span id="BnModel::dff_name__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1abcdf1e636ad3bcee97c77a8921b789ff"></span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dff_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dff_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>DFF名を返す． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dff_id</strong> -- [in] ラッチ番号 ( 0 &lt;= dff_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1ad21c431cb56c0b3d33e4a7e13c4a33c1"><span class="std std-ref">dff_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-オプション情報の内容を設定する関数">オプション情報の内容を設定する関数</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel10set_optionERK9JsonValue">
+<span id="_CPPv3N7BnModel10set_optionERK9JsonValue"></span><span id="_CPPv2N7BnModel10set_optionERK9JsonValue"></span><span id="BnModel::set_option__JsonValueCR"></span><span class="target" id="d3/dc6/classBnModel_1a112ccaf347390e66c46d3d3735205936"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_option</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv49JsonValue" title="JsonValue"><span class="n"><span class="pre">JsonValue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">option</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>オプション情報をセットする． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>option</strong> -- [in] 追加するオプション </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel8set_nameERKNSt6stringE">
+<span id="_CPPv3N7BnModel8set_nameERKNSt6stringE"></span><span id="_CPPv2N7BnModel8set_nameERKNSt6stringE"></span><span id="BnModel::set_name__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1a3e74503f6547b2a28063eef99da20675"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_name</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>名前を設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> -- [in] 名前 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel11add_commentERKNSt6stringE">
+<span id="_CPPv3N7BnModel11add_commentERKNSt6stringE"></span><span id="_CPPv2N7BnModel11add_commentERKNSt6stringE"></span><span id="BnModel::add_comment__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1a0d7c6e6f663c045cd87975f2547c7d74"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_comment</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comment</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>コメントを追加する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>comment</strong> -- [in] コメント </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel14set_input_nameE8SizeTypeRKNSt6stringE">
+<span id="_CPPv3N7BnModel14set_input_nameE8SizeTypeRKNSt6stringE"></span><span id="_CPPv2N7BnModel14set_input_nameE8SizeTypeRKNSt6stringE"></span><span id="BnModel::set_input_name__SizeType.ssCR"></span><span class="target" id="d3/dc6/classBnModel_1addc9050cc57529a09bb9438c58814f7b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_input_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>入力名をセットする． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_id</strong> -- [in] 入力番号 ( 0 &lt;= input_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1a88f47bc7ae394ac6394f7e7ecd39229e"><span class="std std-ref">input_num()</span></a> ) </p></li>
+<li><p><strong>name</strong> -- [in] 名前 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel15set_output_nameE8SizeTypeRKNSt6stringE">
+<span id="_CPPv3N7BnModel15set_output_nameE8SizeTypeRKNSt6stringE"></span><span id="_CPPv2N7BnModel15set_output_nameE8SizeTypeRKNSt6stringE"></span><span id="BnModel::set_output_name__SizeType.ssCR"></span><span class="target" id="d3/dc6/classBnModel_1ad627a231f6680a60dcf2b8dd4abf8cae"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_output_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>出力名をセットする． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_id</strong> -- [in] 出力番号 ( 0 &lt;= output_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1a0ccb43f5c9f9e67d2c820d16f1da09eb"><span class="std std-ref">output_num()</span></a> ) </p></li>
+<li><p><strong>name</strong> -- [in] 名前 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel12set_dff_nameE8SizeTypeRKNSt6stringE">
+<span id="_CPPv3N7BnModel12set_dff_nameE8SizeTypeRKNSt6stringE"></span><span id="_CPPv2N7BnModel12set_dff_nameE8SizeTypeRKNSt6stringE"></span><span id="BnModel::set_dff_name__SizeType.ssCR"></span><span class="target" id="d3/dc6/classBnModel_1ae7c734c198d9384d2a7fa0eba6e9bc85"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_dff_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dff_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>DFF名をセットする． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dff_id</strong> -- [in] DFF番号 ( 0 &lt;= dff_id &lt; <a class="reference internal" href="#d3/dc6/classBnModel_1ad21c431cb56c0b3d33e4a7e13c4a33c1"><span class="std std-ref">dff_num()</span></a> ) </p></li>
+<li><p><strong>name</strong> -- [in] 名前 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-dff/ノードの生成">DFF/ノードの生成</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel7new_dffERKNSt6stringEc">
+<span id="_CPPv3N7BnModel7new_dffERKNSt6stringEc"></span><span id="_CPPv2N7BnModel7new_dffERKNSt6stringEc"></span><span id="BnModel::new_dff__ssCR.c"></span><span class="target" id="d3/dc6/classBnModel_1a7887681154866debb887927714510dbe"></span><a class="reference internal" href="../index.html#_CPPv45BnDff" title="BnDff"><span class="n"><span class="pre">BnDff</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_dff</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reset_val</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="sc"><span class="pre">'X'</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>DFFを作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> -- [in] 名前 </p></li>
+<li><p><strong>reset_val</strong> -- [in] リセット値 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したDFFを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel11set_dff_srcERK5BnDff6BnNode">
+<span id="_CPPv3N7BnModel11set_dff_srcERK5BnDff6BnNode"></span><span id="_CPPv2N7BnModel11set_dff_srcERK5BnDff6BnNode"></span><span id="BnModel::set_dff_src__BnDffCR.BnNode"></span><span class="target" id="d3/dc6/classBnModel_1a9b526e47a439ec54e0aa6b6ffacdc254"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_dff_src</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv45BnDff" title="BnDff"><span class="n"><span class="pre">BnDff</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dff</span></span>, <a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>DFFの入力ノードを設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dff</strong> -- [in] DFF </p></li>
+<li><p><strong>src</strong> -- [in] 入力に設定するノード </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel9new_inputERKNSt6stringE">
+<span id="_CPPv3N7BnModel9new_inputERKNSt6stringE"></span><span id="_CPPv2N7BnModel9new_inputERKNSt6stringE"></span><span id="BnModel::new_input__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1a628acee5b1e5c734096506b32bd28a83"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_input</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>入力ノードを作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> -- [in] 名前 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したノードを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel10new_outputE6BnNodeRKNSt6stringE">
+<span id="_CPPv3N7BnModel10new_outputE6BnNodeRKNSt6stringE"></span><span id="_CPPv2N7BnModel10new_outputE6BnNodeRKNSt6stringE"></span><span id="BnModel::new_output__BnNode.ssCR"></span><span class="target" id="d3/dc6/classBnModel_1aea32d85986cb9a59e7df9eaf6c01e154"></span><a class="reference internal" href="../index.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_output</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>出力ノードを作る． </p>
+<p><ul class="simple">
+<li><p>src は同じ <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> に属するノードでなければならない．</p></li>
+<li><p>条件に合わない時は std::invalid_argument 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> -- [in] ソースノード </p></li>
+<li><p><strong>name</strong> -- [in] 名前 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成した出力ノードの出力番号を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel13new_primitiveE8PrimTypeRKNSt6vectorI6BnNodeEE">
+<span id="_CPPv3N7BnModel13new_primitiveE8PrimTypeRKNSt6vectorI6BnNodeEE"></span><span id="_CPPv2N7BnModel13new_primitiveE8PrimTypeRKNSt6vectorI6BnNodeEE"></span><span id="BnModel::new_primitive__PrimType.std::vector:BnNode:CR"></span><span class="target" id="d3/dc6/classBnModel_1a9e13df8cdc312dec81453fe0e12281f2"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_primitive</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../index.html#_CPPv48PrimType" title="PrimType"><span class="n"><span class="pre">PrimType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">primitive_type</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fanin_list</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>プリミティブ型の論理ノードを作る． </p>
+<p><ul class="simple">
+<li><p>fanin_list の要素は同じ <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> に属するノードでなければならない．</p></li>
+<li><p>条件に合わない時は std::invalid_argument 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>primitive_type</strong> -- [in] プリミティブの種類 </p></li>
+<li><p><strong>fanin_list</strong> -- [in] ファンインのリスト </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したノードを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel9new_coverERK8SopCoverbRKNSt6vectorI6BnNodeEE">
+<span id="_CPPv3N7BnModel9new_coverERK8SopCoverbRKNSt6vectorI6BnNodeEE"></span><span id="_CPPv2N7BnModel9new_coverERK8SopCoverbRKNSt6vectorI6BnNodeEE"></span><span id="BnModel::new_cover__SopCoverCR.b.std::vector:BnNode:CR"></span><span class="target" id="d3/dc6/classBnModel_1a8ef61e3d7efe3a25abd6ad4d8212009d"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_cover</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv48SopCover" title="SopCover"><span class="n"><span class="pre">SopCover</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_cover</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">output_inv</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fanin_list</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>カバー型の論理ノードを登録する． </p>
+<p><ul class="simple">
+<li><p>fanin_list の要素は同じ <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> に属するノードでなければならない．</p></li>
+<li><p>fanin_list の要素数は input_cover の入力数と等しくなければならない．</p></li>
+<li><p>条件に合わない時は std::invalid_argument 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_cover</strong> -- [in] 入力カバー </p></li>
+<li><p><strong>output_inv</strong> -- [in] 出力の反転属性 </p></li>
+<li><p><strong>fanin_list</strong> -- [in] ファンインのリスト </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したノードを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel8new_exprERK4ExprRKNSt6vectorI6BnNodeEE">
+<span id="_CPPv3N7BnModel8new_exprERK4ExprRKNSt6vectorI6BnNodeEE"></span><span id="_CPPv2N7BnModel8new_exprERK4ExprRKNSt6vectorI6BnNodeEE"></span><span id="BnModel::new_expr__ExprCR.std::vector:BnNode:CR"></span><span class="target" id="d3/dc6/classBnModel_1ad759248429e38785600be28ad925d7d0"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_expr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv44Expr" title="Expr"><span class="n"><span class="pre">Expr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">expr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fanin_list</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>論理式型の論理ノードを登録する． </p>
+<p><ul class="simple">
+<li><p>fanin_list の要素は同じ <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> に属するノードでなければならない．</p></li>
+<li><p>fanin_list の要素数は expr の入力数と等しくなければならない．</p></li>
+<li><p>条件に合わない時は std::invalid_argument 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr</strong> -- [in] 論理式 </p></li>
+<li><p><strong>fanin_list</strong> -- [in] ファンインのリスト </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したノードを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel10new_tvfuncERK6TvFuncRKNSt6vectorI6BnNodeEE">
+<span id="_CPPv3N7BnModel10new_tvfuncERK6TvFuncRKNSt6vectorI6BnNodeEE"></span><span id="_CPPv2N7BnModel10new_tvfuncERK6TvFuncRKNSt6vectorI6BnNodeEE"></span><span id="BnModel::new_tvfunc__TvFuncCR.std::vector:BnNode:CR"></span><span class="target" id="d3/dc6/classBnModel_1a46a2e99a12f73c0ca51b26c9925a6b95"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_tvfunc</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fanin_list</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>真理値表型の論理ノードを登録する． </p>
+<p><ul class="simple">
+<li><p>fanin_list の要素は同じ <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> に属するノードでなければならない．</p></li>
+<li><p>fanin_list の要素数は func の入力数と等しくなければならない．</p></li>
+<li><p>条件に合わない時は std::invalid_argument 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> -- [in] 真理値表型の関数 </p></li>
+<li><p><strong>fanin_list</strong> -- [in] ファンインのリスト </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したノードを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel7new_bddERK3BddRKNSt6vectorI6BnNodeEE">
+<span id="_CPPv3N7BnModel7new_bddERK3BddRKNSt6vectorI6BnNodeEE"></span><span id="_CPPv2N7BnModel7new_bddERK3BddRKNSt6vectorI6BnNodeEE"></span><span id="BnModel::new_bdd__BddCR.std::vector:BnNode:CR"></span><span class="target" id="d3/dc6/classBnModel_1a3dd675fdf629c57e0692bef585106d5f"></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">bdd</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../index.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fanin_list</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>BDD型の論理ノードを登録する． </p>
+<p><ul class="simple">
+<li><p>fanin_list の要素は同じ <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> に属するノードでなければならない．</p></li>
+<li><p>fanin_list の要素数は bdd の入力数と等しくなければならない．</p></li>
+<li><p>条件に合わない時は std::invalid_argument 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bdd</strong> -- [in] BDD </p></li>
+<li><p><strong>fanin_list</strong> -- [in] ファンインのリスト </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したノードを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-比較演算">比較演算</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModeleqERK7BnModel">
+<span id="_CPPv3NK7BnModeleqERK7BnModel"></span><span id="_CPPv2NK7BnModeleqERK7BnModel"></span><span id="BnModel::eq-operator__BnModelCRC"></span><span class="target" id="d3/dc6/classBnModel_1a0b88c20e74f01eac5055e147e76f997e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>等価比較演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7BnModelneERK7BnModel">
+<span id="_CPPv3NK7BnModelneERK7BnModel"></span><span id="_CPPv2NK7BnModelneERK7BnModel"></span><span id="BnModel::neq-operator__BnModelCRC"></span><span class="target" id="d3/dc6/classBnModel_1a079a9790a339934c0ae9bce8d027c845"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>非等価比較演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-読み込みを行う関数">読み込みを行う関数</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel9read_blifERKNSt6stringE">
+<span id="_CPPv3N7BnModel9read_blifERKNSt6stringE"></span><span id="_CPPv2N7BnModel9read_blifERKNSt6stringE"></span><span id="BnModel::read_blif__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1a9c02addbdcf65380f7b1f62a4e9af569"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_blif</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>blif ファイルの読み込みを行う． </p>
+<p>
+読み込みが失敗したら std::invalid_argument 例外を送出する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>結果の <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel12read_iscas89ERKNSt6stringE">
+<span id="_CPPv3N7BnModel12read_iscas89ERKNSt6stringE"></span><span id="_CPPv2N7BnModel12read_iscas89ERKNSt6stringE"></span><span id="BnModel::read_iscas89__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1ac1dc346533975733caa43059b03d58c6"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_iscas89</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>iscas89(.bench) ファイルの読み込みを行う． </p>
+<p>
+読み込みが失敗したら std::invalid_argument 例外を送出する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>結果の <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel10read_truthERKNSt6stringE">
+<span id="_CPPv3N7BnModel10read_truthERKNSt6stringE"></span><span id="_CPPv2N7BnModel10read_truthERKNSt6stringE"></span><span id="BnModel::read_truth__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1ab9acf05a0512bdccaa2f66239962fa62"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_truth</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>truth ファイルの読み込みを行う． </p>
+<p>
+読み込みが失敗したら std::invalid_argument 例外を送出する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>結果の <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BnModel4readERKNSt6stringERKNSt6stringE">
+<span id="_CPPv3N7BnModel4readERKNSt6stringERKNSt6stringE"></span><span id="_CPPv2N7BnModel4readERKNSt6stringERKNSt6stringE"></span><span id="BnModel::read__ssCR.ssCR"></span><span class="target" id="d3/dc6/classBnModel_1a370cb33c9b9d85a089e64d94bfb768ff"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../index.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">format</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;&quot;</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>ファイルの読み込みを行う． </p>
+<p><ul class="simple">
+<li><p>format は以下のいずれか<ul>
+<li><p>blif</p></li>
+<li><p>iscas89|bench</p></li>
+<li><p>truth</p></li>
+</ul>
+</p></li>
+<li><p>format が指定されていない時は拡張子から推測する．<ul>
+<li><p>.blif -&gt; blif</p></li>
+<li><p>.bench -&gt; iscas89</p></li>
+<li><p>.truth -&gt; truth</p></li>
+</ul>
+</p></li>
+<li><p>読み込みが失敗したら std::invalid_argument 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> -- [in] ファイル名 </p></li>
+<li><p><strong>format</strong> -- [in] 形式 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>結果の <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">BnModel</a><ul>
+<li><a class="reference internal" href="#_CPPv47BnModel"><code class="docutils literal notranslate"><span class="pre">BnModel</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N7BnModel7BnModelEv"><code class="docutils literal notranslate"><span class="pre">BnModel()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel7BnModelERK7BnModel"><code class="docutils literal notranslate"><span class="pre">BnModel()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModelaSERK7BnModel"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModelD0Ev"><code class="docutils literal notranslate"><span class="pre">~BnModel()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel5writeERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">write()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel4copyEv"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel7dff_numEv"><code class="docutils literal notranslate"><span class="pre">dff_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel3dffE8SizeType"><code class="docutils literal notranslate"><span class="pre">dff()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel8dff_listEv"><code class="docutils literal notranslate"><span class="pre">dff_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel8node_numEv"><code class="docutils literal notranslate"><span class="pre">node_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel4nodeE8SizeType"><code class="docutils literal notranslate"><span class="pre">node()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel9input_numEv"><code class="docutils literal notranslate"><span class="pre">input_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel5inputE8SizeType"><code class="docutils literal notranslate"><span class="pre">input()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel10input_listEv"><code class="docutils literal notranslate"><span class="pre">input_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel10output_numEv"><code class="docutils literal notranslate"><span class="pre">output_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel6outputE8SizeType"><code class="docutils literal notranslate"><span class="pre">output()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel11output_listEv"><code class="docutils literal notranslate"><span class="pre">output_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel9logic_numEv"><code class="docutils literal notranslate"><span class="pre">logic_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel5logicE8SizeType"><code class="docutils literal notranslate"><span class="pre">logic()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel10logic_listEv"><code class="docutils literal notranslate"><span class="pre">logic_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel8func_numEv"><code class="docutils literal notranslate"><span class="pre">func_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel4funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel6optionEv"><code class="docutils literal notranslate"><span class="pre">option()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel4nameEv"><code class="docutils literal notranslate"><span class="pre">name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel12comment_listEv"><code class="docutils literal notranslate"><span class="pre">comment_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel10input_nameE8SizeType"><code class="docutils literal notranslate"><span class="pre">input_name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel11output_nameE8SizeType"><code class="docutils literal notranslate"><span class="pre">output_name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModel8dff_nameE8SizeType"><code class="docutils literal notranslate"><span class="pre">dff_name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel10set_optionERK9JsonValue"><code class="docutils literal notranslate"><span class="pre">set_option()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel8set_nameERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel11add_commentERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">add_comment()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel14set_input_nameE8SizeTypeRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_input_name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel15set_output_nameE8SizeTypeRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_output_name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel12set_dff_nameE8SizeTypeRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">set_dff_name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel7new_dffERKNSt6stringEc"><code class="docutils literal notranslate"><span class="pre">new_dff()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel11set_dff_srcERK5BnDff6BnNode"><code class="docutils literal notranslate"><span class="pre">set_dff_src()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel9new_inputERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">new_input()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel10new_outputE6BnNodeRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">new_output()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel13new_primitiveE8PrimTypeRKNSt6vectorI6BnNodeEE"><code class="docutils literal notranslate"><span class="pre">new_primitive()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel9new_coverERK8SopCoverbRKNSt6vectorI6BnNodeEE"><code class="docutils literal notranslate"><span class="pre">new_cover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel8new_exprERK4ExprRKNSt6vectorI6BnNodeEE"><code class="docutils literal notranslate"><span class="pre">new_expr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel10new_tvfuncERK6TvFuncRKNSt6vectorI6BnNodeEE"><code class="docutils literal notranslate"><span class="pre">new_tvfunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel7new_bddERK3BddRKNSt6vectorI6BnNodeEE"><code class="docutils literal notranslate"><span class="pre">new_bdd()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModeleqERK7BnModel"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7BnModelneERK7BnModel"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel9read_blifERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_blif()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel12read_iscas89ERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_iscas89()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel10read_truthERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_truth()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7BnModel4readERKNSt6stringERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/bn/bnmodel.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">BnModel</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

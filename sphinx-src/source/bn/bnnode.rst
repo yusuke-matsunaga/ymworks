@@ -1,0 +1,5 @@
+BnNode
+==========
+
+.. doxygenclass:: BnNode
+   :members:

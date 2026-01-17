@@ -20,12 +20,27 @@
 /// - Bdd: Binary Decision Diagram
 /// - Zdd: Zero-surpressed Decision Diagram
 /// - SopCover, SopCube: 積和形論理式とキューブ
-/// - AlgCover, AlgCube: 代数的表現にもとづく積和形論理式とキューブ
+
+/// @defgroup ExprGroup 論理式を扱うクラス
+/// @ingroup LogicGroup
 ///
-/// SopCover/SopCube と AlgCover/AlgCube は似ているが，内部のビットパタンの
-/// エンコーディングが異なる．
-/// 具体的には SopCover/SopCube ではドントケアは '11' だが，
-/// AlgCover/AlgCube ではドントケアは '00' となる．
+
+/// @defgroup TvGroup 真理値表を扱うクラス
+/// @ingroup LogicGroup
+///
+
+/// @defgroup SopGroup 積和形論理式を扱うクラス
+/// @ingroup LogicGroup
+///
+
+/// @defgroup NpnGroup NPN変換を扱うクラス
+/// @ingroup LogicGroup
+///
+
+/// @defgroup BcGroup Boolean Chain を扱うクラス
+/// @ingroup LogicGroup
+///
+
 
 #include "ym_config.h"
 

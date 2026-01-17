@@ -15,6 +15,7 @@ BEGIN_NAMESPACE_YM_DD
 
 //////////////////////////////////////////////////////////////////////
 /// @class ZddItem ZddItem.h "ZddItem.h"
+/// @ingroup DdGroup
 /// @brief ZDD の要素を表すクラス
 ///
 /// - 実際にはシングルトンを表す ZDD

@@ -18,6 +18,7 @@ BEGIN_NAMESPACE_YM_DD
 
 //////////////////////////////////////////////////////////////////////
 /// @class ZddMgr ZddMgr.h "ym/ZddMgr.h"
+/// @ingroup DdGroup
 /// @brief ZDD を管理するためのクラス
 ///
 /// 実体は ZddMgrImpl でこのクラスはただの shared pointer となっている．

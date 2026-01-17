@@ -16,16 +16,20 @@
 BEGIN_NAMESPACE_YM_SOP
 
 /// @brief SopPat をパックしたワード型
+/// @ingroup SopGroup
 using SopPatWord = std::uint64_t;
 
 /// @brief オール0
+/// @ingroup SopGroup
 const SopPatWord SOP_ALL0 = 0x0000000000000000ULL;
 
 /// @brief オール1
+/// @ingroup SopGroup
 const SopPatWord SOP_ALL1 = 0xFFFFFFFFFFFFFFFFULL;
 
 //////////////////////////////////////////////////////////////////////
 /// @class SopBase SopBase.h "SopBase.h"
+/// @ingroup SopGroup
 /// @brief SopCover/SopCube に共通な基底クラス
 ///
 /// 入力数を持つだけのクラス．

@@ -15,6 +15,7 @@ BEGIN_NAMESPACE_YM_BC
 
 //////////////////////////////////////////////////////////////////////
 /// @class BcEdge BcEdge.h "ym/BcEdge.h"
+/// @ingroup BcGroup
 /// @brief BcGraph の枝を表すクラス
 ///
 /// - 入力

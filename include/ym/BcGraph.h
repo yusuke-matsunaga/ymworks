@@ -17,6 +17,7 @@ BEGIN_NAMESPACE_YM_BC
 
 //////////////////////////////////////////////////////////////////////
 /// @class BcGraph BcGraph.h "ym/BcGraph.h"
+/// @ingroup BcGroup
 /// @brief Boolean chain を表すグラフ
 ///
 /// Boolean chain は N入力M出力の論理関数を表す論理式の集合

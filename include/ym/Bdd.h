@@ -18,6 +18,7 @@ BEGIN_NAMESPACE_YM_DD
 
 //////////////////////////////////////////////////////////////////////
 /// @class Bdd Bdd.h "ym/Bdd.h"
+/// @ingroup DdGroup
 /// @brief BDD を表すクラス
 ///
 /// - 基本的に個々の Bdd は一つの BddMgr に属す．

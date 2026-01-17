@@ -23,6 +23,7 @@ class DdInfoMgr;
 
 //////////////////////////////////////////////////////////////////////
 /// @class ZddMgrHolder ZddMgrHolder.h "ym/ZddMgrHolder.h"
+/// @ingroup DdGroup
 /// @brief ZddMgrImpl のスマートポインタ
 ///
 /// 中身は std::shared_ptr<ZddMgrImpl> だが

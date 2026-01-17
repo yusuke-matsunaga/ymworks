@@ -15,7 +15,7 @@ BEGIN_NAMESPACE_YM_LOGIC
 
 //////////////////////////////////////////////////////////////////////
 /// @class NpnVmap NpnVmap.h "ym/NpnVmap.h"
-/// @ingroup LogicGroup
+/// @ingroup NpnGroup
 /// @brief 変数の変換を表すクラス
 ///
 /// @sa NpnMap, NpnMapM

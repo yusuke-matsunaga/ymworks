@@ -22,7 +22,7 @@ class ExprNode;
 
 //////////////////////////////////////////////////////////////////////
 /// @class Expr Expr.h "ym/Expr.h"
-/// @ingroup LogicGroup
+/// @ingroup ExprGroup
 /// @brief 論理式を表すクラス
 ///
 /// 論理式は

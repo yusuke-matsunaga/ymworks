@@ -16,6 +16,7 @@ BEGIN_NAMESPACE_YM_BC
 
 //////////////////////////////////////////////////////////////////////
 /// @class BcOp BcOp.h "ym/BcOp.h"
+/// @ingroup BcGroup
 /// @brief Bool chain の演算を表すクラス
 ///
 /// type() が BcOpType::TV の時は真理値表ベクタを持つ．

@@ -22,6 +22,7 @@ class DdInfoMgr;
 
 //////////////////////////////////////////////////////////////////////
 /// @class BddMgrHolder BddMgrHolder.h "ym/BddMgrHolder.h"
+/// @ingroup DdGroup
 /// @brief BddMgrImpl のスマートポインタ
 ///
 /// 中身は std::shared_ptr<BddMgrImpl> だが意味的には BddMgrImpl

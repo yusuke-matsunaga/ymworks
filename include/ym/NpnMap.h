@@ -17,7 +17,7 @@ BEGIN_NAMESPACE_YM_LOGIC
 
 //////////////////////////////////////////////////////////////////////
 /// @class NpnMap NpnMap.h "ym/NpnMap.h"
-/// @ingroup LogicGroup
+/// @ingroup NpnGroup
 /// @brief NPN変換の情報を入れるクラス
 ///
 /// 具体的には

@@ -30,6 +30,7 @@ BEGIN_NAMESPACE_YM_DJDEC
 
 //////////////////////////////////////////////////////////////////////
 /// @class DjDec DjDec.h "ym/DjDec.h"
+/// @ingroup LogicGroup
 /// @brief Disjoint Decomposition を行うクラス
 ///
 /// クラスメソッドしか持たない

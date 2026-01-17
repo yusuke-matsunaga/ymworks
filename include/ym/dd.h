@@ -8,6 +8,12 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
+/// @defgroup DdGroup Decision Diagram を扱うクラス
+/// @ingroup LogicGroup
+///
+/// 具体的には BDD(Binary Decision Diagram) と ZDD(Zero-surpressed Decision Diagram)
+/// を扱う．
+
 
 #include "ym_config.h"
 

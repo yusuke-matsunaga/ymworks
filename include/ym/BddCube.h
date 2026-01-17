@@ -16,6 +16,7 @@ BEGIN_NAMESPACE_YM_DD
 
 //////////////////////////////////////////////////////////////////////
 /// @class BddCube BddCube.h "BddCube.h"
+/// @ingroup DdGroup
 /// @brief キューブを表す BDD のクラス
 ///
 /// - ブール論理の世界においてはリテラルとは変数とその否定のみ

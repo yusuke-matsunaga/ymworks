@@ -16,6 +16,7 @@ BEGIN_NAMESPACE_YM_RC
 
 //////////////////////////////////////////////////////////////////////
 /// @class KIX KIX.h "KIX.h"
+/// @ingroup SopGroup
 /// @brief Kernel Intersection Extraction を行うクラス
 ///
 /// 実際にはただの関数の集まり

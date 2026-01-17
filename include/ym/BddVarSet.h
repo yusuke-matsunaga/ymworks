@@ -16,6 +16,7 @@ BEGIN_NAMESPACE_YM_DD
 
 //////////////////////////////////////////////////////////////////////
 /// @class BddVarSet BddVarSet.h "BddVarSet.h"
+/// @ingroup DdGroup
 /// @brief Bdd を用いて変数集合を表すクラス
 ///
 /// 実際には変数を表す関数の論理積を用いている．

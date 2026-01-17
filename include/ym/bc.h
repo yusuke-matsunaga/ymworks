@@ -29,6 +29,7 @@ END_NAMESPACE_YM
 BEGIN_NAMESPACE_YM_BC
 
 /// @brief 演算の種類を表す列挙型
+/// @ingroup BcGroup
 enum class BcOpType : std::uint8_t {
   NONE = 0,
   AND  = 1,
@@ -38,6 +39,7 @@ enum class BcOpType : std::uint8_t {
 };
 
 /// @brief ストリーム出力
+/// @relates BcOpType
 inline
 std::ostream&
 operator<<(
@@ -56,9 +58,12 @@ operator<<(
 }
 
 /// @brief シミュレーション用のビットベクタを表す型
+/// @relates BcOpType
 using BcBvType = std::uint64_t;
 
+/// @relates BcOpType
 const BcBvType BcBv_ALL0 = 0x0000000000000000UL;
+/// @relates BcOpType
 const BcBvType BcBv_ALL1 = 0xFFFFFFFFFFFFFFFFUL;
 
 class BcGraph;

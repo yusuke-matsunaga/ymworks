@@ -16,6 +16,7 @@ BEGIN_NAMESPACE_YM_DD
 
 //////////////////////////////////////////////////////////////////////
 /// @class BddLit BddLit.h "BddLit.h"
+/// @ingroup DdGroup
 /// @brief BDD のリテラルを表すクラス
 ///
 /// - ブール論理の世界においてはリテラルとは変数とその否定のみ

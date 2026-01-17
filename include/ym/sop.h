@@ -8,10 +8,6 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-/// @defgroup LogicGroup 論理式と論理関数を扱うクラス
-///
-/// - SopCover, SopCube: 積和形論理式とキューブ
-
 #include "ym_config.h"
 
 
@@ -38,6 +34,7 @@ using nsSop::SopCube;
 using nsSop::SopCover;
 
 /// @brief SopCover/SopCube 中のパタンを表す列挙型
+/// @ingroup SopGroup
 enum class SopPat : std::uint8_t {
   __ = 0, ///< 未使用
   _1 = 1, ///< 正極性

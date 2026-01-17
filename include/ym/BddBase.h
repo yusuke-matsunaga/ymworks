@@ -18,6 +18,7 @@ class DdEdge;
 
 //////////////////////////////////////////////////////////////////////
 /// @class BddBase BddBase.h "ym/BddBase.h"
+/// @ingroup DdGroup
 /// @brief Bdd, BddVar, BddLit の基底クラス
 ///
 /// - 基本的に個々の Bdd は一つの BddMgr に属す．
@@ -32,6 +33,10 @@ class BddBase :
   friend class BddMgrHolder;
 
 public:
+  //////////////////////////////////////////////////////////////////////
+  /// @name 生成と破壊
+  /// @{
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 空のコンストラクタ
   ///
@@ -52,35 +57,9 @@ public:
   /// @brief デストラクタ
   ~BddBase();
 
-  /// @brief BddBase(の派生クラス)のリストから代表オブジェクトを取り出す．
-  ///
-  /// - T は BddBase の派生クラスでなければならない．
-  /// - bdd_list が空リストの場合は不正値が返される．
-  /// - bdd_list の中の定数ではないオブジェクトを代表オブジェクトとする．
-  /// - bdd_list が不正なBDDを含む場合には std::invalid_argument が送出される．
-  /// - bdd_list が相異なるマネージャのBDDを含んでいる場合には
-  ///   std::invalid_argument が送出される．
-  template<class T>
-  static
-  T
-  rep(
-    const std::vector<T>& bdd_list
-  )
-  {
-    T rep;
-    for ( auto& bdd: bdd_list ) {
-      if ( bdd.is_invalid() ) {
-	throw std::invalid_argument{"contains invalid BDD"};
-      }
-      if ( rep._has_valid_mgr() ) {
-	_check_mgr(rep, bdd);
-      }
-      else {
-	rep = bdd;
-      }
-    }
-    return rep;
-  }
+  //////////////////////////////////////////////////////////////////////
+  /// @}
+  //////////////////////////////////////////////////////////////////////
 
 
 public:
@@ -146,6 +125,39 @@ public:
 
   /// @}
   //////////////////////////////////////////////////////////////////////
+
+
+public:
+
+  /// @brief BddBase(の派生クラス)のリストから代表オブジェクトを取り出す．
+  ///
+  /// - T は BddBase の派生クラスでなければならない．
+  /// - bdd_list が空リストの場合は不正値が返される．
+  /// - bdd_list の中の定数ではないオブジェクトを代表オブジェクトとする．
+  /// - bdd_list が不正なBDDを含む場合には std::invalid_argument が送出される．
+  /// - bdd_list が相異なるマネージャのBDDを含んでいる場合には
+  ///   std::invalid_argument が送出される．
+  template<class T>
+  static
+  T
+  rep(
+    const std::vector<T>& bdd_list
+  )
+  {
+    T rep;
+    for ( auto& bdd: bdd_list ) {
+      if ( bdd.is_invalid() ) {
+	throw std::invalid_argument{"contains invalid BDD"};
+      }
+      if ( rep._has_valid_mgr() ) {
+	_check_mgr(rep, bdd);
+      }
+      else {
+	rep = bdd;
+      }
+    }
+    return rep;
+  }
 
 
 protected:

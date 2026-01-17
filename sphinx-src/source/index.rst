@@ -10,6 +10,7 @@ Welcome to ymworks's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   logic
    bn/bn
    py_capi/modules
 

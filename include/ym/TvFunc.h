@@ -20,7 +20,7 @@ BEGIN_NAMESPACE_YM_LOGIC
 
 //////////////////////////////////////////////////////////////////////
 /// @class TvFunc TvFunc.h "ym/TvFunc.h"
-/// @ingroup LogicGroup
+/// @ingroup TvGroup
 /// @brief 真理値表形式で論理関数を表すクラス
 ///
 /// ビットパタンのエンコーディングは以下の通り．

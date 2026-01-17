@@ -22,6 +22,7 @@ BEGIN_NAMESPACE_YM_DD
 
 //////////////////////////////////////////////////////////////////////
 /// @class BddMgr BddMgr.h "ym/BddMgr.h"
+/// @ingroup DdGroup
 /// @brief BDD を管理するためのクラス
 ///
 /// - Bdd の演算は同一の BddMgr に属している Bdd の間でのみ有効

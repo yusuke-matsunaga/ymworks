@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>BN(Boolean Network) &#8212; ymworks 1.0.0 ドキュメント</title>
+    <title>1. 概要 &#8212; ymworks 1.0.0 ドキュメント</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
@@ -15,8 +15,8 @@
     <script src="../_static/translations.js?v=4755f45a"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
-    <link rel="next" title="1. 概要" href="intro.html" />
-    <link rel="prev" title="論理式と論理関数を扱うグループ" href="../logic.html" /> 
+    <link rel="next" title="BnModel" href="classes/bnmodel.html" />
+    <link rel="prev" title="BN(Boolean Network)" href="bn.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
@@ -28,13 +28,14 @@
           <a href="../py-modindex.html" title="Pythonモジュール索引"
              >モジュール</a> |</li>
         <li class="right" >
-          <a href="intro.html" title="1. 概要"
+          <a href="classes/bnmodel.html" title="BnModel"
              accesskey="N">次へ</a> |</li>
         <li class="right" >
-          <a href="../logic.html" title="論理式と論理関数を扱うグループ"
+          <a href="bn.html" title="BN(Boolean Network)"
              accesskey="P">前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">BN(Boolean Network)</a></li> 
+          <li class="nav-item nav-item-1"><a href="bn.html" accesskey="U">BN(Boolean Network)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">1. 概要</a></li> 
       </ul>
     </div>  
 
@@ -43,20 +44,38 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="bn-boolean-network">
-<h1>BN(Boolean Network)<a class="headerlink" href="#bn-boolean-network" title="Link to this heading">¶</a></h1>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">BN(Boolean Network)</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">1. 概要</a></li>
-<li class="toctree-l1"><a class="reference internal" href="classes.html">クラス一覧</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="bnmodel.html">BnModel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bndff.html">BnDff</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bnnode.html">BnNode</a></li>
+  <section id="id1">
+<h1>1. 概要<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>Boolean Network は具体的なセルライブラリに依存しないレベルで
+多段論理回路を表すデータ構造である．
+純粋な意味では組み合わせ論理回路が対象だが，
+抽象的な D-FF を含んだ同期式順序回路を表せるようになっている．
+具体的には <cite>blif</cite> 形式や <cite>iscas89(.bench)</cite> 形式のベンチマーク回路
+の表現に用いることを目的としている．</p>
+<p>Boolean Network は非巡回有向グラフ(DAG)として表される．
+ノード(節点・頂点)は以下の3種類からなる．</p>
+<ul class="simple">
+<li><p>外部入力ノード: 外部入力を表す．入枝を持たない．</p></li>
+<li><p>論理ノード: 論理セル(ゲート)を抽象化したもの．論理関数を持つ．</p></li>
+<li><p>外部出力ノード: 外部出力を表す．ただ一つの入枝をもち，出枝を持たない．</p></li>
 </ul>
-</li>
-</ul>
-</div>
+<p>枝はその両端のノード間に接続があることを示している．
+枝に付加的な属性はないので枝そのものを表すデータ構造は存在しない．</p>
+<p>D-FF を含む回路の場合，上記に加えて D-FF の入力と出力に対応するノード
+を持つ．
+ただし，組み合わせ回路部分だけをみると D-FF の出力ノードは見かけ上，
+外部入力ノードと同じである．
+同様に D-FF の入力ノードは見かけ上，外部出力ノードと同じである．
+そこで，外部入力ノードと D-FF の出力ノードを <cite>入力ノード</cite> とみなす．
+同様に，外部出力ノードと D-FF の入力ノードを <cite>出力ノード</cite> とみなす．</p>
+<p>さらに，外部ノードは一つの入力しかもたないので，
+出力ノードというデータ構造は持たずに，
+出力ノードの入力となっているノードを出力ノードの情報として記憶している．</p>
+<p>外部入力，外部出力，DFF は名前を持つことが可能である．
+ただし，名前は設定された値を保持しているだけなので，
+同じ名前が重複して用いられていてもエラーとはならないので注意．
+通常の <cite>blif</cite> や <cite>iscas89</cite> 形式のファイルを読み込んだ場合には
+そのような異常な状態になることはない．</p>
 </section>
 
 
@@ -68,18 +87,18 @@
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>前のトピックへ</h4>
-    <p class="topless"><a href="../logic.html"
-                          title="前の章へ">論理式と論理関数を扱うグループ</a></p>
+    <p class="topless"><a href="bn.html"
+                          title="前の章へ">BN(Boolean Network)</a></p>
   </div>
   <div>
     <h4>次のトピックへ</h4>
-    <p class="topless"><a href="intro.html"
-                          title="次の章へ">1. 概要</a></p>
+    <p class="topless"><a href="classes/bnmodel.html"
+                          title="次の章へ">BnModel</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/bn/bn.rst.txt"
+      <li><a href="../_sources/bn/intro.rst.txt"
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
@@ -107,13 +126,14 @@
           <a href="../py-modindex.html" title="Pythonモジュール索引"
              >モジュール</a> |</li>
         <li class="right" >
-          <a href="intro.html" title="1. 概要"
+          <a href="classes/bnmodel.html" title="BnModel"
              >次へ</a> |</li>
         <li class="right" >
-          <a href="../logic.html" title="論理式と論理関数を扱うグループ"
+          <a href="bn.html" title="BN(Boolean Network)"
              >前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">BN(Boolean Network)</a></li> 
+          <li class="nav-item nav-item-1"><a href="bn.html" >BN(Boolean Network)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">1. 概要</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
