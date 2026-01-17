@@ -43,5 +43,40 @@ D-FF を含む回路の場合，上記に加えて D-FF の入力と出力に対
 通常の `blif` や `iscas89` 形式のファイルを読み込んだ場合には
 そのような異常な状態になることはない．
 
+2. クラス一覧
+~~~~~~~~~~~~
+
+2.1 BnModel
+^^^^^^^^^^^^
 .. doxygenclass:: BnModel
+   :members:
+
+2.2 BnDff
+^^^^^^^^^^
+.. doxygenclass:: BnDff
+   :members:
+
+2.3 BnNode
+^^^^^^^^^^^
+.. doxygenclass:: BnNode
+   :members:
+
+2.4 BnFunc
+^^^^^^^^^^^
+.. doxygenclass:: BnFunc
+   :members:
+
+2.5 BnNodeList
+^^^^^^^^^^^^^^^
+.. doxygenclass:: BnNodeList
+   :members:
+
+2.5.1 BnNodeIter
+^^^^^^^^^^^^^^^^^
+.. doxygenclass:: BnNodeIter
+   :members:
+
+2.5.2 BnNodeIter2
+^^^^^^^^^^^^^^^^^^
+.. doxygenclass:: BnNodeIter2
    :members:

@@ -5,20 +5,21 @@
 # ===================================================================
 
 if (DOXYGEN_FOUND)
-  # doxygen の対象となるヘッダファイル(のパタン)を YM_DOXY_SRCS に入れる．
-  set ( YM_DOXY_SRCS
+  # doxygen の対象となるヘッダファイル(のパタン)を YM_DOXY_DIRS に入れる．
+  set ( YM_DOXY_DIRS
     "${PROJECT_BINARY_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/../include"
     "${CMAKE_CURRENT_SOURCE_DIR}/../py_capi/include"
     )
 
-  # YM_DOXY_SRCS の内容を空白で区切られた文字列に変換する．
+  # YM_DOXY_DIRS の内容を空白で区切られた文字列に変換する．
   set ( YM_DOXY_INPUTS "" )
-  foreach ( _ym_arg ${YM_DOXY_SRCS} )
+  foreach ( _ym_arg ${YM_DOXY_DIRS} )
     set ( YM_DOXY_INPUTS "${YM_DOXY_INPUTS} ${_ym_arg}" )
   endforeach ()
   set ( YM_DOXY_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR})
-  set ( YM_DOXY_INDEX_FILE ${YM_DOXY_OUTPUT_DIR}/xml/index.xml )
+  set ( YM_DOXY_HTML_FILE ${YM_DOXY_OUTPUT_DIR}/html/index.html )
+  set ( YM_DOXY_XML_FILE ${YM_DOXY_OUTPUT_DIR}/xml/index.xml )
   set ( YM_DOXYFILE ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile )
 
   # Doxyfile の生成
@@ -29,11 +30,15 @@ if (DOXYGEN_FOUND)
     )
 
   # 対象のヘッダーファイル
-  file ( GLOB_RECURSE PUBLIC_HEADERS ${YM_DOXY_SRCS} )
+  set ( YM_DOXY_SRCS  )
+  foreach ( _ym_arg ${YM_DOXY_DIRS} )
+    file ( GLOB_RECURSE _ym_headers "${_ym_arg}/*.h" )
+    list ( APPEND YM_DOXY_SRCS ${_ym_headers} )
+  endforeach()
 
   # doxygen 用ターゲット
   add_custom_target(Doxygen ALL
-    DEPENDS ${YM_DOXY_INDEX_FILE}
+    DEPENDS ${YM_DOXY_HTML_FILE} ${YM_DOXY_XML_FILE}
     )
 
   cmake_policy( SET CMP0058 NEW )
@@ -41,10 +46,10 @@ if (DOXYGEN_FOUND)
   # doxygen 起動ルール
   add_custom_command(
     COMMAND "${DOXYGEN_EXECUTABLE}" ${YM_DOXYFILE} ">" "doxygen.log"
-    MAIN_DEPENDENCY ${YM_DOXYFILE}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS ${PUBLIC_HEADERS}
-    OUTPUT ${YM_DOXY_INDEX_FILE}
+    DEPENDS ${YM_DOXYFILE}
+    DEPENDS ${YM_DOXY_SRCS}
+    OUTPUT ${YM_DOXY_HTML_FILE} ${YM_DOXY_XML_FILE}
     COMMENT "generating doxygen documents"
     )
 
