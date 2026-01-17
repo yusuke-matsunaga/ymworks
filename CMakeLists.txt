@@ -22,7 +22,7 @@ set ( YM_NSNAME "nsYm" )
 
 ym_init_readline ()
 find_package(BISON 3.0.4 REQUIRED)
-
+ym_init_doxygen ()
 
 # ===================================================================
 # ヘッダファイルの生成
@@ -58,6 +58,7 @@ if ( Python3_FOUND )
   add_subdirectory( py_capi )
 endif ()
 add_subdirectory ( dox-src )
+add_subdirectory ( sphinx-src )
 
 
 # ===================================================================

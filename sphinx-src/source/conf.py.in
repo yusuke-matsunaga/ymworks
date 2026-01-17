@@ -31,7 +31,7 @@ extensions = [
 ]
 
 breathe_projects = {
-    "ymworks": "/home/yusuke/var/build/ymw-test/ymworks/sphinx-src/../dox-src/xml"
+    "ymworks": "@YM_DOX_XML_DIR@/xml"
 }
 
 breathe_default_project = "ymworks"

@@ -14,9 +14,6 @@ Welcome to ymworks's documentation!
    bn/bn
    py_capi/modules
 
-.. doxygenindex::
-
-
 
 Indices and tables
 ==================
