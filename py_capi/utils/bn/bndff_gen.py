@@ -34,14 +34,6 @@ class BnDffGen(PyObjGen):
                       getter_name='get_id',
                       doc_str="ID")
 
-        def get_name(writer):
-            writer.gen_return_py_string('val.name()')
-        self.add_getter('get_name',
-                        func_body=get_name)
-        self.add_attr('name',
-                      getter_name='get_name',
-                      doc_str="name")
-
         def get_output(writer):
             writer.gen_return_pyobject('PyBnNode', 'val.output()')
         self.add_getter('get_output',

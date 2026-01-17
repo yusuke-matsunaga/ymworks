@@ -126,7 +126,7 @@ TEST( BnModelTest, new_dff)
 
   ASSERT_TRUE( dff.is_valid() );
   EXPECT_EQ( dff_id, dff.id() );
-  EXPECT_EQ( name, dff.name() );
+  EXPECT_EQ( name, model.dff_name(dff_id) );
   EXPECT_EQ( reset_val, reset_val );
 
   auto node = dff.output();

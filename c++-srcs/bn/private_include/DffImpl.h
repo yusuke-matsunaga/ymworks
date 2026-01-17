@@ -32,13 +32,11 @@ public:
   DffImpl(
     const ModelImpl* model, ///< [in] 親のモデル
     SizeType id,            ///< [in] ID番号
-    std::string name,       ///< [in] 名前
     const NodeImpl* output, ///< [in] 出力のノード番号
     const NodeImpl* src,    ///< [in] 入力のノード番号
     char reset_val          ///< [in] リセット値 ('X', '0', '1')
   ) : ImplBase(model),
       mId{id},
-      mName{name},
       mOutput{output},
       mSrc{src},
       mResetVal{reset_val}
@@ -59,13 +57,6 @@ public:
   id() const
   {
     return mId;
-  }
-
-  /// @brief 名前を返す．
-  const std::string&
-  name() const
-  {
-    return mName;
   }
 
   /// @brief 出力のノードを返す．
@@ -97,9 +88,6 @@ private:
 
   // ID番号
   SizeType mId;
-
-  // 名前
-  std::string mName;
 
   // 出力のノード
   const NodeImpl* mOutput;

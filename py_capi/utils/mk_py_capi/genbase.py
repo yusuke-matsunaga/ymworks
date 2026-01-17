@@ -123,7 +123,7 @@ class PatGen:
     """
     def __init__(self, pat, gen):
         self.__gen = gen
-        self.__pat = re.compile(f'^(\s*){pat}$')
+        self.__pat = re.compile(f'^(\\s*){pat}$')
 
     def __call__(self, line, writer):
         result = self.__pat.match(line)

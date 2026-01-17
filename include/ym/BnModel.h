@@ -347,6 +347,27 @@ public:
     const std::string& comment ///< [in] コメント
   );
 
+  /// @brief 入力名をセットする．
+  void
+  set_input_name(
+    SizeType input_id,      ///< [in] 入力番号 ( 0 <= input_id < input_num() )
+    const std::string& name ///< [in] 名前
+  );
+
+  /// @brief 出力名をセットする．
+  void
+  set_output_name(
+    SizeType output_id,      ///< [in] 出力番号 ( 0 <= output_id < output_num() )
+    const std::string& name  ///< [in] 名前
+  );
+
+  /// @brief DFF名をセットする．
+  void
+  set_dff_name(
+    SizeType dff_id,        ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
+    const std::string& name ///< [in] 名前
+  );
+
   /// @}
   //////////////////////////////////////////////////////////////////////
 

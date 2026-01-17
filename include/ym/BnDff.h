@@ -21,7 +21,6 @@ class DffImpl;
 ///
 /// 以下の情報を持つ．
 /// - ID番号
-/// - 名前
 /// - 出力のノード
 /// - 入力のノード
 /// - リセット値
@@ -85,10 +84,6 @@ public:
   /// @brief ノード番号を返す．
   SizeType
   id() const;
-
-  /// @brief 名前を返す．
-  const std::string&
-  name() const;
 
   /// @brief 出力ノードを返す．
   BnNode

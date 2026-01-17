@@ -51,7 +51,7 @@ Bn2Aig::Bn2Aig(
   }
   // DFF出力をコピーする．
   for ( auto bn_dff: model.dff_list() ) {
-    auto name = bn_dff.name();
+    auto name = model.dff_name(bn_dff.id());
     auto dff_id = mgr.new_dff(name);
     auto aig = mgr.dff_output(dff_id);
     mAigMap.emplace(bn_dff.output().id(), aig);

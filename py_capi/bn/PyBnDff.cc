@@ -64,24 +64,6 @@ get_id(
 }
 
 PyObject*
-get_name(
-  PyObject* self,
-  void* Py_UNUSED(closure)
-)
-{
-  auto& val = PyBnDff::_get_ref(self);
-  try {
-    return PyString::ToPyObject(val.name());
-  }
-  catch ( std::exception err ) {
-    std::ostringstream buf;
-    buf << "exception" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
-PyObject*
 get_output(
   PyObject* self,
   void* Py_UNUSED(closure)
@@ -138,7 +120,6 @@ get_reset_val(
 // getter/setter定義
 PyGetSetDef getsets[] = {
   {"id", get_id, nullptr, PyDoc_STR("ID"), nullptr},
-  {"name", get_name, nullptr, PyDoc_STR("name"), nullptr},
   {"output", get_output, nullptr, PyDoc_STR("output node"), nullptr},
   {"input", get_input, nullptr, PyDoc_STR("input node"), nullptr},
   {"reset_val", get_reset_val, nullptr, PyDoc_STR("reset value"), nullptr},

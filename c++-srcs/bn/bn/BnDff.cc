@@ -67,14 +67,6 @@ BnDff::id() const
   return dff.id();
 }
 
-// @brief 名前を返す．
-const std::string&
-BnDff::name() const
-{
-  auto& dff = _dff_impl();
-  return dff.name();
-}
-
 // @brief 出力ノードを返す．
 BnNode
 BnDff::output() const

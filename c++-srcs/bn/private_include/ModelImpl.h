@@ -104,7 +104,11 @@ public:
     SizeType dff_id ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
   ) const
   {
-    return dff_impl(dff_id)->name();
+    auto key = dff_key(dff_id);
+    if ( mSymbolDict.count(key) > 0 ) {
+      return mSymbolDict.at(key);
+    }
+    return {};
   }
 
   /// @brief DFFのリストを返す．
@@ -161,10 +165,9 @@ public:
     SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < input_num() )
   ) const
   {
-    _check_input_id(input_id, "input_name");
-    auto node = mInputList[input_id];
-    if ( mNameDict.count(node->id()) > 0 ) {
-      return mNameDict.at(node->id());
+    auto key = input_key(input_id);
+    if ( mSymbolDict.count(key) > 0 ) {
+      return mSymbolDict.at(key);
     }
     return {};
   }
@@ -199,8 +202,11 @@ public:
     SizeType output_id ///< [in] 出力番号 ( 0 <= output_id < output_num() )
   ) const
   {
-    _check_output_id(output_id, "output_name");
-    return mOutputNameList[output_id];
+    auto key = output_key(output_id);
+    if ( mSymbolDict.count(key) > 0 ) {
+      return mSymbolDict.at(key);
+    }
+    return {};
   }
 
   /// @brief 出力のノードのリストを返す．
@@ -311,9 +317,8 @@ public:
     const std::string& name ///< [in] 名前
   )
   {
-    _check_input_id(input_id, "set_input_name");
-    auto node = mInputList[input_id];
-    mNameDict.emplace(node->id(), name);
+    auto key = input_key(input_id);
+    mSymbolDict[key] = name;
   }
 
   /// @brief 出力名をセットする．
@@ -323,8 +328,8 @@ public:
     const std::string& name  ///< [in] 名前
   )
   {
-    _check_output_id(output_id, "set_output_id");
-    mOutputNameList[output_id] = name;
+    auto key = output_key(output_id);
+    mSymbolDict[key] = name;
   }
 
   /// @brief DFF名をセットする．
@@ -334,8 +339,8 @@ public:
     const std::string& name ///< [in] 名前
   )
   {
-    _check_dff_id(dff_id, "set_dff_name");
-    mDffArray[dff_id]->mName = name;
+    auto key = dff_key(dff_id);
+    mSymbolDict[key] = name;
   }
 
   /// @brief DFFの入力のノード番号をセットする．
@@ -358,9 +363,12 @@ public:
   )
   {
     auto id = mDffArray.size();
-    auto dff = new DffImpl(this, id, name, nullptr, nullptr, reset_val);
+    auto dff = new DffImpl(this, id, nullptr, nullptr, reset_val);
     mDffArray.push_back(std::unique_ptr<DffImpl>{dff});
     mDffList.push_back(dff);
+    if ( name != std::string{} ) {
+      set_dff_name(id, name);
+    }
     return id;
   }
 
@@ -467,11 +475,44 @@ private:
     return node;
   }
 
-  /// @brief print() 中でノード名を出力する関数
+  /// @brief mSymbolDict 用の入力名のキーを返す．
   std::string
-  node_name(
-    const NodeImpl* node ///< [in] ノード
-  ) const;
+  input_key(
+    SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < input_num() )
+  ) const
+  {
+    _check_input_id(input_id, "input_key");
+    std::ostringstream buf;
+    buf << "i" << input_id;
+    auto key = buf.str();
+    return key;
+  }
+
+  /// @brief mSymbolDict 用の出力名のキーを返す．
+  std::string
+  output_key(
+    SizeType output_id ///< [in] 出力番号 ( 0 <= output_id < output_num() )
+  ) const
+  {
+    _check_output_id(output_id, "set_output_id");
+    std::ostringstream buf;
+    buf << "o" << output_id;
+    auto key = buf.str();
+    return key;
+  }
+
+  /// @brief mSymbolDict 用のDFF名のキーを返す．
+  std::string
+  dff_key(
+    SizeType dff_id ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
+  ) const
+  {
+    _check_dff_id(dff_id, "set_dff_name");
+    std::ostringstream buf;
+    buf << "q" << dff_id;
+    auto key = buf.str();
+    return key;
+  }
 
   /// @brief 入力番号をチェックする．
   void
@@ -558,17 +599,14 @@ private:
   mutable
   SizeType mRefCount{0};
 
-  // ノード番号と名前を表す構造体
-  struct NodeInfo {
-    std::string name; ///< 名前
-    SizeType id;      ///< ノード番号
-  };
-
   // 名前
   std::string mName;
 
   // コメントのりスト
   std::vector<std::string> mCommentList;
+
+  // シンボル名の辞書
+  std::unordered_map<std::string, std::string> mSymbolDict;
 
   // NodeImplの配列
   // NodeImpl の所有権を持つ．
@@ -585,9 +623,6 @@ private:
   // 厳密には出力の入力となっているノードのリスト
   std::vector<const NodeImpl*> mOutputList;
 
-  // 出力名のりスト
-  std::vector<std::string> mOutputNameList;
-
   // DFF情報の配列
   // DffImpl の所有権を持つ．
   std::vector<std::unique_ptr<DffImpl>> mDffArray;
@@ -598,9 +633,6 @@ private:
 
   // 論理ノードのリスト
   std::vector<const NodeImpl*> mLogicList;
-
-  // ノード番号をキーにしてノード名を記録する辞書
-  std::unordered_map<SizeType, std::string> mNameDict;
 
   // 関数情報のマネージャ
   FuncMgr mFuncMgr;

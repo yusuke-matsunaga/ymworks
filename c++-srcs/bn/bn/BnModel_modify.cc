@@ -25,7 +25,8 @@ BnModel::set_option(
   const JsonValue& option
 )
 {
-  _model_impl().set_option(option);
+  auto& model = _model_impl();
+  model.set_option(option);
 }
 
 // @brief 名前を設定する．
@@ -34,7 +35,8 @@ BnModel::set_name(
   const std::string& name
 )
 {
-  _model_impl().set_name(name);
+  auto& model = _model_impl();
+  model.set_name(name);
 }
 
 // @brief コメントを追加する．
@@ -43,7 +45,41 @@ BnModel::add_comment(
   const std::string& comment
 )
 {
-  _model_impl().add_comment(comment);
+  auto& model = _model_impl();
+  model.add_comment(comment);
+}
+
+// @brief 入力名をセットする．
+void
+BnModel::set_input_name(
+  SizeType input_id,
+  const std::string& name
+)
+{
+  auto& model = _model_impl();
+  model.set_input_name(input_id, name);
+}
+
+// @brief 出力名をセットする．
+void
+BnModel::set_output_name(
+  SizeType output_id,
+  const std::string& name
+)
+{
+  auto& model = _model_impl();
+  model.set_output_name(output_id, name);
+}
+
+// @brief DFF名をセットする．
+void
+BnModel::set_dff_name(
+  SizeType dff_id,
+  const std::string& name
+)
+{
+  auto& model = _model_impl();
+  model.set_dff_name(dff_id, name);
 }
 
 // @brief DFFを作る．
@@ -53,9 +89,10 @@ BnModel::new_dff(
   char reset_val
 )
 {
-  auto dff_id = _model_impl().new_dff(name, reset_val);
-  _model_impl().new_dff_output(dff_id);
-  auto dff = _model_impl().dff_impl(dff_id);
+  auto& model = _model_impl();
+  auto dff_id = model.new_dff(name, reset_val);
+  model.new_dff_output(dff_id);
+  auto dff = model.dff_impl(dff_id);
   return BnDff(dff);
 }
 
@@ -66,7 +103,8 @@ BnModel::set_dff_src(
   BnNode src
 )
 {
-  _model_impl().set_dff_src(dff.id(), src.mPtr);
+  auto& model = _model_impl();
+  model.set_dff_src(dff.id(), src.mPtr);
 }
 
 // @brief 入力ノードを作る．
@@ -75,7 +113,8 @@ BnModel::new_input(
   const std::string& name
 )
 {
-  auto node = _model_impl().new_input(name);
+  auto& model = _model_impl();
+  auto node = model.new_input(name);
   return node;
 }
 
@@ -86,7 +125,8 @@ BnModel::new_output(
   const std::string& name
 )
 {
-  auto oid = _model_impl().new_output(src.mPtr, name);
+  auto& model = _model_impl();
+  auto oid = model.new_output(src.mPtr, name);
   return oid;
 }
 
@@ -97,10 +137,11 @@ BnModel::new_primitive(
   const std::vector<BnNode>& fanin_list
 )
 {
+  auto& model = _model_impl();
   auto input_num = fanin_list.size();
-  auto func = _model_impl().reg_primitive(input_num, primitive_type);
+  auto func = model.reg_primitive(input_num, primitive_type);
   auto ptr_list = make_ptr_list(fanin_list);
-  auto node = _model_impl().new_logic(func, ptr_list);
+  auto node = model.new_logic(func, ptr_list);
   return BnNode(node);
 }
 
@@ -115,9 +156,10 @@ BnModel::new_cover(
   if ( input_cover.variable_num() != fanin_list.size() ) {
     throw std::invalid_argument{"input_cover.variable_num() != fanin_list.size()"};
   }
-  auto func = _model_impl().reg_cover(input_cover, output_inv);
+  auto& model = _model_impl();
+  auto func = model.reg_cover(input_cover, output_inv);
   auto ptr_list = make_ptr_list(fanin_list);
-  auto node = _model_impl().new_logic(func, ptr_list);
+  auto node = model.new_logic(func, ptr_list);
   return BnNode(node);
 }
 
@@ -131,9 +173,10 @@ BnModel::new_expr(
   if ( expr.input_size() != fanin_list.size() ) {
     throw std::invalid_argument{"expr.input_size() != fanin_list.size()"};
   }
-  auto func = _model_impl().reg_expr(expr);
+  auto& model = _model_impl();
+  auto func = model.reg_expr(expr);
   auto ptr_list = make_ptr_list(fanin_list);
-  auto node = _model_impl().new_logic(func, ptr_list);
+  auto node = model.new_logic(func, ptr_list);
   return BnNode(node);
 }
 
@@ -147,9 +190,10 @@ BnModel::new_tvfunc(
   if ( tvfunc.input_num() != fanin_list.size() ) {
     throw std::invalid_argument{"func.input_num() != fanin_list.size()"};
   }
-  auto func = _model_impl().reg_tvfunc(tvfunc);
+  auto& model = _model_impl();
+  auto func = model.reg_tvfunc(tvfunc);
   auto ptr_list = make_ptr_list(fanin_list);
-  auto node = _model_impl().new_logic(func, ptr_list);
+  auto node = model.new_logic(func, ptr_list);
   return BnNode(node);
 }
 
@@ -163,9 +207,10 @@ BnModel::new_bdd(
   if ( bdd.support_size() != fanin_list.size() ) {
     throw std::invalid_argument{"bdd.support_size() != fanin_list.size()"};
   }
-  auto func = _model_impl().reg_bdd(bdd);
+  auto& model = _model_impl();
+  auto func = model.reg_bdd(bdd);
   auto ptr_list = make_ptr_list(fanin_list);
-  auto node = _model_impl().new_logic(func, ptr_list);
+  auto node = model.new_logic(func, ptr_list);
   return BnNode(node);
 }
 
