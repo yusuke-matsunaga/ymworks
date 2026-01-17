@@ -23,6 +23,7 @@ BEGIN_NAMESPACE_YM_BN
 class ModelImpl;
 
 //////////////////////////////////////////////////////////////////////
+/// @ingroup BnGroup
 /// @class BnModel BnModel.h "BnModel.h"
 /// @brief Boolean Network を表すクラス
 ///

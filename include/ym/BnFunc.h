@@ -19,6 +19,7 @@ BEGIN_NAMESPACE_YM_BN
 class FuncImpl;
 
 //////////////////////////////////////////////////////////////////////
+/// @ingroup BnGroup
 /// @class BnFunc BnFunc.h "BnFunc.h"
 /// @brief BnModel に登録された関数情報を表すクラス
 ///

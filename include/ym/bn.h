@@ -7,6 +7,8 @@
 ///
 /// Copyright (C) 2023 Yusuke Matsunaga
 /// All rights reserved.
+///
+/// @defgroup BnGroup Boolean Network
 
 #include "ym_config.h"
 
@@ -29,9 +31,6 @@ END_NAMESPACE_YM
 
 
 BEGIN_NAMESPACE_YM_BN
-
-/// @brief 不正なノード番号
-const SizeType BAD_ID = -1;
 
 //////////////////////////////////////////////////////////////////////
 // クラスの先行宣言

@@ -743,7 +743,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6AigMgr13new_primitiveE8PrimTypeRKNSt6vectorI10AigLiteralEE">
 <span id="_CPPv3N6AigMgr13new_primitiveE8PrimTypeRKNSt6vectorI10AigLiteralEE"></span><span id="_CPPv2N6AigMgr13new_primitiveE8PrimTypeRKNSt6vectorI10AigLiteralEE"></span><span id="AigMgr::new_primitive__PrimType.std::vector:AigLiteral:CR"></span><span class="target" id="da/d73/classAigMgr_1a454fedf47d5d9c8f640a1faeec3df359"></span><a class="reference internal" href="#_CPPv410AigLiteral" title="AigLiteral"><span class="n"><span class="pre">AigLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_primitive</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48PrimType" title="PrimType"><span class="n"><span class="pre">PrimType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv410AigLiteral" title="AigLiteral"><span class="n"><span class="pre">AigLiteral</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fanin_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6AigMgr13new_primitiveE8PrimTypeRKNSt6vectorI10AigLiteralEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p><a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> の演算を行う． </p>
+<dd><p><a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> の演算を行う． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -7915,7 +7915,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dd><div class="docutils container">
 <em>#include &quot;<a class="reference internal" href="#df/d35/BnDffList_8h"><span class="std std-ref">BnDffList.h</span></a>&quot;</em></div>
 <p><a class="reference internal" href="#d9/dcb/classBnDff"><span class="std std-ref">BnDff</span></a> のリスト </p>
-<p>意味的には std::vector&lt;BnDff&gt; と同様に <a class="reference internal" href="#d9/dcb/classBnDff"><span class="std std-ref">BnDff</span></a> のリストを表すが， こちらのほうが効率がよい． ただし，内容を変更することはできない． <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> が持っているノードのリストの情報を表すために用いられる． </p>
+<p>意味的には std::vector&lt;BnDff&gt; と同様に <a class="reference internal" href="#d9/dcb/classBnDff"><span class="std std-ref">BnDff</span></a> のリストを表すが， こちらのほうが効率がよい． ただし，内容を変更することはできない． <a class="reference internal" href="#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> が持っているDFFのリストの情報を表すために用いられる． </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
@@ -8022,7 +8022,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <p>共通の属性として入力数を持つ．</p>
 <p>以下のタイプがある．</p>
 <p><ul class="simple">
-<li><p>プリミティブ型(PRIMITIVE) <a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を持つ． 同じ型でも入力数が異なれば別の関数と考える．</p></li>
+<li><p>プリミティブ型(PRIMITIVE) <a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を持つ． 同じ型でも入力数が異なれば別の関数と考える．</p></li>
 <li><p>カバー型(COVER) <a class="reference internal" href="#da/d04/classSopCover"><span class="std std-ref">SopCover</span></a> と出力の反転属性を持つ．</p></li>
 <li><p>論理式型(EXPR) <a class="reference internal" href="#d0/d92/classExpr"><span class="std std-ref">Expr</span></a> を持つ．</p></li>
 <li><p>真理値表型(TVFUNC) <a class="reference internal" href="#d4/d6d/classTvFunc"><span class="std std-ref">TvFunc</span></a> を持つ．</p></li>
@@ -15919,7 +15919,7 @@ for ( CombiGen cg(n, k); !cg.is_end(); ++ cg )
 <span id="_CPPv3N10PyPrimType4ConvE"></span><span id="_CPPv2N10PyPrimType4ConvE"></span><span id="PyPrimType::Conv"></span><span class="target" id="d3/d90/structPyPrimType_1_1Conv"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Conv</span></span></span><a class="headerlink" href="#_CPPv4N10PyPrimType4ConvE" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="docutils container">
 <em>#include &lt;<a class="reference internal" href="#d8/d70/PyPrimType_8h"><span class="std std-ref">PyPrimType.h</span></a>&gt;</em></div>
-<p><a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を PyObject* に変換するファンクタクラス </p>
+<p><a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を PyObject* に変換するファンクタクラス </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -17876,7 +17876,7 @@ for ( CombiGen cg(n, k); !cg.is_end(); ++ cg )
 <span id="_CPPv3N10PyPrimType6DeconvE"></span><span id="_CPPv2N10PyPrimType6DeconvE"></span><span id="PyPrimType::Deconv"></span><span class="target" id="db/ded/structPyPrimType_1_1Deconv"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Deconv</span></span></span><a class="headerlink" href="#_CPPv4N10PyPrimType6DeconvE" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="docutils container">
 <em>#include &lt;<a class="reference internal" href="#d8/d70/PyPrimType_8h"><span class="std std-ref">PyPrimType.h</span></a>&gt;</em></div>
-<p>PyObject* から <a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を取り出すファンクタクラス </p>
+<p>PyObject* から <a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を取り出すファンクタクラス </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -19477,7 +19477,7 @@ varmap に登録されていない場合には不変とする． </p>
 <dt class="sig sig-object cpp" id="_CPPv4NK4Expr7analyzeEv">
 <span id="_CPPv3NK4Expr7analyzeEv"></span><span id="_CPPv2NK4Expr7analyzeEv"></span><span id="Expr::analyzeC"></span><span class="target" id="d0/d92/classExpr_1a54e9eee3d54a3de6e05c1dbc6a70ab1c"></span><a class="reference internal" href="#_CPPv48PrimType" title="PrimType"><span class="n"><span class="pre">PrimType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">analyze</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK4Expr7analyzeEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>組み込み型のチェック </p>
-<p>組み込み型出ない場合は <a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da6adf97f83acf6453d4a6a4b1070f3754"><span class="std std-ref">PrimType::None</span></a> を返す． </p>
+<p>組み込み型出ない場合は <a class="reference internal" href="#df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da6adf97f83acf6453d4a6a4b1070f3754"><span class="std std-ref">PrimType::None</span></a> を返す． </p>
 </dd></dl>
 
 </div>
@@ -37138,7 +37138,7 @@ Check(obj) == true であると仮定している． </p>
 <span id="_CPPv310PyPrimType"></span><span id="_CPPv210PyPrimType"></span><span id="PyPrimType"></span><span class="target" id="dd/d7d/classPyPrimType"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyPrimType</span></span></span><a class="headerlink" href="#_CPPv410PyPrimType" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="docutils container">
 <em>#include &quot;<a class="reference internal" href="#d8/d70/PyPrimType_8h"><span class="std std-ref">PyPrimType.h</span></a>&quot;</em></div>
-<p><a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を Python から使用するための拡張 </p>
+<p><a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を Python から使用するための拡張 </p>
 <p>実際には static メンバ関数しか持たないのでクラスではない． </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
@@ -37167,7 +37167,7 @@ Check(obj) == true であると仮定している． </p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N10PyPrimType10ToPyObjectERK8ElemType">
 <span id="_CPPv3N10PyPrimType10ToPyObjectERK8ElemType"></span><span id="_CPPv2N10PyPrimType10ToPyObjectERK8ElemType"></span><span id="PyPrimType::ToPyObject__ElemTypeCR"></span><span class="target" id="dd/d7d/classPyPrimType_1a21f495d463784eebc7ae35df1eb29e94"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">PyObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">ToPyObject</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N10PyPrimType8ElemTypeE" title="PyPrimType::ElemType"><span class="n"><span class="pre">ElemType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10PyPrimType10ToPyObjectERK8ElemType" title="Link to this definition">¶</a><br /></dt>
-<dd><p><a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を表す PyObject を作る． </p>
+<dd><p><a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を表す PyObject を作る． </p>
 <p>
 返り値は新しい参照が返される． </p>
 <dl class="field-list simple">
@@ -37183,7 +37183,7 @@ Check(obj) == true であると仮定している． </p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N10PyPrimType12FromPyObjectEP8PyObjectR8ElemType">
 <span id="_CPPv3N10PyPrimType12FromPyObjectEP8PyObjectR8ElemType"></span><span id="_CPPv2N10PyPrimType12FromPyObjectEP8PyObjectR8ElemType"></span><span id="PyPrimType::FromPyObject__PyObjectP.ElemTypeR"></span><span class="target" id="dd/d7d/classPyPrimType_1ae1ee84be25d3a130ad80aa0687006be0"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromPyObject</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PyObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">obj</span></span>, <a class="reference internal" href="#_CPPv4N10PyPrimType8ElemTypeE" title="PyPrimType::ElemType"><span class="n"><span class="pre">ElemType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10PyPrimType12FromPyObjectEP8PyObjectR8ElemType" title="Link to this definition">¶</a><br /></dt>
-<dd><p>PyObject から <a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を取り出す． </p>
+<dd><p>PyObject から <a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を取り出す． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -37200,7 +37200,7 @@ Check(obj) == true であると仮定している． </p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N10PyPrimType5CheckEP8PyObject">
 <span id="_CPPv3N10PyPrimType5CheckEP8PyObject"></span><span id="_CPPv2N10PyPrimType5CheckEP8PyObject"></span><span id="PyPrimType::Check__PyObjectP"></span><span class="target" id="dd/d7d/classPyPrimType_1abed75a20b58191469f87c6029bf63f48"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Check</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PyObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10PyPrimType5CheckEP8PyObject" title="Link to this definition">¶</a><br /></dt>
-<dd><p>PyObject が <a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> タイプか調べる． </p>
+<dd><p>PyObject が <a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> タイプか調べる． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>obj</strong> -- [in] 対象の PyObject </p>
@@ -37211,7 +37211,7 @@ Check(obj) == true であると仮定している． </p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N10PyPrimType3GetEP8PyObject">
 <span id="_CPPv3N10PyPrimType3GetEP8PyObject"></span><span id="_CPPv2N10PyPrimType3GetEP8PyObject"></span><span id="PyPrimType::Get__PyObjectP"></span><span class="target" id="dd/d7d/classPyPrimType_1aebf0efb90deeb3a181fe06fcd163d2bd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N10PyPrimType8ElemTypeE" title="PyPrimType::ElemType"><span class="n"><span class="pre">ElemType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Get</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PyObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10PyPrimType3GetEP8PyObject" title="Link to this definition">¶</a><br /></dt>
-<dd><p>PyObject から <a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を取り出す． </p>
+<dd><p>PyObject から <a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を取り出す． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>obj</strong> -- [in] 対象の Python オブジェクト </p>
@@ -37222,7 +37222,7 @@ Check(obj) == true であると仮定している． </p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N10PyPrimType8_get_refEP8PyObject">
 <span id="_CPPv3N10PyPrimType8_get_refEP8PyObject"></span><span id="_CPPv2N10PyPrimType8_get_refEP8PyObject"></span><span id="PyPrimType::_get_ref__PyObjectP"></span><span class="target" id="dd/d7d/classPyPrimType_1a1407478452cff6ba0b0b5cb4cf1fa252"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N10PyPrimType8ElemTypeE" title="PyPrimType::ElemType"><span class="n"><span class="pre">ElemType</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">_get_ref</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PyObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">obj</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10PyPrimType8_get_refEP8PyObject" title="Link to this definition">¶</a><br /></dt>
-<dd><p><a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を表す PyObject から <a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を取り出す． </p>
+<dd><p><a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を表す PyObject から <a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を取り出す． </p>
 <p>
 Check(obj) == true であると仮定している． </p>
 <dl class="field-list simple">
@@ -37230,7 +37230,7 @@ Check(obj) == true であると仮定している． </p>
 <dd class="field-odd"><p><strong>obj</strong> -- [in] 変換元の PyObject </p>
 </dd>
 <dt class="field-even">戻り値<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を返す．</p>
+<dd class="field-even"><p><a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を返す．</p>
 </dd>
 </dl>
 </dd></dl>
@@ -37238,7 +37238,7 @@ Check(obj) == true であると仮定している． </p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N10PyPrimType11_typeobjectEv">
 <span id="_CPPv3N10PyPrimType11_typeobjectEv"></span><span id="_CPPv2N10PyPrimType11_typeobjectEv"></span><span id="PyPrimType::_typeobject"></span><span class="target" id="dd/d7d/classPyPrimType_1ac52f628aba238169b5e5f0cbc7bcb1a5"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">PyTypeObject</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">_typeobject</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10PyPrimType11_typeobjectEv" title="Link to this definition">¶</a><br /></dt>
-<dd><p><a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を表すオブジェクトの型定義を返す． </p>
+<dd><p><a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> を表すオブジェクトの型定義を返す． </p>
 </dd></dl>
 
 </div>
@@ -48816,7 +48816,7 @@ src1 と入力数が異なるときは std::invalid_argument 例外が送出さ�
 <dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc7analyzeEv">
 <span id="_CPPv3NK6TvFunc7analyzeEv"></span><span id="_CPPv2NK6TvFunc7analyzeEv"></span><span id="TvFunc::analyzeC"></span><span class="target" id="d4/d6d/classTvFunc_1aa323195e8bc6200abe70c01c3369f43d"></span><a class="reference internal" href="#_CPPv48PrimType" title="PrimType"><span class="n"><span class="pre">PrimType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">analyze</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc7analyzeEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>組み込み型のチェック </p>
-<p>組み込み型出ない場合は <a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da6adf97f83acf6453d4a6a4b1070f3754"><span class="std std-ref">PrimType::None</span></a> を返す． </p>
+<p>組み込み型出ない場合は <a class="reference internal" href="#df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da6adf97f83acf6453d4a6a4b1070f3754"><span class="std std-ref">PrimType::None</span></a> を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -63909,15 +63909,6 @@ Copyright (C) 2025 Yusuke Matsunaga All rights reserved. <dl class="simple">
 </dd></dl>
 
 </div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp">
-<span class="target" id="d1/daf/include_2ym_2bn_8h_1a52c8be53a0a7b7d7cb6a7a89118fde77"></span><span class="sig-name descname"><span class="pre">BEGIN_NAMESPACE_YM_BN</span> <span class="pre">const</span> <span class="pre">SizeType</span> <span class="pre">BAD_ID</span>&#160;&#160; <span class="pre">=</span> <span class="pre">-1</span></span></dt>
-<dd><p>不正なノード番号 </p>
-</dd></dl>
-
-</div>
 </dd></dl>
 
 <dl>
@@ -66416,89 +66407,13 @@ Copyright (C) 2025 Yusuke Matsunaga All rights reserved. <dl class="simple">
 <span class="target" id="d5/d2e/PrimType_8h"></span><em><span class="pre">file</span></em> <span class="sig-name descname"><span class="pre">PrimType.h</span></span></dt>
 <dd><div class="docutils container">
 <em>#include &quot;<a class="reference internal" href="#df/d2e/ym__config_8h"><span class="std std-ref">ym_config.h</span></a>&quot;</em></div>
-<p><a class="reference internal" href="#d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> の定義ファイル </p>
+<p><a class="reference internal" href="#df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"><span class="std std-ref">PrimType</span></a> の定義ファイル </p>
 <p>
 Copyright (C) 2025 Yusuke Matsunaga All rights reserved. <dl class="simple">
 <dt><strong>Author</strong></dt><dd><p>Yusuke Matsunaga (松永 裕介)</p>
 </dd>
 </dl>
 </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-enums">Enums</p>
-<dl class="cpp enum-class">
-<dt class="sig sig-object cpp" id="_CPPv48PrimType">
-<span id="_CPPv38PrimType"></span><span id="_CPPv28PrimType"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PrimType</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint8_t</span></span><a class="headerlink" href="#_CPPv48PrimType" title="Link to this definition">¶</a><br /></dt>
-<dd><p>組み込み型の論理ゲートタイプ </p>
-<p><em>Values:</em></p>
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType4NoneE">
-<span id="_CPPv3N8PrimType4NoneE"></span><span id="_CPPv2N8PrimType4NoneE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da6adf97f83acf6453d4a6a4b1070f3754"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">None</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType4NoneE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>不正値 </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType2C0E">
-<span id="_CPPv3N8PrimType2C0E"></span><span id="_CPPv2N8PrimType2C0E"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da9c5959e6f08f10d0edbadf5be1f33c53"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C0</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType2C0E" title="Link to this definition">¶</a><br /></dt>
-<dd><p>定数0 </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType2C1E">
-<span id="_CPPv3N8PrimType2C1E"></span><span id="_CPPv2N8PrimType2C1E"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da1a2ddc2db4693cfd16d534cde5572cc1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C1</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType2C1E" title="Link to this definition">¶</a><br /></dt>
-<dd><p>定数1 </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType4BuffE">
-<span id="_CPPv3N8PrimType4BuffE"></span><span id="_CPPv2N8PrimType4BuffE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da536e1a5d9f4fe868e6ea5ff628f51f25"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Buff</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType4BuffE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>バッファ </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType3NotE">
-<span id="_CPPv3N8PrimType3NotE"></span><span id="_CPPv2N8PrimType3NotE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21daa74c05d080620f087c4e523977230666"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Not</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType3NotE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>NOT </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType3AndE">
-<span id="_CPPv3N8PrimType3AndE"></span><span id="_CPPv2N8PrimType3AndE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21dac33315685a0cba3ce53be378b3c7874b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">And</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType3AndE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>AND </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType4NandE">
-<span id="_CPPv3N8PrimType4NandE"></span><span id="_CPPv2N8PrimType4NandE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21dad39e2d62791eb0c18e0bb54315180049"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Nand</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType4NandE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>NAND </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType2OrE">
-<span id="_CPPv3N8PrimType2OrE"></span><span id="_CPPv2N8PrimType2OrE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da3a2d5fe857d8f9541136a124c2edec6c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Or</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType2OrE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>OR </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType3NorE">
-<span id="_CPPv3N8PrimType3NorE"></span><span id="_CPPv2N8PrimType3NorE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da5f61fcb6e17f7a46a46a47c7977c90c1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Nor</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType3NorE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>NOR </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType3XorE">
-<span id="_CPPv3N8PrimType3XorE"></span><span id="_CPPv2N8PrimType3XorE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da76feb79109026728a20736a8c6504548"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Xor</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType3XorE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>XOR </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N8PrimType4XnorE">
-<span id="_CPPv3N8PrimType4XnorE"></span><span id="_CPPv2N8PrimType4XnorE"></span><span class="target" id="d5/d2e/PrimType_8h_1a2222341ff03b31b7045e22fd71aea21da3100f90e7868ca98f9e7d03af532b2dd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Xnor</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType4XnorE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>XNOR </p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
 </dd></dl>
 
 <dl>
@@ -71618,6 +71533,11 @@ Copyright (C) 2026 Yusuke Matsunaga All rights reserved. <dl class="simple">
 
 <dl>
 <dt class="sig sig-object cpp">
+<span class="target" id="db/d3c/group__BnGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Boolean</span> <span class="pre">Network</span></span></dt>
+<dd></dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
 <span class="target" id="d8/dc4/group__ClibCellGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">セルライブラリ</span></span></dt>
 <dd><p>セルライブラリを扱うためのクラスライブラリ </p>
 </dd></dl>
@@ -71660,6 +71580,83 @@ Copyright (C) 2026 Yusuke Matsunaga All rights reserved. <dl class="simple">
 <li><p><a class="reference internal" href="#da/d04/classSopCover"><span class="std std-ref">SopCover</span></a>, <a class="reference internal" href="#d5/d15/classSopCube"><span class="std std-ref">SopCube</span></a>: 積和形論理式とキューブ </p></li>
 </ul>
 </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-enums">Enums</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv48PrimType">
+<span id="_CPPv38PrimType"></span><span id="_CPPv28PrimType"></span><span class="target" id="df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PrimType</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint8_t</span></span><a class="headerlink" href="#_CPPv48PrimType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>組み込み型の論理ゲートタイプ </p>
+<p>一般的な論理セル(論理ゲート)に用いられる論理関数のタイプを表す列挙型 </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType4NoneE">
+<span id="_CPPv3N8PrimType4NoneE"></span><span id="_CPPv2N8PrimType4NoneE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da6adf97f83acf6453d4a6a4b1070f3754"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">None</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType4NoneE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>不正値 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType2C0E">
+<span id="_CPPv3N8PrimType2C0E"></span><span id="_CPPv2N8PrimType2C0E"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da9c5959e6f08f10d0edbadf5be1f33c53"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C0</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType2C0E" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType2C1E">
+<span id="_CPPv3N8PrimType2C1E"></span><span id="_CPPv2N8PrimType2C1E"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da1a2ddc2db4693cfd16d534cde5572cc1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">C1</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType2C1E" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数1 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType4BuffE">
+<span id="_CPPv3N8PrimType4BuffE"></span><span id="_CPPv2N8PrimType4BuffE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da536e1a5d9f4fe868e6ea5ff628f51f25"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Buff</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType4BuffE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バッファ </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType3NotE">
+<span id="_CPPv3N8PrimType3NotE"></span><span id="_CPPv2N8PrimType3NotE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21daa74c05d080620f087c4e523977230666"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Not</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType3NotE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>NOT </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType3AndE">
+<span id="_CPPv3N8PrimType3AndE"></span><span id="_CPPv2N8PrimType3AndE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21dac33315685a0cba3ce53be378b3c7874b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">And</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType3AndE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>AND </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType4NandE">
+<span id="_CPPv3N8PrimType4NandE"></span><span id="_CPPv2N8PrimType4NandE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21dad39e2d62791eb0c18e0bb54315180049"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Nand</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType4NandE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>NAND </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType2OrE">
+<span id="_CPPv3N8PrimType2OrE"></span><span id="_CPPv2N8PrimType2OrE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da3a2d5fe857d8f9541136a124c2edec6c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Or</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType2OrE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>OR </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType3NorE">
+<span id="_CPPv3N8PrimType3NorE"></span><span id="_CPPv2N8PrimType3NorE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da5f61fcb6e17f7a46a46a47c7977c90c1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Nor</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType3NorE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>NOR </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType3XorE">
+<span id="_CPPv3N8PrimType3XorE"></span><span id="_CPPv2N8PrimType3XorE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da76feb79109026728a20736a8c6504548"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Xor</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType3XorE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>XOR </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8PrimType4XnorE">
+<span id="_CPPv3N8PrimType4XnorE"></span><span id="_CPPv2N8PrimType4XnorE"></span><span class="target" id="df/d55/group__LogicGroup_1gga2222341ff03b31b7045e22fd71aea21da3100f90e7868ca98f9e7d03af532b2dd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Xnor</span></span></span><a class="headerlink" href="#_CPPv4N8PrimType4XnorE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>XNOR </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </dd></dl>
 
 <dl>
@@ -80914,20 +80911,6 @@ Copyright (C) 2026 Yusuke Matsunaga All rights reserved. <dl class="simple">
 <li><a class="reference internal" href="#_CPPv4N8PoptStat5AbortE"><code class="docutils literal notranslate"><span class="pre">Abort</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#_CPPv48PrimType"><code class="docutils literal notranslate"><span class="pre">PrimType</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N8PrimType4NoneE"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType2C0E"><code class="docutils literal notranslate"><span class="pre">C0</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType2C1E"><code class="docutils literal notranslate"><span class="pre">C1</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType4BuffE"><code class="docutils literal notranslate"><span class="pre">Buff</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType3NotE"><code class="docutils literal notranslate"><span class="pre">Not</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType3AndE"><code class="docutils literal notranslate"><span class="pre">And</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType4NandE"><code class="docutils literal notranslate"><span class="pre">Nand</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType2OrE"><code class="docutils literal notranslate"><span class="pre">Or</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType3NorE"><code class="docutils literal notranslate"><span class="pre">Nor</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType3XorE"><code class="docutils literal notranslate"><span class="pre">Xor</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8PrimType4XnorE"><code class="docutils literal notranslate"><span class="pre">Xnor</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#_CPPv410PtDeclType"><code class="docutils literal notranslate"><span class="pre">PtDeclType</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4N10PtDeclType5ParamE"><code class="docutils literal notranslate"><span class="pre">Param</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N10PtDeclType10LocalParamE"><code class="docutils literal notranslate"><span class="pre">LocalParam</span></code></a></li>
@@ -81072,6 +81055,20 @@ Copyright (C) 2026 Yusuke Matsunaga All rights reserved. <dl class="simple">
 <li><a class="reference internal" href="#_CPPv410opyfstream"><code class="docutils literal notranslate"><span class="pre">opyfstream</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv416PySatLiteralList"><code class="docutils literal notranslate"><span class="pre">PySatLiteralList</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv412PyUdEdgeList"><code class="docutils literal notranslate"><span class="pre">PyUdEdgeList</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv48PrimType"><code class="docutils literal notranslate"><span class="pre">PrimType</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N8PrimType4NoneE"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType2C0E"><code class="docutils literal notranslate"><span class="pre">C0</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType2C1E"><code class="docutils literal notranslate"><span class="pre">C1</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType4BuffE"><code class="docutils literal notranslate"><span class="pre">Buff</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType3NotE"><code class="docutils literal notranslate"><span class="pre">Not</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType3AndE"><code class="docutils literal notranslate"><span class="pre">And</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType4NandE"><code class="docutils literal notranslate"><span class="pre">Nand</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType2OrE"><code class="docutils literal notranslate"><span class="pre">Or</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType3NorE"><code class="docutils literal notranslate"><span class="pre">Nor</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType3XorE"><code class="docutils literal notranslate"><span class="pre">Xor</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8PrimType4XnorE"><code class="docutils literal notranslate"><span class="pre">Xnor</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#_CPPv48SatBool3"><code class="docutils literal notranslate"><span class="pre">SatBool3</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4N8SatBool35FalseE"><code class="docutils literal notranslate"><span class="pre">False</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N8SatBool34TrueE"><code class="docutils literal notranslate"><span class="pre">True</span></code></a></li>

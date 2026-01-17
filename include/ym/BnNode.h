@@ -17,6 +17,7 @@ BEGIN_NAMESPACE_YM_BN
 class NodeImpl;
 
 //////////////////////////////////////////////////////////////////////
+/// @ingroup BnGroup
 /// @class BnNode BnNode.h "BnNode.h"
 /// @brief BnModel のノードを表すクラス
 ///

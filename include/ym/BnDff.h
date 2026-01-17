@@ -16,6 +16,7 @@ BEGIN_NAMESPACE_YM_BN
 class DffImpl;
 
 //////////////////////////////////////////////////////////////////////
+/// @ingroup BnGroup
 /// @class BnDff BnDff.h "BnDff.h"
 /// @brief BnModel のDFFを表すクラス
 ///
