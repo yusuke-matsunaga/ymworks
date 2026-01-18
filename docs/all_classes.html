@@ -8366,6 +8366,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4N7BnModel7BnModelERK7BnModel">
 <span id="_CPPv3N7BnModel7BnModelERK7BnModel"></span><span id="_CPPv2N7BnModel7BnModelERK7BnModel"></span><span id="BnModel::BnModel__BnModelCR"></span><span class="target" id="d3/dc6/classBnModel_1a200b1621c05d7b8a3a9d380f87c50bf3"></span><span class="sig-name descname"><span class="n"><span class="pre">BnModel</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bn/bnmodel.html#_CPPv4N7BnModel7BnModelERK7BnModel" title="BnModel::BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コピーコンストラクタ </p>
+<p>src と同じ実体を共有する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
@@ -8377,6 +8378,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4N7BnModelaSERK7BnModel">
 <span id="_CPPv3N7BnModelaSERK7BnModel"></span><span id="_CPPv2N7BnModelaSERK7BnModel"></span><span id="BnModel::assign-operator__BnModelCR"></span><span class="target" id="d3/dc6/classBnModel_1aba8d283227b07cc020f855cc94ad3af9"></span><a class="reference internal" href="bn/bnmodel.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bn/bnmodel.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コピー代入演算子 </p>
+<p>src と同じ実体を共有する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
@@ -8397,6 +8399,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4NK7BnModel5writeERNSt7ostreamE">
 <span id="_CPPv3NK7BnModel5writeERNSt7ostreamE"></span><span id="_CPPv2NK7BnModel5writeERNSt7ostreamE"></span><span id="BnModel::write__osRC"></span><span class="target" id="d3/dc6/classBnModel_1a73965b648d092c0cd038a5cfc632dfa1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>内容を出力する． </p>
+<p>形式は独自のもの． 主にデバッグ用 </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
@@ -8411,6 +8414,13 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4NK7BnModel4copyEv">
 <span id="_CPPv3NK7BnModel4copyEv"></span><span id="_CPPv2NK7BnModel4copyEv"></span><span id="BnModel::copyC"></span><span class="target" id="d3/dc6/classBnModel_1ac6a37249db35d80c789cb2c2778dec65"></span><a class="reference internal" href="bn/bnmodel.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>'深い'コピーを作る． </p>
+<p>
+コピーコンストラクタ/コピー代入演算子は '浅い'コピーを行う． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>同一内容の新しい実体を返す．</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
@@ -8423,6 +8433,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4NK7BnModel3dffE8SizeType">
 <span id="_CPPv3NK7BnModel3dffE8SizeType"></span><span id="_CPPv2NK7BnModel3dffE8SizeType"></span><span id="BnModel::dff__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a5ee24df9bfbf92fb8eb3798236d1547e"></span><a class="reference internal" href="bn/bndff.html#_CPPv45BnDff" title="BnDff"><span class="n"><span class="pre">BnDff</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dff</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dff_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>DFFを返す． </p>
+<p>dff_id が範囲外の場合は std::out_of_range 例外が送出される． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>dff_id</strong> -- [in] DFF番号 ( 0 &lt;= dff_id &lt; <a class="reference internal" href="bn/bnmodel.html#d3/dc6/classBnModel_1ad21c431cb56c0b3d33e4a7e13c4a33c1"><span class="std std-ref">dff_num()</span></a> ) </p>
@@ -8446,6 +8457,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4NK7BnModel4nodeE8SizeType">
 <span id="_CPPv3NK7BnModel4nodeE8SizeType"></span><span id="_CPPv2NK7BnModel4nodeE8SizeType"></span><span id="BnModel::node__SizeTypeC"></span><span class="target" id="d3/dc6/classBnModel_1a7289011513c5627d6ba77e0a2ef17629"></span><a class="reference internal" href="bn/bnnode.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">node</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>ノードを返す． </p>
+<p>id が範囲外の場合は std::out_of_range 例外が送出される． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] ノード番号 ( 0 &lt;= id &lt; <a class="reference internal" href="bn/bnmodel.html#d3/dc6/classBnModel_1a18b01ba29be0cdc2e33fecb6d8bad44b"><span class="std std-ref">node_num()</span></a> ) </p>
@@ -8587,6 +8599,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4NK7BnModel12comment_listEv">
 <span id="_CPPv3NK7BnModel12comment_listEv"></span><span id="_CPPv2NK7BnModel12comment_listEv"></span><span id="BnModel::comment_listC"></span><span class="target" id="d3/dc6/classBnModel_1a6acdb2e8c1e1a495a1a63215bf93713c"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">comment_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>コメントを返す． </p>
+<p>コメントは1行ずつの文字列のリスト </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -8674,6 +8687,10 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4N7BnModel14set_input_nameE8SizeTypeRKNSt6stringE">
 <span id="_CPPv3N7BnModel14set_input_nameE8SizeTypeRKNSt6stringE"></span><span id="_CPPv2N7BnModel14set_input_nameE8SizeTypeRKNSt6stringE"></span><span id="BnModel::set_input_name__SizeType.ssCR"></span><span class="target" id="d3/dc6/classBnModel_1addc9050cc57529a09bb9438c58814f7b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_input_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>入力名をセットする． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -8688,6 +8705,10 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4N7BnModel15set_output_nameE8SizeTypeRKNSt6stringE">
 <span id="_CPPv3N7BnModel15set_output_nameE8SizeTypeRKNSt6stringE"></span><span id="_CPPv2N7BnModel15set_output_nameE8SizeTypeRKNSt6stringE"></span><span id="BnModel::set_output_name__SizeType.ssCR"></span><span class="target" id="d3/dc6/classBnModel_1ad627a231f6680a60dcf2b8dd4abf8cae"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_output_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>出力名をセットする． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -8702,6 +8723,10 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4N7BnModel12set_dff_nameE8SizeTypeRKNSt6stringE">
 <span id="_CPPv3N7BnModel12set_dff_nameE8SizeTypeRKNSt6stringE"></span><span id="_CPPv2N7BnModel12set_dff_nameE8SizeTypeRKNSt6stringE"></span><span id="BnModel::set_dff_name__SizeType.ssCR"></span><span class="target" id="d3/dc6/classBnModel_1ae7c734c198d9384d2a7fa0eba6e9bc85"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_dff_name</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dff_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>DFF名をセットする． </p>
+<p><ul class="simple">
+<li><p>範囲外のアクセスは std::out_of_range 例外を送出する． </p></li>
+</ul>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -8719,6 +8744,8 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4N7BnModel7new_dffERKNSt6stringEc">
 <span id="_CPPv3N7BnModel7new_dffERKNSt6stringEc"></span><span id="_CPPv2N7BnModel7new_dffERKNSt6stringEc"></span><span id="BnModel::new_dff__ssCR.c"></span><span class="target" id="d3/dc6/classBnModel_1a7887681154866debb887927714510dbe"></span><a class="reference internal" href="bn/bndff.html#_CPPv45BnDff" title="BnDff"><span class="n"><span class="pre">BnDff</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">new_dff</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reset_val</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="sc"><span class="pre">'X'</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>DFFを作る． </p>
+<p>
+リセット値は 'X', '0', '1' を仮定しているが， 実際には設定された値をただ保持しているだけで なんのチェックも行わない． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -8727,7 +8754,7 @@ skip_zeros が true なら上位は0は出力しない． </p>
 </ul>
 </dd>
 <dt class="field-even">戻り値<span class="colon">:</span></dt>
-<dd class="field-even"><p>生成したDFFを返す． </p>
+<dd class="field-even"><p>生成したDFFを返す．</p>
 </dd>
 </dl>
 </dd></dl>
@@ -8736,6 +8763,12 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4N7BnModel11set_dff_srcERK5BnDff6BnNode">
 <span id="_CPPv3N7BnModel11set_dff_srcERK5BnDff6BnNode"></span><span id="_CPPv2N7BnModel11set_dff_srcERK5BnDff6BnNode"></span><span id="BnModel::set_dff_src__BnDffCR.BnNode"></span><span class="target" id="d3/dc6/classBnModel_1a9b526e47a439ec54e0aa6b6ffacdc254"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_dff_src</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bn/bndff.html#_CPPv45BnDff" title="BnDff"><span class="n"><span class="pre">BnDff</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dff</span></span>, <a class="reference internal" href="bn/bnnode.html#_CPPv46BnNode" title="BnNode"><span class="n"><span class="pre">BnNode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>DFFの入力ノードを設定する． </p>
+<p><ul class="simple">
+<li><p>dff は同じ <a class="reference internal" href="bn/bnmodel.html#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> に属するDFFでなければならない．</p></li>
+<li><p>src は同じ <a class="reference internal" href="bn/bnmodel.html#d3/dc6/classBnModel"><span class="std std-ref">BnModel</span></a> に属するノードでなければならない．</p></li>
+<li><p>条件に合わない時は， std::invalid_argument 例外が送出される． </p></li>
+</ul>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -8904,9 +8937,14 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <dt class="sig sig-object cpp" id="_CPPv4NK7BnModeleqERK7BnModel">
 <span id="_CPPv3NK7BnModeleqERK7BnModel"></span><span id="_CPPv2NK7BnModeleqERK7BnModel"></span><span id="BnModel::eq-operator__BnModelCRC"></span><span class="target" id="d3/dc6/classBnModel_1a0b88c20e74f01eac5055e147e76f997e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bn/bnmodel.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>等価比較演算子 </p>
+<p>
+内容が同じでも実体が異なっていたら false となる． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>同じ実体を持っていたら true を返す．</p>
 </dd>
 </dl>
 </dd></dl>
@@ -8930,7 +8968,17 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <span id="_CPPv3N7BnModel9read_blifERKNSt6stringE"></span><span id="_CPPv2N7BnModel9read_blifERKNSt6stringE"></span><span id="BnModel::read_blif__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1a9c02addbdcf65380f7b1f62a4e9af569"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="bn/bnmodel.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_blif</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>blif ファイルの読み込みを行う． </p>
 <p>
-読み込みが失敗したら std::invalid_argument 例外を送出する． </p>
+読み込みが失敗したら std::invalid_argument 例外を送出する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span> <span class="p">{</span>
+   <span class="n">auto</span> <span class="n">model</span> <span class="o">=</span> <span class="n">BnModel</span><span class="p">::</span><span class="n">read_blif</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+   <span class="o">//</span> <span class="n">model</span> <span class="n">は</span> <span class="n">filename</span> <span class="n">を読み込んだ</span> <span class="n">BnModel</span> <span class="n">のオブジェクト</span>
+<span class="p">}</span>
+<span class="n">catch</span> <span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span> <span class="n">err</span> <span class="p">)</span> <span class="p">{</span>
+   <span class="n">std</span><span class="p">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">err</span><span class="o">.</span><span class="n">what</span><span class="p">();</span>
+   <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
@@ -8946,7 +8994,17 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <span id="_CPPv3N7BnModel12read_iscas89ERKNSt6stringE"></span><span id="_CPPv2N7BnModel12read_iscas89ERKNSt6stringE"></span><span id="BnModel::read_iscas89__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1ac1dc346533975733caa43059b03d58c6"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="bn/bnmodel.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_iscas89</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>iscas89(.bench) ファイルの読み込みを行う． </p>
 <p>
-読み込みが失敗したら std::invalid_argument 例外を送出する． </p>
+読み込みが失敗したら std::invalid_argument 例外を送出する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span> <span class="p">{</span>
+   <span class="n">auto</span> <span class="n">model</span> <span class="o">=</span> <span class="n">BnModel</span><span class="p">::</span><span class="n">read_iscas89</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+   <span class="o">//</span> <span class="n">model</span> <span class="n">は</span> <span class="n">filename</span> <span class="n">を読み込んだ</span> <span class="n">BnModel</span> <span class="n">のオブジェクト</span>
+<span class="p">}</span>
+<span class="n">catch</span> <span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span> <span class="n">err</span> <span class="p">)</span> <span class="p">{</span>
+   <span class="n">std</span><span class="p">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">err</span><span class="o">.</span><span class="n">what</span><span class="p">();</span>
+   <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
@@ -8962,7 +9020,17 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <span id="_CPPv3N7BnModel10read_truthERKNSt6stringE"></span><span id="_CPPv2N7BnModel10read_truthERKNSt6stringE"></span><span id="BnModel::read_truth__ssCR"></span><span class="target" id="d3/dc6/classBnModel_1ab9acf05a0512bdccaa2f66239962fa62"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="bn/bnmodel.html#_CPPv47BnModel" title="BnModel"><span class="n"><span class="pre">BnModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_truth</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>truth ファイルの読み込みを行う． </p>
 <p>
-読み込みが失敗したら std::invalid_argument 例外を送出する． </p>
+読み込みが失敗したら std::invalid_argument 例外を送出する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span> <span class="p">{</span>
+   <span class="n">auto</span> <span class="n">model</span> <span class="o">=</span> <span class="n">BnModel</span><span class="p">::</span><span class="n">read_truth</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+   <span class="o">//</span> <span class="n">model</span> <span class="n">は</span> <span class="n">filename</span> <span class="n">を読み込んだ</span> <span class="n">BnModel</span> <span class="n">のオブジェクト</span>
+<span class="p">}</span>
+<span class="n">catch</span> <span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span> <span class="n">err</span> <span class="p">)</span> <span class="p">{</span>
+   <span class="n">std</span><span class="p">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">err</span><span class="o">.</span><span class="n">what</span><span class="p">();</span>
+   <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
@@ -8990,9 +9058,19 @@ skip_zeros が true なら上位は0は出力しない． </p>
 <li><p>.truth -&gt; truth</p></li>
 </ul>
 </p></li>
-<li><p>読み込みが失敗したら std::invalid_argument 例外を送出する． </p></li>
+<li><p>読み込みが失敗したら std::invalid_argument 例外を送出する．</p></li>
 </ul>
 </p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span> <span class="p">{</span>
+   <span class="n">auto</span> <span class="n">model</span> <span class="o">=</span> <span class="n">BnModel</span><span class="p">::</span><span class="n">read_file</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;blif&quot;</span><span class="p">);</span>
+   <span class="o">//</span> <span class="n">model</span> <span class="n">は</span> <span class="n">filename</span> <span class="n">を読み込んだ</span> <span class="n">BnModel</span> <span class="n">のオブジェクト</span>
+<span class="p">}</span>
+<span class="n">catch</span> <span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span> <span class="n">err</span> <span class="p">)</span> <span class="p">{</span>
+   <span class="n">std</span><span class="p">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">err</span><span class="o">.</span><span class="n">what</span><span class="p">();</span>
+   <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

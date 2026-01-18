@@ -83,11 +83,15 @@ public:
   BnModel();
 
   /// @brief コピーコンストラクタ
+  ///
+  /// src と同じ実体を共有する．
   BnModel(
     const BnModel& src ///< [in] コピー元のオブジェクト
   );
 
   /// @brief コピー代入演算子
+  ///
+  /// src と同じ実体を共有する．
   BnModel&
   operator=(
     const BnModel& src ///< [in] コピー元のオブジェクト
@@ -111,6 +115,17 @@ public:
   /// @return 結果の BnModel を返す．
   ///
   /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  ///
+  /// @code
+  /// try {
+  ///    auto model = BnModel::read_blif(filename);
+  ///    // model は filename を読み込んだ BnModel のオブジェクト
+  /// }
+  /// catch ( std::invalid_argument err ) {
+  ///    std::cerr << err.what();
+  ///    ...
+  /// }
+  /// @endcode
   static
   BnModel
   read_blif(
@@ -121,6 +136,17 @@ public:
   /// @return 結果の BnModel を返す．
   ///
   /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  ///
+  /// @code
+  /// try {
+  ///    auto model = BnModel::read_iscas89(filename);
+  ///    // model は filename を読み込んだ BnModel のオブジェクト
+  /// }
+  /// catch ( std::invalid_argument err ) {
+  ///    std::cerr << err.what();
+  ///    ...
+  /// }
+  /// @endcode
   static
   BnModel
   read_iscas89(
@@ -131,6 +157,17 @@ public:
   /// @return 結果の BnModel を返す．
   ///
   /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  ///
+  /// @code
+  /// try {
+  ///    auto model = BnModel::read_truth(filename);
+  ///    // model は filename を読み込んだ BnModel のオブジェクト
+  /// }
+  /// catch ( std::invalid_argument err ) {
+  ///    std::cerr << err.what();
+  ///    ...
+  /// }
+  /// @endcode
   static
   BnModel
   read_truth(
@@ -149,6 +186,17 @@ public:
   ///   * .bench -> iscas89
   ///   * .truth -> truth
   /// - 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  ///
+  /// @code
+  /// try {
+  ///    auto model = BnModel::read_file(filename, "blif");
+  ///    // model は filename を読み込んだ BnModel のオブジェクト
+  /// }
+  /// catch ( std::invalid_argument err ) {
+  ///    std::cerr << err.what();
+  ///    ...
+  /// }
+  /// @endcode
   static
   BnModel
   read(
@@ -167,6 +215,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容を出力する．
+  ///
+  /// 形式は独自のもの．
+  /// 主にデバッグ用
   void
   write(
     std::ostream& s ///< [in] 出力先のストリーム
@@ -183,6 +234,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief '深い'コピーを作る．
+  /// @return 同一内容の新しい実体を返す．
+  ///
+  /// コピーコンストラクタ/コピー代入演算子は '浅い'コピーを行う．
   BnModel
   copy() const;
 
@@ -191,6 +245,8 @@ public:
   dff_num() const;
 
   /// @brief DFFを返す．
+  ///
+  /// dff_id が範囲外の場合は std::out_of_range 例外が送出される．
   BnDff
   dff(
     SizeType dff_id ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
@@ -205,6 +261,8 @@ public:
   node_num() const;
 
   /// @brief ノードを返す．
+  ///
+  /// id が範囲外の場合は std::out_of_range 例外が送出される．
   BnNode
   node(
     SizeType id ///< [in] ノード番号 ( 0 <= id < node_num() )
@@ -301,6 +359,8 @@ public:
   name() const;
 
   /// @brief コメントを返す．
+  ///
+  /// コメントは1行ずつの文字列のリスト
   const std::vector<std::string>&
   comment_list() const;
 
@@ -357,6 +417,8 @@ public:
   );
 
   /// @brief 入力名をセットする．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   void
   set_input_name(
     SizeType input_id,      ///< [in] 入力番号 ( 0 <= input_id < input_num() )
@@ -364,6 +426,8 @@ public:
   );
 
   /// @brief 出力名をセットする．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   void
   set_output_name(
     SizeType output_id,      ///< [in] 出力番号 ( 0 <= output_id < output_num() )
@@ -371,6 +435,8 @@ public:
   );
 
   /// @brief DFF名をセットする．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   void
   set_dff_name(
     SizeType dff_id,        ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
@@ -389,6 +455,10 @@ public:
 
   /// @brief DFFを作る．
   /// @return 生成したDFFを返す．
+  ///
+  /// リセット値は 'X', '0', '1' を仮定しているが，
+  /// 実際には設定された値をただ保持しているだけで
+  /// なんのチェックも行わない．
   BnDff
   new_dff(
     const std::string& name = {}, ///< [in] 名前
@@ -396,6 +466,10 @@ public:
   );
 
   /// @brief DFFの入力ノードを設定する．
+  ///
+  /// - dff は同じ BnModel に属するDFFでなければならない．
+  /// - src は同じ BnModel に属するノードでなければならない．
+  /// - 条件に合わない時は， std::invalid_argument 例外が送出される．
   void
   set_dff_src(
     const BnDff& dff, ///< [in] DFF
@@ -490,6 +564,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 等価比較演算子
+  /// @return 同じ実体を持っていたら true を返す．
+  ///
+  /// 内容が同じでも実体が異なっていたら false となる．
   bool
   operator==(
     const BnModel& right ///< [in] オペランド
