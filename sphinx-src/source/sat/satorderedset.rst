@@ -1,0 +1,5 @@
+SatOrderedSet
+~~~~~~~~~~~~~~~
+
+.. doxygenclass:: SatOrderedSet
+   :members:

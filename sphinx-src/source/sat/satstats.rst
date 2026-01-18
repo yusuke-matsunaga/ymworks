@@ -1,0 +1,5 @@
+SatStats
+~~~~~~~~~~
+
+.. doxygenclass:: SatStats
+   :members:

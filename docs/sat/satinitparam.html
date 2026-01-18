@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.2.5. SatInitParam &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.2.6. SatStats" href="satstats.html" />
+    <link rel="prev" title="5.2.4. SatLiteral" href="satliteral.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="satstats.html" title="5.2.6. SatStats"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="satliteral.html" title="5.2.4. SatLiteral"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" accesskey="U"><span class="section-number">5.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2.5. </span>SatInitParam</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="satinitparam">
+<h1><span class="section-number">5.2.5. </span>SatInitParam<a class="headerlink" href="#satinitparam" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv412SatInitParam">
+<span id="_CPPv312SatInitParam"></span><span id="_CPPv212SatInitParam"></span><span id="SatInitParam"></span><span class="target" id="d8/da3/classSatInitParam"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SatInitParam</span></span></span><br /></dt>
+<dd><p>SATソルバの種類を表すクラス </p>
+<p><ul class="simple">
+<li><p>単純な場合はタイプを表す文字列のみを引数にとる．</p></li>
+<li><p>詳細な設定を行う場合は Json オブジェクトを引数にとる．</p></li>
+<li><p>値を表す JSON で決まっているのは &quot;type&quot; という名の属性のみ． 値が妥当かどうかのチェックもこのクラス内で行われる． それ以外の属性は各々の実装依存で解釈される． このクラスではチェックを行わない．</p></li>
+<li><p>空のコンストラクタは以下のアルゴリズムで初期化する．<ol class="loweralpha simple">
+<li><p>環境変数 YMSAT_CONF が設定されている場合，${YMSAT_CONF} の値 を設定用の json ファイルとみなして読み込む． ファイルの読み込みに失敗した場合スキップする．</p></li>
+<li><p>環境変数 YMSAT_CONFDIR が設定されている場合， ${YMSAT_CONFDIR}/ymsat.json を設定用の json ファイルとみなして 読み込む． ファイルの読み込みに失敗した場合スキップする．</p></li>
+<li><p>カレントディレクトリに ymsat.json ファイルがあれば読み込む ファイルの読み込みに失敗した場合スキップする．</p></li>
+<li><p>ハードコードされたデフォルト値を用いる． </p></li>
+</ol>
+</p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatInitParam12SatInitParamEv">
+<span id="_CPPv3N12SatInitParam12SatInitParamEv"></span><span id="_CPPv2N12SatInitParam12SatInitParamEv"></span><span id="SatInitParam::SatInitParam"></span><span class="target" id="d8/da3/classSatInitParam_1aa43f17297630eb9e6972bcd1de74c3b4"></span><span class="sig-name descname"><span class="n"><span class="pre">SatInitParam</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>空のコンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatInitParam12SatInitParamERKNSt6stringE">
+<span id="_CPPv3N12SatInitParam12SatInitParamERKNSt6stringE"></span><span id="_CPPv2N12SatInitParam12SatInitParamERKNSt6stringE"></span><span id="SatInitParam::SatInitParam__ssCR"></span><span class="target" id="d8/da3/classSatInitParam_1ac73cc9c1f16ba5774e710facabebe3a5"></span><span class="sig-name descname"><span class="n"><span class="pre">SatInitParam</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>コンストラクタ(タイプを表す文字列) </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> -- [in] 実装タイプを表す文字列 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatInitParam12SatInitParamEPKc">
+<span id="_CPPv3N12SatInitParam12SatInitParamEPKc"></span><span id="_CPPv2N12SatInitParam12SatInitParamEPKc"></span><span id="SatInitParam::SatInitParam__cCP"></span><span class="target" id="d8/da3/classSatInitParam_1a124ce39c3662847aa967bd85f49a56fc"></span><span class="sig-name descname"><span class="n"><span class="pre">SatInitParam</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>コンストラクタ(タイプを表す文字列) </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> -- [in] 実装タイプを表す文字列 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatInitParam12SatInitParamERK9JsonValue">
+<span id="_CPPv3N12SatInitParam12SatInitParamERK9JsonValue"></span><span id="_CPPv2N12SatInitParam12SatInitParamERK9JsonValue"></span><span id="SatInitParam::SatInitParam__JsonValueCR"></span><span class="target" id="d8/da3/classSatInitParam_1a5d819bce0df0c0519119fcba859d5586"></span><span class="sig-name descname"><span class="n"><span class="pre">SatInitParam</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49JsonValue" title="JsonValue"><span class="n"><span class="pre">JsonValue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">js_obj</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>コンストラクタ(Jsonオブジェクト) </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>js_obj</strong> -- [in] オプションを表す Json オブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatInitParamD0Ev">
+<span id="_CPPv3N12SatInitParamD0Ev"></span><span id="_CPPv2N12SatInitParamD0Ev"></span><span id="SatInitParam::~SatInitParam"></span><span class="target" id="d8/da3/classSatInitParam_1a14e29070c732f53ca4de76f45c1ef6c5"></span><span class="sig-name descname"><span class="n"><span class="pre">~SatInitParam</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12SatInitParam4typeEv">
+<span id="_CPPv3NK12SatInitParam4typeEv"></span><span id="_CPPv2NK12SatInitParam4typeEv"></span><span id="SatInitParam::typeC"></span><span class="target" id="d8/da3/classSatInitParam_1aa8b0631bdd561b506a8adff6ad8ad903"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>実装タイプを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12SatInitParam6js_objEv">
+<span id="_CPPv3NK12SatInitParam6js_objEv"></span><span id="_CPPv2NK12SatInitParam6js_objEv"></span><span id="SatInitParam::js_objC"></span><span class="target" id="d8/da3/classSatInitParam_1a5b9f1201bdd75a23a06f81991eeedbb5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49JsonValue" title="JsonValue"><span class="n"><span class="pre">JsonValue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">js_obj</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>オプションを表す Json オブジェクトを返す． </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatInitParam9from_jsonERKNSt6stringE">
+<span id="_CPPv3N12SatInitParam9from_jsonERKNSt6stringE"></span><span id="_CPPv2N12SatInitParam9from_jsonERKNSt6stringE"></span><span id="SatInitParam::from_json__ssCR"></span><span class="target" id="d8/da3/classSatInitParam_1a4ecaba8ef2ef23e5953549e6618351b1"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv412SatInitParam" title="SatInitParam"><span class="n"><span class="pre">SatInitParam</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">from_json</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>JSON ファイルからの生成関数 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.2.5. SatInitParam</a><ul>
+<li><a class="reference internal" href="#_CPPv412SatInitParam"><code class="docutils literal notranslate"><span class="pre">SatInitParam</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N12SatInitParam12SatInitParamEv"><code class="docutils literal notranslate"><span class="pre">SatInitParam()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12SatInitParam12SatInitParamERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SatInitParam()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12SatInitParam12SatInitParamEPKc"><code class="docutils literal notranslate"><span class="pre">SatInitParam()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12SatInitParam12SatInitParamERK9JsonValue"><code class="docutils literal notranslate"><span class="pre">SatInitParam()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12SatInitParamD0Ev"><code class="docutils literal notranslate"><span class="pre">~SatInitParam()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12SatInitParam4typeEv"><code class="docutils literal notranslate"><span class="pre">type()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12SatInitParam6js_objEv"><code class="docutils literal notranslate"><span class="pre">js_obj()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12SatInitParam9from_jsonERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">from_json()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="satliteral.html"
+                          title="前の章へ"><span class="section-number">5.2.4. </span>SatLiteral</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="satstats.html"
+                          title="次の章へ"><span class="section-number">5.2.6. </span>SatStats</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/sat/satinitparam.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="satstats.html" title="5.2.6. SatStats"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="satliteral.html" title="5.2.4. SatLiteral"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">5.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2.5. </span>SatInitParam</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

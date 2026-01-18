@@ -1,0 +1,5 @@
+SatLiteral
+~~~~~~~~~~~~
+
+.. doxygenclass:: SatLiteral
+   :members:

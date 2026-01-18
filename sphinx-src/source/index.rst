@@ -15,6 +15,7 @@ Ymworks
    bn/bn
    aig/aig
    clib/clib
+   sat/sat
 
 ..   all_classes
 

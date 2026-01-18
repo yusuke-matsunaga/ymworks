@@ -1,0 +1,5 @@
+SatDimacs
+~~~~~~~~~~~~
+
+.. doxygenclass:: SatDimacs
+   :members:

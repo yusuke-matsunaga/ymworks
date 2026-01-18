@@ -1,0 +1,5 @@
+SatInitParam
+~~~~~~~~~~~~~~
+
+.. doxygenclass:: SatInitParam
+   :members:

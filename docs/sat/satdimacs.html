@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.2.2. SatDimacs &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.2.3. SatSolver" href="satsolver.html" />
+    <link rel="prev" title="5.2.1. SatBool3" href="satbool3.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="satsolver.html" title="5.2.3. SatSolver"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="satbool3.html" title="5.2.1. SatBool3"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" accesskey="U"><span class="section-number">5.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2.2. </span>SatDimacs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="satdimacs">
+<h1><span class="section-number">5.2.2. </span>SatDimacs<a class="headerlink" href="#satdimacs" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv49SatDimacs">
+<span id="_CPPv39SatDimacs"></span><span id="_CPPv29SatDimacs"></span><span id="SatDimacs"></span><span class="target" id="dd/d2e/classSatDimacs"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SatDimacs</span></span></span><br /></dt>
+<dd><p>DIMCAS 形式のファイルの内容を表すクラス </p>
+<p>具体的には以下の内容を持つ．<ul class="simple">
+<li><p>変数の数 正確には使われている変数番号の最大値 + 1</p></li>
+<li><p>節のリスト 節は整数のリスト 正の整数は正のリテラルを表し，負の整数は負のリテラルを表す． 変数番号を x, 極性(1 or -1)を b とすると (x + 1) * b となる．</p></li>
+</ul>
+</p>
+<p><a class="reference internal" href="satsolver.html#d6/ddb/classSatSolver"><span class="std std-ref">SatSolver</span></a> とは直接関係はない． </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9SatDimacs9SatDimacsEv">
+<span id="_CPPv3N9SatDimacs9SatDimacsEv"></span><span id="_CPPv2N9SatDimacs9SatDimacsEv"></span><span id="SatDimacs::SatDimacs"></span><span class="target" id="dd/d2e/classSatDimacs_1af8208ff91435b8b048d025cae890aacd"></span><span class="sig-name descname"><span class="n"><span class="pre">SatDimacs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>コンストラクタ </p>
+<p>空のCNFとなる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9SatDimacsD0Ev">
+<span id="_CPPv3N9SatDimacsD0Ev"></span><span id="_CPPv2N9SatDimacsD0Ev"></span><span id="SatDimacs::~SatDimacs"></span><span class="target" id="dd/d2e/classSatDimacs_1a1e62fceb85cca1ee274f881e152ec93c"></span><span class="sig-name descname"><span class="n"><span class="pre">~SatDimacs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9SatDimacs12variable_numEv">
+<span id="_CPPv3NK9SatDimacs12variable_numEv"></span><span id="_CPPv2NK9SatDimacs12variable_numEv"></span><span id="SatDimacs::variable_numC"></span><span class="target" id="dd/d2e/classSatDimacs_1a6d39cdc850dfc72c70019a1652b2e160"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variable_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>変数の数を返す． </p>
+<p>必ずしも全ての変数が節の中で用いられているとは限らない． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9SatDimacs10clause_numEv">
+<span id="_CPPv3NK9SatDimacs10clause_numEv"></span><span id="_CPPv2NK9SatDimacs10clause_numEv"></span><span id="SatDimacs::clause_numC"></span><span class="target" id="dd/d2e/classSatDimacs_1a6a9d3f1aa1445021cf236579189fa954"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clause_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>節の数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9SatDimacs11clause_listEv">
+<span id="_CPPv3NK9SatDimacs11clause_listEv"></span><span id="_CPPv2NK9SatDimacs11clause_listEv"></span><span id="SatDimacs::clause_listC"></span><span class="target" id="dd/d2e/classSatDimacs_1a1d45702cc37483e7d9fec5aa1423dd92"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">clause_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>節のリストを返す． </p>
+<p>節は DIMACS 形式と同様に int のリストで表す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9SatDimacs4evalERKNSt6vectorIiEE">
+<span id="_CPPv3NK9SatDimacs4evalERKNSt6vectorIiEE"></span><span id="_CPPv2NK9SatDimacs4evalERKNSt6vectorIiEE"></span><span id="SatDimacs::eval__std::vector:i:CRC"></span><span class="target" id="dd/d2e/classSatDimacs_1a5322acb7acbad1a260f63bb8cf7e34d1"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eval</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>評価する． </p>
+<p>
+model[i] に i 番目の変数の値 ( 0 or 1 ) を入れる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> -- [in] モデル </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>true</strong> -- 充足した． </p></li>
+<li><p><strong>false</strong> -- 充足しなかった．</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9SatDimacs12write_dimacsERNSt7ostreamE">
+<span id="_CPPv3NK9SatDimacs12write_dimacsERNSt7ostreamE"></span><span id="_CPPv2NK9SatDimacs12write_dimacsERNSt7ostreamE"></span><span id="SatDimacs::write_dimacs__osRC"></span><span class="target" id="dd/d2e/classSatDimacs_1acf3d7b38fb6064d28d77b2e04a802ee6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_dimacs</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>内容を DIMACS 形式で出力する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9SatDimacs5clearEv">
+<span id="_CPPv3N9SatDimacs5clearEv"></span><span id="_CPPv2N9SatDimacs5clearEv"></span><span id="SatDimacs::clear"></span><span class="target" id="dd/d2e/classSatDimacs_1a0aef863b550cffa4b742e98649384214"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clear</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>クリアする． </p>
+<p>節を持たない状態になる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9SatDimacs10add_clauseERKNSt6vectorIiEE">
+<span id="_CPPv3N9SatDimacs10add_clauseERKNSt6vectorIiEE"></span><span id="_CPPv2N9SatDimacs10add_clauseERKNSt6vectorIiEE"></span><span id="SatDimacs::add_clause__std::vector:i:CR"></span><span class="target" id="dd/d2e/classSatDimacs_1a6cd01e941a2bacb9181c9bacabed851c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_clause</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit_list</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>節を追加する． </p>
+<p>正の整数が正のリテラル，負の整数が負のリテラルを表す． 変数番号に 1 を足したものに符号を掛ける． 例えば<ul class="simple">
+<li><p>0 の正のリテラル -&gt; 1</p></li>
+<li><p>1 の負のリテラル -&gt; -2 となる．</p></li>
+</ul>
+</p>
+<p>値が 0 は不正値なので std::invalid_argument 例外を送出する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lit_list</strong> -- [in] 節を表す int のリスト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9SatDimacs11read_dimacsERNSt7istreamE">
+<span id="_CPPv3N9SatDimacs11read_dimacsERNSt7istreamE"></span><span id="_CPPv2N9SatDimacs11read_dimacsERNSt7istreamE"></span><span id="SatDimacs::read_dimacs__isR"></span><span class="target" id="dd/d2e/classSatDimacs_1a8727478f1d0ed8536d9230fe86b63ef7"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_dimacs</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>DIMACS 形式のファイルを読んで <a class="reference internal" href="#dd/d2e/classSatDimacs"><span class="std std-ref">SatDimacs</span></a> に設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 入力元のストリーム </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>true</strong> -- 読み込みが成功した． </p></li>
+<li><p><strong>false</strong> -- 読み込みが失敗した． </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9SatDimacs11read_dimacsEPKc">
+<span id="_CPPv3N9SatDimacs11read_dimacsEPKc"></span><span id="_CPPv2N9SatDimacs11read_dimacsEPKc"></span><span id="SatDimacs::read_dimacs__cCP"></span><span class="target" id="dd/d2e/classSatDimacs_1affa46cda465247385c352ad41ba49a50"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_dimacs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>DIMACS 形式のファイルを読んで <a class="reference internal" href="#dd/d2e/classSatDimacs"><span class="std std-ref">SatDimacs</span></a> に設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>true</strong> -- 読み込みが成功した． </p></li>
+<li><p><strong>false</strong> -- 読み込みが失敗した． </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9SatDimacs11read_dimacsERKNSt6stringE">
+<span id="_CPPv3N9SatDimacs11read_dimacsERKNSt6stringE"></span><span id="_CPPv2N9SatDimacs11read_dimacsERKNSt6stringE"></span><span id="SatDimacs::read_dimacs__ssCR"></span><span class="target" id="dd/d2e/classSatDimacs_1a31029972ae8d25f7982b037eaa2bf36b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_dimacs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>DIMACS 形式のファイルを読んで <a class="reference internal" href="#dd/d2e/classSatDimacs"><span class="std std-ref">SatDimacs</span></a> に設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>true</strong> -- 読み込みが成功した． </p></li>
+<li><p><strong>false</strong> -- 読み込みが失敗した． </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9SatDimacs12message_listEv">
+<span id="_CPPv3NK9SatDimacs12message_listEv"></span><span id="_CPPv2NK9SatDimacs12message_listEv"></span><span id="SatDimacs::message_listC"></span><span class="target" id="dd/d2e/classSatDimacs_1aa0f03f201c6fec94aa7ab7055c00bfbc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">message_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>直前の <a class="reference internal" href="#dd/d2e/classSatDimacs_1a8727478f1d0ed8536d9230fe86b63ef7"><span class="std std-ref">read_dimacs()</span></a> のメッセージを返す． </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.2.2. SatDimacs</a><ul>
+<li><a class="reference internal" href="#_CPPv49SatDimacs"><code class="docutils literal notranslate"><span class="pre">SatDimacs</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N9SatDimacs9SatDimacsEv"><code class="docutils literal notranslate"><span class="pre">SatDimacs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9SatDimacsD0Ev"><code class="docutils literal notranslate"><span class="pre">~SatDimacs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9SatDimacs12variable_numEv"><code class="docutils literal notranslate"><span class="pre">variable_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9SatDimacs10clause_numEv"><code class="docutils literal notranslate"><span class="pre">clause_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9SatDimacs11clause_listEv"><code class="docutils literal notranslate"><span class="pre">clause_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9SatDimacs4evalERKNSt6vectorIiEE"><code class="docutils literal notranslate"><span class="pre">eval()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9SatDimacs12write_dimacsERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">write_dimacs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9SatDimacs5clearEv"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9SatDimacs10add_clauseERKNSt6vectorIiEE"><code class="docutils literal notranslate"><span class="pre">add_clause()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9SatDimacs11read_dimacsERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">read_dimacs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9SatDimacs11read_dimacsEPKc"><code class="docutils literal notranslate"><span class="pre">read_dimacs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9SatDimacs11read_dimacsERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_dimacs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9SatDimacs12message_listEv"><code class="docutils literal notranslate"><span class="pre">message_list()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="satbool3.html"
+                          title="前の章へ"><span class="section-number">5.2.1. </span>SatBool3</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="satsolver.html"
+                          title="次の章へ"><span class="section-number">5.2.3. </span>SatSolver</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/sat/satdimacs.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="satsolver.html" title="5.2.3. SatSolver"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="satbool3.html" title="5.2.1. SatBool3"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">5.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2.2. </span>SatDimacs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

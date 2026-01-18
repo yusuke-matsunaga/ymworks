@@ -1,0 +1,5 @@
+SatSolver
+~~~~~~~~~~~~
+
+.. doxygenclass:: SatSolver
+   :members:

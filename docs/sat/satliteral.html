@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.2.4. SatLiteral &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.2.5. SatInitParam" href="satinitparam.html" />
+    <link rel="prev" title="5.2.3. SatSolver" href="satsolver.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="satinitparam.html" title="5.2.5. SatInitParam"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="satsolver.html" title="5.2.3. SatSolver"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" accesskey="U"><span class="section-number">5.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2.4. </span>SatLiteral</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="satliteral">
+<h1><span class="section-number">5.2.4. </span>SatLiteral<a class="headerlink" href="#satliteral" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv410SatLiteral">
+<span id="_CPPv310SatLiteral"></span><span id="_CPPv210SatLiteral"></span><span id="SatLiteral"></span><span class="target" id="d6/d75/classSatLiteral"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SatLiteral</span></span></span><br /></dt>
+<dd><p>リテラル(変数番号＋極性)を表すクラス </p>
+<p>ユーザーは <a class="reference internal" href="satsolver.html#d6/ddb/classSatSolver_1aa6cedd889a145e2cc7f70cf8dde9746b"><span class="std std-ref">SatSolver::new_variable()</span></a> の返り値としてのみ このクラスのインスタンスを生成できる．</p>
+<p>変数番号は 0 から始まる非負の整数 単純には最下位ビットで極性を表すだけだが， 不正な値のときにはこのビットに1を立てない． そのために neg_mask() というメンバ関数を用意している． </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteral10SatLiteralEv">
+<span id="_CPPv3N10SatLiteral10SatLiteralEv"></span><span id="_CPPv2N10SatLiteral10SatLiteralEv"></span><span id="SatLiteral::SatLiteral"></span><span class="target" id="d6/d75/classSatLiteral_1adbfbed2ab2badb7798545d12323f17ef"></span><span class="sig-name descname"><span class="n"><span class="pre">SatLiteral</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>デフォルトコンストラクタ </p>
+<p>内容は不定なのであまり使わない方が良い． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteral8is_validEv">
+<span id="_CPPv3NK10SatLiteral8is_validEv"></span><span id="_CPPv2NK10SatLiteral8is_validEv"></span><span id="SatLiteral::is_validC"></span><span class="target" id="d6/d75/classSatLiteral_1a7f8e6b5e9467e89c3a1f97a6a8e092ee"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>内容が適正の時に true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteral5varidEv">
+<span id="_CPPv3NK10SatLiteral5varidEv"></span><span id="_CPPv2NK10SatLiteral5varidEv"></span><span id="SatLiteral::varidC"></span><span class="target" id="d6/d75/classSatLiteral_1a5f4fd265deeba298eb1eff309724dd3d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SatVarId" title="SatVarId"><span class="n"><span class="pre">SatVarId</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">varid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>変数番号を得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>変数番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteral11is_positiveEv">
+<span id="_CPPv3NK10SatLiteral11is_positiveEv"></span><span id="_CPPv2NK10SatLiteral11is_positiveEv"></span><span id="SatLiteral::is_positiveC"></span><span class="target" id="d6/d75/classSatLiteral_1a74d4470ebd6ffd5850d666a0f0103275"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_positive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>正極性のリテラルの時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteral11is_negativeEv">
+<span id="_CPPv3NK10SatLiteral11is_negativeEv"></span><span id="_CPPv2NK10SatLiteral11is_negativeEv"></span><span id="SatLiteral::is_negativeC"></span><span class="target" id="d6/d75/classSatLiteral_1a6fd7ca20aa59e6437a744594fdd4404d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_negative</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>負極性のリテラルの時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteral4hashEv">
+<span id="_CPPv3NK10SatLiteral4hashEv"></span><span id="_CPPv2NK10SatLiteral4hashEv"></span><span id="SatLiteral::hashC"></span><span class="target" id="d6/d75/classSatLiteral_1ac8b223ee25f5963d3cfa655dc21dffe0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hash</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>ハッシュ用の関数 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteral5indexEv">
+<span id="_CPPv3NK10SatLiteral5indexEv"></span><span id="_CPPv2NK10SatLiteral5indexEv"></span><span id="SatLiteral::indexC"></span><span class="target" id="d6/d75/classSatLiteral_1ac3c7b2ab43df942a99d4ce77c94f93b4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>配列のインデックスとして使用可能な数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteral6invertEv">
+<span id="_CPPv3N10SatLiteral6invertEv"></span><span id="_CPPv2N10SatLiteral6invertEv"></span><span id="SatLiteral::invert"></span><span class="target" id="d6/d75/classSatLiteral_1a2d2bd2d4bdf359bd115f022842e426e7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">invert</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>自身の極性を反転させる． </p>
+<p>
+不正な値の場合は変化しない． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>自身の参照を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteralcoEv">
+<span id="_CPPv3NK10SatLiteralcoEv"></span><span id="_CPPv2NK10SatLiteralcoEv"></span><span id="SatLiteral::inv-operatorC"></span><span class="target" id="d6/d75/classSatLiteral_1a5d9be57d759e728bc21a93dab177ce08"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">~</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>極性の反転 </p>
+<p>
+不正な値の場合は変化しない． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>極性を反転させたリテラルを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteralmlEb">
+<span id="_CPPv3NK10SatLiteralmlEb"></span><span id="_CPPv2NK10SatLiteralmlEb"></span><span id="SatLiteral::mul-operator__bC"></span><span class="target" id="d6/d75/classSatLiteral_1afe437230589b0065a49ba551c4232cbd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>極性を作用させる </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv</strong> -- [in] 反転フラグ </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>結果のリテラルを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteral13make_positiveEv">
+<span id="_CPPv3NK10SatLiteral13make_positiveEv"></span><span id="_CPPv2NK10SatLiteral13make_positiveEv"></span><span id="SatLiteral::make_positiveC"></span><span class="target" id="d6/d75/classSatLiteral_1a7f9725732c5107a038f77f867c5e6e52"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_positive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>同じ変数の正極性リテラルを返す． </p>
+<p>不正な値の場合は変化しない． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10SatLiteral13make_negativeEv">
+<span id="_CPPv3NK10SatLiteral13make_negativeEv"></span><span id="_CPPv2NK10SatLiteral13make_negativeEv"></span><span id="SatLiteral::make_negativeC"></span><span class="target" id="d6/d75/classSatLiteral_1a2796fbc9d7fe32d86d2a012efdf8a8a5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_negative</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>同じ変数の負極性リテラルを返す． </p>
+<p>不正な値の場合は変化しない． </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteral7invalidEv">
+<span id="_CPPv3N10SatLiteral7invalidEv"></span><span id="_CPPv2N10SatLiteral7invalidEv"></span><span id="SatLiteral::invalid"></span><span class="target" id="d6/d75/classSatLiteral_1ae1a0d0bb363435e04942c1d1735e0947"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>不正な値を返す． </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteral1XE">
+<span id="_CPPv3N10SatLiteral1XE"></span><span id="_CPPv2N10SatLiteral1XE"></span><span id="SatLiteral::X__SatLiteralC"></span><span class="target" id="d6/d75/classSatLiteral_1a6f3fefd41e9565843e0925f0298aa745"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">X</span></span></span><br /></dt>
+<dd><p>未定義リテラル </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-related">Related</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteraleqE10SatLiteral10SatLiteral">
+<span id="_CPPv3N10SatLiteraleqE10SatLiteral10SatLiteral"></span><span id="_CPPv2N10SatLiteraleqE10SatLiteral10SatLiteral"></span><span id="SatLiteral::eq-operator__SatLiteral.SatLiteral"></span><span class="target" id="d6/d75/classSatLiteral_1a5971eb7e83528e199a794d577c9b49fd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>等価比較 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] オペランド1 </p></li>
+<li><p><strong>lit2</strong> -- [in] オペランド2 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>lit1 と lit2 が等しいリテラルの時 true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteralneE10SatLiteral10SatLiteral">
+<span id="_CPPv3N10SatLiteralneE10SatLiteral10SatLiteral"></span><span id="_CPPv2N10SatLiteralneE10SatLiteral10SatLiteral"></span><span id="SatLiteral::neq-operator__SatLiteral.SatLiteral"></span><span class="target" id="d6/d75/classSatLiteral_1a4d4872de9ae7704f23ea4d93674175f7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>非等価比較 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] オペランド1 </p></li>
+<li><p><strong>lit2</strong> -- [in] オペランド2 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>lit1 と lit2 が等しいリテラルでないとき true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteralltE10SatLiteral10SatLiteral">
+<span id="_CPPv3N10SatLiteralltE10SatLiteral10SatLiteral"></span><span id="_CPPv2N10SatLiteralltE10SatLiteral10SatLiteral"></span><span id="SatLiteral::lt-operator__SatLiteral.SatLiteral"></span><span class="target" id="d6/d75/classSatLiteral_1a6c6fa8ac4f7074e7274cb63214f0b512"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>小なり比較演算 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] オペランド1 </p></li>
+<li><p><strong>lit2</strong> -- [in] オペランド2 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteralleE10SatLiteral10SatLiteral">
+<span id="_CPPv3N10SatLiteralleE10SatLiteral10SatLiteral"></span><span id="_CPPv2N10SatLiteralleE10SatLiteral10SatLiteral"></span><span id="SatLiteral::lte-operator__SatLiteral.SatLiteral"></span><span class="target" id="d6/d75/classSatLiteral_1a11e5c6305ad235ecd50133078621122a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>小なりイコール比較演算 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] オペランド1 </p></li>
+<li><p><strong>lit2</strong> -- [in] オペランド2 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteralgtE10SatLiteral10SatLiteral">
+<span id="_CPPv3N10SatLiteralgtE10SatLiteral10SatLiteral"></span><span id="_CPPv2N10SatLiteralgtE10SatLiteral10SatLiteral"></span><span id="SatLiteral::gt-operator__SatLiteral.SatLiteral"></span><span class="target" id="d6/d75/classSatLiteral_1af759850975e6fc66cb92fed045c8d302"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>大なり比較演算 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] オペランド1 </p></li>
+<li><p><strong>lit2</strong> -- [in] オペランド2 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiteralgeE10SatLiteral10SatLiteral">
+<span id="_CPPv3N10SatLiteralgeE10SatLiteral10SatLiteral"></span><span id="_CPPv2N10SatLiteralgeE10SatLiteral10SatLiteral"></span><span id="SatLiteral::gte-operator__SatLiteral.SatLiteral"></span><span class="target" id="d6/d75/classSatLiteral_1a61bfae7c69ede75be62d5738699eeb51"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>大なりイコール比較演算 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] オペランド1 </p></li>
+<li><p><strong>lit2</strong> -- [in] オペランド2 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10SatLiterallsERNSt7ostreamERK10SatLiteral">
+<span id="_CPPv3N10SatLiterallsERNSt7ostreamERK10SatLiteral"></span><span id="_CPPv2N10SatLiterallsERNSt7ostreamERK10SatLiteral"></span><span id="SatLiteral::lshift-operator__osR.SatLiteralCR"></span><span class="target" id="d6/d75/classSatLiteral_1a70892aca0b5c77fa3ac03422ed2c1eaa"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p><a class="reference internal" href="#d6/d75/classSatLiteral"><span class="std std-ref">SatLiteral</span></a> の内容を ostream に出力する関数 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>lit</strong> -- [in] 出力対象のリテラル </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>s </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.2.4. SatLiteral</a><ul>
+<li><a class="reference internal" href="#_CPPv410SatLiteral"><code class="docutils literal notranslate"><span class="pre">SatLiteral</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteral10SatLiteralEv"><code class="docutils literal notranslate"><span class="pre">SatLiteral()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteral8is_validEv"><code class="docutils literal notranslate"><span class="pre">is_valid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteral5varidEv"><code class="docutils literal notranslate"><span class="pre">varid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteral11is_positiveEv"><code class="docutils literal notranslate"><span class="pre">is_positive()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteral11is_negativeEv"><code class="docutils literal notranslate"><span class="pre">is_negative()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteral4hashEv"><code class="docutils literal notranslate"><span class="pre">hash()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteral5indexEv"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteral6invertEv"><code class="docutils literal notranslate"><span class="pre">invert()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteralcoEv"><code class="docutils literal notranslate"><span class="pre">operator~()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteralmlEb"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteral13make_positiveEv"><code class="docutils literal notranslate"><span class="pre">make_positive()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10SatLiteral13make_negativeEv"><code class="docutils literal notranslate"><span class="pre">make_negative()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteral7invalidEv"><code class="docutils literal notranslate"><span class="pre">invalid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteral1XE"><code class="docutils literal notranslate"><span class="pre">X</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteraleqE10SatLiteral10SatLiteral"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteralneE10SatLiteral10SatLiteral"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteralltE10SatLiteral10SatLiteral"><code class="docutils literal notranslate"><span class="pre">operator&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteralleE10SatLiteral10SatLiteral"><code class="docutils literal notranslate"><span class="pre">operator&lt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteralgtE10SatLiteral10SatLiteral"><code class="docutils literal notranslate"><span class="pre">operator&gt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiteralgeE10SatLiteral10SatLiteral"><code class="docutils literal notranslate"><span class="pre">operator&gt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10SatLiterallsERNSt7ostreamERK10SatLiteral"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="satsolver.html"
+                          title="前の章へ"><span class="section-number">5.2.3. </span>SatSolver</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="satinitparam.html"
+                          title="次の章へ"><span class="section-number">5.2.5. </span>SatInitParam</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/sat/satliteral.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="satinitparam.html" title="5.2.5. SatInitParam"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="satsolver.html" title="5.2.3. SatSolver"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">5.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2.4. </span>SatLiteral</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

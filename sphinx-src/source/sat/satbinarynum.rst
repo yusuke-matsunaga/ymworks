@@ -1,0 +1,5 @@
+SatBinaryNum
+~~~~~~~~~~~~~~~
+
+.. doxygenclass:: SatBinaryNum
+   :members:

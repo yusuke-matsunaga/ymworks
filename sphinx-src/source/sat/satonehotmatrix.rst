@@ -1,0 +1,5 @@
+SatOneHotMatrix
+~~~~~~~~~~~~~~~~
+
+.. doxygenclass:: SatOneHotMatrix
+   :members:

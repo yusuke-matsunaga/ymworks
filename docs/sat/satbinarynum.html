@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.2.9. SatBinaryNum &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.2.10. SatOneHotVar" href="satonehotvar.html" />
+    <link rel="prev" title="5.2.8. SatCondBlock" href="satcondblock.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="satonehotvar.html" title="5.2.10. SatOneHotVar"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="satcondblock.html" title="5.2.8. SatCondBlock"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" accesskey="U"><span class="section-number">5.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2.9. </span>SatBinaryNum</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="satbinarynum">
+<h1><span class="section-number">5.2.9. </span>SatBinaryNum<a class="headerlink" href="#satbinarynum" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv412SatBinaryNum">
+<span id="_CPPv312SatBinaryNum"></span><span id="_CPPv212SatBinaryNum"></span><span id="SatBinaryNum"></span><span class="target" id="d3/dbc/classSatBinaryNum"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SatBinaryNum</span></span></span><br /></dt>
+<dd><p>2進符号化を用いて数値を表すクラス </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatBinaryNum12SatBinaryNumEv">
+<span id="_CPPv3N12SatBinaryNum12SatBinaryNumEv"></span><span id="_CPPv2N12SatBinaryNum12SatBinaryNumEv"></span><span id="SatBinaryNum::SatBinaryNum"></span><span class="target" id="d3/dbc/classSatBinaryNum_1ac07d20fcc428a1b18fb745e7b4ad7559"></span><span class="sig-name descname"><span class="n"><span class="pre">SatBinaryNum</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>コンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatBinaryNum12SatBinaryNumER9SatSolver8SizeType">
+<span id="_CPPv3N12SatBinaryNum12SatBinaryNumER9SatSolver8SizeType"></span><span id="_CPPv2N12SatBinaryNum12SatBinaryNumER9SatSolver8SizeType"></span><span id="SatBinaryNum::SatBinaryNum__SatSolverR.SizeType"></span><span class="target" id="d3/dbc/classSatBinaryNum_1ac9d0fafed70d3bd996ec435a75e0dd74"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SatBinaryNum</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv49SatSolver" title="SatSolver"><span class="n"><span class="pre">SatSolver</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">solver</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">bit_num</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>コンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solver</strong> -- [in] SATソルバ </p></li>
+<li><p><strong>bit_num</strong> -- [in] ビット幅 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatBinaryNumD0Ev">
+<span id="_CPPv3N12SatBinaryNumD0Ev"></span><span id="_CPPv2N12SatBinaryNumD0Ev"></span><span id="SatBinaryNum::~SatBinaryNum"></span><span class="target" id="d3/dbc/classSatBinaryNum_1ad52ac23bcbdb0fb001a9ddc2c17be42e"></span><span class="sig-name descname"><span class="n"><span class="pre">~SatBinaryNum</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12SatBinaryNum4initER9SatSolver8SizeType">
+<span id="_CPPv3N12SatBinaryNum4initER9SatSolver8SizeType"></span><span id="_CPPv2N12SatBinaryNum4initER9SatSolver8SizeType"></span><span id="SatBinaryNum::init__SatSolverR.SizeType"></span><span class="target" id="d3/dbc/classSatBinaryNum_1a3f43edc4013fafc04691318ad3a17dce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">init</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv49SatSolver" title="SatSolver"><span class="n"><span class="pre">SatSolver</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">solver</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">bit_num</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>初期化を行う． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>solver</strong> -- [in] SATソルバ </p></li>
+<li><p><strong>bit_num</strong> -- [in] ビット幅 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12SatBinaryNum7bit_numEv">
+<span id="_CPPv3NK12SatBinaryNum7bit_numEv"></span><span id="_CPPv2NK12SatBinaryNum7bit_numEv"></span><span id="SatBinaryNum::bit_numC"></span><span class="target" id="d3/dbc/classSatBinaryNum_1ad88f8ef6349d2dd429d9f501b1543eb3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bit_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>ビット数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12SatBinaryNum7bit_varE8SizeType">
+<span id="_CPPv3NK12SatBinaryNum7bit_varE8SizeType"></span><span id="_CPPv2NK12SatBinaryNum7bit_varE8SizeType"></span><span id="SatBinaryNum::bit_var__SizeTypeC"></span><span class="target" id="d3/dbc/classSatBinaryNum_1a7db3e07c4ef9c1e6d4c2ff0c8c641121"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bit_var</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">bit</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>ビットに対応する変数を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bit</strong> -- [in] ビット位置 ( 0 &lt;= bit &lt; <a class="reference internal" href="#d3/dbc/classSatBinaryNum_1ad88f8ef6349d2dd429d9f501b1543eb3"><span class="std std-ref">bit_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12SatBinaryNum8bit_varsEv">
+<span id="_CPPv3NK12SatBinaryNum8bit_varsEv"></span><span id="_CPPv2NK12SatBinaryNum8bit_varsEv"></span><span id="SatBinaryNum::bit_varsC"></span><span class="target" id="d3/dbc/classSatBinaryNum_1ae2a13e3aecec6fd684d7d9391cdf17e3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">bit_vars</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>値に対応する変数のベクタを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12SatBinaryNum3valERK8SatModel">
+<span id="_CPPv3NK12SatBinaryNum3valERK8SatModel"></span><span id="_CPPv2NK12SatBinaryNum3valERK8SatModel"></span><span id="SatBinaryNum::val__SatModelCRC"></span><span class="target" id="d3/dbc/classSatBinaryNum_1a027072f942c1ec5c9a01310c214b9043"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">val</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SatModel" title="SatModel"><span class="n"><span class="pre">SatModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>SATの解から値を得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> -- [in] SATの解 </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.2.9. SatBinaryNum</a><ul>
+<li><a class="reference internal" href="#_CPPv412SatBinaryNum"><code class="docutils literal notranslate"><span class="pre">SatBinaryNum</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N12SatBinaryNum12SatBinaryNumEv"><code class="docutils literal notranslate"><span class="pre">SatBinaryNum()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12SatBinaryNum12SatBinaryNumER9SatSolver8SizeType"><code class="docutils literal notranslate"><span class="pre">SatBinaryNum()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12SatBinaryNumD0Ev"><code class="docutils literal notranslate"><span class="pre">~SatBinaryNum()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12SatBinaryNum4initER9SatSolver8SizeType"><code class="docutils literal notranslate"><span class="pre">init()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12SatBinaryNum7bit_numEv"><code class="docutils literal notranslate"><span class="pre">bit_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12SatBinaryNum7bit_varE8SizeType"><code class="docutils literal notranslate"><span class="pre">bit_var()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12SatBinaryNum8bit_varsEv"><code class="docutils literal notranslate"><span class="pre">bit_vars()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12SatBinaryNum3valERK8SatModel"><code class="docutils literal notranslate"><span class="pre">val()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="satcondblock.html"
+                          title="前の章へ"><span class="section-number">5.2.8. </span>SatCondBlock</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="satonehotvar.html"
+                          title="次の章へ"><span class="section-number">5.2.10. </span>SatOneHotVar</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/sat/satbinarynum.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="satonehotvar.html" title="5.2.10. SatOneHotVar"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="satcondblock.html" title="5.2.8. SatCondBlock"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">5.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2.9. </span>SatBinaryNum</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

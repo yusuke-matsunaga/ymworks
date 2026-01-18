@@ -1,0 +1,5 @@
+SatOneHotVar
+~~~~~~~~~~~~~~
+
+.. doxygenclass:: SatOneHotVar
+   :members:
