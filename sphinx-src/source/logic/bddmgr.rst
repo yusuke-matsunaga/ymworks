@@ -1,0 +1,5 @@
+BddMgr
+~~~~~~~
+
+.. doxygenclass:: BddMgr
+   :members:

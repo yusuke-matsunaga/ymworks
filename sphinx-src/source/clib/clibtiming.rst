@@ -1,0 +1,5 @@
+ClibTiming
+~~~~~~~~~~~
+
+.. doxygenclass:: ClibTiming
+   :members:

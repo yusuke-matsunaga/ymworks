@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>クラス一覧 &#8212; ymworks 1.0.0 ドキュメント</title>
+    <title>2.2. クラス一覧 &#8212; ymworks 1.0.0 ドキュメント</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
@@ -15,8 +15,8 @@
     <script src="../_static/translations.js?v=4755f45a"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
-    <link rel="next" title="BnModel" href="bnmodel.html" />
-    <link rel="prev" title="1. 概要" href="intro.html" /> 
+    <link rel="next" title="2.2.1. BnModel" href="bnmodel.html" />
+    <link rel="prev" title="2.1. 概要" href="intro.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
@@ -28,14 +28,14 @@
           <a href="../py-modindex.html" title="Pythonモジュール索引"
              >モジュール</a> |</li>
         <li class="right" >
-          <a href="bnmodel.html" title="BnModel"
+          <a href="bnmodel.html" title="2.2.1. BnModel"
              accesskey="N">次へ</a> |</li>
         <li class="right" >
-          <a href="intro.html" title="1. 概要"
+          <a href="intro.html" title="2.1. 概要"
              accesskey="P">前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="bn.html" accesskey="U">BN(Boolean Network)</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">クラス一覧</a></li> 
+          <li class="nav-item nav-item-1"><a href="bn.html" accesskey="U"><span class="section-number">2. </span>BN(Boolean Network)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.2. </span>クラス一覧</a></li> 
       </ul>
     </div>  
 
@@ -45,13 +45,31 @@
           <div class="body" role="main">
             
   <section id="id1">
-<h1>クラス一覧<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">2.2. </span>クラス一覧<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>ネットワーク全体を <cite>BnModel</cite> が表す．
+ネットワーク中のノード(入力ノード，論理ノード)は <cite>BnNode</cite>
+が表す．
+D-FFの情報は <cite>BnDff</cite> が表す．
+これらのクラスはすべて実装クラスへのスマートポインタとなっており，
+ユーザーアプリケーション側でリソースの管理を行う必要はない．
+これらのオブジェクトのコピーはポインタのコピーと同程度のコストで
+行える．
+逆にいうと一つでも <cite>BnNode</cite> や <cite>BnDff</cite> のオブジェクトが残っていると
+それを含むネットワーク全体のリソースは開放されない．
+<cite>BnNode</cite> や <cite>BnDff</cite> は <cite>std::vector&lt;&gt;</cite> を用いてリスト構造を作る
+ことができる．上述のように <cite>BnNode</cite> や <cite>BnDff</cite> のコピーのコストは
+小さいので問題はないが， <cite>BnModel</cite> や <cite>BnNode</cite> が内部に持っている
+リストをそのまま利用した <cite>BnNodeList</cite> と <cite>BnDffList</cite> というクラス
+も用意されている．
+こちらのほうがよりオーバーヘッドが少ない．</p>
 <div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">bn のクラス一覧</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="bnmodel.html">BnModel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bndff.html">BnDff</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bnnode.html">BnNode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bnmodel.html">2.2.1. BnModel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bndff.html">2.2.2. BnDff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bnnode.html">2.2.3. BnNode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bnfunc.html">2.2.4. BnFunc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bnnodelist.html">2.2.5. BnNodeList</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bndfflist.html">2.2.6. BnDffList</a></li>
 </ul>
 </div>
 </section>
@@ -66,12 +84,12 @@
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="intro.html"
-                          title="前の章へ">1. 概要</a></p>
+                          title="前の章へ"><span class="section-number">2.1. </span>概要</a></p>
   </div>
   <div>
     <h4>次のトピックへ</h4>
     <p class="topless"><a href="bnmodel.html"
-                          title="次の章へ">BnModel</a></p>
+                          title="次の章へ"><span class="section-number">2.2.1. </span>BnModel</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
@@ -104,14 +122,14 @@
           <a href="../py-modindex.html" title="Pythonモジュール索引"
              >モジュール</a> |</li>
         <li class="right" >
-          <a href="bnmodel.html" title="BnModel"
+          <a href="bnmodel.html" title="2.2.1. BnModel"
              >次へ</a> |</li>
         <li class="right" >
-          <a href="intro.html" title="1. 概要"
+          <a href="intro.html" title="2.1. 概要"
              >前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="bn.html" >BN(Boolean Network)</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">クラス一覧</a></li> 
+          <li class="nav-item nav-item-1"><a href="bn.html" ><span class="section-number">2. </span>BN(Boolean Network)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2.2. </span>クラス一覧</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

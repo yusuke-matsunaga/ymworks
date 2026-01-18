@@ -1,0 +1,5 @@
+ClibResistance
+~~~~~~~~~~~~~~~
+
+.. doxygenclass:: ClibResistance
+   :members:

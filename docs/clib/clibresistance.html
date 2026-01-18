@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>4.2.3. ClibResistance &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="4.2.4. ClibTime" href="clibtime.html" />
+    <link rel="prev" title="4.2.2. ClibCapacitance" href="clibcapacitance.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="clibtime.html" title="4.2.4. ClibTime"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="clibcapacitance.html" title="4.2.2. ClibCapacitance"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="clib.html" ><span class="section-number">4. </span>clib(Cell Library)</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" accesskey="U"><span class="section-number">4.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.2.3. </span>ClibResistance</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="clibresistance">
+<h1><span class="section-number">4.2.3. </span>ClibResistance<a class="headerlink" href="#clibresistance" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv414ClibResistance">
+<span id="_CPPv314ClibResistance"></span><span id="_CPPv214ClibResistance"></span><span id="ClibResistance"></span><span class="target" id="d3/d9e/classClibResistance"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibResistance</span></span></span><br /></dt>
+<dd><p>抵抗値を表すクラス </p>
+<p>内容的には double そのものだが他の単位との演算が 行えないようになっている． <a class="reference internal" href="#d3/d9e/classClibResistance"><span class="std std-ref">ClibResistance</span></a> 同士の演算も加減算のみ定義されている． </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistance14ClibResistanceEv">
+<span id="_CPPv3N14ClibResistance14ClibResistanceEv"></span><span id="_CPPv2N14ClibResistance14ClibResistanceEv"></span><span id="ClibResistance::ClibResistance"></span><span class="target" id="d3/d9e/classClibResistance_1a82b7886e59e5d05942bd602afcf10d3b"></span><span class="sig-name descname"><span class="n"><span class="pre">ClibResistance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>空のコンストラクタ </p>
+<p>内容は 0.0 で初期化される． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistance14ClibResistanceEd">
+<span id="_CPPv3N14ClibResistance14ClibResistanceEd"></span><span id="_CPPv2N14ClibResistance14ClibResistanceEd"></span><span id="ClibResistance::ClibResistance__double"></span><span class="target" id="d3/d9e/classClibResistance_1aa6f4956f50ae261292c014668a0c55e7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibResistance</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">v</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>double からの変換コンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v</strong> -- [in] 設定する値 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistanceD0Ev">
+<span id="_CPPv3N14ClibResistanceD0Ev"></span><span id="_CPPv2N14ClibResistanceD0Ev"></span><span id="ClibResistance::~ClibResistance"></span><span class="target" id="d3/d9e/classClibResistance_1ad696e34f179c4bdc1ef76c8ce6f41121"></span><span class="sig-name descname"><span class="n"><span class="pre">~ClibResistance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK14ClibResistance5valueEv">
+<span id="_CPPv3NK14ClibResistance5valueEv"></span><span id="_CPPv2NK14ClibResistance5valueEv"></span><span id="ClibResistance::valueC"></span><span class="target" id="d3/d9e/classClibResistance_1abf150f6885144de2dfa3c4e79fd95a7d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>値を得る． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistanceaSERK14ClibResistance">
+<span id="_CPPv3N14ClibResistanceaSERK14ClibResistance"></span><span id="_CPPv2N14ClibResistanceaSERK14ClibResistance"></span><span id="ClibResistance::assign-operator__ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1ad56a5e9546cabd0966261f4196b024ae"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>代入演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>代入後の自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancepLERK14ClibResistance">
+<span id="_CPPv3N14ClibResistancepLERK14ClibResistance"></span><span id="_CPPv2N14ClibResistancepLERK14ClibResistance"></span><span id="ClibResistance::add-assign-operator__ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a4f417e6fab8ca469165ae9a040092b1d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>加算付き代入演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>代入後の自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancemIERK14ClibResistance">
+<span id="_CPPv3N14ClibResistancemIERK14ClibResistance"></span><span id="_CPPv2N14ClibResistancemIERK14ClibResistance"></span><span id="ClibResistance::sub-assign-operator__ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a448da5becd494d6e93401e04562d9bd6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>減算付き代入演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>代入後の自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistance8infinityEv">
+<span id="_CPPv3N14ClibResistance8infinityEv"></span><span id="_CPPv2N14ClibResistance8infinityEv"></span><span id="ClibResistance::infinity"></span><span class="target" id="d3/d9e/classClibResistance_1afbc509d7c821ac43f52343c25d84208d"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">infinity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>無限大の値を作るクラス関数 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistance5inftyEv">
+<span id="_CPPv3N14ClibResistance5inftyEv"></span><span id="_CPPv2N14ClibResistance5inftyEv"></span><span id="ClibResistance::infty"></span><span class="target" id="d3/d9e/classClibResistance_1acf02889b8b31dd5b0d875767c9e6f3be"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">infty</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd><p>無限大の値を作る． </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-related">Related</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistanceplERK14ClibResistanceRK14ClibResistance">
+<span id="_CPPv3N14ClibResistanceplERK14ClibResistanceRK14ClibResistance"></span><span id="_CPPv2N14ClibResistanceplERK14ClibResistanceRK14ClibResistance"></span><span id="ClibResistance::add-operator__ClibResistanceCR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1aed530b135b241d32741c5187d6c18f58"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>加算 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 左のオペランド </p></li>
+<li><p><strong>right</strong> -- [in] 右のオペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>演算結果を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancemiERK14ClibResistanceRK14ClibResistance">
+<span id="_CPPv3N14ClibResistancemiERK14ClibResistanceRK14ClibResistance"></span><span id="_CPPv2N14ClibResistancemiERK14ClibResistanceRK14ClibResistance"></span><span id="ClibResistance::sub-operator__ClibResistanceCR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a0236b99f9303c4426e617f6a15f0239f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>減算 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 左のオペランド </p></li>
+<li><p><strong>right</strong> -- [in] 右のオペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>演算結果を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistanceeqERK14ClibResistanceRK14ClibResistance">
+<span id="_CPPv3N14ClibResistanceeqERK14ClibResistanceRK14ClibResistance"></span><span id="_CPPv2N14ClibResistanceeqERK14ClibResistanceRK14ClibResistance"></span><span id="ClibResistance::eq-operator__ClibResistanceCR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a9d8cc34b5489b243cebe7b46d0584643"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>等価比較演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 左のオペランド </p></li>
+<li><p><strong>right</strong> -- [in] 右のオペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>演算結果を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistanceneERK14ClibResistanceRK14ClibResistance">
+<span id="_CPPv3N14ClibResistanceneERK14ClibResistanceRK14ClibResistance"></span><span id="_CPPv2N14ClibResistanceneERK14ClibResistanceRK14ClibResistance"></span><span id="ClibResistance::neq-operator__ClibResistanceCR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a34877fbb6c18cd5155ec7291a3aeaea8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>非等価比較演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 左のオペランド </p></li>
+<li><p><strong>right</strong> -- [in] 右のオペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>演算結果を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistanceltERK14ClibResistanceRK14ClibResistance">
+<span id="_CPPv3N14ClibResistanceltERK14ClibResistanceRK14ClibResistance"></span><span id="_CPPv2N14ClibResistanceltERK14ClibResistanceRK14ClibResistance"></span><span id="ClibResistance::lt-operator__ClibResistanceCR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1af25cc10486374ff7c612334c3916c1f6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>大小比較演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 左のオペランド </p></li>
+<li><p><strong>right</strong> -- [in] 右のオペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>演算結果を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancegtERK14ClibResistanceRK14ClibResistance">
+<span id="_CPPv3N14ClibResistancegtERK14ClibResistanceRK14ClibResistance"></span><span id="_CPPv2N14ClibResistancegtERK14ClibResistanceRK14ClibResistance"></span><span id="ClibResistance::gt-operator__ClibResistanceCR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a2aa7e6289574a85d7a79c4639ef8e4f7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>大小比較演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 左のオペランド </p></li>
+<li><p><strong>right</strong> -- [in] 右のオペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>演算結果を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistanceleERK14ClibResistanceRK14ClibResistance">
+<span id="_CPPv3N14ClibResistanceleERK14ClibResistanceRK14ClibResistance"></span><span id="_CPPv2N14ClibResistanceleERK14ClibResistanceRK14ClibResistance"></span><span id="ClibResistance::lte-operator__ClibResistanceCR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a4c3bd5636795fb9591f19a9287013fdf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>大小比較演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 左のオペランド </p></li>
+<li><p><strong>right</strong> -- [in] 右のオペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>演算結果を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancegeERK14ClibResistanceRK14ClibResistance">
+<span id="_CPPv3N14ClibResistancegeERK14ClibResistanceRK14ClibResistance"></span><span id="_CPPv2N14ClibResistancegeERK14ClibResistanceRK14ClibResistance"></span><span id="ClibResistance::gte-operator__ClibResistanceCR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1aa40165ad3c3acb2e9372778bd615b52e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>大小比較演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 左のオペランド </p></li>
+<li><p><strong>right</strong> -- [in] 右のオペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>演算結果を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancelsERNSt7ostreamERK14ClibResistance">
+<span id="_CPPv3N14ClibResistancelsERNSt7ostreamERK14ClibResistance"></span><span id="_CPPv2N14ClibResistancelsERNSt7ostreamERK14ClibResistance"></span><span id="ClibResistance::lshift-operator__osR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a381564529b94776420122ffb94965e61"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>ストリーム出力 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力先のストリーム </p></li>
+<li><p><strong>val</strong> -- [in] 値 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancersERNSt7istreamER14ClibResistance">
+<span id="_CPPv3N14ClibResistancersERNSt7istreamER14ClibResistance"></span><span id="_CPPv2N14ClibResistancersERNSt7istreamER14ClibResistance"></span><span id="ClibResistance::rshift-operator__isR.ClibResistanceR"></span><span class="target" id="d3/d9e/classClibResistance_1a75ad5552558b5c45c33dfbc81307500e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;&gt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>ストリーム入力 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 入力元のストリーム </p></li>
+<li><p><strong>val</strong> -- [out] 読み出された値を格納する変数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancelsER6BinEncRK14ClibResistance">
+<span id="_CPPv3N14ClibResistancelsER6BinEncRK14ClibResistance"></span><span id="_CPPv2N14ClibResistancelsER6BinEncRK14ClibResistance"></span><span id="ClibResistance::lshift-operator__BinEncR.ClibResistanceCR"></span><span class="target" id="d3/d9e/classClibResistance_1a5a796dd74d81f4ac59a7f2cfafca6f09"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BinEnc" title="BinEnc"><span class="n"><span class="pre">BinEnc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv46BinEnc" title="BinEnc"><span class="n"><span class="pre">BinEnc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>バイナリストリーム出力 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力先のストリーム </p></li>
+<li><p><strong>val</strong> -- [in] 値 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N14ClibResistancersER6BinDecR14ClibResistance">
+<span id="_CPPv3N14ClibResistancersER6BinDecR14ClibResistance"></span><span id="_CPPv2N14ClibResistancersER6BinDecR14ClibResistance"></span><span id="ClibResistance::rshift-operator__BinDecR.ClibResistanceR"></span><span class="target" id="d3/d9e/classClibResistance_1a7a340ebcf5ce0e7ef9cf3e02ebc69e6e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BinDec" title="BinDec"><span class="n"><span class="pre">BinDec</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;&gt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv46BinDec" title="BinDec"><span class="n"><span class="pre">BinDec</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>バイナリストリーム入力 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 入力元のストリーム </p></li>
+<li><p><strong>val</strong> -- [out] 読み出された値を格納する変数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.2.3. ClibResistance</a><ul>
+<li><a class="reference internal" href="#_CPPv414ClibResistance"><code class="docutils literal notranslate"><span class="pre">ClibResistance</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistance14ClibResistanceEv"><code class="docutils literal notranslate"><span class="pre">ClibResistance()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistance14ClibResistanceEd"><code class="docutils literal notranslate"><span class="pre">ClibResistance()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistanceD0Ev"><code class="docutils literal notranslate"><span class="pre">~ClibResistance()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14ClibResistance5valueEv"><code class="docutils literal notranslate"><span class="pre">value()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistanceaSERK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancepLERK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator+=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancemIERK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator-=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistance8infinityEv"><code class="docutils literal notranslate"><span class="pre">infinity()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistance5inftyEv"><code class="docutils literal notranslate"><span class="pre">infty()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistanceplERK14ClibResistanceRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator+()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancemiERK14ClibResistanceRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistanceeqERK14ClibResistanceRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistanceneERK14ClibResistanceRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistanceltERK14ClibResistanceRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancegtERK14ClibResistanceRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator&gt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistanceleERK14ClibResistanceRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator&lt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancegeERK14ClibResistanceRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator&gt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancelsERNSt7ostreamERK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancersERNSt7istreamER14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancelsER6BinEncRK14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14ClibResistancersER6BinDecR14ClibResistance"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="clibcapacitance.html"
+                          title="前の章へ"><span class="section-number">4.2.2. </span>ClibCapacitance</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="clibtime.html"
+                          title="次の章へ"><span class="section-number">4.2.4. </span>ClibTime</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/clib/clibresistance.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="clibtime.html" title="4.2.4. ClibTime"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="clibcapacitance.html" title="4.2.2. ClibCapacitance"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="clib.html" ><span class="section-number">4. </span>clib(Cell Library)</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">4.2. </span>クラス一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">4.2.3. </span>ClibResistance</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+TruthTable
+~~~~~~~~~~~
+
+.. doxygenclass:: TruthTable
+   :members:

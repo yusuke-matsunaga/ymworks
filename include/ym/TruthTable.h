@@ -16,7 +16,7 @@ BEGIN_NAMESPACE_YM
 
 //////////////////////////////////////////////////////////////////////
 /// @class TruthTable TruthTable.h "ym/TruthTable.h"
-/// @ingroup LogicGroup
+/// @ingroup TvGroup
 /// @brief 真理値表を表すクラス
 ///
 /// 多入力多出力の不完全指定論理関数を表す．

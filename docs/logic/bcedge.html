@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.2.7.4. BcEdge &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="2. BN(Boolean Network)" href="../bn/bn.html" />
+    <link rel="prev" title="1.2.7.3. BcOp" href="bcop.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="../bn/bn.html" title="2. BN(Boolean Network)"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="bcop.html" title="1.2.7.3. BcOp"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="bc_grp.html" accesskey="U"><span class="section-number">1.2.7. </span>Boolean Chain を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.7.4. </span>BcEdge</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="bcedge">
+<h1><span class="section-number">1.2.7.4. </span>BcEdge<a class="headerlink" href="#bcedge" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv46BcEdge">
+<span id="_CPPv36BcEdge"></span><span id="_CPPv26BcEdge"></span><span id="BcEdge"></span><span class="target" id="d9/d26/classBcEdge"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BcEdge</span></span></span><a class="headerlink" href="#_CPPv46BcEdge" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="bcgraph.html#d0/d8e/classBcGraph"><span class="std std-ref">BcGraph</span></a> の枝を表すクラス </p>
+<p><ul class="simple">
+<li><p>入力</p></li>
+<li><p>演算ノード</p></li>
+<li><p>入力の否定</p></li>
+<li><p>演算ノードの否定</p></li>
+<li><p>定数0</p></li>
+<li><p>定数1 を表す． ただし，定数0，定数1 は出力の枝の場合のみ </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdge6BcEdgeEv">
+<span id="_CPPv3N6BcEdge6BcEdgeEv"></span><span id="_CPPv2N6BcEdge6BcEdgeEv"></span><span id="BcEdge::BcEdge"></span><span class="target" id="d9/d26/classBcEdge_1af1ed4d846a7d64e75c0bb0e058675f90"></span><span class="sig-name descname"><span class="n"><span class="pre">BcEdge</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N6BcEdge6BcEdgeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>空のコンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdge6BcEdgeERK6BcEdge">
+<span id="_CPPv3N6BcEdge6BcEdgeERK6BcEdge"></span><span id="_CPPv2N6BcEdge6BcEdgeERK6BcEdge"></span><span id="BcEdge::BcEdge__BcEdgeCR"></span><span class="target" id="d9/d26/classBcEdge_1a6e3f59ef65fc06eea15dc2a0b1616591"></span><span class="sig-name descname"><span class="n"><span class="pre">BcEdge</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N6BcEdge6BcEdgeERK6BcEdge" title="BcEdge::BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N6BcEdge6BcEdgeERK6BcEdge" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コピーコンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdgeaSERK6BcEdge">
+<span id="_CPPv3N6BcEdgeaSERK6BcEdge"></span><span id="_CPPv2N6BcEdgeaSERK6BcEdge"></span><span id="BcEdge::assign-operator__BcEdgeCR"></span><span class="target" id="d9/d26/classBcEdge_1a26b2b88de67aadf55469d47acb7f3d23"></span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N6BcEdgeaSERK6BcEdge" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コピー代入演算 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdgeD0Ev">
+<span id="_CPPv3N6BcEdgeD0Ev"></span><span id="_CPPv2N6BcEdgeD0Ev"></span><span id="BcEdge::~BcEdge"></span><span class="target" id="d9/d26/classBcEdge_1a5be79d66d8b78ceb8997d1b500c21c2d"></span><span class="sig-name descname"><span class="n"><span class="pre">~BcEdge</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N6BcEdgeD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge8is_inputEv">
+<span id="_CPPv3NK6BcEdge8is_inputEv"></span><span id="_CPPv2NK6BcEdge8is_inputEv"></span><span id="BcEdge::is_inputC"></span><span class="target" id="d9/d26/classBcEdge_1a25e545665cf665f95d210537d84caa04"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_input</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge8is_inputEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力を指す時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge5is_opEv">
+<span id="_CPPv3NK6BcEdge5is_opEv"></span><span id="_CPPv2NK6BcEdge5is_opEv"></span><span id="BcEdge::is_opC"></span><span class="target" id="d9/d26/classBcEdge_1afa256dcb590971dfed1d458335805691"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_op</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge5is_opEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>演算ノードを指す時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge7is_zeroEv">
+<span id="_CPPv3NK6BcEdge7is_zeroEv"></span><span id="_CPPv2NK6BcEdge7is_zeroEv"></span><span id="BcEdge::is_zeroC"></span><span class="target" id="d9/d26/classBcEdge_1ab156479116d3d120c598baea467c7a92"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_zero</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge7is_zeroEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数0を指す時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge6is_oneEv">
+<span id="_CPPv3NK6BcEdge6is_oneEv"></span><span id="_CPPv2NK6BcEdge6is_oneEv"></span><span id="BcEdge::is_oneC"></span><span class="target" id="d9/d26/classBcEdge_1a53ff40fa254daba5528018c7ebb133f6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_one</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge6is_oneEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数1を指す時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge8is_constEv">
+<span id="_CPPv3NK6BcEdge8is_constEv"></span><span id="_CPPv2NK6BcEdge8is_constEv"></span><span id="BcEdge::is_constC"></span><span class="target" id="d9/d26/classBcEdge_1a167e95cd27c487e0adef52e979aca137"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_const</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge8is_constEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数を指す時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge8input_idEv">
+<span id="_CPPv3NK6BcEdge8input_idEv"></span><span id="_CPPv2NK6BcEdge8input_idEv"></span><span id="BcEdge::input_idC"></span><span class="target" id="d9/d26/classBcEdge_1a0e2af0785084f31fd1139524bc0dc249"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge8input_idEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力番号を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge5op_idEv">
+<span id="_CPPv3NK6BcEdge5op_idEv"></span><span id="_CPPv2NK6BcEdge5op_idEv"></span><span id="BcEdge::op_idC"></span><span class="target" id="d9/d26/classBcEdge_1af886aa7654b473b99fd124c71a937494"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">op_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge5op_idEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>演算番号を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge3invEv">
+<span id="_CPPv3NK6BcEdge3invEv"></span><span id="_CPPv2NK6BcEdge3invEv"></span><span id="BcEdge::invC"></span><span class="target" id="d9/d26/classBcEdge_1afe29a8c25f13cbb8daca7a8a040f5d7f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inv</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge3invEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>否定属性を持つ時 true を返す． </p>
+<p>定数の場合には否定属性を持たない． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdgecoEv">
+<span id="_CPPv3NK6BcEdgecoEv"></span><span id="_CPPv2NK6BcEdgecoEv"></span><span id="BcEdge::inv-operatorC"></span><span class="target" id="d9/d26/classBcEdge_1ad0a6b3662f3424a41ab68728870ef51b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">~</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdgecoEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>反転した枝を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdge6invertEv">
+<span id="_CPPv3N6BcEdge6invertEv"></span><span id="_CPPv2N6BcEdge6invertEv"></span><span id="BcEdge::invert"></span><span class="target" id="d9/d26/classBcEdge_1a944082164b9cd0364f958916e8ab20f1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">invert</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BcEdge6invertEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>自身の値を反転する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>自身の参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdgeeqERK6BcEdge">
+<span id="_CPPv3NK6BcEdgeeqERK6BcEdge"></span><span id="_CPPv2NK6BcEdgeeqERK6BcEdge"></span><span id="BcEdge::eq-operator__BcEdgeCRC"></span><span class="target" id="d9/d26/classBcEdge_1a8c864c0a6dffa2c4518929667df72638"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdgeeqERK6BcEdge" title="Link to this definition">¶</a><br /></dt>
+<dd><p>等価比較演算子 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdgeneERK6BcEdge">
+<span id="_CPPv3NK6BcEdgeneERK6BcEdge"></span><span id="_CPPv2NK6BcEdgeneERK6BcEdge"></span><span id="BcEdge::neq-operator__BcEdgeCRC"></span><span class="target" id="d9/d26/classBcEdge_1a6c888d05ed665cc1337e9c88d7481815"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdgeneERK6BcEdge" title="Link to this definition">¶</a><br /></dt>
+<dd><p>非等価比較演算子 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BcEdge9to_stringEv">
+<span id="_CPPv3NK6BcEdge9to_stringEv"></span><span id="_CPPv2NK6BcEdge9to_stringEv"></span><span id="BcEdge::to_stringC"></span><span class="target" id="d9/d26/classBcEdge_1abf02d49e0b77d24da4dc5a7b77871897"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_string</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BcEdge9to_stringEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を表す文字列を返す． </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdge4zeroEv">
+<span id="_CPPv3N6BcEdge4zeroEv"></span><span id="_CPPv2N6BcEdge4zeroEv"></span><span id="BcEdge::zero"></span><span class="target" id="d9/d26/classBcEdge_1a83b60a93c49165a4f311443a5af215d9"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zero</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BcEdge4zeroEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数0を表す枝を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdge3oneEv">
+<span id="_CPPv3N6BcEdge3oneEv"></span><span id="_CPPv2N6BcEdge3oneEv"></span><span id="BcEdge::one"></span><span class="target" id="d9/d26/classBcEdge_1ad879872820a51996e9a0cce61065558c"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">one</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BcEdge3oneEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数1を表す枝を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdge5inputE8SizeTypeb">
+<span id="_CPPv3N6BcEdge5inputE8SizeTypeb"></span><span id="_CPPv2N6BcEdge5inputE8SizeTypeb"></span><span id="BcEdge::input__SizeType.b"></span><span class="target" id="d9/d26/classBcEdge_1a19521f21ac2be6c95ec977034830d730"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_id</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BcEdge5inputE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力を指す枝を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_id</strong> -- [in] 入力番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BcEdge2opE8SizeTypeb">
+<span id="_CPPv3N6BcEdge2opE8SizeTypeb"></span><span id="_CPPv2N6BcEdge2opE8SizeTypeb"></span><span id="BcEdge::op__SizeType.b"></span><span class="target" id="d9/d26/classBcEdge_1ae5c3b03f95821b4f808c45e3d6ac2fd8"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">op</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">op_id</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BcEdge2opE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>演算を指す枝を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>op_id</strong> -- [in] 演算番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.7.4. BcEdge</a><ul>
+<li><a class="reference internal" href="#_CPPv46BcEdge"><code class="docutils literal notranslate"><span class="pre">BcEdge</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N6BcEdge6BcEdgeEv"><code class="docutils literal notranslate"><span class="pre">BcEdge()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BcEdge6BcEdgeERK6BcEdge"><code class="docutils literal notranslate"><span class="pre">BcEdge()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BcEdgeaSERK6BcEdge"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BcEdgeD0Ev"><code class="docutils literal notranslate"><span class="pre">~BcEdge()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge8is_inputEv"><code class="docutils literal notranslate"><span class="pre">is_input()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge5is_opEv"><code class="docutils literal notranslate"><span class="pre">is_op()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge7is_zeroEv"><code class="docutils literal notranslate"><span class="pre">is_zero()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge6is_oneEv"><code class="docutils literal notranslate"><span class="pre">is_one()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge8is_constEv"><code class="docutils literal notranslate"><span class="pre">is_const()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge8input_idEv"><code class="docutils literal notranslate"><span class="pre">input_id()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge5op_idEv"><code class="docutils literal notranslate"><span class="pre">op_id()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge3invEv"><code class="docutils literal notranslate"><span class="pre">inv()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdgecoEv"><code class="docutils literal notranslate"><span class="pre">operator~()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BcEdge6invertEv"><code class="docutils literal notranslate"><span class="pre">invert()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdgeeqERK6BcEdge"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdgeneERK6BcEdge"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BcEdge9to_stringEv"><code class="docutils literal notranslate"><span class="pre">to_string()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BcEdge4zeroEv"><code class="docutils literal notranslate"><span class="pre">zero()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BcEdge3oneEv"><code class="docutils literal notranslate"><span class="pre">one()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BcEdge5inputE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">input()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BcEdge2opE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">op()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="bcop.html"
+                          title="前の章へ"><span class="section-number">1.2.7.3. </span>BcOp</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../bn/bn.html"
+                          title="次の章へ"><span class="section-number">2. </span>BN(Boolean Network)</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/logic/bcedge.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="../bn/bn.html" title="2. BN(Boolean Network)"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="bcop.html" title="1.2.7.3. BcOp"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="bc_grp.html" ><span class="section-number">1.2.7. </span>Boolean Chain を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.7.4. </span>BcEdge</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

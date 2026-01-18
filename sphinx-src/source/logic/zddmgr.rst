@@ -1,0 +1,5 @@
+ZddMgr
+~~~~~~~
+
+.. doxygenclass:: ZddMgr
+   :members:

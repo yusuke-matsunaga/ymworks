@@ -1,0 +1,5 @@
+ZddMgrHolder
+~~~~~~~~~~~~~
+
+.. doxygenclass:: ZddMgrHolder
+   :members:

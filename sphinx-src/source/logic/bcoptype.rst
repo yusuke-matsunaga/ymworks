@@ -1,0 +1,4 @@
+BcOpType
+~~~~~~~~~
+
+.. doxygenenum:: BcOpType

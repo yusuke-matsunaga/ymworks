@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.6. NPN変換を扱うサブグループ &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=96226336" />
+    <script src="../../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" />
+    <link rel="next" title="1.7. Decision Diagram を扱うサブグループ" href="dd.html" />
+    <link rel="prev" title="1.5. 積和形論理式を扱うサブグループ" href="sop.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="dd.html" title="1.7. Decision Diagram を扱うサブグループ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="sop.html" title="1.5. 積和形論理式を扱うサブグループ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../logic.html" accesskey="U"><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.6. </span>NPN変換を扱うサブグループ</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="npn">
+<h1><span class="section-number">1.6. </span>NPN変換を扱うサブグループ<a class="headerlink" href="#npn" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv46NpnMap">
+<span id="_CPPv36NpnMap"></span><span id="_CPPv26NpnMap"></span><span id="NpnMap"></span><span class="target" id="d8/d7a/classNpnMap"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnMap</span></span></span><a class="headerlink" href="#_CPPv46NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &quot;ym/NpnMap.h&quot;</em></div>
+<p>NPN変換の情報を入れるクラス </p>
+<p>具体的には<ul class="simple">
+<li><p>入力変数の写像</p></li>
+<li><p>入力変数の反転属性</p></li>
+<li><p>出力変数の反転属性 の情報を持つ．入力変数の写像は N -&gt; N の順列となる． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d0/d5c/classNpnVmap"><span class="std std-ref">NpnVmap</span></a></p>
+</div>
+</p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap6NpnMapEv">
+<span id="_CPPv3N6NpnMap6NpnMapEv"></span><span id="_CPPv2N6NpnMap6NpnMapEv"></span><span id="NpnMap::NpnMap"></span><span class="target" id="d8/d7a/classNpnMap_1ae03834a192331c7f50a4ac96dd67e9d2"></span><span class="sig-name descname"><span class="n"><span class="pre">NpnMap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N6NpnMap6NpnMapEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>空のコンストラクタ． </p>
+<p>内容は不定 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap6NpnMapE8SizeType">
+<span id="_CPPv3N6NpnMap6NpnMapE8SizeType"></span><span id="_CPPv2N6NpnMap6NpnMapE8SizeType"></span><span id="NpnMap::NpnMap__SizeType"></span><span class="target" id="d8/d7a/classNpnMap_1a7a29dabf84c4d8f9ae1c69b21e63fbe7"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnMap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap6NpnMapE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数を指定したコンストラクタ </p>
+<p>定義域と値域のサイズは同じになる． 恒等変換になる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap6NpnMapE8SizeType8SizeType">
+<span id="_CPPv3N6NpnMap6NpnMapE8SizeType8SizeType"></span><span id="_CPPv2N6NpnMap6NpnMapE8SizeType8SizeType"></span><span id="NpnMap::NpnMap__SizeType.SizeType"></span><span class="target" id="d8/d7a/classNpnMap_1a9aef81af0c85c1166f81bdd10d1a0db0"></span><span class="sig-name descname"><span class="n"><span class="pre">NpnMap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap6NpnMapE8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>写像前と後の入力数を指定したコンストラクタ </p>
+<p>内容は不定 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 写像前の入力数 </p></li>
+<li><p><strong>ni2</strong> -- [in] 写像後の入力数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap6NpnMapERK6NpnMap">
+<span id="_CPPv3N6NpnMap6NpnMapERK6NpnMap"></span><span id="_CPPv2N6NpnMap6NpnMapERK6NpnMap"></span><span id="NpnMap::NpnMap__NpnMapCR"></span><span class="target" id="d8/d7a/classNpnMap_1af87a60f8803f3b18dd50d2606bf5a353"></span><span class="sig-name descname"><span class="n"><span class="pre">NpnMap</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N6NpnMap6NpnMapERK6NpnMap" title="NpnMap::NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap6NpnMapERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コピーコンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMapaSERK6NpnMap">
+<span id="_CPPv3N6NpnMapaSERK6NpnMap"></span><span id="_CPPv2N6NpnMapaSERK6NpnMap"></span><span id="NpnMap::assign-operator__NpnMapCR"></span><span class="target" id="d8/d7a/classNpnMap_1adcb9f743c014d3c71e830852a9d57adc"></span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMapaSERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>代入演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自分自身への定数参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMapD0Ev">
+<span id="_CPPv3N6NpnMapD0Ev"></span><span id="_CPPv2N6NpnMapD0Ev"></span><span id="NpnMap::~NpnMap"></span><span class="target" id="d8/d7a/classNpnMap_1a6054da08e10ba5df0626ca7c3fb385ea"></span><span class="sig-name descname"><span class="n"><span class="pre">~NpnMap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N6NpnMapD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap5clearEv">
+<span id="_CPPv3N6NpnMap5clearEv"></span><span id="_CPPv2N6NpnMap5clearEv"></span><span id="NpnMap::clear"></span><span class="target" id="d8/d7a/classNpnMap_1ae99c1f344392ca98fd6d00417d0c816d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clear</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap5clearEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容をクリアする． </p>
+<p>入力の変換内容は不正な値になる． 出力の極性は反転なし </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap6resizeE8SizeType">
+<span id="_CPPv3N6NpnMap6resizeE8SizeType"></span><span id="_CPPv2N6NpnMap6resizeE8SizeType"></span><span id="NpnMap::resize__SizeType"></span><span class="target" id="d8/d7a/classNpnMap_1a50282dc1d73b0dbac11ff3c9aa375cfa"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap6resizeE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数を再設定する． </p>
+<p>写像前と写像後の入力数が等しい場合． 以前の内容はクリアされる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap6resizeE8SizeType8SizeType">
+<span id="_CPPv3N6NpnMap6resizeE8SizeType8SizeType"></span><span id="_CPPv2N6NpnMap6resizeE8SizeType8SizeType"></span><span id="NpnMap::resize__SizeType.SizeType"></span><span class="target" id="d8/d7a/classNpnMap_1acea1b7ad592db81cc0e7198ed99d490d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap6resizeE8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数を再設定する． </p>
+<p>以前の内容はクリアされる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 写像前の入力数 </p></li>
+<li><p><strong>ni2</strong> -- [in] 写像後の入力数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap12set_identityE8SizeTypeb">
+<span id="_CPPv3N6NpnMap12set_identityE8SizeTypeb"></span><span id="_CPPv2N6NpnMap12set_identityE8SizeTypeb"></span><span id="NpnMap::set_identity__SizeType.b"></span><span class="target" id="d8/d7a/classNpnMap_1a5ddd138f864a9a8ffb06f5fb36840710"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_identity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">oinv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap12set_identityE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>恒等変換を表すように設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>oinv</strong> -- [in] 出力を反転する時 true にするフラグ </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap8set_imapE8SizeType8SizeTypeb">
+<span id="_CPPv3N6NpnMap8set_imapE8SizeType8SizeTypeb"></span><span id="_CPPv2N6NpnMap8set_imapE8SizeType8SizeTypeb"></span><span id="NpnMap::set_imap__SizeType.SizeType.b"></span><span class="target" id="d8/d7a/classNpnMap_1a397ce3fae7f16b77e869bbbfd72bfece"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_imap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">src_var</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dst_var</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap8set_imapE8SizeType8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力の変換内容の設定 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_var</strong> -- [in] 入力変数 </p></li>
+<li><p><strong>dst_var</strong> -- [in] 変換先の入力変数 </p></li>
+<li><p><strong>inv</strong> -- [in] 極性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap8set_imapE8SizeType7NpnVmap">
+<span id="_CPPv3N6NpnMap8set_imapE8SizeType7NpnVmap"></span><span id="_CPPv2N6NpnMap8set_imapE8SizeType7NpnVmap"></span><span id="NpnMap::set_imap__SizeType.NpnVmap"></span><span class="target" id="d8/d7a/classNpnMap_1ac927b4a3713e34b5fe17995acfffb574"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_imap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">src_var</span></span>, <a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">imap</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap8set_imapE8SizeType7NpnVmap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力の変換内容の設定 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d0/d5c/classNpnVmap"><span class="std std-ref">NpnVmap</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_var</strong> -- [in] 入力変数 </p></li>
+<li><p><strong>imap</strong> -- [in] 変換情報(変換先の入力番号と極性) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap8set_oinvEb">
+<span id="_CPPv3N6NpnMap8set_oinvEb"></span><span id="_CPPv2N6NpnMap8set_oinvEb"></span><span id="NpnMap::set_oinv__b"></span><span class="target" id="d8/d7a/classNpnMap_1a13fbdd6099645241a6b5bd5c59f4a18e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_oinv</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap8set_oinvEb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>出力極性を設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv</strong> -- [in] 出力極性<ul class="simple">
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMap9input_numEv">
+<span id="_CPPv3NK6NpnMap9input_numEv"></span><span id="_CPPv2NK6NpnMap9input_numEv"></span><span id="NpnMap::input_numC"></span><span class="target" id="d8/d7a/classNpnMap_1a05d0206b05c1b6746654d6ba76a992af"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMap9input_numEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>写像前の入力数を得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>入力数 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMap10input_num2Ev">
+<span id="_CPPv3NK6NpnMap10input_num2Ev"></span><span id="_CPPv2NK6NpnMap10input_num2Ev"></span><span id="NpnMap::input_num2C"></span><span class="target" id="d8/d7a/classNpnMap_1a292df561ddf46b7d8525e2e435c3b4b8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_num2</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMap10input_num2Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>写像後の入力数を得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>入力数 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMap4imapE8SizeType">
+<span id="_CPPv3NK6NpnMap4imapE8SizeType"></span><span id="_CPPv2NK6NpnMap4imapE8SizeType"></span><span id="NpnMap::imap__SizeTypeC"></span><span class="target" id="d8/d7a/classNpnMap_1ad6a7024125132559ac6d79af09a1b475"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">imap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMap4imapE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力の変換情報の取得 </p>
+<p>
+var に対応するマッピング情報がないときには不正な値を返す． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d0/d5c/classNpnVmap"><span class="std std-ref">NpnVmap</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> -- [in] 入力変数 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>pos 番目の入力の変換情報</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMap4oinvEv">
+<span id="_CPPv3NK6NpnMap4oinvEv"></span><span id="_CPPv2NK6NpnMap4oinvEv"></span><span id="NpnMap::oinvC"></span><span class="target" id="d8/d7a/classNpnMap_1ac3a9e516a79a1eb9286edb8b8a8f72d5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">oinv</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMap4oinvEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>出力極性を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>false</strong> -- 反転なし </p></li>
+<li><p><strong>true</strong> -- 反転あり </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMap7inverseEv">
+<span id="_CPPv3NK6NpnMap7inverseEv"></span><span id="_CPPv2NK6NpnMap7inverseEv"></span><span id="NpnMap::inverseC"></span><span class="target" id="d8/d7a/classNpnMap_1a9911ea833089e509b7d84651fd84c446"></span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inverse</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMap7inverseEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>逆写像を求める． </p>
+<p>1対1写像でなければ答えは不定． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMapcoEv">
+<span id="_CPPv3NK6NpnMapcoEv"></span><span id="_CPPv2NK6NpnMapcoEv"></span><span id="NpnMap::inv-operatorC"></span><span class="target" id="d8/d7a/classNpnMap_1a9cc084acb276696b3dd44aaf67be02e6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">~</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMapcoEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#d8/d7a/classNpnMap_1a9911ea833089e509b7d84651fd84c446"><span class="std std-ref">inverse()</span></a> の別名 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMapmlERK6NpnMap">
+<span id="_CPPv3NK6NpnMapmlERK6NpnMap"></span><span id="_CPPv2NK6NpnMapmlERK6NpnMap"></span><span id="NpnMap::mul-operator__NpnMapCRC"></span><span class="target" id="d8/d7a/classNpnMap_1a848ae098778123212ae1d84029864f07"></span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMapmlERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>合成を求める． </p>
+<p>this の値域とsrc2の定義域は一致していな ければならない．そうでなければ答えは不定． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src2</strong> -- [in] 右側のオペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMapmLERK6NpnMap">
+<span id="_CPPv3N6NpnMapmLERK6NpnMap"></span><span id="_CPPv2N6NpnMapmLERK6NpnMap"></span><span id="NpnMap::mul-assign-operator__NpnMapCR"></span><span class="target" id="d8/d7a/classNpnMap_1a08f9687e948d26e9472fd986de600133"></span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMapmLERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>合成を求める． </p>
+<p>this の値域とsrc2の定義域は一致していな ければならない．そうでなければ答えは不定． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src2</strong> -- [in] 右側のオペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMapeqERK6NpnMap">
+<span id="_CPPv3NK6NpnMapeqERK6NpnMap"></span><span id="_CPPv2NK6NpnMapeqERK6NpnMap"></span><span id="NpnMap::eq-operator__NpnMapCRC"></span><span class="target" id="d8/d7a/classNpnMap_1aa2236078c814d1bedd088cb8a25674fa"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMapeqERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容が等しいか調べる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] 比較対象のマップ </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自分自身と src が等しいときに true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMapneERK6NpnMap">
+<span id="_CPPv3NK6NpnMapneERK6NpnMap"></span><span id="_CPPv2NK6NpnMapneERK6NpnMap"></span><span id="NpnMap::neq-operator__NpnMapCRC"></span><span class="target" id="d8/d7a/classNpnMap_1a610de75dcc07bfd04d1feeea60df5224"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMapneERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src2</strong> -- [in] 右側のオペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>src1 と src2 が等しくないときに true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6NpnMap4dumpERNSt7ostreamE">
+<span id="_CPPv3NK6NpnMap4dumpERNSt7ostreamE"></span><span id="_CPPv2NK6NpnMap4dumpERNSt7ostreamE"></span><span id="NpnMap::dump__osRC"></span><span class="target" id="d8/d7a/classNpnMap_1aeffacf9d5202afbc4cc10d81f7b0e5be"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6NpnMap4dumpERNSt7ostreamE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリストリームに出力する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap7restoreERNSt7istreamE">
+<span id="_CPPv3N6NpnMap7restoreERNSt7istreamE"></span><span id="_CPPv2N6NpnMap7restoreERNSt7istreamE"></span><span id="NpnMap::restore__isR"></span><span class="target" id="d8/d7a/classNpnMap_1ad4407b10ec0d621a79de19d6df318cc7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap7restoreERNSt7istreamE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリストリームから読み込む． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 入力元のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMap8identityE8SizeTypeb">
+<span id="_CPPv3N6NpnMap8identityE8SizeTypeb"></span><span id="_CPPv2N6NpnMap8identityE8SizeTypeb"></span><span id="NpnMap::identity__SizeType.b"></span><span class="target" id="d8/d7a/classNpnMap_1a615adb97ec19415e18c8476f73dcd57a"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">identity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">oinv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMap8identityE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>恒等変換を返すクラスメソッド </p>
+<p>当たり前だが定義域と値域のサイズ(入力数)は同じ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>oinv</strong> -- [in] 出力を反転する時 true にするフラグ </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-related">Related</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6NpnMaplsERNSt7ostreamERK6NpnMap">
+<span id="_CPPv3N6NpnMaplsERNSt7ostreamERK6NpnMap"></span><span id="_CPPv2N6NpnMaplsERNSt7ostreamERK6NpnMap"></span><span id="NpnMap::lshift-operator__osR.NpnMapCR"></span><span class="target" id="d8/d7a/classNpnMap_1a933feaefd32c39126f2d604d12c54d6f"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">map</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6NpnMaplsERNSt7ostreamERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を表示する(主にデバッグ用)． </p>
+<p>改行はしない． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>map</strong> -- [in] 出力対象のマップ </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv47NpnMapM">
+<span id="_CPPv37NpnMapM"></span><span id="_CPPv27NpnMapM"></span><span id="NpnMapM"></span><span class="target" id="d7/d69/classNpnMapM"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnMapM</span></span></span><a class="headerlink" href="#_CPPv47NpnMapM" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &quot;ym/NpnMapM.h&quot;</em></div>
+<p>多出力のNPN変換の情報を入れるクラス </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d0/d5c/classNpnVmap"><span class="std std-ref">NpnVmap</span></a></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM7NpnMapMEv">
+<span id="_CPPv3N7NpnMapM7NpnMapMEv"></span><span id="_CPPv2N7NpnMapM7NpnMapMEv"></span><span id="NpnMapM::NpnMapM"></span><span class="target" id="d7/d69/classNpnMapM_1ab9240d48768afa4d8db372421266034f"></span><span class="sig-name descname"><span class="n"><span class="pre">NpnMapM</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7NpnMapM7NpnMapMEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>空のコンストラクタ． </p>
+<p>内容は不定 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM7NpnMapME8SizeType8SizeType">
+<span id="_CPPv3N7NpnMapM7NpnMapME8SizeType8SizeType"></span><span id="_CPPv2N7NpnMapM7NpnMapME8SizeType8SizeType"></span><span id="NpnMapM::NpnMapM__SizeType.SizeType"></span><span class="target" id="d7/d69/classNpnMapM_1a70143a3e70be49d1f6b3ec2da0e28095"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnMapM</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">no</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM7NpnMapME8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数と出力数を指定したコンストラクタ </p>
+<p>各変数の変換内容は不正な値になっている． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>no</strong> -- [in] 出力数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM7NpnMapMERK7NpnMapM">
+<span id="_CPPv3N7NpnMapM7NpnMapMERK7NpnMapM"></span><span id="_CPPv2N7NpnMapM7NpnMapMERK7NpnMapM"></span><span id="NpnMapM::NpnMapM__NpnMapMCR"></span><span class="target" id="d7/d69/classNpnMapM_1af167a8b08dbcc463444b81fc43b08095"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnMapM</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7NpnMapM7NpnMapMERK7NpnMapM" title="NpnMapM::NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM7NpnMapMERK7NpnMapM" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コピーコンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapMaSERK7NpnMapM">
+<span id="_CPPv3N7NpnMapMaSERK7NpnMapM"></span><span id="_CPPv2N7NpnMapMaSERK7NpnMapM"></span><span id="NpnMapM::assign-operator__NpnMapMCR"></span><span class="target" id="d7/d69/classNpnMapM_1a9ec1653de39168904eaff00136bbdbbd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnMapM" title="NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnMapM" title="NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapMaSERK7NpnMapM" title="Link to this definition">¶</a><br /></dt>
+<dd><p>代入演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自分自身への定数参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM7NpnMapMERK6NpnMap">
+<span id="_CPPv3N7NpnMapM7NpnMapMERK6NpnMap"></span><span id="_CPPv2N7NpnMapM7NpnMapMERK6NpnMap"></span><span id="NpnMapM::NpnMapM__NpnMapCR"></span><span class="target" id="d7/d69/classNpnMapM_1a369e505674908785566485e4f2b36f39"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnMapM</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM7NpnMapMERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#d8/d7a/classNpnMap"><span class="std std-ref">NpnMap</span></a> からの変換コンストラクタ </p>
+<p>出力数が1となる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapMD0Ev">
+<span id="_CPPv3N7NpnMapMD0Ev"></span><span id="_CPPv2N7NpnMapMD0Ev"></span><span id="NpnMapM::~NpnMapM"></span><span class="target" id="d7/d69/classNpnMapM_1a8c12eaf31d644025ae3684952bfe9c26"></span><span class="sig-name descname"><span class="n"><span class="pre">~NpnMapM</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7NpnMapMD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM5clearEv">
+<span id="_CPPv3N7NpnMapM5clearEv"></span><span id="_CPPv2N7NpnMapM5clearEv"></span><span id="NpnMapM::clear"></span><span class="target" id="d7/d69/classNpnMapM_1a645a9bf59102863ea2e2aead28c7e053"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clear</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM5clearEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容をクリアする． </p>
+<p>各変数の変換内容は不正な値になる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM6resizeE8SizeType8SizeType">
+<span id="_CPPv3N7NpnMapM6resizeE8SizeType8SizeType"></span><span id="_CPPv2N7NpnMapM6resizeE8SizeType8SizeType"></span><span id="NpnMapM::resize__SizeType.SizeType"></span><span class="target" id="d7/d69/classNpnMapM_1a0b22b7240f9da0ab8dc6a51d62a0bdea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">no</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM6resizeE8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数と出力数を再設定する． </p>
+<p>以前の内容はクリアされる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>no</strong> -- [in] 出力数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM12set_identityE8SizeType8SizeType">
+<span id="_CPPv3N7NpnMapM12set_identityE8SizeType8SizeType"></span><span id="_CPPv2N7NpnMapM12set_identityE8SizeType8SizeType"></span><span id="NpnMapM::set_identity__SizeType.SizeType"></span><span class="target" id="d7/d69/classNpnMapM_1ae0934f53b22e429c18d0a07bca6ec2e9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_identity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">no</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM12set_identityE8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>恒等変換を表すように設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>no</strong> -- [in] 出力数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM8set_imapE8SizeType8SizeTypeb">
+<span id="_CPPv3N7NpnMapM8set_imapE8SizeType8SizeTypeb"></span><span id="_CPPv2N7NpnMapM8set_imapE8SizeType8SizeTypeb"></span><span id="NpnMapM::set_imap__SizeType.SizeType.b"></span><span class="target" id="d7/d69/classNpnMapM_1ad4a37737ca60d98ffeea6a255069ca16"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_imap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">src_var</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dst_var</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM8set_imapE8SizeType8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力の変換内容の設定 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_var</strong> -- [in] 入力番号 </p></li>
+<li><p><strong>dst_var</strong> -- [in] 変換先の入力番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 極性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM8set_imapE8SizeType7NpnVmap">
+<span id="_CPPv3N7NpnMapM8set_imapE8SizeType7NpnVmap"></span><span id="_CPPv2N7NpnMapM8set_imapE8SizeType7NpnVmap"></span><span id="NpnMapM::set_imap__SizeType.NpnVmap"></span><span class="target" id="d7/d69/classNpnMapM_1a694f9dd338ebe6aac9be692d4ff9684e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_imap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span>, <a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">imap</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM8set_imapE8SizeType7NpnVmap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力の変換内容の設定 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d0/d5c/classNpnVmap"><span class="std std-ref">NpnVmap</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> -- [in] 入力番号 </p></li>
+<li><p><strong>imap</strong> -- [in] 変換情報(変換先の入力番号と極性) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM8set_omapE8SizeType8SizeTypeb">
+<span id="_CPPv3N7NpnMapM8set_omapE8SizeType8SizeTypeb"></span><span id="_CPPv2N7NpnMapM8set_omapE8SizeType8SizeTypeb"></span><span id="NpnMapM::set_omap__SizeType.SizeType.b"></span><span class="target" id="d7/d69/classNpnMapM_1a6dc9447ac7aa04b8abbc27f96acd40bc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_omap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">src_var</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dst_var</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM8set_omapE8SizeType8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>出力の変換内容の設定 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_var</strong> -- [in] 出力番号 </p></li>
+<li><p><strong>dst_var</strong> -- [in] 変換先の出力番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 極性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM8set_omapE8SizeType7NpnVmap">
+<span id="_CPPv3N7NpnMapM8set_omapE8SizeType7NpnVmap"></span><span id="_CPPv2N7NpnMapM8set_omapE8SizeType7NpnVmap"></span><span id="NpnMapM::set_omap__SizeType.NpnVmap"></span><span class="target" id="d7/d69/classNpnMapM_1ae2b4d4cebca2a4b6c09119c6636159b4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_omap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span>, <a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">omap</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM8set_omapE8SizeType7NpnVmap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>出力の変換内容の設定 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d0/d5c/classNpnVmap"><span class="std std-ref">NpnVmap</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> -- [in] 出力番号 </p></li>
+<li><p><strong>omap</strong> -- [in] 変換情報(変換先の出力番号と極性) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapM9input_numEv">
+<span id="_CPPv3NK7NpnMapM9input_numEv"></span><span id="_CPPv2NK7NpnMapM9input_numEv"></span><span id="NpnMapM::input_numC"></span><span class="target" id="d7/d69/classNpnMapM_1a3f83edbcb4b54e8d5c62c19d0a471a1f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapM9input_numEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数を得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>入力数 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapM10output_numEv">
+<span id="_CPPv3NK7NpnMapM10output_numEv"></span><span id="_CPPv2NK7NpnMapM10output_numEv"></span><span id="NpnMapM::output_numC"></span><span class="target" id="d7/d69/classNpnMapM_1aee236109f39d2da598dc95986c55b02f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapM10output_numEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>出力数を得る． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapM4imapE8SizeType">
+<span id="_CPPv3NK7NpnMapM4imapE8SizeType"></span><span id="_CPPv2NK7NpnMapM4imapE8SizeType"></span><span id="NpnMapM::imap__SizeTypeC"></span><span class="target" id="d7/d69/classNpnMapM_1a6196ae8f03adecca68c80c13f686e6f1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">imap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapM4imapE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力の変換情報の取得 </p>
+<p>
+var に対応するマッピング情報がないときには不正な値を返す． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d0/d5c/classNpnVmap"><span class="std std-ref">NpnVmap</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> -- [in] 入力番号 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>var の変換情報</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapM4omapE8SizeType">
+<span id="_CPPv3NK7NpnMapM4omapE8SizeType"></span><span id="_CPPv2NK7NpnMapM4omapE8SizeType"></span><span id="NpnMapM::omap__SizeTypeC"></span><span class="target" id="d7/d69/classNpnMapM_1ac69674bd9838ce24bfa43e3b736e5ee5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">omap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapM4omapE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>出力の変換情報の取得 </p>
+<p>
+var に対応するマッピング情報がないときには不正な値を返す． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d0/d5c/classNpnVmap"><span class="std std-ref">NpnVmap</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> -- [in] 出力番号 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>var の変換情報</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapM7inverseEv">
+<span id="_CPPv3NK7NpnMapM7inverseEv"></span><span id="_CPPv2NK7NpnMapM7inverseEv"></span><span id="NpnMapM::inverseC"></span><span class="target" id="d7/d69/classNpnMapM_1a9b1e1f5bc312d6999567ff60e945bffa"></span><a class="reference internal" href="#_CPPv47NpnMapM" title="NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inverse</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapM7inverseEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>逆写像を求める． </p>
+<p>1対1写像でなければ答えは不定． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapMcoEv">
+<span id="_CPPv3NK7NpnMapMcoEv"></span><span id="_CPPv2NK7NpnMapMcoEv"></span><span id="NpnMapM::inv-operatorC"></span><span class="target" id="d7/d69/classNpnMapM_1a368cd4a4df8f5e81fd441ee8b11391cd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnMapM" title="NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">~</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapMcoEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#d7/d69/classNpnMapM_1a9b1e1f5bc312d6999567ff60e945bffa"><span class="std std-ref">inverse()</span></a> の別名 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapMmlERK7NpnMapM">
+<span id="_CPPv3NK7NpnMapMmlERK7NpnMapM"></span><span id="_CPPv2NK7NpnMapMmlERK7NpnMapM"></span><span id="NpnMapM::mul-operator__NpnMapMCRC"></span><span class="target" id="d7/d69/classNpnMapM_1adafe9e30a99a1ab8cde7c33ad06bd944"></span><a class="reference internal" href="#_CPPv47NpnMapM" title="NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnMapM" title="NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapMmlERK7NpnMapM" title="Link to this definition">¶</a><br /></dt>
+<dd><p>合成を求める． </p>
+<p>this の値域とsrc2の定義域は一致していなければならない． そうでなければ答えは不定． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 右側のオペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapMeqERK7NpnMapM">
+<span id="_CPPv3NK7NpnMapMeqERK7NpnMapM"></span><span id="_CPPv2NK7NpnMapMeqERK7NpnMapM"></span><span id="NpnMapM::eq-operator__NpnMapMCRC"></span><span class="target" id="d7/d69/classNpnMapM_1a68eb9de9341f24c9834bfc0df9a28f9f"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnMapM" title="NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapMeqERK7NpnMapM" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容が等しいか調べる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] 比較対象のマップ </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自分自身と src が等しいときに true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnMapM4dumpERNSt7ostreamE">
+<span id="_CPPv3NK7NpnMapM4dumpERNSt7ostreamE"></span><span id="_CPPv2NK7NpnMapM4dumpERNSt7ostreamE"></span><span id="NpnMapM::dump__osRC"></span><span class="target" id="d7/d69/classNpnMapM_1af81d6e832d36c80e75f8b53c2a8b88cd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnMapM4dumpERNSt7ostreamE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリストリームに出力する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapM7restoreERNSt7istreamE">
+<span id="_CPPv3N7NpnMapM7restoreERNSt7istreamE"></span><span id="_CPPv2N7NpnMapM7restoreERNSt7istreamE"></span><span id="NpnMapM::restore__isR"></span><span class="target" id="d7/d69/classNpnMapM_1a566993cb388eade5fdde5b5243778d39"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapM7restoreERNSt7istreamE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリストリームから読み込む． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 入力元のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-related">Related</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnMapMlsERNSt7ostreamERK7NpnMapM">
+<span id="_CPPv3N7NpnMapMlsERNSt7ostreamERK7NpnMapM"></span><span id="_CPPv2N7NpnMapMlsERNSt7ostreamERK7NpnMapM"></span><span id="NpnMapM::lshift-operator__osR.NpnMapMCR"></span><span class="target" id="d7/d69/classNpnMapM_1a77b05e7a5e6b1bc9699f0f7e607aa096"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnMapM" title="NpnMapM"><span class="n"><span class="pre">NpnMapM</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">map</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnMapMlsERNSt7ostreamERK7NpnMapM" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を表示する(主にデバッグ用)． </p>
+<p>改行はしない． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>map</strong> -- [in] 出力対象のマップ </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv47NpnVmap">
+<span id="_CPPv37NpnVmap"></span><span id="_CPPv27NpnVmap"></span><span id="NpnVmap"></span><span class="target" id="d0/d5c/classNpnVmap"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnVmap</span></span></span><a class="headerlink" href="#_CPPv47NpnVmap" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &quot;ym/NpnVmap.h&quot;</em></div>
+<p>変数の変換を表すクラス </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d8/d7a/classNpnMap"><span class="std std-ref">NpnMap</span></a>, <a class="reference internal" href="#d7/d69/classNpnMapM"><span class="std std-ref">NpnMapM</span></a></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnVmap7NpnVmapEv">
+<span id="_CPPv3N7NpnVmap7NpnVmapEv"></span><span id="_CPPv2N7NpnVmap7NpnVmapEv"></span><span id="NpnVmap::NpnVmap"></span><span class="target" id="d0/d5c/classNpnVmap_1ad991c2adca326dc431c4a2e44dd66aa8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnVmap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnVmap7NpnVmapEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>空のコンストラクタ． </p>
+<p>内容は不正値 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnVmap7NpnVmapE8SizeTypeb">
+<span id="_CPPv3N7NpnVmap7NpnVmapE8SizeTypeb"></span><span id="_CPPv2N7NpnVmap7NpnVmapE8SizeTypeb"></span><span id="NpnVmap::NpnVmap__SizeType.b"></span><span class="target" id="d0/d5c/classNpnVmap_1ab123516464e7bf0bc9b278fc5f68eff7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnVmap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnVmap7NpnVmapE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数番号と極性を指定したコンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> -- [in] 変数番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+<li><p><strong>var</strong> -- </p></li>
+<li><p><strong>inv</strong> -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnVmap3varEv">
+<span id="_CPPv3NK7NpnVmap3varEv"></span><span id="_CPPv2NK7NpnVmap3varEv"></span><span id="NpnVmap::varC"></span><span class="target" id="d0/d5c/classNpnVmap_1a43b98be1ed153f7960bb5da0651eca2f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">var</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnVmap3varEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変換先の変数番号を得る． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnVmap3invEv">
+<span id="_CPPv3NK7NpnVmap3invEv"></span><span id="_CPPv2NK7NpnVmap3invEv"></span><span id="NpnVmap::invC"></span><span class="target" id="d0/d5c/classNpnVmap_1a4a4275c0dc6da1dba79f52357e2c14a1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inv</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnVmap3invEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>反転属性を取り出す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnVmap10is_invalidEv">
+<span id="_CPPv3NK7NpnVmap10is_invalidEv"></span><span id="_CPPv2NK7NpnVmap10is_invalidEv"></span><span id="NpnVmap::is_invalidC"></span><span class="target" id="d0/d5c/classNpnVmap_1a71b9f2bfb0e4b82c40edef1d6beadef0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnVmap10is_invalidEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>不正な値の時に true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnVmapeqERK7NpnVmap">
+<span id="_CPPv3NK7NpnVmapeqERK7NpnVmap"></span><span id="_CPPv2NK7NpnVmapeqERK7NpnVmap"></span><span id="NpnVmap::eq-operator__NpnVmapCRC"></span><span class="target" id="d0/d5c/classNpnVmap_1af9b17eb094b976905e3e7789ba9f64cf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnVmapeqERK7NpnVmap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>等価比較演算 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnVmapneERK7NpnVmap">
+<span id="_CPPv3NK7NpnVmapneERK7NpnVmap"></span><span id="_CPPv2NK7NpnVmapneERK7NpnVmap"></span><span id="NpnVmap::neq-operator__NpnVmapCRC"></span><span class="target" id="d0/d5c/classNpnVmap_1ac3426d7e570539eb395590b2fa656d21"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnVmapneERK7NpnVmap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>非等価比較演算 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7NpnVmap4dumpERNSt7ostreamE">
+<span id="_CPPv3NK7NpnVmap4dumpERNSt7ostreamE"></span><span id="_CPPv2NK7NpnVmap4dumpERNSt7ostreamE"></span><span id="NpnVmap::dump__osRC"></span><span class="target" id="d0/d5c/classNpnVmap_1aa0a1979450d3991bebf25f618d86cf16"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7NpnVmap4dumpERNSt7ostreamE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容をバイナリダンプする． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 出力ストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnVmap7restoreERNSt7istreamE">
+<span id="_CPPv3N7NpnVmap7restoreERNSt7istreamE"></span><span id="_CPPv2N7NpnVmap7restoreERNSt7istreamE"></span><span id="NpnVmap::restore__isR"></span><span class="target" id="d0/d5c/classNpnVmap_1a63d4781d704999acdff2e8aaa618ccd0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnVmap7restoreERNSt7istreamE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリ入力 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 入力ストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7NpnVmap7invalidEv">
+<span id="_CPPv3N7NpnVmap7invalidEv"></span><span id="_CPPv2N7NpnVmap7invalidEv"></span><span id="NpnVmap::invalid"></span><span class="target" id="d0/d5c/classNpnVmap_1a0d43ede492ebafdab3e093d4ceef2556"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47NpnVmap" title="NpnVmap"><span class="n"><span class="pre">NpnVmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7NpnVmap7invalidEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>不正な値を返すクラス関数 </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.6. NPN変換を扱うサブグループ</a><ul>
+<li><a class="reference internal" href="#_CPPv46NpnMap"><code class="docutils literal notranslate"><span class="pre">NpnMap</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap6NpnMapEv"><code class="docutils literal notranslate"><span class="pre">NpnMap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap6NpnMapE8SizeType"><code class="docutils literal notranslate"><span class="pre">NpnMap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap6NpnMapE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">NpnMap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap6NpnMapERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">NpnMap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMapaSERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMapD0Ev"><code class="docutils literal notranslate"><span class="pre">~NpnMap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap5clearEv"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap6resizeE8SizeType"><code class="docutils literal notranslate"><span class="pre">resize()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap6resizeE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">resize()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap12set_identityE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">set_identity()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap8set_imapE8SizeType8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">set_imap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap8set_imapE8SizeType7NpnVmap"><code class="docutils literal notranslate"><span class="pre">set_imap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap8set_oinvEb"><code class="docutils literal notranslate"><span class="pre">set_oinv()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMap9input_numEv"><code class="docutils literal notranslate"><span class="pre">input_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMap10input_num2Ev"><code class="docutils literal notranslate"><span class="pre">input_num2()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMap4imapE8SizeType"><code class="docutils literal notranslate"><span class="pre">imap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMap4oinvEv"><code class="docutils literal notranslate"><span class="pre">oinv()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMap7inverseEv"><code class="docutils literal notranslate"><span class="pre">inverse()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMapcoEv"><code class="docutils literal notranslate"><span class="pre">operator~()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMapmlERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMapmLERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">operator*=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMapeqERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMapneERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6NpnMap4dumpERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap7restoreERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMap8identityE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">identity()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6NpnMaplsERNSt7ostreamERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#_CPPv47NpnMapM"><code class="docutils literal notranslate"><span class="pre">NpnMapM</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM7NpnMapMEv"><code class="docutils literal notranslate"><span class="pre">NpnMapM()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM7NpnMapME8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">NpnMapM()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM7NpnMapMERK7NpnMapM"><code class="docutils literal notranslate"><span class="pre">NpnMapM()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapMaSERK7NpnMapM"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM7NpnMapMERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">NpnMapM()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapMD0Ev"><code class="docutils literal notranslate"><span class="pre">~NpnMapM()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM5clearEv"><code class="docutils literal notranslate"><span class="pre">clear()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM6resizeE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">resize()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM12set_identityE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">set_identity()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM8set_imapE8SizeType8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">set_imap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM8set_imapE8SizeType7NpnVmap"><code class="docutils literal notranslate"><span class="pre">set_imap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM8set_omapE8SizeType8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">set_omap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM8set_omapE8SizeType7NpnVmap"><code class="docutils literal notranslate"><span class="pre">set_omap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapM9input_numEv"><code class="docutils literal notranslate"><span class="pre">input_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapM10output_numEv"><code class="docutils literal notranslate"><span class="pre">output_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapM4imapE8SizeType"><code class="docutils literal notranslate"><span class="pre">imap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapM4omapE8SizeType"><code class="docutils literal notranslate"><span class="pre">omap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapM7inverseEv"><code class="docutils literal notranslate"><span class="pre">inverse()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapMcoEv"><code class="docutils literal notranslate"><span class="pre">operator~()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapMmlERK7NpnMapM"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapMeqERK7NpnMapM"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnMapM4dumpERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapM7restoreERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnMapMlsERNSt7ostreamERK7NpnMapM"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#_CPPv47NpnVmap"><code class="docutils literal notranslate"><span class="pre">NpnVmap</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N7NpnVmap7NpnVmapEv"><code class="docutils literal notranslate"><span class="pre">NpnVmap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnVmap7NpnVmapE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">NpnVmap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnVmap3varEv"><code class="docutils literal notranslate"><span class="pre">var()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnVmap3invEv"><code class="docutils literal notranslate"><span class="pre">inv()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnVmap10is_invalidEv"><code class="docutils literal notranslate"><span class="pre">is_invalid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnVmapeqERK7NpnVmap"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnVmapneERK7NpnVmap"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7NpnVmap4dumpERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnVmap7restoreERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7NpnVmap7invalidEv"><code class="docutils literal notranslate"><span class="pre">invalid()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="sop.html"
+                          title="前の章へ"><span class="section-number">1.5. </span>積和形論理式を扱うサブグループ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dd.html"
+                          title="次の章へ"><span class="section-number">1.7. </span>Decision Diagram を扱うサブグループ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/logic/classes/npn.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="dd.html" title="1.7. Decision Diagram を扱うサブグループ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="sop.html" title="1.5. 積和形論理式を扱うサブグループ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.6. </span>NPN変換を扱うサブグループ</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

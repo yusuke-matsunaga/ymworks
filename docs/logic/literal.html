@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.2.1.2. Literal &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="1.2.2. 論理式を扱うサブグループ" href="expr_grp.html" />
+    <link rel="prev" title="1.2.1.1. Val3" href="val3.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="expr_grp.html" title="1.2.2. 論理式を扱うサブグループ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="val3.html" title="1.2.1.1. Val3"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="common_grp.html" accesskey="U"><span class="section-number">1.2.1. </span>基本的なデータ型</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.1.2. </span>Literal</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="literal">
+<h1><span class="section-number">1.2.1.2. </span>Literal<a class="headerlink" href="#literal" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv47Literal">
+<span id="_CPPv37Literal"></span><span id="_CPPv27Literal"></span><span id="Literal"></span><span class="target" id="df/dec/classLiteral"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Literal</span></span></span><a class="headerlink" href="#_CPPv47Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>リテラル(変数番号＋極性)を表すクラス </p>
+<p>内部では変数番号を2倍したものに極性フラグを加算している． 極性は肯定が 0 , 否定が 1 と見なす． 反転しているかどうかを表すブール値と考えれば良い． </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-生成と破壊">生成と破壊</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Literal1xEv">
+<span id="_CPPv3N7Literal1xEv"></span><span id="_CPPv2N7Literal1xEv"></span><span id="Literal::x"></span><span class="target" id="df/dec/classLiteral_1aae5f8489593be16981f5950bb4ff69a3"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">x</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Literal1xEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>不正値を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Literal13index2literalE8SizeType">
+<span id="_CPPv3N7Literal13index2literalE8SizeType"></span><span id="_CPPv2N7Literal13index2literalE8SizeType"></span><span id="Literal::index2literal__SizeType"></span><span class="target" id="df/dec/classLiteral_1aeb59ffed75f226306525d3c322cea09d"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index2literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Literal13index2literalE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>index からの変換関数 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> -- [in] 変数番号と極性をエンコードしたもの </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Literal7LiteralEv">
+<span id="_CPPv3N7Literal7LiteralEv"></span><span id="_CPPv2N7Literal7LiteralEv"></span><span id="Literal::Literal"></span><span class="target" id="df/dec/classLiteral_1a19d21600c3b0741214ee6f403c2f6d33"></span><span class="sig-name descname"><span class="n"><span class="pre">Literal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7Literal7LiteralEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デフォルトコンストラクタ </p>
+<p>未定義リテラル( = <a class="reference internal" href="#df/dec/classLiteral_1aae5f8489593be16981f5950bb4ff69a3"><span class="std std-ref">Literal::x()</span></a>)になる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Literal7LiteralE8SizeTypeb">
+<span id="_CPPv3N7Literal7LiteralE8SizeTypeb"></span><span id="_CPPv2N7Literal7LiteralE8SizeTypeb"></span><span id="Literal::Literal__SizeType.b"></span><span class="target" id="df/dec/classLiteral_1a78a012ce39fac9732d4c442e726fb422"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Literal7LiteralE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数番号と極性を指定したコンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varid</strong> -- [in] 変数番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 極性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-内容をセットする関数">内容をセットする関数</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Literal3setE8SizeTypeb">
+<span id="_CPPv3N7Literal3setE8SizeTypeb"></span><span id="_CPPv2N7Literal3setE8SizeTypeb"></span><span id="Literal::set__SizeType.b"></span><span class="target" id="df/dec/classLiteral_1a96f35ecce57e543569044d9757cb9a4f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Literal3setE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varid</strong> -- [in] 変数番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 極性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-内容を取得する関数">内容を取得する関数</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal8is_validEv">
+<span id="_CPPv3NK7Literal8is_validEv"></span><span id="_CPPv2NK7Literal8is_validEv"></span><span id="Literal::is_validC"></span><span class="target" id="df/dec/classLiteral_1a566aefcaef8b44771feb7a3d04f27f23"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal8is_validEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>適正な値を持っている時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal5varidEv">
+<span id="_CPPv3NK7Literal5varidEv"></span><span id="_CPPv2NK7Literal5varidEv"></span><span id="Literal::varidC"></span><span class="target" id="df/dec/classLiteral_1ade0aaefc75640e9ad37f2f4e7a548f18"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">varid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal5varidEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数番号を得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>変数番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal11is_positiveEv">
+<span id="_CPPv3NK7Literal11is_positiveEv"></span><span id="_CPPv2NK7Literal11is_positiveEv"></span><span id="Literal::is_positiveC"></span><span class="target" id="df/dec/classLiteral_1a49132026b30a5e13007c892f580e7f4a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_positive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal11is_positiveEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>正極性のリテラルの時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal11is_negativeEv">
+<span id="_CPPv3NK7Literal11is_negativeEv"></span><span id="_CPPv2NK7Literal11is_negativeEv"></span><span id="Literal::is_negativeC"></span><span class="target" id="df/dec/classLiteral_1ac9665a7a7e03e40f403fca4a4bf16662"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_negative</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal11is_negativeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>負極性のリテラルの時 true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7LiteralcoEv">
+<span id="_CPPv3NK7LiteralcoEv"></span><span id="_CPPv2NK7LiteralcoEv"></span><span id="Literal::inv-operatorC"></span><span class="target" id="df/dec/classLiteral_1a099a4b0a7e20c4fa0e88f5904f35e05e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">~</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7LiteralcoEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>極性の反転 </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>極性を反転させたリテラルを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal6invertEv">
+<span id="_CPPv3NK7Literal6invertEv"></span><span id="_CPPv2NK7Literal6invertEv"></span><span id="Literal::invertC"></span><span class="target" id="df/dec/classLiteral_1ae813f8e775cd072d57da9e32a8e68501"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invert</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal6invertEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>極性の反転の別名 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal13make_positiveEv">
+<span id="_CPPv3NK7Literal13make_positiveEv"></span><span id="_CPPv2NK7Literal13make_positiveEv"></span><span id="Literal::make_positiveC"></span><span class="target" id="df/dec/classLiteral_1a44840ca5e11f8d1e68ed292911b73836"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_positive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal13make_positiveEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>同じ変数の正極性リテラルを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal13make_negativeEv">
+<span id="_CPPv3NK7Literal13make_negativeEv"></span><span id="_CPPv2NK7Literal13make_negativeEv"></span><span id="Literal::make_negativeC"></span><span class="target" id="df/dec/classLiteral_1ad5bdf0a45fc1e427aa59a07aa4fadb49"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_negative</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal13make_negativeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>同じ変数の負極性リテラルを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal4hashEv">
+<span id="_CPPv3NK7Literal4hashEv"></span><span id="_CPPv2NK7Literal4hashEv"></span><span id="Literal::hashC"></span><span class="target" id="df/dec/classLiteral_1a2540d0dd960823059a8f7464371e0d98"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hash</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal4hashEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ハッシュ用の関数 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal5indexEv">
+<span id="_CPPv3NK7Literal5indexEv"></span><span id="_CPPv2NK7Literal5indexEv"></span><span id="Literal::indexC"></span><span class="target" id="df/dec/classLiteral_1a1fed629dd5d24a34fc17047224645fd6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal5indexEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>配列のインデックスとして使用可能な数を返す． </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-バイナリダンプ用の関数">バイナリダンプ用の関数</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Literal4dumpER6BinEnc">
+<span id="_CPPv3NK7Literal4dumpER6BinEnc"></span><span id="_CPPv2NK7Literal4dumpER6BinEnc"></span><span id="Literal::dump__BinEncRC"></span><span class="target" id="df/dec/classLiteral_1a9d2fdc0ff707302399bb56cc2fd0d7c0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">BinEnc</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Literal4dumpER6BinEnc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリファイルに出力する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Literal7restoreER6BinDec">
+<span id="_CPPv3N7Literal7restoreER6BinDec"></span><span id="_CPPv2N7Literal7restoreER6BinDec"></span><span id="Literal::restore__BinDecR"></span><span class="target" id="df/dec/classLiteral_1ab243f8c7fd06ab5aea9956e6b26b6dbd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">BinDec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Literal7restoreER6BinDec" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリファイルから読み込む． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 入力元のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-related">Related</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Literal7compareE7Literal7Literal">
+<span id="_CPPv3N7Literal7compareE7Literal7Literal"></span><span id="_CPPv2N7Literal7compareE7Literal7Literal"></span><span id="Literal::compare__Literal.Literal"></span><span class="target" id="df/dec/classLiteral_1abddc3a666570fd2589029789d588ce38"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compare</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Literal7compareE7Literal7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>比較関数 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>lit2</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>-1</strong> -- lit1 &lt; lit2 </p></li>
+<li><p><strong>0</strong> -- lit1 = lit2 </p></li>
+<li><p><strong>1</strong> -- lit1 &gt; lit2 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiteraleqE7Literal7Literal">
+<span id="_CPPv3N7LiteraleqE7Literal7Literal"></span><span id="_CPPv2N7LiteraleqE7Literal7Literal"></span><span id="Literal::eq-operator__Literal.Literal"></span><span class="target" id="df/dec/classLiteral_1a2542c42dd989ba653c58b56a559a5c4c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiteraleqE7Literal7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>等価比較 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>lit2</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>lit1 と lit2 が等しいリテラルの時 true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiteralneE7Literal7Literal">
+<span id="_CPPv3N7LiteralneE7Literal7Literal"></span><span id="_CPPv2N7LiteralneE7Literal7Literal"></span><span id="Literal::neq-operator__Literal.Literal"></span><span class="target" id="df/dec/classLiteral_1aff1f3a6a86cc59ff9773ec5a6df49f7b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiteralneE7Literal7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>非等価比較 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>lit2</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>lit1 と lit2 が等しいリテラルでないとき true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiteralltE7Literal7Literal">
+<span id="_CPPv3N7LiteralltE7Literal7Literal"></span><span id="_CPPv2N7LiteralltE7Literal7Literal"></span><span id="Literal::lt-operator__Literal.Literal"></span><span class="target" id="df/dec/classLiteral_1a85fb1607fef27fd513d88a3de0d8c13b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiteralltE7Literal7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>小なり比較 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>lit2</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>lit1 が lit2 より小さいとき true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiteralgtE7Literal7Literal">
+<span id="_CPPv3N7LiteralgtE7Literal7Literal"></span><span id="_CPPv2N7LiteralgtE7Literal7Literal"></span><span id="Literal::gt-operator__Literal.Literal"></span><span class="target" id="df/dec/classLiteral_1a9bf0626ab267d0f6f6ea8a02b1b75f0d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiteralgtE7Literal7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>大なり比較 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>lit2</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>lit1 が lit2 より大きいとき true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiteralleE7Literal7Literal">
+<span id="_CPPv3N7LiteralleE7Literal7Literal"></span><span id="_CPPv2N7LiteralleE7Literal7Literal"></span><span id="Literal::lte-operator__Literal.Literal"></span><span class="target" id="df/dec/classLiteral_1ab9a4b52f2a3fe1d53be8a329da03f57e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiteralleE7Literal7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>小なりイコール比較 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>lit2</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>lit1 が lit2 より小さいか等しいとき true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiteralgeE7Literal7Literal">
+<span id="_CPPv3N7LiteralgeE7Literal7Literal"></span><span id="_CPPv2N7LiteralgeE7Literal7Literal"></span><span id="Literal::gte-operator__Literal.Literal"></span><span class="target" id="df/dec/classLiteral_1ae1394a0d30ed30f37cc5a4146bd87bc3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit1</span></span>, <a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiteralgeE7Literal7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>大なりイコール比較 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lit1</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>lit2</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>lit1 が lit2 より大きいか等しいとき true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiterallsERNSt7ostreamERK7Literal">
+<span id="_CPPv3N7LiterallsERNSt7ostreamERK7Literal"></span><span id="_CPPv2N7LiterallsERNSt7ostreamERK7Literal"></span><span id="Literal::lshift-operator__osR.LiteralCR"></span><span class="target" id="df/dec/classLiteral_1ad046976ee8ddb10aab3d0d272786a4fb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiterallsERNSt7ostreamERK7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#df/dec/classLiteral"><span class="std std-ref">Literal</span></a> の内容を ostream に出力する関数 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>lit</strong> -- [in] 出力対象のリテラル </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>s </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiterallsER6BinEncRK7Literal">
+<span id="_CPPv3N7LiterallsER6BinEncRK7Literal"></span><span id="_CPPv2N7LiterallsER6BinEncRK7Literal"></span><span id="Literal::lshift-operator__BinEncR.LiteralCR"></span><span class="target" id="df/dec/classLiteral_1ad4d3c801382e6fd5a4c07c14be388f21"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">BinEnc</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">BinEnc</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiterallsER6BinEncRK7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#df/dec/classLiteral"><span class="std std-ref">Literal</span></a> の内容をバイナリ出力する関数 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>lit</strong> -- [in] 象のリテラル </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>s </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7LiteralrsER6BinDecR7Literal">
+<span id="_CPPv3N7LiteralrsER6BinDecR7Literal"></span><span id="_CPPv2N7LiteralrsER6BinDecR7Literal"></span><span id="Literal::rshift-operator__BinDecR.LiteralR"></span><span class="target" id="df/dec/classLiteral_1a4a36db38db79b3083d8ca585ded0520a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">BinDec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;&gt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">BinDec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <a class="reference internal" href="#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7LiteralrsER6BinDecR7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#df/dec/classLiteral"><span class="std std-ref">Literal</span></a> の内容をバイナリ入力する関数 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 入力ストリーム </p></li>
+<li><p><strong>lit</strong> -- [out] 対象のリテラル </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>s </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.1.2. Literal</a><ul>
+<li><a class="reference internal" href="#_CPPv47Literal"><code class="docutils literal notranslate"><span class="pre">Literal</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N7Literal1xEv"><code class="docutils literal notranslate"><span class="pre">x()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Literal13index2literalE8SizeType"><code class="docutils literal notranslate"><span class="pre">index2literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Literal7LiteralEv"><code class="docutils literal notranslate"><span class="pre">Literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Literal7LiteralE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">Literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Literal3setE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">set()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal8is_validEv"><code class="docutils literal notranslate"><span class="pre">is_valid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal5varidEv"><code class="docutils literal notranslate"><span class="pre">varid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal11is_positiveEv"><code class="docutils literal notranslate"><span class="pre">is_positive()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal11is_negativeEv"><code class="docutils literal notranslate"><span class="pre">is_negative()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7LiteralcoEv"><code class="docutils literal notranslate"><span class="pre">operator~()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal6invertEv"><code class="docutils literal notranslate"><span class="pre">invert()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal13make_positiveEv"><code class="docutils literal notranslate"><span class="pre">make_positive()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal13make_negativeEv"><code class="docutils literal notranslate"><span class="pre">make_negative()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal4hashEv"><code class="docutils literal notranslate"><span class="pre">hash()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal5indexEv"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Literal4dumpER6BinEnc"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Literal7restoreER6BinDec"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Literal7compareE7Literal7Literal"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiteraleqE7Literal7Literal"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiteralneE7Literal7Literal"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiteralltE7Literal7Literal"><code class="docutils literal notranslate"><span class="pre">operator&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiteralgtE7Literal7Literal"><code class="docutils literal notranslate"><span class="pre">operator&gt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiteralleE7Literal7Literal"><code class="docutils literal notranslate"><span class="pre">operator&lt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiteralgeE7Literal7Literal"><code class="docutils literal notranslate"><span class="pre">operator&gt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiterallsERNSt7ostreamERK7Literal"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiterallsER6BinEncRK7Literal"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7LiteralrsER6BinDecR7Literal"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="val3.html"
+                          title="前の章へ"><span class="section-number">1.2.1.1. </span>Val3</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="expr_grp.html"
+                          title="次の章へ"><span class="section-number">1.2.2. </span>論理式を扱うサブグループ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/logic/literal.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="expr_grp.html" title="1.2.2. 論理式を扱うサブグループ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="val3.html" title="1.2.1.1. Val3"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="common_grp.html" ><span class="section-number">1.2.1. </span>基本的なデータ型</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.1.2. </span>Literal</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.2.6.7. BddLit &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="1.2.6.8. BddCube" href="bddcube.html" />
+    <link rel="prev" title="1.2.6.6. BddVarSet" href="bddvarset.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="bddcube.html" title="1.2.6.8. BddCube"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="bddvarset.html" title="1.2.6.6. BddVarSet"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="dd_grp.html" accesskey="U"><span class="section-number">1.2.6. </span>Decision Diagram を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.6.7. </span>BddLit</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="bddlit">
+<h1><span class="section-number">1.2.6.7. </span>BddLit<a class="headerlink" href="#bddlit" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv46BddLit">
+<span id="_CPPv36BddLit"></span><span id="_CPPv26BddLit"></span><span id="BddLit"></span><span class="target" id="d0/dc3/classBddLit"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddLit</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="bddbase.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><a class="headerlink" href="#_CPPv46BddLit" title="Link to this definition">¶</a><br /></dt>
+<dd><p>BDD のリテラルを表すクラス </p>
+<p><ul class="simple">
+<li><p>ブール論理の世界においてはリテラルとは変数とその否定のみ</p></li>
+<li><p>実際にはリテラル関数を表すBDDを用いている． </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddLit6BddLitEv">
+<span id="_CPPv3N6BddLit6BddLitEv"></span><span id="_CPPv2N6BddLit6BddLitEv"></span><span id="BddLit::BddLit"></span><span class="target" id="d0/dc3/classBddLit_1a23702e56cc7dbcd88a799ccdb021f8fb"></span><span class="sig-name descname"><span class="n"><span class="pre">BddLit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N6BddLit6BddLitEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>空のコンストラクタ </p>
+<p>不正な値となる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddLit6BddLitER12BddMgrHolder8SizeTypeb">
+<span id="_CPPv3N6BddLit6BddLitER12BddMgrHolder8SizeTypeb"></span><span id="_CPPv2N6BddLit6BddLitER12BddMgrHolder8SizeTypeb"></span><span id="BddLit::BddLit__BddMgrHolderR.SizeType.b"></span><span class="target" id="d0/dc3/classBddLit_1a0fbe84932b194fb72dc1280d01eb5282"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddLit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="bddmgrholder.html#_CPPv412BddMgrHolder" title="BddMgrHolder"><span class="n"><span class="pre">BddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddLit6BddLitER12BddMgrHolder8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>マネージャと変数番号を指定したコンストラクタ </p>
+<p><ul class="simple">
+<li><p>mgr が nullptr の時は std::invalid_argument 例外が送出される． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mgr</strong> -- [in] マネージャ </p></li>
+<li><p><strong>varid</strong> -- [in] 変数番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性<ul>
+<li><p>false: 肯定(反転なし)</p></li>
+<li><p>true: 否定(反転あり) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddLit6BddLitERK6BddVarb">
+<span id="_CPPv3N6BddLit6BddLitERK6BddVarb"></span><span id="_CPPv2N6BddLit6BddLitERK6BddVarb"></span><span id="BddLit::BddLit__BddVarCR.b"></span><span class="target" id="d0/dc3/classBddLit_1aeb0699f17bcfb6825ed99281267a0546"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddLit</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddLit6BddLitERK6BddVarb" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a> と反転属性を引数にとるコンストラクタ </p>
+<p><ul class="simple">
+<li><p>var が不正値の時は std::invalid_argument 例外が送出される． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> -- [in] 変数 </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性<ul>
+<li><p>false: 肯定(反転なし)</p></li>
+<li><p>true: 否定(反転あり) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddLitD0Ev">
+<span id="_CPPv3N6BddLitD0Ev"></span><span id="_CPPv2N6BddLitD0Ev"></span><span id="BddLit::~BddLit"></span><span class="target" id="d0/dc3/classBddLit_1a25a173cbb7d4c0c359624fcf570132d1"></span><span class="sig-name descname"><span class="n"><span class="pre">~BddLit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N6BddLitD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLit3varEv">
+<span id="_CPPv3NK6BddLit3varEv"></span><span id="_CPPv2NK6BddLit3varEv"></span><span id="BddLit::varC"></span><span class="target" id="d0/dc3/classBddLit_1a6074ee2b01a5d6374fbe75cfb0972ff9"></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">var</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLit3varEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数を取り出す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLit11is_positiveEv">
+<span id="_CPPv3NK6BddLit11is_positiveEv"></span><span id="_CPPv2NK6BddLit11is_positiveEv"></span><span id="BddLit::is_positiveC"></span><span class="target" id="d0/dc3/classBddLit_1a12259c523c599fb9511aa7938fe1d211"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_positive</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLit11is_positiveEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>肯定のリテラルのとき true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLit11is_negativeEv">
+<span id="_CPPv3NK6BddLit11is_negativeEv"></span><span id="_CPPv2NK6BddLit11is_negativeEv"></span><span id="BddLit::is_negativeC"></span><span class="target" id="d0/dc3/classBddLit_1aedbb568972ecb680dd028de4f5a0556a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_negative</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLit11is_negativeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>否定のリテラルのとき true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLit16positive_literalEv">
+<span id="_CPPv3NK6BddLit16positive_literalEv"></span><span id="_CPPv2NK6BddLit16positive_literalEv"></span><span id="BddLit::positive_literalC"></span><span class="target" id="d0/dc3/classBddLit_1acaddfb82b011fecd7b6d031c343b714b"></span><a class="reference internal" href="#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">positive_literal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLit16positive_literalEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>同じ変数の肯定のリテラルを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLit16negative_literalEv">
+<span id="_CPPv3NK6BddLit16negative_literalEv"></span><span id="_CPPv2NK6BddLit16negative_literalEv"></span><span id="BddLit::negative_literalC"></span><span class="target" id="d0/dc3/classBddLit_1ad5b67cf3f30cdbd902d8c8a3db399a40"></span><a class="reference internal" href="#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">negative_literal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLit16negative_literalEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>同じ変数の否定のリテラルを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLit10complementEv">
+<span id="_CPPv3NK6BddLit10complementEv"></span><span id="_CPPv2NK6BddLit10complementEv"></span><span id="BddLit::complementC"></span><span class="target" id="d0/dc3/classBddLit_1a5ce373f0a0e2b27ed219d095629f9ac4"></span><a class="reference internal" href="#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">complement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLit10complementEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>極性を反転したリテラルを返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLitcoEv">
+<span id="_CPPv3NK6BddLitcoEv"></span><span id="_CPPv2NK6BddLitcoEv"></span><span id="BddLit::inv-operatorC"></span><span class="target" id="d0/dc3/classBddLit_1ab34624d0276844466336ed095d44ef5c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">~</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLitcoEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>反転演算子(complementの別名) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLitmlEb">
+<span id="_CPPv3NK6BddLitmlEb"></span><span id="_CPPv2NK6BddLitmlEb"></span><span id="BddLit::mul-operator__bC"></span><span class="target" id="d0/dc3/classBddLit_1a453b97572c5543e8f5f857e5c0679984"></span><a class="reference internal" href="#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLitmlEb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>反転属性との掛け算 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv</strong> -- [in] 反転属性(true で反転) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddLitmLEb">
+<span id="_CPPv3N6BddLitmLEb"></span><span id="_CPPv2N6BddLitmLEb"></span><span id="BddLit::mul-assign-operator__b"></span><span class="target" id="d0/dc3/classBddLit_1a0c5fe86caf70f633c9b112f99bb524b6"></span><a class="reference internal" href="#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*=</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddLitmLEb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>反転属性との掛け算付き代入 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv</strong> -- [in] 反転属性(true で反転) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLitanERK6BddLit">
+<span id="_CPPv3NK6BddLitanERK6BddLit"></span><span id="_CPPv2NK6BddLitanERK6BddLit"></span><span id="BddLit::and-operator__BddLitCRC"></span><span class="target" id="d0/dc3/classBddLit_1a9b4c05a6fa408f7de114be5eb6d9c6ee"></span><a class="reference internal" href="bddcube.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLitanERK6BddLit" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理積を計算する． </p>
+<p>結果は <a class="reference internal" href="bddcube.html#d9/d05/classBddCube"><span class="std std-ref">BddCube</span></a> となる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddLitanERK7BddCube">
+<span id="_CPPv3NK6BddLitanERK7BddCube"></span><span id="_CPPv2NK6BddLitanERK7BddCube"></span><span id="BddLit::and-operator__BddCubeCRC"></span><span class="target" id="d0/dc3/classBddLit_1a3da447df9d5eb8a0926da1743405e583"></span><a class="reference internal" href="bddcube.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddcube.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddLitanERK7BddCube" title="Link to this definition">¶</a><br /></dt>
+<dd><p>キューブとの論理積 </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddLit7invalidEv">
+<span id="_CPPv3N6BddLit7invalidEv"></span><span id="_CPPv2N6BddLit7invalidEv"></span><span id="BddLit::invalid"></span><span class="target" id="d0/dc3/classBddLit_1af3e20acf405777c9a54fbd495c5b1695"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddLit7invalidEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>不正な値を作るクラスメソッド </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.6.7. BddLit</a><ul>
+<li><a class="reference internal" href="#_CPPv46BddLit"><code class="docutils literal notranslate"><span class="pre">BddLit</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N6BddLit6BddLitEv"><code class="docutils literal notranslate"><span class="pre">BddLit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddLit6BddLitER12BddMgrHolder8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">BddLit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddLit6BddLitERK6BddVarb"><code class="docutils literal notranslate"><span class="pre">BddLit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddLitD0Ev"><code class="docutils literal notranslate"><span class="pre">~BddLit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLit3varEv"><code class="docutils literal notranslate"><span class="pre">var()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLit11is_positiveEv"><code class="docutils literal notranslate"><span class="pre">is_positive()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLit11is_negativeEv"><code class="docutils literal notranslate"><span class="pre">is_negative()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLit16positive_literalEv"><code class="docutils literal notranslate"><span class="pre">positive_literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLit16negative_literalEv"><code class="docutils literal notranslate"><span class="pre">negative_literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLit10complementEv"><code class="docutils literal notranslate"><span class="pre">complement()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLitcoEv"><code class="docutils literal notranslate"><span class="pre">operator~()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLitmlEb"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddLitmLEb"><code class="docutils literal notranslate"><span class="pre">operator*=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLitanERK6BddLit"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddLitanERK7BddCube"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddLit7invalidEv"><code class="docutils literal notranslate"><span class="pre">invalid()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="bddvarset.html"
+                          title="前の章へ"><span class="section-number">1.2.6.6. </span>BddVarSet</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="bddcube.html"
+                          title="次の章へ"><span class="section-number">1.2.6.8. </span>BddCube</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/logic/bddlit.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="bddcube.html" title="1.2.6.8. BddCube"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="bddvarset.html" title="1.2.6.6. BddVarSet"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="dd_grp.html" ><span class="section-number">1.2.6. </span>Decision Diagram を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.6.7. </span>BddLit</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

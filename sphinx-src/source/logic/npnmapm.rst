@@ -1,0 +1,5 @@
+NpnMapM
+~~~~~~~~
+
+.. doxygenclass:: NpnMapM
+   :members:

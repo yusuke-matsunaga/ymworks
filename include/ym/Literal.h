@@ -22,7 +22,10 @@ const SizeType BAD_VARID = static_cast<SizeType>(-1);
 /// @ingroup LogicGroup
 /// @class Literal Literal.h "ym/Literal.h"
 /// @brief リテラル(変数番号＋極性)を表すクラス
-/// @sa VarId
+///
+/// 内部では変数番号を2倍したものに極性フラグを加算している．
+/// 極性は肯定が 0 , 否定が 1 と見なす．
+/// 反転しているかどうかを表すブール値と考えれば良い．
 //////////////////////////////////////////////////////////////////////
 class Literal
 {

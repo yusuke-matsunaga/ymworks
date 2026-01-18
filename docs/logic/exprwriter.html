@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.2.2.2. ExprWriter &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="1.2.3. 積和形論理式を扱うサブグループ" href="sop_grp.html" />
+    <link rel="prev" title="1.2.2.1. Expr" href="expr.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="sop_grp.html" title="1.2.3. 積和形論理式を扱うサブグループ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="expr.html" title="1.2.2.1. Expr"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="expr_grp.html" accesskey="U"><span class="section-number">1.2.2. </span>論理式を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.2.2. </span>ExprWriter</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="exprwriter">
+<h1><span class="section-number">1.2.2.2. </span>ExprWriter<a class="headerlink" href="#exprwriter" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv410ExprWriter">
+<span id="_CPPv310ExprWriter"></span><span id="_CPPv210ExprWriter"></span><span id="ExprWriter"></span><span class="target" id="d1/db0/classExprWriter"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExprWriter</span></span></span><a class="headerlink" href="#_CPPv410ExprWriter" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="expr.html#d0/d92/classExpr"><span class="std std-ref">Expr</span></a> を出力するためのクラス </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="expr.html#d0/d92/classExpr"><span class="std std-ref">Expr</span></a></p>
+</div>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N10ExprWriter11VarNameDictE">
+<span id="_CPPv3N10ExprWriter11VarNameDictE"></span><span id="_CPPv2N10ExprWriter11VarNameDictE"></span><span class="target" id="d1/db0/classExprWriter_1a4035fcdc216475e7c03b7a1375842881"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VarNameDict</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">SizeType</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N10ExprWriter11VarNameDictE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数名の辞書 </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10ExprWriter10ExprWriterEv">
+<span id="_CPPv3N10ExprWriter10ExprWriterEv"></span><span id="_CPPv2N10ExprWriter10ExprWriterEv"></span><span id="ExprWriter::ExprWriter"></span><span class="target" id="d1/db0/classExprWriter_1a98b4f3bd7b9db42beffeef2e38dcd08c"></span><span class="sig-name descname"><span class="n"><span class="pre">ExprWriter</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N10ExprWriter10ExprWriterEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10ExprWriterD0Ev">
+<span id="_CPPv3N10ExprWriterD0Ev"></span><span id="_CPPv2N10ExprWriterD0Ev"></span><span id="ExprWriter::~ExprWriter"></span><span class="target" id="d1/db0/classExprWriter_1afa6e24789894d9be97be6ed93d9fa935"></span><span class="sig-name descname"><span class="n"><span class="pre">~ExprWriter</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N10ExprWriterD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter4dumpERNSt7ostreamERK4Expr">
+<span id="_CPPv3NK10ExprWriter4dumpERNSt7ostreamERK4Expr"></span><span id="_CPPv2NK10ExprWriter4dumpERNSt7ostreamERK4Expr"></span><span id="ExprWriter::dump__osR.ExprCRC"></span><span class="target" id="d1/db0/classExprWriter_1ae0c710b4d32f1951dad06a03bb576004"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="expr.html#_CPPv44Expr" title="Expr"><span class="n"><span class="pre">Expr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">expr</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter4dumpERNSt7ostreamERK4Expr" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容の出力 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>expr</strong> -- [in] 式 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>s </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter4dumpERNSt7ostreamERK4ExprRK11VarNameDict">
+<span id="_CPPv3NK10ExprWriter4dumpERNSt7ostreamERK4ExprRK11VarNameDict"></span><span id="_CPPv2NK10ExprWriter4dumpERNSt7ostreamERK4ExprRK11VarNameDict"></span><span id="ExprWriter::dump__osR.ExprCR.VarNameDictCRC"></span><span class="target" id="d1/db0/classExprWriter_1a03847390711fc3300e9559ca7ca425b5"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="expr.html#_CPPv44Expr" title="Expr"><span class="n"><span class="pre">Expr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">expr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N10ExprWriter11VarNameDictE" title="ExprWriter::VarNameDict"><span class="n"><span class="pre">VarNameDict</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_names</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter4dumpERNSt7ostreamERK4ExprRK11VarNameDict" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容の出力 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>expr</strong> -- [in] 式 </p></li>
+<li><p><strong>var_names</strong> -- [in] 各変数から変数名への写像 var の変数名として var_names[var] を用いる． 登録されていなければデフォルトの表記を用いる． </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>s </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter14dump_to_stringERK4Expr">
+<span id="_CPPv3NK10ExprWriter14dump_to_stringERK4Expr"></span><span id="_CPPv2NK10ExprWriter14dump_to_stringERK4Expr"></span><span id="ExprWriter::dump_to_string__ExprCRC"></span><span class="target" id="d1/db0/classExprWriter_1aa8e4a406940abb8765425c9d20c05124"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump_to_string</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="expr.html#_CPPv44Expr" title="Expr"><span class="n"><span class="pre">Expr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">expr</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter14dump_to_stringERK4Expr" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を文字列にする． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expr</strong> -- [in] 式 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>式の内容を表す文字列 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter14dump_to_stringERK4ExprRK11VarNameDict">
+<span id="_CPPv3NK10ExprWriter14dump_to_stringERK4ExprRK11VarNameDict"></span><span id="_CPPv2NK10ExprWriter14dump_to_stringERK4ExprRK11VarNameDict"></span><span id="ExprWriter::dump_to_string__ExprCR.VarNameDictCRC"></span><span class="target" id="d1/db0/classExprWriter_1a207dc01216934573d04862681b8ff2c5"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump_to_string</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="expr.html#_CPPv44Expr" title="Expr"><span class="n"><span class="pre">Expr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">expr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N10ExprWriter11VarNameDictE" title="ExprWriter::VarNameDict"><span class="n"><span class="pre">VarNameDict</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_names</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter14dump_to_stringERK4ExprRK11VarNameDict" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を文字列にする． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>var_names</strong> -- [in] 各変数から変数名への写像 var の変数名として var_names[var] を用いる． 登録されていなければデフォルトの表記を用いる． </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>式の内容を表す文字列 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10ExprWriter9set_opstrERKNSt6vectorINSt6stringEEE">
+<span id="_CPPv3N10ExprWriter9set_opstrERKNSt6vectorINSt6stringEEE"></span><span id="_CPPv2N10ExprWriter9set_opstrERKNSt6vectorINSt6stringEEE"></span><span id="ExprWriter::set_opstr__std::vector:ss:CR"></span><span class="target" id="d1/db0/classExprWriter_1a163b521b8e3a20a7dc5dfe98727024b1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_opstr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">op</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10ExprWriter9set_opstrERKNSt6vectorINSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>演算子を表す文字列の設定 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d1/db0/classExprWriter_1ac0efee3ee1fc39da236f9f5c0d8a570a"><span class="std std-ref">opstr</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>op</strong> -- [in] 演算子を表す文字列を入れる．<ul class="simple">
+<li><p>op[0]: 否定 (~)</p></li>
+<li><p>op[1]: AND (&amp;)</p></li>
+<li><p>op[2]: OR (|)</p></li>
+<li><p>op[3]: XOR (^) </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter5opstrEv">
+<span id="_CPPv3NK10ExprWriter5opstrEv"></span><span id="_CPPv2NK10ExprWriter5opstrEv"></span><span id="ExprWriter::opstrC"></span><span class="target" id="d1/db0/classExprWriter_1ac0efee3ee1fc39da236f9f5c0d8a570a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">opstr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter5opstrEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>演算子を表す文字列の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="#d1/db0/classExprWriter_1a163b521b8e3a20a7dc5dfe98727024b1"><span class="std std-ref">set_opstr</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>演算子を表す文字列を格納するベクタ(サイズは4) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter7not_strEv">
+<span id="_CPPv3NK10ExprWriter7not_strEv"></span><span id="_CPPv2NK10ExprWriter7not_strEv"></span><span id="ExprWriter::not_strC"></span><span class="target" id="d1/db0/classExprWriter_1a3fe4c9de280ee12547456b1152706846"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">not_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter7not_strEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>否定演算子を表す文字列の取得 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter7and_strEv">
+<span id="_CPPv3NK10ExprWriter7and_strEv"></span><span id="_CPPv2NK10ExprWriter7and_strEv"></span><span id="ExprWriter::and_strC"></span><span class="target" id="d1/db0/classExprWriter_1a2d47e34220cb7ce29cc1fea05f8c3d1d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">and_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter7and_strEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>AND演算子を表す文字列の取得 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter6or_strEv">
+<span id="_CPPv3NK10ExprWriter6or_strEv"></span><span id="_CPPv2NK10ExprWriter6or_strEv"></span><span id="ExprWriter::or_strC"></span><span class="target" id="d1/db0/classExprWriter_1a59813cd4e07a8a00391fb11818caee36"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">or_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter6or_strEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>OR演算子を表す文字列の取得 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10ExprWriter7xor_strEv">
+<span id="_CPPv3NK10ExprWriter7xor_strEv"></span><span id="_CPPv2NK10ExprWriter7xor_strEv"></span><span id="ExprWriter::xor_strC"></span><span class="target" id="d1/db0/classExprWriter_1a3e2b26baf32b3eba4228232b16e472ae"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">xor_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10ExprWriter7xor_strEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>XOR演算子を表す文字列の取得 </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.2.2. ExprWriter</a><ul>
+<li><a class="reference internal" href="#_CPPv410ExprWriter"><code class="docutils literal notranslate"><span class="pre">ExprWriter</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N10ExprWriter11VarNameDictE"><code class="docutils literal notranslate"><span class="pre">VarNameDict</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10ExprWriter10ExprWriterEv"><code class="docutils literal notranslate"><span class="pre">ExprWriter()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10ExprWriterD0Ev"><code class="docutils literal notranslate"><span class="pre">~ExprWriter()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter4dumpERNSt7ostreamERK4Expr"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter4dumpERNSt7ostreamERK4ExprRK11VarNameDict"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter14dump_to_stringERK4Expr"><code class="docutils literal notranslate"><span class="pre">dump_to_string()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter14dump_to_stringERK4ExprRK11VarNameDict"><code class="docutils literal notranslate"><span class="pre">dump_to_string()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10ExprWriter9set_opstrERKNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">set_opstr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter5opstrEv"><code class="docutils literal notranslate"><span class="pre">opstr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter7not_strEv"><code class="docutils literal notranslate"><span class="pre">not_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter7and_strEv"><code class="docutils literal notranslate"><span class="pre">and_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter6or_strEv"><code class="docutils literal notranslate"><span class="pre">or_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter7xor_strEv"><code class="docutils literal notranslate"><span class="pre">xor_str()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="expr.html"
+                          title="前の章へ"><span class="section-number">1.2.2.1. </span>Expr</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="sop_grp.html"
+                          title="次の章へ"><span class="section-number">1.2.3. </span>積和形論理式を扱うサブグループ</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/logic/exprwriter.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="sop_grp.html" title="1.2.3. 積和形論理式を扱うサブグループ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="expr.html" title="1.2.2.1. Expr"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="expr_grp.html" ><span class="section-number">1.2.2. </span>論理式を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.2.2. </span>ExprWriter</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

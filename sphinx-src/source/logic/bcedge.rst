@@ -1,0 +1,5 @@
+BcEdge
+~~~~~~~
+
+.. doxygenclass:: BcEdge
+   :members:

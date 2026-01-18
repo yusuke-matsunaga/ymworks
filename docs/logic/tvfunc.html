@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.2.4.1. TvFunc &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="1.2.4.2. TvFuncM" href="tvfuncm.html" />
+    <link rel="prev" title="1.2.4. 真理値表を扱うサブグループ" href="tv_grp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="tvfuncm.html" title="1.2.4.2. TvFuncM"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="tv_grp.html" title="1.2.4. 真理値表を扱うサブグループ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="tv_grp.html" accesskey="U"><span class="section-number">1.2.4. </span>真理値表を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.4.1. </span>TvFunc</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="tvfunc">
+<h1><span class="section-number">1.2.4.1. </span>TvFunc<a class="headerlink" href="#tvfunc" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv46TvFunc">
+<span id="_CPPv36TvFunc"></span><span id="_CPPv26TvFunc"></span><span id="TvFunc"></span><span class="target" id="d4/d6d/classTvFunc"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TvFunc</span></span></span><a class="headerlink" href="#_CPPv46TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>真理値表形式で論理関数を表すクラス </p>
+<p>ビットパタンのエンコーディングは以下の通り．<ul class="simple">
+<li><p>ビット位置 p = b0 * 2^0 + b1 * 2^1 + b2 * 2^2 ... は (b0, b1, b2, ...) の値を表す．</p></li>
+</ul>
+</p>
+<p>中身はビットパックされた本当の真理値表なので入力数の指数乗に比例した メモリ容量を必要とする． そのため通常の論理演算よりも代入付き論理演算のほうが効率がよい． さらに，オペランドのどちらかが右辺値の場合には自動的にそのオブジェクト からムーブ演算子で中身を移してそのオブジェクト乗で代入付き論理演算を 行うようになっている． 捨てて良いオブジェクトを用いる場合には move() で右辺値にしておいた ほうが効率がよい． </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc6TvFuncEv">
+<span id="_CPPv3N6TvFunc6TvFuncEv"></span><span id="_CPPv2N6TvFunc6TvFuncEv"></span><span id="TvFunc::TvFunc"></span><span class="target" id="d4/d6d/classTvFunc_1ad6bdfb5213158129f7f05fcb01fc54fb"></span><span class="sig-name descname"><span class="n"><span class="pre">TvFunc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc6TvFuncEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>不正値を作るコンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc6TvFuncE8SizeType">
+<span id="_CPPv3N6TvFunc6TvFuncE8SizeType"></span><span id="_CPPv2N6TvFunc6TvFuncE8SizeType"></span><span id="TvFunc::TvFunc__SizeType"></span><span class="target" id="d4/d6d/classTvFunc_1ab403da7532a25e7992967f2a6852aa0a"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TvFunc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc6TvFuncE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数のみ指定したコンストラクタ </p>
+<p>中身は恒偽関数 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc6TvFuncE8SizeTypeRKNSt6vectorIiEE">
+<span id="_CPPv3N6TvFunc6TvFuncE8SizeTypeRKNSt6vectorIiEE"></span><span id="_CPPv2N6TvFunc6TvFuncE8SizeTypeRKNSt6vectorIiEE"></span><span id="TvFunc::TvFunc__SizeType.std::vector:i:CR"></span><span class="target" id="d4/d6d/classTvFunc_1af7964b92819a7f13cfe8c3620fd55ae9"></span><span class="sig-name descname"><span class="n"><span class="pre">TvFunc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">values</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc6TvFuncE8SizeTypeRKNSt6vectorIiEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数と真理値を指定したコンストラクタ </p>
+<p><ul class="simple">
+<li><p>values のサイズは 2^ni に等しくなければならない．</p></li>
+<li><p>違反時には std::invalid_argument 例外が送出される． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>values</strong> -- [in] 真理値のベクタ </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc6TvFuncERKNSt6stringEi">
+<span id="_CPPv3N6TvFunc6TvFuncERKNSt6stringEi"></span><span id="_CPPv2N6TvFunc6TvFuncERKNSt6stringEi"></span><span id="TvFunc::TvFunc__ssCR.i"></span><span class="target" id="d4/d6d/classTvFunc_1a8a4f5856551cfd18e2ecf98a8acbea0a"></span><span class="sig-name descname"><span class="n"><span class="pre">TvFunc</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">str</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc6TvFuncERKNSt6stringEi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>文字列からの変換コンストラクタ </p>
+<p><ul class="simple">
+<li><p>文字列の形式は <a class="reference internal" href="#d4/d6d/classTvFunc_1a08c959c1f3f4a261e450ff5c31de65f3"><span class="std std-ref">TvFunc::str()</span></a> と同一</p></li>
+<li><p>つまり，TvFunc(str1).<a class="reference internal" href="#d4/d6d/classTvFunc_1a08c959c1f3f4a261e450ff5c31de65f3"><span class="std std-ref">str()</span></a> == str1 となる．</p></li>
+<li><p>str の長さは 2^n でなければならない(2進モード)．</p></li>
+<li><p>str は '0' と '1' 以外の文字を含んではいけない(2進モード)．</p></li>
+<li><p>str の長さは 2^n/4 でなければならない(16進モード)．</p></li>
+<li><p>str は '0' 〜 '9' と 'a' 〜 'h' 以外の文字を含んではいけない(16進モード)．</p></li>
+<li><p>違反時には std::invalid_argument 例外が送出される． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>str</strong> -- [in] 0と1からなる文字列 </p></li>
+<li><p><strong>mode</strong> -- [in] モード(基数) 2 or 16 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc6TvFuncERK6TvFunc">
+<span id="_CPPv3N6TvFunc6TvFuncERK6TvFunc"></span><span id="_CPPv2N6TvFunc6TvFuncERK6TvFunc"></span><span id="TvFunc::TvFunc__TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1ab94a108eafcf73c4dbb5608c876d249d"></span><span class="sig-name descname"><span class="n"><span class="pre">TvFunc</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N6TvFunc6TvFuncERK6TvFunc" title="TvFunc::TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc6TvFuncERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>16進文字列 </p>
+<p>コピーコンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のソースオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc6TvFuncERR6TvFunc">
+<span id="_CPPv3N6TvFunc6TvFuncERR6TvFunc"></span><span id="_CPPv2N6TvFunc6TvFuncERR6TvFunc"></span><span id="TvFunc::TvFunc__TvFuncRR"></span><span class="target" id="d4/d6d/classTvFunc_1aca02894421500775b044b6a83d5f5f09"></span><span class="sig-name descname"><span class="n"><span class="pre">TvFunc</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6TvFunc6TvFuncERR6TvFunc" title="TvFunc::TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc6TvFuncERR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ムーブコンストラクタ </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] ムーブ元のソースオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncaSERK6TvFunc">
+<span id="_CPPv3N6TvFuncaSERK6TvFunc"></span><span id="_CPPv2N6TvFuncaSERK6TvFunc"></span><span id="TvFunc::assign-operator__TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a5cdcf17f313f73490bb077e1cd8d8ad3"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncaSERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コピー代入演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のソースオブジェクト </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自分自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncaSERR6TvFunc">
+<span id="_CPPv3N6TvFuncaSERR6TvFunc"></span><span id="_CPPv2N6TvFuncaSERR6TvFunc"></span><span id="TvFunc::assign-operator__TvFuncRR"></span><span class="target" id="d4/d6d/classTvFunc_1a515e5c6cb902f834f7e8441a9a5815ac"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncaSERR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ムーブ代入演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] ムーブ元のソースオブジェクト </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自分自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncD0Ev">
+<span id="_CPPv3N6TvFuncD0Ev"></span><span id="_CPPv2N6TvFuncD0Ev"></span><span id="TvFunc::~TvFunc"></span><span class="target" id="d4/d6d/classTvFunc_1a0463e911a01fbc97f5b7596f2acf51ec"></span><span class="sig-name descname"><span class="n"><span class="pre">~TvFunc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc6invertEb">
+<span id="_CPPv3NK6TvFunc6invertEb"></span><span id="_CPPv2NK6TvFunc6invertEb"></span><span id="TvFunc::invert__bC"></span><span class="target" id="d4/d6d/classTvFunc_1a0fcd0afa70f7adbfe27278f2bc16ebdc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invert</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc6invertEb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>否定した関数を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv</strong> -- [in] 反転フラグ </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc6and_opERK6TvFunc">
+<span id="_CPPv3NK6TvFunc6and_opERK6TvFunc"></span><span id="_CPPv2NK6TvFunc6and_opERK6TvFunc"></span><span id="TvFunc::and_op__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a0b409d55414beffc24c8ac10c63aee11"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">and_op</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc6and_opERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理積を返す． </p>
+<p>right と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc5or_opERK6TvFunc">
+<span id="_CPPv3NK6TvFunc5or_opERK6TvFunc"></span><span id="_CPPv2NK6TvFunc5or_opERK6TvFunc"></span><span id="TvFunc::or_op__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a8c23f6fb7e3907700400ea71a9971083"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">or_op</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc5or_opERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理和を返す． </p>
+<p>right と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc6xor_opERK6TvFunc">
+<span id="_CPPv3NK6TvFunc6xor_opERK6TvFunc"></span><span id="_CPPv2NK6TvFunc6xor_opERK6TvFunc"></span><span id="TvFunc::xor_op__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a32fc937d2b8b6db3b67e6e2c10e6d112"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">xor_op</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc6xor_opERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>排他的論理和を返す． </p>
+<p>right と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc8cofactorE7Literal">
+<span id="_CPPv3NK6TvFunc8cofactorE7Literal"></span><span id="_CPPv2NK6TvFunc8cofactorE7Literal"></span><span id="TvFunc::cofactor__LiteralC"></span><span class="target" id="d4/d6d/classTvFunc_1af791a4d5e658fcdfbb93ba04f4dfdcd0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cofactor</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc8cofactorE7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コファクターを返す． </p>
+<p>lit.varid() が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lit</strong> -- [in] リテラル </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc8cofactorE8SizeTypeb">
+<span id="_CPPv3NK6TvFunc8cofactorE8SizeTypeb"></span><span id="_CPPv2NK6TvFunc8cofactorE8SizeTypeb"></span><span id="TvFunc::cofactor__SizeType.bC"></span><span class="target" id="d4/d6d/classTvFunc_1a5edd304eb27087805197818ec67d90d7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cofactor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc8cofactorE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コファクターを返す． </p>
+<p>var が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> -- [in] 変数番号 ( 0 &lt;= var &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p></li>
+<li><p><strong>inv</strong> -- [in] 極性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc4bindE7Literal">
+<span id="_CPPv3NK6TvFunc4bindE7Literal"></span><span id="_CPPv2NK6TvFunc4bindE7Literal"></span><span id="TvFunc::bind__LiteralC"></span><span class="target" id="d4/d6d/classTvFunc_1a9266fdf08e33a885067e1277edcd5e65"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bind</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc4bindE7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コファクターを計算し，束縛した変数を消去する． </p>
+<p>lit.varid() が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lit</strong> -- [in] リテラル </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc4bindE8SizeTypeb">
+<span id="_CPPv3NK6TvFunc4bindE8SizeTypeb"></span><span id="_CPPv2NK6TvFunc4bindE8SizeTypeb"></span><span id="TvFunc::bind__SizeType.bC"></span><span class="target" id="d4/d6d/classTvFunc_1a4a4805339e7051304a44fff6662ecc43"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bind</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc4bindE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コファクターを計算し，束縛した変数を消去する． </p>
+<p>var が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> -- [in] 変数番号 ( 0 &lt;= var &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p></li>
+<li><p><strong>inv</strong> -- [in] 極性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc8cofactorERKNSt6vectorI7LiteralEE">
+<span id="_CPPv3NK6TvFunc8cofactorERKNSt6vectorI7LiteralEE"></span><span id="_CPPv2NK6TvFunc8cofactorERKNSt6vectorI7LiteralEE"></span><span id="TvFunc::cofactor__std::vector:Literal:CRC"></span><span class="target" id="d4/d6d/classTvFunc_1a47edc765d30e5ae77f1cdaace5e6dd16"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cofactor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cube</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc8cofactorERKNSt6vectorI7LiteralEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コファクターを返す． </p>
+<p>lit.varid() が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cube</strong> -- [in] キューブ(リテラルのリスト) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc15check_intersectERK6TvFunc">
+<span id="_CPPv3NK6TvFunc15check_intersectERK6TvFunc"></span><span id="_CPPv2NK6TvFunc15check_intersectERK6TvFunc"></span><span id="TvFunc::check_intersect__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a0f6b7e859322ce66aaad282330bfb85e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_intersect</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc15check_intersectERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>共通部分を持つ時 true を返す． </p>
+<p>right の入力数が異なる時は std::invalid_argument 例外が送出される． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc17check_containmentERK6TvFunc">
+<span id="_CPPv3NK6TvFunc17check_containmentERK6TvFunc"></span><span id="_CPPv2NK6TvFunc17check_containmentERK6TvFunc"></span><span id="TvFunc::check_containment__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1ad6a9d52250c1661132e5ee08fb63ecc2"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_containment</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc17check_containmentERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>right に包含されている時 true を返す． </p>
+<p>right の入力数が異なる時は std::invalid_argument 例外が送出される． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc9decomposeER6TvFuncR6TvFunc">
+<span id="_CPPv3NK6TvFunc9decomposeER6TvFuncR6TvFunc"></span><span id="_CPPv2NK6TvFunc9decomposeER6TvFuncR6TvFunc"></span><span id="TvFunc::decompose__TvFuncR.TvFuncRC"></span><span class="target" id="d4/d6d/classTvFunc_1a8982b8b302fd11c8a8b7424aac564dd4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">decompose</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func0</span></span>, <a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func1</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc9decomposeER6TvFuncR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>外側の変数で分割する． </p>
+<p><a class="reference internal" href="#d4/d6d/classTvFunc_1af791a4d5e658fcdfbb93ba04f4dfdcd0"><span class="std std-ref">cofactor()</span></a> と異なり func0, func1 の入力数は もとの関数の入力数より1少ない． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func0</strong> -- [out] 0 のコファクター </p></li>
+<li><p><strong>func1</strong> -- [out] 1 のコファクター </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc10invert_intEb">
+<span id="_CPPv3N6TvFunc10invert_intEb"></span><span id="_CPPv2N6TvFunc10invert_intEb"></span><span id="TvFunc::invert_int__b"></span><span class="target" id="d4/d6d/classTvFunc_1ac1df0353140fb17114dc670f0120d525"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">invert_int</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc10invert_intEb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>自分自身を否定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv</strong> -- [in] 反転フラグ </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc7and_intERK6TvFunc">
+<span id="_CPPv3N6TvFunc7and_intERK6TvFunc"></span><span id="_CPPv2N6TvFunc7and_intERK6TvFunc"></span><span id="TvFunc::and_int__TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a02110a188b3d728309dd3f16f9f262b1"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">and_int</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc7and_intERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>src1 との論理積を計算し自分に代入する． </p>
+<p>
+src1 と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src1</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc6or_intERK6TvFunc">
+<span id="_CPPv3N6TvFunc6or_intERK6TvFunc"></span><span id="_CPPv2N6TvFunc6or_intERK6TvFunc"></span><span id="TvFunc::or_int__TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a3a703bbfe30cbde3253f8506a55ca33b"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">or_int</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc6or_intERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>src1 との論理和を計算し自分に代入する． </p>
+<p>
+src1 と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src1</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc7xor_intERK6TvFunc">
+<span id="_CPPv3N6TvFunc7xor_intERK6TvFunc"></span><span id="_CPPv2N6TvFunc7xor_intERK6TvFunc"></span><span id="TvFunc::xor_int__TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a928e47ec598d2963b0812ce40b45e9d2"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">xor_int</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc7xor_intERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>src1 との排他的論理和を計算し自分に代入する． </p>
+<p>
+src1 と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src1</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc12cofactor_intE7Literal">
+<span id="_CPPv3N6TvFunc12cofactor_intE7Literal"></span><span id="_CPPv2N6TvFunc12cofactor_intE7Literal"></span><span id="TvFunc::cofactor_int__Literal"></span><span class="target" id="d4/d6d/classTvFunc_1a66dee22ecca13e82c66b73e48afaf89c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">cofactor_int</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc12cofactor_intE7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コファクターを計算し自分に代入する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lit</strong> -- [in] リテラル </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc12cofactor_intE8SizeTypeb">
+<span id="_CPPv3N6TvFunc12cofactor_intE8SizeTypeb"></span><span id="_CPPv2N6TvFunc12cofactor_intE8SizeTypeb"></span><span id="TvFunc::cofactor_int__SizeType.b"></span><span class="target" id="d4/d6d/classTvFunc_1a54dfece469bc55e63ab6918f78f57f75"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">cofactor_int</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc12cofactor_intE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コファクターを計算し自分に代入する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varid</strong> -- [in] 変数番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc12cofactor_intERKNSt6vectorI7LiteralEE">
+<span id="_CPPv3N6TvFunc12cofactor_intERKNSt6vectorI7LiteralEE"></span><span id="_CPPv2N6TvFunc12cofactor_intERKNSt6vectorI7LiteralEE"></span><span id="TvFunc::cofactor_int__std::vector:Literal:CR"></span><span class="target" id="d4/d6d/classTvFunc_1a4c6914d4437a92ecb777e1b0c38f4ba2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">cofactor_int</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cube</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc12cofactor_intERKNSt6vectorI7LiteralEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コファクターを計算し自分に代入する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cube</strong> -- [in] キューブ(リテラルのリスト) </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunccoEv">
+<span id="_CPPv3NK6TvFunccoEv"></span><span id="_CPPv2NK6TvFunccoEv"></span><span id="TvFunc::inv-operatorC"></span><span class="target" id="d4/d6d/classTvFunc_1af9fa2c0e53efe9fe583629a8b9c616c2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">~</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunccoEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#d4/d6d/classTvFunc_1a0fcd0afa70f7adbfe27278f2bc16ebdc"><span class="std std-ref">invert()</span></a> の別名 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncmlEb">
+<span id="_CPPv3NK6TvFuncmlEb"></span><span id="_CPPv2NK6TvFuncmlEb"></span><span id="TvFunc::mul-operator__bC"></span><span class="target" id="d4/d6d/classTvFunc_1a9c9a2c574b38bcffba5ac62940153a0b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncmlEb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>反転を行う． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv</strong> -- [in] 反転フラグ </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncmLEb">
+<span id="_CPPv3N6TvFuncmLEb"></span><span id="_CPPv2N6TvFuncmLEb"></span><span id="TvFunc::mul-assign-operator__b"></span><span class="target" id="d4/d6d/classTvFunc_1af3f380c235466011ae8a096ed157917b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*=</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncmLEb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>反転を行い，自身に代入する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inv</strong> -- [in] 反転フラグ </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncanERK6TvFunc">
+<span id="_CPPv3NK6TvFuncanERK6TvFunc"></span><span id="_CPPv2NK6TvFuncanERK6TvFunc"></span><span id="TvFunc::and-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1abd1682aa8726e40f577d8b6c3cd788cb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncanERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理積を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncaNERK6TvFunc">
+<span id="_CPPv3N6TvFuncaNERK6TvFunc"></span><span id="_CPPv2N6TvFuncaNERK6TvFunc"></span><span id="TvFunc::and-assign-operator__TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a0c42064613d27c4baa06779a11511474"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncaNERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>src1 との論理積を計算し自分に代入する． </p>
+<p>
+src1 と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src1</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncorERK6TvFunc">
+<span id="_CPPv3NK6TvFuncorERK6TvFunc"></span><span id="_CPPv2NK6TvFuncorERK6TvFunc"></span><span id="TvFunc::or-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1aa71f3e74468aef9d281b8687b90af91d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncorERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理和を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncoRERK6TvFunc">
+<span id="_CPPv3N6TvFuncoRERK6TvFunc"></span><span id="_CPPv2N6TvFuncoRERK6TvFunc"></span><span id="TvFunc::or-assign-operator__TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1afdefafa0d222bb72bb8267fc67ca0760"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncoRERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>src1 との論理和を計算し自分に代入する． </p>
+<p>
+src1 と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src1</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunceoERK6TvFunc">
+<span id="_CPPv3NK6TvFunceoERK6TvFunc"></span><span id="_CPPv2NK6TvFunceoERK6TvFunc"></span><span id="TvFunc::xor-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1afd312c8ef59da4ed09bc0537c450a52b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">^</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunceoERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>排他的論理和を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunceOERK6TvFunc">
+<span id="_CPPv3N6TvFunceOERK6TvFunc"></span><span id="_CPPv2N6TvFunceOERK6TvFunc"></span><span id="TvFunc::xor-assign-operator__TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a9384b4ddb22f8cadc5987665be6c3277"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">^=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunceOERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>src1 との排他的論理和を計算し自分に代入する． </p>
+<p>
+src1 と入力数が異なるときは std::invalid_argument 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src1</strong> -- [in] オペランド </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>自身への参照を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncdvE7Literal">
+<span id="_CPPv3NK6TvFuncdvE7Literal"></span><span id="_CPPv2NK6TvFuncdvE7Literal"></span><span id="TvFunc::div-operator__LiteralC"></span><span class="target" id="d4/d6d/classTvFunc_1a3a505a98eff6006fbaf4b32dda4be2cf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">/</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncdvE7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>cofactor の別名 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lit</strong> -- [in] リテラル </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncdvERKNSt6vectorI7LiteralEE">
+<span id="_CPPv3NK6TvFuncdvERKNSt6vectorI7LiteralEE"></span><span id="_CPPv2NK6TvFuncdvERKNSt6vectorI7LiteralEE"></span><span id="TvFunc::div-operator__std::vector:Literal:CRC"></span><span class="target" id="d4/d6d/classTvFunc_1a29aeff185ba768e4b51a466d77b4314b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">/</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cube</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncdvERKNSt6vectorI7LiteralEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>cofactor の別名 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cube</strong> -- [in] キューブ(リテラルのリスト) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncdVE7Literal">
+<span id="_CPPv3N6TvFuncdVE7Literal"></span><span id="_CPPv2N6TvFuncdVE7Literal"></span><span id="TvFunc::div-assign-operator__Literal"></span><span class="target" id="d4/d6d/classTvFunc_1ae53ccceca6f33428d51d8a7ca4a293a5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">/=</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncdVE7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#d4/d6d/classTvFunc_1a66dee22ecca13e82c66b73e48afaf89c"><span class="std std-ref">cofactor_int()</span></a> の別名 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>lit</strong> -- [in] リテラル </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncdVERKNSt6vectorI7LiteralEE">
+<span id="_CPPv3N6TvFuncdVERKNSt6vectorI7LiteralEE"></span><span id="_CPPv2N6TvFuncdVERKNSt6vectorI7LiteralEE"></span><span id="TvFunc::div-assign-operator__std::vector:Literal:CR"></span><span class="target" id="d4/d6d/classTvFunc_1a72f0c5bb45f527601b35cfd20096fbc4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">/=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cube</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncdVERKNSt6vectorI7LiteralEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>cofactor_int の別名 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cube</strong> -- [in] キューブ(リテラルのリスト) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunceqERK6TvFunc">
+<span id="_CPPv3NK6TvFunceqERK6TvFunc"></span><span id="_CPPv2NK6TvFunceqERK6TvFunc"></span><span id="TvFunc::eq-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a597d7e5d9dd35dd32fa73a4b7002e0d2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunceqERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>等価比較 </p>
+<p>入力数の異なる関数間の比較は false となる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncneERK6TvFunc">
+<span id="_CPPv3NK6TvFuncneERK6TvFunc"></span><span id="_CPPv2NK6TvFuncneERK6TvFunc"></span><span id="TvFunc::neq-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a44abf216a1c36279502cb5a0c8c4fa9a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncneERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>非等価比較 </p>
+<p>入力数の異なる関数間の比較は true となる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncltERK6TvFunc">
+<span id="_CPPv3NK6TvFuncltERK6TvFunc"></span><span id="_CPPv2NK6TvFuncltERK6TvFunc"></span><span id="TvFunc::lt-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a38c032b039032a0407c63f4f6184ee16"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncltERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>大小比較(小なり) </p>
+<p>入力数の異なる関数間の比較は std::invalid_argument 例外を送出する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncgtERK6TvFunc">
+<span id="_CPPv3NK6TvFuncgtERK6TvFunc"></span><span id="_CPPv2NK6TvFuncgtERK6TvFunc"></span><span id="TvFunc::gt-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1adad7874457d5823eeb7028774c037bf2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncgtERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>大小比較(大なり) </p>
+<p>入力数の異なる関数間の比較はまず入力数で比較する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncleERK6TvFunc">
+<span id="_CPPv3NK6TvFuncleERK6TvFunc"></span><span id="_CPPv2NK6TvFuncleERK6TvFunc"></span><span id="TvFunc::lte-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a0d836dbf2d1de146449fb5ea586d796e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncleERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>大小比較(小なりイコール) </p>
+<p>入力数の異なる関数間の比較はまず入力数で比較する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncgeERK6TvFunc">
+<span id="_CPPv3NK6TvFuncgeERK6TvFunc"></span><span id="_CPPv2NK6TvFuncgeERK6TvFunc"></span><span id="TvFunc::gte-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1acd4964595130790f7071c09cdc23e459"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncgeERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>大小比較(大なりイコール) </p>
+<p>入力数の異なる関数間の比較はまず入力数で比較する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFuncaaERK6TvFunc">
+<span id="_CPPv3NK6TvFuncaaERK6TvFunc"></span><span id="_CPPv2NK6TvFuncaaERK6TvFunc"></span><span id="TvFunc::sand-operator__TvFuncCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a4159b3fe7924338c4a013346b273dc78"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFuncaaERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>交差チェック </p>
+<p>入力数の異なる関数間の比較は false を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>right</strong> -- [in] 第2オペランド </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc8is_validEv">
+<span id="_CPPv3NK6TvFunc8is_validEv"></span><span id="_CPPv2NK6TvFunc8is_validEv"></span><span id="TvFunc::is_validC"></span><span class="target" id="d4/d6d/classTvFunc_1a0e52f528d7420ef837797c2a9b20ec77"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc8is_validEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>適正な値を持っている時に true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc10is_invalidEv">
+<span id="_CPPv3NK6TvFunc10is_invalidEv"></span><span id="_CPPv2NK6TvFunc10is_invalidEv"></span><span id="TvFunc::is_invalidC"></span><span class="target" id="d4/d6d/classTvFunc_1a60fa9bb9ef465b71ac587fdd63e7702f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc10is_invalidEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>不正値の時に true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc9input_numEv">
+<span id="_CPPv3NK6TvFunc9input_numEv"></span><span id="_CPPv2NK6TvFunc9input_numEv"></span><span id="TvFunc::input_numC"></span><span class="target" id="d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc9input_numEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数を得る． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc5valueE8SizeType">
+<span id="_CPPv3NK6TvFunc5valueE8SizeType"></span><span id="_CPPv2NK6TvFunc5valueE8SizeType"></span><span id="TvFunc::value__SizeTypeC"></span><span class="target" id="d4/d6d/classTvFunc_1a63e1930a5ec6a0fec801b24d727d7eba"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pos</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc5valueE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力値を2進数と見なしたときの pos 番目の値を得る． 答は 0 か 1 だが int 型 </p>
+<p>pos が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pos</strong> -- [in] 位置番号 ( 0 &lt;= pos &lt; 2^(<a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a>) ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc7is_zeroEv">
+<span id="_CPPv3NK6TvFunc7is_zeroEv"></span><span id="_CPPv2NK6TvFunc7is_zeroEv"></span><span id="TvFunc::is_zeroC"></span><span class="target" id="d4/d6d/classTvFunc_1a85ba3a7de530e603762324c0f2c4e0f2"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_zero</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc7is_zeroEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数0関数の時に true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc6is_oneEv">
+<span id="_CPPv3NK6TvFunc6is_oneEv"></span><span id="_CPPv2NK6TvFunc6is_oneEv"></span><span id="TvFunc::is_oneC"></span><span class="target" id="d4/d6d/classTvFunc_1adf3dccc7a689ed7f39632830b5cc720c"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_one</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc6is_oneEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>定数1関数の時に true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc7analyzeEv">
+<span id="_CPPv3NK6TvFunc7analyzeEv"></span><span id="_CPPv2NK6TvFunc7analyzeEv"></span><span id="TvFunc::analyzeC"></span><span class="target" id="d4/d6d/classTvFunc_1aa323195e8bc6200abe70c01c3369f43d"></span><span class="n"><span class="pre">PrimType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">analyze</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc7analyzeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>組み込み型のチェック </p>
+<p>組み込み型出ない場合は PrimType::None を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc10count_zeroEv">
+<span id="_CPPv3NK6TvFunc10count_zeroEv"></span><span id="_CPPv2NK6TvFunc10count_zeroEv"></span><span id="TvFunc::count_zeroC"></span><span class="target" id="d4/d6d/classTvFunc_1ab02f08336cbdc6b4d8afea2ed9f75409"></span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">count_zero</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc10count_zeroEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>0 の数を数える． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc9count_oneEv">
+<span id="_CPPv3NK6TvFunc9count_oneEv"></span><span id="_CPPv2NK6TvFunc9count_oneEv"></span><span id="TvFunc::count_oneC"></span><span class="target" id="d4/d6d/classTvFunc_1a5041a30ccde1944a251f9b8a915dcd78"></span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">count_one</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc9count_oneEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>1 の数を数える． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc7walsh_0Ev">
+<span id="_CPPv3NK6TvFunc7walsh_0Ev"></span><span id="_CPPv2NK6TvFunc7walsh_0Ev"></span><span id="TvFunc::walsh_0C"></span><span class="target" id="d4/d6d/classTvFunc_1aaa2e00a3d79aac415e79a50cad4cc045"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">walsh_0</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc7walsh_0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>0次の Walsh 係数を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>1</strong> -- positive unate </p></li>
+<li><p><strong>0</strong> -- binate </p></li>
+<li><p><strong>-1</strong> -- negative unate </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc7walsh_1E8SizeType">
+<span id="_CPPv3NK6TvFunc7walsh_1E8SizeType"></span><span id="_CPPv2NK6TvFunc7walsh_1E8SizeType"></span><span id="TvFunc::walsh_1__SizeTypeC"></span><span class="target" id="d4/d6d/classTvFunc_1a3305b661617706995290bea44c22c880"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">walsh_1</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc7walsh_1E8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>1次の Walsh 係数を求める． </p>
+<p>varid が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>varid</strong> -- [in] 変数 ( 0 &lt;= varid &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc7walsh_2E8SizeType8SizeType">
+<span id="_CPPv3NK6TvFunc7walsh_2E8SizeType8SizeType"></span><span id="_CPPv2NK6TvFunc7walsh_2E8SizeType8SizeType"></span><span id="TvFunc::walsh_2__SizeType.SizeTypeC"></span><span class="target" id="d4/d6d/classTvFunc_1a57ce1aaa51642b6c94c36174f1ea2c8f"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">walsh_2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var1</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc7walsh_2E8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>2次の Walsh 係数を求める． </p>
+<p>var1, var2 が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var1</strong> -- [in] 第1変数 ( 0 &lt;= var1 &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p></li>
+<li><p><strong>var2</strong> -- [in] 第2変数 ( 0 &lt;= var2 &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc8walsh_01EA_i">
+<span id="_CPPv3NK6TvFunc8walsh_01EA_i"></span><span id="_CPPv2NK6TvFunc8walsh_01EA_i"></span><span id="TvFunc::walsh_01__iAC"></span><span class="target" id="d4/d6d/classTvFunc_1a37610e4cfdebfe725df13980dfaefbec"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">walsh_01</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vec</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc8walsh_01EA_i" title="Link to this definition">¶</a><br /></dt>
+<dd><p>0次と 1次の Walsh 係数を求める． </p>
+<p>
+vec は <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> の容量を持つと仮定している． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vec</strong> -- [out] 1次の Walsh 係数を格納する配列 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>0次の Walsh 係数</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc9walsh_012EA_iA_i">
+<span id="_CPPv3NK6TvFunc9walsh_012EA_iA_i"></span><span id="_CPPv2NK6TvFunc9walsh_012EA_iA_i"></span><span id="TvFunc::walsh_012__iA.iAC"></span><span class="target" id="d4/d6d/classTvFunc_1a2ad66440d6461b961726aeee6fac6a6e"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">walsh_012</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vec1</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vec2</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc9walsh_012EA_iA_i" title="Link to this definition">¶</a><br /></dt>
+<dd><p>0次と 1次と 2次の Walsh 係数を求める． </p>
+<p><ul class="simple">
+<li><p>vec1 は <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> の容量を持つと仮定している．</p></li>
+<li><p>vec2 は <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a>^2 の容量を持つと仮定している． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec1</strong> -- [out] 1次の Walsh 係数を格納する配列 </p></li>
+<li><p><strong>vec2</strong> -- [out] 2次の Walsh 係数を格納する配列 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>0次の Walsh 係数</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc8walsh_w0Eibi">
+<span id="_CPPv3NK6TvFunc8walsh_w0Eibi"></span><span id="_CPPv2NK6TvFunc8walsh_w0Eibi"></span><span id="TvFunc::walsh_w0__i.b.iC"></span><span class="target" id="d4/d6d/classTvFunc_1a5fd77300899fa9e664567d102230abf8"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">walsh_w0</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">w</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">oinv</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ibits</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc8walsh_w0Eibi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>重み別の 0 次の Walsh 係数を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>w</strong> -- [in] 重み </p></li>
+<li><p><strong>oinv</strong> -- [in] 出力の反転属性 </p></li>
+<li><p><strong>ibits</strong> -- [in] 入力の反転属性のビットベクタ </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc8walsh_w1E8SizeTypeibi">
+<span id="_CPPv3NK6TvFunc8walsh_w1E8SizeTypeibi"></span><span id="_CPPv2NK6TvFunc8walsh_w1E8SizeTypeibi"></span><span id="TvFunc::walsh_w1__SizeType.i.b.iC"></span><span class="target" id="d4/d6d/classTvFunc_1a47a05f19bee23917fbcc39fb69ea5658"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">walsh_w1</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">w</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">oinv</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ibits</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc8walsh_w1E8SizeTypeibi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>重み別の 1 次の Walsh 係数を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> -- [in] 変数 </p></li>
+<li><p><strong>w</strong> -- [in] 重み </p></li>
+<li><p><strong>oinv</strong> -- [in] 出力の反転属性 </p></li>
+<li><p><strong>ibits</strong> -- [in] 入力の反転属性のビットベクタ </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc9check_supE8SizeType">
+<span id="_CPPv3NK6TvFunc9check_supE8SizeType"></span><span id="_CPPv2NK6TvFunc9check_supE8SizeType"></span><span id="TvFunc::check_sup__SizeTypeC"></span><span class="target" id="d4/d6d/classTvFunc_1ac8358b7f15a88ae64972444e4e683cc2"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_sup</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc9check_supE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>var がサポートの時 true を返す． </p>
+<p>var が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> -- [in] 変数 ( 0 &lt;= var &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc11get_supportEv">
+<span id="_CPPv3NK6TvFunc11get_supportEv"></span><span id="_CPPv2NK6TvFunc11get_supportEv"></span><span id="TvFunc::get_supportC"></span><span class="target" id="d4/d6d/classTvFunc_1a27b737c6c8e01f21521be5820225aacd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">SizeType</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_support</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc11get_supportEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>サポート変数のリストを求める． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc11check_unateE8SizeType">
+<span id="_CPPv3NK6TvFunc11check_unateE8SizeType"></span><span id="_CPPv2NK6TvFunc11check_unateE8SizeType"></span><span id="TvFunc::check_unate__SizeTypeC"></span><span class="target" id="d4/d6d/classTvFunc_1a2bfc9119eaaf9f6a75e1a926c88f1788"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_unate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc11check_unateE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>unateness を調べる． </p>
+<p>
+var が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> -- [in] 変数 ( 0 &lt;= var &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>0</strong> -- binate </p></li>
+<li><p><strong>1</strong> -- positive unate </p></li>
+<li><p><strong>2</strong> -- negative unate </p></li>
+<li><p><strong>3</strong> -- independent</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc9check_symE8SizeType8SizeTypeb">
+<span id="_CPPv3NK6TvFunc9check_symE8SizeType8SizeTypeb"></span><span id="_CPPv2NK6TvFunc9check_symE8SizeType8SizeTypeb"></span><span id="TvFunc::check_sym__SizeType.SizeType.bC"></span><span class="target" id="d4/d6d/classTvFunc_1a68b694c481f5812915d7948ea2aa611b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_sym</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var1</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">var2</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc9check_symE8SizeType8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>var1 と var2 が対称のとき true を返す． </p>
+<p>var1, var2 が範囲外の時は std::out_of_range 例外が送出される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var1</strong> -- [in] 第1変数 ( 0 &lt;= var1 &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p></li>
+<li><p><strong>var2</strong> -- [in] 第2変数 ( 0 &lt;= var2 &lt; <a class="reference internal" href="#d4/d6d/classTvFunc_1a5e8dd13dd5780205a95130dc00e037d0"><span class="std std-ref">input_num()</span></a> ) </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc3strEi">
+<span id="_CPPv3NK6TvFunc3strEi"></span><span id="_CPPv2NK6TvFunc3strEi"></span><span id="TvFunc::str__iC"></span><span class="target" id="d4/d6d/classTvFunc_1a08c959c1f3f4a261e450ff5c31de65f3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">str</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc3strEi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を表す文字列を返す． </p>
+<p>この値はコンストラクタで用いることができる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> -- [in] 出力モード<ul class="simple">
+<li><p>2: 2進モード</p></li>
+<li><p>16: 16進モード </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc7bin_strEv">
+<span id="_CPPv3NK6TvFunc7bin_strEv"></span><span id="_CPPv2NK6TvFunc7bin_strEv"></span><span id="TvFunc::bin_strC"></span><span class="target" id="d4/d6d/classTvFunc_1a9772075e505d2dcd4a94696603446c02"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bin_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc7bin_strEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を表す2進文字列を返す． </p>
+<p>この値はコンストラクタで用いることができる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc7hex_strEv">
+<span id="_CPPv3NK6TvFunc7hex_strEv"></span><span id="_CPPv2NK6TvFunc7hex_strEv"></span><span id="TvFunc::hex_strC"></span><span class="target" id="d4/d6d/classTvFunc_1a1206a790b00728c9f5f1f1c1b6af4608"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hex_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc7hex_strEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を表す16進文字列を返す． </p>
+<p>この値はコンストラクタで用いることができる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc4hashEv">
+<span id="_CPPv3NK6TvFunc4hashEv"></span><span id="_CPPv2NK6TvFunc4hashEv"></span><span id="TvFunc::hashC"></span><span class="target" id="d4/d6d/classTvFunc_1a342928513c74963c5394a4baf1a2a6af"></span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hash</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc4hashEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ハッシュ値を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc5printERNSt7ostreamEi">
+<span id="_CPPv3NK6TvFunc5printERNSt7ostreamEi"></span><span id="_CPPv2NK6TvFunc5printERNSt7ostreamEi"></span><span id="TvFunc::print__osR.iC"></span><span class="target" id="d4/d6d/classTvFunc_1a1148f22785799c87f4faee8c7fd85600"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc5printERNSt7ostreamEi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容の出力 </p>
+<p>基本的に真理値表を2進数とみなして文字列に変換する． i0 が LSB, in が MSB となる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力先のストリーム </p></li>
+<li><p><strong>mode</strong> -- [in] 出力モード<ul>
+<li><p>2: 2進モード</p></li>
+<li><p>16: 16進モード </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc4dumpER6BinEnc">
+<span id="_CPPv3NK6TvFunc4dumpER6BinEnc"></span><span id="_CPPv2NK6TvFunc4dumpER6BinEnc"></span><span id="TvFunc::dump__BinEncRC"></span><span class="target" id="d4/d6d/classTvFunc_1a05af8a1e921e2f0c203cb31312cb5c11"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">BinEnc</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc4dumpER6BinEnc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリファイルの書き出し </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc7restoreER6BinDec">
+<span id="_CPPv3N6TvFunc7restoreER6BinDec"></span><span id="_CPPv2N6TvFunc7restoreER6BinDec"></span><span id="TvFunc::restore__BinDecR"></span><span class="target" id="d4/d6d/classTvFunc_1ad960feec54e8c3fc61322a65608d39a0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">BinDec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc7restoreER6BinDec" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリファイルの読み込み </p>
+<p>自身に設定される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 入力元のストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc5xformERK6NpnMap">
+<span id="_CPPv3NK6TvFunc5xformERK6NpnMap"></span><span id="_CPPv2NK6TvFunc5xformERK6NpnMap"></span><span id="TvFunc::xform__NpnMapCRC"></span><span class="target" id="d4/d6d/classTvFunc_1a6a632bf8fcc388b2a486770b971ff10d"></span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">xform</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="npnmap.html#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">npnmap</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc5xformERK6NpnMap" title="Link to this definition">¶</a><br /></dt>
+<dd><p>npnmap に従った変換を行う． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>npnmap</strong> -- [in] 変換マップ </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>変換した関数を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc10shrink_mapEv">
+<span id="_CPPv3NK6TvFunc10shrink_mapEv"></span><span id="_CPPv2NK6TvFunc10shrink_mapEv"></span><span id="TvFunc::shrink_mapC"></span><span class="target" id="d4/d6d/classTvFunc_1aeb589d52c47dff2619e62672781de98f"></span><a class="reference internal" href="npnmap.html#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">shrink_map</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc10shrink_mapEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>独立な変数を取り除く変換を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc17npn_canonical_mapEv">
+<span id="_CPPv3NK6TvFunc17npn_canonical_mapEv"></span><span id="_CPPv2NK6TvFunc17npn_canonical_mapEv"></span><span id="TvFunc::npn_canonical_mapC"></span><span class="target" id="d4/d6d/classTvFunc_1a1cd2e477cc1a76130689f37c84c12779"></span><a class="reference internal" href="npnmap.html#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">npn_canonical_map</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc17npn_canonical_mapEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>npn 変換の正規変換を求める． </p>
+<p>正規変換とは，変換後の関数が以下の性質を持つもの．<ul class="simple">
+<li><p>Walsh の0次の係数が非負である．</p></li>
+<li><p>Walsh の1次の係数が非負である．</p></li>
+<li><p>他のNPN同値の関数と比較して(ある基準で)最大となる． </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc21npn_canonical_all_mapEv">
+<span id="_CPPv3NK6TvFunc21npn_canonical_all_mapEv"></span><span id="_CPPv2NK6TvFunc21npn_canonical_all_mapEv"></span><span id="TvFunc::npn_canonical_all_mapC"></span><span class="target" id="d4/d6d/classTvFunc_1aea02893be970ebb0e5ac33ed301a0e5d"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="npnmap.html#_CPPv46NpnMap" title="NpnMap"><span class="n"><span class="pre">NpnMap</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">npn_canonical_all_map</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc21npn_canonical_all_mapEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>npn 変換の正規変換をすべて求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>変換を格納するリストを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc4nblkEv">
+<span id="_CPPv3NK6TvFunc4nblkEv"></span><span id="_CPPv2NK6TvFunc4nblkEv"></span><span id="TvFunc::nblkC"></span><span class="target" id="d4/d6d/classTvFunc_1a7ce3b3e60680980e67fde57b54dda198"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nblk</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc4nblkEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ブロック数を得る． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6TvFunc8raw_dataE8SizeType">
+<span id="_CPPv3NK6TvFunc8raw_dataE8SizeType"></span><span id="_CPPv2NK6TvFunc8raw_dataE8SizeType"></span><span id="TvFunc::raw_data__SizeTypeC"></span><span class="target" id="d4/d6d/classTvFunc_1a6b0289ec3ff28a4c40dd74177df4ad6b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">WordType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">raw_data</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">blk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6TvFunc8raw_dataE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>生のデータを得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>blk</strong> -- [in] ブロック番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc7invalidEv">
+<span id="_CPPv3N6TvFunc7invalidEv"></span><span id="_CPPv2N6TvFunc7invalidEv"></span><span id="TvFunc::invalid"></span><span class="target" id="d4/d6d/classTvFunc_1a1f4ea4baeaac0bcdef10c1c1e857566c"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc7invalidEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>不正な値を作る． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc4zeroE8SizeType">
+<span id="_CPPv3N6TvFunc4zeroE8SizeType"></span><span id="_CPPv2N6TvFunc4zeroE8SizeType"></span><span id="TvFunc::zero__SizeType"></span><span class="target" id="d4/d6d/classTvFunc_1ac06a5b6edf1206222206fcc5ed0549da"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zero</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc4zeroE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>恒偽関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクトを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc3oneE8SizeType">
+<span id="_CPPv3N6TvFunc3oneE8SizeType"></span><span id="_CPPv2N6TvFunc3oneE8SizeType"></span><span id="TvFunc::one__SizeType"></span><span class="target" id="d4/d6d/classTvFunc_1ad42f71c3757125d77d8825096a91cea3"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">one</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc3oneE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>恒真関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクトを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc7literalE8SizeType8SizeTypeb">
+<span id="_CPPv3N6TvFunc7literalE8SizeType8SizeTypeb"></span><span id="_CPPv2N6TvFunc7literalE8SizeType8SizeTypeb"></span><span id="TvFunc::literal__SizeType.SizeType.b"></span><span class="target" id="d4/d6d/classTvFunc_1a1e346ee47e8eae40b449ebde7ccd3952"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc7literalE8SizeType8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>リテラル関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>varid</strong> -- [in] リテラルの変数番号 ( 0 &lt;= varid &lt; ni ) </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性<ul>
+<li><p>false: 反転なし (正極性)</p></li>
+<li><p>true: 反転あり (負極性) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc7literalE8SizeType7Literal">
+<span id="_CPPv3N6TvFunc7literalE8SizeType7Literal"></span><span id="_CPPv2N6TvFunc7literalE8SizeType7Literal"></span><span id="TvFunc::literal__SizeType.Literal"></span><span class="target" id="d4/d6d/classTvFunc_1a5b051bae26bb0d31d0c6ac7b259934c3"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc7literalE8SizeType7Literal" title="Link to this definition">¶</a><br /></dt>
+<dd><p>リテラル関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>lit</strong> -- [in] リテラル </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc16positive_literalE8SizeType8SizeType">
+<span id="_CPPv3N6TvFunc16positive_literalE8SizeType8SizeType"></span><span id="_CPPv2N6TvFunc16positive_literalE8SizeType8SizeType"></span><span id="TvFunc::positive_literal__SizeType.SizeType"></span><span class="target" id="d4/d6d/classTvFunc_1ad750f386094ae72be9f492a119a50b82"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">positive_literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc16positive_literalE8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>肯定のリテラル関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>varid</strong> -- [in] リテラルの変数番号 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクトを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc16negative_literalE8SizeType8SizeType">
+<span id="_CPPv3N6TvFunc16negative_literalE8SizeType8SizeType"></span><span id="_CPPv2N6TvFunc16negative_literalE8SizeType8SizeType"></span><span id="TvFunc::negative_literal__SizeType.SizeType"></span><span class="target" id="d4/d6d/classTvFunc_1af26ef8c943218d95ca28c6066f4b2831"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">negative_literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc16negative_literalE8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>否定のリテラル関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>varid</strong> -- [in] リテラルの変数番号 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクトを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc5coverE8SizeTypeRKNSt6vectorINSt6vectorI7LiteralEEEE">
+<span id="_CPPv3N6TvFunc5coverE8SizeTypeRKNSt6vectorINSt6vectorI7LiteralEEEE"></span><span id="_CPPv2N6TvFunc5coverE8SizeTypeRKNSt6vectorINSt6vectorI7LiteralEEEE"></span><span id="TvFunc::cover__SizeType.std::vector:std::vector:Literal::CR"></span><span class="target" id="d4/d6d/classTvFunc_1a3ccaa7e34412c295b73132ebd7ee7d03"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cover</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cube_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc5coverE8SizeTypeRKNSt6vectorINSt6vectorI7LiteralEEEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>カバーに対応した関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>cube_list</strong> -- [in] キューブのリスト </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクトを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc5coverE8SizeTypeRKNSt6vectorI7SopCubeEE">
+<span id="_CPPv3N6TvFunc5coverE8SizeTypeRKNSt6vectorI7SopCubeEE"></span><span id="_CPPv2N6TvFunc5coverE8SizeTypeRKNSt6vectorI7SopCubeEE"></span><span id="TvFunc::cover__SizeType.std::vector:SopCube:CR"></span><span class="target" id="d4/d6d/classTvFunc_1aadc2f9400be564eebb82d99d849bb0c2"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cover</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="sopcube.html#_CPPv47SopCube" title="SopCube"><span class="n"><span class="pre">SopCube</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cube_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc5coverE8SizeTypeRKNSt6vectorI7SopCubeEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>カバーに対応した関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>cube_list</strong> -- [in] キューブのリスト </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクトを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc4cubeE8SizeTypeRKNSt6vectorI7LiteralEE">
+<span id="_CPPv3N6TvFunc4cubeE8SizeTypeRKNSt6vectorI7LiteralEE"></span><span id="_CPPv2N6TvFunc4cubeE8SizeTypeRKNSt6vectorI7LiteralEE"></span><span id="TvFunc::cube__SizeType.std::vector:Literal:CR"></span><span class="target" id="d4/d6d/classTvFunc_1a22a24cfd0f473096af066f20216da58e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cube</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="literal.html#_CPPv47Literal" title="Literal"><span class="n"><span class="pre">Literal</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc4cubeE8SizeTypeRKNSt6vectorI7LiteralEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>キューブに対応した関数を作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ni</strong> -- [in] 入力数 </p></li>
+<li><p><strong>lit_list</strong> -- [in] リテラルのリスト </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成したオブジェクトを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc7composeERK6TvFuncRK6TvFunc">
+<span id="_CPPv3N6TvFunc7composeERK6TvFuncRK6TvFunc"></span><span id="_CPPv2N6TvFunc7composeERK6TvFuncRK6TvFunc"></span><span id="TvFunc::compose__TvFuncCR.TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a49d328155a1d41f936e3bea42c7d9ad1"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compose</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func0</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc7composeERK6TvFuncRK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#d4/d6d/classTvFunc_1a8982b8b302fd11c8a8b7424aac564dd4"><span class="std std-ref">decompose()</span></a> の逆関数 </p>
+<p><ul class="simple">
+<li><p>func0 と func1 の入力数は同じでなければならない．</p></li>
+<li><p>結果の関数の入力数は func0, func1 の入力数より1多い． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func0</strong> -- [in] 0 のコファクター </p></li>
+<li><p><strong>func1</strong> -- [in] 1 のコファクター </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc16check_complementERK6TvFuncRK6TvFunc">
+<span id="_CPPv3N6TvFunc16check_complementERK6TvFuncRK6TvFunc"></span><span id="_CPPv2N6TvFunc16check_complementERK6TvFuncRK6TvFunc"></span><span id="TvFunc::check_complement__TvFuncCR.TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a2327972d696e3c866df4a669d30f481c"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_complement</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc16check_complementERK6TvFuncRK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>否定の関係を調べる． </p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>left == ~right の時 true を返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-attributes">Public Static Attributes</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc6kMaxNiE">
+<span id="_CPPv3N6TvFunc6kMaxNiE"></span><span id="_CPPv2N6TvFunc6kMaxNiE"></span><span id="TvFunc::kMaxNi__SizeType"></span><span class="target" id="d4/d6d/classTvFunc_1a719cd243d732283b18f12971e1459183"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kMaxNi</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">20</span></span><a class="headerlink" href="#_CPPv4N6TvFunc6kMaxNiE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>最大の入力数 特に根拠はないが，これなら Walsh 係数が 32 ビット整数で収まる． あと真理値表ベースの手法ではこれくらいが限度 </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-related">Related</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncanERR6TvFuncRK6TvFunc">
+<span id="_CPPv3N6TvFuncanERR6TvFuncRK6TvFunc"></span><span id="_CPPv2N6TvFuncanERR6TvFuncRK6TvFunc"></span><span id="TvFunc::and-operator__TvFuncRR.TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1ad12a6b4db748cb06cf890007d70261d4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncanERR6TvFuncRK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理積を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncanERK6TvFuncRR6TvFunc">
+<span id="_CPPv3N6TvFuncanERK6TvFuncRR6TvFunc"></span><span id="_CPPv2N6TvFuncanERK6TvFuncRR6TvFunc"></span><span id="TvFunc::and-operator__TvFuncCR.TvFuncRR"></span><span class="target" id="d4/d6d/classTvFunc_1a1c723501ce3c91b5358260549047e555"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncanERK6TvFuncRR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理積を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncanERR6TvFuncRR6TvFunc">
+<span id="_CPPv3N6TvFuncanERR6TvFuncRR6TvFunc"></span><span id="_CPPv2N6TvFuncanERR6TvFuncRR6TvFunc"></span><span id="TvFunc::and-operator__TvFuncRR.TvFuncRR"></span><span class="target" id="d4/d6d/classTvFunc_1aa64eb46b242eec25d0db427fd0d0f0ac"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncanERR6TvFuncRR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理積を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncorERR6TvFuncRK6TvFunc">
+<span id="_CPPv3N6TvFuncorERR6TvFuncRK6TvFunc"></span><span id="_CPPv2N6TvFuncorERR6TvFuncRK6TvFunc"></span><span id="TvFunc::or-operator__TvFuncRR.TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1a6b6871fa51a397185eaaa3f277da23f4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncorERR6TvFuncRK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理和を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncorERK6TvFuncRR6TvFunc">
+<span id="_CPPv3N6TvFuncorERK6TvFuncRR6TvFunc"></span><span id="_CPPv2N6TvFuncorERK6TvFuncRR6TvFunc"></span><span id="TvFunc::or-operator__TvFuncCR.TvFuncRR"></span><span class="target" id="d4/d6d/classTvFunc_1afeb276a08335654f9b7812c52e6d4b93"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncorERK6TvFuncRR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理和を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFuncorERR6TvFuncRR6TvFunc">
+<span id="_CPPv3N6TvFuncorERR6TvFuncRR6TvFunc"></span><span id="_CPPv2N6TvFuncorERR6TvFuncRR6TvFunc"></span><span id="TvFunc::or-operator__TvFuncRR.TvFuncRR"></span><span class="target" id="d4/d6d/classTvFunc_1a9f2b500bba3b7e7ba6f92b61d5262c05"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">|</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFuncorERR6TvFuncRR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理和を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunceoERR6TvFuncRK6TvFunc">
+<span id="_CPPv3N6TvFunceoERR6TvFuncRK6TvFunc"></span><span id="_CPPv2N6TvFunceoERR6TvFuncRK6TvFunc"></span><span id="TvFunc::xor-operator__TvFuncRR.TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1ac4f6486fefd525f0bbd69305ea34e4dd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">^</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunceoERR6TvFuncRK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>排他的論理和を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunceoERK6TvFuncRR6TvFunc">
+<span id="_CPPv3N6TvFunceoERK6TvFuncRR6TvFunc"></span><span id="_CPPv2N6TvFunceoERK6TvFuncRR6TvFunc"></span><span id="TvFunc::xor-operator__TvFuncCR.TvFuncRR"></span><span class="target" id="d4/d6d/classTvFunc_1a5a57023ba00fcf969ed82cf716f713f9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">^</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunceoERK6TvFuncRR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>排他的論理和を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunceoERR6TvFuncRR6TvFunc">
+<span id="_CPPv3N6TvFunceoERR6TvFuncRR6TvFunc"></span><span id="_CPPv2N6TvFunceoERR6TvFuncRR6TvFunc"></span><span id="TvFunc::xor-operator__TvFuncRR.TvFuncRR"></span><span class="target" id="d4/d6d/classTvFunc_1a83515260d562688cef7f9d21bf04944c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">^</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunceoERR6TvFuncRR6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>排他的論理和を求める． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] 第1オペランド </p></li>
+<li><p><strong>right</strong> -- [in] 第2オペランド </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunclsERNSt7ostreamERK6TvFunc">
+<span id="_CPPv3N6TvFunclsERNSt7ostreamERK6TvFunc"></span><span id="_CPPv2N6TvFunclsERNSt7ostreamERK6TvFunc"></span><span id="TvFunc::lshift-operator__osR.TvFuncCR"></span><span class="target" id="d4/d6d/classTvFunc_1adbf5f5adce2a39efdea0b7bc956f079a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">func</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunclsERNSt7ostreamERK6TvFunc" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ストリームに対する出力 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力先のストリーム </p></li>
+<li><p><strong>func</strong> -- [in] 対象の関数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6TvFunc7compareERK7TvFuncMRK7TvFuncM">
+<span id="_CPPv3N6TvFunc7compareERK7TvFuncMRK7TvFuncM"></span><span id="_CPPv2N6TvFunc7compareERK7TvFuncMRK7TvFuncM"></span><span id="TvFunc::compare__TvFuncMCR.TvFuncMCR"></span><span class="target" id="d4/d6d/classTvFunc_1ad9f212161ad41ba135e695e8e544092a"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compare</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="tvfuncm.html#_CPPv47TvFuncM" title="TvFuncM"><span class="n"><span class="pre">TvFuncM</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">left</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="tvfuncm.html#_CPPv47TvFuncM" title="TvFuncM"><span class="n"><span class="pre">TvFuncM</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6TvFunc7compareERK7TvFuncMRK7TvFuncM" title="Link to this definition">¶</a><br /></dt>
+<dd><p>比較関数 </p>
+<p>
+入力数/出力数の異なる関数間の比較はまず入力数つぎに出力数で比較する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> -- [in] オペランド1 </p></li>
+<li><p><strong>right</strong> -- [in] オペランド2 </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>-1</strong> -- left &lt; right </p></li>
+<li><p><strong>0</strong> -- left = right </p></li>
+<li><p><strong>1</strong> -- left &gt; right</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.4.1. TvFunc</a><ul>
+<li><a class="reference internal" href="#_CPPv46TvFunc"><code class="docutils literal notranslate"><span class="pre">TvFunc</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc6TvFuncEv"><code class="docutils literal notranslate"><span class="pre">TvFunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc6TvFuncE8SizeType"><code class="docutils literal notranslate"><span class="pre">TvFunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc6TvFuncE8SizeTypeRKNSt6vectorIiEE"><code class="docutils literal notranslate"><span class="pre">TvFunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc6TvFuncERKNSt6stringEi"><code class="docutils literal notranslate"><span class="pre">TvFunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc6TvFuncERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">TvFunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc6TvFuncERR6TvFunc"><code class="docutils literal notranslate"><span class="pre">TvFunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncaSERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncaSERR6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncD0Ev"><code class="docutils literal notranslate"><span class="pre">~TvFunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc6invertEb"><code class="docutils literal notranslate"><span class="pre">invert()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc6and_opERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">and_op()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc5or_opERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">or_op()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc6xor_opERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">xor_op()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc8cofactorE7Literal"><code class="docutils literal notranslate"><span class="pre">cofactor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc8cofactorE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">cofactor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc4bindE7Literal"><code class="docutils literal notranslate"><span class="pre">bind()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc4bindE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">bind()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc8cofactorERKNSt6vectorI7LiteralEE"><code class="docutils literal notranslate"><span class="pre">cofactor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc15check_intersectERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">check_intersect()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc17check_containmentERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">check_containment()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc9decomposeER6TvFuncR6TvFunc"><code class="docutils literal notranslate"><span class="pre">decompose()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc10invert_intEb"><code class="docutils literal notranslate"><span class="pre">invert_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc7and_intERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">and_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc6or_intERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">or_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc7xor_intERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">xor_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc12cofactor_intE7Literal"><code class="docutils literal notranslate"><span class="pre">cofactor_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc12cofactor_intE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">cofactor_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc12cofactor_intERKNSt6vectorI7LiteralEE"><code class="docutils literal notranslate"><span class="pre">cofactor_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunccoEv"><code class="docutils literal notranslate"><span class="pre">operator~()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncmlEb"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncmLEb"><code class="docutils literal notranslate"><span class="pre">operator*=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncanERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncaNERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&amp;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncorERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncoRERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator|=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunceoERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator^()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunceOERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator^=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncdvE7Literal"><code class="docutils literal notranslate"><span class="pre">operator/()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncdvERKNSt6vectorI7LiteralEE"><code class="docutils literal notranslate"><span class="pre">operator/()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncdVE7Literal"><code class="docutils literal notranslate"><span class="pre">operator/=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncdVERKNSt6vectorI7LiteralEE"><code class="docutils literal notranslate"><span class="pre">operator/=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunceqERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncneERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncltERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncgtERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&gt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncleERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&lt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncgeERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&gt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFuncaaERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&amp;&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc8is_validEv"><code class="docutils literal notranslate"><span class="pre">is_valid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc10is_invalidEv"><code class="docutils literal notranslate"><span class="pre">is_invalid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc9input_numEv"><code class="docutils literal notranslate"><span class="pre">input_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc5valueE8SizeType"><code class="docutils literal notranslate"><span class="pre">value()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc7is_zeroEv"><code class="docutils literal notranslate"><span class="pre">is_zero()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc6is_oneEv"><code class="docutils literal notranslate"><span class="pre">is_one()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc7analyzeEv"><code class="docutils literal notranslate"><span class="pre">analyze()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc10count_zeroEv"><code class="docutils literal notranslate"><span class="pre">count_zero()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc9count_oneEv"><code class="docutils literal notranslate"><span class="pre">count_one()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc7walsh_0Ev"><code class="docutils literal notranslate"><span class="pre">walsh_0()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc7walsh_1E8SizeType"><code class="docutils literal notranslate"><span class="pre">walsh_1()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc7walsh_2E8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">walsh_2()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc8walsh_01EA_i"><code class="docutils literal notranslate"><span class="pre">walsh_01()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc9walsh_012EA_iA_i"><code class="docutils literal notranslate"><span class="pre">walsh_012()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc8walsh_w0Eibi"><code class="docutils literal notranslate"><span class="pre">walsh_w0()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc8walsh_w1E8SizeTypeibi"><code class="docutils literal notranslate"><span class="pre">walsh_w1()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc9check_supE8SizeType"><code class="docutils literal notranslate"><span class="pre">check_sup()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc11get_supportEv"><code class="docutils literal notranslate"><span class="pre">get_support()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc11check_unateE8SizeType"><code class="docutils literal notranslate"><span class="pre">check_unate()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc9check_symE8SizeType8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">check_sym()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc3strEi"><code class="docutils literal notranslate"><span class="pre">str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc7bin_strEv"><code class="docutils literal notranslate"><span class="pre">bin_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc7hex_strEv"><code class="docutils literal notranslate"><span class="pre">hex_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc4hashEv"><code class="docutils literal notranslate"><span class="pre">hash()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc5printERNSt7ostreamEi"><code class="docutils literal notranslate"><span class="pre">print()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc4dumpER6BinEnc"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc7restoreER6BinDec"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc5xformERK6NpnMap"><code class="docutils literal notranslate"><span class="pre">xform()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc10shrink_mapEv"><code class="docutils literal notranslate"><span class="pre">shrink_map()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc17npn_canonical_mapEv"><code class="docutils literal notranslate"><span class="pre">npn_canonical_map()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc21npn_canonical_all_mapEv"><code class="docutils literal notranslate"><span class="pre">npn_canonical_all_map()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc4nblkEv"><code class="docutils literal notranslate"><span class="pre">nblk()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6TvFunc8raw_dataE8SizeType"><code class="docutils literal notranslate"><span class="pre">raw_data()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc7invalidEv"><code class="docutils literal notranslate"><span class="pre">invalid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc4zeroE8SizeType"><code class="docutils literal notranslate"><span class="pre">zero()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc3oneE8SizeType"><code class="docutils literal notranslate"><span class="pre">one()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc7literalE8SizeType8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc7literalE8SizeType7Literal"><code class="docutils literal notranslate"><span class="pre">literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc16positive_literalE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">positive_literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc16negative_literalE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">negative_literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc5coverE8SizeTypeRKNSt6vectorINSt6vectorI7LiteralEEEE"><code class="docutils literal notranslate"><span class="pre">cover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc5coverE8SizeTypeRKNSt6vectorI7SopCubeEE"><code class="docutils literal notranslate"><span class="pre">cover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc4cubeE8SizeTypeRKNSt6vectorI7LiteralEE"><code class="docutils literal notranslate"><span class="pre">cube()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc7composeERK6TvFuncRK6TvFunc"><code class="docutils literal notranslate"><span class="pre">compose()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc16check_complementERK6TvFuncRK6TvFunc"><code class="docutils literal notranslate"><span class="pre">check_complement()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc6kMaxNiE"><code class="docutils literal notranslate"><span class="pre">kMaxNi</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncanERR6TvFuncRK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncanERK6TvFuncRR6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncanERR6TvFuncRR6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncorERR6TvFuncRK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncorERK6TvFuncRR6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFuncorERR6TvFuncRR6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunceoERR6TvFuncRK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator^()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunceoERK6TvFuncRR6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator^()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunceoERR6TvFuncRR6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator^()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunclsERNSt7ostreamERK6TvFunc"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6TvFunc7compareERK7TvFuncMRK7TvFuncM"><code class="docutils literal notranslate"><span class="pre">compare()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="tv_grp.html"
+                          title="前の章へ"><span class="section-number">1.2.4. </span>真理値表を扱うサブグループ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="tvfuncm.html"
+                          title="次の章へ"><span class="section-number">1.2.4.2. </span>TvFuncM</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/logic/tvfunc.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="tvfuncm.html" title="1.2.4.2. TvFuncM"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="tv_grp.html" title="1.2.4. 真理値表を扱うサブグループ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="tv_grp.html" ><span class="section-number">1.2.4. </span>真理値表を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.4.1. </span>TvFunc</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -27,7 +27,7 @@ class DffImpl;
 /// - リセット値
 ///
 /// 空のコンストラクタで作られたインスタンスは不正値となる．
-/// その場合，is_valid() は false を返し， is_invalid() は true を返す．
+/// その場合， is_valid() は false を返し， is_invalid() は true を返す．
 /// それ以外のメンバ関数の呼び出しは std::logic_error 例外を送出する．
 ///
 /// 公開されているメンバ関数はすべて const であり，内容を変更することは
@@ -103,6 +103,9 @@ public:
   input() const;
 
   /// @brief リセット値
+  /// @retval 'X' 不定値
+  /// @retval '0' 0
+  /// @retval '1' 1
   char
   reset_val() const;
 

@@ -1,0 +1,5 @@
+AigMgr
+~~~~~~~
+
+.. doxygenclass:: AigMgr
+   :members:

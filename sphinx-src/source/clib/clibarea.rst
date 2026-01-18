@@ -1,0 +1,5 @@
+ClibArea
+~~~~~~~~~
+
+.. doxygenclass:: ClibArea
+   :members:

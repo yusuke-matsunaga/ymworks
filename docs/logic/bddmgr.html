@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.2.6.1. BddMgr &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="1.2.6.2. BddMgrHolder" href="bddmgrholder.html" />
+    <link rel="prev" title="1.2.6. Decision Diagram を扱うサブグループ" href="dd_grp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="bddmgrholder.html" title="1.2.6.2. BddMgrHolder"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="dd_grp.html" title="1.2.6. Decision Diagram を扱うサブグループ"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="dd_grp.html" accesskey="U"><span class="section-number">1.2.6. </span>Decision Diagram を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.6.1. </span>BddMgr</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="bddmgr">
+<h1><span class="section-number">1.2.6.1. </span>BddMgr<a class="headerlink" href="#bddmgr" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv46BddMgr">
+<span id="_CPPv36BddMgr"></span><span id="_CPPv26BddMgr"></span><span id="BddMgr"></span><span class="target" id="d1/d19/classBddMgr"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddMgr</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="bddmgrholder.html#_CPPv412BddMgrHolder" title="BddMgrHolder"><span class="n"><span class="pre">BddMgrHolder</span></span></a><a class="headerlink" href="#_CPPv46BddMgr" title="Link to this definition">¶</a><br /></dt>
+<dd><p>BDD を管理するためのクラス </p>
+<p><ul class="simple">
+<li><p><a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> の演算は同一の <a class="reference internal" href="#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> に属している <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> の間でのみ有効</p></li>
+<li><p>異なる <a class="reference internal" href="#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> に属する <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> の演算は std::invalid_argument 例外を送出する．</p></li>
+<li><p><a class="reference internal" href="#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> は変数順を保持しており，異なる <a class="reference internal" href="#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> 間では変数順が 異なる可能性がある．</p></li>
+<li><p>実体は BddMgrImpl でこのクラスはただの shared pointer となっている． コピーしても同一の BddMgrImpl を持つインスタンスが生成される．</p></li>
+<li><p>BddMgrImpl は内部で参照回数を持っており，参照回数がゼロになると 自動的に開放される． </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr6BddMgrEv">
+<span id="_CPPv3N6BddMgr6BddMgrEv"></span><span id="_CPPv2N6BddMgr6BddMgrEv"></span><span id="BddMgr::BddMgr"></span><span class="target" id="d1/d19/classBddMgr_1a632986e40b2855c8ad39d33ca81c386d"></span><span class="sig-name descname"><span class="n"><span class="pre">BddMgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr6BddMgrEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr6BddMgrERK12BddMgrHolder">
+<span id="_CPPv3N6BddMgr6BddMgrERK12BddMgrHolder"></span><span id="_CPPv2N6BddMgr6BddMgrERK12BddMgrHolder"></span><span id="BddMgr::BddMgr__BddMgrHolderCR"></span><span class="target" id="d1/d19/classBddMgr_1a13c9c6c8c6fcaf5862c389a24e25571a"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddMgr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddmgrholder.html#_CPPv412BddMgrHolder" title="BddMgrHolder"><span class="n"><span class="pre">BddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">holder</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr6BddMgrERK12BddMgrHolder" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="bddmgrholder.html#d1/d59/classBddMgrHolder"><span class="std std-ref">BddMgrHolder</span></a> を指定したコンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr6BddMgrERK6BddMgr">
+<span id="_CPPv3N6BddMgr6BddMgrERK6BddMgr"></span><span id="_CPPv2N6BddMgr6BddMgrERK6BddMgr"></span><span id="BddMgr::BddMgr__BddMgrCR"></span><span class="target" id="d1/d19/classBddMgr_1a721930b510c4ecea2037f248f28fab5c"></span><span class="sig-name descname"><span class="n"><span class="pre">BddMgr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N6BddMgr6BddMgrERK6BddMgr" title="BddMgr::BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr6BddMgrERK6BddMgr" title="Link to this definition">¶</a><br /></dt>
+<dd><p>コピーコンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgrD0Ev">
+<span id="_CPPv3N6BddMgrD0Ev"></span><span id="_CPPv2N6BddMgrD0Ev"></span><span id="BddMgr::~BddMgr"></span><span class="target" id="d1/d19/classBddMgr_1a77e84ffa376ae15f574901c262e3a726"></span><span class="sig-name descname"><span class="n"><span class="pre">~BddMgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgrD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddMgr12variable_numEv">
+<span id="_CPPv3NK6BddMgr12variable_numEv"></span><span id="_CPPv2NK6BddMgr12variable_numEv"></span><span id="BddMgr::variable_numC"></span><span class="target" id="d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"></span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variable_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddMgr12variable_numEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>&#64;breif 変数の数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr8variableE8SizeType">
+<span id="_CPPv3N6BddMgr8variableE8SizeType"></span><span id="_CPPv2N6BddMgr8variableE8SizeType"></span><span id="BddMgr::variable__SizeType"></span><span class="target" id="d1/d19/classBddMgr_1a399ab1b89bde54fc06f4bec508dd018c"></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variable</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr8variableE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数を返す． </p>
+<p><ul class="simple">
+<li><p>varid &gt;= <a class="reference internal" href="#d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"><span class="std std-ref">variable_num()</span></a> の場合には新しい変数が確保される．</p></li>
+<li><p>auto var = variable(id); var.id() == id; が成り立つ． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>varid</strong> -- [in] 変数番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr12variable_bddE8SizeType">
+<span id="_CPPv3N6BddMgr12variable_bddE8SizeType"></span><span id="_CPPv2N6BddMgr12variable_bddE8SizeType"></span><span id="BddMgr::variable_bdd__SizeType"></span><span class="target" id="d1/d19/classBddMgr_1af257811d7145eb5132d3378c26fc9808"></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variable_bdd</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr12variable_bddE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数を表すBDDを返す． </p>
+<p><ul class="simple">
+<li><p>varid &gt;= <a class="reference internal" href="#d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"><span class="std std-ref">variable_num()</span></a> の場合には新しい変数が確保される．</p></li>
+<li><p>auto var = variable(id); var.id() == id; が成り立つ． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>varid</strong> -- [in] 変数番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr7literalE8SizeTypeb">
+<span id="_CPPv3N6BddMgr7literalE8SizeTypeb"></span><span id="_CPPv2N6BddMgr7literalE8SizeTypeb"></span><span id="BddMgr::literal__SizeType.b"></span><span class="target" id="d1/d19/classBddMgr_1a2f27d3ed0190880d35b84fe5f3d35f3c"></span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr7literalE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>リテラルを返す． </p>
+<p><ul class="simple">
+<li><p>varid &gt;= <a class="reference internal" href="#d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"><span class="std std-ref">variable_num()</span></a> の場合には新しい変数が確保される．</p></li>
+<li><p>auto lit = literal(id, inv); lit.var().id() == id; が成り立つ． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varid</strong> -- [in] 変数番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr11literal_bddE8SizeTypeb">
+<span id="_CPPv3N6BddMgr11literal_bddE8SizeTypeb"></span><span id="_CPPv2N6BddMgr11literal_bddE8SizeTypeb"></span><span id="BddMgr::literal_bdd__SizeType.b"></span><span class="target" id="d1/d19/classBddMgr_1a29463a1560f0e103171d2223b4011f54"></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">literal_bdd</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr11literal_bddE8SizeTypeb" title="Link to this definition">¶</a><br /></dt>
+<dd><p>リテラルを表すBDDを返す． </p>
+<p><ul class="simple">
+<li><p>varid &gt;= <a class="reference internal" href="#d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"><span class="std std-ref">variable_num()</span></a> の場合には新しい変数が確保される． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varid</strong> -- [in] 変数番号 </p></li>
+<li><p><strong>inv</strong> -- [in] 反転属性 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr16positive_literalE8SizeType">
+<span id="_CPPv3N6BddMgr16positive_literalE8SizeType"></span><span id="_CPPv2N6BddMgr16positive_literalE8SizeType"></span><span id="BddMgr::positive_literal__SizeType"></span><span class="target" id="d1/d19/classBddMgr_1adba9318d99465fc94a2a6269a05835c4"></span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">positive_literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr16positive_literalE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>正のリテラルを返す． </p>
+<p><ul class="simple">
+<li><p>varid &gt;= <a class="reference internal" href="#d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"><span class="std std-ref">variable_num()</span></a> の場合には新しい変数が確保される．</p></li>
+<li><p>auto lit = positive_literal(id); lit.var().id() == id; が成り立つ． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>varid</strong> -- [in] 変数番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr20positive_literal_bddE8SizeType">
+<span id="_CPPv3N6BddMgr20positive_literal_bddE8SizeType"></span><span id="_CPPv2N6BddMgr20positive_literal_bddE8SizeType"></span><span id="BddMgr::positive_literal_bdd__SizeType"></span><span class="target" id="d1/d19/classBddMgr_1a5e2ff2b24758a95eb85e36548268e0f9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">positive_literal_bdd</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr20positive_literal_bddE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>正のリテラルを表すBDDを返す． </p>
+<p><ul class="simple">
+<li><p>varid &gt;= <a class="reference internal" href="#d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"><span class="std std-ref">variable_num()</span></a> の場合には新しい変数が確保される． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>varid</strong> -- [in] 変数番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr16negative_literalE8SizeType">
+<span id="_CPPv3N6BddMgr16negative_literalE8SizeType"></span><span id="_CPPv2N6BddMgr16negative_literalE8SizeType"></span><span id="BddMgr::negative_literal__SizeType"></span><span class="target" id="d1/d19/classBddMgr_1aa4104d0d88555900d81183b502a0a120"></span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">negative_literal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr16negative_literalE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>負のリテラルを返す． </p>
+<p><ul class="simple">
+<li><p>varid &gt;= <a class="reference internal" href="#d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"><span class="std std-ref">variable_num()</span></a> の場合には新しい変数が確保される．</p></li>
+<li><p>auto lit = negative_literal(id); lit.var().id() == id; が成り立つ． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>varid</strong> -- [in] 変数番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr20negative_literal_bddE8SizeType">
+<span id="_CPPv3N6BddMgr20negative_literal_bddE8SizeType"></span><span id="_CPPv2N6BddMgr20negative_literal_bddE8SizeType"></span><span id="BddMgr::negative_literal_bdd__SizeType"></span><span class="target" id="d1/d19/classBddMgr_1a031ccf452fb197faa152af509b4c096e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">negative_literal_bdd</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">varid</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr20negative_literal_bddE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>負のリテラルを表すBDDを返す． </p>
+<p><ul class="simple">
+<li><p>varid &gt;= <a class="reference internal" href="#d1/d19/classBddMgr_1a41f96806e6ddb59841aa4d527fa238be"><span class="std std-ref">variable_num()</span></a> の場合には新しい変数が確保される． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>varid</strong> -- [in] 変数番号 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddMgr13variable_listEv">
+<span id="_CPPv3NK6BddMgr13variable_listEv"></span><span id="_CPPv2NK6BddMgr13variable_listEv"></span><span id="BddMgr::variable_listC"></span><span class="target" id="d1/d19/classBddMgr_1a564b031de97d9e732709d959f30b1560"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variable_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddMgr13variable_listEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数のリストを返す． </p>
+<p>変数番号の昇順に並んでいる </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddMgr14variable_orderEv">
+<span id="_CPPv3NK6BddMgr14variable_orderEv"></span><span id="_CPPv2NK6BddMgr14variable_orderEv"></span><span id="BddMgr::variable_orderC"></span><span class="target" id="d1/d19/classBddMgr_1acf31f080718e5256fee4ede1956a1d0d"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variable_order</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddMgr14variable_orderEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数順を表す変数のリストを返す． </p>
+<p>インデックスの昇順に並んでいる </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr18set_variable_orderERKNSt6vectorI6BddVarEE">
+<span id="_CPPv3N6BddMgr18set_variable_orderERKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N6BddMgr18set_variable_orderERKNSt6vectorI6BddVarEE"></span><span id="BddMgr::set_variable_order__std::vector:BddVar:CR"></span><span class="target" id="d1/d19/classBddMgr_1adf2701fa5ebe62ef294867187a3d22ad"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_variable_order</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">order_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr18set_variable_orderERKNSt6vectorI6BddVarEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>変数順を設定する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>order_list</strong> -- [in] 変数順を表すリスト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr4copyERK3Bdd">
+<span id="_CPPv3N6BddMgr4copyERK3Bdd"></span><span id="_CPPv2N6BddMgr4copyERK3Bdd"></span><span id="BddMgr::copy__BddCR"></span><span class="target" id="d1/d19/classBddMgr_1aaf50ecbeb700271c6eb221ed843ddf5d"></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr4copyERK3Bdd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>BDD をコピーする． </p>
+<p>通常は同じものを返すが，src のマネージャが異なる場合には 同じ構造のコピーを作る． ただし，変数順が異なる場合には効率の悪い処理となる． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr10from_truthERKNSt6stringERKNSt6vectorI6BddVarEE">
+<span id="_CPPv3N6BddMgr10from_truthERKNSt6stringERKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N6BddMgr10from_truthERKNSt6stringERKNSt6vectorI6BddVarEE"></span><span id="BddMgr::from_truth__ssCR.std::vector:BddVar:CR"></span><span class="target" id="d1/d19/classBddMgr_1aa91ecb513d523b991606c8a8a4e9bcd9"></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">from_truth</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">str</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_list</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr10from_truthERKNSt6stringERKNSt6vectorI6BddVarEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>真理値表形式の文字列からBDDを作る． </p>
+<p><ul class="simple">
+<li><p>str は '0' か '1' の文字列．</p></li>
+<li><p>ただし，長さはvar_listのサイズのべき乗である必要がある．</p></li>
+<li><p>for some reason, この文字列は big endian となっている．</p></li>
+<li><p>0文字目が(1, 1, 1, 1)に対応する</p></li>
+<li><p>var_list が省略された場合は自動的に適切な変数リストを用いる．</p></li>
+<li><p>不正な形式の場合は std::invalid_argument 例外を送出する． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>str</strong> -- [in] 01の文字列 </p></li>
+<li><p><strong>var_list</strong> -- [in] 変数のリスト </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr9from_exprERK4ExprRKNSt6vectorI6BddVarEE">
+<span id="_CPPv3N6BddMgr9from_exprERK4ExprRKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N6BddMgr9from_exprERK4ExprRKNSt6vectorI6BddVarEE"></span><span id="BddMgr::from_expr__ExprCR.std::vector:BddVar:CR"></span><span class="target" id="d1/d19/classBddMgr_1a69c4bb14476135440e5b8af7597bbee7"></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">from_expr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="expr.html#_CPPv44Expr" title="Expr"><span class="n"><span class="pre">Expr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">expr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_list</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr9from_exprERK4ExprRKNSt6vectorI6BddVarEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>論理式から BDD を作る． </p>
+<p><ul class="simple">
+<li><p>var_list が省略された場合は自動的に適切な変数リストを用いる． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr</strong> -- [in] 論理式 </p></li>
+<li><p><strong>var_list</strong> -- [in] 変数のリスト </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr7restoreER6BinDec">
+<span id="_CPPv3N6BddMgr7restoreER6BinDec"></span><span id="_CPPv2N6BddMgr7restoreER6BinDec"></span><span id="BddMgr::restore__BinDecR"></span><span class="target" id="d1/d19/classBddMgr_1ab9762aea96134a9e6bc2ee0d73510e19"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">BinDec</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr7restoreER6BinDec" title="Link to this definition">¶</a><br /></dt>
+<dd><p>バイナリダンプから復元する． </p>
+<p>
+不正な形式の場合は std::invalid_argument 例外を送出する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 入力ストリーム </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成されたBDDのリストを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddMgr8is_validEv">
+<span id="_CPPv3NK6BddMgr8is_validEv"></span><span id="_CPPv2NK6BddMgr8is_validEv"></span><span id="BddMgr::is_validC"></span><span class="target" id="d1/d19/classBddMgr_1aef0df6e872b0c8ba70a223d95725822b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddMgr8is_validEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>適正な値を持っている時に true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr18garbage_collectionEv">
+<span id="_CPPv3N6BddMgr18garbage_collectionEv"></span><span id="_CPPv2N6BddMgr18garbage_collectionEv"></span><span id="BddMgr::garbage_collection"></span><span class="target" id="d1/d19/classBddMgr_1a68636b9f4f1ce4a86c1e8db7104d988f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">garbage_collection</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr18garbage_collectionEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ガーベージコレクションを行う． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddMgr8node_numEv">
+<span id="_CPPv3NK6BddMgr8node_numEv"></span><span id="_CPPv2NK6BddMgr8node_numEv"></span><span id="BddMgr::node_numC"></span><span class="target" id="d1/d19/classBddMgr_1ac5ee2870418ec4ac21e85c70f2dee77b"></span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">node_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddMgr8node_numEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ノード数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddMgr8gc_limitEv">
+<span id="_CPPv3NK6BddMgr8gc_limitEv"></span><span id="_CPPv2NK6BddMgr8gc_limitEv"></span><span id="BddMgr::gc_limitC"></span><span class="target" id="d1/d19/classBddMgr_1a1f71bbede5bd36d1b6da9f624e13089e"></span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gc_limit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddMgr8gc_limitEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>GC を起動するしきい値を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr12set_gc_limitE8SizeType">
+<span id="_CPPv3N6BddMgr12set_gc_limitE8SizeType"></span><span id="_CPPv2N6BddMgr12set_gc_limitE8SizeType"></span><span id="BddMgr::set_gc_limit__SizeType"></span><span class="target" id="d1/d19/classBddMgr_1a712cf94d250f30402b6dcb469dd255ec"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gc_limit</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">limit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr12set_gc_limitE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>GC を起動するしきい値を設定する． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr9enable_gcEv">
+<span id="_CPPv3N6BddMgr9enable_gcEv"></span><span id="_CPPv2N6BddMgr9enable_gcEv"></span><span id="BddMgr::enable_gc"></span><span class="target" id="d1/d19/classBddMgr_1a1c76ec526e6fa5030b61cb04e4f9c0f1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_gc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr9enable_gcEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>GC を許可する． </p>
+<p>ただちに GC が起動するわけではない． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6BddMgr10disable_gcEv">
+<span id="_CPPv3N6BddMgr10disable_gcEv"></span><span id="_CPPv2N6BddMgr10disable_gcEv"></span><span id="BddMgr::disable_gc"></span><span class="target" id="d1/d19/classBddMgr_1adfc51c145e9d977be2fd321034109817"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">disable_gc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6BddMgr10disable_gcEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>GC を禁止する． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddMgreqERK6BddMgr">
+<span id="_CPPv3NK6BddMgreqERK6BddMgr"></span><span id="_CPPv2NK6BddMgreqERK6BddMgr"></span><span id="BddMgr::eq-operator__BddMgrCRC"></span><span class="target" id="d1/d19/classBddMgr_1a83fbc9cd1175377dc7c5d5e8c2b66f9d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddMgreqERK6BddMgr" title="Link to this definition">¶</a><br /></dt>
+<dd><p>等価比較演算子 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6BddMgrneERK6BddMgr">
+<span id="_CPPv3NK6BddMgrneERK6BddMgr"></span><span id="_CPPv2NK6BddMgrneERK6BddMgr"></span><span id="BddMgr::neq-operator__BddMgrCRC"></span><span class="target" id="d1/d19/classBddMgr_1a684aea31e962628377058cb4b0c3c86b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6BddMgrneERK6BddMgr" title="Link to this definition">¶</a><br /></dt>
+<dd><p>非等価比較演算子 </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.6.1. BddMgr</a><ul>
+<li><a class="reference internal" href="#_CPPv46BddMgr"><code class="docutils literal notranslate"><span class="pre">BddMgr</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr6BddMgrEv"><code class="docutils literal notranslate"><span class="pre">BddMgr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr6BddMgrERK12BddMgrHolder"><code class="docutils literal notranslate"><span class="pre">BddMgr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr6BddMgrERK6BddMgr"><code class="docutils literal notranslate"><span class="pre">BddMgr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgrD0Ev"><code class="docutils literal notranslate"><span class="pre">~BddMgr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddMgr12variable_numEv"><code class="docutils literal notranslate"><span class="pre">variable_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr8variableE8SizeType"><code class="docutils literal notranslate"><span class="pre">variable()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr12variable_bddE8SizeType"><code class="docutils literal notranslate"><span class="pre">variable_bdd()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr7literalE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr11literal_bddE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">literal_bdd()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr16positive_literalE8SizeType"><code class="docutils literal notranslate"><span class="pre">positive_literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr20positive_literal_bddE8SizeType"><code class="docutils literal notranslate"><span class="pre">positive_literal_bdd()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr16negative_literalE8SizeType"><code class="docutils literal notranslate"><span class="pre">negative_literal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr20negative_literal_bddE8SizeType"><code class="docutils literal notranslate"><span class="pre">negative_literal_bdd()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddMgr13variable_listEv"><code class="docutils literal notranslate"><span class="pre">variable_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddMgr14variable_orderEv"><code class="docutils literal notranslate"><span class="pre">variable_order()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr18set_variable_orderERKNSt6vectorI6BddVarEE"><code class="docutils literal notranslate"><span class="pre">set_variable_order()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr4copyERK3Bdd"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr10from_truthERKNSt6stringERKNSt6vectorI6BddVarEE"><code class="docutils literal notranslate"><span class="pre">from_truth()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr9from_exprERK4ExprRKNSt6vectorI6BddVarEE"><code class="docutils literal notranslate"><span class="pre">from_expr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr7restoreER6BinDec"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddMgr8is_validEv"><code class="docutils literal notranslate"><span class="pre">is_valid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr18garbage_collectionEv"><code class="docutils literal notranslate"><span class="pre">garbage_collection()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddMgr8node_numEv"><code class="docutils literal notranslate"><span class="pre">node_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddMgr8gc_limitEv"><code class="docutils literal notranslate"><span class="pre">gc_limit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr12set_gc_limitE8SizeType"><code class="docutils literal notranslate"><span class="pre">set_gc_limit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr9enable_gcEv"><code class="docutils literal notranslate"><span class="pre">enable_gc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6BddMgr10disable_gcEv"><code class="docutils literal notranslate"><span class="pre">disable_gc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddMgreqERK6BddMgr"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6BddMgrneERK6BddMgr"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="dd_grp.html"
+                          title="前の章へ"><span class="section-number">1.2.6. </span>Decision Diagram を扱うサブグループ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="bddmgrholder.html"
+                          title="次の章へ"><span class="section-number">1.2.6.2. </span>BddMgrHolder</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/logic/bddmgr.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="bddmgrholder.html" title="1.2.6.2. BddMgrHolder"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="dd_grp.html" title="1.2.6. Decision Diagram を扱うサブグループ"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="dd_grp.html" ><span class="section-number">1.2.6. </span>Decision Diagram を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.6.1. </span>BddMgr</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

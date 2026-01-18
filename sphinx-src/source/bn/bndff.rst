@@ -1,5 +1,5 @@
 BnDff
-==========
+~~~~~~~~~
 
 .. doxygenclass:: BnDff
    :members:

@@ -52,6 +52,21 @@
 </section>
 <section id="id3">
 <h2>2. クラス一覧<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="df/d55/group__LogicGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">論理式と論理関数を扱うクラス</span></span></dt>
+<dd><p>論理式(ファクタードフォーム)と論理関数を扱うためのクラスライブラリ C++ の機能を活かして論理演算子のオーバーロードを使っている．</p>
+<p>主なクラスは以下の通り<ul class="simple">
+<li><p><a class="reference internal" href="#df/dec/classLiteral"><span class="std std-ref">Literal</span></a>: 変数リテラル(変数番号＋極性)</p></li>
+<li><p><a class="reference internal" href="#d0/d92/classExpr"><span class="std std-ref">Expr</span></a>: 通常の論理式</p></li>
+<li><p><a class="reference internal" href="#d4/d6d/classTvFunc"><span class="std std-ref">TvFunc</span></a>: 真理値表を用いた論理関数表現</p></li>
+<li><p><a class="reference internal" href="#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a>: Binary Decision Diagram</p></li>
+<li><p><a class="reference internal" href="#d2/d01/classZdd"><span class="std std-ref">Zdd</span></a>: Zero-surpressed Decision Diagram</p></li>
+<li><p><a class="reference internal" href="#da/d04/classSopCover"><span class="std std-ref">SopCover</span></a>, <a class="reference internal" href="#d5/d15/classSopCube"><span class="std std-ref">SopCube</span></a>: 積和形論理式とキューブ </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-enums">Enums</p>
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv48PrimType">
 <span id="_CPPv38PrimType"></span><span id="_CPPv28PrimType"></span><span class="target" id="df/d55/group__LogicGroup_1ga2222341ff03b31b7045e22fd71aea21d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PrimType</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint8_t</span></span><a class="headerlink" href="#_CPPv48PrimType" title="Link to this definition">¶</a><br /></dt>
@@ -126,6 +141,7 @@
 
 </dd></dl>
 
+</div>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv45DjDec">
 <span id="_CPPv35DjDec"></span><span id="_CPPv25DjDec"></span><span id="DjDec"></span><span class="target" id="df/df1/classDjDec"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DjDec</span></span></span><a class="headerlink" href="#_CPPv45DjDec" title="Link to this definition">¶</a><br /></dt>
@@ -712,8 +728,13 @@
 </div>
 </dd></dl>
 
+</dd></dl>
+
 <p>2.1. 論理式を扱うサブグループ</p>
-<dl class="cpp class">
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="d4/dc5/group__ExprGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">論理式を扱うクラス</span></span></dt>
+<dd><dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv44Expr">
 <span id="_CPPv34Expr"></span><span id="_CPPv24Expr"></span><span id="Expr"></span><span class="target" id="d0/d92/classExpr"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Expr</span></span></span><a class="headerlink" href="#_CPPv44Expr" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="docutils container">
@@ -1981,8 +2002,13 @@ varmap に登録されていない場合には不変とする． </p>
 </div>
 </dd></dl>
 
+</dd></dl>
+
 <p>2.2. 真理値表を扱うサブグループ</p>
-<dl class="cpp class">
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="d8/d6b/group__TvGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">真理値表を扱うクラス</span></span></dt>
+<dd><dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv46Tv2Bdd">
 <span id="_CPPv36Tv2Bdd"></span><span id="_CPPv26Tv2Bdd"></span><span id="Tv2Bdd"></span><span class="target" id="dd/dbc/classTv2Bdd"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Tv2Bdd</span></span></span><a class="headerlink" href="#_CPPv46Tv2Bdd" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="docutils container">
@@ -4307,8 +4333,30 @@ src_list の関数の入力数は等しくなければならない． </p>
 </div>
 </dd></dl>
 
+</dd></dl>
+
 <section id="id4">
 <h3>2.3. 積和形論理式を扱うサブグループ<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="d7/dab/group__SopGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">積和形論理式を扱うクラス</span></span></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv410SopPatWord">
+<span id="_CPPv310SopPatWord"></span><span id="_CPPv210SopPatWord"></span><span class="target" id="d7/dab/group__SopGroup_1ga691fb27f8973278f5939b5ea86fe8172"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SopPatWord</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint64_t</span></span><a class="headerlink" href="#_CPPv410SopPatWord" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#d7/dab/group__SopGroup_1ga20d50c0d4f4a05e08a93c83e6a2a058d"><span class="std std-ref">SopPat</span></a> をパックしたワード型 </p>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv410KernelEval">
+<span id="_CPPv310KernelEval"></span><span id="_CPPv210KernelEval"></span><span class="target" id="d7/dab/group__SopGroup_1ga5306f39bc06cb2e59473d32e782d55a8"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KernelEval</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv48SopCover" title="SopCover"><span class="n"><span class="pre">SopCover</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv47SopCube" title="SopCube"><span class="n"><span class="pre">SopCube</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv410KernelEval" title="Link to this definition">¶</a><br /></dt>
+<dd><p>カーネルの評価関数 </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-enums">Enums</p>
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv46SopPat">
 <span id="_CPPv36SopPat"></span><span id="_CPPv26SopPat"></span><span class="target" id="d7/dab/group__SopGroup_1ga20d50c0d4f4a05e08a93c83e6a2a058d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SopPat</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint8_t</span></span><a class="headerlink" href="#_CPPv46SopPat" title="Link to this definition">¶</a><br /></dt>
@@ -4340,18 +4388,9 @@ src_list の関数の入力数は等しくなければならない． </p>
 
 </dd></dl>
 
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv410SopPatWord">
-<span id="_CPPv310SopPatWord"></span><span id="_CPPv210SopPatWord"></span><span class="target" id="d7/dab/group__SopGroup_1ga691fb27f8973278f5939b5ea86fe8172"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SopPatWord</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint64_t</span></span><a class="headerlink" href="#_CPPv410SopPatWord" title="Link to this definition">¶</a><br /></dt>
-<dd><p><a class="reference internal" href="#d7/dab/group__SopGroup_1ga20d50c0d4f4a05e08a93c83e6a2a058d"><span class="std std-ref">SopPat</span></a> をパックしたワード型 </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv410KernelEval">
-<span id="_CPPv310KernelEval"></span><span id="_CPPv210KernelEval"></span><span class="target" id="d7/dab/group__SopGroup_1ga5306f39bc06cb2e59473d32e782d55a8"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KernelEval</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv48SopCover" title="SopCover"><span class="n"><span class="pre">SopCover</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv47SopCube" title="SopCube"><span class="n"><span class="pre">SopCube</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv410KernelEval" title="Link to this definition">¶</a><br /></dt>
-<dd><p>カーネルの評価関数 </p>
-</dd></dl>
-
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv48SOP_ALL0">
 <span id="_CPPv38SOP_ALL0"></span><span id="_CPPv28SOP_ALL0"></span><span id="SOP_ALL0__SopPatWordC"></span><span class="target" id="d7/dab/group__SopGroup_1ga70e421e16536aab1d393990d0aa0e02f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410SopPatWord" title="SopPatWord"><span class="n"><span class="pre">SopPatWord</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SOP_ALL0</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0x0000000000000000ULL</span></span><a class="headerlink" href="#_CPPv48SOP_ALL0" title="Link to this definition">¶</a><br /></dt>
@@ -4364,6 +4403,7 @@ src_list の関数の入力数は等しくなければならない． </p>
 <dd><p>オール1 </p>
 </dd></dl>
 
+</div>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv43KIX">
 <span id="_CPPv33KIX"></span><span id="_CPPv23KIX"></span><span id="KIX"></span><span class="target" id="d2/d2f/classKIX"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KIX</span></span></span><a class="headerlink" href="#_CPPv43KIX" title="Link to this definition">¶</a><br /></dt>
@@ -6162,10 +6202,15 @@ right のみに含まれる要素があっても無視される． </p>
 </div>
 </dd></dl>
 
+</dd></dl>
+
 </section>
 <section id="npn">
 <h3>2.4. NPN変換を扱うサブグループ<a class="headerlink" href="#npn" title="Link to this heading">¶</a></h3>
-<dl class="cpp class">
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="d6/db6/group__NpnGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">NPN変換を扱うクラス</span></span></dt>
+<dd><dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv46NpnMap">
 <span id="_CPPv36NpnMap"></span><span id="_CPPv26NpnMap"></span><span id="NpnMap"></span><span class="target" id="d8/d7a/classNpnMap"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NpnMap</span></span></span><a class="headerlink" href="#_CPPv46NpnMap" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="docutils container">
@@ -6963,9 +7008,15 @@ var に対応するマッピング情報がないときには不正な値を返�
 </div>
 </dd></dl>
 
+</dd></dl>
+
 </section>
 <section id="decision-diagram">
 <h3>2.5. Decision Diagram を扱うサブグループ<a class="headerlink" href="#decision-diagram" title="Link to this heading">¶</a></h3>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="d9/d9f/group__DdGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Decision</span> <span class="pre">Diagram</span> <span class="pre">を扱うクラス</span></span></dt>
+<dd><p>具体的には BDD(Binary Decision Diagram) と ZDD(Zero-surpressed Decision Diagram) を扱う． </p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv43Bdd">
 <span id="_CPPv33Bdd"></span><span id="_CPPv23Bdd"></span><span id="Bdd"></span><span class="target" id="df/d7a/classBdd"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Bdd</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><a class="headerlink" href="#_CPPv43Bdd" title="Link to this definition">¶</a><br /></dt>
@@ -9659,9 +9710,16 @@ var に対応するマッピング情報がないときには不正な値を返�
 </div>
 </dd></dl>
 
+</dd></dl>
+
 </section>
 <section id="boolean-chain">
 <h3>2.6. Boolean Chain を扱うサブグループ<a class="headerlink" href="#boolean-chain" title="Link to this heading">¶</a></h3>
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="d7/dea/group__BcGroup"></span><em><span class="pre">group</span></em> <span class="sig-name descname"><span class="pre">Boolean</span> <span class="pre">Chain</span> <span class="pre">を扱うクラス</span></span></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-enums">Enums</p>
 <dl class="cpp enum-class">
 <dt class="sig sig-object cpp" id="_CPPv48BcOpType">
 <span id="_CPPv38BcOpType"></span><span id="_CPPv28BcOpType"></span><span class="target" id="d7/dea/group__BcGroup_1ga968d6479da91812115a9422ea92ef3a0"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BcOpType</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint8_t</span></span><a class="headerlink" href="#_CPPv48BcOpType" title="Link to this definition">¶</a><br /></dt>
@@ -9694,6 +9752,7 @@ var に対応するマッピング情報がないときには不正な値を返�
 
 </dd></dl>
 
+</div>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv46BcEdge">
 <span id="_CPPv36BcEdge"></span><span id="_CPPv26BcEdge"></span><span id="BcEdge"></span><span class="target" id="d9/d26/classBcEdge"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BcEdge</span></span></span><a class="headerlink" href="#_CPPv46BcEdge" title="Link to this definition">¶</a><br /></dt>
@@ -10189,6 +10248,8 @@ var に対応するマッピング情報がないときには不正な値を返�
 </div>
 </dd></dl>
 
+</dd></dl>
+
 </section>
 </section>
 </section>
@@ -10565,6 +10626,8 @@ var に対応するマッピング情報がないときには不正な値を返�
 </ul>
 </li>
 <li><a class="reference internal" href="#id4">2.3. 積和形論理式を扱うサブグループ</a><ul>
+<li><a class="reference internal" href="#_CPPv410SopPatWord"><code class="docutils literal notranslate"><span class="pre">SopPatWord</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv410KernelEval"><code class="docutils literal notranslate"><span class="pre">KernelEval</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv46SopPat"><code class="docutils literal notranslate"><span class="pre">SopPat</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4N6SopPat2__E"><code class="docutils literal notranslate"><span class="pre">__</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N6SopPat2_1E"><code class="docutils literal notranslate"><span class="pre">_1</span></code></a></li>
@@ -10572,8 +10635,6 @@ var に対応するマッピング情報がないときには不正な値を返�
 <li><a class="reference internal" href="#_CPPv4N6SopPat2_XE"><code class="docutils literal notranslate"><span class="pre">_X</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#_CPPv410SopPatWord"><code class="docutils literal notranslate"><span class="pre">SopPatWord</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv410KernelEval"><code class="docutils literal notranslate"><span class="pre">KernelEval</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv48SOP_ALL0"><code class="docutils literal notranslate"><span class="pre">SOP_ALL0</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv48SOP_ALL1"><code class="docutils literal notranslate"><span class="pre">SOP_ALL1</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv43KIX"><code class="docutils literal notranslate"><span class="pre">KIX</span></code></a><ul>

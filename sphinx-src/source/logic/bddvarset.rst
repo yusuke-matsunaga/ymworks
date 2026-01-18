@@ -1,0 +1,5 @@
+BddVarSet
+~~~~~~~~~~
+
+.. doxygenclass:: BddVarSet
+   :members:

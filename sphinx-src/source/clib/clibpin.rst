@@ -1,0 +1,5 @@
+ClibPin
+~~~~~~~~
+
+.. doxygenclass:: ClibPin
+   :members:

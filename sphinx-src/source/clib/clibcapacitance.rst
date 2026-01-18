@@ -1,0 +1,5 @@
+ClibCapacitance
+~~~~~~~~~~~~~~~~
+
+.. doxygenclass:: ClibCapacitance
+   :members:

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>1.2.4.3. TruthTable &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="1.2.4.4. Tv2Sop" href="tv2sop.html" />
+    <link rel="prev" title="1.2.4.2. TvFuncM" href="tvfuncm.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="tv2sop.html" title="1.2.4.4. Tv2Sop"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="tvfuncm.html" title="1.2.4.2. TvFuncM"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="tv_grp.html" accesskey="U"><span class="section-number">1.2.4. </span>真理値表を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.4.3. </span>TruthTable</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="truthtable">
+<h1><span class="section-number">1.2.4.3. </span>TruthTable<a class="headerlink" href="#truthtable" title="Link to this heading">¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv410TruthTable">
+<span id="_CPPv310TruthTable"></span><span id="_CPPv210TruthTable"></span><span id="TruthTable"></span><span class="target" id="d5/d36/classTruthTable"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TruthTable</span></span></span><a class="headerlink" href="#_CPPv410TruthTable" title="Link to this definition">¶</a><br /></dt>
+<dd><p>真理値表を表すクラス </p>
+<p>多入力多出力の不完全指定論理関数を表す． 具体的には 2^input_num() * <a class="reference internal" href="#d5/d36/classTruthTable_1adc653cd7505f70b36425badc3f44e0f3"><span class="std std-ref">output_num()</span></a> 個の論理値(Val3: 0, 1, X)の ベクタを用いる． 真理値表は0 番目の入力が左端に来るので左端をMSB，右端をLSBとする． そのためインデックスは Sum_2^(ni - i - 1) の形で表される．</p>
+<p>内部では <a class="reference internal" href="val3.html#df/d55/group__LogicGroup_1ga26d38ad75f4a50fd125b7edd1dbebf8c"><span class="std std-ref">Val3</span></a> を2ビットに符号化して表す． </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10TruthTable10TruthTableEv">
+<span id="_CPPv3N10TruthTable10TruthTableEv"></span><span id="_CPPv2N10TruthTable10TruthTableEv"></span><span id="TruthTable::TruthTable"></span><span class="target" id="d5/d36/classTruthTable_1a98200316f3d4b53fba9769e72627583f"></span><span class="sig-name descname"><span class="n"><span class="pre">TruthTable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N10TruthTable10TruthTableEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>空のコンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10TruthTable10TruthTableE8SizeType8SizeType">
+<span id="_CPPv3N10TruthTable10TruthTableE8SizeType8SizeType"></span><span id="_CPPv2N10TruthTable10TruthTableE8SizeType8SizeType"></span><span id="TruthTable::TruthTable__SizeType.SizeType"></span><span class="target" id="d5/d36/classTruthTable_1ac51f620f44ec1213556996870f4f9a59"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TruthTable</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_num</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">output_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10TruthTable10TruthTableE8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>サイズを指定したコンストラクタ </p>
+<p>全てドントケアで初期化される． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_num</strong> -- [in] 入力数 </p></li>
+<li><p><strong>output_num</strong> -- [in] 出力数 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10TruthTableD0Ev">
+<span id="_CPPv3N10TruthTableD0Ev"></span><span id="_CPPv2N10TruthTableD0Ev"></span><span id="TruthTable::~TruthTable"></span><span class="target" id="d5/d36/classTruthTable_1a7851c2e1a4fdaa2ec2ba34ae5356211d"></span><span class="sig-name descname"><span class="n"><span class="pre">~TruthTable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N10TruthTableD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable9input_numEv">
+<span id="_CPPv3NK10TruthTable9input_numEv"></span><span id="_CPPv2NK10TruthTable9input_numEv"></span><span id="TruthTable::input_numC"></span><span class="target" id="d5/d36/classTruthTable_1a52113e8550dd4f5a9e80a691d2c4d729"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable9input_numEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable10output_numEv">
+<span id="_CPPv3NK10TruthTable10output_numEv"></span><span id="_CPPv2NK10TruthTable10output_numEv"></span><span id="TruthTable::output_numC"></span><span class="target" id="d5/d36/classTruthTable_1adc653cd7505f70b36425badc3f44e0f3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable10output_numEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>出力数を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable12encode_indexEKNSt6vectorIbEE">
+<span id="_CPPv3NK10TruthTable12encode_indexEKNSt6vectorIbEE"></span><span id="_CPPv2NK10TruthTable12encode_indexEKNSt6vectorIbEE"></span><span id="TruthTable::encode_index__std::vector:b:CC"></span><span class="target" id="d5/d36/classTruthTable_1a6e8ed6f8abc0b3b3ab826e613fc1603d"></span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">encode_index</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_vals</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable12encode_indexEKNSt6vectorIbEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力インデックスを作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_vals</strong> -- [in] 入力値のベクタ </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable12decode_indexE8SizeType">
+<span id="_CPPv3NK10TruthTable12decode_indexE8SizeType"></span><span id="_CPPv2NK10TruthTable12decode_indexE8SizeType"></span><span id="TruthTable::decode_index__SizeTypeC"></span><span class="target" id="d5/d36/classTruthTable_1af415d2ed916c29868128bb6d22dd7bda"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">decode_index</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable12decode_indexE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>入力インデックスから入力値ベクタを作る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>i_index</strong> -- [in] 入力インデックス </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable9get_valueE8SizeType8SizeType">
+<span id="_CPPv3NK10TruthTable9get_valueE8SizeType8SizeType"></span><span id="_CPPv2NK10TruthTable9get_valueE8SizeType8SizeType"></span><span id="TruthTable::get_value__SizeType.SizeTypeC"></span><span class="target" id="d5/d36/classTruthTable_1a62af007551a3d5f25adbe11c0c47e553"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="val3.html#_CPPv44Val3" title="Val3"><span class="n"><span class="pre">Val3</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_value</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_index</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o_index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable9get_valueE8SizeType8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>値を読み出す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i_index</strong> -- [in] 入力インデックス ( 0 &lt;= i_index &lt; 2^input_num() ) </p></li>
+<li><p><strong>o_index</strong> -- [in] 出力インデックス ( 0 &lt;= o_index &lt; <a class="reference internal" href="#d5/d36/classTruthTable_1adc653cd7505f70b36425badc3f44e0f3"><span class="std std-ref">output_num()</span></a> ) </p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>出力数分のベクタを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10TruthTable9set_valueE8SizeType8SizeType4Val3">
+<span id="_CPPv3N10TruthTable9set_valueE8SizeType8SizeType4Val3"></span><span id="_CPPv2N10TruthTable9set_valueE8SizeType8SizeType4Val3"></span><span id="TruthTable::set_value__SizeType.SizeType.Val3"></span><span class="target" id="d5/d36/classTruthTable_1a7343b849e8a055190d5c82866375a70e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_value</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i_index</span></span>, <span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o_index</span></span>, <a class="reference internal" href="val3.html#_CPPv44Val3" title="Val3"><span class="n"><span class="pre">Val3</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10TruthTable9set_valueE8SizeType8SizeType4Val3" title="Link to this definition">¶</a><br /></dt>
+<dd><p>値をセットする． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i_index</strong> -- [in] 入力インデックス ( 0 &lt;= i_index &lt; 2^input_num() ) </p></li>
+<li><p><strong>o_index</strong> -- [in] 出力インデックス ( 0 &lt;= o_index &lt; <a class="reference internal" href="#d5/d36/classTruthTable_1adc653cd7505f70b36425badc3f44e0f3"><span class="std std-ref">output_num()</span></a> ) </p></li>
+<li><p><strong>val</strong> -- [in] 値 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable11get_supportE8SizeType">
+<span id="_CPPv3NK10TruthTable11get_supportE8SizeType"></span><span id="_CPPv2NK10TruthTable11get_supportE8SizeType"></span><span id="TruthTable::get_support__SizeTypeC"></span><span class="target" id="d5/d36/classTruthTable_1ae2acac0417b84c1a8c6e9a3a7798e7c0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_support</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">SizeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">o_index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable11get_supportE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<dd><p>サポートを得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>o_index</strong> -- [in] 出力番号 ( 0 &lt;= o_index &lt; <a class="reference internal" href="#d5/d36/classTruthTable_1adc653cd7505f70b36425badc3f44e0f3"><span class="std std-ref">output_num()</span></a> ) </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>サポートかどうかのビットベクタを返す． </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable5printERNSt7ostreamE">
+<span id="_CPPv3NK10TruthTable5printERNSt7ostreamE"></span><span id="_CPPv2NK10TruthTable5printERNSt7ostreamE"></span><span id="TruthTable::print__osRC"></span><span class="target" id="d5/d36/classTruthTable_1a58d7d4b0fd079513b3e58958731f1828"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable5printERNSt7ostreamE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を出力する． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> -- [in] 出力ストリーム </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable7bin_strEv">
+<span id="_CPPv3NK10TruthTable7bin_strEv"></span><span id="_CPPv2NK10TruthTable7bin_strEv"></span><span id="TruthTable::bin_strC"></span><span class="target" id="d5/d36/classTruthTable_1aa0885625fe32c350c04ceb420180352c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bin_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable7bin_strEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を表すBIN文字列を返す． </p>
+<p><a class="reference internal" href="#d5/d36/classTruthTable_1aaac1c83217cd33f1647c0da194d146a1"><span class="std std-ref">from_bin()</span></a> で用いる文字列と同一の形式 </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10TruthTable7hex_strEv">
+<span id="_CPPv3NK10TruthTable7hex_strEv"></span><span id="_CPPv2NK10TruthTable7hex_strEv"></span><span id="TruthTable::hex_strC"></span><span class="target" id="d5/d36/classTruthTable_1abee81df3d46a1cf366fab27a3eec75d7"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hex_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10TruthTable7hex_strEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>内容を表すHEX文字列を返す． </p>
+<p><a class="reference internal" href="#d5/d36/classTruthTable_1a32068a9c8776fac99d3277470acbed11"><span class="std std-ref">from_hex()</span></a> で用いる文字列と同一の形式 </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10TruthTable9read_fileERKNSt6stringE">
+<span id="_CPPv3N10TruthTable9read_fileERKNSt6stringE"></span><span id="_CPPv2N10TruthTable9read_fileERKNSt6stringE"></span><span id="TruthTable::read_file__ssCR"></span><span class="target" id="d5/d36/classTruthTable_1a16c54761dcb5f243b6f4a51b6c0ec257"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410TruthTable" title="TruthTable"><span class="n"><span class="pre">TruthTable</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_file</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10TruthTable9read_fileERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>ファイルを読み込む． </p>
+<p>
+ファイルの形式は IWLS2023 のベンチマークの形式 エラーの場合は std::invalid_argument を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>結果の <a class="reference internal" href="#d5/d36/classTruthTable"><span class="std std-ref">TruthTable</span></a> を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10TruthTable8from_binERKNSt6stringE">
+<span id="_CPPv3N10TruthTable8from_binERKNSt6stringE"></span><span id="_CPPv2N10TruthTable8from_binERKNSt6stringE"></span><span id="TruthTable::from_bin__ssCR"></span><span class="target" id="d5/d36/classTruthTable_1aaac1c83217cd33f1647c0da194d146a1"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410TruthTable" title="TruthTable"><span class="n"><span class="pre">TruthTable</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">from_bin</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">str</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10TruthTable8from_binERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>BIN 形式の文字列から変換する． </p>
+<p>
+文字列は &lt;ni&gt;':'&lt;no&gt;':'&lt;bin_str&gt; の形式を仮定する． &lt;bin_str&gt; の長さは (2^&lt;ni&gt;) * &lt;no&gt;) ただし，一つの出力ごとに区切って2進文字列に 変換する． 使用可能な文字は '0', '1', '-', '*' エラーの場合は std::invalid_argument を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>str</strong> -- [in] 文字列 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>結果の <a class="reference internal" href="#d5/d36/classTruthTable"><span class="std std-ref">TruthTable</span></a> を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10TruthTable8from_hexERKNSt6stringE">
+<span id="_CPPv3N10TruthTable8from_hexERKNSt6stringE"></span><span id="_CPPv2N10TruthTable8from_hexERKNSt6stringE"></span><span id="TruthTable::from_hex__ssCR"></span><span class="target" id="d5/d36/classTruthTable_1a32068a9c8776fac99d3277470acbed11"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410TruthTable" title="TruthTable"><span class="n"><span class="pre">TruthTable</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">from_hex</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">str</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10TruthTable8from_hexERKNSt6stringE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>HEX 形式の文字列から変換する． </p>
+<p>
+文字列は &lt;ni&gt;':'&lt;no&gt;':'&lt;hex_str&gt; の形式を仮定する． &lt;hex_str&gt; の長さは ((2^&lt;ni&gt;) * &lt;no&gt;) / 4 ただし，一つの出力ごとに区切って16進文字列に 変換する． なので1入力以下の関数は表せない． エラーの場合は std::invalid_argument を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>str</strong> -- [in] 文字列 </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>結果の <a class="reference internal" href="#d5/d36/classTruthTable"><span class="std std-ref">TruthTable</span></a> を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.4.3. TruthTable</a><ul>
+<li><a class="reference internal" href="#_CPPv410TruthTable"><code class="docutils literal notranslate"><span class="pre">TruthTable</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N10TruthTable10TruthTableEv"><code class="docutils literal notranslate"><span class="pre">TruthTable()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10TruthTable10TruthTableE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">TruthTable()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10TruthTableD0Ev"><code class="docutils literal notranslate"><span class="pre">~TruthTable()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable9input_numEv"><code class="docutils literal notranslate"><span class="pre">input_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable10output_numEv"><code class="docutils literal notranslate"><span class="pre">output_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable12encode_indexEKNSt6vectorIbEE"><code class="docutils literal notranslate"><span class="pre">encode_index()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable12decode_indexE8SizeType"><code class="docutils literal notranslate"><span class="pre">decode_index()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable9get_valueE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">get_value()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10TruthTable9set_valueE8SizeType8SizeType4Val3"><code class="docutils literal notranslate"><span class="pre">set_value()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable11get_supportE8SizeType"><code class="docutils literal notranslate"><span class="pre">get_support()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable5printERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">print()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable7bin_strEv"><code class="docutils literal notranslate"><span class="pre">bin_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10TruthTable7hex_strEv"><code class="docutils literal notranslate"><span class="pre">hex_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10TruthTable9read_fileERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_file()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10TruthTable8from_binERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">from_bin()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10TruthTable8from_hexERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">from_hex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="tvfuncm.html"
+                          title="前の章へ"><span class="section-number">1.2.4.2. </span>TvFuncM</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="tv2sop.html"
+                          title="次の章へ"><span class="section-number">1.2.4.4. </span>Tv2Sop</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/logic/truthtable.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="tv2sop.html" title="1.2.4.4. Tv2Sop"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="tvfuncm.html" title="1.2.4.2. TvFuncM"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="logic.html" ><span class="section-number">1. </span>論理式と論理関数を扱うグループ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="classes.html" ><span class="section-number">1.2. </span>クラス一覧</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="tv_grp.html" ><span class="section-number">1.2.4. </span>真理値表を扱うサブグループ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">1.2.4.3. </span>TruthTable</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+SopCube
+~~~~~~~~
+
+.. doxygenclass:: SopCube
+   :members:

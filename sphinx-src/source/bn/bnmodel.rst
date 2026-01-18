@@ -1,5 +1,5 @@
 BnModel
-==========
+~~~~~~~~~~
 
 .. doxygenclass:: BnModel
    :members:

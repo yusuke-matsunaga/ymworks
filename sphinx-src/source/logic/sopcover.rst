@@ -1,0 +1,5 @@
+SopCover
+~~~~~~~~
+
+.. doxygenclass:: SopCover
+   :members:

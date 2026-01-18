@@ -1,0 +1,5 @@
+BddCube
+~~~~~~~~
+
+.. doxygenclass:: BddCube
+   :members:

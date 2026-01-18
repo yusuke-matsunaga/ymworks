@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>3.1. 概要 &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="3.2. ファイル入出力" href="io.html" />
+    <link rel="prev" title="3. AIG(And Inverter Graph)" href="aig.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="io.html" title="3.2. ファイル入出力"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="aig.html" title="3. AIG(And Inverter Graph)"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aig.html" accesskey="U"><span class="section-number">3. </span>AIG(And Inverter Graph)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1. </span>概要</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">3.1. </span>概要<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>AIGとは AND-INVERTER-GRAPH の略で，2入力ANDゲートとインバーターのみで
+論理回路の構造を表すものである．
+ただし，正確には単純なDFFも含むので同期式順序回路を表すことができる．
+別の見方をすると，Boolean Network のノードを2入力ANDに限定したものと言
+える．
+ただし，厳密にはインバータ(枝の反転属性)を表すために2入力ANDのN同値類
+(入力の極性を反転させたときにANDと一致するもの)に限定している．
+基本的な概念は abc の AIG と同一だが，実装に関しては全く異なっている．</p>
+<p>AigMgr が回路全体を表す.
+AIGは入力，および出力と内部にDFFとANDノードを持つ．
+外部出力のソースやANDノードのファンインを表す枝は
+単純に他のANDノード，入力ノードを指している場合もあれば，
+反転している場合もある．
+そこで，ノードと反転属性の情報を合わせて AigLiteral で表す．
+AigLiteral の実体はノード番号と1ビットの反転属性である．
+AigMgr ではメンバ関数の呼び出しに伴って内部のノード番号が
+変更される可能性があるため，AigLiteral の値を保持するときには
+注意が必要となる．</p>
+<p>AigMgr の実装は実体を表すクラスへのスマートポインタとなっている．
+そのためユーザーが AigMgr 内部のリソース管理を気にする必要はない．
+AigMgr の変数をコピーしたり代入した場合は同じ実体を表すオブジェクトが
+共有されるだけで実際の複製は行われない．
+もしも，同様の内容の複製を作る場合には AigMgr::copy() を用いる．</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="aig.html"
+                          title="前の章へ"><span class="section-number">3. </span>AIG(And Inverter Graph)</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="io.html"
+                          title="次の章へ"><span class="section-number">3.2. </span>ファイル入出力</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/aig/intro.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="io.html" title="3.2. ファイル入出力"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="aig.html" title="3. AIG(And Inverter Graph)"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="aig.html" ><span class="section-number">3. </span>AIG(And Inverter Graph)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">3.1. </span>概要</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    </div>
+  </body>
+</html>

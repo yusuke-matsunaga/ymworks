@@ -1,0 +1,5 @@
+BcGraph
+~~~~~~~~
+
+.. doxygenclass:: BcGraph
+   :members:

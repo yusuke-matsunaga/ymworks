@@ -8,6 +8,9 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
+/// @defgroup AigGroup
+///
+/// AIG に関するグループ
 
 //////////////////////////////////////////////////////////////////////
 // ym-common のコンフィギュレーションファイル

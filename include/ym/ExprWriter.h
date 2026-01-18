@@ -25,7 +25,7 @@ class ExprWriter
 {
 public:
 
-  /// @breif 変数名の辞書
+  /// @brief 変数名の辞書
   using VarNameDict = std::unordered_map<SizeType, std::string>;
 
 public:

@@ -1,0 +1,5 @@
+ClibBundle
+~~~~~~~~~~~
+
+.. doxygenclass:: ClibBundle
+   :members:

@@ -16,6 +16,7 @@ BEGIN_NAMESPACE_YM_AIG
 //////////////////////////////////////////////////////////////////////
 /// @class AigLiteral AigLiteral.h "ym/AigLiteral.h"
 /// @brief AIG のノードを指す枝を表すクラス
+/// @ingroup AigGroup
 ///
 /// - 実際にはノード番号と極性をパックしたもの．
 /// - ノード番号は AigMgr::cleanup() で変わる可能性があるので注意
