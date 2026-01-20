@@ -49,14 +49,14 @@ CiPatMgr::pat_num() const
 // @brief パタンを返す．
 const CiPatGraph&
 CiPatMgr::pat(
-  SizeType id
+  SizeType pat_id
 ) const
 {
   // CiPatGraph の定義が必要なのでヘッダファイルに書けない．
-  if ( id < 0 || pat_num() <= id ) {
-    throw std::out_of_range{"id is out of range"};
+  if ( pat_id >= pat_num() ) {
+    throw std::out_of_range{"'pat_id' is out of range"};
   }
-  return mPatArray[id];
+  return mPatArray[pat_id];
 }
 
 // @brief ノード数を設定する．

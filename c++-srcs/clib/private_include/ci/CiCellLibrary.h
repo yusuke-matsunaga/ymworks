@@ -216,11 +216,10 @@ public:
   /// @brief 位置からセルの取得
   const CiCell*
   cell(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < cell_num() )
+    SizeType id ///< [in] 位置番号 ( 0 <= id < cell_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < cell_num() );
-    return mCellList[pos].get();
+    return _cell(id);
   }
 
   /// @brief 名前からのセルの取得
@@ -238,10 +237,12 @@ public:
     const ShString& name
   ) const
   {
-    if ( mCellDict.count(name) > 0 ) {
-      return mCellDict.at(name);
+    if ( mCellDict.count(name) == 0 ) {
+      std::ostringstream buf;
+      buf << name << ": not found";
+      throw std::out_of_range{buf.str()};
     }
-    return nullptr;
+    return mCellDict.at(name);
   }
 
   /// @brief セルのリストの取得
@@ -261,11 +262,10 @@ public:
   /// @brief セルグループの取得
   const CiCellGroup*
   cell_group(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < cell_group_num() )
+    SizeType id ///< [in] 位置 ( 0 <= id < cell_group_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < cell_group_num() );
-    return mCellGroupList[pos].get();
+    return _cell_group(id);
   }
 
   /// @brief セルグループのリストの取得
@@ -285,11 +285,10 @@ public:
   /// @brief NPN同値クラスの取得
   const CiCellClass*
   npn_class(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < npn_class_num() )
+    SizeType id ///< [in] 位置 ( 0 <= pos < id_class_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < npn_class_num() );
-    return mCellClassList[pos].get();
+    return _cell_class(id);
   }
 
   /// @brief NPN同値クラス番号のリストの取得
@@ -340,7 +339,7 @@ public:
   ) const
   {
     if ( ni < 2 || 4 < ni ) {
-      throw std::invalid_argument{"'ni' is out of range"};
+      throw std::out_of_range{"'ni' is out of range"};
     }
     auto index = ni - 2;
     return mLogicGroup[AND_BASE + index];
@@ -353,7 +352,7 @@ public:
   ) const
   {
     if ( ni < 2 || 4 < ni ) {
-      throw std::invalid_argument{"'ni' is out of range"};
+      throw std::out_of_range{"'ni' is out of range"};
     }
     auto index = ni - 2;
     return mLogicGroup[NAND_BASE + index];
@@ -366,7 +365,7 @@ public:
   ) const
   {
     if ( ni < 2 || 4 < ni ) {
-      throw std::invalid_argument{"'ni' is out of range"};
+      throw std::out_of_range{"'ni' is out of range"};
     }
     auto index = ni - 2;
     return mLogicGroup[OR_BASE + index];
@@ -379,7 +378,7 @@ public:
   ) const
   {
     if ( ni < 2 || 4 < ni ) {
-      throw std::invalid_argument{"'ni' is out of range"};
+      throw std::out_of_range{"'ni' is out of range"};
     }
     auto index = ni - 2;
     return mLogicGroup[NOR_BASE + index];
@@ -392,7 +391,7 @@ public:
   ) const
   {
     if ( ni < 2 || 4 < ni ) {
-      throw std::invalid_argument{"'ni' is out of range"};
+      throw std::out_of_range{"'ni' is out of range"};
     }
     auto index = ni - 2;
     return mLogicGroup[XOR_BASE + index];
@@ -405,7 +404,7 @@ public:
   ) const
   {
     if ( ni < 2 || 4 < ni ) {
-      throw std::invalid_argument{"'ni' is out of range"};
+      throw std::out_of_range{"'ni' is out of range"};
     }
     auto index = ni - 2;
     return mLogicGroup[XNOR_BASE + index];
@@ -777,7 +776,10 @@ public:
     SizeType id ///< [in] ID番号
   ) const
   {
-    return mCellClassList[id].get();
+    if ( id >= npn_class_num() ) {
+      throw std::out_of_range{"'id' is out of range"};
+    }
+   return mCellClassList[id].get();
   }
 
   /// @brief セルグループを得る．
@@ -786,6 +788,9 @@ public:
     SizeType id ///< [in] ID番号
   ) const
   {
+    if ( id >= cell_group_num() ) {
+      throw std::out_of_range{"'id' is out of range"};
+    }
     return mCellGroupList[id].get();
   }
 
@@ -795,6 +800,9 @@ public:
     SizeType id ///< [in] ID番号
   ) const
   {
+    if ( id >= cell_num() ) {
+      throw std::out_of_range{"'id' is out of range"};
+    }
     return mCellList[id].get();
   }
 
@@ -839,7 +847,7 @@ public:
 
   /// @brief ピン名からピンを取り出す．
   ///
-  /// 見つからない場合は nullptr を返す．
+  /// 見つからない場合は std::out_of_range 例外を送出する．
   const CiPin*
   find_pin(
     const CiCell* cell, ///< [in] セル
@@ -851,7 +859,7 @@ public:
 
   /// @brief バス名からバスを取り出す．
   ///
-  /// 見つからない場合は nullptr を返す．
+  /// 見つからない場合は std::out_of_range 例外を送出する．
   const CiBus*
   find_bus(
     const CiCell* cell, ///< [in] セル
@@ -863,7 +871,7 @@ public:
 
   /// @brief バンドル名からバンドル番号を取り出す．
   ///
-  /// 見つからない場合は nullptr を返す．
+  /// 見つからない場合は std::out_of_range 例外を送出する．
   const CiBundle*
   find_bundle(
     const CiCell* cell, ///< [in] セル番号

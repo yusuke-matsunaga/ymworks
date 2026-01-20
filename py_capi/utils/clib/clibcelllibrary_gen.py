@@ -137,7 +137,7 @@ class ClibCellLibraryGen(PyObjGen):
                       doc_str='comment')
 
         def get_time_unit(writer):
-            writer.gen_return_py_string('val.time_unit()')
+            writer.gen_return_py_string('val.time_unit().val()')
         self.add_getter('get_time_unit',
                         func_body=get_time_unit)
         self.add_attr('time_unit',
@@ -145,7 +145,7 @@ class ClibCellLibraryGen(PyObjGen):
                       doc_str='time unit')
 
         def get_voltage_unit(writer):
-            writer.gen_return_py_string('val.voltage_unit()')
+            writer.gen_return_py_string('val.voltage_unit().val()')
         self.add_getter('get_voltage_unit',
                         func_body=get_voltage_unit)
         self.add_attr('voltage_unit',
@@ -153,7 +153,7 @@ class ClibCellLibraryGen(PyObjGen):
                       doc_str='valtage unit')
 
         def get_current_unit(writer):
-            writer.gen_return_py_string('val.current_unit()')
+            writer.gen_return_py_string('val.current_unit().val()')
         self.add_getter('get_current_unit',
                         func_body=get_current_unit)
         self.add_attr('current_unit',
@@ -161,7 +161,7 @@ class ClibCellLibraryGen(PyObjGen):
                       doc_str='current unit')
 
         def get_pulling_resistance_unit(writer):
-            writer.gen_return_py_string('val.pulling_resistance_unit()')
+            writer.gen_return_py_string('val.pulling_resistance_unit().val()')
         self.add_getter('get_pulling_resistance_unit',
                         func_body=get_pulling_resistance_unit)
         self.add_attr('pulling_resistance_unit',
@@ -169,8 +169,8 @@ class ClibCellLibraryGen(PyObjGen):
                       doc_str='pulling resistance unit')
 
         def get_capacitive_load_unit(writer):
-            writer.gen_auto_assign('val1', 'PyFloat::ToPyObject(val.capacitive_load_unit())')
-            writer.gen_auto_assign('val2', 'PyString::ToPyObject(val.capacitive_load_unit_str())')
+            writer.gen_auto_assign('val1', 'PyFloat::ToPyObject(val.capacitive_load_unit().float_val())')
+            writer.gen_auto_assign('val2', 'PyString::ToPyObject(val.capacitive_load_unit().str_val())')
             writer.gen_return_buildvalue('(OO)', ['val1', 'val2'])
         self.add_getter('get_capacitive_load_unit',
                         func_body=get_capacitive_load_unit)
@@ -179,7 +179,7 @@ class ClibCellLibraryGen(PyObjGen):
                       doc_str='capacitive load unit')
 
         def get_leakage_power_unit(writer):
-            writer.gen_return_py_string('val.leakage_power_unit()')
+            writer.gen_return_py_string('val.leakage_power_unit().val()')
         self.add_getter('get_leakage_power_unit',
                         func_body=get_leakage_power_unit)
         self.add_attr('leakage_power_unit',

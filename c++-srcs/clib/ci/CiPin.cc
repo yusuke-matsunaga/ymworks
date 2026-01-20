@@ -141,98 +141,98 @@ CiPin::is_internal() const
 SizeType
 CiPin::input_id() const
 {
-  return 0;
+  throw std::logic_error{"not an input pin"};
 }
 
 // @brief 負荷容量を返す．
 ClibCapacitance
 CiPin::capacitance() const
 {
-  return ClibCapacitance(0.0);
+  throw std::logic_error{"not an input pin"};
 }
 
 // @brief 立ち上がり時の負荷容量を返す．
 ClibCapacitance
 CiPin::rise_capacitance() const
 {
-  return ClibCapacitance(0.0);
+  throw std::logic_error{"not an input pin"};
 }
 
 // @brief 立ち下がり時の負荷容量を返す．
 ClibCapacitance
 CiPin::fall_capacitance() const
 {
-  return ClibCapacitance(0.0);
+  throw std::logic_error{"not an input pin"};
 }
 
 // @brief 出力ピン番号を返す．
 SizeType
 CiPin::output_id() const
 {
-  return 0;
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief 最大ファンアウト容量を返す．
 ClibCapacitance
 CiPin::max_fanout() const
 {
-  return ClibCapacitance(0.0);
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief 最小ファンアウト容量を返す．
 ClibCapacitance
 CiPin::min_fanout() const
 {
-  return ClibCapacitance(0.0);
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief 最大負荷容量を返す．
 ClibCapacitance
 CiPin::max_capacitance() const
 {
-  return ClibCapacitance(0.0);
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief 最小負荷容量を返す．
 ClibCapacitance
 CiPin::min_capacitance() const
 {
-  return ClibCapacitance(0.0);
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief 最大遷移時間を返す．
 ClibTime
 CiPin::max_transition() const
 {
-  return ClibTime(0.0);
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief 最小遷移時間を返す．
 ClibTime
 CiPin::min_transition() const
 {
-  return ClibTime(0.0);
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief 論理式を返す．
 Expr
 CiPin::function() const
 {
-  return Expr::invalid();
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief tristate 条件式を返す．
 Expr
 CiPin::tristate() const
 {
-  return Expr::invalid();
+  throw std::logic_error{"not an output pin"};
 }
 
 // @brief 内部ピン番号を返す．
 SizeType
 CiPin::internal_id() const
 {
-  return 0;
+  throw std::logic_error{"not an internal pin"};
 }
 
 // @brief 内容をシリアライズする．

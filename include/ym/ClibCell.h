@@ -11,6 +11,10 @@
 #include "ym/clib.h"
 #include "ym/ClibCellPtr.h"
 #include "ym/ClibArea.h"
+#include "ym/ClibPin.h"
+#include "ym/ClibBus.h"
+#include "ym/ClibBundle.h"
+#include "ym/ClibTiming.h"
 #include "ym/ClibList2.h"
 #include "ym/Expr.h"
 

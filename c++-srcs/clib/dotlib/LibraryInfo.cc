@@ -180,6 +180,7 @@ LibraryInfo::set_piece_params()
       auto label = "'piece_define' has no effects on this delay model, ignored";
       warning(label);
     }
+    mLibrary->set_piece_params(ClibVarType::none, {});
   }
 }
 

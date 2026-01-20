@@ -36,10 +36,7 @@ public:
   ClibPatGraph(
     ClibLibraryPtr lib, ///< [in] 親のライブラリ
     SizeType id         ///< [in] ID番号
-  ) : mLibrary{lib},
-      mId{id}
-  {
-  }
+  );
 
   /// @brief デストラクタ
   ~ClibPatGraph() = default;

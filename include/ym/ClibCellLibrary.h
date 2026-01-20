@@ -10,6 +10,12 @@
 
 #include "ym/clib.h"
 #include "ym/logic.h"
+#include "ym/ClibUnit.h"
+#include "ym/ClibCell.h"
+#include "ym/ClibCellGroup.h"
+#include "ym/ClibCellClass.h"
+#include "ym/ClibSeqAttr.h"
+#include "ym/ClibPatGraph.h"
 #include "ym/ClibLibraryPtr.h"
 #include "ym/ClibList.h"
 
@@ -23,17 +29,25 @@ class CiCellLibrary;
 /// @class ClibCellLibrary ClibCellLibrary.h "ym/ClibCellLibrary.h"
 /// @brief セルライブラリを表すクラス
 ///
-/// 実際には実体の CiCellLibrary へのスマートポインタとなっている．
+/// - 実際には実体の CiCellLibrary へのスマートポインタとなっている．
 /// アプリケーション側では CiCellLibrary のメモリ管理について気にする
 /// 必要はない．
+/// - 空のコンストラクタで作られたオブジェクトは不正値となる．
+/// - 不正値に対しては is_valid() が false となる．
+/// - is_valid() = false の場合にはそれ以外のメソッド呼び出しが
+///   std::logic_error 例外を送出する．
 //////////////////////////////////////////////////////////////////////
 class ClibCellLibrary
 {
 public:
+  //////////////////////////////////////////////////////////////////////
+  /// @name 生成と破壊
+  /// @{
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief コンストラクタ
   ///
-  /// 空の状態で初期化される．
+  /// 不正値となる．
   ClibCellLibrary() = default;
 
   /// @brief 実体のポインタを引数にしたコンストラクタ
@@ -59,6 +73,10 @@ public:
 
   /// @brief デストラクタ
   ~ClibCellLibrary() = default;
+
+  //////////////////////////////////////////////////////////////////////
+  /// @}
+  //////////////////////////////////////////////////////////////////////
 
 
 public:
@@ -98,11 +116,18 @@ public:
   /// @{
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 内容を持っているときに true を返す．
+  /// @brief 適正な値を持っているときに true を返す．
   bool
   is_valid() const
   {
-    return mImpl != nullptr;
+    return mImpl.is_valid();
+  }
+
+  /// @brief 不正値の時 true を返す．
+  bool
+  is_invalid() const
+  {
+    return !is_valid();
   }
 
   /// @brief 名前の取得
@@ -170,35 +195,27 @@ public:
   comment() const;
 
   /// @brief 時間単位の取得
-  std::string
+  ClibTimeUnit
   time_unit() const;
 
   /// @brief 電圧単位の取得
-  std::string
+  ClibVoltageUnit
   voltage_unit() const;
 
   /// @brief 電流単位の取得
-  std::string
+  ClibCurrentUnit
   current_unit() const;
 
   /// @brief 抵抗単位の取得
-  std::string
+  ClibResistanceUnit
   pulling_resistance_unit() const;
 
   /// @brief 容量単位の取得
-  ///
-  /// なぜかここだけインターフェイスが異なる．
-  double
+  ClibCapacitanceUnit
   capacitive_load_unit() const;
 
-  /// @brief 容量単位文字列の取得
-  ///
-  /// なぜかここだけインターフェイスが異なる．
-  std::string
-  capacitive_load_unit_str() const;
-
   /// @brief 電力単位の取得
-  std::string
+  ClibPowerUnit
   leakage_power_unit() const;
 
   //////////////////////////////////////////////////////////////////////
@@ -218,6 +235,8 @@ public:
 
   /// @brief セル情報の取得
   /// @return 該当するセル情報を返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCell
   cell(
     SizeType cell_id ///< [in] セル番号 ( 0 <= cell_id < cell_num() )
@@ -226,7 +245,7 @@ public:
   /// @brief 名前からのセルの取得
   /// @return セルを返す．
   ///
-  /// なければ不正値を返す．
+  /// - 見つからなければ std::out_of_range 例外を送出する．
   ClibCell
   cell(
     const std::string& name ///< [in] セル名
@@ -241,6 +260,8 @@ public:
   cell_group_num() const;
 
   /// @brief セルグループの取得
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCellGroup
   cell_group(
     SizeType id ///< [in] グループ番号 ( 0 <= id < cell_group_num() )
@@ -255,6 +276,8 @@ public:
   npn_class_num() const;
 
   /// @brief NPN同値クラスの取得
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCellClass
   npn_class(
     SizeType id ///< [in] 同値クラス番号 ( 0 <= id < npn_class_num() )
@@ -271,7 +294,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  /// @name 論理セルの情報の取得
+  /// @name 論理セルグループの取得
   /// @{
   //////////////////////////////////////////////////////////////////////
 
@@ -292,36 +315,48 @@ public:
   inv_func() const;
 
   /// @brief ANDセルのグループを返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCellGroup
   and_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief NANDセルのグループを返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCellGroup
   nand_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief ORセルのグループを返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCellGroup
   or_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief NORセルのグループを返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCellGroup
   nor_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief XORセルのグループを返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCellGroup
   xor_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief XNORセルのグループを返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibCellGroup
   xnor_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
@@ -342,10 +377,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // FFセルの情報の取得
+  // FFセルクラスの取得
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 指定されたFFタイプのセルクラスを返す．
+  ///
+  /// @sa ClibSeqAttr
   ClibCellClassList
   find_ff_class(
     ClibSeqAttr attr ///< [in] FFタイプの属性
@@ -354,10 +391,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // ラッチセルの情報の取得
+  // ラッチセルクラスの取得
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 指定されたラッチタイプのセルクラスを返す．
+  ///
+  /// @sa ClibSeqAttr
   ClibCellClassList
   find_latch_class(
     ClibSeqAttr attr ///< [in] FFタイプの属性
@@ -375,6 +414,8 @@ public:
   pg_pat_num() const;
 
   /// @brief パタンを返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibPatGraph
   pg_pat(
     SizeType id ///< [in] パタン番号 ( 0 <= id < pg_pat_num() )
@@ -389,6 +430,8 @@ public:
   pg_node_num() const;
 
   /// @brief ノードの種類を返す．
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   ClibPatType
   pg_node_type(
     SizeType id ///< [in] ノード番号 ( 0 <= id < pg_node_num() )
@@ -396,7 +439,8 @@ public:
 
   /// @brief ノードが入力ノードの時に入力番号を返す．
   ///
-  /// 入力ノードでない場合の返り値は不定
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// - 入力ノードでない場合の返り値は不定
   SizeType
   pg_input_id(
     SizeType id ///< [in] ノード番号 ( 0 <= id < pg_node_num() )
@@ -404,9 +448,11 @@ public:
 
   /// @brief 入力のノード番号を返す．
   /// @return input_id の入力に対応するノードのノード番号
+  ///
+  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
   SizeType
   pg_input_node(
-    SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < pg_input_num() )
+    SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < pg_max_input() )
   ) const;
 
   /// @brief 総枝数を返す．

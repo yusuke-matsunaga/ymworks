@@ -18,6 +18,19 @@ BEGIN_NAMESPACE_YM_CLIB
 // クラス ClibPatGraph
 //////////////////////////////////////////////////////////////////////
 
+// @brief 内容を指定したコンストラクタ
+ClibPatGraph::ClibPatGraph(
+  ClibLibraryPtr lib,
+  SizeType id
+) : mLibrary{lib},
+    mId{id}
+{
+  _check_valid();
+  if ( mId >= mLibrary->pg_pat_num() ) {
+    throw std::out_of_range{"'id' is out of range"};
+  }
+}
+
 // @brief 代表クラスを返す．
 ClibCellClass
 ClibPatGraph::rep_class() const

@@ -23,19 +23,10 @@ class ImplBase
 {
 public:
 
-#if 0
-  /// @brief コンストラクタ
-  ImplBase(
-    const ModelImpl* model ///< [in] 親のモデル
-  ) : mModel{model}
-  {
-  }
-#else
   /// @brief コンストラクタ
   ImplBase(
     const ModelImpl* model ///< [in] 親のモデル
   );
-#endif
 
   /// @brief デストラクタ
   ~ImplBase() = default;

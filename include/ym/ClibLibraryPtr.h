@@ -53,24 +53,42 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief dereference 演算子
-  const CiCellLibrary*
-  operator->() const { return mPtr; }
-
-  /// @brief ->() の別名
-  const CiCellLibrary*
-  ptr() const { return mPtr; }
-
   /// @brief 適正な値を持っている時 true を返す．
   bool
-  is_valid() const { return mPtr != nullptr; }
+  is_valid() const
+  {
+    return mPtr != nullptr;
+  }
 
   /// @brief 不正値の時 true を返す．
   bool
-  is_invalid() const { return !is_valid(); }
+  is_invalid() const
+  {
+    return !is_valid();
+  }
 
   /// @brief is_valid() の別名
-  operator bool() const { return is_valid(); }
+  operator bool() const
+  {
+    return is_valid();
+  }
+
+  /// @brief dereference 演算子
+  const CiCellLibrary*
+  operator->() const
+  {
+    return ptr();
+  }
+
+  /// @brief ->() の別名
+  const CiCellLibrary*
+  ptr() const
+  {
+    if ( is_invalid() ) {
+      throw std::logic_error{"invalid data"};
+    }
+    return mPtr;
+  }
 
   /// @brief 等価比較演算子
   bool

@@ -177,16 +177,18 @@ public:
   /// @brief ピンの取得
   const CiPin*
   pin(
-    SizeType pos ///< [in] ピン番号 ( 0 <= pos < pin_num() )
+    SizeType pin_id ///< [in] ピン番号 ( 0 <= pin_id < pin_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < pin_num() );
-    return mPinList[pos].get();
+    if ( pin_id >= pin_num() ) {
+      throw std::out_of_range{"'pin_id' is out of range"};
+    }
+    return mPinList[pin_id].get();
   }
 
   /// @brief 名前からピンの取得
   ///
-  /// なければ nullptr を返す．
+  /// なければ std::out_of_range 例外を送出する．
   const CiPin*
   find_pin(
     const ShString& name ///< [in] ピン名
@@ -216,11 +218,13 @@ public:
   /// @brief 入力ピンの取得
   const CiPin*
   input(
-    SizeType pos ///< [in] 入力番号 ( 0 <= pos < input2_num() )
+    SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < input2_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < input2_num() );
-    return mInputList[pos];
+    if ( input_id >= input2_num() ) {
+      throw std::out_of_range{"'input_id' is out of range"};
+    }
+    return mInputList[input_id];
   }
 
   /// @brief 入力ピンのリストの取得
@@ -242,11 +246,13 @@ public:
   /// pos >= output_num() の場合には入出力ピンが返される．
   const CiPin*
   output(
-    SizeType pos ///< [in] 出力番号 ( 0 <= id < output2_num() )
+    SizeType output_id ///< [in] 出力番号 ( 0 <= output_id < output2_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < output2_num() );
-    return mOutputList[pos];
+    if ( output_id >= output2_num() ) {
+      throw std::out_of_range{"'output_id' is out of range"};
+    }
+    return mOutputList[output_id];
   }
 
   /// @brief 出力ピンのリスト
@@ -266,11 +272,13 @@ public:
   /// @brief 入出力ピンの取得
   const CiPin*
   inout(
-    SizeType id ///< [in] 番号 ( 0 <= id < inout_num() )
+    SizeType inout_id ///< [in] 番号 ( 0 <= id < inout_num() )
   ) const
   {
-    ASSERT_COND( 0 <= id && id < inout_num() );
-    return mInputList[id + input_num()];
+    if ( inout_id >= inout_num() ) {
+      throw std::out_of_range{"'inout_id' is out of range"};
+    }
+    return mInputList[inout_id + input_num()];
   }
 
   /// @brief 入出力ピン番号のリストの先頭
@@ -308,11 +316,13 @@ public:
   /// @brief 内部ピンの取得
   const CiPin*
   internal(
-    SizeType pos ///< [in] 内部ピン番号 ( 0 <= pos < internal_num() )
+    SizeType internal_id ///< [in] 内部ピン番号 ( 0 <= internal_id < internal_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < mInternalList.size() );
-    return mInternalList[pos].get();
+    if ( internal_id >= internal_num() ) {
+      throw std::out_of_range{"'internal_id' is out of range"};
+    }
+    return mInternalList[internal_id].get();
   }
 
   /// @brief 内部ピンのリスト
@@ -332,14 +342,18 @@ public:
   /// @brief バスの取得
   const CiBus*
   bus(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < bus_num() )
+    SizeType bus_id ///< [in] 位置番号 ( 0 <= bus_id < bus_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < bus_num() );
-    return mBusList[pos].get();
+    if ( bus_id >= bus_num() ) {
+      throw std::out_of_range{"'bus_id' is out of range"};
+    }
+    return mBusList[bus_id].get();
   }
 
   /// @brief 名前からバスの取得
+  ///
+  /// なければ std::out_of_range 例外を送出する．
   const CiBus*
   find_bus(
     const ShString& name ///< [in] 名前
@@ -369,14 +383,18 @@ public:
   /// @brief バンドルの取得
   const CiBundle*
   bundle(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < bundle_num() )
+    SizeType bundle_id ///< [in] 位置番号 ( 0 <= bundle_id < bundle_num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < bundle_num() );
-    return mBundleList[pos].get();
+    if ( bundle_id >= bundle_num() ) {
+      throw std::out_of_range{"'bundle_id' is out of range"};
+    }
+    return mBundleList[bundle_id].get();
   }
 
   /// @brief 名前からバスの取得
+  ///
+  /// なければ std::out_of_range 例外を送出する．
   const CiBundle*
   find_bundle(
     const ShString& name ///< [in] 名前
@@ -405,11 +423,17 @@ public:
   /// @brief 条件に合致するタイミング情報のインデックスのリストを返す．
   const std::vector<const CiTiming*>&
   timing_list(
-    SizeType ipos,        ///< [in] 開始ピン番号 ( 0 <= ipos < input_num2() )
-    SizeType opos,        ///< [in] 終了ピン番号 ( 0 <= opos < output_num2() )
+    SizeType ipos,        ///< [in] 開始ピン番号 ( 0 <= ipos < input2_num() )
+    SizeType opos,        ///< [in] 終了ピン番号 ( 0 <= opos < output2_num() )
     ClibTimingSense sense ///< [in] タイミング情報の摘要条件
   ) const
   {
+    if ( ipos >= input2_num() ) {
+      throw std::out_of_range{"'ipos' is out of range"};
+    }
+    if ( opos >= output2_num() ) {
+      throw std::out_of_range{"'opos' is out of range"};
+    }
     SizeType base = (opos * input2_num() + ipos) * 2;
     switch ( sense ) {
     case ClibTimingSense::positive_unate: base += 0; break;

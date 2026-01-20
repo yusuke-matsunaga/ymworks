@@ -332,8 +332,7 @@ Writer::run(
 
   // 容量単位
   s << "  capacitive_load_unit: "
-    << mLibrary.capacitive_load_unit()
-    << mLibrary.capacitive_load_unit_str() << std::endl;
+    << mLibrary.capacitive_load_unit() << std::endl;
 
   // 電力単位
   s << "  leakage_power_unit: "

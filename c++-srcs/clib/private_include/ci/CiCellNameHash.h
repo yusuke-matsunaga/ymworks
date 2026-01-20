@@ -61,7 +61,7 @@ public:
   /// @brief 要素を取り出す．
   /// @return cell の name という要素を返す．
   ///
-  /// なければ nullptr を返す．
+  /// 見つからない場合は std::out_of_range 例外を送出する．
   const T*
   get(
     const CiCell* cell, ///< [in] ピンの親のセル
@@ -69,12 +69,12 @@ public:
   ) const
   {
     Key key{cell, name};
-    if ( mDict.count(key) > 0 ) {
-      return mDict.at(key);
+    if ( mDict.count(key) == 0 ) {
+      std::ostringstream buf;
+      buf << name << " not foud";
+      throw std::out_of_range{buf.str()};
     }
-    else {
-      return nullptr;
-    }
+    return mDict.at(key);
   }
 
 

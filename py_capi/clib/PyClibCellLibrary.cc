@@ -1136,7 +1136,7 @@ get_time_unit(
 {
   auto& val = PyClibCellLibrary::_get_ref(self);
   try {
-    return PyString::ToPyObject(val.time_unit());
+    return PyString::ToPyObject(val.time_unit().val());
   }
   catch ( std::exception err ) {
     std::ostringstream buf;
@@ -1154,7 +1154,7 @@ get_voltage_unit(
 {
   auto& val = PyClibCellLibrary::_get_ref(self);
   try {
-    return PyString::ToPyObject(val.voltage_unit());
+    return PyString::ToPyObject(val.voltage_unit().val());
   }
   catch ( std::exception err ) {
     std::ostringstream buf;
@@ -1172,7 +1172,7 @@ get_current_unit(
 {
   auto& val = PyClibCellLibrary::_get_ref(self);
   try {
-    return PyString::ToPyObject(val.current_unit());
+    return PyString::ToPyObject(val.current_unit().val());
   }
   catch ( std::exception err ) {
     std::ostringstream buf;
@@ -1190,7 +1190,7 @@ get_pulling_resistance_unit(
 {
   auto& val = PyClibCellLibrary::_get_ref(self);
   try {
-    return PyString::ToPyObject(val.pulling_resistance_unit());
+    return PyString::ToPyObject(val.pulling_resistance_unit().val());
   }
   catch ( std::exception err ) {
     std::ostringstream buf;
@@ -1208,8 +1208,8 @@ get_capacitive_load_unit(
 {
   auto& val = PyClibCellLibrary::_get_ref(self);
   try {
-    auto val1 = PyFloat::ToPyObject(val.capacitive_load_unit());
-    auto val2 = PyString::ToPyObject(val.capacitive_load_unit_str());
+    auto val1 = PyFloat::ToPyObject(val.capacitive_load_unit().float_val());
+    auto val2 = PyString::ToPyObject(val.capacitive_load_unit().str_val());
     return Py_BuildValue("(OO)", val1, val2);
   }
   catch ( std::exception err ) {
@@ -1228,7 +1228,7 @@ get_leakage_power_unit(
 {
   auto& val = PyClibCellLibrary::_get_ref(self);
   try {
-    return PyString::ToPyObject(val.leakage_power_unit());
+    return PyString::ToPyObject(val.leakage_power_unit().val());
   }
   catch ( std::exception err ) {
     std::ostringstream buf;

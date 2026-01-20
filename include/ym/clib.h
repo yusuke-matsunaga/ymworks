@@ -49,6 +49,13 @@ class ClibTime;
 class ClibCapacitance;
 class ClibResistance;
 
+class ClibTimeUnit;
+class ClibVoltageUnit;
+class ClibCurrentUnit;
+class ClibResistanceUnit;
+class ClibCapacitanceUnit;
+class ClibPowerUnit;
+
 class ClibCellLibrary;
 class ClibCell;
 class ClibPin;
@@ -74,6 +81,13 @@ using nsClib::ClibArea;
 using nsClib::ClibTime;
 using nsClib::ClibCapacitance;
 using nsClib::ClibResistance;
+
+using nsClib::ClibTimeUnit;
+using nsClib::ClibVoltageUnit;
+using nsClib::ClibCurrentUnit;
+using nsClib::ClibResistanceUnit;
+using nsClib::ClibCapacitanceUnit;
+using nsClib::ClibPowerUnit;
 
 using nsClib::ClibCellLibrary;
 using nsClib::ClibCell;

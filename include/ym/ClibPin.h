@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/ClibCellElem.h"
+#include "ym/ClibCapacitance.h"
 #include "ym/Expr.h"
 
 

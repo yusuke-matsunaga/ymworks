@@ -63,11 +63,11 @@ public:
   /// @brief ノードの種類を返す．
   ClibPatType
   node_type(
-    SizeType id ///< [in] ノード番号 ( 0 <= id < node_num() )
+    SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const
   {
-    ASSERT_COND( 0 <= id && id < node_num() );
-    return static_cast<ClibPatType>(mNodeTypeArray[id] & 3U);
+    _check_node_id(node_id);
+    return static_cast<ClibPatType>(mNodeTypeArray[node_id] & 3U);
   }
 
   /// @brief ノードが入力ノードの時に入力番号を返す．
@@ -75,20 +75,24 @@ public:
   /// 入力ノードでない場合の返り値は不定
   SizeType
   input_id(
-    SizeType id ///< [in] ノード番号 ( 0 <= id < node_num() )
+    SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const
   {
-    ASSERT_COND( 0 <= id && id < node_num() );
-    return (mNodeTypeArray[id] >> 2);
+    _check_node_id(node_id);
+    return (mNodeTypeArray[node_id] >> 2);
   }
 
   /// @brief 入力のノード番号を返す．
   /// @return input_id の入力に対応するノードのノード番号
   SizeType
   input_node(
-    SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < input_num() )
+    SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < max_input() )
   ) const
   {
+    if ( input_id >= max_input() ) {
+      throw std::out_of_range{"'input_id' is out of range"};
+    }
+    // 実はノード番号と同一
     return input_id;
   }
 
@@ -102,41 +106,41 @@ public:
   /// @brief 枝のファンイン元のノード番号を返す．
   SizeType
   edge_from(
-    SizeType id ///< [in] 枝番号 ( 0 <= id < edge_num() )
+    SizeType edge_id ///< [in] 枝番号 ( 0 <= edge_id < edge_num() )
   ) const
   {
-    ASSERT_COND( 0 <= id && id < edge_num() );
-    return (mEdgeArray[id] >> 1);
+    _check_edge_id(edge_id);
+    return (mEdgeArray[edge_id] >> 1);
   }
 
   /// @brief 枝のファンアウト先のノード番号を返す．
   SizeType
   edge_to(
-    SizeType id ///< [in] 枝番号 ( 0 <= id < edge_num() )
+    SizeType edge_id ///< [in] 枝番号 ( 0 <= edge_id < edge_num() )
   ) const
   {
-    ASSERT_COND( 0 <= id && id < edge_num() );
-    return (id / 2);
+    _check_edge_id(edge_id);
+    return (edge_id / 2);
   }
 
   /// @brief 枝のファンアウト先の入力位置( 0 or 1 ) を返す．
   SizeType
   edge_pos(
-    SizeType id ///< [in] 枝番号 ( 0 <= id < node_num() * 2 )
+    SizeType edge_id ///< [in] 枝番号 ( 0 <= edge_id < node_num() * 2 )
   ) const
   {
-    ASSERT_COND( 0 <= id && id < edge_num() );
-    return (id & 1U);
+    _check_edge_id(edge_id);
+    return (edge_id & 1U);
   }
 
   /// @brief 枝の反転属性を返す．
   bool
   edge_inv(
-    SizeType id ///< [in] 枝番号 ( 0 <= id < node_num() * 2 )
+    SizeType edge_id ///< [in] 枝番号 ( 0 <= edge_id < node_num() * 2 )
   ) const
   {
-    ASSERT_COND( 0 <= id && id < edge_num() );
-    return static_cast<bool>(mEdgeArray[id] & 1U);
+    _check_edge_id(edge_id);
+    return static_cast<bool>(mEdgeArray[edge_id] & 1U);
   }
 
   /// @brief 総パタン数を返す．
@@ -146,7 +150,7 @@ public:
   /// @brief パタンを返す．
   const CiPatGraph&
   pat(
-    SizeType id ///< [in] パタン番号 ( 0 <= id < pat_num() )
+    SizeType pat_id ///< [in] パタン番号 ( 0 <= pat_id < pat_num() )
   ) const;
 
   /// @brief バイナリダンプを行う．
@@ -207,6 +211,45 @@ public:
   restore(
     Deserializer& s ///< [in] デシリアライザ
   );
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ノード番号のチェック
+  void
+  _check_node_id(
+    SizeType node_id ///< [in] ノード番号
+  ) const
+  {
+    if ( node_id >= node_num() ) {
+      throw std::out_of_range{"'node_id' is out of range"};
+    }
+  }
+
+  /// @brief 枝番号のチェック
+  void
+  _check_edge_id(
+    SizeType edge_id ///< [in] 枝番号
+  ) const
+  {
+    if ( edge_id >= edge_num() ) {
+      throw std::out_of_range{"'edge_id' is out of range"};
+    }
+  }
+
+  /// @brief パタン番号のチェック
+  void
+  _check_pat_id(
+    SizeType pat_id ///< [in] パタン番号
+  ) const
+  {
+    if ( pat_id >= pat_num() ) {
+      throw std::out_of_range{"'pat_id' is out of range"};
+    }
+  }
 
 
 private:

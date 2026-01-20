@@ -169,11 +169,7 @@ CiCell::find_pin(
   const ShString& name
 ) const
 {
-  auto lib = library();
-  if ( lib != nullptr ) {
-    return lib->find_pin(this, name);
-  }
-  return nullptr;
+  return library()->find_pin(this, name);
 }
 
 // @brief 名前からバスの取得
@@ -182,11 +178,7 @@ CiCell::find_bus(
   const ShString& name
 ) const
 {
-  auto lib = library();
-  if ( lib != nullptr ) {
-    return lib->find_bus(this, name);
-  }
-  return nullptr;
+  return library()->find_bus(this, name);
 }
 
 // @brief 名前からバスの取得
@@ -195,11 +187,7 @@ CiCell::find_bundle(
   const ShString& name
 ) const
 {
-  auto lib = library();
-  if ( lib != nullptr ) {
-    return lib->find_bundle(this, name);
-  }
-  return nullptr;
+  return library()->find_bundle(this, name);
 }
 
 // @brief 入力ピンを追加する．
