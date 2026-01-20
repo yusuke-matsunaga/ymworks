@@ -31,6 +31,21 @@ TEST( BnModelTest, read_blif1)
   EXPECT_EQ( nd, model.dff_num() );
   EXPECT_EQ( ng, model.logic_num() );
 
+  EXPECT_THROW( model.input(ni),
+		std::out_of_range );
+  EXPECT_THROW( model.input_name(ni),
+		std::out_of_range );
+  EXPECT_THROW( model.output(no),
+		std::out_of_range );
+  EXPECT_THROW( model.output_name(no),
+		std::out_of_range );
+  EXPECT_THROW( model.dff(nd),
+		std::out_of_range );
+  EXPECT_THROW( model.dff_name(nd),
+		std::out_of_range );
+  EXPECT_THROW( model.logic(ng),
+		std::out_of_range );
+
   std::ostringstream s;
   model.write(s);
 

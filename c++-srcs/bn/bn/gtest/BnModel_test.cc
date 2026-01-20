@@ -35,55 +35,25 @@ TEST( BnModelTest, constructor1 )
   EXPECT_EQ( 0, model.logic_list().size() );
   EXPECT_EQ( 0, model.dff_num() );
   EXPECT_EQ( 0, model.func_num() );
-}
 
-TEST( BnModelTest, input_bad )
-{
-  BnModel model;
-
-  EXPECT_THROW( {model.input(0);}, std::out_of_range );
-}
-
-TEST( BnModelTest, input_name_bad )
-{
-  BnModel model;
-
-  EXPECT_THROW( {model.input_name(0);}, std::out_of_range );
-}
-
-TEST( BnModelTest, output_bad )
-{
-  BnModel model;
-
-  EXPECT_THROW( {model.output(0);}, std::out_of_range );
-}
-
-TEST( BnModelTest, output_name_bad )
-{
-  BnModel model;
-
-  EXPECT_THROW( {model.output_name(0);}, std::out_of_range );
-}
-
-TEST( BnModelTest, logic_bad )
-{
-  BnModel model;
-
-  EXPECT_THROW( {model.logic(0);}, std::out_of_range );
-}
-
-TEST( BnModelTest, dff_bad )
-{
-  BnModel model;
-
-  EXPECT_THROW( {model.dff(0);}, std::out_of_range );
-}
-
-TEST( BnModelTest, func_bad )
-{
-  BnModel model;
-
-  EXPECT_THROW( {model.func(0);}, std::out_of_range );
+  EXPECT_THROW( model.dff(0),
+		std::out_of_range );
+  EXPECT_THROW( model.dff_name(0),
+		std::out_of_range );
+  EXPECT_THROW( model.node(0),
+		std::out_of_range );
+  EXPECT_THROW( model.input(0),
+		std::out_of_range );
+  EXPECT_THROW( model.input_name(0),
+		std::out_of_range );
+  EXPECT_THROW( model.output(0),
+		std::out_of_range );
+  EXPECT_THROW( model.output_name(0),
+		std::out_of_range );
+  EXPECT_THROW( model.logic(0),
+		std::out_of_range );
+  EXPECT_THROW( model.func(0),
+		std::out_of_range );
 }
 
 TEST( BnModelTest, new_input )
