@@ -11,6 +11,7 @@
 #include "ym/ClibCellElem.h"
 #include "ym/ClibTime.h"
 #include "ym/ClibResistance.h"
+#include "ym/ClibLut.h"
 #include "ym/Expr.h"
 
 

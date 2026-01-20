@@ -369,7 +369,7 @@ CiCell::add_timing_piecewise(
   return timing;
 }
 
-// @brief タイミング情報を作る(非線形タイプ1)．
+// @brief タイミング情報を作る(非線形タイプ1, CiLut)．
 CiTiming*
 CiCell::add_timing_lut_cell(
   ClibTimingType timing_type,
@@ -390,7 +390,7 @@ CiCell::add_timing_lut_cell(
   return timing;
 }
 
-// @brief タイミング情報を作る(非線形タイプ2)．
+// @brief タイミング情報を作る(非線形タイプ2, CiLut)．
 CiTiming*
 CiCell::add_timing_lut_prop(
   ClibTimingType timing_type,
@@ -411,7 +411,7 @@ CiCell::add_timing_lut_prop(
   return timing;
 }
 
-// @brief タイミング情報を作る(非線形タイプ1)．
+// @brief タイミング情報を作る(非線形タイプ1, CiStLut)．
 CiTiming*
 CiCell::add_timing_lut_cell(
   ClibTimingType timing_type,
@@ -432,7 +432,7 @@ CiCell::add_timing_lut_cell(
   return timing;
 }
 
-// @brief タイミング情報を作る(非線形タイプ2)．
+// @brief タイミング情報を作る(非線形タイプ2, CiStLut)．
 CiTiming*
 CiCell::add_timing_lut_prop(
   ClibTimingType timing_type,

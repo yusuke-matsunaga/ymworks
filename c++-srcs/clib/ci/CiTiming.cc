@@ -160,42 +160,42 @@ CiTiming::new_Lut_prop(
 ClibTime
 CiTiming::intrinsic_rise() const
 {
-  return ClibTime(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち下がり固有遅延の取得
 ClibTime
 CiTiming::intrinsic_fall() const
 {
-  return ClibTime(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち上がりスロープ遅延の取得
 ClibTime
 CiTiming::slope_rise() const
 {
-  return ClibTime(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち下がりスロープ遅延の取得
 ClibTime
 CiTiming::slope_fall() const
 {
-  return ClibTime(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち上がり遷遅延の取得
 ClibResistance
 CiTiming::rise_resistance() const
 {
-  return ClibResistance(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち下がり遷移遅延の取得
 ClibResistance
 CiTiming::fall_resistance() const
 {
-  return ClibResistance(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち上がりピン抵抗の取得
@@ -204,7 +204,7 @@ CiTiming::rise_pin_resistance(
   SizeType piece_id
 ) const
 {
-  return ClibResistance(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち下がりピン抵抗の取得
@@ -213,7 +213,7 @@ CiTiming::fall_pin_resistance(
   SizeType piece_id
 ) const
 {
-  return ClibResistance(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち上がりY切片の取得
@@ -222,7 +222,7 @@ CiTiming::rise_delay_intercept(
   SizeType piece_id
 ) const
 {
-  return ClibTime(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち下がりY切片の取得
@@ -231,49 +231,49 @@ CiTiming::fall_delay_intercept(
   SizeType piece_id
 ) const
 {
-  return ClibTime(0.0);
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち上がり遷移遅延テーブルの取得
 const CiLut*
 CiTiming::rise_transition() const
 {
-  return nullptr;
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち下がり遷移遅延テーブルの取得
 const CiLut*
 CiTiming::fall_transition() const
 {
-  return nullptr;
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち上がり伝搬遅延テーブルの取得
 const CiLut*
 CiTiming::rise_propagation() const
 {
-  return nullptr;
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち下がり伝搬遅延テーブルの取得
 const CiLut*
 CiTiming::fall_propagation() const
 {
-  return nullptr;
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち上がりセル遅延テーブルの取得
 const CiLut*
 CiTiming::cell_rise() const
 {
-  return nullptr;
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 立ち下がりセル遅延テーブルの取得
 const CiLut*
 CiTiming::cell_fall() const
 {
-  return nullptr;
+  throw std::logic_error{"invalid parameter"};
 }
 
 // @brief 内容をシリアライズする．
@@ -609,8 +609,7 @@ CiTimingLut::calc_rise_transition(
   ClibCapacitance output_capacitance
 ) const
 {
-  throw std::invalid_argument{"Delay calculation of thid delay model is not implemented."};
-  return ClibTime{};
+  throw std::invalid_argument{"Delay calculation of this delay model is not implemented."};
 }
 
 // @brief 立ち下がり遷移時間を計算する．
@@ -620,8 +619,7 @@ CiTimingLut::calc_fall_transition(
   ClibCapacitance output_capacitance
 ) const
 {
-  throw std::invalid_argument{"Delay calculation of thid delay model is not implemented."};
-  return ClibTime{};
+  throw std::invalid_argument{"Delay calculation of this delay model is not implemented."};
 }
 
 // @brief 立ち上がり遷移遅延テーブルの取得
@@ -636,6 +634,34 @@ const CiLut*
 CiTimingLut::fall_transition() const
 {
   return mFallTransition.get();
+}
+
+// @brief 立ち上がり伝搬遅延テーブルの取得
+const CiLut*
+CiTimingLut::rise_propagation() const
+{
+  return nullptr;
+}
+
+// @brief 立ち下がり伝搬遅延テーブルの取得
+const CiLut*
+CiTimingLut::fall_propagation() const
+{
+  return nullptr;
+}
+
+// @brief 立ち上がりセル遅延テーブルの取得
+const CiLut*
+CiTimingLut::cell_rise() const
+{
+  return nullptr;
+}
+
+// @brief 立ち下がりセル遅延テーブルの取得
+const CiLut*
+CiTimingLut::cell_fall() const
+{
+  return nullptr;
 }
 
 // @brief 内容をバイナリダンプする．
@@ -671,8 +697,7 @@ CiTimingLut_cell::calc_rise_delay(
   ClibCapacitance output_capacitance
 ) const
 {
-  throw std::invalid_argument{"Delay calculation of thid delay model is not implemented."};
-  return ClibTime{};
+  throw std::invalid_argument{"Delay calculation of this delay model is not implemented."};
 }
 
 // @brief 立ち下がり遅延時間を計算する．
@@ -682,8 +707,7 @@ CiTimingLut_cell::calc_fall_delay(
   ClibCapacitance output_capacitance
 ) const
 {
-  throw std::invalid_argument{"Delay calculation of thid delay model is not implemented."};
-  return ClibTime{};
+  throw std::invalid_argument{"Delay calculation of this delay model is not implemented."};
 }
 
 // @brief 立ち上がりセル遅延テーブルの取得
@@ -735,8 +759,7 @@ CiTimingLut_prop::calc_rise_delay(
   ClibCapacitance output_capacitance
 ) const
 {
-  throw std::invalid_argument{"Delay calculation of thid delay model is not implemented."};
-  return ClibTime{};
+  throw std::invalid_argument{"Delay calculation of this delay model is not implemented."};
 }
 
 // @brief 立ち下がり遅延時間を計算する．
@@ -746,8 +769,7 @@ CiTimingLut_prop::calc_fall_delay(
   ClibCapacitance output_capacitance
 ) const
 {
-  throw std::invalid_argument{"Delay calculation of thid delay model is not implemented."};
-  return ClibTime{};
+  throw std::invalid_argument{"Delay calculation of this delay model is not implemented."};
 }
 
 // @brief 立ち上がり伝搬遅延テーブルの取得

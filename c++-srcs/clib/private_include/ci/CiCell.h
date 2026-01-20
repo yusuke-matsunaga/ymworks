@@ -674,7 +674,7 @@ public:
     const std::vector<ClibTime>& fall_delay_intercept
   );
 
-  /// @brief タイミング情報を作る(非線形タイプ1)．
+  /// @brief タイミング情報を作る(非線形タイプ1, CiLut)．
   /// @return 生成されたタイミングを返す．
   CiTiming*
   add_timing_lut_cell(
@@ -686,7 +686,7 @@ public:
     std::unique_ptr<CiLut>&& fall_transition
   );
 
-  /// @brief タイミング情報を作る(非線形タイプ2)．
+  /// @brief タイミング情報を作る(非線形タイプ2, CiLut)．
   /// @return 生成されたタイミングを返す．
   CiTiming*
   add_timing_lut_prop(
@@ -698,7 +698,7 @@ public:
     std::unique_ptr<CiLut>&& fall_propagation
   );
 
-  /// @brief タイミング情報を作る(非線形タイプ1)．
+  /// @brief タイミング情報を作る(非線形タイプ1, CiStLut)．
   /// @return 生成されたタイミングを返す．
   CiTiming*
   add_timing_lut_cell(
@@ -710,7 +710,7 @@ public:
     std::unique_ptr<CiStLut>&& fall_transition
   );
 
-  /// @brief タイミング情報を作る(非線形タイプ2)．
+  /// @brief タイミング情報を作る(非線形タイプ2, CiStLut)．
   /// @return 生成されたタイミングを返す．
   CiTiming*
   add_timing_lut_prop(

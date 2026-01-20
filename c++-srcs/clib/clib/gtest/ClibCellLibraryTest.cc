@@ -25,6 +25,14 @@ public:
     std::istream& s2
   );
 
+  void
+  check_lut(
+    ClibLut& lut,
+    const std::vector<ClibVarType>& var_list,
+    const std::vector<std::vector<double>>& index_list,
+    const std::vector<double>& value_list
+  );
+
 };
 
 void
@@ -42,6 +50,52 @@ ClibCellLibraryTest::check_lines(
   }
   getline(s2, buff2);
   EXPECT_FALSE( s2 );
+}
+
+void
+ClibCellLibraryTest::check_lut(
+  ClibLut& lut,
+  const std::vector<ClibVarType>& var_type_array,
+  const std::vector<std::vector<double>>& index_list_array,
+  const std::vector<double>& value_list
+)
+{
+  ASSERT_EQ( var_type_array.size(), lut.dimension() );
+  ASSERT_EQ( index_list_array.size(), lut.dimension() );
+
+  for ( SizeType i = 0; i < lut.dimension(); ++ i ) {
+    EXPECT_EQ( var_type_array[i], lut.variable_type(i) );
+  }
+
+  SizeType vsize = 1;
+  for ( SizeType i = 0; i < lut.dimension(); ++ i ) {
+    auto& index_list = index_list_array[i];
+    ASSERT_EQ( index_list.size(), lut.index_num(i) );
+    for ( SizeType j = 0; j < lut.index_num(i); ++ j ) {
+      EXPECT_FLOAT_EQ( index_list[j], lut.index(i, j) );
+    }
+    vsize *= lut.index_num(i);
+  }
+
+  ASSERT_EQ( value_list.size(), vsize );
+  std::vector<SizeType> pos_list(lut.dimension(), 0);
+  for ( auto value: value_list ) {
+    std::ostringstream buf;
+    const char* comma = "";
+    for ( SizeType i = 0; i < lut.dimension(); ++ i ) {
+      buf << comma << pos_list[i];
+      comma = ", ";
+    }
+    EXPECT_FLOAT_EQ( value, lut.grid_value(pos_list) ) << buf.str();
+    for ( SizeType i = 0; i < lut.dimension(); ++ i ) {
+      auto j = lut.dimension() - i - 1;
+      ++ pos_list[j];
+      if ( pos_list[j] < lut.index_num(j) ) {
+	break;
+      }
+      pos_list[j] = 0;
+    }
+  }
 }
 
 
@@ -211,7 +265,8 @@ TEST_F(ClibCellLibraryTest, read_liberty)
 		  std::out_of_range );
     EXPECT_THROW( library.cell("bad_name"),
 		  std::out_of_range );
-    {
+    { // Cell#0 のテスト
+      // 期待値をハードコーディングしている．
       auto cell0 = library.cell(0);
       ASSERT_TRUE( cell0.is_valid() );
       EXPECT_FALSE( cell0.is_invalid() );
@@ -239,7 +294,7 @@ TEST_F(ClibCellLibraryTest, read_liberty)
 		    std::out_of_range );
       EXPECT_THROW( cell0.pin("Z"),
 		    std::out_of_range );
-      {
+      { // Cell#0.Pin#0 のテスト
 	auto pin0 = cell0.pin(0);
 	EXPECT_EQ( 0, pin0.pin_id() );
 	ASSERT_TRUE( pin0.is_valid() );
@@ -281,7 +336,7 @@ TEST_F(ClibCellLibraryTest, read_liberty)
 	EXPECT_THROW( pin0.internal_id(),
 		      std::logic_error );
       }
-      {
+      { // Cell#0.Pin#1 のテスト
 	auto pin0 = cell0.pin(1);
 	EXPECT_EQ( 1, pin0.pin_id() );
 	ASSERT_TRUE( pin0.is_valid() );
@@ -323,7 +378,7 @@ TEST_F(ClibCellLibraryTest, read_liberty)
 	EXPECT_THROW( pin0.internal_id(),
 		      std::logic_error );
       }
-      {
+      { // Cell#0.Pin#2 のテスト
 	auto pin0 = cell0.pin(2);
 	EXPECT_EQ( 2, pin0.pin_id() );
 	ASSERT_TRUE( pin0.is_valid() );
@@ -370,9 +425,85 @@ TEST_F(ClibCellLibraryTest, read_liberty)
       EXPECT_THROW( cell0.bundle(0),
 		    std::out_of_range );
 
-      {
+      { // タイミングのテスト
 	auto tlist0 = cell0.timing_list(0, 0, ClibTimingSense::positive_unate);
-	EXPECT_EQ( 1, tlist0.size() );
+	ASSERT_EQ( 1, tlist0.size() );
+	auto timing0 = tlist0[0];
+	EXPECT_EQ( ClibTimingType::combinational, timing0.type() );
+	EXPECT_EQ( Expr::one(), timing0.timing_cond() );
+
+	EXPECT_THROW( timing0.intrinsic_rise(),
+		      std::logic_error );
+	EXPECT_THROW( timing0.intrinsic_fall(),
+		      std::logic_error );
+	EXPECT_THROW( timing0.slope_rise(),
+		      std::logic_error );
+	EXPECT_THROW( timing0.slope_fall(),
+		      std::logic_error );
+
+	EXPECT_THROW( timing0.rise_resistance(),
+		      std::logic_error );
+	EXPECT_THROW( timing0.fall_resistance(),
+		      std::logic_error );
+
+	EXPECT_THROW( timing0.rise_pin_resistance(0),
+		      std::logic_error );
+	EXPECT_THROW( timing0.fall_pin_resistance(0),
+		      std::logic_error );
+	EXPECT_THROW( timing0.rise_delay_intercept(0),
+		      std::logic_error );
+	EXPECT_THROW( timing0.fall_delay_intercept(0),
+		      std::logic_error );
+
+	auto rt = timing0.rise_transition();
+	check_lut(rt,
+		  {ClibVarType::total_output_net_capacitance,
+		   ClibVarType::input_net_transition},
+		  {{0.005, 0.05, 0.14, 0.3},
+		   {0.04, 0.92, 2}},
+		  {0.104, 0.132, 0.16,
+		   0.471, 0.477, 0.488,
+		   1.255, 1.256, 1.26,
+		   2.654, 2.654, 2.657});
+
+	auto ft = timing0.fall_transition();
+	check_lut(ft,
+		  {ClibVarType::total_output_net_capacitance,
+		   ClibVarType::input_net_transition},
+		  {{0.005, 0.05, 0.14, 0.3},
+		   {0.04, 0.92, 2}},
+		  {0.0849, 0.119, 0.132,
+		   0.249, 0.265, 0.286,
+		   0.615, 0.62, 0.629,
+		   1.284, 1.286, 1.291});
+
+	auto rp = timing0.rise_propagation();
+	EXPECT_FALSE( rp.is_valid() );
+
+	auto fp = timing0.fall_propagation();
+	EXPECT_FALSE( fp.is_valid() );
+
+	auto cr = timing0.cell_rise();
+	check_lut(cr,
+		  {ClibVarType::total_output_net_capacitance,
+		   ClibVarType::input_net_transition},
+		  {{0.005, 0.05, 0.14, 0.3},
+		   {0.04, 0.92, 2}},
+		  {0.116371, 0.207, 0.253,
+		   0.273441, 0.3695, 0.424,
+		   0.586702, 0.681321, 0.735,
+		   1.14, 1.234582, 1.289372});
+
+	auto cf = timing0.cell_fall();
+	check_lut(cf,
+		  {ClibVarType::total_output_net_capacitance,
+		   ClibVarType::input_net_transition},
+		  {{0.005, 0.05, 0.14, 0.3},
+		   {0.04, 0.92, 2}},
+		  {0.110102, 0.2175, 0.291,
+		   0.205085, 0.3285, 0.413,
+		   0.377483, 0.502, 0.5875,
+		   0.679562, 0.804, 0.8895});
       }
       {
 	auto tlist0 = cell0.timing_list(0, 0, ClibTimingSense::negative_unate);

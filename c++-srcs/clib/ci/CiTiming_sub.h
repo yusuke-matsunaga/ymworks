@@ -451,6 +451,22 @@ public:
   const CiLut*
   fall_transition() const override;
 
+  /// @brief 立ち上がり伝搬遅延テーブルの取得
+  const CiLut*
+  rise_propagation() const override;
+
+  /// @brief 立ち下がり伝搬遅延テーブルの取得
+  const CiLut*
+  fall_propagation() const override;
+
+  /// @brief 立ち上がりセル遅延テーブルの取得
+  const CiLut*
+  cell_rise() const override;
+
+  /// @brief 立ち下がりセル遅延テーブルの取得
+  const CiLut*
+  cell_fall() const override;
+
 
 protected:
   //////////////////////////////////////////////////////////////////////
