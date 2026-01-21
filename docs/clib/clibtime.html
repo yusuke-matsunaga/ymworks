@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>4.2.4. ClibTime &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="4.2.5. ClibCellLibrary" href="clibcelllibrary.html" />
     <link rel="prev" title="4.2.3. ClibResistance" href="clibresistance.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,19 +50,26 @@
           <div class="body" role="main">
             
   <section id="clibtime">
-<h1><span class="section-number">4.2.4. </span>ClibTime<a class="headerlink" href="#clibtime" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">4.2.4. </span>ClibTime<a class="headerlink" href="#clibtime" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv48ClibTime">
 <span id="_CPPv38ClibTime"></span><span id="_CPPv28ClibTime"></span><span id="ClibTime"></span><span class="target" id="df/dc2/classClibTime"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibTime</span></span></span><br /></dt>
 <dd><p>時間を表すクラス </p>
-<p>内容的には double そのものだが他の単位との演算が 行えないようになっている． <a class="reference internal" href="#df/dc2/classClibTime"><span class="std std-ref">ClibTime</span></a> 同士の演算も加減算のみ定義されている． </p>
+<p><ul class="simple">
+<li><p>内容的には double そのものだが他の単位との演算が 行えないようになっている．</p></li>
+<li><p><a class="reference internal" href="#df/dc2/classClibTime"><span class="std std-ref">ClibTime</span></a> 同士の演算も加減算のみ定義されている． </p></li>
+</ul>
+</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8ClibTime8ClibTimeEv">
 <span id="_CPPv3N8ClibTime8ClibTimeEv"></span><span id="_CPPv2N8ClibTime8ClibTimeEv"></span><span id="ClibTime::ClibTime"></span><span class="target" id="df/dc2/classClibTime_1a3fe566f9a56132ad23590e5586a30d9d"></span><span class="sig-name descname"><span class="n"><span class="pre">ClibTime</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
 <dd><p>空のコンストラクタ </p>
-<p>内容は 0.0 に初期化される． </p>
+<p><ul class="simple">
+<li><p>内容は 0.0 に初期化される． </p></li>
+</ul>
+</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -133,12 +144,6 @@
 <dt class="sig sig-object cpp" id="_CPPv4N8ClibTime8infinityEv">
 <span id="_CPPv3N8ClibTime8infinityEv"></span><span id="_CPPv2N8ClibTime8infinityEv"></span><span id="ClibTime::infinity"></span><span class="target" id="df/dc2/classClibTime_1a5bd954a4e6913e50b6a9c12fa8926453"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">infinity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>無限大の値を作るクラス関数 </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8ClibTime5inftyEv">
-<span id="_CPPv3N8ClibTime5inftyEv"></span><span id="_CPPv2N8ClibTime5inftyEv"></span><span id="ClibTime::infty"></span><span class="target" id="df/dc2/classClibTime_1a7e7266cb93199cbea694a884e457f416"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">infty</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
-<dd><p>無限大の値を作る． </p>
 </dd></dl>
 
 </div>
@@ -318,39 +323,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">4.2.4. ClibTime</a><ul>
-<li><a class="reference internal" href="#_CPPv48ClibTime"><code class="docutils literal notranslate"><span class="pre">ClibTime</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N8ClibTime8ClibTimeEv"><code class="docutils literal notranslate"><span class="pre">ClibTime()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTime8ClibTimeEd"><code class="docutils literal notranslate"><span class="pre">ClibTime()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimeD0Ev"><code class="docutils literal notranslate"><span class="pre">~ClibTime()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK8ClibTime5valueEv"><code class="docutils literal notranslate"><span class="pre">value()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimeaSERK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimepLERK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator+=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimemIERK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator-=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTime8infinityEv"><code class="docutils literal notranslate"><span class="pre">infinity()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTime5inftyEv"><code class="docutils literal notranslate"><span class="pre">infty()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimeplERK8ClibTimeRK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator+()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimemiERK8ClibTimeRK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimeeqERK8ClibTimeRK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimeneERK8ClibTimeRK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimeltERK8ClibTimeRK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator&lt;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimegtERK8ClibTimeRK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator&gt;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimeleERK8ClibTimeRK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator&lt;=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimegeERK8ClibTimeRK8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator&gt;=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimersERNSt7istreamER8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N8ClibTimersER6BinDecR8ClibTime"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="clibresistance.html"
@@ -368,7 +342,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -376,13 +350,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -404,8 +378,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.6.8. BddCube &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.6.9. ZddMgr" href="zddmgr.html" />
     <link rel="prev" title="1.2.6.7. BddLit" href="bddlit.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -47,10 +51,10 @@
           <div class="body" role="main">
             
   <section id="bddcube">
-<h1><span class="section-number">1.2.6.8. </span>BddCube<a class="headerlink" href="#bddcube" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">1.2.6.8. </span>BddCube<a class="headerlink" href="#bddcube" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv47BddCube">
-<span id="_CPPv37BddCube"></span><span id="_CPPv27BddCube"></span><span id="BddCube"></span><span class="target" id="d9/d05/classBddCube"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddCube</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="bddbase.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><a class="headerlink" href="#_CPPv47BddCube" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv37BddCube"></span><span id="_CPPv27BddCube"></span><span id="BddCube"></span><span class="target" id="d9/d05/classBddCube"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddCube</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><br /></dt>
 <dd><p>キューブを表す BDD のクラス </p>
 <p><ul class="simple">
 <li><p>ブール論理の世界においてはリテラルとは変数とその否定のみ</p></li>
@@ -64,8 +68,14 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCube7BddCubeERK6BddLit">
-<span id="_CPPv3N7BddCube7BddCubeERK6BddLit"></span><span id="_CPPv2N7BddCube7BddCubeERK6BddLit"></span><span id="BddCube::BddCube__BddLitCR"></span><span class="target" id="d9/d05/classBddCube_1a3523e2d2340330810fba3237be9b9799"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddCube</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddCube7BddCubeERK6BddLit" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCube7BddCubeERK6BddLit"></span><span id="_CPPv2N7BddCube7BddCubeERK6BddLit"></span><span id="BddCube::BddCube__BddLitCR"></span><span class="target" id="d9/d05/classBddCube_1a3523e2d2340330810fba3237be9b9799"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddCube</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p><a class="reference internal" href="bddlit.html#d0/dc3/classBddLit"><span class="std std-ref">BddLit</span></a> からの変換コンストラクタ </p>
+<p>
+lit のみを要素とする singleton を作る． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddlit.html#d0/dc3/classBddLit"><span class="std std-ref">BddLit</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>lit</strong> -- [in] リテラル </p>
@@ -75,7 +85,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCube7BddCubeERKNSt6vectorI6BddLitEE">
-<span id="_CPPv3N7BddCube7BddCubeERKNSt6vectorI6BddLitEE"></span><span id="_CPPv2N7BddCube7BddCubeERKNSt6vectorI6BddLitEE"></span><span id="BddCube::BddCube__std::vector:BddLit:CR"></span><span class="target" id="d9/d05/classBddCube_1a880f1d494f4b011edd8cfe7e7d4f4ded"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddCube</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit_list</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddCube7BddCubeERKNSt6vectorI6BddLitEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCube7BddCubeERKNSt6vectorI6BddLitEE"></span><span id="_CPPv2N7BddCube7BddCubeERKNSt6vectorI6BddLitEE"></span><span id="BddCube::BddCube__std::vector:BddLit:CR"></span><span class="target" id="d9/d05/classBddCube_1a880f1d494f4b011edd8cfe7e7d4f4ded"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddCube</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lit_list</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>要素のリストを指定したコンストラクタ </p>
 <p>lit_set を省略した場合には空のキューブとなる． </p>
 <dl class="field-list simple">
@@ -87,92 +97,92 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCubeD0Ev">
-<span id="_CPPv3N7BddCubeD0Ev"></span><span id="_CPPv2N7BddCubeD0Ev"></span><span id="BddCube::~BddCube"></span><span class="target" id="d9/d05/classBddCube_1adccd68f7d4943d16a3131413f440d32f"></span><span class="sig-name descname"><span class="n"><span class="pre">~BddCube</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N7BddCubeD0Ev" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCubeD0Ev"></span><span id="_CPPv2N7BddCubeD0Ev"></span><span id="BddCube::~BddCube"></span><span class="target" id="d9/d05/classBddCube_1adccd68f7d4943d16a3131413f440d32f"></span><span class="sig-name descname"><span class="n"><span class="pre">~BddCube</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
 <dd><p>デストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCube17is_universal_cubeEv">
-<span id="_CPPv3NK7BddCube17is_universal_cubeEv"></span><span id="_CPPv2NK7BddCube17is_universal_cubeEv"></span><span id="BddCube::is_universal_cubeC"></span><span class="target" id="d9/d05/classBddCube_1abbfa33d25e88a9c329612cecb9199379"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_universal_cube</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCube17is_universal_cubeEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCube17is_universal_cubeEv"></span><span id="_CPPv2NK7BddCube17is_universal_cubeEv"></span><span id="BddCube::is_universal_cubeC"></span><span class="target" id="d9/d05/classBddCube_1abbfa33d25e88a9c329612cecb9199379"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_universal_cube</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>空のキューブの時に true を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCube4sizeEv">
-<span id="_CPPv3NK7BddCube4sizeEv"></span><span id="_CPPv2NK7BddCube4sizeEv"></span><span id="BddCube::sizeC"></span><span class="target" id="d9/d05/classBddCube_1a78e264cacd02e70943acb81da0b7bf39"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCube4sizeEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCube4sizeEv"></span><span id="_CPPv2NK7BddCube4sizeEv"></span><span id="BddCube::sizeC"></span><span class="target" id="d9/d05/classBddCube_1a78e264cacd02e70943acb81da0b7bf39"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>リテラル数を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCube8lit_listEv">
-<span id="_CPPv3NK7BddCube8lit_listEv"></span><span id="_CPPv2NK7BddCube8lit_listEv"></span><span id="BddCube::lit_listC"></span><span class="target" id="d9/d05/classBddCube_1a502ccabbb903d4afcafec89e7f0ae9df"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lit_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCube8lit_listEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCube8lit_listEv"></span><span id="_CPPv2NK7BddCube8lit_listEv"></span><span id="BddCube::lit_listC"></span><span class="target" id="d9/d05/classBddCube_1a502ccabbb903d4afcafec89e7f0ae9df"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lit_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>リテラルのリストに変換する． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCubeanERK6BddLit">
-<span id="_CPPv3NK7BddCubeanERK6BddLit"></span><span id="_CPPv2NK7BddCubeanERK6BddLit"></span><span id="BddCube::and-operator__BddLitCRC"></span><span class="target" id="d9/d05/classBddCube_1ae2f097e929961f6fa745e6cfcdbe73a2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCubeanERK6BddLit" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCubeanERK6BddLit"></span><span id="_CPPv2NK7BddCubeanERK6BddLit"></span><span id="BddCube::and-operator__BddLitCRC"></span><span class="target" id="d9/d05/classBddCube_1ae2f097e929961f6fa745e6cfcdbe73a2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>リテラルとの論理積を返す． </p>
 <p>相反するリテラルとの積はヌルキューブとなる． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCubeaNERK6BddLit">
-<span id="_CPPv3N7BddCubeaNERK6BddLit"></span><span id="_CPPv2N7BddCubeaNERK6BddLit"></span><span id="BddCube::and-assign-operator__BddLitCR"></span><span class="target" id="d9/d05/classBddCube_1ae19866f3a04c8feaf13a44c180299646"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddCubeaNERK6BddLit" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCubeaNERK6BddLit"></span><span id="_CPPv2N7BddCubeaNERK6BddLit"></span><span id="BddCube::and-assign-operator__BddLitCR"></span><span class="target" id="d9/d05/classBddCube_1ae19866f3a04c8feaf13a44c180299646"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>リテラルとの論理積を代入する． </p>
 <p>相反するリテラルとの積はヌルキューブとなる． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCubeanERK7BddCube">
-<span id="_CPPv3NK7BddCubeanERK7BddCube"></span><span id="_CPPv2NK7BddCubeanERK7BddCube"></span><span id="BddCube::and-operator__BddCubeCRC"></span><span class="target" id="d9/d05/classBddCube_1a2f3d491fbfb896c6d0019a09e92f6179"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCubeanERK7BddCube" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCubeanERK7BddCube"></span><span id="_CPPv2NK7BddCubeanERK7BddCube"></span><span id="BddCube::and-operator__BddCubeCRC"></span><span class="target" id="d9/d05/classBddCube_1a2f3d491fbfb896c6d0019a09e92f6179"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>キューブとの論理積を返す． </p>
 <p>相反するリテラルとの積はヌルキューブとなる． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCubeaNERK7BddCube">
-<span id="_CPPv3N7BddCubeaNERK7BddCube"></span><span id="_CPPv2N7BddCubeaNERK7BddCube"></span><span id="BddCube::and-assign-operator__BddCubeCR"></span><span class="target" id="d9/d05/classBddCube_1a9ff7d21b7a7c9663c43c7f56d619463e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddCubeaNERK7BddCube" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCubeaNERK7BddCube"></span><span id="_CPPv2N7BddCubeaNERK7BddCube"></span><span id="BddCube::and-assign-operator__BddCubeCR"></span><span class="target" id="d9/d05/classBddCube_1a9ff7d21b7a7c9663c43c7f56d619463e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>キューブとの論理積を代入する． </p>
 <p>相反するリテラルとの積はヌルキューブとなる． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCubemiERK6BddLit">
-<span id="_CPPv3NK7BddCubemiERK6BddLit"></span><span id="_CPPv2NK7BddCubemiERK6BddLit"></span><span id="BddCube::sub-operator__BddLitCRC"></span><span class="target" id="d9/d05/classBddCube_1a040a65a69f271bd32982bc70ccbe1ff8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCubemiERK6BddLit" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCubemiERK6BddLit"></span><span id="_CPPv2NK7BddCubemiERK6BddLit"></span><span id="BddCube::sub-operator__BddLitCRC"></span><span class="target" id="d9/d05/classBddCube_1a040a65a69f271bd32982bc70ccbe1ff8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>リテラルを取り除いたものを返す． </p>
 <p>含んでいないリテラルは無視する． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCubemIERK6BddLit">
-<span id="_CPPv3N7BddCubemIERK6BddLit"></span><span id="_CPPv2N7BddCubemIERK6BddLit"></span><span id="BddCube::sub-assign-operator__BddLitCR"></span><span class="target" id="d9/d05/classBddCube_1a3ef5618e7c2c145d98f5a134321250df"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddCubemIERK6BddLit" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCubemIERK6BddLit"></span><span id="_CPPv2N7BddCubemIERK6BddLit"></span><span id="BddCube::sub-assign-operator__BddLitCR"></span><span class="target" id="d9/d05/classBddCube_1a3ef5618e7c2c145d98f5a134321250df"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>自身からリテラルを取り除く </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCubemiERK7BddCube">
-<span id="_CPPv3NK7BddCubemiERK7BddCube"></span><span id="_CPPv2NK7BddCubemiERK7BddCube"></span><span id="BddCube::sub-operator__BddCubeCRC"></span><span class="target" id="d9/d05/classBddCube_1a66c99cc0d145aa761ff517a69e937246"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCubemiERK7BddCube" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCubemiERK7BddCube"></span><span id="_CPPv2NK7BddCubemiERK7BddCube"></span><span id="BddCube::sub-operator__BddCubeCRC"></span><span class="target" id="d9/d05/classBddCube_1a66c99cc0d145aa761ff517a69e937246"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>キューブを取り除いたものを返す． </p>
 <p>含んでいないリテラルは無視する． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCubemIERK7BddCube">
-<span id="_CPPv3N7BddCubemIERK7BddCube"></span><span id="_CPPv2N7BddCubemIERK7BddCube"></span><span id="BddCube::sub-assign-operator__BddCubeCR"></span><span class="target" id="d9/d05/classBddCube_1a647c2d1de77740081f4bccb7b9fc62a6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddCubemIERK7BddCube" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCubemIERK7BddCube"></span><span id="_CPPv2N7BddCubemIERK7BddCube"></span><span id="BddCube::sub-assign-operator__BddCubeCR"></span><span class="target" id="d9/d05/classBddCube_1a647c2d1de77740081f4bccb7b9fc62a6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>自身からキューブを取り除く </p>
 <p>含んでいないリテラルは無視する． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCube14check_conflictERK6BddLit">
-<span id="_CPPv3NK7BddCube14check_conflictERK6BddLit"></span><span id="_CPPv2NK7BddCube14check_conflictERK6BddLit"></span><span id="BddCube::check_conflict__BddLitCRC"></span><span class="target" id="d9/d05/classBddCube_1a709484a7db6e741ca7999a91e537fb0f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_conflict</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddlit.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCube14check_conflictERK6BddLit" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCube14check_conflictERK6BddLit"></span><span id="_CPPv2NK7BddCube14check_conflictERK6BddLit"></span><span id="BddCube::check_conflict__BddLitCRC"></span><span class="target" id="d9/d05/classBddCube_1a709484a7db6e741ca7999a91e537fb0f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_conflict</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddLit" title="BddLit"><span class="n"><span class="pre">BddLit</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>相反するリテラルを持つ時 true を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddCube14check_conflictERK7BddCube">
-<span id="_CPPv3NK7BddCube14check_conflictERK7BddCube"></span><span id="_CPPv2NK7BddCube14check_conflictERK7BddCube"></span><span id="BddCube::check_conflict__BddCubeCRC"></span><span class="target" id="d9/d05/classBddCube_1a513d04cdf332053a1253f8f9d5523715"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_conflict</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddCube14check_conflictERK7BddCube" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddCube14check_conflictERK7BddCube"></span><span id="_CPPv2NK7BddCube14check_conflictERK7BddCube"></span><span id="BddCube::check_conflict__BddCubeCRC"></span><span class="target" id="d9/d05/classBddCube_1a513d04cdf332053a1253f8f9d5523715"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_conflict</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>相反するリテラルを持つ時 true を返す． </p>
 </dd></dl>
 
@@ -181,14 +191,31 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCube14universal_cubeEv">
-<span id="_CPPv3N7BddCube14universal_cubeEv"></span><span id="_CPPv2N7BddCube14universal_cubeEv"></span><span id="BddCube::universal_cube"></span><span class="target" id="d9/d05/classBddCube_1a7d1eeb0863e74a0b41a003fa8f518166"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">universal_cube</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddCube14universal_cubeEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCube14universal_cubeEv"></span><span id="_CPPv2N7BddCube14universal_cubeEv"></span><span id="BddCube::universal_cube"></span><span class="target" id="d9/d05/classBddCube_1a7d1eeb0863e74a0b41a003fa8f518166"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">universal_cube</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>空のキューブを返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddCube7invalidEv">
-<span id="_CPPv3N7BddCube7invalidEv"></span><span id="_CPPv2N7BddCube7invalidEv"></span><span id="BddCube::invalid"></span><span class="target" id="d9/d05/classBddCube_1ad0cf2367db9cc3d2a20c1fde1498be2c"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddCube7invalidEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddCube7invalidEv"></span><span id="_CPPv2N7BddCube7invalidEv"></span><span id="BddCube::invalid"></span><span class="target" id="d9/d05/classBddCube_1ad0cf2367db9cc3d2a20c1fde1498be2c"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>不正値を返す． </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-related">Related</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7BddCubelsERNSt7ostreamERK7BddCube">
+<span id="_CPPv3N7BddCubelsERNSt7ostreamERK7BddCube"></span><span id="_CPPv2N7BddCubelsERNSt7ostreamERK7BddCube"></span><span id="BddCube::lshift-operator__osR.BddCubeCR"></span><span class="target" id="d9/d05/classBddCube_1a8d2768e0c462cc003a643faecf9a1a57"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddCube" title="BddCube"><span class="n"><span class="pre">BddCube</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cube</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>ストリーム出力演算子 </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> -- [in] 出力ストリーム </p></li>
+<li><p><strong>cube</strong> -- [in] 対象のキューブ </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -201,38 +228,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">1.2.6.8. BddCube</a><ul>
-<li><a class="reference internal" href="#_CPPv47BddCube"><code class="docutils literal notranslate"><span class="pre">BddCube</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N7BddCube7BddCubeERK6BddLit"><code class="docutils literal notranslate"><span class="pre">BddCube()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddCube7BddCubeERKNSt6vectorI6BddLitEE"><code class="docutils literal notranslate"><span class="pre">BddCube()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddCubeD0Ev"><code class="docutils literal notranslate"><span class="pre">~BddCube()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCube17is_universal_cubeEv"><code class="docutils literal notranslate"><span class="pre">is_universal_cube()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCube4sizeEv"><code class="docutils literal notranslate"><span class="pre">size()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCube8lit_listEv"><code class="docutils literal notranslate"><span class="pre">lit_list()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCubeanERK6BddLit"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddCubeaNERK6BddLit"><code class="docutils literal notranslate"><span class="pre">operator&amp;=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCubeanERK7BddCube"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddCubeaNERK7BddCube"><code class="docutils literal notranslate"><span class="pre">operator&amp;=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCubemiERK6BddLit"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddCubemIERK6BddLit"><code class="docutils literal notranslate"><span class="pre">operator-=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCubemiERK7BddCube"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddCubemIERK7BddCube"><code class="docutils literal notranslate"><span class="pre">operator-=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCube14check_conflictERK6BddLit"><code class="docutils literal notranslate"><span class="pre">check_conflict()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddCube14check_conflictERK7BddCube"><code class="docutils literal notranslate"><span class="pre">check_conflict()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddCube14universal_cubeEv"><code class="docutils literal notranslate"><span class="pre">universal_cube()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddCube7invalidEv"><code class="docutils literal notranslate"><span class="pre">invalid()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="bddlit.html"
@@ -250,7 +247,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -258,13 +255,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -287,8 +284,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.7.1. BcGraph &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.7.2. BcOpType" href="bcoptype.html" />
     <link rel="prev" title="1.2.7. Boolean Chain を扱うサブグループ" href="bc_grp.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -47,25 +51,29 @@
           <div class="body" role="main">
             
   <section id="bcgraph">
-<h1><span class="section-number">1.2.7.1. </span>BcGraph<a class="headerlink" href="#bcgraph" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">1.2.7.1. </span>BcGraph<a class="headerlink" href="#bcgraph" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv47BcGraph">
-<span id="_CPPv37BcGraph"></span><span id="_CPPv27BcGraph"></span><span id="BcGraph"></span><span class="target" id="d0/d8e/classBcGraph"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BcGraph</span></span></span><a class="headerlink" href="#_CPPv47BcGraph" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv37BcGraph"></span><span id="_CPPv27BcGraph"></span><span id="BcGraph"></span><span class="target" id="d0/d8e/classBcGraph"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BcGraph</span></span></span><br /></dt>
 <dd><p>Boolean chain を表すグラフ </p>
-<p>Boolean chain は N入力M出力の論理関数を表す論理式の集合 ただし，論理式の間に順序関係があり，論理式の右辺には 自分より前の論理式もしくは入力しか使えない． 特殊なケースとして定数を表す入力がある． ただし，定数は出力の右辺としてのみ用いられる．</p>
-<p>この Boolean chain を DAG とみなしてグラフ構造で表す． ただし，ノードとして情報を持つのは演算のみ． 入力や定数の情報は枝に持たせる．</p>
-<p>なお，この Boolean chain では各ノードの出力は正規形になっている． 正規形とは全ての入力が0の時の値が0であること． そのため元々の関数が正規形でなかった場合には出力に反転属性をつける． </p>
+<p>Boolean chain は N入力M出力の論理関数を表す論理式の集合</p>
+<p>ただし，論理式の間に順序関係があり，論理式の右辺には 自分より前の論理式もしくは入力しか使えない．</p>
+<p>特殊なケースとして定数を表す入力がある． ただし，定数は出力の右辺としてのみ用いられる．</p>
+<p>この Boolean chain を DAG とみなしてグラフ構造で表す．</p>
+<p>ただし，ノードとして情報を持つのは演算のみ． 入力や定数の情報は枝に持たせる．</p>
+<p>なお，この Boolean chain では各ノードの出力は正規形になっている．</p>
+<p>正規形とは全ての入力が0の時の値が0であること． そのため元々の関数が正規形でなかった場合には出力に反転属性をつける． </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BcGraph7BcGraphEv">
-<span id="_CPPv3N7BcGraph7BcGraphEv"></span><span id="_CPPv2N7BcGraph7BcGraphEv"></span><span id="BcGraph::BcGraph"></span><span class="target" id="d0/d8e/classBcGraph_1a087583799da3c9e5ba36fe41263d9dfa"></span><span class="sig-name descname"><span class="n"><span class="pre">BcGraph</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BcGraph7BcGraphEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BcGraph7BcGraphEv"></span><span id="_CPPv2N7BcGraph7BcGraphEv"></span><span id="BcGraph::BcGraph"></span><span class="target" id="d0/d8e/classBcGraph_1a087583799da3c9e5ba36fe41263d9dfa"></span><span class="sig-name descname"><span class="n"><span class="pre">BcGraph</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>空のコンストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BcGraph7BcGraphE8SizeType">
-<span id="_CPPv3N7BcGraph7BcGraphE8SizeType"></span><span id="_CPPv2N7BcGraph7BcGraphE8SizeType"></span><span id="BcGraph::BcGraph__SizeType"></span><span class="target" id="d0/d8e/classBcGraph_1a6250d5fd424d6d65c2e59ecac23bb2bc"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BcGraph</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BcGraph7BcGraphE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BcGraph7BcGraphE8SizeType"></span><span id="_CPPv2N7BcGraph7BcGraphE8SizeType"></span><span id="BcGraph::BcGraph__SizeType"></span><span class="target" id="d0/d8e/classBcGraph_1a6250d5fd424d6d65c2e59ecac23bb2bc"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BcGraph</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_num</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>入力サイズだけ指定したコンストラクタ </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -76,31 +84,31 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BcGraphD0Ev">
-<span id="_CPPv3N7BcGraphD0Ev"></span><span id="_CPPv2N7BcGraphD0Ev"></span><span id="BcGraph::~BcGraph"></span><span class="target" id="d0/d8e/classBcGraph_1aebb97b2a75cdd29759fdc5e149bea644"></span><span class="sig-name descname"><span class="n"><span class="pre">~BcGraph</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BcGraphD0Ev" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BcGraphD0Ev"></span><span id="_CPPv2N7BcGraphD0Ev"></span><span id="BcGraph::~BcGraph"></span><span class="target" id="d0/d8e/classBcGraph_1aebb97b2a75cdd29759fdc5e149bea644"></span><span class="sig-name descname"><span class="n"><span class="pre">~BcGraph</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>デストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph9input_numEv">
-<span id="_CPPv3NK7BcGraph9input_numEv"></span><span id="_CPPv2NK7BcGraph9input_numEv"></span><span id="BcGraph::input_numC"></span><span class="target" id="d0/d8e/classBcGraph_1a0f88df0246b4764414b38bf3cb3c3a6a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph9input_numEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph9input_numEv"></span><span id="_CPPv2NK7BcGraph9input_numEv"></span><span id="BcGraph::input_numC"></span><span class="target" id="d0/d8e/classBcGraph_1a0f88df0246b4764414b38bf3cb3c3a6a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>入力数を得る． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph10output_numEv">
-<span id="_CPPv3NK7BcGraph10output_numEv"></span><span id="_CPPv2NK7BcGraph10output_numEv"></span><span id="BcGraph::output_numC"></span><span class="target" id="d0/d8e/classBcGraph_1a200b545071202585cc9914c917d47a03"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph10output_numEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph10output_numEv"></span><span id="_CPPv2NK7BcGraph10output_numEv"></span><span id="BcGraph::output_numC"></span><span class="target" id="d0/d8e/classBcGraph_1a200b545071202585cc9914c917d47a03"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>出力数を得る． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph6op_numEv">
-<span id="_CPPv3NK7BcGraph6op_numEv"></span><span id="_CPPv2NK7BcGraph6op_numEv"></span><span id="BcGraph::op_numC"></span><span class="target" id="d0/d8e/classBcGraph_1a7f323a29c83070df3008622c1fd2de8a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">op_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph6op_numEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph6op_numEv"></span><span id="_CPPv2NK7BcGraph6op_numEv"></span><span id="BcGraph::op_numC"></span><span class="target" id="d0/d8e/classBcGraph_1a7f323a29c83070df3008622c1fd2de8a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">op_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>演算数を得る． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph2opE8SizeType">
-<span id="_CPPv3NK7BcGraph2opE8SizeType"></span><span id="_CPPv2NK7BcGraph2opE8SizeType"></span><span id="BcGraph::op__SizeTypeC"></span><span class="target" id="d0/d8e/classBcGraph_1aa869de4cb0a94dce02527e8d5ba7542c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bcop.html#_CPPv44BcOp" title="BcOp"><span class="n"><span class="pre">BcOp</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">op</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">op_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph2opE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph2opE8SizeType"></span><span id="_CPPv2NK7BcGraph2opE8SizeType"></span><span id="BcGraph::op__SizeTypeC"></span><span class="target" id="d0/d8e/classBcGraph_1aa869de4cb0a94dce02527e8d5ba7542c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv44BcOp" title="BcOp"><span class="n"><span class="pre">BcOp</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">op</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">op_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>演算ノードを得る． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -111,7 +119,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph6outputE8SizeType">
-<span id="_CPPv3NK7BcGraph6outputE8SizeType"></span><span id="_CPPv2NK7BcGraph6outputE8SizeType"></span><span id="BcGraph::output__SizeTypeC"></span><span class="target" id="d0/d8e/classBcGraph_1a4e6dfdd2cb83a2817a93cbf70984e731"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="bcedge.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph6outputE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph6outputE8SizeType"></span><span id="_CPPv2NK7BcGraph6outputE8SizeType"></span><span id="BcGraph::output__SizeTypeC"></span><span class="target" id="d0/d8e/classBcGraph_1a4e6dfdd2cb83a2817a93cbf70984e731"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>出力の枝を得る． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -122,7 +130,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph12output_levelE8SizeType">
-<span id="_CPPv3NK7BcGraph12output_levelE8SizeType"></span><span id="_CPPv2NK7BcGraph12output_levelE8SizeType"></span><span id="BcGraph::output_level__SizeTypeC"></span><span class="target" id="d0/d8e/classBcGraph_1a81cd37a5717d5f31f6c16bb329b3dff7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_level</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph12output_levelE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph12output_levelE8SizeType"></span><span id="_CPPv2NK7BcGraph12output_levelE8SizeType"></span><span id="BcGraph::output_level__SizeTypeC"></span><span class="target" id="d0/d8e/classBcGraph_1a81cd37a5717d5f31f6c16bb329b3dff7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output_level</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>出力のレベルを得る． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -133,13 +141,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph9max_levelEv">
-<span id="_CPPv3NK7BcGraph9max_levelEv"></span><span id="_CPPv2NK7BcGraph9max_levelEv"></span><span id="BcGraph::max_levelC"></span><span class="target" id="d0/d8e/classBcGraph_1abef5085793fbca0409ad5eb5541c7e5c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_level</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph9max_levelEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph9max_levelEv"></span><span id="_CPPv2NK7BcGraph9max_levelEv"></span><span id="BcGraph::max_levelC"></span><span class="target" id="d0/d8e/classBcGraph_1abef5085793fbca0409ad5eb5541c7e5c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_level</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>最大レベルを得る． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph10edge_levelERK6BcEdge">
-<span id="_CPPv3NK7BcGraph10edge_levelERK6BcEdge"></span><span id="_CPPv2NK7BcGraph10edge_levelERK6BcEdge"></span><span id="BcGraph::edge_level__BcEdgeCRC"></span><span class="target" id="d0/d8e/classBcGraph_1a2092d22da602bff21a3c3c14e216934c"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">edge_level</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bcedge.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">edge</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph10edge_levelERK6BcEdge" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph10edge_levelERK6BcEdge"></span><span id="_CPPv2NK7BcGraph10edge_levelERK6BcEdge"></span><span id="BcGraph::edge_level__BcEdgeCRC"></span><span class="target" id="d0/d8e/classBcGraph_1a2092d22da602bff21a3c3c14e216934c"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">edge_level</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">edge</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>枝のレベルを得る． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -150,7 +158,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph8simulateERKNSt6vectorIbEE">
-<span id="_CPPv3NK7BcGraph8simulateERKNSt6vectorIbEE"></span><span id="_CPPv2NK7BcGraph8simulateERKNSt6vectorIbEE"></span><span id="BcGraph::simulate__std::vector:b:CRC"></span><span class="target" id="d0/d8e/classBcGraph_1a62c945721802ebb44ec6f09c2b87d73c"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_vals</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph8simulateERKNSt6vectorIbEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph8simulateERKNSt6vectorIbEE"></span><span id="_CPPv2NK7BcGraph8simulateERKNSt6vectorIbEE"></span><span id="BcGraph::simulate__std::vector:b:CRC"></span><span class="target" id="d0/d8e/classBcGraph_1a62c945721802ebb44ec6f09c2b87d73c"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_vals</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>シミュレーションを行う(bool値版)． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -161,7 +169,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph8simulateERKNSt6vectorI8BcBvTypeEE">
-<span id="_CPPv3NK7BcGraph8simulateERKNSt6vectorI8BcBvTypeEE"></span><span id="_CPPv2NK7BcGraph8simulateERKNSt6vectorI8BcBvTypeEE"></span><span id="BcGraph::simulate__std::vector:BcBvType:CRC"></span><span class="target" id="d0/d8e/classBcGraph_1a39b94c21ec2f4c03fe5e6e1f94f13529"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv48BcBvType" title="BcBvType"><span class="n"><span class="pre">BcBvType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv48BcBvType" title="BcBvType"><span class="n"><span class="pre">BcBvType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_vals</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph8simulateERKNSt6vectorI8BcBvTypeEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph8simulateERKNSt6vectorI8BcBvTypeEE"></span><span id="_CPPv2NK7BcGraph8simulateERKNSt6vectorI8BcBvTypeEE"></span><span id="BcGraph::simulate__std::vector:BcBvType:CRC"></span><span class="target" id="d0/d8e/classBcGraph_1a39b94c21ec2f4c03fe5e6e1f94f13529"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv48BcBvType" title="BcBvType"><span class="n"><span class="pre">BcBvType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulate</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv48BcBvType" title="BcBvType"><span class="n"><span class="pre">BcBvType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">input_vals</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>シミュレーションを行う(BcBvType版)． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -172,7 +180,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BcGraph5printERNSt7ostreamE">
-<span id="_CPPv3NK7BcGraph5printERNSt7ostreamE"></span><span id="_CPPv2NK7BcGraph5printERNSt7ostreamE"></span><span id="BcGraph::print__osRC"></span><span class="target" id="d0/d8e/classBcGraph_1afa512f9fc50d56bfaf6e3f04d14b3ccd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BcGraph5printERNSt7ostreamE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BcGraph5printERNSt7ostreamE"></span><span id="_CPPv2NK7BcGraph5printERNSt7ostreamE"></span><span id="BcGraph::print__osRC"></span><span class="target" id="d0/d8e/classBcGraph_1afa512f9fc50d56bfaf6e3f04d14b3ccd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>内容を出力する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -183,7 +191,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BcGraph6add_opE8BcOpTypeRKNSt6vectorI6BcEdgeEE">
-<span id="_CPPv3N7BcGraph6add_opE8BcOpTypeRKNSt6vectorI6BcEdgeEE"></span><span id="_CPPv2N7BcGraph6add_opE8BcOpTypeRKNSt6vectorI6BcEdgeEE"></span><span id="BcGraph::add_op__BcOpType.std::vector:BcEdge:CR"></span><span class="target" id="d0/d8e/classBcGraph_1a9a0f9edffdeb25f5f39d366a79c00b27"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_op</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="bcoptype.html#_CPPv48BcOpType" title="BcOpType"><span class="n"><span class="pre">BcOpType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bcedge.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opr_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BcGraph6add_opE8BcOpTypeRKNSt6vectorI6BcEdgeEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BcGraph6add_opE8BcOpTypeRKNSt6vectorI6BcEdgeEE"></span><span id="_CPPv2N7BcGraph6add_opE8BcOpTypeRKNSt6vectorI6BcEdgeEE"></span><span id="BcGraph::add_op__BcOpType.std::vector:BcEdge:CR"></span><span class="target" id="d0/d8e/classBcGraph_1a9a0f9edffdeb25f5f39d366a79c00b27"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_op</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48BcOpType" title="BcOpType"><span class="n"><span class="pre">BcOpType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opr_list</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>演算を追加する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -200,7 +208,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BcGraph8add_tvopERKNSt6vectorI8BcBvTypeEERKNSt6vectorI6BcEdgeEE">
-<span id="_CPPv3N7BcGraph8add_tvopERKNSt6vectorI8BcBvTypeEERKNSt6vectorI6BcEdgeEE"></span><span id="_CPPv2N7BcGraph8add_tvopERKNSt6vectorI8BcBvTypeEERKNSt6vectorI6BcEdgeEE"></span><span id="BcGraph::add_tvop__std::vector:BcBvType:CR.std::vector:BcEdge:CR"></span><span class="target" id="d0/d8e/classBcGraph_1a2f680a79a50007dd91a1831a0c53e13f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_tvop</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv48BcBvType" title="BcBvType"><span class="n"><span class="pre">BcBvType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">tv</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bcedge.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opr_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BcGraph8add_tvopERKNSt6vectorI8BcBvTypeEERKNSt6vectorI6BcEdgeEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BcGraph8add_tvopERKNSt6vectorI8BcBvTypeEERKNSt6vectorI6BcEdgeEE"></span><span id="_CPPv2N7BcGraph8add_tvopERKNSt6vectorI8BcBvTypeEERKNSt6vectorI6BcEdgeEE"></span><span id="BcGraph::add_tvop__std::vector:BcBvType:CR.std::vector:BcEdge:CR"></span><span class="target" id="d0/d8e/classBcGraph_1a2f680a79a50007dd91a1831a0c53e13f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_tvop</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv48BcBvType" title="BcBvType"><span class="n"><span class="pre">BcBvType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">tv</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">opr_list</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>真理値表タイプの演算を追加する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -217,7 +225,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BcGraph10add_outputE6BcEdge">
-<span id="_CPPv3N7BcGraph10add_outputE6BcEdge"></span><span id="_CPPv2N7BcGraph10add_outputE6BcEdge"></span><span id="BcGraph::add_output__BcEdge"></span><span class="target" id="d0/d8e/classBcGraph_1a23046a058a002ba10791413de38673ee"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_output</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="bcedge.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BcGraph10add_outputE6BcEdge" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BcGraph10add_outputE6BcEdge"></span><span id="_CPPv2N7BcGraph10add_outputE6BcEdge"></span><span id="BcGraph::add_output__BcEdge"></span><span class="target" id="d0/d8e/classBcGraph_1a23046a058a002ba10791413de38673ee"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_output</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv46BcEdge" title="BcEdge"><span class="n"><span class="pre">BcEdge</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>出力を追加する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -231,7 +239,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BcGraph15add_zero_outputEv">
-<span id="_CPPv3N7BcGraph15add_zero_outputEv"></span><span id="_CPPv2N7BcGraph15add_zero_outputEv"></span><span id="BcGraph::add_zero_output"></span><span class="target" id="d0/d8e/classBcGraph_1af52b02a291801209f73de68e666a6000"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_zero_output</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BcGraph15add_zero_outputEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BcGraph15add_zero_outputEv"></span><span id="_CPPv2N7BcGraph15add_zero_outputEv"></span><span id="BcGraph::add_zero_output"></span><span class="target" id="d0/d8e/classBcGraph_1af52b02a291801209f73de68e666a6000"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_zero_output</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>定数0の出力を追加する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値<span class="colon">:</span></dt>
@@ -242,7 +250,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BcGraph14add_one_outputEv">
-<span id="_CPPv3N7BcGraph14add_one_outputEv"></span><span id="_CPPv2N7BcGraph14add_one_outputEv"></span><span id="BcGraph::add_one_output"></span><span class="target" id="d0/d8e/classBcGraph_1ae5ad11db7da713a7ceb2a28465561f7b"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_one_output</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BcGraph14add_one_outputEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BcGraph14add_one_outputEv"></span><span id="_CPPv2N7BcGraph14add_one_outputEv"></span><span id="BcGraph::add_one_output"></span><span class="target" id="d0/d8e/classBcGraph_1ae5ad11db7da713a7ceb2a28465561f7b"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_one_output</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>定数1の出力を追加する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">戻り値<span class="colon">:</span></dt>
@@ -261,39 +269,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">1.2.7.1. BcGraph</a><ul>
-<li><a class="reference internal" href="#_CPPv47BcGraph"><code class="docutils literal notranslate"><span class="pre">BcGraph</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N7BcGraph7BcGraphEv"><code class="docutils literal notranslate"><span class="pre">BcGraph()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BcGraph7BcGraphE8SizeType"><code class="docutils literal notranslate"><span class="pre">BcGraph()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BcGraphD0Ev"><code class="docutils literal notranslate"><span class="pre">~BcGraph()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph9input_numEv"><code class="docutils literal notranslate"><span class="pre">input_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph10output_numEv"><code class="docutils literal notranslate"><span class="pre">output_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph6op_numEv"><code class="docutils literal notranslate"><span class="pre">op_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph2opE8SizeType"><code class="docutils literal notranslate"><span class="pre">op()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph6outputE8SizeType"><code class="docutils literal notranslate"><span class="pre">output()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph12output_levelE8SizeType"><code class="docutils literal notranslate"><span class="pre">output_level()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph9max_levelEv"><code class="docutils literal notranslate"><span class="pre">max_level()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph10edge_levelERK6BcEdge"><code class="docutils literal notranslate"><span class="pre">edge_level()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph8simulateERKNSt6vectorIbEE"><code class="docutils literal notranslate"><span class="pre">simulate()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph8simulateERKNSt6vectorI8BcBvTypeEE"><code class="docutils literal notranslate"><span class="pre">simulate()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BcGraph5printERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">print()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BcGraph6add_opE8BcOpTypeRKNSt6vectorI6BcEdgeEE"><code class="docutils literal notranslate"><span class="pre">add_op()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BcGraph8add_tvopERKNSt6vectorI8BcBvTypeEERKNSt6vectorI6BcEdgeEE"><code class="docutils literal notranslate"><span class="pre">add_tvop()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BcGraph10add_outputE6BcEdge"><code class="docutils literal notranslate"><span class="pre">add_output()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BcGraph15add_zero_outputEv"><code class="docutils literal notranslate"><span class="pre">add_zero_output()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BcGraph14add_one_outputEv"><code class="docutils literal notranslate"><span class="pre">add_one_output()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="bc_grp.html"
@@ -311,7 +288,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -319,13 +296,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -348,8 +325,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

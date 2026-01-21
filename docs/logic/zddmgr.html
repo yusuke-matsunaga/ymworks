@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.6.9. ZddMgr &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.6.10. ZddMgrHolder" href="zddmgrholder.html" />
     <link rel="prev" title="1.2.6.8. BddCube" href="bddcube.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -47,10 +51,10 @@
           <div class="body" role="main">
             
   <section id="zddmgr">
-<h1><span class="section-number">1.2.6.9. </span>ZddMgr<a class="headerlink" href="#zddmgr" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">1.2.6.9. </span>ZddMgr<a class="headerlink" href="#zddmgr" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv46ZddMgr">
-<span id="_CPPv36ZddMgr"></span><span id="_CPPv26ZddMgr"></span><span id="ZddMgr"></span><span class="target" id="d4/dd1/classZddMgr"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgr</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="zddmgrholder.html#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><a class="headerlink" href="#_CPPv46ZddMgr" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv36ZddMgr"></span><span id="_CPPv26ZddMgr"></span><span id="ZddMgr"></span><span class="target" id="d4/dd1/classZddMgr"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgr</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><br /></dt>
 <dd><p>ZDD を管理するためのクラス </p>
 <p>実体は ZddMgrImpl でこのクラスはただの shared pointer となっている． コピーしても同一の ZddMgrImpl を持つインスタンスが生成される．</p>
 <p>ZddMgrImpl は内部で参照回数を持っており，参照回数がゼロになると 自動的に開放される． </p>
@@ -58,37 +62,37 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr6ZddMgrEv">
-<span id="_CPPv3N6ZddMgr6ZddMgrEv"></span><span id="_CPPv2N6ZddMgr6ZddMgrEv"></span><span id="ZddMgr::ZddMgr"></span><span class="target" id="d4/dd1/classZddMgr_1a7b67f193885bbc13dd01bfa9c0b83c50"></span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr6ZddMgrEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr6ZddMgrEv"></span><span id="_CPPv2N6ZddMgr6ZddMgrEv"></span><span id="ZddMgr::ZddMgr"></span><span class="target" id="d4/dd1/classZddMgr_1a7b67f193885bbc13dd01bfa9c0b83c50"></span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コンストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr6ZddMgrERK12ZddMgrHolder">
-<span id="_CPPv3N6ZddMgr6ZddMgrERK12ZddMgrHolder"></span><span id="_CPPv2N6ZddMgr6ZddMgrERK12ZddMgrHolder"></span><span id="ZddMgr::ZddMgr__ZddMgrHolderCR"></span><span class="target" id="d4/dd1/classZddMgr_1aa44dc3f8764402730aac17c9856932b9"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="zddmgrholder.html#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr6ZddMgrERK12ZddMgrHolder" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr6ZddMgrERK12ZddMgrHolder"></span><span id="_CPPv2N6ZddMgr6ZddMgrERK12ZddMgrHolder"></span><span id="ZddMgr::ZddMgr__ZddMgrHolderCR"></span><span class="target" id="d4/dd1/classZddMgr_1aa44dc3f8764402730aac17c9856932b9"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p><a class="reference internal" href="zddmgrholder.html#d4/d45/classZddMgrHolder"><span class="std std-ref">ZddMgrHolder</span></a> を指定したコンストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr6ZddMgrERK6ZddMgr">
-<span id="_CPPv3N6ZddMgr6ZddMgrERK6ZddMgr"></span><span id="_CPPv2N6ZddMgr6ZddMgrERK6ZddMgr"></span><span id="ZddMgr::ZddMgr__ZddMgrCR"></span><span class="target" id="d4/dd1/classZddMgr_1ad8e451b112939f5966adb3675dd710f9"></span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N6ZddMgr6ZddMgrERK6ZddMgr" title="ZddMgr::ZddMgr"><span class="n"><span class="pre">ZddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr6ZddMgrERK6ZddMgr" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr6ZddMgrERK6ZddMgr"></span><span id="_CPPv2N6ZddMgr6ZddMgrERK6ZddMgr"></span><span id="ZddMgr::ZddMgr__ZddMgrCR"></span><span class="target" id="d4/dd1/classZddMgr_1ad8e451b112939f5966adb3675dd710f9"></span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4N6ZddMgr6ZddMgrERK6ZddMgr" title="ZddMgr::ZddMgr"><span class="n"><span class="pre">ZddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コピーコンストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgrD0Ev">
-<span id="_CPPv3N6ZddMgrD0Ev"></span><span id="_CPPv2N6ZddMgrD0Ev"></span><span id="ZddMgr::~ZddMgr"></span><span class="target" id="d4/dd1/classZddMgr_1a0e8bd9ce814d63d8adc6f7002193befe"></span><span class="sig-name descname"><span class="n"><span class="pre">~ZddMgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgrD0Ev" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgrD0Ev"></span><span id="_CPPv2N6ZddMgrD0Ev"></span><span id="ZddMgr::~ZddMgr"></span><span class="target" id="d4/dd1/classZddMgr_1a0e8bd9ce814d63d8adc6f7002193befe"></span><span class="sig-name descname"><span class="n"><span class="pre">~ZddMgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>デストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK6ZddMgr8item_numEv">
-<span id="_CPPv3NK6ZddMgr8item_numEv"></span><span id="_CPPv2NK6ZddMgr8item_numEv"></span><span id="ZddMgr::item_numC"></span><span class="target" id="d4/dd1/classZddMgr_1a73ab5f344fb0ad4a01f3bf4a87bc09fe"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">item_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6ZddMgr8item_numEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK6ZddMgr8item_numEv"></span><span id="_CPPv2NK6ZddMgr8item_numEv"></span><span id="ZddMgr::item_numC"></span><span class="target" id="d4/dd1/classZddMgr_1a73ab5f344fb0ad4a01f3bf4a87bc09fe"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">item_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>要素数を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr4itemE8SizeType">
-<span id="_CPPv3N6ZddMgr4itemE8SizeType"></span><span id="_CPPv2N6ZddMgr4itemE8SizeType"></span><span id="ZddMgr::item__SizeType"></span><span class="target" id="d4/dd1/classZddMgr_1ac7eb5be66d05f9a0ed9e8d11dae8f7d8"></span><a class="reference internal" href="zdditem.html#_CPPv47ZddItem" title="ZddItem"><span class="n"><span class="pre">ZddItem</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">item</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">elem_id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr4itemE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr4itemE8SizeType"></span><span id="_CPPv2N6ZddMgr4itemE8SizeType"></span><span id="ZddMgr::item__SizeType"></span><span class="target" id="d4/dd1/classZddMgr_1ac7eb5be66d05f9a0ed9e8d11dae8f7d8"></span><a class="reference internal" href="../all_classes.html#_CPPv47ZddItem" title="ZddItem"><span class="n"><span class="pre">ZddItem</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">item</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">elem_id</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>要素を返す． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -99,32 +103,32 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK6ZddMgr9item_listEv">
-<span id="_CPPv3NK6ZddMgr9item_listEv"></span><span id="_CPPv2NK6ZddMgr9item_listEv"></span><span id="ZddMgr::item_listC"></span><span class="target" id="d4/dd1/classZddMgr_1ad3bd0e43d0b58cfd491914069ec903d5"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="zdditem.html#_CPPv47ZddItem" title="ZddItem"><span class="n"><span class="pre">ZddItem</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">item_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6ZddMgr9item_listEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK6ZddMgr9item_listEv"></span><span id="_CPPv2NK6ZddMgr9item_listEv"></span><span id="ZddMgr::item_listC"></span><span class="target" id="d4/dd1/classZddMgr_1ad3bd0e43d0b58cfd491914069ec903d5"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv47ZddItem" title="ZddItem"><span class="n"><span class="pre">ZddItem</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">item_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>要素のリストを返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr4copyERK3Zdd">
-<span id="_CPPv3N6ZddMgr4copyERK3Zdd"></span><span id="_CPPv2N6ZddMgr4copyERK3Zdd"></span><span id="ZddMgr::copy__ZddCR"></span><span class="target" id="d4/dd1/classZddMgr_1aad4727946905dcb7bb7ca668723ac596"></span><a class="reference internal" href="zdd.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="zdd.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr4copyERK3Zdd" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr4copyERK3Zdd"></span><span id="_CPPv2N6ZddMgr4copyERK3Zdd"></span><span id="ZddMgr::copy__ZddCR"></span><span class="target" id="d4/dd1/classZddMgr_1aad4727946905dcb7bb7ca668723ac596"></span><a class="reference internal" href="../all_classes.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>ZDD をコピーする． </p>
 <p>通常は同じものを返すが，src のマネージャが異なる場合には 同じ構造のコピーを作る． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr4zeroEv">
-<span id="_CPPv3N6ZddMgr4zeroEv"></span><span id="_CPPv2N6ZddMgr4zeroEv"></span><span id="ZddMgr::zero"></span><span class="target" id="d4/dd1/classZddMgr_1a69dfeca1592c96a57a4db5b6debd50f6"></span><a class="reference internal" href="zdd.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zero</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr4zeroEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr4zeroEv"></span><span id="_CPPv2N6ZddMgr4zeroEv"></span><span id="ZddMgr::zero"></span><span class="target" id="d4/dd1/classZddMgr_1a69dfeca1592c96a57a4db5b6debd50f6"></span><a class="reference internal" href="../all_classes.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zero</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>空集合を作る． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr3oneEv">
-<span id="_CPPv3N6ZddMgr3oneEv"></span><span id="_CPPv2N6ZddMgr3oneEv"></span><span id="ZddMgr::one"></span><span class="target" id="d4/dd1/classZddMgr_1a6c8be12d8b0df9b6e811ad7d9816fc63"></span><a class="reference internal" href="zdd.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">one</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr3oneEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr3oneEv"></span><span id="_CPPv2N6ZddMgr3oneEv"></span><span id="ZddMgr::one"></span><span class="target" id="d4/dd1/classZddMgr_1a6c8be12d8b0df9b6e811ad7d9816fc63"></span><a class="reference internal" href="../all_classes.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">one</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>ユニバースを作る． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr8make_setEKNSt6vectorI7ZddItemEE">
-<span id="_CPPv3N6ZddMgr8make_setEKNSt6vectorI7ZddItemEE"></span><span id="_CPPv2N6ZddMgr8make_setEKNSt6vectorI7ZddItemEE"></span><span id="ZddMgr::make_set__std::vector:ZddItem:C"></span><span class="target" id="d4/dd1/classZddMgr_1ac66ed0aa7cc733b04d92953061d12f2b"></span><a class="reference internal" href="zdd.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_set</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="zdditem.html#_CPPv47ZddItem" title="ZddItem"><span class="n"><span class="pre">ZddItem</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">item_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr8make_setEKNSt6vectorI7ZddItemEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr8make_setEKNSt6vectorI7ZddItemEE"></span><span id="_CPPv2N6ZddMgr8make_setEKNSt6vectorI7ZddItemEE"></span><span id="ZddMgr::make_set__std::vector:ZddItem:C"></span><span class="target" id="d4/dd1/classZddMgr_1ac66ed0aa7cc733b04d92953061d12f2b"></span><a class="reference internal" href="../all_classes.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_set</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv47ZddItem" title="ZddItem"><span class="n"><span class="pre">ZddItem</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">item_list</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>部分集合を作る． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -135,7 +139,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr7restoreER6BinDec">
-<span id="_CPPv3N6ZddMgr7restoreER6BinDec"></span><span id="_CPPv2N6ZddMgr7restoreER6BinDec"></span><span id="ZddMgr::restore__BinDecR"></span><span class="target" id="d4/dd1/classZddMgr_1a46b315bdc4515a45cf7ccf1b2d62e2ce"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="zdd.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv46BinDec" title="BinDec"><span class="n"><span class="pre">BinDec</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr7restoreER6BinDec" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr7restoreER6BinDec"></span><span id="_CPPv2N6ZddMgr7restoreER6BinDec"></span><span id="ZddMgr::restore__BinDecR"></span><span class="target" id="d4/dd1/classZddMgr_1a46b315bdc4515a45cf7ccf1b2d62e2ce"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv43Zdd" title="Zdd"><span class="n"><span class="pre">Zdd</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">restore</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv46BinDec" title="BinDec"><span class="n"><span class="pre">BinDec</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">s</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>バイナリダンプから復元する． </p>
 <p>
 不正な形式の場合は std::invalid_argument 例外を送出する． </p>
@@ -151,50 +155,50 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr18garbage_collectionEv">
-<span id="_CPPv3N6ZddMgr18garbage_collectionEv"></span><span id="_CPPv2N6ZddMgr18garbage_collectionEv"></span><span id="ZddMgr::garbage_collection"></span><span class="target" id="d4/dd1/classZddMgr_1a62494a78e907ab6e5c0fb492f84ca2d8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">garbage_collection</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr18garbage_collectionEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr18garbage_collectionEv"></span><span id="_CPPv2N6ZddMgr18garbage_collectionEv"></span><span id="ZddMgr::garbage_collection"></span><span class="target" id="d4/dd1/classZddMgr_1a62494a78e907ab6e5c0fb492f84ca2d8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">garbage_collection</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>ガーベージコレクションを行う． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK6ZddMgr8node_numEv">
-<span id="_CPPv3NK6ZddMgr8node_numEv"></span><span id="_CPPv2NK6ZddMgr8node_numEv"></span><span id="ZddMgr::node_numC"></span><span class="target" id="d4/dd1/classZddMgr_1ad3d90690e1931bc38c0a700bf495412b"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">node_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6ZddMgr8node_numEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK6ZddMgr8node_numEv"></span><span id="_CPPv2NK6ZddMgr8node_numEv"></span><span id="ZddMgr::node_numC"></span><span class="target" id="d4/dd1/classZddMgr_1ad3d90690e1931bc38c0a700bf495412b"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">node_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>ノード数を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK6ZddMgr8gc_limitEv">
-<span id="_CPPv3NK6ZddMgr8gc_limitEv"></span><span id="_CPPv2NK6ZddMgr8gc_limitEv"></span><span id="ZddMgr::gc_limitC"></span><span class="target" id="d4/dd1/classZddMgr_1afc9345951a1fc323fe6d6ef40063a659"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gc_limit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6ZddMgr8gc_limitEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK6ZddMgr8gc_limitEv"></span><span id="_CPPv2NK6ZddMgr8gc_limitEv"></span><span id="ZddMgr::gc_limitC"></span><span class="target" id="d4/dd1/classZddMgr_1afc9345951a1fc323fe6d6ef40063a659"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gc_limit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>GC を起動するしきい値を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr12set_gc_limitE8SizeType">
-<span id="_CPPv3N6ZddMgr12set_gc_limitE8SizeType"></span><span id="_CPPv2N6ZddMgr12set_gc_limitE8SizeType"></span><span id="ZddMgr::set_gc_limit__SizeType"></span><span class="target" id="d4/dd1/classZddMgr_1a2d9c09ce8f419a702bef517907c10a7c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gc_limit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">limit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr12set_gc_limitE8SizeType" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr12set_gc_limitE8SizeType"></span><span id="_CPPv2N6ZddMgr12set_gc_limitE8SizeType"></span><span id="ZddMgr::set_gc_limit__SizeType"></span><span class="target" id="d4/dd1/classZddMgr_1a2d9c09ce8f419a702bef517907c10a7c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gc_limit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">limit</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>GC を起動するしきい値を設定する． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr9enable_gcEv">
-<span id="_CPPv3N6ZddMgr9enable_gcEv"></span><span id="_CPPv2N6ZddMgr9enable_gcEv"></span><span id="ZddMgr::enable_gc"></span><span class="target" id="d4/dd1/classZddMgr_1a52f77a06869712c15ec41ed4ce373820"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_gc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr9enable_gcEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr9enable_gcEv"></span><span id="_CPPv2N6ZddMgr9enable_gcEv"></span><span id="ZddMgr::enable_gc"></span><span class="target" id="d4/dd1/classZddMgr_1a52f77a06869712c15ec41ed4ce373820"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_gc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>GC を許可する． </p>
 <p>ただちに GC が起動するわけではない． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6ZddMgr10disable_gcEv">
-<span id="_CPPv3N6ZddMgr10disable_gcEv"></span><span id="_CPPv2N6ZddMgr10disable_gcEv"></span><span id="ZddMgr::disable_gc"></span><span class="target" id="d4/dd1/classZddMgr_1ae5a3906868bfdf85a53029c3496782a2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">disable_gc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6ZddMgr10disable_gcEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6ZddMgr10disable_gcEv"></span><span id="_CPPv2N6ZddMgr10disable_gcEv"></span><span id="ZddMgr::disable_gc"></span><span class="target" id="d4/dd1/classZddMgr_1ae5a3906868bfdf85a53029c3496782a2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">disable_gc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>GC を禁止する． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK6ZddMgreqERK6ZddMgr">
-<span id="_CPPv3NK6ZddMgreqERK6ZddMgr"></span><span id="_CPPv2NK6ZddMgreqERK6ZddMgr"></span><span id="ZddMgr::eq-operator__ZddMgrCRC"></span><span class="target" id="d4/dd1/classZddMgr_1ad533a107d93c617658e23693ac2bacd2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46ZddMgr" title="ZddMgr"><span class="n"><span class="pre">ZddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6ZddMgreqERK6ZddMgr" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK6ZddMgreqERK6ZddMgr"></span><span id="_CPPv2NK6ZddMgreqERK6ZddMgr"></span><span id="ZddMgr::eq-operator__ZddMgrCRC"></span><span class="target" id="d4/dd1/classZddMgr_1ad533a107d93c617658e23693ac2bacd2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46ZddMgr" title="ZddMgr"><span class="n"><span class="pre">ZddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>等価比較演算子 </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK6ZddMgrneERK6ZddMgr">
-<span id="_CPPv3NK6ZddMgrneERK6ZddMgr"></span><span id="_CPPv2NK6ZddMgrneERK6ZddMgr"></span><span id="ZddMgr::neq-operator__ZddMgrCRC"></span><span class="target" id="d4/dd1/classZddMgr_1a7de59c2618fc048b8575ac19a53bdcf1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv46ZddMgr" title="ZddMgr"><span class="n"><span class="pre">ZddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6ZddMgrneERK6ZddMgr" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK6ZddMgrneERK6ZddMgr"></span><span id="_CPPv2NK6ZddMgrneERK6ZddMgr"></span><span id="ZddMgr::neq-operator__ZddMgrCRC"></span><span class="target" id="d4/dd1/classZddMgr_1a7de59c2618fc048b8575ac19a53bdcf1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46ZddMgr" title="ZddMgr"><span class="n"><span class="pre">ZddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>非等価比較演算子 </p>
 </dd></dl>
 
@@ -208,40 +212,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">1.2.6.9. ZddMgr</a><ul>
-<li><a class="reference internal" href="#_CPPv46ZddMgr"><code class="docutils literal notranslate"><span class="pre">ZddMgr</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr6ZddMgrEv"><code class="docutils literal notranslate"><span class="pre">ZddMgr()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr6ZddMgrERK12ZddMgrHolder"><code class="docutils literal notranslate"><span class="pre">ZddMgr()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr6ZddMgrERK6ZddMgr"><code class="docutils literal notranslate"><span class="pre">ZddMgr()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgrD0Ev"><code class="docutils literal notranslate"><span class="pre">~ZddMgr()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6ZddMgr8item_numEv"><code class="docutils literal notranslate"><span class="pre">item_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr4itemE8SizeType"><code class="docutils literal notranslate"><span class="pre">item()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6ZddMgr9item_listEv"><code class="docutils literal notranslate"><span class="pre">item_list()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr4copyERK3Zdd"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr4zeroEv"><code class="docutils literal notranslate"><span class="pre">zero()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr3oneEv"><code class="docutils literal notranslate"><span class="pre">one()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr8make_setEKNSt6vectorI7ZddItemEE"><code class="docutils literal notranslate"><span class="pre">make_set()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr7restoreER6BinDec"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr18garbage_collectionEv"><code class="docutils literal notranslate"><span class="pre">garbage_collection()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6ZddMgr8node_numEv"><code class="docutils literal notranslate"><span class="pre">node_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6ZddMgr8gc_limitEv"><code class="docutils literal notranslate"><span class="pre">gc_limit()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr12set_gc_limitE8SizeType"><code class="docutils literal notranslate"><span class="pre">set_gc_limit()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr9enable_gcEv"><code class="docutils literal notranslate"><span class="pre">enable_gc()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6ZddMgr10disable_gcEv"><code class="docutils literal notranslate"><span class="pre">disable_gc()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6ZddMgreqERK6ZddMgr"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6ZddMgrneERK6ZddMgr"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="bddcube.html"
@@ -259,7 +231,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -267,13 +239,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -296,8 +268,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

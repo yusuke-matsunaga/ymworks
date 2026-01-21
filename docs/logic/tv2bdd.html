@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.4.5. Tv2Bdd &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.5. NPN変換を扱うサブグループ" href="npn_grp.html" />
     <link rel="prev" title="1.2.4.4. Tv2Sop" href="tv2sop.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -47,10 +51,10 @@
           <div class="body" role="main">
             
   <section id="tv2bdd">
-<h1><span class="section-number">1.2.4.5. </span>Tv2Bdd<a class="headerlink" href="#tv2bdd" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">1.2.4.5. </span>Tv2Bdd<a class="headerlink" href="#tv2bdd" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv46Tv2Bdd">
-<span id="_CPPv36Tv2Bdd"></span><span id="_CPPv26Tv2Bdd"></span><span id="Tv2Bdd"></span><span class="target" id="dd/dbc/classTv2Bdd"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Tv2Bdd</span></span></span><a class="headerlink" href="#_CPPv46Tv2Bdd" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv36Tv2Bdd"></span><span id="_CPPv26Tv2Bdd"></span><span id="Tv2Bdd"></span><span class="target" id="dd/dbc/classTv2Bdd"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Tv2Bdd</span></span></span><br /></dt>
 <dd><p><a class="reference internal" href="tvfunc.html#d4/d6d/classTvFunc"><span class="std std-ref">TvFunc</span></a> を <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> に変換するクラス </p>
 <p>実際にはただの関数群 <div class="admonition seealso">
 <p class="admonition-title">参考</p>
@@ -61,7 +65,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgr">
-<span id="_CPPv3N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgr"></span><span id="_CPPv2N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgr"></span><span id="Tv2Bdd::gen_bdd__TvFuncCR.BddMgrR"></span><span class="target" id="dd/dbc/classTv2Bdd_1a0d77ad2de89d60cc6969f078e9b28cbb"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gen_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="tvfunc.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span>, <a class="reference internal" href="bddmgr.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgr" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgr"></span><span id="_CPPv2N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgr"></span><span id="Tv2Bdd::gen_bdd__TvFuncCR.BddMgrR"></span><span class="target" id="dd/dbc/classTv2Bdd_1a0d77ad2de89d60cc6969f078e9b28cbb"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gen_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p><a class="reference internal" href="tvfunc.html#d4/d6d/classTvFunc"><span class="std std-ref">TvFunc</span></a> を BDD に変換する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -75,7 +79,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgrRKNSt6vectorI6BddVarEE">
-<span id="_CPPv3N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgrRKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgrRKNSt6vectorI6BddVarEE"></span><span id="Tv2Bdd::gen_bdd__TvFuncCR.BddMgrR.std::vector:BddVar:CR"></span><span class="target" id="dd/dbc/classTv2Bdd_1aaaf832770a98b259b5bba6b3442ffbc5"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gen_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="tvfunc.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span>, <a class="reference internal" href="bddmgr.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgrRKNSt6vectorI6BddVarEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgrRKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgrRKNSt6vectorI6BddVarEE"></span><span id="Tv2Bdd::gen_bdd__TvFuncCR.BddMgrR.std::vector:BddVar:CR"></span><span class="target" id="dd/dbc/classTv2Bdd_1aaaf832770a98b259b5bba6b3442ffbc5"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gen_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_list</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>BDD に変換する． </p>
 <p><ul class="simple">
 <li><p>f の i 番目の変数を var_list[i] に対応させる．</p></li>
@@ -95,7 +99,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgr">
-<span id="_CPPv3N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgr"></span><span id="_CPPv2N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgr"></span><span id="Tv2Bdd::gen_bdd__std::vector:TvFunc:CR.BddMgrR"></span><span class="target" id="dd/dbc/classTv2Bdd_1acdbf9f0e6755ff19adfab95144f8f7ba"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gen_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="tvfunc.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f_list</span></span>, <a class="reference internal" href="bddmgr.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgr" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgr"></span><span id="_CPPv2N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgr"></span><span id="Tv2Bdd::gen_bdd__std::vector:TvFunc:CR.BddMgrR"></span><span class="target" id="dd/dbc/classTv2Bdd_1acdbf9f0e6755ff19adfab95144f8f7ba"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gen_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f_list</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>複数の <a class="reference internal" href="tvfunc.html#d4/d6d/classTvFunc"><span class="std std-ref">TvFunc</span></a> を BDD のリストに変換する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -109,7 +113,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgrRKNSt6vectorI6BddVarEE">
-<span id="_CPPv3N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgrRKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgrRKNSt6vectorI6BddVarEE"></span><span id="Tv2Bdd::gen_bdd__std::vector:TvFunc:CR.BddMgrR.std::vector:BddVar:CR"></span><span class="target" id="dd/dbc/classTv2Bdd_1ad9a9877af9fffbf11afc4e0b6600f9fb"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gen_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="tvfunc.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f_list</span></span>, <a class="reference internal" href="bddmgr.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgrRKNSt6vectorI6BddVarEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgrRKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgrRKNSt6vectorI6BddVarEE"></span><span id="Tv2Bdd::gen_bdd__std::vector:TvFunc:CR.BddMgrR.std::vector:BddVar:CR"></span><span class="target" id="dd/dbc/classTv2Bdd_1ad9a9877af9fffbf11afc4e0b6600f9fb"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gen_bdd</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46TvFunc" title="TvFunc"><span class="n"><span class="pre">TvFunc</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f_list</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mgr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_list</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>複数の <a class="reference internal" href="tvfunc.html#d4/d6d/classTvFunc"><span class="std std-ref">TvFunc</span></a> を BDD のリストに変換する． </p>
 <p><ul class="simple">
 <li><p>f の i 番目の変数を var_list[i] に対応させる．</p></li>
@@ -137,24 +141,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">1.2.4.5. Tv2Bdd</a><ul>
-<li><a class="reference internal" href="#_CPPv46Tv2Bdd"><code class="docutils literal notranslate"><span class="pre">Tv2Bdd</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgr"><code class="docutils literal notranslate"><span class="pre">gen_bdd()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Tv2Bdd7gen_bddERK6TvFuncR6BddMgrRKNSt6vectorI6BddVarEE"><code class="docutils literal notranslate"><span class="pre">gen_bdd()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgr"><code class="docutils literal notranslate"><span class="pre">gen_bdd()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Tv2Bdd7gen_bddERKNSt6vectorI6TvFuncEER6BddMgrRKNSt6vectorI6BddVarEE"><code class="docutils literal notranslate"><span class="pre">gen_bdd()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="tv2sop.html"
@@ -172,7 +160,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -180,13 +168,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -209,8 +197,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

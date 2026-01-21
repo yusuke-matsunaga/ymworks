@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.6.3. BddBase &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.6.4. Bdd" href="bdd.html" />
     <link rel="prev" title="1.2.6.2. BddMgrHolder" href="bddmgrholder.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -47,16 +51,14 @@
           <div class="body" role="main">
             
   <section id="bddbase">
-<h1><span class="section-number">1.2.6.3. </span>BddBase<a class="headerlink" href="#bddbase" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">1.2.6.3. </span>BddBase<a class="headerlink" href="#bddbase" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv47BddBase">
-<span id="_CPPv37BddBase"></span><span id="_CPPv27BddBase"></span><span id="BddBase"></span><span class="target" id="de/dc5/classBddBase"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddBase</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="bddmgrholder.html#_CPPv412BddMgrHolder" title="BddMgrHolder"><span class="n"><span class="pre">BddMgrHolder</span></span></a><a class="headerlink" href="#_CPPv47BddBase" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv37BddBase"></span><span id="_CPPv27BddBase"></span><span id="BddBase"></span><span class="target" id="de/dc5/classBddBase"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddBase</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv412BddMgrHolder" title="BddMgrHolder"><span class="n"><span class="pre">BddMgrHolder</span></span></a><br /></dt>
 <dd><p><a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a>, <a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a>, <a class="reference internal" href="bddlit.html#d0/dc3/classBddLit"><span class="std std-ref">BddLit</span></a> の基底クラス </p>
 <p><ul class="simple">
-<li><p>基本的に個々の <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> は一つの <a class="reference internal" href="bddmgr.html#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> に属す．</p></li>
-<li><p>例外は invalid な <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> で関連する <a class="reference internal" href="bddmgr.html#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> を持たない．</p></li>
-<li><p><a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> 間の演算は同じ <a class="reference internal" href="bddmgr.html#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> に属するもののみ可とする．</p></li>
-<li><p>異なる <a class="reference internal" href="bddmgr.html#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> に属する <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> の演算は std::invalid_argument 例外を 送出する． </p></li>
+<li><p>大まかには <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> を表すクラス</p></li>
+<li><p>インターフェイス上で <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> と <a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a>, <a class="reference internal" href="bddlit.html#d0/dc3/classBddLit"><span class="std std-ref">BddLit</span></a> を区別するために <a class="reference internal" href="#de/dc5/classBddBase"><span class="std std-ref">BddBase</span></a> を継承した別のクラスを用意している． </p></li>
 </ul>
 </p>
 <p>Subclassed by <a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a>, <a class="reference internal" href="bddcube.html#d9/d05/classBddCube"><span class="std std-ref">BddCube</span></a>, <a class="reference internal" href="bddlit.html#d0/dc3/classBddLit"><span class="std std-ref">BddLit</span></a>, <a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a>, <a class="reference internal" href="bddvarset.html#d7/de4/classBddVarSet"><span class="std std-ref">BddVarSet</span></a></p>
@@ -64,14 +66,14 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-生成と破壊">生成と破壊</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddBase7BddBaseEv">
-<span id="_CPPv3N7BddBase7BddBaseEv"></span><span id="_CPPv2N7BddBase7BddBaseEv"></span><span id="BddBase::BddBase"></span><span class="target" id="de/dc5/classBddBase_1a5ea573d412500257da2341e9f97588ef"></span><span class="sig-name descname"><span class="n"><span class="pre">BddBase</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddBase7BddBaseEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddBase7BddBaseEv"></span><span id="_CPPv2N7BddBase7BddBaseEv"></span><span id="BddBase::BddBase"></span><span class="target" id="de/dc5/classBddBase_1a5ea573d412500257da2341e9f97588ef"></span><span class="sig-name descname"><span class="n"><span class="pre">BddBase</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>空のコンストラクタ </p>
 <p>不正な値となる． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddBase7BddBaseERK7BddBase">
-<span id="_CPPv3N7BddBase7BddBaseERK7BddBase"></span><span id="_CPPv2N7BddBase7BddBaseERK7BddBase"></span><span id="BddBase::BddBase__BddBaseCR"></span><span class="target" id="de/dc5/classBddBase_1ab3a617dffe9a0ad032537a953f006f98"></span><span class="sig-name descname"><span class="n"><span class="pre">BddBase</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N7BddBase7BddBaseERK7BddBase" title="BddBase::BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddBase7BddBaseERK7BddBase" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddBase7BddBaseERK7BddBase"></span><span id="_CPPv2N7BddBase7BddBaseERK7BddBase"></span><span id="BddBase::BddBase__BddBaseCR"></span><span class="target" id="de/dc5/classBddBase_1ab3a617dffe9a0ad032537a953f006f98"></span><span class="sig-name descname"><span class="n"><span class="pre">BddBase</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4N7BddBase7BddBaseERK7BddBase" title="BddBase::BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コピーコンストラクタ </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -82,7 +84,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddBaseaSERK7BddBase">
-<span id="_CPPv3N7BddBaseaSERK7BddBase"></span><span id="_CPPv2N7BddBaseaSERK7BddBase"></span><span id="BddBase::assign-operator__BddBaseCR"></span><span class="target" id="de/dc5/classBddBase_1a7a7ca0faa1b28590d26ee55ca29efc16"></span><a class="reference internal" href="#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddBaseaSERK7BddBase" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddBaseaSERK7BddBase"></span><span id="_CPPv2N7BddBaseaSERK7BddBase"></span><span id="BddBase::assign-operator__BddBaseCR"></span><span class="target" id="de/dc5/classBddBase_1a7a7ca0faa1b28590d26ee55ca29efc16"></span><a class="reference internal" href="../all_classes.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コピー代入演算子 </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -93,7 +95,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7BddBaseD0Ev">
-<span id="_CPPv3N7BddBaseD0Ev"></span><span id="_CPPv2N7BddBaseD0Ev"></span><span id="BddBase::~BddBase"></span><span class="target" id="de/dc5/classBddBase_1a48a2f08c1711c95a6a8e76a85ad166b6"></span><span class="sig-name descname"><span class="n"><span class="pre">~BddBase</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7BddBaseD0Ev" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7BddBaseD0Ev"></span><span id="_CPPv2N7BddBaseD0Ev"></span><span id="BddBase::~BddBase"></span><span class="target" id="de/dc5/classBddBase_1a48a2f08c1711c95a6a8e76a85ad166b6"></span><span class="sig-name descname"><span class="n"><span class="pre">~BddBase</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>デストラクタ </p>
 </dd></dl>
 
@@ -102,33 +104,33 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-内容を取得する関数">内容を取得する関数</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddBase10is_invalidEv">
-<span id="_CPPv3NK7BddBase10is_invalidEv"></span><span id="_CPPv2NK7BddBase10is_invalidEv"></span><span id="BddBase::is_invalidC"></span><span class="target" id="de/dc5/classBddBase_1adcec8082a462af94d380d67e5491aa7e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddBase10is_invalidEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddBase10is_invalidEv"></span><span id="_CPPv2NK7BddBase10is_invalidEv"></span><span id="BddBase::is_invalidC"></span><span class="target" id="de/dc5/classBddBase_1adcec8082a462af94d380d67e5491aa7e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>不正値の時 true を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddBase3mgrEv">
-<span id="_CPPv3NK7BddBase3mgrEv"></span><span id="_CPPv2NK7BddBase3mgrEv"></span><span id="BddBase::mgrC"></span><span class="target" id="de/dc5/classBddBase_1abe4eeca2eef49746bfac4f0762322338"></span><a class="reference internal" href="bddmgr.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddBase3mgrEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddBase3mgrEv"></span><span id="_CPPv2NK7BddBase3mgrEv"></span><span id="BddBase::mgrC"></span><span class="target" id="de/dc5/classBddBase_1abe4eeca2eef49746bfac4f0762322338"></span><a class="reference internal" href="../all_classes.html#_CPPv46BddMgr" title="BddMgr"><span class="n"><span class="pre">BddMgr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>親のマネージャを返す． </p>
 <p>定数と不正値の時はマネージャを持たない． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddBase3bddEv">
-<span id="_CPPv3NK7BddBase3bddEv"></span><span id="_CPPv2NK7BddBase3bddEv"></span><span id="BddBase::bddC"></span><span class="target" id="de/dc5/classBddBase_1a1b763d6bfdbb06aea7c576f8a092556b"></span><a class="reference internal" href="bdd.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bdd</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddBase3bddEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddBase3bddEv"></span><span id="_CPPv2NK7BddBase3bddEv"></span><span id="BddBase::bddC"></span><span class="target" id="de/dc5/classBddBase_1a1b763d6bfdbb06aea7c576f8a092556b"></span><a class="reference internal" href="../all_classes.html#_CPPv43Bdd" title="Bdd"><span class="n"><span class="pre">Bdd</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bdd</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p><a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> に変換する． </p>
 <p>元の継承クラスの性質は失われる． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddBase8root_invEv">
-<span id="_CPPv3NK7BddBase8root_invEv"></span><span id="_CPPv2NK7BddBase8root_invEv"></span><span id="BddBase::root_invC"></span><span class="target" id="de/dc5/classBddBase_1ab038c30e84122af8d13a6141a01a2c45"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">root_inv</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddBase8root_invEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddBase8root_invEv"></span><span id="_CPPv2NK7BddBase8root_invEv"></span><span id="BddBase::root_invC"></span><span class="target" id="de/dc5/classBddBase_1ab038c30e84122af8d13a6141a01a2c45"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">root_inv</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>根が否定されている時 true を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddBaseeqERK7BddBase">
-<span id="_CPPv3NK7BddBaseeqERK7BddBase"></span><span id="_CPPv2NK7BddBaseeqERK7BddBase"></span><span id="BddBase::eq-operator__BddBaseCRC"></span><span class="target" id="de/dc5/classBddBase_1a8810c607a00ee1e169c8f5663f1d4804"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddBaseeqERK7BddBase" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddBaseeqERK7BddBase"></span><span id="_CPPv2NK7BddBaseeqERK7BddBase"></span><span id="BddBase::eq-operator__BddBaseCRC"></span><span class="target" id="de/dc5/classBddBase_1a8810c607a00ee1e169c8f5663f1d4804"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>等価比較演算 </p>
 <p>構造が同じで異なるBDDとの等価比較は <a class="reference internal" href="../all_classes.html#de/dc5/classBddBase_1adfa63fe5642b6c334d3f55ffab35f27e"><span class="std std-ref">is_identical()</span></a> で行う． </p>
 <dl class="field-list simple">
@@ -140,7 +142,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddBaseneERK7BddBase">
-<span id="_CPPv3NK7BddBaseneERK7BddBase"></span><span id="_CPPv2NK7BddBaseneERK7BddBase"></span><span id="BddBase::neq-operator__BddBaseCRC"></span><span class="target" id="de/dc5/classBddBase_1ac972900318c4d64fe811697c4e6fa6bf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddBaseneERK7BddBase" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddBaseneERK7BddBase"></span><span id="_CPPv2NK7BddBaseneERK7BddBase"></span><span id="BddBase::neq-operator__BddBaseCRC"></span><span class="target" id="de/dc5/classBddBase_1ac972900318c4d64fe811697c4e6fa6bf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>非等価比較演算 </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -154,13 +156,13 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-その他の関数">その他の関数</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddBase4sizeEv">
-<span id="_CPPv3NK7BddBase4sizeEv"></span><span id="_CPPv2NK7BddBase4sizeEv"></span><span id="BddBase::sizeC"></span><span class="target" id="de/dc5/classBddBase_1a491bae8dd4aecf2932395cf3afa86776"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddBase4sizeEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddBase4sizeEv"></span><span id="_CPPv2NK7BddBase4sizeEv"></span><span id="BddBase::sizeC"></span><span class="target" id="de/dc5/classBddBase_1a491bae8dd4aecf2932395cf3afa86776"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>ノード数を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7BddBase4hashEv">
-<span id="_CPPv3NK7BddBase4hashEv"></span><span id="_CPPv2NK7BddBase4hashEv"></span><span id="BddBase::hashC"></span><span class="target" id="de/dc5/classBddBase_1a5b0da3384a971f1db53a11f22687bec5"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hash</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7BddBase4hashEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK7BddBase4hashEv"></span><span id="_CPPv2NK7BddBase4hashEv"></span><span id="BddBase::hashC"></span><span class="target" id="de/dc5/classBddBase_1a5b0da3384a971f1db53a11f22687bec5"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hash</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>ハッシュ値を返す． </p>
 </dd></dl>
 
@@ -169,7 +171,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN7BddBase3repE1TRKNSt6vectorI1TEE">
-<span id="_CPPv3I0EN7BddBase3repERKNSt6vectorI1TEE"></span><span id="_CPPv2I0EN7BddBase3repERKNSt6vectorI1TEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="de/dc5/classBddBase_1a52fe293d1d2629fc5c55eaa8126acadb"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN7BddBase3repE1TRKNSt6vectorI1TEE" title="BddBase::rep::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rep</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN7BddBase3repE1TRKNSt6vectorI1TEE" title="BddBase::rep::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">bdd_list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN7BddBase3repE1TRKNSt6vectorI1TEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3I0EN7BddBase3repERKNSt6vectorI1TEE"></span><span id="_CPPv2I0EN7BddBase3repERKNSt6vectorI1TEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="de/dc5/classBddBase_1a52fe293d1d2629fc5c55eaa8126acadb"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4I0EN7BddBase3repE1TRKNSt6vectorI1TEE" title="BddBase::rep::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rep</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv4I0EN7BddBase3repE1TRKNSt6vectorI1TEE" title="BddBase::rep::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">bdd_list</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p><a class="reference internal" href="#de/dc5/classBddBase"><span class="std std-ref">BddBase</span></a>(の派生クラス)のリストから代表オブジェクトを取り出す． </p>
 <p><ul class="simple">
 <li><p>T は <a class="reference internal" href="#de/dc5/classBddBase"><span class="std std-ref">BddBase</span></a> の派生クラスでなければならない．</p></li>
@@ -191,33 +193,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">1.2.6.3. BddBase</a><ul>
-<li><a class="reference internal" href="#_CPPv47BddBase"><code class="docutils literal notranslate"><span class="pre">BddBase</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N7BddBase7BddBaseEv"><code class="docutils literal notranslate"><span class="pre">BddBase()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddBase7BddBaseERK7BddBase"><code class="docutils literal notranslate"><span class="pre">BddBase()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddBaseaSERK7BddBase"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7BddBaseD0Ev"><code class="docutils literal notranslate"><span class="pre">~BddBase()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddBase10is_invalidEv"><code class="docutils literal notranslate"><span class="pre">is_invalid()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddBase3mgrEv"><code class="docutils literal notranslate"><span class="pre">mgr()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddBase3bddEv"><code class="docutils literal notranslate"><span class="pre">bdd()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddBase8root_invEv"><code class="docutils literal notranslate"><span class="pre">root_inv()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddBaseeqERK7BddBase"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddBaseneERK7BddBase"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddBase4sizeEv"><code class="docutils literal notranslate"><span class="pre">size()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7BddBase4hashEv"><code class="docutils literal notranslate"><span class="pre">hash()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I0EN7BddBase3repE1TRKNSt6vectorI1TEE"><code class="docutils literal notranslate"><span class="pre">rep()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="bddmgrholder.html"
@@ -235,7 +212,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -243,13 +220,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -272,8 +249,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

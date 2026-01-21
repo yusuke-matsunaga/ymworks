@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>4.2.12. ClibTiming &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="4.2.13. ClibLut" href="cliblut.html" />
     <link rel="prev" title="4.2.11. ClibBundle" href="clibbundle.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,7 +50,7 @@
           <div class="body" role="main">
             
   <section id="clibtiming">
-<h1><span class="section-number">4.2.12. </span>ClibTiming<a class="headerlink" href="#clibtiming" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">4.2.12. </span>ClibTiming<a class="headerlink" href="#clibtiming" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv410ClibTiming">
 <span id="_CPPv310ClibTiming"></span><span id="_CPPv210ClibTiming"></span><span id="ClibTiming"></span><span class="target" id="d4/d02/classClibTiming"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibTiming</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4I0E12ClibCellElem" title="ClibCellElem"><span class="n"><span class="pre">ClibCellElem</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">CiTiming</span></span><span class="p"><span class="pre">&gt;</span></span><br /></dt>
@@ -57,6 +61,10 @@
 <dt class="sig sig-object cpp" id="_CPPv4N10ClibTiming10ClibTimingEv">
 <span id="_CPPv3N10ClibTiming10ClibTimingEv"></span><span id="_CPPv2N10ClibTiming10ClibTimingEv"></span><span id="ClibTiming::ClibTiming"></span><span class="target" id="d4/d02/classClibTiming_1a49e9e7f36698a0bb70178cbe87ea322e"></span><span class="sig-name descname"><span class="n"><span class="pre">ClibTiming</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
 <dd><p>空のコンストラクタ </p>
+<p><ul class="simple">
+<li><p>不正な値となる． </p></li>
+</ul>
+</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -83,26 +91,52 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming4typeEv">
 <span id="_CPPv3NK10ClibTiming4typeEv"></span><span id="_CPPv2NK10ClibTiming4typeEv"></span><span id="ClibTiming::typeC"></span><span class="target" id="d4/d02/classClibTiming_1a8e50296888fd3008e175317369cd13e1"></span><a class="reference internal" href="../all_classes.html#_CPPv414ClibTimingType" title="ClibTimingType"><span class="n"><span class="pre">ClibTimingType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>型の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1aa03ac9d31fd937287a881a3796d605a9"><span class="std std-ref">ClibTimingType</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming11timing_condEv">
-<span id="_CPPv3NK10ClibTiming11timing_condEv"></span><span id="_CPPv2NK10ClibTiming11timing_condEv"></span><span id="ClibTiming::timing_condC"></span><span class="target" id="d4/d02/classClibTiming_1a610f635f0122c70c02d8ffc10f539994"></span><a class="reference internal" href="../logic/expr.html#_CPPv44Expr" title="Expr"><span class="n"><span class="pre">Expr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timing_cond</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<span id="_CPPv3NK10ClibTiming11timing_condEv"></span><span id="_CPPv2NK10ClibTiming11timing_condEv"></span><span id="ClibTiming::timing_condC"></span><span class="target" id="d4/d02/classClibTiming_1a610f635f0122c70c02d8ffc10f539994"></span><a class="reference internal" href="../all_classes.html#_CPPv44Expr" title="Expr"><span class="n"><span class="pre">Expr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timing_cond</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>タイミング条件式の取得 </p>
-<p>ない場合には定数1の式が返される． </p>
+<p><ul class="simple">
+<li><p>ない場合には定数1の式が返される． </p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming15calc_rise_delayE8ClibTime15ClibCapacitance">
 <span id="_CPPv3NK10ClibTiming15calc_rise_delayE8ClibTime15ClibCapacitance"></span><span id="_CPPv2NK10ClibTiming15calc_rise_delayE8ClibTime15ClibCapacitance"></span><span id="ClibTiming::calc_rise_delay__ClibTime.ClibCapacitanceC"></span><span class="target" id="d4/d02/classClibTiming_1a06514b8032e7e1a77bffce17ed26e48b"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">calc_rise_delay</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_transition</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv415ClibCapacitance" title="ClibCapacitance"><span class="n"><span class="pre">ClibCapacitance</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_capacitance</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がり遅延時間を計算する． </p>
-<p>遅延時間は入力信号がしきい値(通常50%)を超えてから 出力信号がしきい値(通常50%)を超えるまでの時間 </p>
+<p>
+遅延時間は入力信号がしきい値(通常50%)を超えてから 出力信号がしきい値(通常50%)を超えるまでの時間 <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibtime.html#df/dc2/classClibTime"><span class="std std-ref">ClibTime</span></a>, <a class="reference internal" href="clibcapacitance.html#df/da3/classClibCapacitance"><span class="std std-ref">ClibCapacitance</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_transition</strong> -- [in] 入力信号の遷移時間 </p></li>
 <li><p><strong>output_capacitance</strong> -- [in] 出力の負荷容量 </p></li>
 </ul>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
 </dd>
 </dl>
 </dd></dl>
@@ -111,13 +145,21 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming15calc_fall_delayE8ClibTime15ClibCapacitance">
 <span id="_CPPv3NK10ClibTiming15calc_fall_delayE8ClibTime15ClibCapacitance"></span><span id="_CPPv2NK10ClibTiming15calc_fall_delayE8ClibTime15ClibCapacitance"></span><span id="ClibTiming::calc_fall_delay__ClibTime.ClibCapacitanceC"></span><span class="target" id="d4/d02/classClibTiming_1aa01d8a81b5e1cb993e56b70c5a1b6406"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">calc_fall_delay</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_transition</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv415ClibCapacitance" title="ClibCapacitance"><span class="n"><span class="pre">ClibCapacitance</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_capacitance</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がり遅延時間を計算する． </p>
-<p>遅延時間は入力信号がしきい値(通常50%)を超えてから 出力信号がしきい値(通常50%)を超えるまでの時間 </p>
+<p>
+遅延時間は入力信号がしきい値(通常50%)を超えてから 出力信号がしきい値(通常50%)を超えるまでの時間 <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibtime.html#df/dc2/classClibTime"><span class="std std-ref">ClibTime</span></a>, <a class="reference internal" href="clibcapacitance.html#df/da3/classClibCapacitance"><span class="std std-ref">ClibCapacitance</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_transition</strong> -- [in] 入力信号の遷移時間 </p></li>
 <li><p><strong>output_capacitance</strong> -- [in] 出力の負荷容量 </p></li>
 </ul>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
 </dd>
 </dl>
 </dd></dl>
@@ -126,13 +168,21 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming20calc_rise_transitionE8ClibTime15ClibCapacitance">
 <span id="_CPPv3NK10ClibTiming20calc_rise_transitionE8ClibTime15ClibCapacitance"></span><span id="_CPPv2NK10ClibTiming20calc_rise_transitionE8ClibTime15ClibCapacitance"></span><span id="ClibTiming::calc_rise_transition__ClibTime.ClibCapacitanceC"></span><span class="target" id="d4/d02/classClibTiming_1ae8f0288e65d4a9d9d64c41c8690f90d6"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">calc_rise_transition</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_transition</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv415ClibCapacitance" title="ClibCapacitance"><span class="n"><span class="pre">ClibCapacitance</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_capacitance</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がり遷移時間を計算する． </p>
-<p>立ち上がり遷移時間は出力信号がしきい値1(通常20%)を超えてから しきい値2(通常80%)を超えるまでの時間 </p>
+<p>
+立ち上がり遷移時間は出力信号がしきい値1(通常20%)を超えてから しきい値2(通常80%)を超えるまでの時間 <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibtime.html#df/dc2/classClibTime"><span class="std std-ref">ClibTime</span></a>, <a class="reference internal" href="clibcapacitance.html#df/da3/classClibCapacitance"><span class="std std-ref">ClibCapacitance</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_transition</strong> -- [in] 入力信号の遷移時間 </p></li>
 <li><p><strong>output_capacitance</strong> -- [in] 出力の負荷容量 </p></li>
 </ul>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
 </dd>
 </dl>
 </dd></dl>
@@ -141,13 +191,21 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming20calc_fall_transitionE8ClibTime15ClibCapacitance">
 <span id="_CPPv3NK10ClibTiming20calc_fall_transitionE8ClibTime15ClibCapacitance"></span><span id="_CPPv2NK10ClibTiming20calc_fall_transitionE8ClibTime15ClibCapacitance"></span><span id="ClibTiming::calc_fall_transition__ClibTime.ClibCapacitanceC"></span><span class="target" id="d4/d02/classClibTiming_1a0f4c878063277997f0cf76462a10e9a5"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">calc_fall_transition</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">input_transition</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv415ClibCapacitance" title="ClibCapacitance"><span class="n"><span class="pre">ClibCapacitance</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">output_capacitance</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がり遷移時間を計算する． </p>
-<p>立ち上がり遷移時間は出力信号がしきい値1(通常80%)を下回ってから しきい値2(通常20%)を下回るまでの時間 </p>
+<p>
+立ち上がり遷移時間は出力信号がしきい値1(通常80%)を下回ってから しきい値2(通常20%)を下回るまでの時間 <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibtime.html#df/dc2/classClibTime"><span class="std std-ref">ClibTime</span></a>, <a class="reference internal" href="clibcapacitance.html#df/da3/classClibCapacitance"><span class="std std-ref">ClibCapacitance</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_transition</strong> -- [in] 入力信号の遷移時間 </p></li>
 <li><p><strong>output_capacitance</strong> -- [in] 出力の負荷容量 </p></li>
 </ul>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
 </dd>
 </dl>
 </dd></dl>
@@ -156,45 +214,138 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming14intrinsic_riseEv">
 <span id="_CPPv3NK10ClibTiming14intrinsic_riseEv"></span><span id="_CPPv2NK10ClibTiming14intrinsic_riseEv"></span><span id="ClibTiming::intrinsic_riseC"></span><span class="target" id="d4/d02/classClibTiming_1a3d85255f69fffad52d67a99c7c1702cd"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">intrinsic_rise</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がり固有遅延の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ClibTIme </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が generic_cmos/piecewise_cmos 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming14intrinsic_fallEv">
 <span id="_CPPv3NK10ClibTiming14intrinsic_fallEv"></span><span id="_CPPv2NK10ClibTiming14intrinsic_fallEv"></span><span id="ClibTiming::intrinsic_fallC"></span><span class="target" id="d4/d02/classClibTiming_1ad87ec39fb97e4475c56855930e9c40bc"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">intrinsic_fall</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がり固有遅延の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ClibTIme </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が generic_cmos/piecewise_cmos 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming10slope_riseEv">
 <span id="_CPPv3NK10ClibTiming10slope_riseEv"></span><span id="_CPPv2NK10ClibTiming10slope_riseEv"></span><span id="ClibTiming::slope_riseC"></span><span class="target" id="d4/d02/classClibTiming_1ad6eb88b5b591eb6a7af0a107b58f6ae7"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">slope_rise</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がりスロープ遅延の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ClibTIme </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が generic_cmos/piecewise_cmos 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming10slope_fallEv">
 <span id="_CPPv3NK10ClibTiming10slope_fallEv"></span><span id="_CPPv2NK10ClibTiming10slope_fallEv"></span><span id="ClibTiming::slope_fallC"></span><span class="target" id="d4/d02/classClibTiming_1af4cf74ef8cb8cce733bbdf734d6a69f4"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">slope_fall</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がりスロープ遅延の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ClibTIme </p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が generic_cmos/piecewise_cmos 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming15rise_resistanceEv">
 <span id="_CPPv3NK10ClibTiming15rise_resistanceEv"></span><span id="_CPPv2NK10ClibTiming15rise_resistanceEv"></span><span id="ClibTiming::rise_resistanceC"></span><span class="target" id="d4/d02/classClibTiming_1a60a2d4ff99c09761a223a54984970234"></span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rise_resistance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がり遷移遅延の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibresistance.html#d3/d9e/classClibResistance"><span class="std std-ref">ClibResistance</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が generic_cmos 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming15fall_resistanceEv">
 <span id="_CPPv3NK10ClibTiming15fall_resistanceEv"></span><span id="_CPPv2NK10ClibTiming15fall_resistanceEv"></span><span id="ClibTiming::fall_resistanceC"></span><span class="target" id="d4/d02/classClibTiming_1a26eda47e4b342cd6f1563ebc73053903"></span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fall_resistance</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がり遷移遅延の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibresistance.html#d3/d9e/classClibResistance"><span class="std std-ref">ClibResistance</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が generic_cmos 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming19rise_pin_resistanceE8SizeType">
 <span id="_CPPv3NK10ClibTiming19rise_pin_resistanceE8SizeType"></span><span id="_CPPv2NK10ClibTiming19rise_pin_resistanceE8SizeType"></span><span id="ClibTiming::rise_pin_resistance__SizeTypeC"></span><span class="target" id="d4/d02/classClibTiming_1a4a41a9e4ad958074a602789fe719fb58"></span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rise_pin_resistance</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">piece_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がりピン抵抗の取得 </p>
+<p><ul class="simple">
+<li><p>区間の情報は <a class="reference internal" href="clibcelllibrary.html#d9/d5e/classClibCellLibrary_1a0829f367a911b7a1fcb2a3098b54d923"><span class="std std-ref">ClibCellLibrary::piece_define()</span></a> から得られる． </p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibresistance.html#d3/d9e/classClibResistance"><span class="std std-ref">ClibResistance</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>piece_id</strong> -- [in] 区間番号 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が piecewise_cmos 以外の時 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -203,9 +354,24 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming19fall_pin_resistanceE8SizeType">
 <span id="_CPPv3NK10ClibTiming19fall_pin_resistanceE8SizeType"></span><span id="_CPPv2NK10ClibTiming19fall_pin_resistanceE8SizeType"></span><span id="ClibTiming::fall_pin_resistance__SizeTypeC"></span><span class="target" id="d4/d02/classClibTiming_1a2182032cd908f6d85549ae31ba1e981f"></span><a class="reference internal" href="../all_classes.html#_CPPv414ClibResistance" title="ClibResistance"><span class="n"><span class="pre">ClibResistance</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fall_pin_resistance</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">piece_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がりピン抵抗の取得 </p>
+<p><ul class="simple">
+<li><p>区間の情報は <a class="reference internal" href="clibcelllibrary.html#d9/d5e/classClibCellLibrary_1a0829f367a911b7a1fcb2a3098b54d923"><span class="std std-ref">ClibCellLibrary::piece_define()</span></a> から得られる． </p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibresistance.html#d3/d9e/classClibResistance"><span class="std std-ref">ClibResistance</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>piece_id</strong> -- [in] 区間番号 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が piecewise_cmos 以外の時 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -214,9 +380,24 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming20rise_delay_interceptE8SizeType">
 <span id="_CPPv3NK10ClibTiming20rise_delay_interceptE8SizeType"></span><span id="_CPPv2NK10ClibTiming20rise_delay_interceptE8SizeType"></span><span id="ClibTiming::rise_delay_intercept__SizeTypeC"></span><span class="target" id="d4/d02/classClibTiming_1a2b7cfbde0b10f81a89fc997b12bb27f1"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rise_delay_intercept</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">piece_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がりY切片 </p>
+<p><ul class="simple">
+<li><p>区間の情報は <a class="reference internal" href="clibcelllibrary.html#d9/d5e/classClibCellLibrary_1a0829f367a911b7a1fcb2a3098b54d923"><span class="std std-ref">ClibCellLibrary::piece_define()</span></a> から得られる． </p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ClibTIme</p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>piece_id</strong> -- [in] 区間番号 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が piecewise_cmos 以外の時 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -225,9 +406,24 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming20fall_delay_interceptE8SizeType">
 <span id="_CPPv3NK10ClibTiming20fall_delay_interceptE8SizeType"></span><span id="_CPPv2NK10ClibTiming20fall_delay_interceptE8SizeType"></span><span id="ClibTiming::fall_delay_intercept__SizeTypeC"></span><span class="target" id="d4/d02/classClibTiming_1ae1229a52789daea36edc19115a0fa799"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibTime" title="ClibTime"><span class="n"><span class="pre">ClibTime</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fall_delay_intercept</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">piece_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がりY切片 </p>
+<p><ul class="simple">
+<li><p>区間の情報は <a class="reference internal" href="clibcelllibrary.html#d9/d5e/classClibCellLibrary_1a0829f367a911b7a1fcb2a3098b54d923"><span class="std std-ref">ClibCellLibrary::piece_define()</span></a> から得られる． </p></li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ClibTIme</p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>piece_id</strong> -- [in] 区間番号 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が piecewise_cmos 以外の時 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -236,36 +432,114 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming15rise_transitionEv">
 <span id="_CPPv3NK10ClibTiming15rise_transitionEv"></span><span id="_CPPv2NK10ClibTiming15rise_transitionEv"></span><span id="ClibTiming::rise_transitionC"></span><span class="target" id="d4/d02/classClibTiming_1ab3c613bf67a77941b83398d8666f6dfc"></span><a class="reference internal" href="../all_classes.html#_CPPv47ClibLut" title="ClibLut"><span class="n"><span class="pre">ClibLut</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rise_transition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がり遷移遅延テーブルの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="cliblut.html#d1/da9/classClibLut"><span class="std std-ref">ClibLut</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が table_lookup 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming15fall_transitionEv">
 <span id="_CPPv3NK10ClibTiming15fall_transitionEv"></span><span id="_CPPv2NK10ClibTiming15fall_transitionEv"></span><span id="ClibTiming::fall_transitionC"></span><span class="target" id="d4/d02/classClibTiming_1a52d9f1650ebf47c74e69ecd0303c30dd"></span><a class="reference internal" href="../all_classes.html#_CPPv47ClibLut" title="ClibLut"><span class="n"><span class="pre">ClibLut</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fall_transition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がり遷移遅延テーブルの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="cliblut.html#d1/da9/classClibLut"><span class="std std-ref">ClibLut</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が table_lookup 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming16rise_propagationEv">
 <span id="_CPPv3NK10ClibTiming16rise_propagationEv"></span><span id="_CPPv2NK10ClibTiming16rise_propagationEv"></span><span id="ClibTiming::rise_propagationC"></span><span class="target" id="d4/d02/classClibTiming_1a279f681bb96498469750fb3050564475"></span><a class="reference internal" href="../all_classes.html#_CPPv47ClibLut" title="ClibLut"><span class="n"><span class="pre">ClibLut</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rise_propagation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がり伝搬遅延テーブルの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="cliblut.html#d1/da9/classClibLut"><span class="std std-ref">ClibLut</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が table_lookup 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming16fall_propagationEv">
 <span id="_CPPv3NK10ClibTiming16fall_propagationEv"></span><span id="_CPPv2NK10ClibTiming16fall_propagationEv"></span><span id="ClibTiming::fall_propagationC"></span><span class="target" id="d4/d02/classClibTiming_1a9e622693b66c4170d11182d14e6672d3"></span><a class="reference internal" href="../all_classes.html#_CPPv47ClibLut" title="ClibLut"><span class="n"><span class="pre">ClibLut</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fall_propagation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がり伝搬遅延テーブルの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="cliblut.html#d1/da9/classClibLut"><span class="std std-ref">ClibLut</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が table_lookup 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming9cell_riseEv">
 <span id="_CPPv3NK10ClibTiming9cell_riseEv"></span><span id="_CPPv2NK10ClibTiming9cell_riseEv"></span><span id="ClibTiming::cell_riseC"></span><span class="target" id="d4/d02/classClibTiming_1a59ced452a2bfac312a96ebb8ed4f6cc2"></span><a class="reference internal" href="../all_classes.html#_CPPv47ClibLut" title="ClibLut"><span class="n"><span class="pre">ClibLut</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell_rise</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち上がりセル遅延テーブルの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="cliblut.html#d1/da9/classClibLut"><span class="std std-ref">ClibLut</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が table_lookup 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10ClibTiming9cell_fallEv">
 <span id="_CPPv3NK10ClibTiming9cell_fallEv"></span><span id="_CPPv2NK10ClibTiming9cell_fallEv"></span><span id="ClibTiming::cell_fallC"></span><span class="target" id="d4/d02/classClibTiming_1a1cff14c977f9bd2c47167b88be86cbd4"></span><a class="reference internal" href="../all_classes.html#_CPPv47ClibLut" title="ClibLut"><span class="n"><span class="pre">ClibLut</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell_fall</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>立ち下がりセル遅延テーブルの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="cliblut.html#d1/da9/classClibLut"><span class="std std-ref">ClibLut</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- delay_model() が table_lookup 以外の時 </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -278,45 +552,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">4.2.12. ClibTiming</a><ul>
-<li><a class="reference internal" href="#_CPPv410ClibTiming"><code class="docutils literal notranslate"><span class="pre">ClibTiming</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N10ClibTiming10ClibTimingEv"><code class="docutils literal notranslate"><span class="pre">ClibTiming()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10ClibTiming10ClibTimingEPK6CiCellPK8CiTiming"><code class="docutils literal notranslate"><span class="pre">ClibTiming()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N10ClibTimingD0Ev"><code class="docutils literal notranslate"><span class="pre">~ClibTiming()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming4typeEv"><code class="docutils literal notranslate"><span class="pre">type()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming11timing_condEv"><code class="docutils literal notranslate"><span class="pre">timing_cond()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming15calc_rise_delayE8ClibTime15ClibCapacitance"><code class="docutils literal notranslate"><span class="pre">calc_rise_delay()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming15calc_fall_delayE8ClibTime15ClibCapacitance"><code class="docutils literal notranslate"><span class="pre">calc_fall_delay()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming20calc_rise_transitionE8ClibTime15ClibCapacitance"><code class="docutils literal notranslate"><span class="pre">calc_rise_transition()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming20calc_fall_transitionE8ClibTime15ClibCapacitance"><code class="docutils literal notranslate"><span class="pre">calc_fall_transition()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming14intrinsic_riseEv"><code class="docutils literal notranslate"><span class="pre">intrinsic_rise()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming14intrinsic_fallEv"><code class="docutils literal notranslate"><span class="pre">intrinsic_fall()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming10slope_riseEv"><code class="docutils literal notranslate"><span class="pre">slope_rise()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming10slope_fallEv"><code class="docutils literal notranslate"><span class="pre">slope_fall()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming15rise_resistanceEv"><code class="docutils literal notranslate"><span class="pre">rise_resistance()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming15fall_resistanceEv"><code class="docutils literal notranslate"><span class="pre">fall_resistance()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming19rise_pin_resistanceE8SizeType"><code class="docutils literal notranslate"><span class="pre">rise_pin_resistance()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming19fall_pin_resistanceE8SizeType"><code class="docutils literal notranslate"><span class="pre">fall_pin_resistance()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming20rise_delay_interceptE8SizeType"><code class="docutils literal notranslate"><span class="pre">rise_delay_intercept()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming20fall_delay_interceptE8SizeType"><code class="docutils literal notranslate"><span class="pre">fall_delay_intercept()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming15rise_transitionEv"><code class="docutils literal notranslate"><span class="pre">rise_transition()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming15fall_transitionEv"><code class="docutils literal notranslate"><span class="pre">fall_transition()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming16rise_propagationEv"><code class="docutils literal notranslate"><span class="pre">rise_propagation()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming16fall_propagationEv"><code class="docutils literal notranslate"><span class="pre">fall_propagation()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming9cell_riseEv"><code class="docutils literal notranslate"><span class="pre">cell_rise()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10ClibTiming9cell_fallEv"><code class="docutils literal notranslate"><span class="pre">cell_fall()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="clibbundle.html"
@@ -334,7 +571,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -342,13 +579,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -370,8 +607,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

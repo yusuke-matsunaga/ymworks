@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>5.2.5. SatInitParam &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="5.2.6. SatStats" href="satstats.html" />
     <link rel="prev" title="5.2.4. SatLiteral" href="satliteral.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,7 +50,7 @@
           <div class="body" role="main">
             
   <section id="satinitparam">
-<h1><span class="section-number">5.2.5. </span>SatInitParam<a class="headerlink" href="#satinitparam" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">5.2.5. </span>SatInitParam<a class="headerlink" href="#satinitparam" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv412SatInitParam">
 <span id="_CPPv312SatInitParam"></span><span id="_CPPv212SatInitParam"></span><span id="SatInitParam"></span><span class="target" id="d8/da3/classSatInitParam"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SatInitParam</span></span></span><br /></dt>
@@ -63,6 +67,10 @@
 </ol>
 </p></li>
 </ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d1/dc8/classJsonValue"><span class="std std-ref">JsonValue</span></a></p>
+</div>
 </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
@@ -80,6 +88,9 @@
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>type</strong> -- [in] 実装タイプを表す文字列 </p>
 </dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">invalid_argument</span></span></span> -- type が不正な値だった． </p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -91,6 +102,9 @@
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>type</strong> -- [in] 実装タイプを表す文字列 </p>
 </dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">invalid_argument</span></span></span> -- type が不正な値だった． </p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -98,9 +112,17 @@
 <dt class="sig sig-object cpp" id="_CPPv4N12SatInitParam12SatInitParamERK9JsonValue">
 <span id="_CPPv3N12SatInitParam12SatInitParamERK9JsonValue"></span><span id="_CPPv2N12SatInitParam12SatInitParamERK9JsonValue"></span><span id="SatInitParam::SatInitParam__JsonValueCR"></span><span class="target" id="d8/da3/classSatInitParam_1a5d819bce0df0c0519119fcba859d5586"></span><span class="sig-name descname"><span class="n"><span class="pre">SatInitParam</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49JsonValue" title="JsonValue"><span class="n"><span class="pre">JsonValue</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">js_obj</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コンストラクタ(Jsonオブジェクト) </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d1/dc8/classJsonValue"><span class="std std-ref">JsonValue</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>js_obj</strong> -- [in] オプションを表す Json オブジェクト </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">invalid_argument</span></span></span> -- js_obj が不正な値だった． </p>
 </dd>
 </dl>
 </dd></dl>
@@ -134,6 +156,9 @@
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
 </dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">invalid_argument</span></span></span> -- filename からの読み込みに失敗した． </p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -147,28 +172,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">5.2.5. SatInitParam</a><ul>
-<li><a class="reference internal" href="#_CPPv412SatInitParam"><code class="docutils literal notranslate"><span class="pre">SatInitParam</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N12SatInitParam12SatInitParamEv"><code class="docutils literal notranslate"><span class="pre">SatInitParam()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12SatInitParam12SatInitParamERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">SatInitParam()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12SatInitParam12SatInitParamEPKc"><code class="docutils literal notranslate"><span class="pre">SatInitParam()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12SatInitParam12SatInitParamERK9JsonValue"><code class="docutils literal notranslate"><span class="pre">SatInitParam()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12SatInitParamD0Ev"><code class="docutils literal notranslate"><span class="pre">~SatInitParam()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12SatInitParam4typeEv"><code class="docutils literal notranslate"><span class="pre">type()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12SatInitParam6js_objEv"><code class="docutils literal notranslate"><span class="pre">js_obj()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12SatInitParam9from_jsonERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">from_json()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="satliteral.html"
@@ -186,7 +191,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -194,13 +199,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -222,8 +227,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

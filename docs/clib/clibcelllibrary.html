@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>4.2.5. ClibCellLibrary &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="4.2.6. ClibCellClass" href="clibcellclass.html" />
     <link rel="prev" title="4.2.4. ClibTime" href="clibtime.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,139 +50,323 @@
           <div class="body" role="main">
             
   <section id="clibcelllibrary">
-<h1><span class="section-number">4.2.5. </span>ClibCellLibrary<a class="headerlink" href="#clibcelllibrary" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">4.2.5. </span>ClibCellLibrary<a class="headerlink" href="#clibcelllibrary" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv415ClibCellLibrary">
 <span id="_CPPv315ClibCellLibrary"></span><span id="_CPPv215ClibCellLibrary"></span><span id="ClibCellLibrary"></span><span class="target" id="d9/d5e/classClibCellLibrary"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibCellLibrary</span></span></span><br /></dt>
 <dd><p>セルライブラリを表すクラス </p>
-<p>実際には実体の CiCellLibrary へのスマートポインタとなっている． アプリケーション側では CiCellLibrary のメモリ管理について気にする 必要はない． </p>
+<p><ul class="simple">
+<li><p>実際には実体の CiCellLibrary へのスマートポインタとなっている． アプリケーション側では CiCellLibrary のメモリ管理について気にする 必要はない． </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-生成と破壊">生成と破壊</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibrary15ClibCellLibraryEv">
+<span id="_CPPv3N15ClibCellLibrary15ClibCellLibraryEv"></span><span id="_CPPv2N15ClibCellLibrary15ClibCellLibraryEv"></span><span id="ClibCellLibrary::ClibCellLibrary"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ac10b55e08a45908285bf462c3aa65489"></span><span class="sig-name descname"><span class="n"><span class="pre">ClibCellLibrary</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>コンストラクタ </p>
+<p><ul class="simple">
+<li><p>不正値となる． </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibrary15ClibCellLibraryE14ClibLibraryPtr">
+<span id="_CPPv3N15ClibCellLibrary15ClibCellLibraryE14ClibLibraryPtr"></span><span id="_CPPv2N15ClibCellLibrary15ClibCellLibraryE14ClibLibraryPtr"></span><span id="ClibCellLibrary::ClibCellLibrary__ClibLibraryPtr"></span><span class="target" id="d9/d5e/classClibCellLibrary_1aef5bbd6adf7e50e813717d9727f27c58"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibCellLibrary</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv414ClibLibraryPtr" title="ClibLibraryPtr"><span class="n"><span class="pre">ClibLibraryPtr</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>実体のポインタを引数にしたコンストラクタ </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary">
+<span id="_CPPv3N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary"></span><span id="_CPPv2N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary"></span><span id="ClibCellLibrary::ClibCellLibrary__ClibCellLibraryCR"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a9e21e76a0443360a0525f82cd98a360a"></span><span class="sig-name descname"><span class="n"><span class="pre">ClibCellLibrary</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary" title="ClibCellLibrary::ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>コピーコンストラクタ </p>
+<p>src と同じ実体を共有する'浅い'コピーを行う． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibraryaSERK15ClibCellLibrary">
+<span id="_CPPv3N15ClibCellLibraryaSERK15ClibCellLibrary"></span><span id="_CPPv2N15ClibCellLibraryaSERK15ClibCellLibrary"></span><span id="ClibCellLibrary::assign-operator__ClibCellLibraryCR"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a0832a97917ac2936ecf8db5360f62dca"></span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>代入演算子 </p>
+<p>
+src と同じ実体を共有する'浅い'コピーを行う． </p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>代入後の自身への参照を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibraryD0Ev">
+<span id="_CPPv3N15ClibCellLibraryD0Ev"></span><span id="_CPPv2N15ClibCellLibraryD0Ev"></span><span id="ClibCellLibrary::~ClibCellLibrary"></span><span class="target" id="d9/d5e/classClibCellLibrary_1add12473312996d7e1e2ea91aaffa138f"></span><span class="sig-name descname"><span class="n"><span class="pre">~ClibCellLibrary</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
+<dd><p>デストラクタ </p>
+</dd></dl>
+
+</div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-属性の取得">属性の取得</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary8is_validEv">
 <span id="_CPPv3NK15ClibCellLibrary8is_validEv"></span><span id="_CPPv2NK15ClibCellLibrary8is_validEv"></span><span id="ClibCellLibrary::is_validC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_valid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
-<dd><p>内容を持っているときに true を返す． </p>
+<dd><p>適正な値を持っているときに true を返す． </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary10is_invalidEv">
+<span id="_CPPv3NK15ClibCellLibrary10is_invalidEv"></span><span id="_CPPv2NK15ClibCellLibrary10is_invalidEv"></span><span id="ClibCellLibrary::is_invalidC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1aa4597aa62d4c0245db171d6bc9d48b61"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>不正値の時 true を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary4nameEv">
 <span id="_CPPv3NK15ClibCellLibrary4nameEv"></span><span id="_CPPv2NK15ClibCellLibrary4nameEv"></span><span id="ClibCellLibrary::nameC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1adfd669317e4ef8a84de58bf09e6010b7"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>名前の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary10technologyEv">
 <span id="_CPPv3NK15ClibCellLibrary10technologyEv"></span><span id="_CPPv2NK15ClibCellLibrary10technologyEv"></span><span id="ClibCellLibrary::technologyC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a5bfc9deaee37d96b4a3fd21fd6183a69"></span><a class="reference internal" href="../all_classes.html#_CPPv414ClibTechnology" title="ClibTechnology"><span class="n"><span class="pre">ClibTechnology</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">technology</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>テクノロジの取得 </p>
-<p>返り値は<ul class="simple">
+<p>
+返り値は<ul class="simple">
 <li><p>cmos</p></li>
 <li><p>fpga のどちらか </p></li>
 </ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1af4bc86c6325ea6accb3cde769340d1a3"><span class="std std-ref">ClibTechnology</span></a></p>
+</div>
 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary11delay_modelEv">
 <span id="_CPPv3NK15ClibCellLibrary11delay_modelEv"></span><span id="_CPPv2NK15ClibCellLibrary11delay_modelEv"></span><span id="ClibCellLibrary::delay_modelC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ad2d99f9850d3d8d0708d176075f26f65"></span><a class="reference internal" href="../all_classes.html#_CPPv414ClibDelayModel" title="ClibDelayModel"><span class="n"><span class="pre">ClibDelayModel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delay_model</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>遅延モデルの取得 </p>
-<p>返り値は<ul class="simple">
+<p>
+返り値は<ul class="simple">
 <li><p>generic_cmos</p></li>
 <li><p>table_lookup</p></li>
 <li><p>piecewise_cmos</p></li>
 <li><p>cmos2</p></li>
 <li><p>dcm のいずれか </p></li>
 </ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1ad0c79063e917c2e32377b95a593b12d2"><span class="std std-ref">ClibDelayModel</span></a></p>
+</div>
 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary10piece_typeEv">
 <span id="_CPPv3NK15ClibCellLibrary10piece_typeEv"></span><span id="_CPPv2NK15ClibCellLibrary10piece_typeEv"></span><span id="ClibCellLibrary::piece_typeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a068219b12fc0ab18160f579691cad2e6"></span><a class="reference internal" href="../all_classes.html#_CPPv411ClibVarType" title="ClibVarType"><span class="n"><span class="pre">ClibVarType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">piece_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>区間のタイプの取得 </p>
-<p>返り値は<ul class="simple">
+<p>
+返り値は<ul class="simple">
 <li><p>output_net_length ( piece_length )</p></li>
 <li><p>output_pin_cap ( pice_pin_cap )</p></li>
 <li><p>output_wire_cap ( piece_wire_cap )</p></li>
 <li><p>total_output_net_capacitance ( piece_total_cap )</p></li>
 <li><p>none のいずれか． それ以外の値は用いられない．</p></li>
 </ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1ad0c79063e917c2e32377b95a593b12d2"><span class="std std-ref">ClibDelayModel</span></a>, <a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1a76244afe1b27c62aff9fa024185cd801"><span class="std std-ref">ClibVarType</span></a></p>
+</div>
 </p>
-<p><a class="reference internal" href="#d9/d5e/classClibCellLibrary_1ad2d99f9850d3d8d0708d176075f26f65"><span class="std std-ref">delay_model()</span></a> = <a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1ad0c79063e917c2e32377b95a593b12d2a4bf387323d0b62c30286cf9098ac7cf3"><span class="std std-ref">ClibDelayModel::piecewise_cmos</span></a> の時のみ意味を持つ． </p>
+<p><a class="reference internal" href="#d9/d5e/classClibCellLibrary_1ad2d99f9850d3d8d0708d176075f26f65"><span class="std std-ref">delay_model()</span></a> = ClibDelayModel::piecewise_cmos の時のみ意味を持つ． </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1ad2d99f9850d3d8d0708d176075f26f65"><span class="std std-ref">delay_model()</span></a> が piecewise_cmos でなかった． </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary12piece_defineEv">
 <span id="_CPPv3NK15ClibCellLibrary12piece_defineEv"></span><span id="_CPPv2NK15ClibCellLibrary12piece_defineEv"></span><span id="ClibCellLibrary::piece_defineC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a0829f367a911b7a1fcb2a3098b54d923"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">piece_define</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>区間のリストの取得 </p>
-<p><a class="reference internal" href="#d9/d5e/classClibCellLibrary_1ad2d99f9850d3d8d0708d176075f26f65"><span class="std std-ref">delay_model()</span></a> = <a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1ad0c79063e917c2e32377b95a593b12d2a4bf387323d0b62c30286cf9098ac7cf3"><span class="std std-ref">ClibDelayModel::piecewise_cmos</span></a> の時のみ意味を持つ． </p>
+<p><a class="reference internal" href="#d9/d5e/classClibCellLibrary_1ad2d99f9850d3d8d0708d176075f26f65"><span class="std std-ref">delay_model()</span></a> = ClibDelayModel::piecewise_cmos の時のみ意味を持つ． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1ad0c79063e917c2e32377b95a593b12d2"><span class="std std-ref">ClibDelayModel</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1ad2d99f9850d3d8d0708d176075f26f65"><span class="std std-ref">delay_model()</span></a> が piecewise_cmos でなかった． </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary16bus_naming_styleEv">
 <span id="_CPPv3NK15ClibCellLibrary16bus_naming_styleEv"></span><span id="_CPPv2NK15ClibCellLibrary16bus_naming_styleEv"></span><span id="ClibCellLibrary::bus_naming_styleC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ada2f34c9c138dea2afdd60d8b8b1fbe9"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bus_naming_style</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>バス命名規則の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary4dateEv">
 <span id="_CPPv3NK15ClibCellLibrary4dateEv"></span><span id="_CPPv2NK15ClibCellLibrary4dateEv"></span><span id="ClibCellLibrary::dateC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a5ede0ff613707fd6f5aef05a1058e0b7"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">date</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>日付情報の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary8revisionEv">
 <span id="_CPPv3NK15ClibCellLibrary8revisionEv"></span><span id="_CPPv2NK15ClibCellLibrary8revisionEv"></span><span id="ClibCellLibrary::revisionC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ad37d29cfeb4da5d66c29acf924cadc8a"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">revision</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>リビジョン情報の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary7commentEv">
 <span id="_CPPv3NK15ClibCellLibrary7commentEv"></span><span id="_CPPv2NK15ClibCellLibrary7commentEv"></span><span id="ClibCellLibrary::commentC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ac567a3bbf28769cb5c4b3a0b63ff8add"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">comment</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>コメント情報の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary9time_unitEv">
-<span id="_CPPv3NK15ClibCellLibrary9time_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary9time_unitEv"></span><span id="ClibCellLibrary::time_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ada4c7af050f9599a613c6d59d5fa5312"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<span id="_CPPv3NK15ClibCellLibrary9time_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary9time_unitEv"></span><span id="ClibCellLibrary::time_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a1b3c2ac1cf8b1a00f8a86b009c81184b"></span><a class="reference internal" href="../all_classes.html#_CPPv412ClibTimeUnit" title="ClibTimeUnit"><span class="n"><span class="pre">ClibTimeUnit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>時間単位の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#de/df2/classClibTimeUnit"><span class="std std-ref">ClibTimeUnit</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary12voltage_unitEv">
-<span id="_CPPv3NK15ClibCellLibrary12voltage_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary12voltage_unitEv"></span><span id="ClibCellLibrary::voltage_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a38a0c44da0d98d333d4b4f7ba943e299"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">voltage_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<span id="_CPPv3NK15ClibCellLibrary12voltage_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary12voltage_unitEv"></span><span id="ClibCellLibrary::voltage_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ae559ac6f209052e01d9f8b5e413c295f"></span><a class="reference internal" href="../all_classes.html#_CPPv415ClibVoltageUnit" title="ClibVoltageUnit"><span class="n"><span class="pre">ClibVoltageUnit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">voltage_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>電圧単位の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d1/dc1/classClibVoltageUnit"><span class="std std-ref">ClibVoltageUnit</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary12current_unitEv">
-<span id="_CPPv3NK15ClibCellLibrary12current_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary12current_unitEv"></span><span id="ClibCellLibrary::current_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a42adbd5d7654b0991d766385e77416e1"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">current_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<span id="_CPPv3NK15ClibCellLibrary12current_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary12current_unitEv"></span><span id="ClibCellLibrary::current_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a69f0dde25e9f7803370cc5b56aae391c"></span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCurrentUnit" title="ClibCurrentUnit"><span class="n"><span class="pre">ClibCurrentUnit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">current_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>電流単位の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d1/dc4/classClibCurrentUnit"><span class="std std-ref">ClibCurrentUnit</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary23pulling_resistance_unitEv">
-<span id="_CPPv3NK15ClibCellLibrary23pulling_resistance_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary23pulling_resistance_unitEv"></span><span id="ClibCellLibrary::pulling_resistance_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ab07b52b568961a2a6961b5f8797c2f84"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pulling_resistance_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<span id="_CPPv3NK15ClibCellLibrary23pulling_resistance_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary23pulling_resistance_unitEv"></span><span id="ClibCellLibrary::pulling_resistance_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ab004b9db8fedc23ff0a4a4bb07aac3de"></span><a class="reference internal" href="../all_classes.html#_CPPv418ClibResistanceUnit" title="ClibResistanceUnit"><span class="n"><span class="pre">ClibResistanceUnit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pulling_resistance_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>抵抗単位の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d9/d51/classClibResistanceUnit"><span class="std std-ref">ClibResistanceUnit</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary20capacitive_load_unitEv">
-<span id="_CPPv3NK15ClibCellLibrary20capacitive_load_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary20capacitive_load_unitEv"></span><span id="ClibCellLibrary::capacitive_load_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a89255f1fa42f7460292ec09f05c674bf"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">capacitive_load_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<span id="_CPPv3NK15ClibCellLibrary20capacitive_load_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary20capacitive_load_unitEv"></span><span id="ClibCellLibrary::capacitive_load_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1afd20ee4b65940aeeb4074c6d9da9c7fa"></span><a class="reference internal" href="../all_classes.html#_CPPv419ClibCapacitanceUnit" title="ClibCapacitanceUnit"><span class="n"><span class="pre">ClibCapacitanceUnit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">capacitive_load_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>容量単位の取得 </p>
-<p>なぜかここだけインターフェイスが異なる． </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary24capacitive_load_unit_strEv">
-<span id="_CPPv3NK15ClibCellLibrary24capacitive_load_unit_strEv"></span><span id="_CPPv2NK15ClibCellLibrary24capacitive_load_unit_strEv"></span><span id="ClibCellLibrary::capacitive_load_unit_strC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a76ccdc7347d315e6a06d73ac15f47a58"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">capacitive_load_unit_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
-<dd><p>容量単位文字列の取得 </p>
-<p>なぜかここだけインターフェイスが異なる． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d8/dbd/classClibCapacitanceUnit"><span class="std std-ref">ClibCapacitanceUnit</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary18leakage_power_unitEv">
-<span id="_CPPv3NK15ClibCellLibrary18leakage_power_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary18leakage_power_unitEv"></span><span id="ClibCellLibrary::leakage_power_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1aeb939b67e438bbcf227f11b6caa4f62a"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">leakage_power_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<span id="_CPPv3NK15ClibCellLibrary18leakage_power_unitEv"></span><span id="_CPPv2NK15ClibCellLibrary18leakage_power_unitEv"></span><span id="ClibCellLibrary::leakage_power_unitC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a508f73e653be1ba08a398fd201628bc4"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibPowerUnit" title="ClibPowerUnit"><span class="n"><span class="pre">ClibPowerUnit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">leakage_power_unit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>電力単位の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d8/dff/classClibPowerUnit"><span class="std std-ref">ClibPowerUnit</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -188,18 +376,34 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary8cell_numEv">
 <span id="_CPPv3NK15ClibCellLibrary8cell_numEv"></span><span id="_CPPv2NK15ClibCellLibrary8cell_numEv"></span><span id="ClibCellLibrary::cell_numC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a2ca57a5dd01486cb797296a1d15a779f"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>このライブラリの持つセル数の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary4cellE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary4cellE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary4cellE8SizeType"></span><span id="ClibCellLibrary::cell__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a25fda690473e498a851141797c4fd587"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibCell" title="ClibCell"><span class="n"><span class="pre">ClibCell</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">cell_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>セル情報の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcell.html#d2/da8/classClibCell"><span class="std std-ref">ClibCell</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>cell_id</strong> -- [in] セル番号 ( 0 &lt;= cell_id &lt; <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a2ca57a5dd01486cb797296a1d15a779f"><span class="std std-ref">cell_num()</span></a> ) </p>
 </dd>
-<dt class="field-even">戻り値<span class="colon">:</span></dt>
-<dd class="field-even"><p>該当するセル情報を返す． </p>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
+</dd>
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>該当するセル情報を返す． </p>
 </dd>
 </dl>
 </dd></dl>
@@ -208,14 +412,23 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary4cellERKNSt6stringE">
 <span id="_CPPv3NK15ClibCellLibrary4cellERKNSt6stringE"></span><span id="_CPPv2NK15ClibCellLibrary4cellERKNSt6stringE"></span><span id="ClibCellLibrary::cell__ssCRC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1aa83402e587266992320c3d3121e416be"></span><a class="reference internal" href="../all_classes.html#_CPPv48ClibCell" title="ClibCell"><span class="n"><span class="pre">ClibCell</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>名前からのセルの取得 </p>
-<p>
-なければ不正値を返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcell.html#d2/da8/classClibCell"><span class="std std-ref">ClibCell</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> -- [in] セル名 </p>
 </dd>
-<dt class="field-even">戻り値<span class="colon">:</span></dt>
-<dd class="field-even"><p>セルを返す．</p>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- name という名前のセルが見つからない時 </p></li>
+</ul>
+</dd>
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>セルを返す． </p>
 </dd>
 </dl>
 </dd></dl>
@@ -224,21 +437,47 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary9cell_listEv">
 <span id="_CPPv3NK15ClibCellLibrary9cell_listEv"></span><span id="_CPPv2NK15ClibCellLibrary9cell_listEv"></span><span id="ClibCellLibrary::cell_listC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a85ff310eaec929d7d23affd10fba69d0"></span><a class="reference internal" href="../all_classes.html#_CPPv412ClibCellList" title="ClibCellList"><span class="n"><span class="pre">ClibCellList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>全セルのリストの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d3/d1b/ClibList_8h_1a4659c5173c5b023c10f71b081ce8cb74"><span class="std std-ref">ClibCellList</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary14cell_group_numEv">
 <span id="_CPPv3NK15ClibCellLibrary14cell_group_numEv"></span><span id="_CPPv2NK15ClibCellLibrary14cell_group_numEv"></span><span id="ClibCellLibrary::cell_group_numC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a08e8cd72776525c8d3589b83badd3a92"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell_group_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>セルグループ数の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary10cell_groupE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary10cell_groupE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary10cell_groupE8SizeType"></span><span id="ClibCellLibrary::cell_group__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1aebc896cda6815ec61799c456bad72f42"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell_group</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>セルグループの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] グループ番号 ( 0 &lt;= id &lt; <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a08e8cd72776525c8d3589b83badd3a92"><span class="std std-ref">cell_group_num()</span></a> ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -247,21 +486,47 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary15cell_group_listEv">
 <span id="_CPPv3NK15ClibCellLibrary15cell_group_listEv"></span><span id="_CPPv2NK15ClibCellLibrary15cell_group_listEv"></span><span id="ClibCellLibrary::cell_group_listC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a46b99c8ae66b10cfc1228d6bc8e7edfd"></span><a class="reference internal" href="../all_classes.html#_CPPv417ClibCellGroupList" title="ClibCellGroupList"><span class="n"><span class="pre">ClibCellGroupList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cell_group_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>セルグループのリストの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d3/d1b/ClibList_8h_1a18fb63604df54741478dce2e27efd8d7"><span class="std std-ref">ClibCellGroupList</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary13npn_class_numEv">
 <span id="_CPPv3NK15ClibCellLibrary13npn_class_numEv"></span><span id="_CPPv2NK15ClibCellLibrary13npn_class_numEv"></span><span id="ClibCellLibrary::npn_class_numC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a259c5f1197c3735bcea6d4b3714c7fb3"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">npn_class_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>NPN同値クラス数の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary9npn_classE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary9npn_classE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary9npn_classE8SizeType"></span><span id="ClibCellLibrary::npn_class__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1acc8dd99f6657d21327ffee5b56291056"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellClass" title="ClibCellClass"><span class="n"><span class="pre">ClibCellClass</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">npn_class</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>NPN同値クラスの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellclass.html#d7/d80/classClibCellClass"><span class="std std-ref">ClibCellClass</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] 同値クラス番号 ( 0 &lt;= id &lt; <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a259c5f1197c3735bcea6d4b3714c7fb3"><span class="std std-ref">npn_class_num()</span></a> ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -270,42 +535,103 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary14npn_class_listEv">
 <span id="_CPPv3NK15ClibCellLibrary14npn_class_listEv"></span><span id="_CPPv2NK15ClibCellLibrary14npn_class_listEv"></span><span id="ClibCellLibrary::npn_class_listC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a27330c52109368f766d138849b58a6a9"></span><a class="reference internal" href="../all_classes.html#_CPPv417ClibCellClassList" title="ClibCellClassList"><span class="n"><span class="pre">ClibCellClassList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">npn_class_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>NPN同値クラスのリストの取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d3/d1b/ClibList_8h_1ad2635cf9446e2e9e2258c7fbb90993a0"><span class="std std-ref">ClibCellClassList</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-論理セルの情報の取得">論理セルの情報の取得</p>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-論理セルグループの取得">論理セルグループの取得</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary11const0_funcEv">
 <span id="_CPPv3NK15ClibCellLibrary11const0_funcEv"></span><span id="_CPPv2NK15ClibCellLibrary11const0_funcEv"></span><span id="ClibCellLibrary::const0_funcC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a74e2123c37da6595b52eb4ce4ab3bef4"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">const0_func</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>定数0セルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary11const1_funcEv">
 <span id="_CPPv3NK15ClibCellLibrary11const1_funcEv"></span><span id="_CPPv2NK15ClibCellLibrary11const1_funcEv"></span><span id="ClibCellLibrary::const1_funcC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a99d2bfd1a3c445442ea03fff55e85c6e"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">const1_func</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>定数1セルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary8buf_funcEv">
 <span id="_CPPv3NK15ClibCellLibrary8buf_funcEv"></span><span id="_CPPv2NK15ClibCellLibrary8buf_funcEv"></span><span id="ClibCellLibrary::buf_funcC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a805682bc37d0dfa4950e42f6243bffd9"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buf_func</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>バッファセルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary8inv_funcEv">
 <span id="_CPPv3NK15ClibCellLibrary8inv_funcEv"></span><span id="_CPPv2NK15ClibCellLibrary8inv_funcEv"></span><span id="ClibCellLibrary::inv_funcC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1af43176688be8d4e563913d8baffd5e36"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inv_func</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>インバータセルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary8and_funcE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary8and_funcE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary8and_funcE8SizeType"></span><span id="ClibCellLibrary::and_func__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a12202036f9e912c02ae4c75dd2018c48"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">and_func</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>ANDセルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 ( 2 &lt;= ni &lt;= 4 ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -314,9 +640,20 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary9nand_funcE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary9nand_funcE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary9nand_funcE8SizeType"></span><span id="ClibCellLibrary::nand_func__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a8bdbb452c8ec9658a35ac82d704b86d0"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nand_func</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>NANDセルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 ( 2 &lt;= ni &lt;= 4 ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -325,9 +662,20 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary7or_funcE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary7or_funcE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary7or_funcE8SizeType"></span><span id="ClibCellLibrary::or_func__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ab2d2025e8311f8a4d19ed95790b4608e"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">or_func</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>ORセルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 ( 2 &lt;= ni &lt;= 4 ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -336,9 +684,20 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary8nor_funcE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary8nor_funcE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary8nor_funcE8SizeType"></span><span id="ClibCellLibrary::nor_func__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ae20618287b28a43ab3b0d810767cddbd"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nor_func</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>NORセルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 ( 2 &lt;= ni &lt;= 4 ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -347,9 +706,20 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary8xor_funcE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary8xor_funcE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary8xor_funcE8SizeType"></span><span id="ClibCellLibrary::xor_func__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1aa75f766b593696f3df8f590c00dd2a5b"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">xor_func</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>XORセルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 ( 2 &lt;= ni &lt;= 4 ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -358,9 +728,20 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary9xnor_funcE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary9xnor_funcE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary9xnor_funcE8SizeType"></span><span id="ClibCellLibrary::xnor_func__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a62c35250ce68e0ec73264b34ccfe1367"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">xnor_func</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ni</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>XNORセルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ni</strong> -- [in] 入力数 ( 2 &lt;= ni &lt;= 4 ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -369,12 +750,32 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary9mux2_funcEv">
 <span id="_CPPv3NK15ClibCellLibrary9mux2_funcEv"></span><span id="_CPPv2NK15ClibCellLibrary9mux2_funcEv"></span><span id="ClibCellLibrary::mux2_funcC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a0cbc0ac6728d533c1e0bdf7101b86341"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mux2_func</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>MUX2セルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary9mux4_funcEv">
 <span id="_CPPv3NK15ClibCellLibrary9mux4_funcEv"></span><span id="_CPPv2NK15ClibCellLibrary9mux4_funcEv"></span><span id="ClibCellLibrary::mux4_funcC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a7e7074f0c8deef4f91903c7ccd10d250"></span><a class="reference internal" href="../all_classes.html#_CPPv413ClibCellGroup" title="ClibCellGroup"><span class="n"><span class="pre">ClibCellGroup</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mux4_func</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>MUX4セルのグループを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="clibcellgroup.html#dc/d0b/classClibCellGroup"><span class="std std-ref">ClibCellGroup</span></a></p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -384,15 +785,31 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary10pg_pat_numEv">
 <span id="_CPPv3NK15ClibCellLibrary10pg_pat_numEv"></span><span id="_CPPv2NK15ClibCellLibrary10pg_pat_numEv"></span><span id="ClibCellLibrary::pg_pat_numC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1adb52e0687bc94e7962a6663d458e8d10"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pg_pat_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>総パタン数を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary6pg_patE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary6pg_patE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary6pg_patE8SizeType"></span><span id="ClibCellLibrary::pg_pat__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a8450626d76d288f80b8750ca0d361231"></span><a class="reference internal" href="../all_classes.html#_CPPv412ClibPatGraph" title="ClibPatGraph"><span class="n"><span class="pre">ClibPatGraph</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pg_pat</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>パタンを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#da/d5b/classClibPatGraph"><span class="std std-ref">ClibPatGraph</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] パタン番号 ( 0 &lt;= id &lt; <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1adb52e0687bc94e7962a6663d458e8d10"><span class="std std-ref">pg_pat_num()</span></a> ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -401,21 +818,42 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary12pg_max_inputEv">
 <span id="_CPPv3NK15ClibCellLibrary12pg_max_inputEv"></span><span id="_CPPv2NK15ClibCellLibrary12pg_max_inputEv"></span><span id="ClibCellLibrary::pg_max_inputC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a06021337e469a22962d19c32e6384212"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pg_max_input</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>パタンの最大の入力数を得る． </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary11pg_node_numEv">
 <span id="_CPPv3NK15ClibCellLibrary11pg_node_numEv"></span><span id="_CPPv2NK15ClibCellLibrary11pg_node_numEv"></span><span id="ClibCellLibrary::pg_node_numC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a588f118742e1e2d4c61bf1b522f0d2f9"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pg_node_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>総ノード数を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary12pg_node_typeE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary12pg_node_typeE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary12pg_node_typeE8SizeType"></span><span id="ClibCellLibrary::pg_node_type__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a4e62685de0c04b09462c60f049cf1d66"></span><span class="n"><span class="pre">ClibPatType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pg_node_type</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>ノードの種類を返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p>ClibPatTYpe </p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] ノード番号 ( 0 &lt;= id &lt; <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a588f118742e1e2d4c61bf1b522f0d2f9"><span class="std std-ref">pg_node_num()</span></a> ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -424,10 +862,16 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary11pg_input_idE8SizeType">
 <span id="_CPPv3NK15ClibCellLibrary11pg_input_idE8SizeType"></span><span id="_CPPv2NK15ClibCellLibrary11pg_input_idE8SizeType"></span><span id="ClibCellLibrary::pg_input_id__SizeTypeC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ab1d6b164b2373ae37fdd0badb60588ff"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pg_input_id</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>ノードが入力ノードの時に入力番号を返す． </p>
-<p>入力ノードでない場合の返り値は不定 </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] ノード番号 ( 0 &lt;= id &lt; <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a588f118742e1e2d4c61bf1b522f0d2f9"><span class="std std-ref">pg_node_num()</span></a> ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- id のノードが入力でなかった． </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -438,10 +882,16 @@
 <dd><p>入力のノード番号を返す． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>input_id</strong> -- [in] 入力番号 ( 0 &lt;= input_id &lt; pg_input_num() ) </p>
+<dd class="field-odd"><p><strong>input_id</strong> -- [in] 入力番号 ( 0 &lt;= input_id &lt; <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a06021337e469a22962d19c32e6384212"><span class="std std-ref">pg_max_input()</span></a> ) </p>
 </dd>
-<dt class="field-even">戻り値<span class="colon">:</span></dt>
-<dd class="field-even"><p>input_id の入力に対応するノードのノード番号 </p>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
+</dd>
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>input_id の入力に対応するノードのノード番号 </p>
 </dd>
 </dl>
 </dd></dl>
@@ -450,6 +900,11 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary11pg_edge_numEv">
 <span id="_CPPv3NK15ClibCellLibrary11pg_edge_numEv"></span><span id="_CPPv2NK15ClibCellLibrary11pg_edge_numEv"></span><span id="ClibCellLibrary::pg_edge_numC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a3c9823a3d82e7a31e49bb60843bf7e1d"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pg_edge_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>総枝数を返す． </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
@@ -459,6 +914,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] 枝番号 ( 0 &lt;= id &lt; edge_num() ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -471,6 +932,12 @@
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] 枝番号 ( 0 &lt;= id &lt; edge_num() ) </p>
 </dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
@@ -481,6 +948,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>id</strong> -- [in] 枝番号 ( 0 &lt;= id &lt; edge_num() ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -499,6 +972,12 @@
 <li><p><strong>false</strong> -- 反転なし </p></li>
 </ul>
 </dd>
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
@@ -513,6 +992,9 @@
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
 </dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
 </dl>
 </dd></dl>
 
@@ -523,6 +1005,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
 </dd>
 </dl>
 </dd></dl>
@@ -535,13 +1020,10 @@
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>s</strong> -- [in] 出力先のストリーム </p>
 </dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
 </dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary9to_stringEv">
-<span id="_CPPv3NK15ClibCellLibrary9to_stringEv"></span><span id="_CPPv2NK15ClibCellLibrary9to_stringEv"></span><span id="ClibCellLibrary::to_stringC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a4d110acf45f040212976b8c9af74e2d3"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_string</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
-<dd><p>内容を表す文字列を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -573,14 +1055,26 @@
 <dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibrary11read_mislibERKNSt6stringE">
 <span id="_CPPv3N15ClibCellLibrary11read_mislibERKNSt6stringE"></span><span id="_CPPv2N15ClibCellLibrary11read_mislibERKNSt6stringE"></span><span id="ClibCellLibrary::read_mislib__ssCR"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ac61ad52894d4e0611a497c96b7202678"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_mislib</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>mislib 形式のファイルを読み込む． </p>
-<p>
-読み込みが失敗した場合は std::invalid_argument 例外を送出する． </p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span> <span class="p">{</span>
+  <span class="n">auto</span> <span class="n">lib</span> <span class="o">=</span> <span class="n">ClibCellLibrary</span><span class="p">::</span><span class="n">read_mislib</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+<span class="n">catch</span> <span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span> <span class="n">e</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="o">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+ </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
 </dd>
-<dt class="field-even">戻り値<span class="colon">:</span></dt>
-<dd class="field-even"><p>生成したライブラリを返す．</p>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">invalid_argument</span></span></span> -- 読み込みが失敗した．</p>
+</dd>
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>生成したライブラリを返す． </p>
 </dd>
 </dl>
 </dd></dl>
@@ -589,14 +1083,26 @@
 <dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibrary12read_libertyERKNSt6stringE">
 <span id="_CPPv3N15ClibCellLibrary12read_libertyERKNSt6stringE"></span><span id="_CPPv2N15ClibCellLibrary12read_libertyERKNSt6stringE"></span><span id="ClibCellLibrary::read_liberty__ssCR"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ae6c2ad8e24f45affb3af99e458cc074e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_liberty</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>liberty 形式のファイルを読み込む． </p>
-<p>
-読み込みが失敗した場合は std::invalid_argumnet 例外を送出する． </p>
+<p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span> <span class="p">{</span>
+  <span class="n">auto</span> <span class="n">lib</span> <span class="o">=</span> <span class="n">ClibCellLibrary</span><span class="p">::</span><span class="n">read_liberty</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+<span class="n">catch</span> <span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span> <span class="n">e</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">e</span><span class="o">.</span><span class="n">what</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+ </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> -- [in] ファイル名 </p>
 </dd>
-<dt class="field-even">戻り値<span class="colon">:</span></dt>
-<dd class="field-even"><p>生成したライブラリを返す．</p>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">invalid_argument</span></span></span> -- 読み込みが失敗した．</p>
+</dd>
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>生成したライブラリを返す． </p>
 </dd>
 </dl>
 </dd></dl>
@@ -605,57 +1111,23 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibrary15ClibCellLibraryEv">
-<span id="_CPPv3N15ClibCellLibrary15ClibCellLibraryEv"></span><span id="_CPPv2N15ClibCellLibrary15ClibCellLibraryEv"></span><span id="ClibCellLibrary::ClibCellLibrary"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ac10b55e08a45908285bf462c3aa65489"></span><span class="sig-name descname"><span class="n"><span class="pre">ClibCellLibrary</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
-<dd><p>コンストラクタ </p>
-<p>空の状態で初期化される． </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibrary15ClibCellLibraryE14ClibLibraryPtr">
-<span id="_CPPv3N15ClibCellLibrary15ClibCellLibraryE14ClibLibraryPtr"></span><span id="_CPPv2N15ClibCellLibrary15ClibCellLibraryE14ClibLibraryPtr"></span><span id="ClibCellLibrary::ClibCellLibrary__ClibLibraryPtr"></span><span class="target" id="d9/d5e/classClibCellLibrary_1aef5bbd6adf7e50e813717d9727f27c58"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibCellLibrary</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv414ClibLibraryPtr" title="ClibLibraryPtr"><span class="n"><span class="pre">ClibLibraryPtr</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><br /></dt>
-<dd><p>実体のポインタを引数にしたコンストラクタ </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary">
-<span id="_CPPv3N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary"></span><span id="_CPPv2N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary"></span><span id="ClibCellLibrary::ClibCellLibrary__ClibCellLibraryCR"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a9e21e76a0443360a0525f82cd98a360a"></span><span class="sig-name descname"><span class="n"><span class="pre">ClibCellLibrary</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary" title="ClibCellLibrary::ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
-<dd><p>コピーコンストラクタ </p>
-<p>'浅い'コピーを行う． </p>
-<dl class="field-list simple">
-<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibraryaSERK15ClibCellLibrary">
-<span id="_CPPv3N15ClibCellLibraryaSERK15ClibCellLibrary"></span><span id="_CPPv2N15ClibCellLibraryaSERK15ClibCellLibrary"></span><span id="ClibCellLibrary::assign-operator__ClibCellLibraryCR"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a0832a97917ac2936ecf8db5360f62dca"></span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
-<dd><p>代入演算子 </p>
-<dl class="field-list simple">
-<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>src</strong> -- [in] コピー元のオブジェクト </p>
-</dd>
-<dt class="field-even">戻り値<span class="colon">:</span></dt>
-<dd class="field-even"><p>代入後の自身への参照を返す． </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15ClibCellLibraryD0Ev">
-<span id="_CPPv3N15ClibCellLibraryD0Ev"></span><span id="_CPPv2N15ClibCellLibraryD0Ev"></span><span id="ClibCellLibrary::~ClibCellLibrary"></span><span class="target" id="d9/d5e/classClibCellLibrary_1add12473312996d7e1e2ea91aaffa138f"></span><span class="sig-name descname"><span class="n"><span class="pre">~ClibCellLibrary</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
-<dd><p>デストラクタ </p>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary13find_ff_classE11ClibSeqAttr">
 <span id="_CPPv3NK15ClibCellLibrary13find_ff_classE11ClibSeqAttr"></span><span id="_CPPv2NK15ClibCellLibrary13find_ff_classE11ClibSeqAttr"></span><span id="ClibCellLibrary::find_ff_class__ClibSeqAttrC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a92adb6d5dc0a643c300d00517509e3aa"></span><a class="reference internal" href="../all_classes.html#_CPPv417ClibCellClassList" title="ClibCellClassList"><span class="n"><span class="pre">ClibCellClassList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">find_ff_class</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv411ClibSeqAttr" title="ClibSeqAttr"><span class="n"><span class="pre">ClibSeqAttr</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">attr</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>指定されたFFタイプのセルクラスを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d2/d3d/classClibSeqAttr"><span class="std std-ref">ClibSeqAttr</span></a>, <a class="reference internal" href="../all_classes.html#d3/d1b/ClibList_8h_1ad2635cf9446e2e9e2258c7fbb90993a0"><span class="std std-ref">ClibCellClassList</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>attr</strong> -- [in] FFタイプの属性 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>attr に合致するセルクラスのリストを返す． </p>
 </dd>
 </dl>
 </dd></dl>
@@ -664,9 +1136,20 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibrary16find_latch_classE11ClibSeqAttr">
 <span id="_CPPv3NK15ClibCellLibrary16find_latch_classE11ClibSeqAttr"></span><span id="_CPPv2NK15ClibCellLibrary16find_latch_classE11ClibSeqAttr"></span><span id="ClibCellLibrary::find_latch_class__ClibSeqAttrC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a4ecdb6decb29114a150558f27ec5e397"></span><a class="reference internal" href="../all_classes.html#_CPPv417ClibCellClassList" title="ClibCellClassList"><span class="n"><span class="pre">ClibCellClassList</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">find_latch_class</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv411ClibSeqAttr" title="ClibSeqAttr"><span class="n"><span class="pre">ClibSeqAttr</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">attr</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>指定されたラッチタイプのセルクラスを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#d2/d3d/classClibSeqAttr"><span class="std std-ref">ClibSeqAttr</span></a>, <a class="reference internal" href="../all_classes.html#d3/d1b/ClibList_8h_1ad2635cf9446e2e9e2258c7fbb90993a0"><span class="std std-ref">ClibCellClassList</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>attr</strong> -- [in] FFタイプの属性 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="#d9/d5e/classClibCellLibrary_1a868d336d482fd6d740a335b7cde86254"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>attr に合致するセルクラスのリストを返す． </p>
 </dd>
 </dl>
 </dd></dl>
@@ -675,6 +1158,10 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15ClibCellLibraryeqE15ClibCellLibrary">
 <span id="_CPPv3NK15ClibCellLibraryeqE15ClibCellLibrary"></span><span id="_CPPv2NK15ClibCellLibraryeqE15ClibCellLibrary"></span><span id="ClibCellLibrary::eq-operator__ClibCellLibraryC"></span><span class="target" id="d9/d5e/classClibCellLibrary_1a4c5cf1b23a5cfc7c5cc0d3806c06c4e9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>等価比較 </p>
+<p><ul class="simple">
+<li><p>内容ではなく同一の実体を持つ時等しいと見なす． </p></li>
+</ul>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
@@ -703,88 +1190,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">4.2.5. ClibCellLibrary</a><ul>
-<li><a class="reference internal" href="#_CPPv415ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">ClibCellLibrary</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8is_validEv"><code class="docutils literal notranslate"><span class="pre">is_valid()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4nameEv"><code class="docutils literal notranslate"><span class="pre">name()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10technologyEv"><code class="docutils literal notranslate"><span class="pre">technology()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11delay_modelEv"><code class="docutils literal notranslate"><span class="pre">delay_model()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10piece_typeEv"><code class="docutils literal notranslate"><span class="pre">piece_type()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12piece_defineEv"><code class="docutils literal notranslate"><span class="pre">piece_define()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary16bus_naming_styleEv"><code class="docutils literal notranslate"><span class="pre">bus_naming_style()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4dateEv"><code class="docutils literal notranslate"><span class="pre">date()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8revisionEv"><code class="docutils literal notranslate"><span class="pre">revision()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary7commentEv"><code class="docutils literal notranslate"><span class="pre">comment()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9time_unitEv"><code class="docutils literal notranslate"><span class="pre">time_unit()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12voltage_unitEv"><code class="docutils literal notranslate"><span class="pre">voltage_unit()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12current_unitEv"><code class="docutils literal notranslate"><span class="pre">current_unit()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary23pulling_resistance_unitEv"><code class="docutils literal notranslate"><span class="pre">pulling_resistance_unit()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary20capacitive_load_unitEv"><code class="docutils literal notranslate"><span class="pre">capacitive_load_unit()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary24capacitive_load_unit_strEv"><code class="docutils literal notranslate"><span class="pre">capacitive_load_unit_str()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary18leakage_power_unitEv"><code class="docutils literal notranslate"><span class="pre">leakage_power_unit()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8cell_numEv"><code class="docutils literal notranslate"><span class="pre">cell_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4cellE8SizeType"><code class="docutils literal notranslate"><span class="pre">cell()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4cellERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">cell()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9cell_listEv"><code class="docutils literal notranslate"><span class="pre">cell_list()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary14cell_group_numEv"><code class="docutils literal notranslate"><span class="pre">cell_group_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10cell_groupE8SizeType"><code class="docutils literal notranslate"><span class="pre">cell_group()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary15cell_group_listEv"><code class="docutils literal notranslate"><span class="pre">cell_group_list()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary13npn_class_numEv"><code class="docutils literal notranslate"><span class="pre">npn_class_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9npn_classE8SizeType"><code class="docutils literal notranslate"><span class="pre">npn_class()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary14npn_class_listEv"><code class="docutils literal notranslate"><span class="pre">npn_class_list()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11const0_funcEv"><code class="docutils literal notranslate"><span class="pre">const0_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11const1_funcEv"><code class="docutils literal notranslate"><span class="pre">const1_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8buf_funcEv"><code class="docutils literal notranslate"><span class="pre">buf_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8inv_funcEv"><code class="docutils literal notranslate"><span class="pre">inv_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8and_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">and_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9nand_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">nand_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary7or_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">or_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8nor_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">nor_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8xor_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">xor_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9xnor_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">xnor_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9mux2_funcEv"><code class="docutils literal notranslate"><span class="pre">mux2_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9mux4_funcEv"><code class="docutils literal notranslate"><span class="pre">mux4_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10pg_pat_numEv"><code class="docutils literal notranslate"><span class="pre">pg_pat_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary6pg_patE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_pat()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12pg_max_inputEv"><code class="docutils literal notranslate"><span class="pre">pg_max_input()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_node_numEv"><code class="docutils literal notranslate"><span class="pre">pg_node_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12pg_node_typeE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_node_type()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_input_idE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_input_id()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary13pg_input_nodeE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_input_node()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_edge_numEv"><code class="docutils literal notranslate"><span class="pre">pg_edge_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12pg_edge_fromE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_edge_from()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10pg_edge_toE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_edge_to()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_edge_posE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_edge_pos()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_edge_invE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_edge_inv()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4dumpERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4dumpERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary7displayERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">display()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9to_stringEv"><code class="docutils literal notranslate"><span class="pre">to_string()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary7restoreERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary7restoreERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary11read_mislibERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_mislib()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary12read_libertyERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_liberty()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary15ClibCellLibraryEv"><code class="docutils literal notranslate"><span class="pre">ClibCellLibrary()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary15ClibCellLibraryE14ClibLibraryPtr"><code class="docutils literal notranslate"><span class="pre">ClibCellLibrary()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">ClibCellLibrary()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibraryaSERK15ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15ClibCellLibraryD0Ev"><code class="docutils literal notranslate"><span class="pre">~ClibCellLibrary()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary13find_ff_classE11ClibSeqAttr"><code class="docutils literal notranslate"><span class="pre">find_ff_class()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary16find_latch_classE11ClibSeqAttr"><code class="docutils literal notranslate"><span class="pre">find_latch_class()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibraryeqE15ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibraryneE15ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="clibtime.html"
@@ -802,7 +1209,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -810,13 +1217,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -838,8 +1245,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

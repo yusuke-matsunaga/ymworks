@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>5.2.11. SatOneHotMatrix &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="5.2.12. SatOrderedSet" href="satorderedset.html" />
     <link rel="prev" title="5.2.10. SatOneHotVar" href="satonehotvar.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,12 +50,14 @@
           <div class="body" role="main">
             
   <section id="satonehotmatrix">
-<h1><span class="section-number">5.2.11. </span>SatOneHotMatrix<a class="headerlink" href="#satonehotmatrix" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">5.2.11. </span>SatOneHotMatrix<a class="headerlink" href="#satonehotmatrix" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv415SatOneHotMatrix">
 <span id="_CPPv315SatOneHotMatrix"></span><span id="_CPPv215SatOneHotMatrix"></span><span id="SatOneHotMatrix"></span><span class="target" id="d6/df3/classSatOneHotMatrix"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SatOneHotMatrix</span></span></span><br /></dt>
 <dd><p>one-hot 符号化で多値の組み合わせを表すクラス </p>
-<p>elem_size 個の要素のなかから sel_size 個を選ぶ組み合わせを表す． 正確には順列を表す． 内部では elem_size x sel_size の２次元配列(行列)を持つ． 各行，各列の変数に対して one-hot 制約が課されている． </p>
+<p>elem_size 個の要素のなかから sel_size 個を選ぶ組み合わせを表す． 正確には順列を表す．</p>
+<p>内部では elem_size x sel_size の２次元配列(行列)を持つ．</p>
+<p>各行，各列の変数に対して one-hot 制約が課されている． </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -83,12 +89,20 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15SatOneHotMatrix3varE8SizeType8SizeType">
 <span id="_CPPv3NK15SatOneHotMatrix3varE8SizeType8SizeType"></span><span id="_CPPv2NK15SatOneHotMatrix3varE8SizeType8SizeType"></span><span id="SatOneHotMatrix::var__SizeType.SizeTypeC"></span><span class="target" id="d6/df3/classSatOneHotMatrix_1a012a53e1c7b7224e249895615624d2ed"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">var</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">sel_val</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">elem_val</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>値に対応する変数を返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="satliteral.html#d6/d75/classSatLiteral"><span class="std std-ref">SatLiteral</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sel_val</strong> -- [in] 選択番号 ( 0 &lt;= sel_val &lt; <a class="reference internal" href="#d6/df3/classSatOneHotMatrix_1a14d785482e19c1dcaa3a1054dcbcfa88"><span class="std std-ref">sel_size()</span></a> ) </p></li>
 <li><p><strong>elem_val</strong> -- [in] 要素番号 ( 0 &lt;= elem_val &lt; <a class="reference internal" href="#d6/df3/classSatOneHotMatrix_1a7918c9db875b7605b61d0e4fc8564a2f"><span class="std std-ref">elem_size()</span></a> ) </p></li>
 </ul>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p>
 </dd>
 </dl>
 </dd></dl>
@@ -97,18 +111,31 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK15SatOneHotMatrix4varsEv">
 <span id="_CPPv3NK15SatOneHotMatrix4varsEv"></span><span id="_CPPv2NK15SatOneHotMatrix4varsEv"></span><span id="SatOneHotMatrix::varsC"></span><span class="target" id="d6/df3/classSatOneHotMatrix_1acf0c794837312041d66e39d60734f2ec"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">vars</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>値に対応する変数のリストを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="satliteral.html#d6/d75/classSatLiteral"><span class="std std-ref">SatLiteral</span></a></p>
+</div>
+</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK15SatOneHotMatrix3valERK8SatModel8SizeType">
 <span id="_CPPv3NK15SatOneHotMatrix3valERK8SatModel8SizeType"></span><span id="_CPPv2NK15SatOneHotMatrix3valERK8SatModel8SizeType"></span><span id="SatOneHotMatrix::val__SatModelCR.SizeTypeC"></span><span class="target" id="d6/df3/classSatOneHotMatrix_1a3991aed7d15aa7ab9798b55269732cc5"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">val</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SatModel" title="SatModel"><span class="n"><span class="pre">SatModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span>, <a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">sel_val</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>SATの解から値を得る． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="satmodel.html#d7/d29/classSatModel"><span class="std std-ref">SatModel</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>model</strong> -- [in] SATの解 </p></li>
 <li><p><strong>sel_val</strong> -- [in] 選択番号 ( 0 &lt;= sel_val &lt; <a class="reference internal" href="#d6/df3/classSatOneHotMatrix_1a14d785482e19c1dcaa3a1054dcbcfa88"><span class="std std-ref">sel_size()</span></a> ) </p></li>
 </ul>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p>
 </dd>
 </dl>
 </dd></dl>
@@ -123,27 +150,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">5.2.11. SatOneHotMatrix</a><ul>
-<li><a class="reference internal" href="#_CPPv415SatOneHotMatrix"><code class="docutils literal notranslate"><span class="pre">SatOneHotMatrix</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N15SatOneHotMatrix15SatOneHotMatrixEv"><code class="docutils literal notranslate"><span class="pre">SatOneHotMatrix()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15SatOneHotMatrixD0Ev"><code class="docutils literal notranslate"><span class="pre">~SatOneHotMatrix()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15SatOneHotMatrix9elem_sizeEv"><code class="docutils literal notranslate"><span class="pre">elem_size()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15SatOneHotMatrix8sel_sizeEv"><code class="docutils literal notranslate"><span class="pre">sel_size()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15SatOneHotMatrix3varE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">var()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15SatOneHotMatrix4varsEv"><code class="docutils literal notranslate"><span class="pre">vars()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15SatOneHotMatrix3valERK8SatModel8SizeType"><code class="docutils literal notranslate"><span class="pre">val()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="satonehotvar.html"
@@ -161,7 +169,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -169,13 +177,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -197,8 +205,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

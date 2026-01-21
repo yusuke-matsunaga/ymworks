@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.6.6. BddVarSet &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.6.7. BddLit" href="bddlit.html" />
     <link rel="prev" title="1.2.6.5. BddVar" href="bddvar.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -47,23 +51,32 @@
           <div class="body" role="main">
             
   <section id="bddvarset">
-<h1><span class="section-number">1.2.6.6. </span>BddVarSet<a class="headerlink" href="#bddvarset" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">1.2.6.6. </span>BddVarSet<a class="headerlink" href="#bddvarset" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv49BddVarSet">
-<span id="_CPPv39BddVarSet"></span><span id="_CPPv29BddVarSet"></span><span id="BddVarSet"></span><span class="target" id="d7/de4/classBddVarSet"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddVarSet</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="bddbase.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><a class="headerlink" href="#_CPPv49BddVarSet" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv39BddVarSet"></span><span id="_CPPv29BddVarSet"></span><span id="BddVarSet"></span><span class="target" id="d7/de4/classBddVarSet"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddVarSet</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47BddBase" title="BddBase"><span class="n"><span class="pre">BddBase</span></span></a><br /></dt>
 <dd><p><a class="reference internal" href="bdd.html#df/d7a/classBdd"><span class="std std-ref">Bdd</span></a> を用いて変数集合を表すクラス </p>
-<p>実際には変数を表す関数の論理積を用いている． 空集合を表す場合には定数1を用いる． 定数0は用いない． </p>
+<p><ul class="simple">
+<li><p>実際には変数を表す関数の論理積を用いている．</p></li>
+<li><p>空集合を表す場合には定数1を用いる．</p></li>
+<li><p>定数0は用いない． </p></li>
+</ul>
+</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSet9BddVarSetERKNSt6vectorI6BddVarEE">
-<span id="_CPPv3N9BddVarSet9BddVarSetERKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N9BddVarSet9BddVarSetERKNSt6vectorI6BddVarEE"></span><span id="BddVarSet::BddVarSet__std::vector:BddVar:CR"></span><span class="target" id="d7/de4/classBddVarSet_1a95a1990c66d42a0bae60f23f2929be68"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddVarSet</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_set</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSet9BddVarSetERKNSt6vectorI6BddVarEE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSet9BddVarSetERKNSt6vectorI6BddVarEE"></span><span id="_CPPv2N9BddVarSet9BddVarSetERKNSt6vectorI6BddVarEE"></span><span id="BddVarSet::BddVarSet__std::vector:BddVar:CR"></span><span class="target" id="d7/de4/classBddVarSet_1a95a1990c66d42a0bae60f23f2929be68"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddVarSet</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var_set</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>要素のリストを指定したコンストラクタ </p>
 <p><ul class="simple">
 <li><p>var_set を省略した場合には空集合となる．</p></li>
 <li><p>var_set の要素に不正な <a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a> が含まれている場合， std::invalid_argument が送出される．</p></li>
 <li><p>var_set の要素に相異なる <a class="reference internal" href="bddmgr.html#d1/d19/classBddMgr"><span class="std std-ref">BddMgr</span></a> の <a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a> が含まれている場合， std::invalid_argument が送出される． </p></li>
 </ul>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
 </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -74,38 +87,54 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSet9BddVarSetERK6BddVar">
-<span id="_CPPv3N9BddVarSet9BddVarSetERK6BddVar"></span><span id="_CPPv2N9BddVarSet9BddVarSetERK6BddVar"></span><span id="BddVarSet::BddVarSet__BddVarCR"></span><span class="target" id="d7/de4/classBddVarSet_1a1e4655cbbfdb46646378590427c4d2a1"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddVarSet</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSet9BddVarSetERK6BddVar" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSet9BddVarSetERK6BddVar"></span><span id="_CPPv2N9BddVarSet9BddVarSetERK6BddVar"></span><span id="BddVarSet::BddVarSet__BddVarCR"></span><span class="target" id="d7/de4/classBddVarSet_1a1e4655cbbfdb46646378590427c4d2a1"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BddVarSet</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a> からの変換コンストラクタ </p>
+<p>
+var のみを要素とする singleton を作る． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSetD0Ev">
-<span id="_CPPv3N9BddVarSetD0Ev"></span><span id="_CPPv2N9BddVarSetD0Ev"></span><span id="BddVarSet::~BddVarSet"></span><span class="target" id="d7/de4/classBddVarSet_1aab38ca56f1fe3337076b32af26eee593"></span><span class="sig-name descname"><span class="n"><span class="pre">~BddVarSet</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N9BddVarSetD0Ev" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSetD0Ev"></span><span id="_CPPv2N9BddVarSetD0Ev"></span><span id="BddVarSet::~BddVarSet"></span><span class="target" id="d7/de4/classBddVarSet_1aab38ca56f1fe3337076b32af26eee593"></span><span class="sig-name descname"><span class="n"><span class="pre">~BddVarSet</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
 <dd><p>デストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSet12is_empty_setEv">
-<span id="_CPPv3NK9BddVarSet12is_empty_setEv"></span><span id="_CPPv2NK9BddVarSet12is_empty_setEv"></span><span id="BddVarSet::is_empty_setC"></span><span class="target" id="d7/de4/classBddVarSet_1a9ab1061215f00f1fd5488d668c1f17f3"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_empty_set</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSet12is_empty_setEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSet12is_empty_setEv"></span><span id="_CPPv2NK9BddVarSet12is_empty_setEv"></span><span id="BddVarSet::is_empty_setC"></span><span class="target" id="d7/de4/classBddVarSet_1a9ab1061215f00f1fd5488d668c1f17f3"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_empty_set</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>空集合の時 true を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSet4sizeEv">
-<span id="_CPPv3NK9BddVarSet4sizeEv"></span><span id="_CPPv2NK9BddVarSet4sizeEv"></span><span id="BddVarSet::sizeC"></span><span class="target" id="d7/de4/classBddVarSet_1a70d209665525fb5696b31088ebfd2fd9"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSet4sizeEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSet4sizeEv"></span><span id="_CPPv2NK9BddVarSet4sizeEv"></span><span id="BddVarSet::sizeC"></span><span class="target" id="d7/de4/classBddVarSet_1a70d209665525fb5696b31088ebfd2fd9"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>変数の数を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSet8var_listEv">
-<span id="_CPPv3NK9BddVarSet8var_listEv"></span><span id="_CPPv2NK9BddVarSet8var_listEv"></span><span id="BddVarSet::var_listC"></span><span class="target" id="d7/de4/classBddVarSet_1a7da030462bb696ce05b8d2c7ed6fbb51"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">var_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSet8var_listEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSet8var_listEv"></span><span id="_CPPv2NK9BddVarSet8var_listEv"></span><span id="BddVarSet::var_listC"></span><span class="target" id="d7/de4/classBddVarSet_1a7da030462bb696ce05b8d2c7ed6fbb51"></span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">var_list</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>変数のリストに変換する． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSetplERK6BddVar">
-<span id="_CPPv3NK9BddVarSetplERK6BddVar"></span><span id="_CPPv2NK9BddVarSetplERK6BddVar"></span><span id="BddVarSet::add-operator__BddVarCRC"></span><span class="target" id="d7/de4/classBddVarSet_1ad03de31871673290c8983573336e1ec5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSetplERK6BddVar" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSetplERK6BddVar"></span><span id="_CPPv2NK9BddVarSetplERK6BddVar"></span><span id="BddVarSet::add-operator__BddVarCRC"></span><span class="target" id="d7/de4/classBddVarSet_1ad03de31871673290c8983573336e1ec5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>変数を追加する． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] 変数 </p>
@@ -115,7 +144,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSetplERK9BddVarSet">
-<span id="_CPPv3NK9BddVarSetplERK9BddVarSet"></span><span id="_CPPv2NK9BddVarSetplERK9BddVarSet"></span><span id="BddVarSet::add-operator__BddVarSetCRC"></span><span class="target" id="d7/de4/classBddVarSet_1a6dc59a8185c7535b80c7a3ba33889248"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSetplERK9BddVarSet" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSetplERK9BddVarSet"></span><span id="_CPPv2NK9BddVarSetplERK9BddVarSet"></span><span id="BddVarSet::add-operator__BddVarSetCRC"></span><span class="target" id="d7/de4/classBddVarSet_1a6dc59a8185c7535b80c7a3ba33889248"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>和集合を求める． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -126,8 +155,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSetpLERK6BddVar">
-<span id="_CPPv3N9BddVarSetpLERK6BddVar"></span><span id="_CPPv2N9BddVarSetpLERK6BddVar"></span><span id="BddVarSet::add-assign-operator__BddVarCR"></span><span class="target" id="d7/de4/classBddVarSet_1aafb2c9a56d00eff744a6fc0a9344055a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSetpLERK6BddVar" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSetpLERK6BddVar"></span><span id="_CPPv2N9BddVarSetpLERK6BddVar"></span><span id="BddVarSet::add-assign-operator__BddVarCR"></span><span class="target" id="d7/de4/classBddVarSet_1aafb2c9a56d00eff744a6fc0a9344055a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>変数を自身に追加する． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] 変数 </p>
@@ -137,7 +171,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSetpLERK9BddVarSet">
-<span id="_CPPv3N9BddVarSetpLERK9BddVarSet"></span><span id="_CPPv2N9BddVarSetpLERK9BddVarSet"></span><span id="BddVarSet::add-assign-operator__BddVarSetCR"></span><span class="target" id="d7/de4/classBddVarSet_1ab57600a673f1180107382395d5bdbafc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSetpLERK9BddVarSet" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSetpLERK9BddVarSet"></span><span id="_CPPv2N9BddVarSetpLERK9BddVarSet"></span><span id="BddVarSet::add-assign-operator__BddVarSetCR"></span><span class="target" id="d7/de4/classBddVarSet_1ab57600a673f1180107382395d5bdbafc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>和集合を求め代入する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -148,8 +182,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSetmiERK6BddVar">
-<span id="_CPPv3NK9BddVarSetmiERK6BddVar"></span><span id="_CPPv2NK9BddVarSetmiERK6BddVar"></span><span id="BddVarSet::sub-operator__BddVarCRC"></span><span class="target" id="d7/de4/classBddVarSet_1a202bd4b58035f32d9db38af886d03860"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSetmiERK6BddVar" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSetmiERK6BddVar"></span><span id="_CPPv2NK9BddVarSetmiERK6BddVar"></span><span id="BddVarSet::sub-operator__BddVarCRC"></span><span class="target" id="d7/de4/classBddVarSet_1a202bd4b58035f32d9db38af886d03860"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>変数を取り除く </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] 変数 </p>
@@ -159,8 +198,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSetmIERK6BddVar">
-<span id="_CPPv3N9BddVarSetmIERK6BddVar"></span><span id="_CPPv2N9BddVarSetmIERK6BddVar"></span><span id="BddVarSet::sub-assign-operator__BddVarCR"></span><span class="target" id="d7/de4/classBddVarSet_1afaa9e9842389bcbde8f649f13049674e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSetmIERK6BddVar" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSetmIERK6BddVar"></span><span id="_CPPv2N9BddVarSetmIERK6BddVar"></span><span id="BddVarSet::sub-assign-operator__BddVarCR"></span><span class="target" id="d7/de4/classBddVarSet_1afaa9e9842389bcbde8f649f13049674e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>変数を自身の集合から取り除く </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] 変数 </p>
@@ -170,7 +214,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSetmiERK9BddVarSet">
-<span id="_CPPv3NK9BddVarSetmiERK9BddVarSet"></span><span id="_CPPv2NK9BddVarSetmiERK9BddVarSet"></span><span id="BddVarSet::sub-operator__BddVarSetCRC"></span><span class="target" id="d7/de4/classBddVarSet_1a132df3d798f0323fa1bfc5ad5ec99dcc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSetmiERK9BddVarSet" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSetmiERK9BddVarSet"></span><span id="_CPPv2NK9BddVarSetmiERK9BddVarSet"></span><span id="BddVarSet::sub-operator__BddVarSetCRC"></span><span class="target" id="d7/de4/classBddVarSet_1a132df3d798f0323fa1bfc5ad5ec99dcc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>差集合を求める． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -181,7 +225,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSetmIERK9BddVarSet">
-<span id="_CPPv3N9BddVarSetmIERK9BddVarSet"></span><span id="_CPPv2N9BddVarSetmIERK9BddVarSet"></span><span id="BddVarSet::sub-assign-operator__BddVarSetCR"></span><span class="target" id="d7/de4/classBddVarSet_1a799ce4ffe0747bdcc703c18bcc0b9968"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSetmIERK9BddVarSet" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSetmIERK9BddVarSet"></span><span id="_CPPv2N9BddVarSetmIERK9BddVarSet"></span><span id="BddVarSet::sub-assign-operator__BddVarSetCR"></span><span class="target" id="d7/de4/classBddVarSet_1a799ce4ffe0747bdcc703c18bcc0b9968"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>差集合を求め代入する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -192,8 +236,14 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSetanERK6BddVar">
-<span id="_CPPv3NK9BddVarSetanERK6BddVar"></span><span id="_CPPv2NK9BddVarSetanERK6BddVar"></span><span id="BddVarSet::and-operator__BddVarCRC"></span><span class="target" id="d7/de4/classBddVarSet_1a392314d2eb0b31ce919ab3c9223b46b1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSetanERK6BddVar" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSetanERK6BddVar"></span><span id="_CPPv2NK9BddVarSetanERK6BddVar"></span><span id="BddVarSet::and-operator__BddVarCRC"></span><span class="target" id="d7/de4/classBddVarSet_1a392314d2eb0b31ce919ab3c9223b46b1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>共通集合を求める． </p>
+<p>
+結果は空集合が singleton になる． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
@@ -203,8 +253,14 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSetaNERK6BddVar">
-<span id="_CPPv3N9BddVarSetaNERK6BddVar"></span><span id="_CPPv2N9BddVarSetaNERK6BddVar"></span><span id="BddVarSet::and-assign-operator__BddVarCR"></span><span class="target" id="d7/de4/classBddVarSet_1acfd13bd5517958e2435feb727e928937"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSetaNERK6BddVar" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSetaNERK6BddVar"></span><span id="_CPPv2N9BddVarSetaNERK6BddVar"></span><span id="BddVarSet::and-assign-operator__BddVarCR"></span><span class="target" id="d7/de4/classBddVarSet_1acfd13bd5517958e2435feb727e928937"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>共通集合を求め代入する． </p>
+<p>
+結果は空集合が singleton になる． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] オペランド </p>
@@ -214,7 +270,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSetanERK9BddVarSet">
-<span id="_CPPv3NK9BddVarSetanERK9BddVarSet"></span><span id="_CPPv2NK9BddVarSetanERK9BddVarSet"></span><span id="BddVarSet::and-operator__BddVarSetCRC"></span><span class="target" id="d7/de4/classBddVarSet_1adf79979d130e3433950d1dd819aa2d0d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSetanERK9BddVarSet" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSetanERK9BddVarSet"></span><span id="_CPPv2NK9BddVarSetanERK9BddVarSet"></span><span id="BddVarSet::and-operator__BddVarSetCRC"></span><span class="target" id="d7/de4/classBddVarSet_1adf79979d130e3433950d1dd819aa2d0d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>共通集合を求める． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -225,7 +281,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSetaNERK9BddVarSet">
-<span id="_CPPv3N9BddVarSetaNERK9BddVarSet"></span><span id="_CPPv2N9BddVarSetaNERK9BddVarSet"></span><span id="BddVarSet::and-assign-operator__BddVarSetCR"></span><span class="target" id="d7/de4/classBddVarSet_1aac28ab07742d747bd0d6964701146401"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSetaNERK9BddVarSet" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSetaNERK9BddVarSet"></span><span id="_CPPv2N9BddVarSetaNERK9BddVarSet"></span><span id="BddVarSet::and-assign-operator__BddVarSetCR"></span><span class="target" id="d7/de4/classBddVarSet_1aac28ab07742d747bd0d6964701146401"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>共通集合を求め代入する． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -236,8 +292,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSetaaERK6BddVar">
-<span id="_CPPv3NK9BddVarSetaaERK6BddVar"></span><span id="_CPPv2NK9BddVarSetaaERK6BddVar"></span><span id="BddVarSet::sand-operator__BddVarCRC"></span><span class="target" id="d7/de4/classBddVarSet_1ac9bd786516f1c382620cca8a8c4c1d03"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="bddvar.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSetaaERK6BddVar" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSetaaERK6BddVar"></span><span id="_CPPv2NK9BddVarSetaaERK6BddVar"></span><span id="BddVarSet::sand-operator__BddVarCRC"></span><span class="target" id="d7/de4/classBddVarSet_1ac9bd786516f1c382620cca8a8c4c1d03"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv46BddVar" title="BddVar"><span class="n"><span class="pre">BddVar</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>変数を含むかチェックする． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="bddvar.html#d3/d3e/classBddVar"><span class="std std-ref">BddVar</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>right</strong> -- [in] 変数 </p>
@@ -247,7 +308,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9BddVarSetaaERK9BddVarSet">
-<span id="_CPPv3NK9BddVarSetaaERK9BddVarSet"></span><span id="_CPPv2NK9BddVarSetaaERK9BddVarSet"></span><span id="BddVarSet::sand-operator__BddVarSetCRC"></span><span class="target" id="d7/de4/classBddVarSet_1aaad630d278eed619574662637e6b17a3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9BddVarSetaaERK9BddVarSet" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK9BddVarSetaaERK9BddVarSet"></span><span id="_CPPv2NK9BddVarSetaaERK9BddVarSet"></span><span id="BddVarSet::sand-operator__BddVarSetCRC"></span><span class="target" id="d7/de4/classBddVarSet_1aaad630d278eed619574662637e6b17a3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&amp;&amp;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">right</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>共通部分を持つかチェックする． </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -261,13 +322,13 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSet9empty_setEv">
-<span id="_CPPv3N9BddVarSet9empty_setEv"></span><span id="_CPPv2N9BddVarSet9empty_setEv"></span><span id="BddVarSet::empty_set"></span><span class="target" id="d7/de4/classBddVarSet_1a424605d45c3e5dbc12e436fa1e87a023"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">empty_set</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSet9empty_setEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSet9empty_setEv"></span><span id="_CPPv2N9BddVarSet9empty_setEv"></span><span id="BddVarSet::empty_set"></span><span class="target" id="d7/de4/classBddVarSet_1a424605d45c3e5dbc12e436fa1e87a023"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">empty_set</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>空集合を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N9BddVarSet7invalidEv">
-<span id="_CPPv3N9BddVarSet7invalidEv"></span><span id="_CPPv2N9BddVarSet7invalidEv"></span><span id="BddVarSet::invalid"></span><span class="target" id="d7/de4/classBddVarSet_1a1b2ad8281d15223cf34fedf6754daffd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9BddVarSet7invalidEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N9BddVarSet7invalidEv"></span><span id="_CPPv2N9BddVarSet7invalidEv"></span><span id="BddVarSet::invalid"></span><span class="target" id="d7/de4/classBddVarSet_1a1b2ad8281d15223cf34fedf6754daffd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv49BddVarSet" title="BddVarSet"><span class="n"><span class="pre">BddVarSet</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invalid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>不正値を返す． </p>
 </dd></dl>
 
@@ -281,42 +342,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">1.2.6.6. BddVarSet</a><ul>
-<li><a class="reference internal" href="#_CPPv49BddVarSet"><code class="docutils literal notranslate"><span class="pre">BddVarSet</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSet9BddVarSetERKNSt6vectorI6BddVarEE"><code class="docutils literal notranslate"><span class="pre">BddVarSet()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSet9BddVarSetERK6BddVar"><code class="docutils literal notranslate"><span class="pre">BddVarSet()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSetD0Ev"><code class="docutils literal notranslate"><span class="pre">~BddVarSet()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSet12is_empty_setEv"><code class="docutils literal notranslate"><span class="pre">is_empty_set()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSet4sizeEv"><code class="docutils literal notranslate"><span class="pre">size()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSet8var_listEv"><code class="docutils literal notranslate"><span class="pre">var_list()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSetplERK6BddVar"><code class="docutils literal notranslate"><span class="pre">operator+()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSetplERK9BddVarSet"><code class="docutils literal notranslate"><span class="pre">operator+()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSetpLERK6BddVar"><code class="docutils literal notranslate"><span class="pre">operator+=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSetpLERK9BddVarSet"><code class="docutils literal notranslate"><span class="pre">operator+=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSetmiERK6BddVar"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSetmIERK6BddVar"><code class="docutils literal notranslate"><span class="pre">operator-=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSetmiERK9BddVarSet"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSetmIERK9BddVarSet"><code class="docutils literal notranslate"><span class="pre">operator-=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSetanERK6BddVar"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSetaNERK6BddVar"><code class="docutils literal notranslate"><span class="pre">operator&amp;=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSetanERK9BddVarSet"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSetaNERK9BddVarSet"><code class="docutils literal notranslate"><span class="pre">operator&amp;=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSetaaERK6BddVar"><code class="docutils literal notranslate"><span class="pre">operator&amp;&amp;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9BddVarSetaaERK9BddVarSet"><code class="docutils literal notranslate"><span class="pre">operator&amp;&amp;()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSet9empty_setEv"><code class="docutils literal notranslate"><span class="pre">empty_set()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9BddVarSet7invalidEv"><code class="docutils literal notranslate"><span class="pre">invalid()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="bddvar.html"
@@ -334,7 +361,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -342,13 +369,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -371,8 +398,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

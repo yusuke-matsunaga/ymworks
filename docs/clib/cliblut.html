@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>4.2.13. ClibLut &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="5. SAT Solver" href="../sat/sat.html" />
     <link rel="prev" title="4.2.12. ClibTiming" href="clibtiming.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -46,7 +50,7 @@
           <div class="body" role="main">
             
   <section id="cliblut">
-<h1><span class="section-number">4.2.13. </span>ClibLut<a class="headerlink" href="#cliblut" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">4.2.13. </span>ClibLut<a class="headerlink" href="#cliblut" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv47ClibLut">
 <span id="_CPPv37ClibLut"></span><span id="_CPPv27ClibLut"></span><span id="ClibLut"></span><span class="target" id="d1/da9/classClibLut"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibLut</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4I0E12ClibCellElem" title="ClibCellElem"><span class="n"><span class="pre">ClibCellElem</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">CiLut</span></span><span class="p"><span class="pre">&gt;</span></span><br /></dt>
@@ -57,15 +61,31 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK7ClibLut9dimensionEv">
 <span id="_CPPv3NK7ClibLut9dimensionEv"></span><span id="_CPPv2NK7ClibLut9dimensionEv"></span><span id="ClibLut::dimensionC"></span><span class="target" id="d1/da9/classClibLut_1af7afdea7d98e62f7bd3958a152615ce0"></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dimension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>次元数の取得 </p>
+<dl class="field-list simple">
+<dt class="field-odd">例外<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK7ClibLut13variable_typeE8SizeType">
 <span id="_CPPv3NK7ClibLut13variable_typeE8SizeType"></span><span id="_CPPv2NK7ClibLut13variable_typeE8SizeType"></span><span id="ClibLut::variable_type__SizeTypeC"></span><span class="target" id="d1/da9/classClibLut_1a04eae5f925c7dd2b43ddb1b4a51d7824"></span><a class="reference internal" href="../all_classes.html#_CPPv411ClibVarType" title="ClibVarType"><span class="n"><span class="pre">ClibVarType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">variable_type</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">var</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>変数型の取得 </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="../all_classes.html#da/d73/include_2ym_2clib_8h_1a76244afe1b27c62aff9fa024185cd801"><span class="std std-ref">ClibVarType</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>var</strong> -- [in] 変数番号 ( 0 &lt;= var &lt; <a class="reference internal" href="#d1/da9/classClibLut_1af7afdea7d98e62f7bd3958a152615ce0"><span class="std std-ref">dimension()</span></a> ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -77,6 +97,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>var</strong> -- [in] 変数番号 ( 0 &lt;= var &lt; <a class="reference internal" href="#d1/da9/classClibLut_1af7afdea7d98e62f7bd3958a152615ce0"><span class="std std-ref">dimension()</span></a> ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -92,6 +118,12 @@
 <li><p><strong>pos</strong> -- [in] 位置番号 ( 0 &lt;= pos &lt; index_num(var) ) </p></li>
 </ul>
 </dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合 </p></li>
+<li><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
@@ -99,10 +131,16 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK7ClibLut10grid_valueERKNSt6vectorI8SizeTypeEE">
 <span id="_CPPv3NK7ClibLut10grid_valueERKNSt6vectorI8SizeTypeEE"></span><span id="_CPPv2NK7ClibLut10grid_valueERKNSt6vectorI8SizeTypeEE"></span><span id="ClibLut::grid_value__std::vector:SizeType:CRC"></span><span class="target" id="d1/da9/classClibLut_1a0dbff94d1ece349478450724e06b7f87"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">grid_value</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv48SizeType" title="SizeType"><span class="n"><span class="pre">SizeType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">pos_array</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>格子点の値の取得 </p>
-<p>pos_array のサイズは <a class="reference internal" href="#d1/da9/classClibLut_1af7afdea7d98e62f7bd3958a152615ce0"><span class="std std-ref">dimension()</span></a> と同じ </p>
+<p><ul class="simple">
+<li><p>pos_array のサイズは <a class="reference internal" href="#d1/da9/classClibLut_1af7afdea7d98e62f7bd3958a152615ce0"><span class="std std-ref">dimension()</span></a> と同じ </p></li>
+</ul>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pos_array</strong> -- [in] pos_array 格子点座標 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合</p>
 </dd>
 </dl>
 </dd></dl>
@@ -111,13 +149,16 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK7ClibLut5valueERKNSt6vectorIdEE">
 <span id="_CPPv3NK7ClibLut5valueERKNSt6vectorIdEE"></span><span id="_CPPv2NK7ClibLut5valueERKNSt6vectorIdEE"></span><span id="ClibLut::value__std::vector:double:CRC"></span><span class="target" id="d1/da9/classClibLut_1a25dc4d8f418105464f56c5e151a4e7aa"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">val_array</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>値の取得 </p>
-<div class="admonition note">
-<p class="admonition-title">注釈</p>
-<p>val_array のサイズは <a class="reference internal" href="#d1/da9/classClibLut_1af7afdea7d98e62f7bd3958a152615ce0"><span class="std std-ref">dimension()</span></a> と同じ </p>
-</div>
+<p><ul class="simple">
+<li><p>val_array のサイズは <a class="reference internal" href="#d1/da9/classClibLut_1af7afdea7d98e62f7bd3958a152615ce0"><span class="std std-ref">dimension()</span></a> と同じ </p></li>
+</ul>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>val_array</strong> -- [in] 入力の値の配列 </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">logic_error</span></span></span> -- <a class="reference internal" href="../all_classes.html#d3/d8a/classClibCellElem_1a5e1852128073709648432038d405d93e"><span class="std std-ref">is_valid()</span></a> = false の場合</p>
 </dd>
 </dl>
 </dd></dl>
@@ -129,7 +170,10 @@
 <dt class="sig sig-object cpp" id="_CPPv4N7ClibLut7ClibLutEv">
 <span id="_CPPv3N7ClibLut7ClibLutEv"></span><span id="_CPPv2N7ClibLut7ClibLutEv"></span><span id="ClibLut::ClibLut"></span><span class="target" id="d1/da9/classClibLut_1ac5514fb060467be101767f6e572fa80f"></span><span class="sig-name descname"><span class="n"><span class="pre">ClibLut</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><br /></dt>
 <dd><p>空のコンストラクタ </p>
-<p>不正値となる． </p>
+<p><ul class="simple">
+<li><p>不正値となる． </p></li>
+</ul>
+</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -162,29 +206,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">4.2.13. ClibLut</a><ul>
-<li><a class="reference internal" href="#_CPPv47ClibLut"><code class="docutils literal notranslate"><span class="pre">ClibLut</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK7ClibLut9dimensionEv"><code class="docutils literal notranslate"><span class="pre">dimension()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7ClibLut13variable_typeE8SizeType"><code class="docutils literal notranslate"><span class="pre">variable_type()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7ClibLut9index_numE8SizeType"><code class="docutils literal notranslate"><span class="pre">index_num()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7ClibLut5indexE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7ClibLut10grid_valueERKNSt6vectorI8SizeTypeEE"><code class="docutils literal notranslate"><span class="pre">grid_value()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7ClibLut5valueERKNSt6vectorIdEE"><code class="docutils literal notranslate"><span class="pre">value()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7ClibLut7ClibLutEv"><code class="docutils literal notranslate"><span class="pre">ClibLut()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7ClibLut7ClibLutEPK6CiCellPK5CiLut"><code class="docutils literal notranslate"><span class="pre">ClibLut()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N7ClibLutD0Ev"><code class="docutils literal notranslate"><span class="pre">~ClibLut()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="clibtiming.html"
@@ -202,7 +225,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -210,13 +233,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -238,8 +261,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

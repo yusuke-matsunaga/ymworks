@@ -1,24 +1,28 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.6.10. ZddMgrHolder &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.6.11. ZddBase" href="zddbase.html" />
     <link rel="prev" title="1.2.6.9. ZddMgr" href="zddmgr.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -47,10 +51,10 @@
           <div class="body" role="main">
             
   <section id="zddmgrholder">
-<h1><span class="section-number">1.2.6.10. </span>ZddMgrHolder<a class="headerlink" href="#zddmgrholder" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">1.2.6.10. </span>ZddMgrHolder<a class="headerlink" href="#zddmgrholder" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv412ZddMgrHolder">
-<span id="_CPPv312ZddMgrHolder"></span><span id="_CPPv212ZddMgrHolder"></span><span id="ZddMgrHolder"></span><span class="target" id="d4/d45/classZddMgrHolder"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgrHolder</span></span></span><a class="headerlink" href="#_CPPv412ZddMgrHolder" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv312ZddMgrHolder"></span><span id="_CPPv212ZddMgrHolder"></span><span id="ZddMgrHolder"></span><span class="target" id="d4/d45/classZddMgrHolder"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgrHolder</span></span></span><br /></dt>
 <dd><p>ZddMgrImpl のスマートポインタ </p>
 <p>中身は std::shared_ptr&lt;ZddMgrImpl&gt; だが インターフェイス定義のために別クラスにしている． </p>
 <p>Subclassed by <a class="reference internal" href="zddbase.html#da/df3/classZddBase"><span class="std std-ref">ZddBase</span></a>, <a class="reference internal" href="zddmgr.html#d4/dd1/classZddMgr"><span class="std std-ref">ZddMgr</span></a></p>
@@ -58,7 +62,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N12ZddMgrHolder12ZddMgrHolderEP10ZddMgrImpl">
-<span id="_CPPv3N12ZddMgrHolder12ZddMgrHolderEP10ZddMgrImpl"></span><span id="_CPPv2N12ZddMgrHolder12ZddMgrHolderEP10ZddMgrImpl"></span><span id="ZddMgrHolder::ZddMgrHolder__ZddMgrImplP"></span><span class="target" id="d4/d45/classZddMgrHolder_1a14db109aeb61e98356035602fdef7f57"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgrHolder</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ZddMgrImpl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12ZddMgrHolder12ZddMgrHolderEP10ZddMgrImpl" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12ZddMgrHolder12ZddMgrHolderEP10ZddMgrImpl"></span><span id="_CPPv2N12ZddMgrHolder12ZddMgrHolderEP10ZddMgrImpl"></span><span id="ZddMgrHolder::ZddMgrHolder__ZddMgrImplP"></span><span class="target" id="d4/d45/classZddMgrHolder_1a14db109aeb61e98356035602fdef7f57"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgrHolder</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ZddMgrImpl</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>生のポインタを指定したコンストラクタ </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -69,7 +73,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder">
-<span id="_CPPv3N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder"></span><span id="_CPPv2N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder"></span><span id="ZddMgrHolder::ZddMgrHolder__ZddMgrHolderCR"></span><span class="target" id="d4/d45/classZddMgrHolder_1a820f5c7ca69ddf9f708cb6d69f2a7fae"></span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgrHolder</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder" title="ZddMgrHolder::ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder"></span><span id="_CPPv2N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder"></span><span id="ZddMgrHolder::ZddMgrHolder__ZddMgrHolderCR"></span><span class="target" id="d4/d45/classZddMgrHolder_1a820f5c7ca69ddf9f708cb6d69f2a7fae"></span><span class="sig-name descname"><span class="n"><span class="pre">ZddMgrHolder</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder" title="ZddMgrHolder::ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コピーコンストラクタ </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -80,7 +84,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N12ZddMgrHolderaSERK12ZddMgrHolder">
-<span id="_CPPv3N12ZddMgrHolderaSERK12ZddMgrHolder"></span><span id="_CPPv2N12ZddMgrHolderaSERK12ZddMgrHolder"></span><span id="ZddMgrHolder::assign-operator__ZddMgrHolderCR"></span><span class="target" id="d4/d45/classZddMgrHolder_1ab81da9de3264a7f7bbb6a76fb1be5db8"></span><a class="reference internal" href="#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12ZddMgrHolderaSERK12ZddMgrHolder" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12ZddMgrHolderaSERK12ZddMgrHolder"></span><span id="_CPPv2N12ZddMgrHolderaSERK12ZddMgrHolder"></span><span id="ZddMgrHolder::assign-operator__ZddMgrHolderCR"></span><span class="target" id="d4/d45/classZddMgrHolder_1ab81da9de3264a7f7bbb6a76fb1be5db8"></span><a class="reference internal" href="../all_classes.html#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">=</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">src</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>コピー代入演算子 </p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
@@ -91,25 +95,25 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N12ZddMgrHolderD0Ev">
-<span id="_CPPv3N12ZddMgrHolderD0Ev"></span><span id="_CPPv2N12ZddMgrHolderD0Ev"></span><span id="ZddMgrHolder::~ZddMgrHolder"></span><span class="target" id="d4/d45/classZddMgrHolder_1a9719a3b1afc96912644d8d18dad9c355"></span><span class="sig-name descname"><span class="n"><span class="pre">~ZddMgrHolder</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12ZddMgrHolderD0Ev" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N12ZddMgrHolderD0Ev"></span><span id="_CPPv2N12ZddMgrHolderD0Ev"></span><span id="ZddMgrHolder::~ZddMgrHolder"></span><span class="target" id="d4/d45/classZddMgrHolder_1a9719a3b1afc96912644d8d18dad9c355"></span><span class="sig-name descname"><span class="n"><span class="pre">~ZddMgrHolder</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
 <dd><p>デストラクタ </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK12ZddMgrHolder3mgrEv">
-<span id="_CPPv3NK12ZddMgrHolder3mgrEv"></span><span id="_CPPv2NK12ZddMgrHolder3mgrEv"></span><span id="ZddMgrHolder::mgrC"></span><span class="target" id="d4/d45/classZddMgrHolder_1a93a7b6a75b757d89a497b8ae03979ef0"></span><a class="reference internal" href="zddmgr.html#_CPPv46ZddMgr" title="ZddMgr"><span class="n"><span class="pre">ZddMgr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12ZddMgrHolder3mgrEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK12ZddMgrHolder3mgrEv"></span><span id="_CPPv2NK12ZddMgrHolder3mgrEv"></span><span id="ZddMgrHolder::mgrC"></span><span class="target" id="d4/d45/classZddMgrHolder_1a93a7b6a75b757d89a497b8ae03979ef0"></span><a class="reference internal" href="../all_classes.html#_CPPv46ZddMgr" title="ZddMgr"><span class="n"><span class="pre">ZddMgr</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>親のマネージャを返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK12ZddMgrHolder13has_valid_mgrEv">
-<span id="_CPPv3NK12ZddMgrHolder13has_valid_mgrEv"></span><span id="_CPPv2NK12ZddMgrHolder13has_valid_mgrEv"></span><span id="ZddMgrHolder::has_valid_mgrC"></span><span class="target" id="d4/d45/classZddMgrHolder_1a3cf637cd08b22574262dc230d94200bf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_valid_mgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12ZddMgrHolder13has_valid_mgrEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK12ZddMgrHolder13has_valid_mgrEv"></span><span id="_CPPv2NK12ZddMgrHolder13has_valid_mgrEv"></span><span id="ZddMgrHolder::has_valid_mgrC"></span><span class="target" id="d4/d45/classZddMgrHolder_1a3cf637cd08b22574262dc230d94200bf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_valid_mgr</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>適正な値を持っている時に true を返す． </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK12ZddMgrHolder12has_same_mgrERK12ZddMgrHolder">
-<span id="_CPPv3NK12ZddMgrHolder12has_same_mgrERK12ZddMgrHolder"></span><span id="_CPPv2NK12ZddMgrHolder12has_same_mgrERK12ZddMgrHolder"></span><span id="ZddMgrHolder::has_same_mgr__ZddMgrHolderCRC"></span><span class="target" id="d4/d45/classZddMgrHolder_1a873a75832efbdca3632b30616dc4de32"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_same_mgr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12ZddMgrHolder12has_same_mgrERK12ZddMgrHolder" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK12ZddMgrHolder12has_same_mgrERK12ZddMgrHolder"></span><span id="_CPPv2NK12ZddMgrHolder12has_same_mgrERK12ZddMgrHolder"></span><span id="ZddMgrHolder::has_same_mgr__ZddMgrHolderCRC"></span><span class="target" id="d4/d45/classZddMgrHolder_1a873a75832efbdca3632b30616dc4de32"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_same_mgr</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv412ZddMgrHolder" title="ZddMgrHolder"><span class="n"><span class="pre">ZddMgrHolder</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>同じマネージャのオブジェクトなら true を返す． </p>
 </dd></dl>
 
@@ -123,27 +127,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">1.2.6.10. ZddMgrHolder</a><ul>
-<li><a class="reference internal" href="#_CPPv412ZddMgrHolder"><code class="docutils literal notranslate"><span class="pre">ZddMgrHolder</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N12ZddMgrHolder12ZddMgrHolderEP10ZddMgrImpl"><code class="docutils literal notranslate"><span class="pre">ZddMgrHolder()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12ZddMgrHolder12ZddMgrHolderERK12ZddMgrHolder"><code class="docutils literal notranslate"><span class="pre">ZddMgrHolder()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12ZddMgrHolderaSERK12ZddMgrHolder"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12ZddMgrHolderD0Ev"><code class="docutils literal notranslate"><span class="pre">~ZddMgrHolder()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12ZddMgrHolder3mgrEv"><code class="docutils literal notranslate"><span class="pre">mgr()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12ZddMgrHolder13has_valid_mgrEv"><code class="docutils literal notranslate"><span class="pre">has_valid_mgr()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12ZddMgrHolder12has_same_mgrERK12ZddMgrHolder"><code class="docutils literal notranslate"><span class="pre">has_same_mgr()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="zddmgr.html"
@@ -161,7 +146,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -169,13 +154,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -198,8 +183,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

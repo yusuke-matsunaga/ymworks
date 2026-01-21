@@ -1,23 +1,27 @@
+
 <!DOCTYPE html>
 
-<html lang="ja" data-content_root="../">
+<html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>5.2.12. SatOrderedSet &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
-    <script src="../_static/documentation_options.js?v=144c8c96"></script>
-    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="prev" title="5.2.11. SatOneHotMatrix" href="satonehotmatrix.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -42,7 +46,7 @@
           <div class="body" role="main">
             
   <section id="satorderedset">
-<h1><span class="section-number">5.2.12. </span>SatOrderedSet<a class="headerlink" href="#satorderedset" title="Link to this heading">¶</a></h1>
+<h1><span class="section-number">5.2.12. </span>SatOrderedSet<a class="headerlink" href="#satorderedset" title="この見出しへのパーマリンク">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv413SatOrderedSet">
 <span id="_CPPv313SatOrderedSet"></span><span id="_CPPv213SatOrderedSet"></span><span id="SatOrderedSet"></span><span class="target" id="da/d39/classSatOrderedSet"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SatOrderedSet</span></span></span><br /></dt>
@@ -77,10 +81,18 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK13SatOrderedSet3varEi">
 <span id="_CPPv3NK13SatOrderedSet3varEi"></span><span id="_CPPv2NK13SatOrderedSet3varEi"></span><span id="SatOrderedSet::var__iC"></span><span class="target" id="da/d39/classSatOrderedSet_1ad1f0c7a34fffbcbf114d5ae4c1d90add"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">var</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>値に対応する変数を返す． </p>
-<p>var(val) == True &lt;==&gt; 値が val </p>
+<p>
+var(val) == True &lt;==&gt; 値が val <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="satliteral.html#d6/d75/classSatLiteral"><span class="std std-ref">SatLiteral</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>val</strong> -- [in] 値 ( min &lt;= val &lt;= max ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p>
 </dd>
 </dl>
 </dd></dl>
@@ -89,16 +101,29 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK13SatOrderedSet4varsEv">
 <span id="_CPPv3NK13SatOrderedSet4varsEv"></span><span id="_CPPv2NK13SatOrderedSet4varsEv"></span><span id="SatOrderedSet::varsC"></span><span class="target" id="da/d39/classSatOrderedSet_1a1db3a4843f9c6b564dbd5fba400f9e99"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">vars</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>値に対応する変数のベクタを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="satliteral.html#d6/d75/classSatLiteral"><span class="std std-ref">SatLiteral</span></a></p>
+</div>
+</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK13SatOrderedSet7pri_varEi">
 <span id="_CPPv3NK13SatOrderedSet7pri_varEi"></span><span id="_CPPv2NK13SatOrderedSet7pri_varEi"></span><span id="SatOrderedSet::pri_var__iC"></span><span class="target" id="da/d39/classSatOrderedSet_1aa7bb77ab3d37be3ca88cc6c3fdcc999b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pri_var</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">val</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>順序符号化された変数を返す． </p>
-<p>この変数が true == 値が val 以上 値が min 以上は常に成り立つので val &gt; min となる． つまり <a class="reference internal" href="#da/d39/classSatOrderedSet_1ad1f0c7a34fffbcbf114d5ae4c1d90add"><span class="std std-ref">var()</span></a> よりも範囲が一つ短い． </p>
+<p>
+この変数が true == 値が val 以上 値が min 以上は常に成り立つので val &gt; min となる． つまり <a class="reference internal" href="#da/d39/classSatOrderedSet_1ad1f0c7a34fffbcbf114d5ae4c1d90add"><span class="std std-ref">var()</span></a> よりも範囲が一つ短い． <div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="satliteral.html#d6/d75/classSatLiteral"><span class="std std-ref">SatLiteral</span></a></p>
+</div>
+</p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>val</strong> -- [in] 値 ( min &lt; val &lt;= max ) </p>
+</dd>
+<dt class="field-even">例外<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><span class="cpp-expr sig sig-inline cpp"><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n">std</span></a><span class="p">::</span><span class="n">out_of_range</span></span></span> -- 範囲外のアクセス </p>
 </dd>
 </dl>
 </dd></dl>
@@ -107,12 +132,17 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK13SatOrderedSet8pri_varsEv">
 <span id="_CPPv3NK13SatOrderedSet8pri_varsEv"></span><span id="_CPPv2NK13SatOrderedSet8pri_varsEv"></span><span id="SatOrderedSet::pri_varsC"></span><span class="target" id="da/d39/classSatOrderedSet_1ab09a8450c2db1329b16cd8a374f42849"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../all_classes.html#_CPPv410SatLiteral" title="SatLiteral"><span class="n"><span class="pre">SatLiteral</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">pri_vars</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
 <dd><p>順序符号化された変数のベクタを返す． </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p><a class="reference internal" href="satliteral.html#d6/d75/classSatLiteral"><span class="std std-ref">SatLiteral</span></a></p>
+</div>
+</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK13SatOrderedSet3valERK8SatModel">
 <span id="_CPPv3NK13SatOrderedSet3valERK8SatModel"></span><span id="_CPPv2NK13SatOrderedSet3valERK8SatModel"></span><span id="SatOrderedSet::val__SatModelCRC"></span><span class="target" id="da/d39/classSatOrderedSet_1a88adbd6c09c68d9ef85f4b1af964cb64"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">val</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv48SatModel" title="SatModel"><span class="n"><span class="pre">SatModel</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">model</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
-<dd><p>SATの解から値を得る． </p>
+<dd><p>SATの解から値を得る． &#64;sat <a class="reference internal" href="satmodel.html#d7/d29/classSatModel"><span class="std std-ref">SatModel</span></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">パラメータ<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>model</strong> -- [in] SATの解 </p>
@@ -130,28 +160,8 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../index.html">目次</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">5.2.12. SatOrderedSet</a><ul>
-<li><a class="reference internal" href="#_CPPv413SatOrderedSet"><code class="docutils literal notranslate"><span class="pre">SatOrderedSet</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N13SatOrderedSetD0Ev"><code class="docutils literal notranslate"><span class="pre">~SatOrderedSet()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13SatOrderedSet3minEv"><code class="docutils literal notranslate"><span class="pre">min()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13SatOrderedSet3maxEv"><code class="docutils literal notranslate"><span class="pre">max()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13SatOrderedSet3varEi"><code class="docutils literal notranslate"><span class="pre">var()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13SatOrderedSet4varsEv"><code class="docutils literal notranslate"><span class="pre">vars()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13SatOrderedSet7pri_varEi"><code class="docutils literal notranslate"><span class="pre">pri_var()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13SatOrderedSet8pri_varsEv"><code class="docutils literal notranslate"><span class="pre">pri_vars()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13SatOrderedSet3valERK8SatModel"><code class="docutils literal notranslate"><span class="pre">val()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="satonehotmatrix.html"
@@ -164,7 +174,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -172,13 +182,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -197,8 +207,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-    &#169; 著作権 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+        &#169; Copyright 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>
