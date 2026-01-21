@@ -23,11 +23,16 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// - B = (0 | 1)
 /// - Q = (0 | 1 | X)
 /// の5種類の値からなる．
+///
 /// ただし，val_a -> val_b という形の遷移シンボルがある．
+///
 /// また，変化なし，というシンボルもある．
+///
 /// やっかいなのが，
+/// @code
 /// p = 01 | 0X | X1
 /// n = 10 | 1X | X0
+/// @endcode
 /// という特殊シンボル
 /// なので 00, 01, 0X, 10, 11, 1X, X0, X1, XX の9つのビットの組み合わせ
 /// で表す．
@@ -79,7 +84,8 @@ public:
   is_nc_symbol() const;
 
   /// @brief 複合値の時に true を返す．
-  /// @note レベルシンボルの時のみ意味を持つ．
+  ///
+  /// レベルシンボルの時のみ意味を持つ．
   bool
   is_composite_symbol() const;
 
@@ -126,6 +132,7 @@ private:
 };
 
 /// @brief 非等価比較
+/// @relates VlUdpVal
 inline
 bool
 operator!=(
@@ -137,6 +144,7 @@ operator!=(
 }
 
 /// @brief 包含性チェック
+/// @relates VlUdpVal
 inline
 bool
 operator>=(

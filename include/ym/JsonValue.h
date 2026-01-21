@@ -483,11 +483,11 @@ private:
 
 };
 
+/// @relates JsonValue
 /// @brief bool 値を取り出す．
 /// @return 結果を返す．
+/// @exception std::logic_error option が辞書型でない || 結果が bool 型でない
 ///
-/// * option が辞書型でなかったり，結果が bool 型でなかった場合，
-///   std::logic_error 例外が送出される．
 /// * option が Null オブジェクトの場合やキーに対応する値がなかった場合，
 ///   default_val が返される．
 inline
@@ -513,11 +513,11 @@ get_bool(
   return bool_var;
 }
 
+/// @relates JsonValue
 /// @brief int 値を取り出す．
 /// @return 結果を返す．
+/// @exception std::logic_error option が辞書型でない || 結果が int 型でない
 ///
-/// * option が辞書型でなかったり，結果が int 型でなかった場合，
-///   std::logic_error 例外が送出される．
 /// * option が Null オブジェクトの場合やキーに対応する値がなかった場合，
 ///   default_val が返される．
 inline
@@ -543,11 +543,11 @@ get_int(
   return int_var;
 }
 
+/// @relates JsonValue
 /// @brief string 値を取り出す．
 /// @return 結果を返す．
+/// @exception std::logic_error option が辞書型でない || 結果が string 型でない
 ///
-/// * option が辞書型でなかったり，結果が string 型でなかった場合，
-///   std::logic_error 例外が送出される．
 /// * option が Null オブジェクトの場合やキーに対応する値がなかった場合，
 ///   default_val が返される．
 inline
@@ -573,6 +573,7 @@ get_string(
   return string_var;
 }
 
+/// @relates JsonValue
 /// @brief ストリーム入力演算子
 std::istream&
 operator>>(
@@ -580,6 +581,7 @@ operator>>(
   JsonValue& json_obj ///< [out] 結果を格納するオブジェクト
 );
 
+/// @relates JsonValue
 /// @brief ストリーム出力演算子
 std::ostream&
 operator<<(

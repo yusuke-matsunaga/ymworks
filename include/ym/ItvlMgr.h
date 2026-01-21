@@ -21,7 +21,7 @@ class ItvlTree;
 /// @ingroup YmUtils
 /// @brief インターバルを管理するクラス
 ///
-/// 最初は 0 から numeric_limits<int>::max() までの区間が利用可能で，
+/// 最初は 0 から numeric_limits<SizeType>::max() までの区間が利用可能で，
 /// 数字を使用するとその部分を利用可能な区間から取り除いてゆく．
 /// あとで，使用していた数字や区間を利用可能に戻すことも可能である．
 ///
@@ -33,7 +33,7 @@ public:
 
   /// @brief コンストラクタ
   ///
-  /// 初期値として [0〜numeric_limits<int>::max()) の区間を持つ
+  /// 初期値として [0〜numeric_limits<SizeType>::max()) の区間を持つ
   ItvlMgr();
 
   /// @brief デストラクタ
@@ -53,19 +53,19 @@ public:
   /// @return 使用可能な数字
   ///
   /// 内容は変化しない．
-  int
+  SizeType
   avail_num() const;
 
   /// @brief d を使用可能な区間から削除する．
   void
   erase(
-    int d ///< [in] 使用不可能となった要素
+    SizeType d ///< [in] 使用不可能となった要素
   );
 
   /// @brief d を使用可能な区間に追加する．
   void
   add(
-    int d ///< [in] 使用可能となった要素
+    SizeType d ///< [in] 使用可能となった要素
   );
 
 

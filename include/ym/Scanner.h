@@ -38,6 +38,7 @@ class Scanner
 public:
 
   /// @brief コンストラクタ
+  /// @sa FileInfo
   Scanner(
     std::istream& s,          ///< [in] 入力ストリーム
     const FileInfo& file_info ///< [in] ファイル情報
@@ -54,10 +55,12 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief オープン中のファイル情報を得る．
+  /// @sa FileInfo
   const FileInfo&
   file_info() const { return mFileInfo; }
 
   /// @brief 現在のファイル情報を書き換える．
+  /// @sa FileInfo
   ///
   /// プリプロセッサのプラグマなどで用いることを想定している．
   /// 通常は使わないこと．
@@ -111,6 +114,7 @@ public:
   set_first_loc();
 
   /// @brief 現在の位置を返す．
+  /// @sa FileLoc
   FileLoc
   cur_pos() const
   {
@@ -118,6 +122,7 @@ public:
   }
 
   /// @brief 直前の set_first_loc() から現在の位置までを返す．
+  /// @sa FileRegion
   FileRegion
   cur_region() const
   {

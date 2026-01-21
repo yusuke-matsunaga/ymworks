@@ -193,7 +193,7 @@ private:
     SizeType size ///< [in] サイズ
   );
 
-  /// @breif 直前の SAT の反例を加えて再ハッシュする．
+  /// @brief 直前の SAT の反例を加えて再ハッシュする．
   void
   add_pat(
     FraigNode* node ///< [in] 対象のノード

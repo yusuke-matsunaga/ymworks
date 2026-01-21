@@ -117,7 +117,7 @@ OpNode2_OSV::add_op_order_cond(
   solver.add_le(opr1, opr2);
 }
 
-// @breif op_id 番目の演算を使用している時 true となるリテラルを追加する．
+// @brief op_id 番目の演算を使用している時 true となるリテラルを追加する．
 void
 OpNode2_OSV::add_use_lit(
   SizeType op_id,

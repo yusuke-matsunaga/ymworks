@@ -85,6 +85,7 @@ public:
   );
 
   /// @brief time 型からの変換コンストラクタ
+  /// @sa VlTime
   ///
   /// 結果の型は
   /// - サイズはあり(64ビット)
@@ -96,6 +97,7 @@ public:
   );
 
   /// @brief スカラ値からのキャスト用コンストラクタ
+  /// @sa VlScalarVal
   ///
   /// size を指定するとその数分 value を繰り返す．<br>
   /// 結果の型は
@@ -238,6 +240,7 @@ public:
 
   /// @brief time 型からの代入演算子
   /// @return 代入後の自分自身の参照を返す．
+  /// @sa VlTime
   ///
   /// 結果の型は
   /// - サイズはあり(64ビット)
@@ -250,6 +253,7 @@ public:
 
   /// @brief スカラ値からの代入演算子
   /// @return 代入後の自分自身の参照を返す．
+  /// @sa VlScalarVal
   ///
   /// 結果の型は
   /// - サイズはあり(1ビット)
@@ -510,6 +514,7 @@ public:
 
   /// @brief リダクションAND
   /// @return 演算結果を返す．
+  /// @sa VlScalarVal
   ///
   /// すべてのビットの AND を計算する
   VlScalarVal
@@ -517,6 +522,7 @@ public:
 
   /// @brief リダクションOR
   /// @return 演算結果を返す．
+  /// @sa VlScalarVal
   ///
   /// すべてのビットの OR を計算する
   VlScalarVal
@@ -524,6 +530,7 @@ public:
 
   /// @brief リダクションXOR
   /// @return 演算結果を返す．
+  /// @sa VlScalarVal
   ///
   /// すべてのビットの XOR を計算する
   VlScalarVal
@@ -531,6 +538,7 @@ public:
 
   /// @brief リダクションNAND
   /// @return 演算結果を返す．
+  /// @sa VlScalarVal
   ///
   /// すべてのビットの NAND を計算する
   VlScalarVal
@@ -538,6 +546,7 @@ public:
 
   /// @brief リダクションNOR
   /// @return 演算結果を返す．
+  /// @sa VlScalarVal
   ///
   /// すべてのビットの NOR を計算する
   VlScalarVal
@@ -545,6 +554,7 @@ public:
 
   /// @brief リダクションXNOR
   /// @return 演算結果を返す．
+  /// @sa VlScalarVal
   ///
   /// すべてのビットの XNOR を計算する
   VlScalarVal
@@ -675,6 +685,7 @@ public:
 
   /// @brief bit-select 演算子
   /// @return bpos で指定された位置の値
+  /// @sa VlScalarVal
   VlScalarVal
   bit_select_op(
     int bpos ///< [in] 選択するビット位置
@@ -684,6 +695,7 @@ public:
   }
 
   /// @brief bit-select 書き込み
+  /// @sa VlScalarVal
   ///
   /// - bpos の位置に val を書き込む．
   /// - 範囲外ならないもしない．
@@ -745,6 +757,7 @@ public:
 
   /// @brief pos ビット目の値を得る．
   /// @return pos ビット目の値を返す．
+  /// @sa VlScalarVal
   ///
   /// pos が範囲を越えていたら X を返す．
   VlScalarVal
@@ -820,6 +833,7 @@ public:
   to_string() const;
 
   /// @brief 1ビットのスカラー値に変換する．
+  /// @sa VlScalarVal
   ///
   /// 実際には LSB を返すだけ．
   VlScalarVal
@@ -829,6 +843,7 @@ public:
   /// @retval 0 0 の時
   /// @retval 1 0 以外の確定値の時
   /// @retval X 不定値を1ビットでも含む場合
+  /// @sa VlScalarVal
   VlScalarVal
   to_logic() const;
 

@@ -28,7 +28,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibCellClass() = default;
 
   /// @brief 内容を指定したコンストラクタ
@@ -47,18 +47,24 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 同位体変換の個数を得る．
+  /// @exception std::logic_error is_valid() = false の場合
   ///
-  /// 恒等変換は含まない．
+  /// - 恒等変換は含まない．
   SizeType
   idmap_num() const;
 
   /// @brief 同位体変換を得る．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibIOMap
   const ClibIOMap&
   idmap(
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < idmap_num() )
   ) const;
 
   /// @brief 同位体変換のリストを得る．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibIOMap
   const std::vector<ClibIOMap>&
   idmap_list() const;
 
@@ -74,16 +80,22 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief グループ数を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   cell_group_num() const;
 
   /// @brief グループを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellGroup
   ClibCellGroup
   cell_group(
     SizeType pos ///< [in] インデックス ( 0 <= pos < cell_group_num() )
   ) const;
 
   /// @brief グループのリストを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellGroupList
   ClibCellGroupList
   cell_group_list() const;
 

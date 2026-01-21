@@ -57,23 +57,23 @@ public:
   );
 
   /// @brief 入力数と真理値を指定したコンストラクタ
-  ///
-  /// - values のサイズは 2^ni に等しくなければならない．
-  /// - 違反時には std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument values のサイズが不適切だった．
   TvFunc(
     SizeType ni,                   ///< [in] 入力数
     const std::vector<int>& values ///< [in] 真理値のベクタ
   );
 
   /// @brief 文字列からの変換コンストラクタ
+  /// @exception std::invalid_argument 文字列の長さが不適切だった．
+  /// @exception std::invalid_argument 文字列が '0' と '1' 以外の文字を含んではいた(2進モード)．
+  /// @exception std::invalid_argument 文字列が '0' 〜 '9' と 'a' 〜 'h' 以外の文字を含んでいた(16進モード)．
   ///
   /// - 文字列の形式は TvFunc::str() と同一
-  /// - つまり，TvFunc(str1).str() == str1 となる．
-  /// - str の長さは 2^n でなければならない(2進モード)．
-  /// - str は '0' と '1' 以外の文字を含んではいけない(2進モード)．
-  /// - str の長さは 2^n/4 でなければならない(16進モード)．
-  /// - str は '0' 〜 '9' と 'a' 〜 'h' 以外の文字を含んではいけない(16進モード)．
-  /// - 違反時には std::invalid_argument 例外が送出される．
+  ///
+  /// @code
+  /// auto f = TvFunc(str1, mode);
+  /// // f.str(mode) = str1 となる．
+  /// @endcode
   TvFunc(
     const std::string& str, ///< [in] 0と1からなる文字列
     int mode = 2            ///< [in] モード(基数) 2 or 16
@@ -146,6 +146,7 @@ public:
 
   /// @brief リテラル関数を作る．
   /// @return 生成したオブジェクト
+  /// @exception std::invalid_argument varid が ni の範囲外だった．
   static
   TvFunc
   literal(
@@ -161,6 +162,7 @@ public:
 
   /// @brief リテラル関数を作る．
   /// @return 生成したオブジェクト
+  /// @exception std::invalid_argument lit が ni の範囲外だった．
   static
   TvFunc
   literal(
@@ -173,6 +175,7 @@ public:
 
   /// @brief 肯定のリテラル関数を作る．
   /// @return 生成したオブジェクトを返す．
+  /// @exception std::invalid_argument varid が ni の範囲外だった．
   static
   TvFunc
   positive_literal(
@@ -185,6 +188,7 @@ public:
 
   /// @brief 否定のリテラル関数を作る．
   /// @return 生成したオブジェクトを返す．
+  /// @exception std::invalid_argument varid が ni の範囲外だった．
   static
   TvFunc
   negative_literal(
@@ -197,6 +201,7 @@ public:
 
   /// @brief カバーに対応した関数を作る．
   /// @return 生成したオブジェクトを返す．
+  /// @exception std::invalid_argument cube_list 中のリテラルが ni の範囲外
   static
   TvFunc
   cover(
@@ -209,6 +214,7 @@ public:
 
   /// @brief カバーに対応した関数を作る．
   /// @return 生成したオブジェクトを返す．
+  /// @exception std::invalid_argument cube_list 中のリテラルが ni の範囲外
   static
   TvFunc
   cover(
@@ -221,6 +227,7 @@ public:
 
   /// @brief キューブに対応した関数を作る．
   /// @return 生成したオブジェクトを返す．
+  /// @exception std::invalid_argument lit_list 中のリテラルが ni の範囲外
   static
   TvFunc
   cube(
@@ -247,8 +254,7 @@ public:
   }
 
   /// @brief 論理積を返す．
-  ///
-  /// right と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc
   and_op(
     const TvFunc& right ///< [in] オペランド
@@ -258,8 +264,7 @@ public:
   }
 
   /// @brief 論理和を返す．
-  ///
-  /// right と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc
   or_op(
     const TvFunc& right ///< [in] オペランド
@@ -269,8 +274,7 @@ public:
   }
 
   /// @brief 排他的論理和を返す．
-  ///
-  /// right と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc
   xor_op(
     const TvFunc& right ///< [in] オペランド
@@ -280,8 +284,7 @@ public:
   }
 
   /// @brief コファクターを返す．
-  ///
-  /// lit.varid() が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::invalid_argument lit が範囲外
   TvFunc
   cofactor(
     Literal lit    ///< [in] リテラル
@@ -291,8 +294,7 @@ public:
   }
 
   /// @brief コファクターを返す．
-  ///
-  /// var が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::invalid_argument var が範囲外
   TvFunc
   cofactor(
     SizeType var, ///< [in] 変数番号 ( 0 <= var < input_num() )
@@ -305,8 +307,7 @@ public:
   }
 
   /// @brief コファクターを計算し，束縛した変数を消去する．
-  ///
-  /// lit.varid() が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::invalid_argument lit が範囲外
   TvFunc
   bind(
     Literal lit ///< [in] リテラル
@@ -316,8 +317,7 @@ public:
   }
 
   /// @brief コファクターを計算し，束縛した変数を消去する．
-  ///
-  /// var が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::invalid_argument var が範囲外
   TvFunc
   bind(
     SizeType var, ///< [in] 変数番号 ( 0 <= var < input_num() )
@@ -327,8 +327,7 @@ public:
   ) const;
 
   /// @brief コファクターを返す．
-  ///
-  /// lit.varid() が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::invalid_argument cube 中のリテラルが範囲外
   TvFunc
   cofactor(
     const std::vector<Literal>& cube ///< [in] キューブ(リテラルのリスト)
@@ -338,16 +337,14 @@ public:
   }
 
   /// @brief 共通部分を持つ時 true を返す．
-  ///
-  /// right の入力数が異なる時は std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   bool
   check_intersect(
     const TvFunc& right
   ) const;
 
   /// @brief right に包含されている時 true を返す．
-  ///
-  /// right の入力数が異なる時は std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   bool
   check_containment(
     const TvFunc& right
@@ -364,8 +361,8 @@ public:
   ) const;
 
   /// @brief decompose() の逆関数
+  /// @exception std::invalid_argument func0 と func1 の入力数が異なる．
   ///
-  /// - func0 と func1 の入力数は同じでなければならない．
   /// - 結果の関数の入力数は func0, func1 の入力数より1多い．
   static
   TvFunc
@@ -388,35 +385,33 @@ public:
     bool inv = true ///< [in] 反転フラグ
   );
 
-  /// @brief src1 との論理積を計算し自分に代入する．
+  /// @brief right との論理積を計算し自分に代入する．
   /// @return 自身への参照を返す．
-  ///
-  /// src1 と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc&
   and_int(
-    const TvFunc& src1 ///< [in] オペランド
+    const TvFunc& right ///< [in] オペランド
   );
 
-  /// @brief src1 との論理和を計算し自分に代入する．
+  /// @brief right との論理和を計算し自分に代入する．
   /// @return 自身への参照を返す．
-  ///
-  /// src1 と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc&
   or_int(
-    const TvFunc& src1 ///< [in] オペランド
+    const TvFunc& right ///< [in] オペランド
   );
 
-  /// @brief src1 との排他的論理和を計算し自分に代入する．
+  /// @brief right との排他的論理和を計算し自分に代入する．
   /// @return 自身への参照を返す．
-  ///
-  /// src1 と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc&
   xor_int(
-    const TvFunc& src1 ///< [in] オペランド
+    const TvFunc& right ///< [in] オペランド
   );
 
   /// @brief コファクターを計算し自分に代入する．
   /// @return 自身への参照を返す．
+  /// @exception std::invalid_argument lit が範囲外
   TvFunc&
   cofactor_int(
     Literal lit     ///< [in] リテラル
@@ -429,6 +424,7 @@ public:
 
   /// @brief コファクターを計算し自分に代入する．
   /// @return 自身への参照を返す．
+  /// @exception std::invalid_argument varid が範囲外
   TvFunc&
   cofactor_int(
     SizeType varid,  ///< [in] 変数番号
@@ -439,6 +435,7 @@ public:
 
   /// @brief コファクターを計算し自分に代入する．
   /// @return 自身への参照を返す．
+  /// @exception std::invalid_argument cube 中のリテラルが範囲外
   TvFunc&
   cofactor_int(
     const std::vector<Literal>& cube ///< [in] キューブ(リテラルのリスト)
@@ -484,6 +481,7 @@ public:
   }
 
   /// @brief 論理積を求める．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc
   operator&(
     const TvFunc& right ///< [in] 第2オペランド
@@ -492,19 +490,19 @@ public:
     return and_op(right);
   }
 
-  /// @brief src1 との論理積を計算し自分に代入する．
+  /// @brief right との論理積を計算し自分に代入する．
   /// @return 自身への参照を返す．
-  ///
-  /// src1 と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc&
   operator&=(
-    const TvFunc& src1 ///< [in] オペランド
+    const TvFunc& right ///< [in] オペランド
   )
   {
-    return and_int(src1);
+    return and_int(right);
   }
 
   /// @brief 論理和を求める．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc
   operator|(
     const TvFunc& right ///< [in] 第2オペランド
@@ -513,19 +511,19 @@ public:
     return or_op(right);
   }
 
-  /// @brief src1 との論理和を計算し自分に代入する．
+  /// @brief right との論理和を計算し自分に代入する．
   /// @return 自身への参照を返す．
-  ///
-  /// src1 と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc&
   operator|=(
-    const TvFunc& src1 ///< [in] オペランド
+    const TvFunc& right ///< [in] オペランド
   )
   {
-    return or_int(src1);
+    return or_int(right);
   }
 
   /// @brief 排他的論理和を求める．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc
   operator^(
     const TvFunc& right ///< [in] 第2オペランド
@@ -534,19 +532,19 @@ public:
     return xor_op(right);
   }
 
-  /// @brief src1 との排他的論理和を計算し自分に代入する．
+  /// @brief right との排他的論理和を計算し自分に代入する．
   /// @return 自身への参照を返す．
-  ///
-  /// src1 と入力数が異なるときは std::invalid_argument 例外が送出される．
+  /// @exception std::invalid_argument right と入力数が異なる．
   TvFunc&
   operator^=(
-    const TvFunc& src1 ///< [in] オペランド
+    const TvFunc& right ///< [in] オペランド
   )
   {
-    return xor_int(src1);
+    return xor_int(right);
   }
 
   /// @brief cofactor の別名
+  /// @exception std::invalid_argument lit が範囲外
   TvFunc
   operator/(
     Literal lit ///< [in] リテラル
@@ -556,6 +554,7 @@ public:
   }
 
   /// @brief cofactor の別名
+  /// @exception std::invalid_argument cube 中のリテラルが範囲外
   TvFunc
   operator/(
     const std::vector<Literal>& cube ///< [in] キューブ(リテラルのリスト)
@@ -565,6 +564,7 @@ public:
   }
 
   /// @brief cofactor_int() の別名
+  /// @exception std::invalid_argument lit が範囲外
   TvFunc&
   operator/=(
     Literal lit ///< [in] リテラル
@@ -574,6 +574,7 @@ public:
   }
 
   /// @brief cofactor_int の別名
+  /// @exception std::invalid_argument cube 中のリテラルが範囲外
   TvFunc&
   operator/=(
     const std::vector<Literal>& cube ///< [in] キューブ(リテラルのリスト)
@@ -690,9 +691,9 @@ public:
   }
 
   /// @brief 入力値を2進数と見なしたときの pos 番目の値を得る．
-  /// 答は 0 か 1 だが int 型
+  /// @exception std::out_of_range 範囲外のアクセス
   ///
-  /// pos が範囲外の時は std::out_of_range 例外が送出される．
+  /// 答は 0 か 1 だが int 型
   int
   value(
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < 2^(input_num()) )
@@ -718,7 +719,7 @@ public:
 
   /// @brief 組み込み型のチェック
   ///
-  /// 組み込み型出ない場合は PrimType::None を返す．
+  /// 組み込み型でない場合は PrimType::None を返す．
   PrimType
   analyze() const;
 
@@ -738,16 +739,14 @@ public:
   walsh_0() const;
 
   /// @brief 1次の Walsh 係数を求める．
-  ///
-  /// varid が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::out_of_range varid が範囲外
   int
   walsh_1(
     SizeType varid ///< [in] 変数 ( 0 <= varid < input_num() )
   ) const;
 
   /// @brief 2次の Walsh 係数を求める．
-  ///
-  /// var1, var2 が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::out_of_range var1, var2 が範囲外
   int
   walsh_2(
     SizeType var1, ///< [in] 第1変数 ( 0 <= var1 < input_num() )
@@ -783,6 +782,7 @@ public:
   ) const;
 
   /// @brief 重み別の 1 次の Walsh 係数を求める．
+  /// @exception std::out_of_range 範囲外のアクセス
   int
   walsh_w1(
     SizeType var, ///< [in] 変数
@@ -801,8 +801,7 @@ public:
   );
 
   /// @brief var がサポートの時 true を返す．
-  ///
-  /// var が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::out_of_range 範囲外のアクセス
   bool
   check_sup(
     SizeType var ///< [in] 変数 ( 0 <= var < input_num() )
@@ -827,16 +826,14 @@ public:
   /// @retval 1 positive unate
   /// @retval 2 negative unate
   /// @retval 3 independent
-  ///
-  /// var が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::out_of_range 範囲外のアクセス
   int
   check_unate(
     SizeType var ///< [in] 変数 ( 0 <= var < input_num() )
   ) const;
 
   /// @brief var1 と var2 が対称のとき true を返す．
-  ///
-  /// var1, var2 が範囲外の時は std::out_of_range 例外が送出される．
+  /// @exception std::out_of_range 範囲外のアクセス
   bool
   check_sym(
     SizeType var1,   ///< [in] 第1変数 ( 0 <= var1 < input_num() )
@@ -845,6 +842,7 @@ public:
   ) const;
 
   /// @brief 内容を表す文字列を返す．
+  /// @exception std::invalid_argument mode の値が不適切
   ///
   /// この値はコンストラクタで用いることができる．
   std::string
@@ -852,25 +850,27 @@ public:
     int mode = 2 ///< [in] 出力モード
                  ///< -  2: 2進モード
                  ///< - 16: 16進モード
-  ) const;
+  ) const
+  {
+    switch ( mode ) {
+    case 2:  return bin_str();
+    case 16: return hex_str();
+    default: break;
+    }
+    throw std::invalid_argument{"'mode' should be 2 or 16"};
+  }
 
   /// @brief 内容を表す2進文字列を返す．
   ///
   /// この値はコンストラクタで用いることができる．
   std::string
-  bin_str() const
-  {
-    return str(2);
-  }
+  bin_str() const;
 
   /// @brief 内容を表す16進文字列を返す．
   ///
   /// この値はコンストラクタで用いることができる．
   std::string
-  hex_str() const
-  {
-    return str(16);
-  }
+  hex_str() const;
 
   /// @brief ハッシュ値を返す．
   SizeType
@@ -892,7 +892,10 @@ public:
     int mode = 2      ///< [in] 出力モード
                       ///< -  2: 2進モード
                       ///< - 16: 16進モード
-  ) const;
+  ) const
+  {
+    s << str(mode);
+  }
 
 
 public:
@@ -901,12 +904,14 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief バイナリファイルの書き出し
+  /// @sa BinEnc
   void
   dump(
     BinEnc& s ///< [in] 出力先のストリーム
   ) const;
 
   /// @brief バイナリファイルの読み込み
+  /// @sa BinDec
   ///
   /// 自身に設定される．
   void
@@ -922,16 +927,19 @@ public:
 
   /// @brief npnmap に従った変換を行う．
   /// @return 変換した関数を返す．
+  /// @sa NpnMap
   TvFunc
   xform(
     const NpnMap& npnmap ///< [in] 変換マップ
   ) const;
 
   /// @brief 独立な変数を取り除く変換を返す．
+  /// @sa NpnMap
   NpnMap
   shrink_map() const;
 
   /// @brief npn 変換の正規変換を求める．
+  /// @sa NpnMap
   ///
   /// 正規変換とは，変換後の関数が以下の性質を持つもの．
   /// - Walsh の0次の係数が非負である．
@@ -942,6 +950,7 @@ public:
 
   /// @brief npn 変換の正規変換をすべて求める．
   /// @return 変換を格納するリストを返す．
+  /// @sa NpnMap
   std::vector<NpnMap>
   npn_canonical_all_map() const;
 
@@ -1244,7 +1253,7 @@ operator<<(
   const TvFunc& func ///< [in] 対象の関数
 )
 {
-  func.print(s, 2);
+  s << func.str(2);
   return s;
 }
 

@@ -19,13 +19,15 @@ BEGIN_NAMESPACE_YM_CLIB
 /// @class ClibPinMap ClibPinMap.h "ClibPinMap.h"
 /// @brief ピンの割当を表すクラス
 ///
-/// 具体的にはピン番号を極性を持つ．
+/// 具体的にはピン番号と極性を持つ．
 //////////////////////////////////////////////////////////////////////
 class ClibPinMap
 {
 public:
 
   /// @brief 空のコンストラクタ
+  ///
+  /// - 不正値となる．
   ClibPinMap() = default;
 
   /// @brief コンストラクタ
@@ -102,12 +104,14 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief バイナリダンプを行う．
+  /// @sa BinEnc
   void
   dump(
     BinEnc& bos ///< [in] 出力先のストリーム
   ) const;
 
   /// @brief バイナリダンプされた内容を読み込む．
+  /// @sa BinDec
   void
   restore(
     BinDec& bis ///< [in] 入力元のストリーム

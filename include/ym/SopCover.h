@@ -63,9 +63,8 @@ public:
   }
 
   /// @brief コンストラクタ
+  /// @exception std::invalid_argument cube_list 中のキューブのサイズが var_num と異なる．
   ///
-  /// * cube_list 中の各キューブのサイズは var_num
-  ///   と等しくなければならない．
   /// * キューブの順番は変わる可能性がある．
   SopCover(
     SizeType var_num,                     ///< [in] 変数の数
@@ -91,6 +90,7 @@ public:
   }
 
   /// @brief コンストラクタ
+  /// @exception std::invalid_argument リテラルが var_num より大きかった．
   ///
   /// * キューブの順番は変わる可能性がある．
   SopCover(
@@ -117,6 +117,7 @@ public:
   }
 
   /// @brief コンストラクタ
+  /// @exception std::invalid_argument cube_list 中のリテラルが var_num の範囲外だった．
   ///
   /// * キューブの順番は変わる可能性がある．
   SopCover(
@@ -249,6 +250,7 @@ public:
   }
 
   /// @brief 指定されたリテラルの出現回数を返す．
+  /// @sa Literal
   SizeType
   literal_num(
     Literal lit ///< [in] 対象のリテラル
@@ -270,6 +272,7 @@ public:
   }
 
   /// @brief 内容をリテラルのリストのリストに変換する．
+  /// @sa Literal
   std::vector<std::vector<Literal>>
   literal_list() const
   {
@@ -277,6 +280,7 @@ public:
   }
 
   /// @brief キューブを取り出す．
+  /// @sa SapCube
   SopCube
   get_cube(
     SizeType cube_id ///< [in] キューブ番号 ( 0 <= cube_id < cube_num() )
@@ -291,6 +295,7 @@ public:
   }
 
   /// @brief 内容をキューブのリストに変換する
+  /// @sa SapCube
   std::vector<SopCube>
   cube_list() const
   {
@@ -306,6 +311,7 @@ public:
   /// @retval SopPat::_X その変数は現れない．
   /// @retval SopPat::_1 その変数が肯定のリテラルとして現れる．
   /// @retval SopPat::_0 その変数が否定のリテラルとして現れる．
+  /// @sa SapPat
   SopPat
   get_pat(
     SizeType cube_id, ///< [in] キューブ番号 ( 0 <= cube_id < cube_num() )
@@ -319,6 +325,7 @@ public:
   }
 
   /// @brief Expr に変換する．
+  /// @sa Expr
   Expr
   expr() const
   {
@@ -326,6 +333,7 @@ public:
   }
 
   /// @brief TvFunc に変換する．
+  /// @sa TvFunc
   TvFunc
   tvfunc() const
   {
@@ -972,7 +980,7 @@ END_NAMESPACE_YM_SOP
 
 BEGIN_NAMESPACE_STD
 
-/// @breif SopCover をキーにしたハッシュ関数クラスの定義
+/// @brief SopCover をキーにしたハッシュ関数クラスの定義
 template <>
 struct hash<YM_NAMESPACE::SopCover>
 {

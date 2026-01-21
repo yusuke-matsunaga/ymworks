@@ -42,7 +42,7 @@ public:
     const ElbStubList& src ///< [in] コピー元のオブジェクト
   ) = default;
 
-  /// @breif ムーブ代入演算子
+  /// @brief ムーブ代入演算子
   ElbStubList&
   operator=(
     ElbStubList&& src ///< [in] ムーブ元のオブジェクト

@@ -25,7 +25,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibLibraryPtr() = default;
 
   /// @brief 値を指定したコンストラクタ

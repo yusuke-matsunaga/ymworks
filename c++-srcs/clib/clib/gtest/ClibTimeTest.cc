@@ -55,9 +55,9 @@ TEST(ClibTimeTest, assignment)
 
 TEST(ClibTimeTest, inf)
 {
-  auto inf_time{ClibTime::infty()};
+  auto inf_time = ClibTime::infinity();
 
-  EXPECT_EQ( std::numeric_limits<double>::max(), inf_time.value() );
+  EXPECT_EQ( std::numeric_limits<double>::infinity(), inf_time.value() );
 }
 
 TEST(ClibTimeTest, add)

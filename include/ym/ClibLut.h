@@ -27,7 +27,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibLut() = default;
 
   /// @brief 内容を指定したコンストラクタ
@@ -47,22 +47,30 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 次元数の取得
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   dimension() const;
 
   /// @brief 変数型の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibVarType
   ClibVarType
   variable_type(
     SizeType var ///< [in] 変数番号 ( 0 <= var < dimension() )
   ) const;
 
   /// @brief インデックス数の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
   SizeType
   index_num(
     SizeType var ///< [in] 変数番号 ( 0 <= var < dimension() )
   ) const;
 
   /// @brief インデックス値の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
   double
   index(
     SizeType var, ///< [in] 変数番号 ( 0 <= var < dimension() )
@@ -70,16 +78,18 @@ public:
   ) const;
 
   /// @brief 格子点の値の取得
+  /// @exception std::logic_error is_valid() = false の場合
   ///
-  /// pos_array のサイズは dimension() と同じ
+  /// - pos_array のサイズは dimension() と同じ
   double
   grid_value(
     const std::vector<SizeType>& pos_array ///< [in] pos_array 格子点座標
   ) const;
 
   /// @brief 値の取得
+  /// @exception std::logic_error is_valid() = false の場合
   ///
-  /// @note val_array のサイズは dimension() と同じ
+  /// - val_array のサイズは dimension() と同じ
   double
   value(
     const std::vector<double>& val_array ///< [in] 入力の値の配列

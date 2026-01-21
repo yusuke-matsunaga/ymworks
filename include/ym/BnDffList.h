@@ -171,6 +171,27 @@ private:
 /// こちらのほうが効率がよい．
 /// ただし，内容を変更することはできない．
 /// BnModel が持っているDFFのリストの情報を表すために用いられる．
+///
+/// std::vector<> と同様の反復子を用意しているので範囲for文で用いる
+/// ことができる．
+///
+/// @code
+/// ...
+/// BnDffList dff_list(...);
+/// for ( auto dff: dff_list ) {
+///   // dff には dff_list の要素の BnDff が入っている．
+///   ...
+/// }
+/// @endcode
+///
+/// `[]` 演算子も使用可能
+///
+/// @code
+/// for ( SizeType i = 0; i < dff_list.size(); ++ i ) {
+///   auto dff = dff_list[i];
+///   ...
+/// }
+/// @endcode
 //////////////////////////////////////////////////////////////////////
 class BnDffList
 {
@@ -206,6 +227,8 @@ public:
   }
 
   /// @brief 要素を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa BnDff
   BnDff
   operator[](
     SizeType index ///< [in] インデックス ( 0 <= index < size() )
@@ -233,6 +256,8 @@ public:
   }
 
   /// @brief Python 用の反復子を返す．
+  ///
+  /// Python の C-API のために用意されたメソッド
   iterator2
   iter() const
   {

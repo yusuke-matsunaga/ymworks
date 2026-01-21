@@ -168,6 +168,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 
 /// @brief ブール値の書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -181,6 +182,7 @@ operator<<(
 }
 
 /// @brief 1バイトの書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -194,6 +196,7 @@ operator<<(
 }
 
 /// @brief 2バイトの書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -207,6 +210,7 @@ operator<<(
 }
 
 /// @brief 4バイトの書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -220,6 +224,7 @@ operator<<(
 }
 
 /// @brief 8バイトの書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -233,6 +238,7 @@ operator<<(
 }
 
 /// @brief 1バイトの書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -246,6 +252,7 @@ operator<<(
 }
 
 /// @brief 2バイトの書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -259,6 +266,7 @@ operator<<(
 }
 
 /// @brief 4バイトの書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -272,6 +280,7 @@ operator<<(
 }
 
 /// @brief 8バイトの書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -285,6 +294,7 @@ operator<<(
 }
 
 /// @brief 単精度浮動小数点数の書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -298,6 +308,7 @@ operator<<(
 }
 
 /// @brief 倍精度浮動小数点数の書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&
@@ -311,6 +322,7 @@ operator<<(
 }
 
 /// @brief 文字列の書き込み
+/// @relates BinEnc
 /// @return BinEnc を返す．
 inline
 BinEnc&

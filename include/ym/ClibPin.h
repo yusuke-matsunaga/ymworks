@@ -29,7 +29,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibPin() = default;
 
   /// @brief 内容を指定したコンストラクタ
@@ -51,42 +51,52 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ピン名を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   std::string
   name() const;
 
   /// @brief 方向を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibDirection
   ClibDirection
   direction() const;
 
   /// @brief 入力ピンの時に true を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   ///
-  /// direction() == ClibDirection::input と等価
+  /// - direction() == ClibDirection::input と等価
   bool
   is_input() const;
 
   /// @brief 出力ピンの時に true を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   ///
-  /// direction() == ClibDirection::output と等価
+  /// - direction() == ClibDirection::output と等価
   bool
   is_output() const;
 
   /// @brief 入出力ピンの時に true を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   ///
-  /// direction() == ClibDirection::inout と等価
+  /// - direction() == ClibDirection::inout と等価
   bool
   is_inout() const;
 
   /// @brief 内部ピンの時に true を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   ///
-  /// direction() == ClibDirection::internal と等価
+  /// - direction() == ClibDirection::internal と等価
   bool
   is_internal() const;
 
   /// @brief ピン番号を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   ///
   /// このピンを持つセルを cell とすると．
-  /// pin = cell.pin(pin_id);
-  /// pin_id = pin.pin_id()
+  /// @code
+  ///   pin = cell.pin(pin_id);
+  ///   pin_id = pin.pin_id()
+  /// @endcode
   /// が成り立つ．
   SizeType
   pin_id() const;
@@ -103,24 +113,36 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 入力ピン番号を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_input() = false && is_inout() = false の場合
   ///
-  /// 入力ピンもしくは入出力ピンの時のみ意味を持つ．
   /// このピンを持つセルを cell とすると．
-  /// pin = cell.input(iid);
-  /// iid = pin.input_id()
+  /// @code
+  ///   pin = cell.input(iid);
+  ///   iid = pin.input_id()
+  /// @endcode
   /// が成り立つ．
   SizeType
   input_id() const;
 
   /// @brief 負荷容量を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_input() = false && is_inout() = false の場合
+  /// @sa ClibCapacitance
   ClibCapacitance
   capacitance() const;
 
   /// @brief 立ち上がり時の負荷容量を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_input() = false && is_inout() = false の場合
+  /// @sa ClibCapacitance
   ClibCapacitance
   rise_capacitance() const;
 
   /// @brief 立ち下がり時の負荷容量を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_input() = false && is_inout() = false の場合
+  /// @sa ClibCapacitance
   ClibCapacitance
   fall_capacitance() const;
 
@@ -136,48 +158,75 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 出力ピン番号を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
   ///
-  /// 出力ピンもしくは入出力ピンの時のみ意味を持つ．
   /// このピンを持つセルを cell とすると．
-  /// pin = cell.output(oid);
-  /// oid = pin.output_id()
+  /// @code
+  ///   pin = cell.output(oid);
+  ///   oid = pin.output_id()
+  /// @endcode
   /// が成り立つ．
   SizeType
   output_id() const;
 
   /// @brief 最大ファンアウト容量を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
+  /// @sa ClibCapacitance
   ClibCapacitance
   max_fanout() const;
 
   /// @brief 最小ファンアウト容量を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
+  /// @sa ClibCapacitance
   ClibCapacitance
   min_fanout() const;
 
   /// @brief 最大負荷容量を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
+  /// @sa ClibCapacitance
   ClibCapacitance
   max_capacitance() const;
 
   /// @brief 最小負荷容量を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
+  /// @sa ClibCapacitance
   ClibCapacitance
   min_capacitance() const;
 
   /// @brief 最大遷移時間を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
+  /// @sa ClibTime
   ClibTime
   max_transition() const;
 
   /// @brief 最小遷移時間を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
+  /// @sa ClibTime
   ClibTime
   min_transition() const;
 
   /// @brief 論理式を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
+  /// @sa Expr
   ///
-  /// 定義されていない場合には Expr::is_invalid() == true となる式を返す．
+  /// - 定義されていない場合には Expr::is_invalid() == true となる式を返す．
   Expr
   function() const;
 
   /// @brief tristate 条件式を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_output() = false && is_inout() = false の場合
+  /// @sa Expr
   ///
-  /// 定義されていない場合には Epxr::is_invalid() == true となる式を返す．
+  /// - 定義されていない場合には Expr::is_invalid() == true となる式を返す．
   Expr
   tristate() const;
 
@@ -193,8 +242,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内部ピン番号を返す．
-  ///
-  /// 内部ピンの時のみ意味を持つ．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error is_internal() = false の場合
   SizeType
   internal_id() const;
 

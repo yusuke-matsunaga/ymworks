@@ -19,7 +19,6 @@ BEGIN_NAMESPACE_YM_LOGIC
 /// @class NpnMapM NpnMapM.h "ym/NpnMapM.h"
 /// @ingroup NpnGroup
 /// @brief 多出力のNPN変換の情報を入れるクラス
-///
 /// @sa NpnVmap
 //////////////////////////////////////////////////////////////////////
 class NpnMapM

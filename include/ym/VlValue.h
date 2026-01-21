@@ -21,8 +21,8 @@ class VlValueRep;
 /// @class VlValue VlValue.h "ym/VlValue.h"
 /// @brief 値を表すクラス
 ///
-/// 型に応じた VlValueRep の派生クラスが実際の値を保持する．
-/// このクラスはそのオブジェクとへの shared_ptr を持つ．
+/// - 型に応じた VlValueRep の派生クラスが実際の値を保持する．
+/// - このクラスはそのオブジェクとへの shared_ptr を持つ．
 //////////////////////////////////////////////////////////////////////
 class VlValue
 {
@@ -59,12 +59,14 @@ public:
   );
 
   /// @brief スカラー値からのコンストラクタ
+  /// @sa VlScalarValue
   explicit
   VlValue(
     const VlScalarVal& val ///< [in] 値
   );
 
   /// @brief time からのコンストラクタ
+  /// @sa VlTime
   explicit
   VlValue(
     VlTime val ///< [in] 値
@@ -77,18 +79,21 @@ public:
   );
 
   /// @brief ビットベクタからのコンストラクタ
+  /// @sa BitVector
   explicit
   VlValue(
     const BitVector& val ///< [in] 値
   );
 
   /// @brief 型変換を伴うコンストラクタ
+  /// @sa VlValueType
   VlValue(
     const VlValue& src,           ///< [in] コピー元のオブジェクト
     const VlValueType& value_type ///< [in] 型
   );
 
   /// @brief 型変換を伴うコンストラクタ
+  /// @sa VlValueType
   VlValue(
     VlValue&& src,                ///< [in] ムーブ元のオブジェクト
     const VlValueType& value_type ///< [in] 型
@@ -128,12 +133,14 @@ public:
   );
 
   /// @brief スカラー値をセットする．
+  /// @sa VlScalarVal
   void
   set(
     const VlScalarVal& val ///< [in] 値
   );
 
   /// @brief time の値をセットする．
+  /// @sa VlTime
   void
   set(
     VlTime val ///< [in] 値
@@ -146,6 +153,7 @@ public:
   );
 
   /// @brief ビットベクタの値をセットする．
+  /// @sa BitVector
   void
   set(
     const BitVector& val ///< [in] 値
@@ -214,39 +222,49 @@ public:
   bit_size() const;
 
   /// @brief 値の型を返す．
+  /// @sa VlValueType
   VlValueType
   value_type() const;
 
   /// @brief 整数型の値を返す．
-  /// @note 値が整数型に変換できない時の値は不定
+  ///
+  /// 値が整数型に変換できない時の値は不定
   int
   int_value() const;
 
   /// @brief unsigned int 型の値を返す．
-  /// @note 値が整数型に変換できない時の値は不定
+  ///
+  /// 値が整数型に変換できない時の値は不定
   unsigned int
   uint_value() const;
 
   /// @brief スカラー型の値を返す．
-  /// @note スカラー型には常に変換可能
+  /// @sa VlScalarVal
+  ///
+  /// スカラー型には常に変換可能
   VlScalarVal
   scalar_value() const;
 
   /// @brief 論理型の値を返す．
+  /// @sa VlScalarVal
   VlScalarVal
   logic_value() const;
 
   /// @brief 実数型の値を返す．
-  /// @note 値が実数型に変換できない時の値は不定
+  ///
+  /// 値が実数型に変換できない時の値は不定
   double
   real_value() const;
 
   /// @brief time 型の値を返す．
-  /// @note 値が time 型に変換できない時の値は不定
+  /// @sa VlTime
+  ///
+  /// 値が time 型に変換できない時の値は不定
   VlTime
   time_value() const;
 
   /// @brief ビットベクタ型の値を返す．
+  /// @sa VitVector, VlValueType
   BitVector
   bitvector_value(
     const VlValueType& req_type = {} ///< [in] 要求されるデータの型

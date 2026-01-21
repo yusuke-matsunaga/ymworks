@@ -91,21 +91,27 @@ public:
   }
 
   /// @brief ノード番号を返す．
+  /// @exception std::logic_error is_valid() = false の時
   SizeType
   id() const;
 
   /// @brief 出力ノードを返す．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @sa BnNode
   BnNode
   output() const;
 
   /// @brief 入力ノードを返す．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @sa BnNode
   BnNode
   input() const;
 
-  /// @brief リセット値
+  /// @brief リセット値を返す．
   /// @retval 'X' 不定値
   /// @retval '0' 0
   /// @retval '1' 1
+  /// @exception std::logic_error is_valid() = false の時
   char
   reset_val() const;
 

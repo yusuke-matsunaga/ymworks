@@ -95,7 +95,7 @@ public:
     const CgSignature& sig ///< [in] シグネチャ
   );
 
-  /// @breif パタングラフを生成する．
+  /// @brief パタングラフを生成する．
   void
   gen_pat();
 

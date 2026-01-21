@@ -202,6 +202,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 
 /// @brief ブール値の読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -215,6 +216,7 @@ operator>>(
 }
 
 /// @brief 1バイトの読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -228,6 +230,7 @@ operator>>(
 }
 
 /// @brief 2バイトの読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -241,6 +244,7 @@ operator>>(
 }
 
 /// @brief 4バイトの読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -254,6 +258,7 @@ operator>>(
 }
 
 /// @brief 8バイトの読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -267,6 +272,7 @@ operator>>(
 }
 
 /// @brief 1バイトの読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -280,6 +286,7 @@ operator>>(
 }
 
 /// @brief 2バイトの読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -293,6 +300,7 @@ operator>>(
 }
 
 /// @brief 4バイトの読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -306,6 +314,7 @@ operator>>(
 }
 
 /// @brief 8バイトの読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -319,6 +328,7 @@ operator>>(
 }
 
 /// @brief 単精度不動週数点数の読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -332,6 +342,7 @@ operator>>(
 }
 
 /// @brief 倍精度不動週数点数の読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&
@@ -345,6 +356,7 @@ operator>>(
 }
 
 /// @brief 文字列の読み出し
+/// @relates BinDec
 /// @return BinDec を返す．
 inline
 BinDec&

@@ -119,12 +119,6 @@ class AigMgrGen(PyObjGen):
                                             cvarname='format')],
                         doc_str='write file in specified format')
 
-        def meth_is_valid(writer):
-            writer.gen_return_py_bool('val.is_valid()')
-        self.add_method('is_valid',
-                        func_body=meth_is_valid,
-                        doc_str='True if having valid data')
-
         def meth_copy(writer):
             writer.gen_return_pyobject('PyAigMgr', 'val.copy()')
         self.add_method('copy',

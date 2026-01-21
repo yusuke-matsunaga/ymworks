@@ -22,14 +22,19 @@ class MultiGenBase
 {
 public:
 
+  /// @brief 全要素数 n と選択する要素数 k のペア
+  using NK_pair = std::pair<SizeType, SizeType>;
+
+public:
+
   /// @brief コンストラクタ
   MultiGenBase(
-    const std::vector<std::pair<int, int>>& nk_array ///< [in] 要素数 n と選択する要素数 k のベクタ
+    const std::vector<NK_pair>& nk_array ///< [in] 要素数 n と選択する要素数 k のベクタ
   );
 
   /// @brief コンストラクタ
   MultiGenBase(
-    std::initializer_list<std::pair<int, int>>& nk_array ///< [in] 要素数 n と選択する要素数 k の初期化リスト
+    std::initializer_list<NK_pair>& nk_array ///< [in] 要素数 n と選択する要素数 k の初期化リスト
   );
 
   /// @brief コピーコンストラクタ

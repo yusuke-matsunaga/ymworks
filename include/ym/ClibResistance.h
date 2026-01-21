@@ -20,9 +20,9 @@ BEGIN_NAMESPACE_YM_CLIB
 /// @class ClibResistance ClibResistance.h "ym/ClibResistance.h"
 /// @brief 抵抗値を表すクラス
 ///
-/// 内容的には double そのものだが他の単位との演算が
-/// 行えないようになっている．
-/// ClibResistance 同士の演算も加減算のみ定義されている．
+/// - 内容的には double そのものだが他の単位との演算が
+///   行えないようになっている．
+/// - ClibResistance 同士の演算も加減算のみ定義されている．
 //////////////////////////////////////////////////////////////////////
 class ClibResistance
 {
@@ -33,7 +33,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 内容は 0.0 で初期化される．
+  /// - 内容は 0.0 で初期化される．
   ClibResistance() = default;
 
   /// @brief double からの変換コンストラクタ
@@ -54,20 +54,6 @@ public:
 
   /// @brief デストラクタ
   ~ClibResistance() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 値を作るクラスメソッド
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 無限大の値を作る．
-  static
-  ClibResistance
-  infty()
-  {
-    return ClibResistance(std::numeric_limits<double>::max());
-  }
 
 
 public:

@@ -24,6 +24,7 @@ class ExprNode;
 /// @class Expr Expr.h "ym/Expr.h"
 /// @ingroup ExprGroup
 /// @brief 論理式を表すクラス
+/// @sa Literal
 ///
 /// 論理式は
 /// - 定数0, 定数1
@@ -36,8 +37,10 @@ class ExprNode;
 ///
 /// 実装は ExprNode の shared_ptr を持っているのでコピーのコストは
 /// 高くない．
-/// そのためムーブ演算は対応していない．
-/// @sa Literal
+/// そのためムーブ演算は用意していない．
+///
+/// Python 的な考え方で言うと Expr はイミュータブルオブジェクトであり，
+/// 一度生成された Expr の内容を変えることはできない．
 //////////////////////////////////////////////////////////////////////
 class Expr
 {
@@ -664,12 +667,14 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief バイナリストリームに出力する．
+  /// @sa BinEnc
   void
   dump(
     BinEnc& s ///< [in] 出力ストリーム
   ) const;
 
   /// @brief バイナリストリームから読み込む．
+  /// @sa BinDec
   static
   Expr
   restore(
@@ -735,6 +740,7 @@ private:
 /// @name 論理演算
 /// @{
 
+/// @brief 根の演算タイプが等しい時 true を返す．
 /// @relates Expr
 bool
 compare_type(
@@ -756,6 +762,7 @@ operator<<(
 /// @relates Expr
 /// @brief 論理式の内容のバイナリ出力
 /// @return s
+/// @sa BinEnc
 inline
 BinEnc&
 operator<<(
@@ -770,6 +777,7 @@ operator<<(
 /// @relates Expr
 /// @brief 論理式の内容のバイナリ入力
 /// @return s
+/// @sa BinDec
 inline
 BinDec&
 operator>>(

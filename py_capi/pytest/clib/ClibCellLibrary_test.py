@@ -21,16 +21,14 @@ def test_read_mislib():
     lib2_filename = os.path.join(DATAPATH, 'clib', 'lib2.genlib')
     exp_filename = os.path.join(DATAPATH, 'clib', 'lib2.genlib.display')
     lib = ClibCellLibrary.read_mislib(lib2_filename)
-    lines = lib.to_string()
 
     f = io.StringIO()
     lib.display(f)
-    lines2 = f.getvalue()
+    lines = f.getvalue()
 
     with open(exp_filename, "rt") as exp_f:
         exp_lines = exp_f.read()
         assert exp_lines == lines
-        assert exp_lines == lines2
 
 def test_read_liberty():
     DATAPATH = os.environ.get("TESTDATA_DIR")
@@ -40,7 +38,9 @@ def test_read_liberty():
 
     assert lib.is_valid()
 
-    lines = lib.to_string()
+    f = io.StringIO()
+    lib.display(f)
+    lines = f.getvalue()
 
     with open(exp_filename, "rt") as exp_f:
         exp_lines = exp_f.read()
@@ -62,4 +62,12 @@ def test_dump_restore():
     assert filename is not None
     lib2 = ClibCellLibrary.restore(filename)
 
-    assert lib2.to_string() == lib.to_string()
+    f1 = io.StringIO()
+    lib.display(f1)
+    lines1 = f1.getvalue()
+
+    f2 = io.StringIO()
+    lib2.display(f2)
+    lines2 = f2.getvalue()
+
+    assert lines1 == lines2

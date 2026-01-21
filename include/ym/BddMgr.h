@@ -33,9 +33,9 @@ BEGIN_NAMESPACE_YM_DD
 ///
 /// - 実体は BddMgrImpl でこのクラスはただの shared pointer となっている．
 ///   コピーしても同一の BddMgrImpl を持つインスタンスが生成される．
-///
 /// - BddMgrImpl は内部で参照回数を持っており，参照回数がゼロになると
 ///   自動的に開放される．
+/// - BddMgrImpl は BddMgr だけでなく Bdd なども所有している．
 //////////////////////////////////////////////////////////////////////
 class BddMgr :
   public BddMgrHolder
@@ -46,6 +46,7 @@ public:
   BddMgr();
 
   /// @brief BddMgrHolder を指定したコンストラクタ
+  /// @sa BddMgrHolder
   explicit
   BddMgr(
     const BddMgrHolder& holder
@@ -65,32 +66,52 @@ public:
   // 変数に関する関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @breif 変数の数を返す．
+  /// @brief 変数の数を返す．
   SizeType
   variable_num() const;
 
   /// @brief 変数を返す．
+  /// @sa BddVar
   ///
   /// - varid >= variable_num() の場合には新しい変数が確保される．
-  /// - auto var = variable(id); var.id() == id; が成り立つ．
+  ///
+  /// @code
+  /// // mgr は BddMgr のインスタンス
+  /// auto var = mgr.variable(id);
+  /// // var.id() == id が成り立つ．
+  /// @endcode
   BddVar
   variable(
     SizeType varid ///< [in] 変数番号
   );
 
   /// @brief 変数を表すBDDを返す．
+  /// @sa Bdd
   ///
   /// - varid >= variable_num() の場合には新しい変数が確保される．
-  /// - auto var = variable(id); var.id() == id; が成り立つ．
+  ///
+  /// @code
+  /// // mgr は BddMgr のインスタンス
+  /// auto var = mgr.variable(id);
+  /// auto var_bdd = mgr.variable_bdd(id);
+  /// // var.bdd() = var_bdd が成り立つ
+  /// @endcode
   Bdd
   variable_bdd(
     SizeType varid ///< [in] 変数番号
   );
 
   /// @brief リテラルを返す．
+  /// @sa BddLit
   ///
   /// - varid >= variable_num() の場合には新しい変数が確保される．
-  /// - auto lit = literal(id, inv); lit.var().id() == id; が成り立つ．
+  ///
+  /// @code
+  /// // mgr は BddMgr のインスタンス
+  /// auto lit = literal(id, inv);
+  /// // lit.var().id() == id が成り立つ．
+  /// // lit.is_negative() = inv が成り立つ．
+  /// @endcode
   BddLit
   literal(
     SizeType varid,  ///< [in] 変数番号
@@ -98,8 +119,16 @@ public:
   );
 
   /// @brief リテラルを表すBDDを返す．
+  /// @sa Bdd
   ///
   /// - varid >= variable_num() の場合には新しい変数が確保される．
+  ///
+  /// @code
+  /// // mgr は BddMgr のインスタンス
+  /// auto lit = literal(id, inv);
+  /// auto lit_bdd = literal_bdd(id, inv);
+  /// // lit.bdd() = lit_bdd が成り立つ．
+  /// @endcode
   Bdd
   literal_bdd(
     SizeType varid,  ///< [in] 変数番号
@@ -107,17 +136,32 @@ public:
   );
 
   /// @brief 正のリテラルを返す．
+  /// @sa BddLit
   ///
   /// - varid >= variable_num() の場合には新しい変数が確保される．
-  /// - auto lit = positive_literal(id); lit.var().id() == id; が成り立つ．
+  ///
+  /// @code
+  /// // mgr は BddMgr のインスタンス
+  /// auto lit = positive_literal(id);
+  /// // lit.var().id() == id が成り立つ．
+  /// // lit.is_positive() = true が成り立つ．
+  /// @endcode
   BddLit
   positive_literal(
     SizeType varid ///< [in] 変数番号
   );
 
   /// @brief 正のリテラルを表すBDDを返す．
+  /// @sa Bdd
   ///
   /// - varid >= variable_num() の場合には新しい変数が確保される．
+  ///
+  /// @code
+  /// // mgr は BddMgr のインスタンス
+  /// auto lit = positive_literal(id);
+  /// auto lit_bdd = positive_literal_bdd(id);
+  /// // lit.bdd() == lit_bdd が成り立つ．
+  /// @endcode
   Bdd
   positive_literal_bdd(
     SizeType varid ///< [in] 変数番号
@@ -127,9 +171,16 @@ public:
   }
 
   /// @brief 負のリテラルを返す．
+  /// @sa BddLit
   ///
   /// - varid >= variable_num() の場合には新しい変数が確保される．
-  /// - auto lit = negative_literal(id); lit.var().id() == id; が成り立つ．
+  ///
+  /// @code
+  /// // mgr は BddMgr のインスタンス
+  /// auto lit = negative_literal(id);
+  /// // lit.var().id() == id が成り立つ．
+  /// // lit.is_negative() = true が成り立つ．
+  /// @endcode
   BddLit
   negative_literal(
     SizeType varid ///< [in] 変数番号
@@ -138,6 +189,13 @@ public:
   /// @brief 負のリテラルを表すBDDを返す．
   ///
   /// - varid >= variable_num() の場合には新しい変数が確保される．
+  ///
+  /// @code
+  /// // mgr は BddMgr のインスタンス
+  /// auto lit = negative_literal(id);
+  /// auto lit_bdd = negative_literal_bdd(id);
+  /// // lit.bdd() == lit_bdd が成り立つ．
+  /// @endcode
   Bdd
   negative_literal_bdd(
     SizeType varid ///< [in] 変数番号
@@ -147,18 +205,21 @@ public:
   }
 
   /// @brief 変数のリストを返す．
+  /// @sa BddVar
   ///
   /// 変数番号の昇順に並んでいる
   std::vector<BddVar>
   variable_list() const;
 
   /// @brief 変数順を表す変数のリストを返す．
+  /// @sa BddVar
   ///
   /// インデックスの昇順に並んでいる
   std::vector<BddVar>
   variable_order() const;
 
   /// @brief 変数順を設定する．
+  /// @sa BddVar
   void
   set_variable_order(
     const std::vector<BddVar>& order_list ///< [in] 変数順を表すリスト
@@ -171,9 +232,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief BDD をコピーする．
+  /// @sa Bdd
   ///
   /// 通常は同じものを返すが，src のマネージャが異なる場合には
   /// 同じ構造のコピーを作る．
+  ///
   /// ただし，変数順が異なる場合には効率の悪い処理となる．
   Bdd
   copy(
@@ -181,6 +244,7 @@ public:
   );
 
   /// @brief 真理値表形式の文字列からBDDを作る．
+  /// @sa Bdd, BddVar
   ///
   /// - str は '0' か '1' の文字列．
   /// - ただし，長さはvar_listのサイズのべき乗である必要がある．
@@ -196,6 +260,7 @@ public:
   );
 
   /// @brief 論理式から BDD を作る．
+  /// @sa Bdd, BddVar, Expr
   ///
   /// - var_list が省略された場合は自動的に適切な変数リストを用いる．
   Bdd
@@ -213,6 +278,7 @@ public:
 
   /// @brief バイナリダンプから復元する．
   /// @return 生成されたBDDのリストを返す．
+  /// @sa Bdd, BinDec
   ///
   /// 不正な形式の場合は std::invalid_argument 例外を送出する．
   std::vector<Bdd>

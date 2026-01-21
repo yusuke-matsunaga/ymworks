@@ -49,7 +49,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibCellGroup() = default;
 
   /// @brief 内容を指定したコンストラクタ
@@ -68,18 +68,26 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 代表クラスを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellClass
   ClibCellClass
   rep_class() const;
 
   /// @brief 代表クラスに対する変換マップを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibIOMap
   const ClibIOMap&
   iomap() const;
 
   /// @brief セルの種類を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellType
   ClibCellType
   cell_type() const;
 
   /// @brief 順序セルタイプの場合の属性を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibSeqAttr
   ClibSeqAttr
   seq_attr() const;
 
@@ -91,16 +99,22 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief セル数を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   cell_num() const;
 
   /// @brief セルを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCell
   ClibCell
   cell(
     SizeType pos ///< [in] インデックス ( 0 <= pos < cell_num() )
   ) const;
 
   /// @brief セルのリストを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellList
   ClibCellList
   cell_list() const;
 

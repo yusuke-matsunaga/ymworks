@@ -100,7 +100,7 @@ EiDeclArray::name() const
   return mPtItem->name();
 }
 
-// @breif 値の型を返す．
+// @brief 値の型を返す．
 VlValueType
 EiDeclArray::value_type() const
 {

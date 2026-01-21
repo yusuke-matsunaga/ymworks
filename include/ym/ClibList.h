@@ -17,8 +17,8 @@ BEGIN_NAMESPACE_YM_CLIB
 /// @class ClibListIter ClibList.h "ClibList.h"
 /// @brief ClibList の反復子
 ///
-/// T1 が実装の本体で T2 がそのスマートポインタクラス
-/// T2{T1} の形のコンストラクタが定義されていると仮定する．
+/// - T1 が実装の本体で T2 がそのスマートポインタクラス
+/// - T2{T1} の形のコンストラクタが定義されていると仮定する．
 //////////////////////////////////////////////////////////////////////
 template<class T1, class T2>
 class ClibListIter
@@ -92,8 +92,8 @@ private:
 /// @class ClibList ClibList.h "ClibList.h"
 /// @brief ClibXXX のリストを表すクラス
 ///
-/// T1 が実装の本体で T2 がそのスマートポインタクラス
-/// T2{T1} の形のコンストラクタが定義されていると仮定する．
+/// - T1 が実装の本体で T2 がそのスマートポインタクラス
+/// - T2{T1} の形のコンストラクタが定義されていると仮定する．
 //////////////////////////////////////////////////////////////////////
 template<class T1, class T2>
 class ClibList

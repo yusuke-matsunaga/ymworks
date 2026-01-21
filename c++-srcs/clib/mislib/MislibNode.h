@@ -173,7 +173,7 @@ class MislibPhase :
   friend class MislibParser;
 public:
 
-  /// @breif 極性の種類
+  /// @brief 極性の種類
   enum Type {
     Noninv,
     Inv,

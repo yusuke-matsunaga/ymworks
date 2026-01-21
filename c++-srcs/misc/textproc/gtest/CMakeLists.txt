@@ -18,11 +18,6 @@
 #  テスト用のターゲットの設定
 # ===================================================================
 
-ym_add_gtest ( misc_OptionParser_test
-  OptionParser_test.cc
-  $<TARGET_OBJECTS:ym_misc_obj_d>
-  )
-
 ym_add_gtest ( misc_ShString_test
   ShString_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>

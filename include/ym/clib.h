@@ -8,7 +8,7 @@
 /// Copyright (C) 2024 Yusuke Matsunaga (松永 裕介)
 /// All rights reserved.
 
-/// @defgroup ClibCellGroup セルライブラリ
+/// @defgroup ClibGroup セルライブラリ
 ///
 /// セルライブラリを扱うためのクラスライブラリ
 
@@ -199,7 +199,7 @@ enum class ClibTimingType : std::uint8_t
   non_seq_hold_rising      = 25,
   non_seq_hold_falling     = 26,
 
-  nochange_high_high      = 27,
+  nochange_high_high       = 27,
   nochange_high_low        = 28,
   nochange_low_high        = 29,
   nochange_low_low         = 30,

@@ -26,7 +26,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibCellPtr() = default;
 
   /// @brief 内容を指定したコンストラクタ
@@ -35,6 +35,8 @@ public:
   );
 
   /// @brief コピーコンストラクタ
+  ///
+  /// src と同じ CiCell を共有するコピーを作る．
   ClibCellPtr(
     const ClibCellPtr& src ///< [in] コピー元
   );

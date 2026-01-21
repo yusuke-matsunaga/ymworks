@@ -20,8 +20,8 @@ BEGIN_NAMESPACE_YM_CLIB
 /// @class ClibCapacitance ClibCapacitance.h "ym/ClibCapacitance.h"
 /// @brief 容量値を表すクラス
 ///
-/// 内容はただの double だが他の数値型との演算を禁止するために独立
-/// したクラスとしている．
+/// - 内容はただの double だが他の数値型との演算を禁止するために独立
+///   したクラスとしている．
 //////////////////////////////////////////////////////////////////////
 class ClibCapacitance
 {
@@ -32,7 +32,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 内容は 0.0 に初期化される．
+  /// - 内容は 0.0 に初期化される．
   ClibCapacitance() = default;
 
   /// @brief double からの変換コンストラクタ
@@ -53,20 +53,6 @@ public:
 
   /// @brief デストラクタ
   ~ClibCapacitance() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 値を作るクラスメソッド
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 無限大の値を作る．
-  static
-  ClibCapacitance
-  infty()
-  {
-    return ClibCapacitance(std::numeric_limits<double>::max());
-  }
 
 
 public:

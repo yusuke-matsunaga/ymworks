@@ -60,14 +60,21 @@ public:
   varid() const;
 
   /// @brief 肯定のリテラルを返す．
+  /// @sa BddLit
+  ///
+  /// 中身は自身と同じ Bdd となっている．
   BddLit
   positive_literal() const;
 
   /// @brief 否定のリテラルを返す．
+  /// @sa BddLit
+  ///
+  /// 中身は自身を否定した Bdd となっている．
   BddLit
   negative_literal() const;
 
   /// @brief 他の変数との集合を作る．
+  /// @sa BddVarSet
   ///
   /// 結果は BddVarSet となる．
   BddVarSet
@@ -76,6 +83,7 @@ public:
   ) const;
 
   /// @brief BddVarSet に追加する．
+  /// @sa BddVarSet
   ///
   /// 結果は BddVarSet となる．
   BddVarSet
@@ -93,7 +101,7 @@ public:
 
   /// @brief 比較演算子
   ///
-  /// 変数番号ではなくレベルで比較する．
+  /// 変数番号ではなくレベル(インデックス)で比較する．
   bool
   operator<=(
     const BddVar& right

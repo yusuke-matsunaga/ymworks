@@ -34,7 +34,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 無効な ID で初期化される．
+  /// - 無効な ID で初期化される．
   FileInfo() = default;
 
   /// @brief ファイル名を指定したコンストラクタ
@@ -48,12 +48,14 @@ public:
   );
 
   /// @brief ファイル名とインクルード元の親ファイルの情報
+  /// @sa FileLoc
   FileInfo(
     const char* filename,     ///< [in] ファイル名
     const FileLoc& parent_loc ///< [in] インクルード元の親ファイルの情報
   );
 
   /// @brief ファイル名とインクルード元の親ファイルの情報
+  /// @sa FileLoc
   FileInfo(
     const std::string& filename, ///< [in] ファイル名
     const FileLoc& parent_loc    ///< [in] インクルード元の親ファイルの情報
@@ -89,12 +91,14 @@ public:
   filename() const;
 
   /// @brief インクルード元のファイル位置を返す．
+  /// @sa FileLoc
   ///
   /// インクルードされていないファイルの場合には無効なデータが返される．
   FileLoc
   parent_loc() const;
 
   /// @brief インクルード元のファイル位置の情報のリスト(vector)を返す．
+  /// @sa FileLoc
   ///
   /// トップレベルのファイルが先頭になる．
   std::vector<FileLoc>

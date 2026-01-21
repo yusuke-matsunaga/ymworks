@@ -55,9 +55,9 @@ TEST(ClibResistanceTest, assignment)
 
 TEST(ClibResistanceTest, inf)
 {
-  auto inf_res{ClibResistance::infty()};
+  auto inf_res = ClibResistance::infinity();
 
-  EXPECT_EQ( std::numeric_limits<double>::max(), inf_res.value() );
+  EXPECT_EQ( std::numeric_limits<double>::infinity(), inf_res.value() );
 }
 
 TEST(ClibResistanceTest, add)

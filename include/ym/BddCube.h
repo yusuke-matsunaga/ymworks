@@ -34,6 +34,9 @@ class BddCube :
 public:
 
   /// @brief BddLit からの変換コンストラクタ
+  /// @sa BddLit
+  ///
+  /// lit のみを要素とする singleton を作る．
   explicit
   BddCube(
     const BddLit& lit ///< [in] リテラル
@@ -208,10 +211,11 @@ private:
 };
 
 /// @brief ストリーム出力演算子
+/// @relates BddCube
 std::ostream&
 operator<<(
-  std::ostream& s,
-  const BddCube& cube
+  std::ostream& s,    ///< [in] 出力ストリーム
+  const BddCube& cube ///< [in] 対象のキューブ
 );
 
 END_NAMESPACE_YM_DD

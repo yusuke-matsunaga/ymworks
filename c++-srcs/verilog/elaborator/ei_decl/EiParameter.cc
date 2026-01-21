@@ -275,7 +275,7 @@ EiParamHead::calc_bit_offset(
   return false;
 }
 
-// @breif 値の型を返す．
+// @brief 値の型を返す．
 VlValueType
 EiParamHead::value_type(
   const VlValue& val
@@ -417,7 +417,7 @@ EiParamHeadV::calc_bit_offset(
   return mRange.calc_offset(index, offset);
 }
 
-// @breif 値の型を返す．
+// @brief 値の型を返す．
 VlValueType
 EiParamHeadV::value_type(
   const VlValue& val
@@ -474,7 +474,7 @@ EiParameter::name() const
   return mPtItem->name();
 }
 
-// @breif 値の型を返す．
+// @brief 値の型を返す．
 VlValueType
 EiParameter::value_type() const
 {

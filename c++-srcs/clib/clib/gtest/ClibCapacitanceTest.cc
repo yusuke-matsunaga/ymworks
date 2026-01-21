@@ -55,9 +55,9 @@ TEST(ClibCapacitanceTest, assignment)
 
 TEST(ClibCapacitanceTest, inf)
 {
-  auto inf_cap{ClibCapacitance::infty()};
+  auto inf_cap = ClibCapacitance::infinity();
 
-  EXPECT_EQ( std::numeric_limits<double>::max(), inf_cap.value() );
+  EXPECT_EQ( std::numeric_limits<double>::infinity(), inf_cap.value() );
 }
 
 TEST(ClibCapacitanceTest, add)

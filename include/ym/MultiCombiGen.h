@@ -22,13 +22,13 @@ BEGIN_NAMESPACE_YM
 /// の出力の直積を作るイメージ．
 ///
 /// @code
-/// vector<pair<int, int> > nk_array(2);
+/// vector<pair<SizeType, SizeType>> nk_array(2);
 /// nk_array[0] = make_pair(3, 1);
 /// nk_array[1] = make_pair(5, 2);
-/// for (MultiCombiGen mcg(nk_array); !mcg.is_end(); ++ mcg) {
-///    for (int g = 0; g < 2; ++ g) {
-///        int k1 = mcg.k(g);
-///        for (int i = 0; i < k1; ++ i) {
+/// for ( MultiCombiGen mcg(nk_array); !mcg.is_end(); ++ mcg ) {
+///    for ( SizeType g = 0; g < 2; ++ g ) {
+///        auto k1 = mcg.k(g);
+///        for ( SizeType i = 0; i < k1; ++ i ) {
 ///            elem[g][i] = mcg(g, i);
 ///        }
 ///    }
@@ -46,15 +46,14 @@ public:
 
   /// @brief コンストラクタ
   MultiCombiGen(
-    const std::vector<std::pair<int, int>>& nk_array ///< [in] 要素数 n と選択する要素数 k のベクタ
+    const std::vector<NK_pair>& nk_array ///< [in] 要素数 n と選択する要素数 k のベクタ
   ) : MultiGenBase{nk_array}
   {
   }
 
   /// @brief コンストラクタ
-  /// @param[in] nk_array
   MultiCombiGen(
-    std::initializer_list<std::pair<int, int>>& nk_array ///< [in] 要素数 n と選択する要素数 k の初期化リスト
+    std::initializer_list<NK_pair>& nk_array ///< [in] 要素数 n と選択する要素数 k の初期化リスト
   ) : MultiGenBase{nk_array}
   {
   }

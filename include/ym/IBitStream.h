@@ -8,6 +8,8 @@
 /// Copyright (C) 2022 Yusuke Matsunaga
 /// All rights reserved.
 
+#error "obsolete"
+
 #include "ym_config.h"
 
 

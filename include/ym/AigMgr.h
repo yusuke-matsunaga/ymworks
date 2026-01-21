@@ -76,20 +76,21 @@ public:
   /// @{
   //////////////////////////////////////////////////////////////////////
 
-
   /// @brief コンストラクタ
+  ///
+  /// - 空の AIG を作る．
   AigMgr();
 
   /// @brief コピーコンストラクタ
   ///
-  /// '浅い'コピーを行う．
+  /// src と同じ実体を共有した '浅い' コピーを行う．
   AigMgr(
     const AigMgr& src
   ) = default;
 
   /// @brief コピー代入演算
   ///
-  /// '浅い'コピーを行う．
+  /// src と同じ実体を共有した '浅い' コピーを行う．
   AigMgr&
   operator=(
     const AigMgr& src
@@ -111,8 +112,18 @@ public:
 
   /// @brief aag ファイルの読み込みを行う．
   /// @return 結果の AigMgr を返す．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
-  /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  /// @code
+  /// try {
+  ///   auto mgr = AigMgr::read_aag(filename);
+  ///   ...
+  /// }
+  /// catch ( std::invalid_argument e ) {
+  ///   std::cerr << e.what() << std::endl;
+  ///   ...
+  /// }
+  /// @endcode
   static
   AigMgr
   read_aag(
@@ -121,8 +132,18 @@ public:
 
   /// @brief aig ファイルの読み込みを行う．
   /// @return 結果の AigMgr を返す．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
-  /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  /// @code
+  /// try {
+  ///   auto mgr = AigMgr::read_aig(filename);
+  ///   ...
+  /// }
+  /// catch ( std::invalid_argument e ) {
+  ///   std::cerr << e.what() << std::endl;
+  ///   ...
+  /// }
+  /// @endcode
   static
   AigMgr
   read_aig(
@@ -131,8 +152,18 @@ public:
 
   /// @brief blif ファイルの読み込みを行う．
   /// @return 結果の AigMgr を返す．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
-  /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  /// @code
+  /// try {
+  ///   auto mgr = AigMgr::read_blif(filename);
+  ///   ...
+  /// }
+  /// catch ( std::invalid_argument e ) {
+  ///   std::cerr << e.what() << std::endl;
+  ///   ...
+  /// }
+  /// @endcode
   static
   AigMgr
   read_blif(
@@ -141,8 +172,18 @@ public:
 
   /// @brief iscas89 ファイルの読み込みを行う．
   /// @return 結果の AigMgr を返す．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
-  /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  /// @code
+  /// try {
+  ///   auto mgr = AigMgr::read_iscas89(filename);
+  ///   ...
+  /// }
+  /// catch ( std::invalid_argument e ) {
+  ///   std::cerr << e.what() << std::endl;
+  ///   ...
+  /// }
+  /// @endcode
   static
   AigMgr
   read_iscas89(
@@ -151,14 +192,25 @@ public:
 
   /// @brief 任意の形式のファイルを読み込む．
   /// @return 結果の AigMgr を返す．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
-  /// format が省略された場合には拡張子から推測する．
-  /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
-  /// 対応する拡張子は以下の通り
-  /// - '.aag':   read_aag()
-  /// - '.aig':   read_aig()
-  /// - '.blif':  read_blif()
-  /// - '.bench': read_iscas89()
+  /// - format が省略された場合には拡張子から推測する．
+  /// - 対応する拡張子は以下の通り
+  ///   - '.aag':   read_aag()
+  ///   - '.aig':   read_aig()
+  ///   - '.blif':  read_blif()
+  ///   - '.bench': read_iscas89()
+  ///
+  /// @code
+  /// try {
+  ///   auto mgr = AigMgr::read(filename, "aig");
+  ///   ...
+  /// }
+  /// catch ( std::invalid_argument e ) {
+  ///   std::cerr << e.what() << std::endl;
+  ///   ...
+  /// }
+  /// @endcode
   static
   AigMgr
   read(
@@ -168,6 +220,9 @@ public:
 
   /// @brief BnModel からの変換
   /// @return 新しいマネージャを返す．
+  ///
+  /// bn_model の3以上の入力のノードを含んでいる場合には
+  /// 2入力ノードに分解する．
   static
   AigMgr
   from_bn(
@@ -211,9 +266,9 @@ public:
 
   /// @brief 内容を出力する．
   ///
-  /// format は以下のいずれか
-  /// - aag
-  /// - aig
+  /// - format は以下のいずれか
+  ///   - aag
+  ///   - aig
   void
   write(
     const std::string& filename, ///< [in] ファイル名
@@ -222,9 +277,9 @@ public:
 
   /// @brief 内容を出力する．
   ///
-  /// format は以下のいずれか
-  /// - aag
-  /// - aig
+  /// - format は以下のいずれか
+  ///   - aag
+  ///   - aig
   void
   write(
     std::ostream& s,          ///< [in] 出力ストリーム
@@ -241,20 +296,6 @@ public:
   /// @name 情報を取得する関数
   /// @{
   //////////////////////////////////////////////////////////////////////
-
-  /// @brief 適正なポインタを持っている時 true を返す．
-  bool
-  is_valid() const
-  {
-    return mPtr != nullptr;
-  }
-
-  /// @brief 適正なポインタを持っていない時 true を返す．
-  bool
-  is_invalid() const
-  {
-    return !is_valid();
-  }
 
   /// @brief '深い'コピーを作る．
   AigMgr
@@ -281,42 +322,53 @@ public:
   dff_num() const;
 
   /// @brief 外部入力を表すリテラルを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa AigLiteral
   AigLiteral
   input(
     SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < input_num() )
   ) const;
 
   /// @brief 入力名を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
   std::string
   input_name(
     SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < input_num() )
   ) const;
 
   /// @brief 出力に対応するリテラルを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa AigLiteral
   AigLiteral
   output(
     SizeType output_id ///< [in] 出力番号 ( 0 <= output_id < output_num() )
   ) const;
 
   /// @brief 出力名を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
   std::string
   output_name(
     SizeType output_id ///< [in] 出力番号 ( 0 <= output_id < output_num() )
   ) const;
 
   /// @brief ラッチ(DFF)の出力を表すリテラルを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa AigLiteral
   AigLiteral
   dff_output(
     SizeType dff_id ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
   ) const;
 
   /// @brief ラッチ(DFF)の入力を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa AigLiteral
   AigLiteral
   dff_input(
     SizeType dff_id ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
   ) const;
 
   /// @brief ラッチ(DFF)名を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
   std::string
   dff_name(
     SizeType dff_id ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
@@ -338,44 +390,56 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 入力ノードの時 true を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
   ///
-  /// 入力ノードは外部入力とDFF出力
+  /// - 入力ノードは外部入力とDFF出力
   bool
   is_input(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const;
 
   /// @brief 外部入力ノードの時 true を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
   bool
   is_primary_input(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const;
 
   /// @brief 外部入力ノードの時 入力番号を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @excpetion std::logic_error 対象のノードが外部入力でなかった．
   SizeType
   input_id(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const;
 
   /// @brief DFF出力の時 true を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @excpetion std::logic_error 対象のノードがDFF出力でなかった．
   bool
   is_dff_output(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const;
 
   /// @brief DFF出力の時 DFF番号を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @excpetion std::logic_error 対象のノードがDFF出力でなかった．
   SizeType
   dff_id(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const;
 
   /// @brief ANDノードの時 true を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
   bool
   is_and(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const;
 
   /// @brief ANDノードの時 ファンインを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @excpetion std::logic_error 対象のノードがANDでなかった．
+  /// @sa AigLiteral
   AigLiteral
   fanin(
     SizeType node_id, ///< [in] ノード番号 ( 0 <= node_id < node_num() )
@@ -383,20 +447,29 @@ public:
   ) const;
 
   /// @brief ANDノードの時 ファンイン0を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @excpetion std::logic_error 対象のノードがANDでなかった．
+  /// @sa AigLiteral
   AigLiteral
   fanin0(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const;
 
   /// @brief ANDノードの時 ファンイン1を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @excpetion std::logic_error 対象のノードがANDでなかった．
+  /// @sa AigLiteral
   AigLiteral
   fanin1(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
   ) const;
 
   /// @brief ANDグループのファンインのリストを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @excpetion std::logic_error 対象のノードがANDでなかった．
+  /// @sa AigLiteral
   ///
-  /// ANDグループとは反転していない枝で繋がったANDノードの集合
+  /// - ANDグループとは反転していない枝で繋がったANDノードの集合
   std::vector<AigLiteral>
   ex_fanin_list(
     SizeType node_id ///< [in] ノード番号 ( 0 <= node_id < node_num() )
@@ -415,6 +488,7 @@ public:
 
   /// @brief 入力を作る．
   /// @return 作成した入力を表すリテラルを返す．
+  /// @sa AigLiteral
   AigLiteral
   new_input(
     const std::string& name = {} ///< [in] 名前
@@ -422,6 +496,7 @@ public:
 
   /// @brief 出力を作る．
   /// @return 出力番号を返す．
+  /// @sa AigLiteral
   SizeType
   new_output(
     AigLiteral lit,              ///< [in] 対応するリテラル
@@ -439,6 +514,8 @@ public:
   );
 
   /// @brief ラッチ(DFF)の入力を設定する．
+  /// @exception std::out_of_range dff_id が範囲外
+  /// @sa AigLiteral
   void
   set_dff_input(
     SizeType dff_id, ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
@@ -446,24 +523,32 @@ public:
   );
 
   /// @brief 複数の入力の AND を作る．
+  /// @return 根のリテラルを返す．
+  /// @sa AigLiteral
   AigLiteral
   new_and(
     const std::vector<AigLiteral>& fanin_list ///< [in] ファンインの枝のリスト
   );
 
   /// @brief 複数の入力の OR を作る．
+  /// @return 根のリテラルを返す．
+  /// @sa AigLiteral
   AigLiteral
   new_or(
     const std::vector<AigLiteral>& fanin_list ///< [in] ファンインの枝のリスト
   );
 
   /// @brief 複数の入力の XOR を作る．
+  /// @return 根のリテラルを返す．
+  /// @sa AigLiteral
   AigLiteral
   new_xor(
     const std::vector<AigLiteral>& fanin_list ///< [in] ファンインの枝のリスト
   );
 
-  /// @brief PrimType の演算を行う．
+  /// @brief PrimType の演算を表すAIGを作る．
+  /// @return 根のリテラルを返す．
+  /// @sa AigLiteral
   AigLiteral
   new_primitive(
     PrimType type,                            ///< [in] 演算の種類
@@ -482,16 +567,20 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief Expr から変換する．
+  /// @return 根のリテラルを返す．
+  /// @sa Expr, AigLiteral
   ///
-  /// 論理式の i 番目の変数は input(i) を用いる．
+  /// - 論理式の i 番目の変数は input(i) を用いる．
   AigLiteral
   from_expr(
     const Expr& expr ///< [in] 論理式
   );
 
   /// @brief Expr から変換する．
+  /// @return 根のリテラルを返す．
+  /// @sa Expr, AigLiteral
   ///
-  /// 論理式の i 番目の変数は input_list[i] を用いる．
+  /// - 論理式の i 番目の変数は input_list[i] を用いる．
   AigLiteral
   from_expr(
     const Expr& expr,                         ///< [in] 論理式
@@ -499,16 +588,20 @@ public:
   );
 
   /// @brief 複数の Expr から変換する．
+  /// @return 論理式のリストに対応する枝のリストを返す．
+  /// @sa Expr, AigLiteral
   ///
-  /// 論理式の i 番目の変数は input(i) を用いる．
+  /// - 論理式の i 番目の変数は input(i) を用いる．
   std::vector<AigLiteral>
   from_expr_list(
     const std::vector<Expr>& expr_list ///< [in] 論理式のリスト
   );
 
   /// @brief 複数の Expr から変換する．
+  /// @return 論理式のリストに対応する枝のリストを返す．
+  /// @sa Expr, AigLiteral
   ///
-  /// 論理式の i 番目の変数は input_list[i] を用いる．
+  /// - 論理式の i 番目の変数は input_list[i] を用いる．
   std::vector<AigLiteral>
   from_expr_list(
     const std::vector<Expr>& expr_list,       ///< [in] 論理式のリスト
@@ -516,16 +609,20 @@ public:
   );
 
   /// @brief SopCover から変換する．
+  /// @return カバーに対応する枝を返す．
+  /// @sa SopCover, AigLiteral
   ///
-  /// カバーの i 番目の変数は input(i) を用いる．
+  /// - カバーの i 番目の変数は input(i) を用いる．
   AigLiteral
   from_cover(
     const SopCover& cover ///< [in] カバー
   );
 
   /// @brief SopCover から変換する．
+  /// @return カバーに対応する枝を返す．
+  /// @sa SopCover, AigLiteral
   ///
-  /// カバーの i 番目の変数は input_list[i] を用いる．
+  /// - カバーの i 番目の変数は input_list[i] を用いる．
   AigLiteral
   from_cover(
     const SopCover& cover,                    ///< [in] カバー
@@ -533,16 +630,20 @@ public:
   );
 
   /// @brief SopCube から変換する．
+  /// @return キューブに対応する枝を返す．
+  /// @sa SopCube, AigLiteral
   ///
-  /// キューブの i 番目の変数は i 番目の入力を用いる．
+  /// - キューブの i 番目の変数は i 番目の入力を用いる．
   AigLiteral
   from_cube(
     const SopCube& cube ///< [in] キューブ
   );
 
   /// @brief SopCube から変換する．
+  /// @return キューブに対応する枝を返す．
+  /// @sa SopCube, AigLiteral
   ///
-  /// キューブの i 番目の変数は input_list[i] を用いる．
+  /// - キューブの i 番目の変数は input_list[i] を用いる．
   AigLiteral
   from_cube(
     const SopCube& cube,                      ///< [in] カバー
@@ -561,8 +662,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief コファクター演算
-  ///
-  /// - cube に含まれるノードの値を固定した AIG を作る．
+  /// @return cube に含まれるノードの値を固定した AIG の根のリテラルを返す．
+  /// @sa AigLiteral
   AigLiteral
   cofactor(
     AigEdge edge,                       ///< [in] 対象の枝
@@ -570,8 +671,8 @@ public:
   );
 
   /// @brief コファクター演算
-  ///
-  /// - cube に含まれるノードの値を固定した AIG を作る．
+  /// @return cube に含まれるノードの値を固定した AIG の根のリテラルのリストを返す．
+  /// @sa AigLiteral
   std::vector<AigLiteral>
   cofactor(
     const std::vector<AigLiteral>& edge_list, ///< [in] 対象の枝のリスト
@@ -584,6 +685,7 @@ public:
 
   /// @brief シミュレーションを行う．
   /// @return 出力値を格納した配列を返す．
+  /// @sa AigBitVect
   ///
   /// - input_vals は入力番号をキーとして値を格納している．
   /// - DFFの出力，入力はそれぞれ疑似入力，疑似出力として扱う．
@@ -641,6 +743,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief dot 形式で出力する．
+  /// @sa JsonValue
   ///
   /// - option は以下のようなキーを持った JSON オブジェクト
   ///   * attr: dot の各種属性値を持った辞書
@@ -716,7 +819,6 @@ private:
   AigMgrImpl*
   get() const
   {
-    _check_valid();
     return mPtr.get();
   }
 
@@ -742,15 +844,6 @@ private:
   ) const
   {
     return mPtr == right.mPtr;
-  }
-
-  /// @brief 適正なポインタを持っていない時，例外を送出する．
-  void
-  _check_valid() const
-  {
-    if ( is_invalid() ) {
-      throw std::logic_error{"mPtr is null"};
-    }
   }
 
   /// @brief AigLiteral を AigEdge に変換する

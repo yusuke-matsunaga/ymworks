@@ -49,14 +49,14 @@ public:
     URNG& randgen ///< [in] 乱数発生器
   )
   {
-    std::vector<int> src_array(num());
-    for ( int i = 0; i < num(); ++ i ) {
+    std::vector<SizeType> src_array(num());
+    for ( SizeType i = 0; i < num(); ++ i ) {
       src_array[i] = i;
     }
-    int n = num() - 1;
-    for ( int i = 0; i < num(); ++ i ) {
-      std::uniform_int_distribution<int> rd(0, n);
-      int r = rd(randgen);
+    auto n = num() - 1;
+    for ( SizeType i = 0; i < num(); ++ i ) {
+      std::uniform_int_distribution<SizeType> rd(0, n);
+      auto r = rd(randgen);
       mArray[i] = src_array[r];
       src_array[r] = src_array[n];
       -- n;
@@ -64,13 +64,15 @@ public:
   }
 
   /// @brief 順列の要素を取り出す．
-  int
+  /// @exception std::out_of_range 範囲外のアクセス
+  SizeType
   elem(
     SizeType pos ///< [in] 要素の位置番号 ( 0 <= pos < num() )
   ) const
   {
-    ASSERT_COND( 0 <= pos && pos < num() );
-
+    if ( pos >= num() ) {
+      throw std::out_of_range{"'pos' is out of range"};
+    }
     return mArray[pos];
   }
 
@@ -81,7 +83,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 現在の順列
-  std::vector<int> mArray;
+  std::vector<SizeType> mArray;
 
 };
 

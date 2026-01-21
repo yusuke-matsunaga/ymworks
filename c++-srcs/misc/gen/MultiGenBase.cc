@@ -19,7 +19,7 @@ BEGIN_NAMESPACE_YM
 
 // コンストラクタ
 MultiGenBase::MultiGenBase(
-  const std::vector<std::pair<int, int>>& nk_array
+  const std::vector<NK_pair>& nk_array
 ) : mGroupNum{nk_array.size()},
     mNArray(mGroupNum),
     mKArray(mGroupNum),
@@ -40,7 +40,7 @@ MultiGenBase::MultiGenBase(
 
 // @brief コンストラクタ
 MultiGenBase::MultiGenBase(
-  std::initializer_list<std::pair<int, int>>& nk_array
+  std::initializer_list<NK_pair>& nk_array
 ) : mGroupNum{nk_array.size()},
     mNArray(mGroupNum),
     mKArray(mGroupNum),

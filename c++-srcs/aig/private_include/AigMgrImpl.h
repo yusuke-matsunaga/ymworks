@@ -65,6 +65,7 @@ public:
     SizeType id ///< [in] ノード番号 ( 0 <= id < node_num() )
   )
   {
+    _check_node_id(id);
     return mNodeArray[id].get();
   }
 
@@ -717,6 +718,17 @@ private:
   void
   _fo_check();
 
+  /// @brief ノード番号が適正か調べる．
+  void
+  _check_node_id(
+    SizeType id
+  ) const
+  {
+    if ( id >= node_num() ) {
+      throw std::out_of_range{"'id' is out of range"};
+    }
+  }
+
   /// @brief 入力番号が適正か調べる．
   void
   _check_input_id(
@@ -724,7 +736,7 @@ private:
   ) const
   {
     if ( input_id >= input_num() ) {
-      throw std::out_of_range{"input_id is out of range"};
+      throw std::out_of_range{"'input_id' is out of range"};
     }
   }
 
@@ -735,7 +747,7 @@ private:
   ) const
   {
     if ( output_id >= output_num() ) {
-      throw std::out_of_range{"output_id is out of range"};
+      throw std::out_of_range{"'output_id' is out of range"};
     }
   }
 
@@ -746,7 +758,7 @@ private:
   ) const
   {
     if ( dff_id >= dff_num() ) {
-      throw std::out_of_range{"dff_id is out of range"};
+      throw std::out_of_range{"'dff_id' is out of range"};
     }
   }
 

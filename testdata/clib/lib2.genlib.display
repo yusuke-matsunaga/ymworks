@@ -21,11 +21,11 @@ inv1x: Cell#0(Group#3)
     Fall Capacitance = 0.0514
   Pin#1[ O ]: Output# 0
     Logic            = ~a
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -46,11 +46,11 @@ inv2x: Cell#1(Group#3)
     Fall Capacitance = 0.1009
   Pin#1[ O ]: Output# 0
     Logic            = ~a
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -71,11 +71,11 @@ inv4x: Cell#2(Group#3)
     Fall Capacitance = 0.1897
   Pin#1[ O ]: Output# 0
     Logic            = ~a
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -100,11 +100,11 @@ xor: Cell#3(Group#16)
     Fall Capacitance = 0.1381
   Pin#2[ O ]: Output# 0
     Logic            = ( ( ~a & b ) | ( a & ~b ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -156,11 +156,11 @@ xnor: Cell#4(Group#17)
     Fall Capacitance = 0.1352
   Pin#2[ O ]: Output# 0
     Logic            = ( ( ~a & ~b ) | ( a & b ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -212,11 +212,11 @@ nand2: Cell#5(Group#5)
     Fall Capacitance = 0.0716
   Pin#2[ O ]: Output# 0
     Logic            = ( ~a | ~b )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -254,11 +254,11 @@ nand3: Cell#6(Group#9)
     Fall Capacitance = 0.0777
   Pin#3[ O ]: Output# 0
     Logic            = ( ~a | ~b | ~c )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -309,11 +309,11 @@ nand4: Cell#7(Group#13)
     Fall Capacitance = 0.105
   Pin#4[ O ]: Output# 0
     Logic            = ( ~a | ~b | ~c | ~d )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -365,11 +365,11 @@ nor2: Cell#8(Group#7)
     Fall Capacitance = 0.0968
   Pin#2[ O ]: Output# 0
     Logic            = ( ~a & ~b )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -407,11 +407,11 @@ nor3: Cell#9(Group#11)
     Fall Capacitance = 0.0826
   Pin#3[ O ]: Output# 0
     Logic            = ( ~a & ~b & ~c )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -462,11 +462,11 @@ nor4: Cell#10(Group#15)
     Fall Capacitance = 0.0887
   Pin#4[ O ]: Output# 0
     Logic            = ( ~a & ~b & ~c & ~d )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -522,11 +522,11 @@ aoi21: Cell#11(Group#24)
     Fall Capacitance = 0.111
   Pin#3[ O ]: Output# 0
     Logic            = ( ( ~a1 | ~a2 ) & ~b )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -577,11 +577,11 @@ aoi31: Cell#12(Group#25)
     Fall Capacitance = 0.0979
   Pin#4[ O ]: Output# 0
     Logic            = ( ( ~a1 | ~a2 | ~a3 ) & ~b )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -641,11 +641,11 @@ aoi22: Cell#13(Group#26)
     Fall Capacitance = 0.0988
   Pin#4[ O ]: Output# 0
     Logic            = ( ( ~a1 | ~a2 ) & ( ~b1 | ~b2 ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -709,11 +709,11 @@ aoi32: Cell#14(Group#27)
     Fall Capacitance = 0.1049
   Pin#5[ O ]: Output# 0
     Logic            = ( ( ~a1 | ~a2 | ~a3 ) & ( ~b1 | ~b2 ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -790,11 +790,11 @@ aoi33: Cell#15(Group#28)
     Fall Capacitance = 0.1039
   Pin#6[ O ]: Output# 0
     Logic            = ( ( ~a1 | ~a2 | ~a3 ) & ( ~b1 | ~b2 | ~b3 ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -872,11 +872,11 @@ aoi211: Cell#16(Group#29)
     Fall Capacitance = 0.1008
   Pin#4[ O ]: Output# 0
     Logic            = ( ( ~a1 | ~a2 ) & ~b & ~c )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -940,11 +940,11 @@ aoi221: Cell#17(Group#30)
     Fall Capacitance = 0.111
   Pin#5[ O ]: Output# 0
     Logic            = ( ( ~a1 | ~a2 ) & ( ~b1 | ~b2 ) & ~c )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1021,11 +1021,11 @@ aoi222: Cell#18(Group#31)
     Fall Capacitance = 0.1039
   Pin#6[ O ]: Output# 0
     Logic            = ( ( ~a1 | ~a2 ) & ( ~b1 | ~b2 ) & ( ~c1 | ~c2 ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1099,11 +1099,11 @@ oai21: Cell#19(Group#32)
     Fall Capacitance = 0.0998
   Pin#3[ O ]: Output# 0
     Logic            = ( ( ~a1 & ~a2 ) | ~b )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1154,11 +1154,11 @@ oai31: Cell#20(Group#33)
     Fall Capacitance = 0.1059
   Pin#4[ O ]: Output# 0
     Logic            = ( ( ~a1 & ~a2 & ~a3 ) | ~b )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1218,11 +1218,11 @@ oai22: Cell#21(Group#34)
     Fall Capacitance = 0.1039
   Pin#4[ O ]: Output# 0
     Logic            = ( ( ~a1 & ~a2 ) | ( ~b1 & ~b2 ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1286,11 +1286,11 @@ oai32: Cell#22(Group#35)
     Fall Capacitance = 0.113
   Pin#5[ O ]: Output# 0
     Logic            = ( ( ~a1 & ~a2 & ~a3 ) | ( ~b1 & ~b2 ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1367,11 +1367,11 @@ oai33: Cell#23(Group#36)
     Fall Capacitance = 0.1109
   Pin#6[ O ]: Output# 0
     Logic            = ( ( ~a1 & ~a2 & ~a3 ) | ( ~b1 & ~b2 & ~b3 ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1449,11 +1449,11 @@ oai211: Cell#24(Group#37)
     Fall Capacitance = 0.105
   Pin#4[ O ]: Output# 0
     Logic            = ( ( ~a1 & ~a2 ) | ~b | ~c )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1517,11 +1517,11 @@ oai221: Cell#25(Group#38)
     Fall Capacitance = 0.1019
   Pin#5[ O ]: Output# 0
     Logic            = ( ( ~a1 & ~a2 ) | ( ~b1 & ~b2 ) | ~c )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1598,11 +1598,11 @@ oai222: Cell#26(Group#39)
     Fall Capacitance = 0.114
   Pin#6[ O ]: Output# 0
     Logic            = ( ( ~a1 & ~a2 ) | ( ~b1 & ~b2 ) | ( ~c1 & ~c2 ) )
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
   Timing:
     Type             = combinational
@@ -1664,11 +1664,11 @@ zero: Cell#27(Group#0)
   area = 0
   Pin#0[ O ]: Output# 0
     Logic            = 0
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
 
 one: Cell#28(Group#1)
@@ -1676,11 +1676,11 @@ one: Cell#28(Group#1)
   area = 0
   Pin#0[ O ]: Output# 0
     Logic            = 1
-    Max Fanout       = 1.79769e+308
+    Max Fanout       = inf
     Min Fanout       = 0
-    Max Capacitance  = 1.79769e+308
+    Max Capacitance  = inf
     Min Capacitance  = 0
-    Max Transition   = 1.79769e+308
+    Max Transition   = inf
     Min Transition   = 0
 
 Group#0(Class#0)

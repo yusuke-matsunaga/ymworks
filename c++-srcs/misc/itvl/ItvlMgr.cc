@@ -37,9 +37,7 @@ ItvlMgr::clear()
 }
 
 // 使用可能な数字を得る．
-// 内容は変化しない．
-// 使用可能な区間がない場合(!!!)，-1を返す．
-int
+SizeType
 ItvlMgr::avail_num() const
 {
   return mImpl->get_min();
@@ -48,7 +46,7 @@ ItvlMgr::avail_num() const
 // d を使用可能な区間から削除する．
 void
 ItvlMgr::erase(
-  int d
+  SizeType d
 )
 {
   mImpl->add(d);
@@ -57,7 +55,7 @@ ItvlMgr::erase(
 // d を使用可能区間に追加する．
 void
 ItvlMgr::add(
-  int d
+  SizeType d
 )
 {
   mImpl->del(d);

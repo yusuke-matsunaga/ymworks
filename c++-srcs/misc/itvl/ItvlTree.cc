@@ -14,7 +14,6 @@ BEGIN_NAMESPACE_YM
 // @brief コンストラクタ
 ItvlTree::ItvlTree()
 {
-  clear();
 }
 
 // @brief デストラクタ
@@ -29,30 +28,24 @@ ItvlTree::clear()
 {
   delete mRoot;
   mRoot = nullptr;
-
-  // [-1, -1] の区間を番兵として登録しておく
-  auto node = new Node{-1, -1};
-  // 実質的には mRoot = node でよいが将来の仕様変更に備えて
-  // 行儀のよい追加の仕方をしている．
-  insert_node(node, mRoot);
 }
 
 // @brief 追加する．
 void
 ItvlTree::add(
-  int x ///< [in] 追加する値
+  SizeType x
 )
 {
   // x の左側のノードを見つける．
   auto left = find_left(x);
-  int left_e = x - 2;
+  SizeType left_e = x - 2;
   if ( left != nullptr ) {
     left_e = left->E;
   }
 
   // x の右側のノードを見つける．
   auto right = find_right(x);
-  int right_s = x + 2;
+  SizeType right_s = x + 2;
   if ( right != nullptr ) {
     right_s = right->S;
   }
@@ -60,7 +53,7 @@ ItvlTree::add(
   if ( left_e + 1 == x ) {
     if ( right_s - 1 == x ) {
       // left と right の隙間がぴったり埋まった．
-      int right_e = right->E;
+      SizeType right_e = right->E;
       // right を削除して left の終端を変更する．
       remove_node(right, mRoot);
       // left は再平衡化の結果変わっている可能性がある．
@@ -86,12 +79,17 @@ ItvlTree::add(
 // @brief 削除する．
 void
 ItvlTree::del(
-  int x ///< [in] 削除する値
+  SizeType x
 )
 {
   // x を含む区間を探す．
   auto node = find(x);
-  ASSERT_COND( node != nullptr );
+  if ( node == nullptr ) {
+    // なかった．
+    std::ostringstream buf;
+    buf << "'" << x << "' is not in the ItvlTree";
+    throw std::invalid_argument{buf.str()};
+  }
 
   if ( node->S == x ) {
     if ( node->E == x ) {
@@ -117,9 +115,13 @@ ItvlTree::del(
 }
 
 // @brief 使用されていない値を取り出す．
-int
+SizeType
 ItvlTree::get_min() const
 {
+  if ( mRoot == nullptr ) {
+    return 0;
+  }
+
   // 最左端のノードを求める．
   auto left_most = mRoot;
   for ( ; left_most->L != nullptr; left_most = left_most->L ) {
@@ -129,13 +131,12 @@ ItvlTree::get_min() const
 }
 
 // @brief x を含むノードを探す．
-//
-// なければ nullptr を返す．
 ItvlTree::Node*
 ItvlTree::find(
-  int x
+  SizeType x
 ) const
 {
+  // mRoot が nullptr でも正しく動く．
   auto node = mRoot;
   while ( node != nullptr ) {
     if ( x < node->S ) {
@@ -151,15 +152,16 @@ ItvlTree::find(
   return node;
 }
 
-/// @brief x よりも小さく最も右にあるノードを探す．
+// @brief x よりも小さく最も右にあるノードを探す．
 ItvlTree::Node*
 ItvlTree::find_left(
-  int x
+  SizeType x
 ) const
 {
   // 大まかには find() と同様の処理を行なう．
   // その際に ptr->E < x のノードを ans に記録しておく．
   // 答は node ではなく ans
+  // mRoot が nullptr でも正しく動く．
   auto node = mRoot;
   Node* ans = nullptr;
   while ( node != nullptr ) {
@@ -182,12 +184,13 @@ ItvlTree::find_left(
 // @brief x よりも大きく最も左にあるノードを探す．
 ItvlTree::Node*
 ItvlTree::find_right(
-  int x
+  SizeType x
 ) const
 {
   // 大まかには find() と同様の処理を行なう．
   // その際に x < ptr->S のノードを ans に記録しておく．
   // 答は node ではなく ans
+  // mRoot が nullptr でも正しく動く．
   auto node = mRoot;
   Node* ans = nullptr;
   while ( node != nullptr ) {
@@ -339,15 +342,12 @@ ItvlTree::insert_node(
 }
 
 // @brief ノードを削除する．
-/// @return 部分木の高さが変わった時に true を返す．
 bool
 ItvlTree::remove_node(
-  Node* node, ///< [in] 削除するノード
-  Node*& ptr  ///< [in] 親のノード
+  Node* node,
+  Node*& ptr
 )
 {
-  ASSERT_COND( ptr != nullptr );
-
   if ( node->E < ptr->S ) {
     // node は左部分木にある．
     bool chg = remove_node(node, ptr->L);
@@ -356,7 +356,7 @@ ItvlTree::remove_node(
     }
     return chg;
   }
-  else if ( ptr->E < node->S ) {
+  if ( ptr->E < node->S ) {
     // node は右部分木にある．
     bool chg = remove_node(node, ptr->R);
     if ( chg ) {
@@ -364,43 +364,41 @@ ItvlTree::remove_node(
     }
     return chg;
   }
-  else {
-    // この場合，ptr と node の区間がオーバーラップしているので
-    // ptr == node のはず
-    ASSERT_COND( ptr == node );
-    // node を削除する．
-    if ( ptr->L == nullptr ) {
-      // 右の子供しか持たない場合
-      // node と右の子供を入れ替えて node を削除する．
-      // 高さは1減る．
-      ptr = node->R;
-      node->R = nullptr;
-      delete node;
-      return true;
-    }
-    else if ( ptr->R == nullptr ) {
-      // 左の子供しか持たない場合
-      // node と左の子供を入れ替えて node を削除する．
-      // 高さは1減る．
-      ptr = node->L;
-      node->L = nullptr;
-      delete node;
-      return true;
-    }
-    else {
-      // 2人の子供を持つ場合
-      // 左の部分木の最も右にあるノードで置き換える．
-      bool chg = remove_right(node, ptr->L);
-      if ( chg ) {
-	chg = balance_left(ptr);
-      }
-      return chg;
-    }
+
+  // この場合，ptr と node の区間がオーバーラップしているので
+  // ptr == node のはず
+  ASSERT_COND( ptr == node );
+
+  // node を削除する．
+  if ( ptr->L == nullptr ) {
+    // 右の子供しか持たない場合
+    // node と右の子供を入れ替えて node を削除する．
+    // 高さは1減る．
+    ptr = node->R;
+    node->R = nullptr;
+    delete node;
+    return true;
   }
+  if ( ptr->R == nullptr ) {
+    // 左の子供しか持たない場合
+    // node と左の子供を入れ替えて node を削除する．
+    // 高さは1減る．
+    ptr = node->L;
+    node->L = nullptr;
+    delete node;
+    return true;
+  }
+
+  // 2人の子供を持つ場合
+  // 左の部分木の最も右にあるノードで置き換える．
+  bool chg = remove_right(node, ptr->L);
+  if ( chg ) {
+    chg = balance_left(ptr);
+  }
+  return chg;
 }
 
 // @brief 右隣のノードと位置を入れ替えて削除する．
-// @return 部分木の高さが変わった時に true を返す．
 bool
 ItvlTree::remove_right(
   Node* node,
@@ -430,7 +428,6 @@ ItvlTree::remove_right(
 }
 
 /// @brief 左の部分木の高さが減少したときの処理
-/// @return 自分自身の高さも減少する時に true を返す．
 bool
 ItvlTree::balance_left(
   Node*& ptr

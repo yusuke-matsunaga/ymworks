@@ -17,6 +17,7 @@ BEGIN_NAMESPACE_YM_SAT
 //////////////////////////////////////////////////////////////////////
 /// @class SatInitParam SatInitParam.h "ym/SatInitParam.h"
 /// @brief SATソルバの種類を表すクラス
+/// @sa JsonValue
 ///
 /// - 単純な場合はタイプを表す文字列のみを引数にとる．
 /// - 詳細な設定を行う場合は Json オブジェクトを引数にとる．
@@ -45,21 +46,26 @@ public:
   SatInitParam();
 
   /// @brief コンストラクタ(タイプを表す文字列)
+  /// @exception std::invalid_argument type が不正な値だった．
   SatInitParam(
     const std::string& type ///< [in] 実装タイプを表す文字列
   );
 
   /// @brief コンストラクタ(タイプを表す文字列)
+  /// @exception std::invalid_argument type が不正な値だった．
   SatInitParam(
     const char* type ///< [in] 実装タイプを表す文字列
   );
 
   /// @brief コンストラクタ(Jsonオブジェクト)
+  /// @exception std::invalid_argument js_obj が不正な値だった．
+  /// @sa JsonValue
   SatInitParam(
     const JsonValue& js_obj ///< [in] オプションを表す Json オブジェクト
   );
 
   /// @brief JSON ファイルからの生成関数
+  /// @exception std::invalid_argument filename からの読み込みに失敗した．
   static
   SatInitParam
   from_json(

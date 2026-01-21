@@ -88,7 +88,7 @@ EiDecl::name() const
   return mPtItem->name();
 }
 
-// @breif 値の型を返す．
+// @brief 値の型を返す．
 VlValueType
 EiDecl::value_type() const
 {

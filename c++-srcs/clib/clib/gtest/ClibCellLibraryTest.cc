@@ -553,7 +553,12 @@ TEST_F(ClibCellLibraryTest, dump_restore)
     }
 
     EXPECT_EQ( library.cell_num(), library2.cell_num() );
-    EXPECT_EQ( library.to_string(), library2.to_string() );
+    // 内容が等しいか調べる．
+    std::ostringstream buf1;
+    library.display(buf1);
+    std::ostringstream buf2;
+    library2.display(buf2);
+    EXPECT_EQ( buf1.str(), buf2.str() );
   }
   catch ( AssertError obj ) {
     std::cerr << obj << std::endl;

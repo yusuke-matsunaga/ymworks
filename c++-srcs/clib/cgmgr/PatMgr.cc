@@ -295,7 +295,7 @@ PatMgr::pg_sub(
     auto n = expr.operand_num();
     // ファンインの式に対するパタングラフを求める．
     std::vector<std::vector<PatHandle>> input_pg_list(n);
-    std::vector<std::pair<int, int>> nk_array(n);
+    std::vector<MultiGenBase::NK_pair> nk_array(n);
     for ( auto i = 0; i < n; ++ i ) {
       pg_sub(expr.operand(i), input_pg_list[i]);
       nk_array[i] = std::make_pair(input_pg_list[i].size(), 1);

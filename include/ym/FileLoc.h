@@ -19,13 +19,13 @@ BEGIN_NAMESPACE_YM
 /// @class FileLoc FileLoc.h "ym/FileLoc.h"
 /// @ingroup ym
 /// @brief ファイル位置を表すクラス
+/// @sa FileInfo FileInfoMgr FileRegion
 ///
 /// 基本的には
 /// - ファイル情報
 /// - 行番号
 /// - コラム位置
 /// の情報を持つ
-/// @sa FileInfo FileInfoMgr FileRegion
 //////////////////////////////////////////////////////////////////////
 class FileLoc
 {
@@ -39,6 +39,7 @@ public:
   FileLoc() = default;
 
   /// @brief 内容を指定するコンストラクタ
+  /// @sa FileInfo
   FileLoc(
     FileInfo file_info, ///< [in] ファイル情報
     int line,           ///< [in] 行番号
@@ -65,6 +66,7 @@ public:
 
   /// @brief ファイル情報の取得
   /// @return ファイル情報を返す．
+  /// @sa FileInfo
   FileInfo
   file_info() const { return mFileInfo; }
 

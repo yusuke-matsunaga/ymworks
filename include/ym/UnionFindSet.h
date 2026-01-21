@@ -20,22 +20,13 @@ class UFCell;
 //////////////////////////////////////////////////////////////////////
 /// @class UnionFindSet UnionFindSet.h "ym/UnionFindSet.h"
 /// @ingroup YmUtils
-/// @brief Merge/Find set を実装したクラス
+/// @brief Union/Find set を実装したクラス
 ///
 /// データ構造とアルゴリズムの教科書でおなじみの Merge/Find-set
 /// お互いに素な集合のマージと検索のみを行なう抽象データ型
 //////////////////////////////////////////////////////////////////////
 class UnionFindSet
 {
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 定数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 範囲外を表す値
-  static
-  const int kBadID = -1;
-
 public:
 
   /// @brief コンストラクタ
@@ -56,29 +47,32 @@ public:
   SizeType
   num() const
   {
-    return mNum;
+    return mCellArray.size();
   }
 
   /// @brief 代表元の検索 (Find)
-  /// @retval 要素 x の属する集合の代表元
-  /// @retval kBadID 要素 x が存在していない場合
-  int
+  /// @return 要素 x の属する集合の代表元
+  /// @exception std::out_of_range 範囲外のアクセス
+  SizeType
   find(
-    int x ///< [in] 要素番号 ( 0 <= x < num() )
+    SizeType x ///< [in] 要素番号 ( 0 <= x < num() )
   );
 
-  /// @brief 2つの集合の併合 (Merge)
-  /// @retval 新たな代表元を返す．
-  /// @retval kBadID x か y が存在していなかった
+  /// @brief 2つの集合の併合 (Union)
+  /// @return 新たな代表元を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
   ///
   /// 2つの代表元 x, y の表す集合を併合する．
-  /// 実は x, y が代表元でない場合，
-  /// 内部で find(x), find(y)を呼ぶので処理は行えるが，
+  ///
+  /// union という名前は c/c++ の予約語なので merge という名前にしている．
+  ///
+  /// 実は x, y が代表元でなくても内部で find(x), find(y)
+  /// を呼ぶので処理は行えるが，
   /// 代表元が分かっている場合にはそれを使ったほうが処理は速い．
-  int
+  SizeType
   merge(
-    int x, ///< [in] マージ対象の要素番号1 ( 0 <= x < num() )
-    int y  ///< [in] マージ対象の要素番号2 ( 0 <= y < num() )
+    SizeType x, ///< [in] マージ対象の要素番号1 ( 0 <= x < num() )
+    SizeType y  ///< [in] マージ対象の要素番号2 ( 0 <= y < num() )
   );
 
 
@@ -88,11 +82,18 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 番号 x の要素セルを取ってくる．
-  /// そのような要素がない場合にはnullptrを返す．
+  ///
+  /// x が範囲外の場合には std::out_of_range 例外を送出する．
   UFCell*
   _get(
-    int x
-  );
+    SizeType x
+  )
+  {
+    if ( x >= num() ) {
+      throw std::out_of_range{"'x' is out of range"};
+    }
+    return mCellArray[x];
+  }
 
 
 private:
@@ -100,11 +101,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 配列の要素数
-  SizeType mNum;
-
   // 要素の配列
-  UFCell* mCellArray;
+  std::vector<UFCell*> mCellArray;
 
 };
 

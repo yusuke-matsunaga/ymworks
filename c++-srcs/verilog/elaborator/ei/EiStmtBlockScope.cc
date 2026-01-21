@@ -17,7 +17,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // EiFactory の生成関数
 //////////////////////////////////////////////////////////////////////
 
-// @breif statement block を生成する．
+// @brief statement block を生成する．
 const VlScope*
 EiFactory::new_StmtBlockScope(
   const VlScope* parent,

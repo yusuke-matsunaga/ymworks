@@ -25,11 +25,11 @@ class ClibCapacitanceGen(PyObjGen):
 
         self.add_dealloc('default')
 
-        def meth_infty(writer):
+        def meth_infinity(writer):
             return writer.gen_return_pyobject('PyClibCapacitance',
-                                              'ClibCapacitance::infty()')
-        self.add_static_method('infty',
-                               func_body=meth_infty,
+                                              'ClibCapacitance::infinity()')
+        self.add_static_method('infinity',
+                               func_body=meth_infinity,
                                doc_str='return Infinity Object')
 
         def get_value(writer):

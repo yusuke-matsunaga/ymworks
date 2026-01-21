@@ -113,7 +113,7 @@ public:
     const VlValue& val ///< [in] 値
   ) const = 0;
 
-  /// @breif 値の型を返す．
+  /// @brief 値の型を返す．
   ///
   /// ヘッダが型指定を持たない時には値から情報を得る．
   virtual

@@ -65,7 +65,7 @@ public:
   // VlDecl の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @breif 値の型を返す．
+  /// @brief 値の型を返す．
   VlValueType
   value_type() const override;
 

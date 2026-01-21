@@ -80,7 +80,7 @@ EiImpNet::name() const
   return mPtExpr->name();
 }
 
-// @breif 値の型を返す．
+// @brief 値の型を返す．
 VlValueType
 EiImpNet::value_type() const
 {

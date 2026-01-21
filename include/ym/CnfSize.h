@@ -16,6 +16,10 @@ BEGIN_NAMESPACE_YM_SAT
 //////////////////////////////////////////////////////////////////////
 /// @class CnfSize CnfSize.h "CnfSize.h"
 /// @brief CNF のサイズを表す構造体
+///
+/// - 項数とリテラル数を持つ．
+/// - 加算と減算が定義されている．
+/// - スカラ値との乗算も定義されている．
 //////////////////////////////////////////////////////////////////////
 struct CnfSize
 {
@@ -112,6 +116,7 @@ struct CnfSize
 };
 
 /// @brief ストリーム出力
+/// @relates CnfSize
 inline
 std::ostream&
 operator<<(

@@ -78,7 +78,7 @@ public:
   init();
 
   /// @brief 要素の取得
-  int
+  SizeType
   operator()(
     SizeType pos ///< [in] 取り出す要素の位置 ( 0 <= pos < k() )
   ) const
@@ -102,7 +102,7 @@ protected:
 
   /// @brief 要素の参照の取得
   /// @return pos 番目の要素への参照
-  int&
+  SizeType&
   elem(
     SizeType pos ///< [in] 取り出す要素の位置 ( 0 <= pos < k() )
   )
@@ -134,7 +134,7 @@ private:
   SizeType mK;
 
   // 現在の要素
-  std::vector<int> mElem;
+  std::vector<SizeType> mElem;
 
 };
 

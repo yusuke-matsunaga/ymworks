@@ -19,10 +19,10 @@ BEGIN_NAMESPACE_YM
 /// @brief 組み合わせ生成器を表すクラス
 ///
 /// @code
-/// int n = 10;
-/// int k =  3;
+/// SizeType n = 10;
+/// SizeType k =  3;
 /// for ( CombiGen cg(n, k); !cg.is_end(); ++ cg )
-///    for ( int i = 0; i < k; ++ i ) {
+///    for ( SizeType i = 0; i < k; ++ i ) {
 ///       elem[i] = cg(i);
 ///    }
 ///    // elem[0] - elem[k - 1] に選ばれた要素(番号)が入る．

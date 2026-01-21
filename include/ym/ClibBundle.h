@@ -27,6 +27,8 @@ class ClibBundle :
 public:
 
   /// @brief 空のコンストラクタ
+  ///
+  /// - 不正値となる．
   ClibBundle() = default;
 
   /// @brief 内容を指定したコンストラクタ
@@ -47,20 +49,27 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 名前の取得
+  /// @exception std::logic_error is_valid() = false の場合
   std::string
   name() const;
 
   /// @brief ピン数の取得
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   pin_num() const;
 
   /// @brief ピンの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibPin
   ClibPin
   pin(
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < pin_num() )
   ) const;
 
   /// @brief ピンのリストの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibPinList
   ClibPinList
   pin_list() const;
 

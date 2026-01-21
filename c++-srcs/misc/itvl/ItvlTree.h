@@ -44,17 +44,17 @@ public:
   /// @brief 追加する．
   void
   add(
-    int x ///< [in] 追加する値
+    SizeType x ///< [in] 追加する値
   );
 
   /// @brief 削除する．
   void
   del(
-    int x ///< [in] 削除する値
+    SizeType x ///< [in] 削除する値
   );
 
   /// @brief 使用されていない値を取り出す．
-  int
+  SizeType
   get_min() const;
 
   /// @brief 内容を出力する．
@@ -79,10 +79,10 @@ private:
     }
 
     // 開始点
-    int S;
+    SizeType S;
 
     // 終了点
-    int E;
+    SizeType E;
 
     // 平衡度(-1, 0, 1)
     std::int8_t B;
@@ -105,26 +105,34 @@ private:
   /// なければ nullptr を返す．
   Node*
   find(
-    int x
+    SizeType x
   ) const;
 
   /// @brief x よりも小さく最も左にあるノードを探す．
+  ///
+  /// なければ nullptr を返す．
   Node*
   find_left(
-    int x
+    SizeType x
   ) const;
 
   /// @brief x よりも大きく最も右にあるノードを探す．
+  ///
+  /// なければ nullptr を返す．
   Node*
   find_right(
-    int x
+    SizeType x
   ) const;
 
   /// @brief ノードを追加する．
+  /// @return 木の高さが増えたら true を返す．
+  ///
+  /// - ptr で指される木に node を追加する．
+  /// - 結果として ptr の内容が変わる可能性がある．
   bool
   insert_node(
     Node* node, ///< [in] 追加するノード
-    Node*& ptr  ///< [in] 親のノード
+    Node*& ptr  ///< [out] 親のノード
   );
 
   /// @brief ノードを削除する．

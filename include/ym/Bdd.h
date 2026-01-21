@@ -20,9 +20,12 @@ BEGIN_NAMESPACE_YM_DD
 /// @class Bdd Bdd.h "ym/Bdd.h"
 /// @ingroup DdGroup
 /// @brief BDD を表すクラス
+/// @sa BddMgr
 ///
+/// - 実装は BddBase と同じ．
+/// - 基本的なメンバ関数は BddBase が提供している．
 /// - 基本的に個々の Bdd は一つの BddMgr に属す．
-/// - 例外は invalid な Bdd で関連する BddMgr を持たない．
+/// - 例外は定数関数を表す Bdd と 不正値を表す Bdd で関連する BddMgr を持たない．
 /// - Bdd 間の演算は同じ BddMgr に属するもののみ可とする．
 /// - 異なる BddMgr に属する Bdd の演算は std::invalid_argument 例外を
 ///   送出する．
@@ -102,6 +105,8 @@ public:
   }
 
   /// @brief 極性をかけ合わせる．
+  ///
+  /// - inv = true の時に否定する．
   Bdd
   operator*(
     bool inv ///< [in] 反転フラグ
@@ -169,6 +174,7 @@ public:
 
   /// @brief コファクターを計算する．
   /// @return 結果を返す．
+  /// @sa BddVar
   Bdd
   cofactor(
     const BddVar& var, ///< [in] 変数
@@ -177,14 +183,16 @@ public:
                        ///<      - true:  反転あり (負極性)
   ) const;
 
-  /// @brief コファクターを計算する．
+  /// @brief リテラルによるコファクターを計算する．
   /// @return 結果を返す．
+  /// @sa BddLit
   Bdd
   cofactor(
     const BddLit& lit ///< [in] リテラル
   ) const;
 
   /// @brief cofactor の別名
+  /// @sa BddLit
   Bdd
   operator/(
     const BddLit& lit ///< [in] リテラル
@@ -193,13 +201,15 @@ public:
     return cofactor(lit);
   }
 
-  /// @brief コファクターを計算する．
+  /// @brief キューブによるコファクターを計算する．
+  /// @sa BddCube
   Bdd
   cofactor(
     const BddCube& cube ///< [in] コファクターのキューブ
   ) const;
 
   /// @brief cofactor の別名
+  /// @sa BddCube
   Bdd
   operator/(
     const BddCube& cube ///< [in] コファクターのキューブ
@@ -225,6 +235,8 @@ public:
 
   /// @brief 極性をかけ合わせて代入する．
   /// @return 自分自身への参照を返す．
+  ///
+  /// - inv = true の時に否定する．
   Bdd&
   operator*=(
     bool inv ///< [in] 反転フラグ
@@ -295,6 +307,7 @@ public:
 
   /// @brief コファクターを計算して代入する．
   /// @return 自分自身への参照を返す．
+  /// @sa BddVar
   Bdd&
   cofactor_int(
     const BddVar& var, ///< [in] 変数
@@ -307,8 +320,9 @@ public:
     return *this;
   }
 
-  /// @brief コファクターを計算して代入する．
+  /// @brief リテラルによるコファクターを計算して代入する．
   /// @return 自分自身への参照を返す．
+  /// @sa BddLit
   Bdd&
   cofactor_int(
     const BddLit& lit ///< [in] リテラル
@@ -320,6 +334,7 @@ public:
 
   /// @brief cofactor_int の別名
   /// @return 自分自身への参照を返す．
+  /// @sa BddLit
   Bdd&
   operator/=(
     const BddLit& lit ///< [in] リテラル
@@ -328,8 +343,9 @@ public:
     return cofactor_int(lit);
   }
 
-  /// @brief コファクターを計算して代入する．
+  /// @brief キューブによるコファクターを計算して代入する．
   /// @return 自分自身への参照を返す．
+  /// @sa BddCube
   Bdd&
   cofactor_int(
     const BddCube& cube ///< [in] コファクターのキューブ
@@ -341,6 +357,7 @@ public:
 
   /// @brief cofactor_int の別名
   /// @return 自分自身への参照を返す．
+  /// @sa BddCube
   Bdd&
   operator/=(
     const BddCube& cube ///< [in] コファクターのキューブ
@@ -359,6 +376,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief (単一)compose演算
+  /// @sa BddVar
   Bdd
   compose(
     const BddVar& var, ///< [in] 対象の変数
@@ -366,6 +384,7 @@ public:
   ) const;
 
   /// @brief (単一)compose演算を行って代入する．
+  /// @sa BddVar
   Bdd&
   compose_int(
     const BddVar& var, ///< [in] 対象の変数
@@ -377,6 +396,7 @@ public:
   }
 
   /// @brief 複合compose演算
+  /// @sa ComposeMap
   Bdd
   multi_compose(
     const ComposeMap& compose_map ///< [in] 変換マップ
@@ -386,6 +406,7 @@ public:
   }
 
   /// @brief 複合compose演算を行って代入する．
+  /// @sa ComposeMap
   Bdd&
   multi_compose_int(
     const ComposeMap& compose_map ///< [in] 変換マップ
@@ -396,6 +417,7 @@ public:
   }
 
   /// @brief 変数順を入れ替える演算
+  /// @sa VarMap
   ///
   /// 極性も入れ替え可能
   Bdd
@@ -407,6 +429,7 @@ public:
   }
 
   /// @brief 変数順を入れ替える演算付き代入
+  /// @sa VarMap
   ///
   /// 極性も入れ替え可能
   Bdd&
@@ -440,12 +463,14 @@ public:
   is_const() const;
 
   /// @brief 与えられた変数がサポートの時 true を返す．
+  /// @sa BddVar
   bool
   check_sup(
     const BddVar& var ///< [in] 変数
   ) const;
 
-  /// @brief 与えられた変数に対して対称の時 true を返す．
+  /// @brief 与えられた変数ペアが対称の時 true を返す．
+  /// @sa BddVar
   bool
   check_sym(
     const BddVar& var1, ///< [in] 変数1
@@ -458,24 +483,29 @@ public:
   support_size() const;
 
   /// @brief サポート変数を表すBDD(BddVarSet)を返す．
+  /// @sa BddVarSet
   BddVarSet
   get_support() const;
 
   /// @brief サポート変数のリスト(vector)を得る．
+  /// @sa BddVar
   std::vector<BddVar>
   get_support_list() const;
 
   /// @brief 1となるパスを求める．
   /// @return キューブを返す．
+  /// @sa BddCube
   BddCube
   get_onepath() const;
 
   /// @brief 0となるパスを求める．
   /// @return キューブを返す．
+  /// @sa BddCube
   BddCube
   get_zeropath() const;
 
   /// @brief 根の変数とコファクターを求める．
+  /// @sa BddVar
   ///
   /// 自身が葉のノードの場合，invalid な BddVar を返す．
   /// f0, f1 には自分自身が入る．
@@ -486,6 +516,7 @@ public:
   ) const;
 
   /// @brief 根の変数を得る．
+  /// @sa BddVar
   ///
   /// 自身が葉のノードの場合，invalid な BddVar を返す．
   BddVar
@@ -520,6 +551,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容を真理値表の文字列に変換する．
+  /// @sa BddVar
   ///
   /// - var_list の先頭がMSBとなる．
   /// - var_list に含まれていない変数があった場合には
@@ -679,6 +711,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 
 /// @brief 複数のBDDのノード数を数える．
+/// @relates Bdd
 ///
 /// bdd_list 中の BDD は同一のマネージャに属していなければならない．
 SizeType
@@ -687,6 +720,7 @@ bdd_size(
 );
 
 /// @brief If-Then-Else 演算
+/// @relates Bdd
 Bdd
 ite(
   const Bdd& cond,   ///< [in] 条件
@@ -695,6 +729,7 @@ ite(
 );
 
 /// @brief ドントケアを利用した簡単化を行う．
+/// @relates Bdd
 Bdd
 simplify(
   const Bdd& on,  ///< [in] オンセット
@@ -702,6 +737,8 @@ simplify(
 );
 
 /// @brief 非冗長積和形を求める．
+/// @relates Bdd
+/// @sa SopCover
 SopCover
 isop(
   const Bdd& on,              ///< [in] オンセット
@@ -709,6 +746,7 @@ isop(
 );
 
 /// @brief 交差チェック
+/// @relates Bdd
 /// @return left と right が交差していたら true を返す．
 bool
 check_intersect(
@@ -717,6 +755,7 @@ check_intersect(
 );
 
 /// @brief 包含チェック
+/// @relates Bdd
 /// @return left が right を包含していたら true を返す．
 inline
 bool
@@ -728,8 +767,8 @@ check_containment(
   return !check_intersect(~left, right);
 }
 
-
 /// @brief 複数のBDDの内容を出力する．
+/// @relates Bdd
 ///
 /// bdd_list 中の BDD は同一のマネージャに属していなければならない．
 void
@@ -739,6 +778,7 @@ display(
 );
 
 /// @brief 内容を出力する．
+/// @relates Bdd
 inline
 void
 display(
@@ -749,7 +789,8 @@ display(
   display(s, std::vector<Bdd>{bdd});
 }
 
-/// @brief 内容を出力する．
+/// @brief 内容をファイルに出力する．
+/// @relates Bdd
 inline
 void
 display(
@@ -767,6 +808,7 @@ display(
 }
 
 /// @brief 複数のBDDの内容を出力する．
+/// @relates Bdd
 ///
 /// bdd_list 中の BDD は同一のマネージャに属していなければならない．
 inline
@@ -786,6 +828,8 @@ display(
 }
 
 /// @brief 複数のBDDを dot 形式で出力する．
+/// @relates Bdd
+/// @sa JsonValue
 ///
 /// - bdd_list 中の BDD は同一のマネージャに属していなければならない．
 /// - option は以下のようなキーを持った JSON オブジェクト
@@ -817,6 +861,8 @@ gen_dot(
 );
 
 /// @brief dot 形式で出力する．
+/// @relates Bdd
+/// @sa JsonValue
 ///
 /// - option は以下のようなキーを持った JSON オブジェクト
 ///   * attr: dot の各種属性値を持った辞書
@@ -850,7 +896,9 @@ gen_dot(
   gen_dot(s, std::vector<Bdd>{bdd}, option);
 }
 
-/// @brief dot 形式で出力する．
+/// @brief dot 形式でファイルに出力する．
+/// @relates Bdd
+/// @sa JsonValue
 ///
 /// - option は以下のようなキーを持った JSON オブジェクト
 ///   * attr: dot の各種属性値を持った辞書
@@ -890,7 +938,9 @@ gen_dot(
   gen_dot(s, std::vector<Bdd>{bdd}, option);
 }
 
-/// @brief 複数のBDDを dot 形式で出力する．
+/// @brief 複数のBDDを dot 形式でファイルに出力する．
+/// @relates Bdd
+/// @sa JsonValue
 ///
 /// - bdd_list 中の BDD は同一のマネージャに属していなければならない．
 /// - option は以下のようなキーを持った JSON オブジェクト
@@ -932,6 +982,7 @@ gen_dot(
 }
 
 /// @brief 構造を表す整数配列を作る．
+/// @relates Bdd
 ///
 /// bdd_list 中の BDD は同一のマネージャに属していなければならない．
 std::vector<SizeType>
@@ -940,6 +991,7 @@ rep_data(
 );
 
 /// @brief 構造を表す整数配列を作る．
+/// @relates Bdd
 inline
 std::vector<SizeType>
 rep_data(
@@ -950,6 +1002,7 @@ rep_data(
 }
 
 /// @brief BDD の内容をバイナリダンプする．
+/// @relates Bdd
 ///
 /// bdd_list 中の BDD は同一のマネージャに属していなければならない．
 void
@@ -959,6 +1012,7 @@ dump(
 );
 
 /// @brief 独自形式でバイナリダンプする．
+/// @relates Bdd
 ///
 /// 復元には BddMgr::restore() を用いる．
 inline

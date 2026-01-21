@@ -21,6 +21,7 @@ BEGIN_NAMESPACE_YM_DD
 ///
 /// - ブール論理の世界においてはリテラルとは変数とその否定のみ
 /// - 実際にはリテラル関数を表すBDDを用いている．
+/// - そのため生成時に BddMgr を必要とする．
 //////////////////////////////////////////////////////////////////////
 class BddLit :
   public BddBase
@@ -35,8 +36,9 @@ public:
   BddLit() = default;
 
   /// @brief マネージャと変数番号を指定したコンストラクタ
+  /// @sa BddMgrHolder
   ///
-  /// - mgr が nullptr の時は std::invalid_argument 例外が送出される．
+  /// - mgr が不正値の時は std::invalid_argument 例外が送出される．
   explicit
   BddLit(
     BddMgrHolder& mgr, ///< [in] マネージャ
@@ -47,6 +49,7 @@ public:
   );
 
   /// @brief BddVar と反転属性を引数にとるコンストラクタ
+  /// @sa BddVar
   ///
   /// - var が不正値の時は std::invalid_argument 例外が送出される．
   explicit
@@ -75,6 +78,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 変数を取り出す．
+  /// @sa BddVar
   BddVar
   var() const;
 
@@ -124,6 +128,7 @@ public:
   );
 
   /// @brief 論理積を計算する．
+  /// @sa BddCube
   ///
   /// 結果は BddCube となる．
   BddCube
@@ -132,6 +137,7 @@ public:
   ) const;
 
   /// @brief キューブとの論理積
+  /// @sa BddCube
   BddCube
   operator&(
     const BddCube& right
@@ -156,6 +162,7 @@ private:
 
 
 /// @brief ストリーム出力演算子
+/// @relates BddLit
 inline
 std::ostream&
 operator<<(

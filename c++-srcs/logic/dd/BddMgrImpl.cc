@@ -27,7 +27,7 @@ BddMgrImpl::~BddMgrImpl()
 {
 }
 
-// @breif 変数の数を返す．
+// @brief 変数の数を返す．
 SizeType
 BddMgrImpl::variable_num() const
 {

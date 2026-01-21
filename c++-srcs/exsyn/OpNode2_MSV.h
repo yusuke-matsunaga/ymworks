@@ -70,7 +70,7 @@ public:
     const OpNode* op   ///< [in] 直前の演算ノード
   ) const override;
 
-  /// @breif op_id 番目の演算を使用している時 true となるリテラルを追加する．
+  /// @brief op_id 番目の演算を使用している時 true となるリテラルを追加する．
   void
   add_use_lit(
     SizeType op_id,                   ///< [in] 演算番号

@@ -44,7 +44,6 @@ add_subdirectory( gtest )
 # ===================================================================
 
 set ( textproc_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/OptionParser.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Scanner.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ShString.cc
   PARENT_SCOPE

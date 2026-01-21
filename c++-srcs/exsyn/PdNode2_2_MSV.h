@@ -75,7 +75,7 @@ public:
     const SatModel& model ///< [in] SATモデル
   ) const override;
 
-  /// @breif step 番目の入力(演算)を使用している時 true となるリテラルを追加する．
+  /// @brief step 番目の入力(演算)を使用している時 true となるリテラルを追加する．
   ///
   /// 入力の場合，入力番号が step になる．
   /// 演算の場合，演算番号 + 入力数が step になる．

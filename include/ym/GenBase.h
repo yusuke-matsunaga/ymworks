@@ -37,12 +37,16 @@ class GenBase
 public:
 
   /// @brief コンストラクタ
+  /// @exception std::invalid_argument n < k の時
   GenBase(
     SizeType n, ///< [in] 全要素数
     SizeType k  ///< [in] 選び出す要素数
   ) : mN{n},
       mElemList(k)
   {
+    if ( n < k ) {
+      throw std::invalid_argument{"'n' < 'k'"};
+    }
     init();
   }
 
@@ -72,11 +76,16 @@ public:
 
   /// @brief 初期化する．
   void
-  init();
+  init()
+  {
+    for ( SizeType i = 0; i < k(); ++ i ) {
+      elem(i) = i;
+    }
+  }
 
   /// @brief 要素の取得
   /// @return pos 番目の要素
-  int
+  SizeType
   operator()(
     SizeType pos ///< [in] 取り出す要素の位置 (最初の位置は 0)
   ) const
@@ -86,7 +95,7 @@ public:
   }
 
   /// @brief 要素リストの取得
-  std::vector<int>
+  std::vector<SizeType>
   elem_list() const { return mElemList; }
 
   /// @brief 末尾のチェック
@@ -109,7 +118,7 @@ protected:
 
   /// @brief 要素の参照の取得
   /// @return pos 番目の要素への参照
-  int&
+  SizeType&
   elem(
     SizeType pos ///< [in] 取り出す要素の位置 (最初の位置は 0)
   )
@@ -140,7 +149,7 @@ private:
 
   // 現在の要素を持つ配列
   // サイズは mK;
-  std::vector<int> mElemList;
+  std::vector<SizeType> mElemList;
 
 };
 

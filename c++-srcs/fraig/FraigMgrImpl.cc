@@ -351,7 +351,7 @@ FraigMgrImpl::verify_const(
   return stat;
 }
 
-// @breif 直前の SAT の反例を加えて再ハッシュする．
+// @brief 直前の SAT の反例を加えて再ハッシュする．
 void
 FraigMgrImpl::add_pat(
   FraigNode* node

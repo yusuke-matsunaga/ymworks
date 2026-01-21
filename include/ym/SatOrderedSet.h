@@ -52,6 +52,8 @@ public:
   }
 
   /// @brief 値に対応する変数を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa SatLiteral
   ///
   /// var(val) == True <==> 値が val
   SatLiteral
@@ -65,6 +67,7 @@ public:
   }
 
   /// @brief 値に対応する変数のベクタを返す．
+  /// @sa SatLiteral
   const std::vector<SatLiteral>&
   vars() const
   {
@@ -72,6 +75,8 @@ public:
   }
 
   /// @brief 順序符号化された変数を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa SatLiteral
   ///
   /// この変数が true == 値が val 以上
   /// 値が min 以上は常に成り立つので val > min となる．
@@ -87,6 +92,7 @@ public:
   }
 
   /// @brief 順序符号化された変数のベクタを返す．
+  /// @sa SatLiteral
   const std::vector<SatLiteral>&
   pri_vars() const
   {
@@ -94,6 +100,7 @@ public:
   }
 
   /// @brief SATの解から値を得る．
+  /// @sat SatModel
   int
   val(
     const SatModel& model ///< [in] SATの解

@@ -239,19 +239,19 @@ check(
     EXPECT_EQ( exp_str, sig1_str );
   }
 
-  for ( MultiCombiGen icg{std::vector<std::pair<int, int>>(ni, std::make_pair(2, 1))};
+  for ( MultiCombiGen icg{std::vector<MultiGenBase::NK_pair>(ni, std::make_pair(2, 1))};
 	!icg.is_end(); ++ icg ) {
     std::vector<bool> ipol_list(ni);
     for ( SizeType i = 0; i < ni; ++ i ) {
       ipol_list[i] = (icg(i, 0) == 1);
     }
-    for ( MultiCombiGen ocg{std::vector<std::pair<int, int>>(no, std::make_pair(2, 1))};
+    for ( MultiCombiGen ocg{std::vector<MultiGenBase::NK_pair>(no, std::make_pair(2, 1))};
 	  !ocg.is_end(); ++ ocg ) {
       std::vector<bool> opol_list(no);
       for ( SizeType i = 0; i < no; ++ i ) {
 	opol_list[i] = (ocg(i, 0) == 1);
       }
-      for ( MultiCombiGen bcg{std::vector<std::pair<int, int>>(nb, std::make_pair(2, 1))};
+      for ( MultiCombiGen bcg{std::vector<MultiGenBase::NK_pair>(nb, std::make_pair(2, 1))};
 	    !bcg.is_end(); ++ bcg ) {
 	std::vector<bool> bpol_list(nb);
 	for ( SizeType i = 0; i < nb; ++ i ) {

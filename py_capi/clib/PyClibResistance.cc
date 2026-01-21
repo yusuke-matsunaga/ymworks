@@ -182,13 +182,13 @@ richcompare_func(
 
 // make INFINITY object
 PyObject*
-infty(
+infinity(
   PyObject* Py_UNUSED(self),
   PyObject* Py_UNUSED(args)
 )
 {
   try {
-    return PyClibResistance::ToPyObject(ClibResistance::infty());
+    return PyClibResistance::ToPyObject(ClibResistance::infinity());
   }
   catch ( std::exception err ) {
     std::ostringstream buf;
@@ -200,8 +200,8 @@ infty(
 
 // メソッド定義
 PyMethodDef methods[] = {
-  {"infty",
-   infty,
+  {"infinity",
+   infinity,
    METH_NOARGS | METH_STATIC,
    PyDoc_STR("make INFINITY object")},
   // end-marker

@@ -213,6 +213,7 @@ public:
 
   /// @brief 最小被覆問題を解く．
   /// @return 解のコスト
+  /// @sa JsonValue
   SizeType
   solve(
     std::vector<SizeType>& solution, ///< [out] 選ばれた列集合

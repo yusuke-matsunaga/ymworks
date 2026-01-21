@@ -25,11 +25,11 @@ class ClibResistanceGen(PyObjGen):
 
         self.add_dealloc('default')
 
-        def meth_infty(writer):
+        def meth_infinity(writer):
             writer.gen_return_pyobject('PyClibResistance',
-                                       'ClibResistance::infty()')
-        self.add_static_method('infty',
-                               func_body=meth_infty,
+                                       'ClibResistance::infinity()')
+        self.add_static_method('infinity',
+                               func_body=meth_infinity,
                                doc_str='make INFINITY object')
 
         def get_value(writer):

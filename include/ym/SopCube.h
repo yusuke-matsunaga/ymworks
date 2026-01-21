@@ -50,6 +50,7 @@ public:
   }
 
   /// @brief コンストラクタ
+  /// @exception std::invalid_argument lit が var_num の範囲外だった．
   ///
   /// * 単一のリテラルからなるキューブを作る．
   SopCube(
@@ -62,6 +63,7 @@ public:
   }
 
   /// @brief コンストラクタ
+  /// @exception std::invalid_argument lit_list 中のリテラルが var_num の範囲外だった．
   SopCube(
     SizeType var_num,                    ///< [in] 変数の数
     const std::vector<Literal>& lit_list ///< [in] キューブを表すリテラルのリスト
@@ -72,6 +74,7 @@ public:
   }
 
   /// @brief コンストラクタ
+  /// @exception std::invalid_argument lit_list 中のリテラルが var_num の範囲外だった．
   SopCube(
     SizeType var_num,                        ///< [in] 変数の数
     std::initializer_list<Literal>& lit_list ///< [in] キューブを表すリテラルのリスト初期化子
@@ -799,7 +802,7 @@ END_NAMESPACE_YM_SOP
 
 BEGIN_NAMESPACE_STD
 
-/// @breif SopCube をキーにしたハッシュ関数クラスの定義
+/// @brief SopCube をキーにしたハッシュ関数クラスの定義
 template <>
 struct hash<YM_NAMESPACE::SopCube>
 {

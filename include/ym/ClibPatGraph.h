@@ -29,7 +29,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibPatGraph() = default;
 
   /// @brief 内容を指定したコンストラクタ
@@ -48,26 +48,34 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 代表クラスを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellClass
   ClibCellClass
   rep_class() const;
 
   /// @brief 根のノード番号を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   root_id() const;
 
   /// @brief 根の反転属性を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   bool
   root_inv() const;
 
   /// @brief 入力数を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   input_num() const;
 
   /// @brief 枝数を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   edge_num() const;
 
   /// @brief 枝(の番号)を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
   SizeType
   edge(
     SizeType pos ///< [in] 位置 ( 0 <= pos < edge_num() )

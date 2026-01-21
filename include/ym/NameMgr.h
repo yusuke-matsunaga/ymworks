@@ -18,7 +18,9 @@ class ItvlTree;
 //////////////////////////////////////////////////////////////////////
 /// @class NameMgr NameMgr.h "ym/NameMgr.h"
 /// @ingroup YmUtils
-/// @brief \<prefix\>ddd\<suffix\> という形の名前で使用可能なものを
+/// @brief 指定されたパタンに合致する名前を管理するためのクラス
+///
+/// 具体的には \<prefix\>ddd\<suffix\> という形の名前で使用可能なものを
 /// 表すためのクラス
 //////////////////////////////////////////////////////////////////////
 class NameMgr
@@ -160,7 +162,7 @@ private:
 
   // 最後の new_name() で得られた番号
   mutable
-  int mLastNum;
+  SizeType mLastNum;
 
 };
 

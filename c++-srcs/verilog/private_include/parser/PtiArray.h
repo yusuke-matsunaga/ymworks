@@ -37,7 +37,7 @@ public:
   {
   }
 
-  /// @breif 内容を指定したコンストラクタ
+  /// @brief 内容を指定したコンストラクタ
   PtiArray(
     Alloc& alloc,              ///< [in] メモリアロケータ
     const std::vector<T*>& src ///< [in] ソース

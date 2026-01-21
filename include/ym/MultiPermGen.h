@@ -22,13 +22,13 @@ BEGIN_NAMESPACE_YM
 /// の出力の直積を作るイメージ．
 ///
 /// @code
-/// vector<pair<int, int> > nk_array(2);
+/// vector<pair<SizeType, SizeType> > nk_array(2);
 /// nk_array[0] = make_pair(3, 1);
 /// nk_array[1] = make_pair(5, 2);
 /// for (MultiPemGen mpg(nk_array); !mpg.is_end(); ++ mpg) {
-///    for (int g = 0; g < 2; ++ g) {
-///        int k1 = mpg.k(g);
-///        for (int i = 0; i < k1; ++ i) {
+///    for ( SizeType g = 0; g < 2; ++ g ) {
+///        iauto k1 = mpg.k(g);
+///        for ( SizeType i = 0; i < k1; ++ i ) {
 ///            elem[g][i] = mpg(g, i);
 ///        }
 ///    }
@@ -46,14 +46,14 @@ public:
 
   /// @brief コンストラクタ
   MultiPermGen(
-    const std::vector<std::pair<int, int>>& nk_array ///< [in] 要素数 n と選択する要素数 k のベクタ
+    const std::vector<NK_pair>& nk_array ///< [in] 要素数 n と選択する要素数 k のベクタ
   ) : MultiGenBase{nk_array}
   {
   }
 
   /// @brief コンストラクタ
   MultiPermGen(
-    std::initializer_list<std::pair<int, int>>& nk_array ///< [in] 要素数 n と選択する要素数 k の初期化リスト
+    std::initializer_list<NK_pair>& nk_array ///< [in] 要素数 n と選択する要素数 k の初期化リスト
   ) : MultiGenBase{nk_array}
   {
   }

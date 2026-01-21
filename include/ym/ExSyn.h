@@ -45,6 +45,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 2項演算で演算数が最小となる実装を求める．
+  /// @sa BcGraph, TruthTable, JsonValue
   static
   BcGraph
   gen_boolchain(
@@ -54,6 +55,7 @@ public:
 
   /// @brief BcGraph が正しいかチェックする．
   /// @return 正しければ true を返す．
+  /// @sa TruthTable, BcGraph
   static
   bool
   check_boolchain(

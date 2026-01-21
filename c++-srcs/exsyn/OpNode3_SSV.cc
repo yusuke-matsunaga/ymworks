@@ -83,7 +83,7 @@ OpNode3_SSV::add_op_order_cond(
   }
 }
 
-// @breif op_id 番目の入力(演算)を使用している時 true となるリテラルを追加する．
+// @brief op_id 番目の入力(演算)を使用している時 true となるリテラルを追加する．
 void
 OpNode3_SSV::add_use_lit(
   SizeType op_id,

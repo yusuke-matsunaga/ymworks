@@ -17,7 +17,6 @@ BEGIN_NAMESPACE_YM_LOGIC
 /// @class NpnVmap NpnVmap.h "ym/NpnVmap.h"
 /// @ingroup NpnGroup
 /// @brief 変数の変換を表すクラス
-///
 /// @sa NpnMap, NpnMapM
 //////////////////////////////////////////////////////////////////////
 class NpnVmap
@@ -32,8 +31,6 @@ public:
   }
 
   /// @brief 変数番号と極性を指定したコンストラクタ
-  /// @param[in] var
-  /// @param[in] inv
   explicit
   NpnVmap(
     SizeType var,    ///< [in] 変数番号

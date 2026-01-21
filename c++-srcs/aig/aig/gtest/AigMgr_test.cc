@@ -20,6 +20,41 @@ TEST(AigMgrTest, constr)
   EXPECT_EQ( 0, mgr.output_num() );
   EXPECT_EQ( 0, mgr.and_num() );
   EXPECT_EQ( 0, mgr.dff_num() );
+
+  EXPECT_THROW( mgr.input(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.input_name(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.output(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.output_name(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.dff_output(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.dff_input(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.dff_name(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.is_input(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.is_primary_input(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.input_id(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.is_dff_output(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.dff_id(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.is_and(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.fanin(0, 0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.fanin0(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.fanin1(0),
+		std::out_of_range );
+  EXPECT_THROW( mgr.ex_fanin_list(0),
+		std::out_of_range );
 }
 
 TEST(AigMgrTest, shallow_copy)

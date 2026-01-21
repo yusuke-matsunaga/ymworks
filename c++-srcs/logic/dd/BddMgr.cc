@@ -40,7 +40,7 @@ BddMgr::~BddMgr()
 {
 }
 
-// @breif 変数の数を返す．
+// @brief 変数の数を返す．
 SizeType
 BddMgr::variable_num() const
 {

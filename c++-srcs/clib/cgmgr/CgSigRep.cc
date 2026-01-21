@@ -336,7 +336,7 @@ gen_pol_gen(
 )
 {
   auto n = rep_list.size();
-  std::vector<std::pair<int, int>> n_array;
+  std::vector<MultiGenBase::NK_pair> n_array;
   n_array.reserve(n);
   for ( auto id: rep_list ) {
     if ( pol_list[id] == CgPolInfo::Both ) {
@@ -378,7 +378,7 @@ gen_pol_gen(
 )
 {
   auto n = pol_list.size();
-  std::vector<std::pair<int, int>> n_array(n);
+  std::vector<MultiGenBase::NK_pair> n_array(n);
   for ( SizeType i = 0; i < n; ++ i ) {
     if ( pol_list[i] == CgPolInfo::Both ) {
       n_array[i] = std::make_pair(2, 1);
@@ -416,7 +416,7 @@ gen_perm_gen(
   const std::vector<CgPinGroup>& pg_list
 )
 {
-  std::vector<std::pair<int, int>> nk_array;
+  std::vector<MultiGenBase::NK_pair> nk_array;
   for ( const auto& pg: pg_list ) {
     auto n = pg.mIdList.size();
     nk_array.push_back(std::make_pair(n, n));

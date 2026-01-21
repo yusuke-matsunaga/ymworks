@@ -46,7 +46,6 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief コンストラクタ
-  ///
   /// @sa SatInitParam
   SatSolver(
     const SatInitParam& init_param = SatInitParam{} ///< [in] 初期化パラメータ
@@ -68,6 +67,7 @@ public:
 
   /// @brief 変数を追加する．
   /// @return 新しい変数を表すリテラルを返す．
+  /// @sa SatLiteral
   ///
   /// * 変数番号は 0 から始まる．
   /// * lingeling においては decision = true のリテラルは freeze される．
@@ -77,6 +77,7 @@ public:
   );
 
   /// @brief 節を追加する．
+  /// @sa SatLiteral
   void
   add_clause(
     const std::vector<SatLiteral>& lits ///< [in] リテラルのリスト
@@ -86,6 +87,7 @@ public:
   }
 
   /// @brief 1項の節(リテラル)を追加する．
+  /// @sa SatLiteral
   void
   add_clause(
     SatLiteral lit1
@@ -95,6 +97,7 @@ public:
   }
 
   /// @brief 2項の節を追加する．
+  /// @sa SatLiteral
   void
   add_clause(
     SatLiteral lit1,
@@ -107,6 +110,7 @@ public:
   }
 
   /// @brief 3項の節を追加する．
+  /// @sa SatLiteral
   void
   add_clause(
     SatLiteral lit1,
@@ -120,6 +124,7 @@ public:
   }
 
   /// @brief 4項の節を追加する．
+  /// @sa SatLiteral
   void
   add_clause(
     SatLiteral lit1,
@@ -134,6 +139,7 @@ public:
   }
 
   /// @brief 5項の節を追加する．
+  /// @sa SatLiteral
   void
   add_clause(
     SatLiteral lit1,
@@ -149,6 +155,7 @@ public:
   }
 
   /// @brief 6項の節を追加する．
+  /// @sa SatLiteral
   void
   add_clause(
     SatLiteral lit1,
@@ -177,6 +184,7 @@ public:
 
   /// @brief 条件変数ブロックを返す．
   /// @return 生成されたブロックを返す．
+  /// @sa SatLiteral, SatCondBlock
   ///
   /// - このブロックの生存期間内では条件変数が有効となる．
   /// - 条件変数ブロックは入れ子にできる．
@@ -191,6 +199,7 @@ public:
 
   /// @brief 条件変数ブロックを返す．
   /// @return 生成されたブロックを返す．
+  /// @sa SatLiteral, SatCondBlock
   ///
   /// - このブロックの生存期間内では条件変数が有効となる．
   /// - 条件変数ブロックは入れ子にできる．
@@ -207,6 +216,7 @@ public:
 
   /// @brief 条件変数ブロックを返す．
   /// @return 生成されたブロックを返す．
+  /// @sa SatLiteral, SatCondBlock
   ///
   /// - このブロックの生存期間内では条件変数が有効となる．
   /// - 条件変数ブロックは入れ子にできる．
@@ -225,6 +235,7 @@ public:
 
   /// @brief 条件変数ブロックを返す．
   /// @return 生成されたブロックを返す．
+  /// @sa SatLiteral, SatCondBlock
   ///
   /// - このブロックの生存期間内では条件変数が有効となる．
   /// - 条件変数ブロックは入れ子にできる．
@@ -245,6 +256,7 @@ public:
 
   /// @brief 条件変数ブロックを返す．
   /// @return 生成されたブロックを返す．
+  /// @sa SatLiteral, SatCondBlock
   ///
   /// - このブロックの生存期間内では条件変数が有効となる．
   /// - 条件変数ブロックは入れ子にできる．
@@ -267,6 +279,7 @@ public:
 
   /// @brief 条件変数ブロックを返す．
   /// @return 生成されたブロックを返す．
+  /// @sa SatLiteral, SatCondBlock
   ///
   /// - このブロックの生存期間内では条件変数が有効となる．
   /// - 条件変数ブロックは入れ子にできる．
@@ -291,6 +304,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 2つのリテラルが等しいという条件を追加する．
+  /// @sa SatLiteral
   ///
   /// 具体的には (~lit1 + lit2)(lit1 + ~lit2) の２つの節を追加する．
   void
@@ -304,6 +318,7 @@ public:
   }
 
   /// @brief 2つのリテラルが等しくないという条件を追加する．
+  /// @sa SatLiteral
   ///
   /// 具体的には (~lit1 + ~lit2)(lit1 + lit2) の２つの節を追加する．
   void
@@ -316,6 +331,7 @@ public:
   }
 
   /// @brief 2入力ANDゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_andgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -329,6 +345,7 @@ public:
   }
 
   /// @brief 3入力ANDゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_andgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -344,6 +361,7 @@ public:
   }
 
   /// @brief 4入力ANDゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_andgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -361,6 +379,7 @@ public:
   }
 
   /// @brief n入力ANDゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_andgate(
     SatLiteral olit,                        ///< [in] 出力のリテラル
@@ -368,6 +387,7 @@ public:
   );
 
   /// @brief 2入力NANDゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_nandgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -379,6 +399,7 @@ public:
   }
 
   /// @brief 3入力NANDゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_nandgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -391,6 +412,7 @@ public:
   }
 
   /// @brief 4入力NANDゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_nandgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -404,6 +426,7 @@ public:
   }
 
   /// @brief n入力NANDゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_nandgate(
     SatLiteral olit,                         ///< [in] 出力のリテラル
@@ -414,6 +437,7 @@ public:
   }
 
   /// @brief 2入力ORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_orgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -427,6 +451,7 @@ public:
   }
 
   /// @brief 3入力ORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_orgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -442,6 +467,7 @@ public:
   }
 
   /// @brief 4入力ORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_orgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -459,6 +485,7 @@ public:
   }
 
   /// @brief n入力ORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_orgate(
     SatLiteral olit,                        ///< [in] 出力のリテラル
@@ -466,6 +493,7 @@ public:
   );
 
   /// @brief 2入力NORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_norgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -477,6 +505,7 @@ public:
   }
 
   /// @brief 3入力NORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_norgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -489,6 +518,7 @@ public:
   }
 
   /// @brief 4入力NORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_norgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -502,6 +532,7 @@ public:
   }
 
   /// @brief n入力NORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_norgate(
     SatLiteral olit,                        ///< [in] 出力のリテラル
@@ -512,6 +543,7 @@ public:
   }
 
   /// @brief 2入力XORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_xorgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -526,6 +558,7 @@ public:
   }
 
   /// @brief 3入力XORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_xorgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -545,6 +578,7 @@ public:
   }
 
   /// @brief 4入力XORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_xorgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -558,6 +592,7 @@ public:
   }
 
   /// @brief n入力XORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_xorgate(
     SatLiteral olit,                        ///< [in] 出力のリテラル
@@ -569,6 +604,7 @@ public:
   }
 
   /// @brief 2入力XNORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_xnorgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -580,6 +616,7 @@ public:
   }
 
   /// @brief 3入力XNORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_xnorgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -592,6 +629,7 @@ public:
   }
 
   /// @brief 4入力XORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_xnorgate(
     SatLiteral olit, ///< [in] 出力のリテラル
@@ -605,6 +643,7 @@ public:
   }
 
   /// @brief n入力XNORゲートの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_xnorgate(
     SatLiteral olit,                        ///< [in] 出力のリテラル
@@ -616,8 +655,8 @@ public:
 
   /// @brief 与えられた論理式を充足する条件を追加する．
   /// @return 条件を表すリテラルのリストを返す．
-  ///
-  /// 変数番号が lit_map に登録されていない時は例外が創出される．
+  /// @exception std::invalid_argument 論理式中の変数番号が lit_map に含まれていない．
+  /// @sa SatLiteral
   std::vector<SatLiteral>
   add_expr(
     const Expr& expr,            ///< [in] 対象の論理式
@@ -626,8 +665,8 @@ public:
 
   /// @brief 与えられたAIGを充足する条件を追加する．
   /// @return 各出力に対応した条件を表すリテラルのリストを返す．
-  ///
-  /// 変数番号が lit_map に登録されていない時は例外が創出される．
+  /// @exception std::invalid_argument AIG中の変数番号が lit_map に含まれていない．
+  /// @sa SatLiteral
   std::vector<std::vector<SatLiteral>>
   add_aig(
     const AigMgr& aig_mgr,        ///< [in] 対象のAIG
@@ -635,6 +674,7 @@ public:
   );
 
   /// @brief half_adder の入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_half_adder(
     SatLiteral alit, ///< [in] 入力Aのリテラル
@@ -644,6 +684,7 @@ public:
   );
 
   /// @brief full_adder の入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   void
   add_full_adder(
     SatLiteral alit, ///< [in] 入力Aのリテラル
@@ -654,6 +695,7 @@ public:
   );
 
   /// @brief 多ビットadderの入出力の関係を表す条件を追加する．
+  /// @sa SatLiteral
   ///
   /// * alits, blits のサイズ <= slits のサイズでなければならない．
   /// * 片方が短い場合には上位ビットに0を仮定する．
@@ -668,6 +710,7 @@ public:
 
   /// @brief 1's counter の入出力の関係を表す条件を追加する．
   /// @return 個数を表す2進数を表すリテラルのリストを返す．
+  /// @sa SatLiteral
   std::vector<SatLiteral>
   add_counter(
     const std::vector<SatLiteral>& ilits, ///< [in] 入力のリテラルのリスト
@@ -675,6 +718,7 @@ public:
   );
 
   /// @brief 与えられたリテラルのうち1つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_one(
     SatLiteral lit1,
@@ -685,6 +729,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_one(
     SatLiteral lit1,
@@ -698,6 +743,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_one(
     SatLiteral lit1,
@@ -715,6 +761,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_one(
     SatLiteral lit1,
@@ -737,6 +784,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_one(
     SatLiteral lit1,
@@ -765,12 +813,14 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_one(
     const std::vector<SatLiteral>& lit_list ///< [in] 入力のリテラルのリスト
   );
 
   /// @brief 与えられたリテラルのうち2つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_two(
     SatLiteral lit1,
@@ -781,6 +831,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_two(
     SatLiteral lit1,
@@ -792,6 +843,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_two(
     SatLiteral lit1,
@@ -807,6 +859,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_two(
     SatLiteral lit1,
@@ -829,6 +882,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_two(
     SatLiteral lit1,
@@ -862,12 +916,14 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つしか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_two(
     const std::vector<SatLiteral>& lit_list ///< [in] 入力のリテラルのリスト
   );
 
   /// @brief 与えられたリテラルのうちk個しか true にならない条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_most_k(
     const std::vector<SatLiteral>& lit_list, ///< [in] 入力のリテラルのリスト
@@ -875,6 +931,7 @@ public:
   );
 
   /// @brief 与えられたリテラルのうち1以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_one(
     SatLiteral lit1,
@@ -885,6 +942,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_one(
     SatLiteral lit1,
@@ -896,6 +954,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_one(
     SatLiteral lit1,
@@ -908,6 +967,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_one(
     SatLiteral lit1,
@@ -921,6 +981,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_one(
     SatLiteral lit1,
@@ -935,6 +996,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち1つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_one(
     const std::vector<SatLiteral>& lit_list ///< [in] 入力のリテラルのリスト
@@ -944,6 +1006,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_two(
     SatLiteral lit1,
@@ -955,6 +1018,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_two(
     SatLiteral lit1,
@@ -969,6 +1033,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_two(
     SatLiteral lit1,
@@ -985,6 +1050,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_two(
     SatLiteral lit1,
@@ -1003,6 +1069,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_two(
     SatLiteral lit1,
@@ -1023,12 +1090,14 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち2つ以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_two(
     const std::vector<SatLiteral>& lit_list ///< [in] 入力のリテラルのリスト
   );
 
   /// @brief 与えられたリテラルのうちk個以上は true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_at_least_k(
     const std::vector<SatLiteral>& lit_list, ///< [in] 入力のリテラルのリスト
@@ -1036,6 +1105,7 @@ public:
   );
 
   /// @brief 与えられたリテラルのうち厳密に1つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_one(
     SatLiteral lit1,
@@ -1047,6 +1117,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に1つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_one(
     SatLiteral lit1,
@@ -1059,6 +1130,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に1つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_one(
     SatLiteral lit1,
@@ -1072,6 +1144,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に1つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_one(
     SatLiteral lit1,
@@ -1086,6 +1159,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に1つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_one(
     SatLiteral lit1,
@@ -1101,12 +1175,14 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に1つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_one(
     const std::vector<SatLiteral>& lit_list ///< [in] 入力のリテラルのリスト
   );
 
   /// @brief 与えられたリテラルのうち厳密に2つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_two(
     SatLiteral lit1,
@@ -1118,6 +1194,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に2つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_two(
     SatLiteral lit1,
@@ -1130,6 +1207,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に2つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_two(
     SatLiteral lit1,
@@ -1143,6 +1221,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に2つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_two(
     SatLiteral lit1,
@@ -1157,6 +1236,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に2つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_two(
     SatLiteral lit1,
@@ -1172,12 +1252,14 @@ public:
   }
 
   /// @brief 与えられたリテラルのうち厳密に2つが true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_two(
     const std::vector<SatLiteral>& lit_list ///< [in] 入力のリテラルのリスト
   );
 
   /// @brief 与えられたリテラルのうち厳密にk個が true になる条件を追加する．
+  /// @sa SatLiteral
   void
   add_exact_k(
     const std::vector<SatLiteral>& lit_list, ///< [in] 入力のリテラルのリスト
@@ -1189,6 +1271,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうちtrueになっている個数が1でない条件を追加する．
+  /// @sa SatLiteral
   void
   add_not_one(
     SatLiteral lit1,
@@ -1200,6 +1283,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうちtrueになっている個数が1でない条件を追加する．
+  /// @sa SatLiteral
   void
   add_not_one(
     SatLiteral lit1,
@@ -1213,6 +1297,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうちtrueになっている個数が1でない条件を追加する．
+  /// @sa SatLiteral
   void
   add_not_one(
     SatLiteral lit1,
@@ -1228,6 +1313,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうちtrueになっている個数が1でない条件を追加する．
+  /// @sa SatLiteral
   void
   add_not_one(
     SatLiteral lit1,
@@ -1245,6 +1331,7 @@ public:
   }
 
   /// @brief 与えられたリテラルのうちtrueになっている個数が1でない条件を追加する．
+  /// @sa SatLiteral
   void
   add_not_one(
     SatLiteral lit1,
@@ -1264,12 +1351,14 @@ public:
   }
 
   /// @brief 与えられたリテラルのうちtrueになっている個数が1でない条件を追加する．
+  /// @sa SatLiteral
   void
   add_not_one(
     const std::vector<SatLiteral>& lit_list ///< [in] 入力のリテラルのリスト
   );
 
   /// @brief A == B という条件を追加する．
+  /// @sa SatLiteral
   ///
   /// a_vec と b_vec のビット長が異なるときは短い方の上位ビットを
   /// 0と仮定する．
@@ -1280,6 +1369,7 @@ public:
   );
 
   /// @brief A == B という条件を追加する．
+  /// @sa SatLiteral
   void
   add_eq(
     const std::vector<SatLiteral>& a_vec, ///< [in] A を表すビットベクタ
@@ -1287,6 +1377,7 @@ public:
   );
 
   /// @brief A != B という条件を追加する．
+  /// @sa SatLiteral
   ///
   /// a_vec と b_vec のビット長が異なるときは短い方の上位ビットを
   /// 0と仮定する．
@@ -1297,6 +1388,7 @@ public:
   );
 
   /// @brief A != B という条件を追加する．
+  /// @sa SatLiteral
   void
   add_ne(
     const std::vector<SatLiteral>& a_vec, ///< [in] A を表すビットベクタ
@@ -1304,7 +1396,7 @@ public:
   );
 
   /// @brief A < B という条件を追加する．
-  /// @param[in] a_vec, b_vec A,Bを表すビットベクタ
+  /// @sa SatLiteral
   ///
   /// a_vec と b_vec のビット長が異なるときは短い方の上位ビットを
   /// 0と仮定する．
@@ -1315,6 +1407,7 @@ public:
   );
 
   /// @brief A < B という条件を追加する．
+  /// @sa SatLiteral
   void
   add_lt(
     const std::vector<SatLiteral>& a_vec, ///< [in] A を表すビットベクタ
@@ -1322,6 +1415,7 @@ public:
   );
 
   /// @brief A <= B という条件を追加する．
+  /// @sa SatLiteral
   ///
   /// a_vec と b_vec のビット長が異なるときは短い方の上位ビットを
   /// 0と仮定する．
@@ -1332,6 +1426,7 @@ public:
   );
 
   /// @brief A <= B という条件を追加する．
+  /// @sa SatLiteral
   void
   add_le(
     const std::vector<SatLiteral>& a_vec, ///< [in] A を表すビットベクタ
@@ -1339,6 +1434,7 @@ public:
   );
 
   /// @brief A > B という条件を追加する．
+  /// @sa SatLiteral
   ///
   /// a_vec と b_vec のビット長が異なるときは短い方の上位ビットを
   /// 0と仮定する．
@@ -1352,6 +1448,7 @@ public:
   }
 
   /// @brief A > B という条件を追加する．
+  /// @sa SatLiteral
   void
   add_gt(
     const std::vector<SatLiteral>& a_vec, ///< [in] A を表すビットベクタ
@@ -1359,6 +1456,7 @@ public:
   );
 
   /// @brief A >= B という条件を追加する．
+  /// @sa SatLiteral
   ///
   /// a_vec と b_vec のビット長が異なるときは短い方の上位ビットを
   /// 0と仮定する．
@@ -1372,6 +1470,7 @@ public:
   }
 
   /// @brief A >= B という条件を追加する．
+  /// @sa SatLiteral
   void
   add_ge(
     const std::vector<SatLiteral>& a_vec, ///< [in] A を表すビットベクタ
@@ -1390,12 +1489,14 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief one-hot 符号化した変数を返す．
+  /// @sa SatOneHotVar
   SatOneHotVar
   new_onehot_var(
     SizeType size ///< [in] サイズ
   );
 
   /// @brief a == b という条件を追加する．
+  /// @sa SatOneHotVar
   void
   add_eq(
     const SatOneHotVar& a,
@@ -1403,6 +1504,7 @@ public:
   );
 
   /// @brief a != b という条件を追加する．
+  /// @sa SatOneHotVar
   void
   add_ne(
     const SatOneHotVar& a,
@@ -1422,6 +1524,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 順序符号化した変数を返す．
+  /// @sa SatOrderedSet
   ///
   /// - min_val <= val <= max_val であるような val を表す．
   /// - min_val <= max_val である必要がある．
@@ -1433,6 +1536,7 @@ public:
   );
 
   /// @brief a < b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_lt(
     const SatOrderedSet& a,
@@ -1440,6 +1544,7 @@ public:
   );
 
   /// @brief a <= b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_le(
     const SatOrderedSet& a,
@@ -1447,6 +1552,7 @@ public:
   );
 
   /// @brief a > b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_gt(
     const SatOrderedSet& a,
@@ -1454,6 +1560,7 @@ public:
   );
 
   /// @brief a >= b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_ge(
     const SatOrderedSet& a,
@@ -1461,6 +1568,7 @@ public:
   );
 
   /// @brief a == b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_eq(
     const SatOrderedSet& a,
@@ -1468,6 +1576,7 @@ public:
   );
 
   /// @brief a != b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_ne(
     const SatOrderedSet& a,
@@ -1475,6 +1584,7 @@ public:
   );
 
   /// @brief a < b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_lt(
     const SatOrderedSet& a,
@@ -1482,6 +1592,7 @@ public:
   );
 
   /// @brief a <= b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_le(
     const SatOrderedSet& a,
@@ -1489,6 +1600,7 @@ public:
   );
 
   /// @brief a > b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_gt(
     const SatOrderedSet& a,
@@ -1499,6 +1611,7 @@ public:
   }
 
   /// @brief a >= b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_ge(
     const SatOrderedSet& a,
@@ -1509,6 +1622,7 @@ public:
   }
 
   /// @brief a の値が uval 以下か lval 以上という制約を作る．
+  /// @sa SatOrderedSet
   ///
   /// uval < lval を仮定する．
   /// そうでなければ常に成り立つ．
@@ -1520,6 +1634,7 @@ public:
   );
 
   /// @brief a == b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_eq(
     const std::vector<SatOrderedSet>& a,
@@ -1527,6 +1642,7 @@ public:
   );
 
   /// @brief a != b という条件を追加する．
+  /// @sa SatOrderedSet
   void
   add_ne(
     const std::vector<SatOrderedSet>& a,
@@ -1534,6 +1650,7 @@ public:
   );
 
   /// @brief a < b という条件を追加する．
+  /// @sa SatOrderedSet
   ///
   /// 辞書式順序で比較する．
   void
@@ -1543,6 +1660,7 @@ public:
   );
 
   /// @brief a <= b という条件を追加する．
+  /// @sa SatOrderedSet
   ///
   /// 辞書式順序で比較する．
   void
@@ -1552,6 +1670,7 @@ public:
   );
 
   /// @brief a > b という条件を追加する．
+  /// @sa SatOrderedSet
   ///
   /// 辞書式順序で比較する．
   void
@@ -1564,6 +1683,7 @@ public:
   }
 
   /// @brief a >= b という条件を追加する．
+  /// @sa SatOrderedSet
   ///
   /// 辞書式順序で比較する．
   void
@@ -1587,6 +1707,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief one-hot 符号化したマトリックスを返す．
+  /// @sa SatOneHotMatrix
   SatOneHotMatrix
   new_onehot_matrix(
     SizeType elem_size, ///< [in] 要素のサイズ
@@ -1607,6 +1728,7 @@ public:
 
   /// @brief SAT 問題を解く．
   /// @return 結果(SatBool3)を返す．
+  /// @sa SatBool3
   ///
   /// 結果の意味は以下の通り
   /// * SatBool3::True  充足した．
@@ -1623,6 +1745,7 @@ public:
 
   /// @brief assumption 付きの SAT 問題を解く．
   /// @return 結果(SatBool3)を返す．
+  /// @sa SatBool3
   ///
   /// 結果の意味は以下の通り
   /// * SatBool3::True  充足した．
@@ -1636,6 +1759,7 @@ public:
   );
 
   /// @brief 直前に解いた問題のモデルを返す．
+  /// @sa SatModel
   ///
   /// 返される値は内部のデータへの参照なので solve()
   /// が呼ばれる度に内容が変わるので必要ならばコピー
@@ -1647,6 +1771,7 @@ public:
   }
 
   /// @brief 直前の問題の矛盾の原因のリテラルを返す．
+  /// @sa SatLiteral
   ///
   /// 返される値は内部のデータへの参照なので solve()
   /// が呼ばれる度に内容が変わるので必要ならばコピー
@@ -1678,6 +1803,7 @@ public:
   );
 
   /// @brief solve() 中のリスタートのたびに呼び出されるメッセージハンドラの登録
+  /// @sa SatMsgHandler
   void
   reg_msg_handler(
     SatMsgHandler* msg_handler ///< [in] 登録するメッセージハンドラ
@@ -1699,6 +1825,7 @@ public:
   sane() const;
 
   /// @brief 現在の内部状態を得る．
+  /// @sa SatStats
   SatStats
   get_stats() const;
 
@@ -1748,6 +1875,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 条件リテラルを追加する．
+  /// @sa SatLiteral
   ///
   /// 以降の add_clause() にはこのリテラルの否定が追加される．
   void
@@ -1759,6 +1887,7 @@ private:
   }
 
   /// @brief 条件リテラルを追加する．
+  /// @sa SatLiteral
   ///
   /// 以降の add_clause() にはこのリテラルの否定が追加される．
   void

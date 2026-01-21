@@ -363,25 +363,6 @@ write(
   }
 }
 
-// True if having valid data
-PyObject*
-is_valid(
-  PyObject* self,
-  PyObject* Py_UNUSED(args)
-)
-{
-  auto& val = PyAigMgr::_get_ref(self);
-  try {
-    return PyBool_FromLong(val.is_valid());
-  }
-  catch ( std::exception err ) {
-    std::ostringstream buf;
-    buf << "exception" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
 // make a DEEP copy
 PyObject*
 copy(
@@ -1510,10 +1491,6 @@ PyMethodDef methods[] = {
    reinterpret_cast<PyCFunction>(write),
    METH_VARARGS | METH_KEYWORDS,
    PyDoc_STR("write file in specified format")},
-  {"is_valid",
-   is_valid,
-   METH_NOARGS,
-   PyDoc_STR("True if having valid data")},
   {"copy",
    copy,
    METH_NOARGS,

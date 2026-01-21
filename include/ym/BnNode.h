@@ -20,6 +20,7 @@ class NodeImpl;
 /// @ingroup BnGroup
 /// @class BnNode BnNode.h "BnNode.h"
 /// @brief BnModel のノードを表すクラス
+/// @sa BnFunc, BnNodeList
 ///
 /// 以下の情報を持つ．
 /// - ID番号
@@ -40,8 +41,6 @@ class NodeImpl;
 ///
 /// 公開されているメンバ関数はすべて const であり，内容を変更することは
 /// できない．
-///
-/// @sa BnFunc
 //////////////////////////////////////////////////////////////////////
 class BnNode
 {
@@ -119,22 +118,27 @@ public:
   }
 
   /// @brief ノード番号を返す．
+  /// @exception std::logic_error is_valid() = false の時
   SizeType
   id() const;
 
   /// @brief ノードの種類を返す．
+  /// @exception std::logic_error is_valid() = false の時
   Type
   type() const;
 
   /// @brief ノードの種類を表す文字列を返す．
+  /// @exception std::logic_error is_valid() = false の時
   std::string
   type_str() const;
 
   /// @brief 入力ノードの時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   bool
   is_input() const;
 
   /// @brief 論理ノードの時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   bool
   is_logic() const;
 
@@ -151,35 +155,46 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 外部入力ノードの時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   ///
   /// is_input() を包含している．
   bool
   is_primary_input() const;
 
   /// @brief DFFの出力ノードの時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   ///
   /// is_input() を包含している．
   bool
   is_dff_output() const;
 
   /// @brief 入力番号を返す．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @exception std::is_primary_input() = false の時
   ///
-  /// - is_primary_input() が true の時のみ意味を持つ．
-  /// - それ以外の時は std::logic_error 例外を送出する．
+  /// @code
+  /// // node1.is_primary_input() = true が成り立っていると仮定する．
+  /// auto node2 = model.input(node1.input_id())
+  /// // node2 == node1
+  /// @endcode
   SizeType
   input_id() const;
 
   /// @brief DFF番号を返す．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @exception std::logic_error is_dff_output() = false の時
   ///
-  /// - is_dff_output() が true の時のみ意味を持つ．
-  /// - それ以外の時は std::logic_error 例外を送出する．
+  /// @code
+  /// // node1.is_dff_output() = true が成り立っていると仮定する．
+  /// auto dff = model.dff(node1.dff_id());
+  /// // dff.output() = node1
+  /// @endcode
   SizeType
   dff_id() const;
 
   //////////////////////////////////////////////////////////////////////
   /// @}
   //////////////////////////////////////////////////////////////////////
-
 
 
 public:
@@ -189,33 +204,39 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 関数情報を返す．
-  ///
-  /// - is_logic() が true の時のみ意味を持つ．
-  /// - それ意外の時は std::logic_error 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @exception std::logic_error is_logic() = false の時
+  /// @sa BnFunc
   BnFunc
   func() const;
 
   /// @brief ファンイン数を返す．
+  /// @exception std::logic_error is_valid() = false の時
   ///
-  /// - is_logic() が true の時のみ意味を持つ．
-  /// - is_logic() が false の時は 0 を返す．
+  /// - is_logic() = false の時は 0 を返す．
   SizeType
   fanin_num() const;
 
   /// @brief ファンインのノードを返す．
-  ///
-  /// - is_logic() が true の時のみ意味を持つ．
-  /// - それ以外の時は std::logic_error 例外を送出する．
-  /// - pos が範囲外の時は std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @exception std::out_of_range 範囲外のアクセス
   BnNode
   fanin(
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < fanin_num() )
   ) const;
 
   /// @brief ファンインのノードのリストを返す．
+  /// @excneption std::logic_error is_valid() = false の時
+  /// @sa BnNodeList
   ///
-  /// - is_logic() が true の時のみ意味を持つ．
   /// - is_logic() が false の時は空リストを返す．
+  ///
+  /// @code
+  /// // node1.is_logic() = true が成り立っていると仮定する．
+  /// for ( auto node2: node1.fanin_list() ) {
+  ///   ...
+  /// }
+  /// @endcode
   BnNodeList
   fanin_list() const;
 

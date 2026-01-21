@@ -33,7 +33,7 @@ OpNode::use(
   return false;
 }
 
-// @breif step 番目のノードを使用している時 true となるリテラルを追加する．
+// @brief step 番目のノードを使用している時 true となるリテラルを追加する．
 void
 OpNode::add_use_lit(
   SizeType op_id,

@@ -77,7 +77,7 @@ VlMgr::pt_attr_list(
 }
 
 // @brief エラボレーションを行う．
-int
+SizeType
 VlMgr::elaborate(
   const ClibCellLibrary& cell_library
 )

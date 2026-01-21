@@ -30,12 +30,18 @@ BEGIN_NAMESPACE_YM_BC
 
 /// @brief 演算の種類を表す列挙型
 /// @ingroup BcGroup
+///
+/// 正規化された Boolean Chain の場合，2入力関数であれば
+/// AND, OR, XOR のみで表現可能となる．
+///
+/// 3入力以上の場合にはより複雑な関数が必要となるので
+/// 真理値表を用いる．
 enum class BcOpType : std::uint8_t {
-  NONE = 0,
-  AND  = 1,
-  OR   = 2,
-  XOR  = 3,
-  TV   = 4
+  NONE = 0, ///< 不正値
+  AND  = 1, ///< AND(論理積)
+  OR   = 2, ///< OR(論理和)
+  XOR  = 3, ///< XOR(排他的論理和)
+  TV   = 4  ///< 真理値表(3入力以上の場合のみ)
 };
 
 /// @brief ストリーム出力

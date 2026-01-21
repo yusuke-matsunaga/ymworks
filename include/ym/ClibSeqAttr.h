@@ -22,21 +22,20 @@ BEGIN_NAMESPACE_YM_CLIB
 ///
 /// 以下の情報を持つ．
 ///
-/// - slave clock の有無
+/// - slave clock/enable の有無
 /// - 非同期 clear の有無
 /// - 非同期 preset の有無
 /// - clear_preset_var1/var2 の値
 ///
-/// clear_preset_var1/var2 は 5x5 = 25 種類ある．
-/// あとは3bitで表せるので全部で8bitで表せる．
+/// - clear_preset_var1/var2 は 5x5 = 25 種類ある．
+/// - あとは3bitで表せるので全部で8bitで表せる．
 //////////////////////////////////////////////////////////////////////
 class ClibSeqAttr
 {
 public:
 
   /// @brief コンストラクタ
-  ///
-  /// clear と preset は両方 true ではない．
+  /// @exception std::invalid_argument clear と preset の両方 が true の時
   explicit
   ClibSeqAttr(
     bool slave_clock ///< [in] slave clock の有無
@@ -67,7 +66,7 @@ public:
 
   /// @brief コンストラクタ
   ///
-  /// clear と preset を持つ場合
+  /// - clear と preset を持つ場合
   ClibSeqAttr(
     bool slave_clock, ///< [in] slave clock の有無
     ClibCPV cpv1,     ///< [in] clear_preset_var1 の値
@@ -88,7 +87,7 @@ public:
   /// @brief インデックス値からの変換コンストラクタ
   explicit
   ClibSeqAttr(
-    SizeType index
+    SizeType index ///< [in] インデックス値
   )
   {
     if ( index < 6 ) {
@@ -136,6 +135,7 @@ public:
   }
 
   /// @brief clear と preset が同時にアサートされたときの var1 の値
+  /// @sa ClibCPV
   ClibCPV
   cpv1() const
   {
@@ -144,6 +144,7 @@ public:
   }
 
   /// @brief clear と preset が同時にアサートされたときの var2 の値
+  /// @sa ClibCPV
   ClibCPV
   cpv2() const
   {
@@ -180,6 +181,15 @@ public:
     return mPackedVal == right.mPackedVal;
   }
 
+  /// @brief 非等価比較演算子
+  bool
+  operator!=(
+    ClibSeqAttr right
+  )
+  {
+    return !operator==(right);
+  }
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -195,18 +205,8 @@ private:
 
 };
 
-/// @brief 非等価比較演算子
-inline
-bool
-operator!=(
-  ClibSeqAttr left,
-  ClibSeqAttr right
-)
-{
-  return !left.operator==(right);
-}
-
 /// @brief ストリーム出力演算子
+/// @relates ClibSeqAttr
 inline
 std::ostream&
 operator<<(

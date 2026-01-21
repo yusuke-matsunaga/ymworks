@@ -494,11 +494,6 @@ class ClibCellLibraryGen(PyObjGen):
                                             cvarname='fout_obj')],
                         doc_str='display contents')
 
-        def meth_to_string(writer):
-            writer.gen_return_py_string('val.to_string()')
-        self.add_method('to_string',
-                        func_body=meth_to_string)
-
         self.add_richcompare('eq_default')
 
         self.add_conv('default')

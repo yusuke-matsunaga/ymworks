@@ -19,13 +19,13 @@ BEGIN_NAMESPACE_YM_LOGIC
 /// @class NpnMap NpnMap.h "ym/NpnMap.h"
 /// @ingroup NpnGroup
 /// @brief NPN変換の情報を入れるクラス
+/// @sa NpnVmap
 ///
 /// 具体的には
 /// - 入力変数の写像
 /// - 入力変数の反転属性
 /// - 出力変数の反転属性
 /// の情報を持つ．入力変数の写像は N -> N の順列となる．
-/// @sa NpnVmap
 //////////////////////////////////////////////////////////////////////
 class NpnMap
 {

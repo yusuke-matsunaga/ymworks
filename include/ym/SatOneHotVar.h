@@ -43,6 +43,8 @@ public:
   }
 
   /// @brief 値に対応する変数を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa SatLiteral
   SatLiteral
   var(
     SizeType val ///< [in] 値 ( 0 <= val < size() )
@@ -54,6 +56,7 @@ public:
   }
 
   /// @brief 値に対応する変数のリストを返す．
+  /// @sa SatLiteral
   const std::vector<SatLiteral>&
   vars() const
   {
@@ -61,6 +64,7 @@ public:
   }
 
   /// @brief SATの解から値を得る．
+  /// @sa SatModel
   SizeType
   val(
     const SatModel& model ///< [in] SATの解

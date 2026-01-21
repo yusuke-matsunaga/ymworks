@@ -32,10 +32,6 @@ class CiCellLibrary;
 /// - 実際には実体の CiCellLibrary へのスマートポインタとなっている．
 /// アプリケーション側では CiCellLibrary のメモリ管理について気にする
 /// 必要はない．
-/// - 空のコンストラクタで作られたオブジェクトは不正値となる．
-/// - 不正値に対しては is_valid() が false となる．
-/// - is_valid() = false の場合にはそれ以外のメソッド呼び出しが
-///   std::logic_error 例外を送出する．
 //////////////////////////////////////////////////////////////////////
 class ClibCellLibrary
 {
@@ -47,7 +43,7 @@ public:
 
   /// @brief コンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibCellLibrary() = default;
 
   /// @brief 実体のポインタを引数にしたコンストラクタ
@@ -59,13 +55,15 @@ public:
 
   /// @brief コピーコンストラクタ
   ///
-  /// '浅い'コピーを行う．
+  /// src と同じ実体を共有する'浅い'コピーを行う．
   ClibCellLibrary(
     const ClibCellLibrary& src ///< [in] コピー元のオブジェクト
   ) = default;
 
   /// @brief 代入演算子
   /// @return 代入後の自身への参照を返す．
+  ///
+  /// src と同じ実体を共有する'浅い'コピーを行う．
   ClibCellLibrary&
   operator=(
     const ClibCellLibrary& src ///< [in] コピー元のオブジェクト
@@ -87,8 +85,18 @@ public:
 
   /// @brief mislib 形式のファイルを読み込む．
   /// @return 生成したライブラリを返す．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
-  /// 読み込みが失敗した場合は std::invalid_argument 例外を送出する．
+  /// @code
+  /// try {
+  ///   auto lib = ClibCellLibrary::read_mislib(filename);
+  ///   ...
+  /// }
+  /// catch ( std::invalid_argument e ) {
+  ///   std::cerr << e.what() << std::endl;
+  ///   ...
+  /// }
+  /// @endcode
   static
   ClibCellLibrary
   read_mislib(
@@ -97,8 +105,18 @@ public:
 
   /// @brief liberty 形式のファイルを読み込む．
   /// @return 生成したライブラリを返す．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
-  /// 読み込みが失敗した場合は std::invalid_argumnet 例外を送出する．
+  /// @code
+  /// try {
+  ///   auto lib = ClibCellLibrary::read_liberty(filename);
+  ///   ...
+  /// }
+  /// catch ( std::invalid_argument e ) {
+  ///   std::cerr << e.what() << std::endl;
+  ///   ...
+  /// }
+  /// @endcode
   static
   ClibCellLibrary
   read_liberty(
@@ -131,10 +149,13 @@ public:
   }
 
   /// @brief 名前の取得
+  /// @exception std::logic_error is_valid() = false の場合
   std::string
   name() const;
 
   /// @brief テクノロジの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibTechnology
   ///
   /// 返り値は
   /// - cmos
@@ -144,6 +165,8 @@ public:
   technology() const;
 
   /// @brief 遅延モデルの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibDelayModel
   ///
   /// 返り値は
   /// - generic_cmos
@@ -156,6 +179,9 @@ public:
   delay_model() const;
 
   /// @brief 区間のタイプの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error delay_model() が piecewise_cmos でなかった．
+  /// @sa ClibDelayModel, ClibVarType
   ///
   /// 返り値は
   /// - output_net_length ( piece_length )
@@ -172,6 +198,9 @@ public:
   piece_type() const;
 
   /// @brief 区間のリストの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::logic_error delay_model() が piecewise_cmos でなかった．
+  /// @sa ClibDelayModel
   ///
   /// delay_model() = ClibDelayModel::piecewise_cmos
   /// の時のみ意味を持つ．
@@ -179,42 +208,58 @@ public:
   piece_define() const;
 
   /// @brief バス命名規則の取得
+  /// @exception std::logic_error is_valid() = false の場合
   std::string
   bus_naming_style() const;
 
   /// @brief 日付情報の取得
+  /// @exception std::logic_error is_valid() = false の場合
   std::string
   date() const;
 
   /// @brief リビジョン情報の取得
+  /// @exception std::logic_error is_valid() = false の場合
   std::string
   revision() const;
 
   /// @brief コメント情報の取得
+  /// @exception std::logic_error is_valid() = false の場合
   std::string
   comment() const;
 
   /// @brief 時間単位の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibTimeUnit
   ClibTimeUnit
   time_unit() const;
 
   /// @brief 電圧単位の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibVoltageUnit
   ClibVoltageUnit
   voltage_unit() const;
 
   /// @brief 電流単位の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCurrentUnit
   ClibCurrentUnit
   current_unit() const;
 
   /// @brief 抵抗単位の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibResistanceUnit
   ClibResistanceUnit
   pulling_resistance_unit() const;
 
   /// @brief 容量単位の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCapacitanceUnit
   ClibCapacitanceUnit
   capacitive_load_unit() const;
 
   /// @brief 電力単位の取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibPowerUnit
   ClibPowerUnit
   leakage_power_unit() const;
 
@@ -230,13 +275,15 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief このライブラリの持つセル数の取得
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   cell_num() const;
 
   /// @brief セル情報の取得
   /// @return 該当するセル情報を返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCell
   ClibCell
   cell(
     SizeType cell_id ///< [in] セル番号 ( 0 <= cell_id < cell_num() )
@@ -244,46 +291,57 @@ public:
 
   /// @brief 名前からのセルの取得
   /// @return セルを返す．
-  ///
-  /// - 見つからなければ std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range name という名前のセルが見つからない時
+  /// @sa ClibCell
   ClibCell
   cell(
     const std::string& name ///< [in] セル名
   ) const;
 
   /// @brief 全セルのリストの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellList
   ClibCellList
   cell_list() const;
 
   /// @brief セルグループ数の取得
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   cell_group_num() const;
 
   /// @brief セルグループの取得
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellGroup
   ClibCellGroup
   cell_group(
     SizeType id ///< [in] グループ番号 ( 0 <= id < cell_group_num() )
   ) const;
 
   /// @brief セルグループのリストの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellGroupList
   ClibCellGroupList
   cell_group_list() const;
 
   /// @brief NPN同値クラス数の取得
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   npn_class_num() const;
 
   /// @brief NPN同値クラスの取得
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellClass
   ClibCellClass
   npn_class(
     SizeType id ///< [in] 同値クラス番号 ( 0 <= id < npn_class_num() )
   ) const;
 
   /// @brief NPN同値クラスのリストの取得
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellClassList
   ClibCellClassList
   npn_class_list() const;
 
@@ -299,74 +357,92 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 定数0セルのグループを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellGroup
   ClibCellGroup
   const0_func() const;
 
   /// @brief 定数1セルのグループを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellGroup
   ClibCellGroup
   const1_func() const;
 
   /// @brief バッファセルのグループを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellGroup
   ClibCellGroup
   buf_func() const;
 
   /// @brief インバータセルのグループを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellGroup
   ClibCellGroup
   inv_func() const;
 
   /// @brief ANDセルのグループを返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellGroup
   ClibCellGroup
   and_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief NANDセルのグループを返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellGroup
   ClibCellGroup
   nand_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief ORセルのグループを返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellGroup
   ClibCellGroup
   or_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief NORセルのグループを返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellGroup
   ClibCellGroup
   nor_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief XORセルのグループを返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellGroup
   ClibCellGroup
   xor_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief XNORセルのグループを返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibCellGroup
   ClibCellGroup
   xnor_func(
     SizeType ni ///< [in] 入力数 ( 2 <= ni <= 4 )
   ) const;
 
   /// @brief MUX2セルのグループを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellGroup
   ClibCellGroup
   mux2_func() const;
 
   /// @brief MUX4セルのグループを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellGroup
   ClibCellGroup
   mux4_func() const;
 
@@ -381,8 +457,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 指定されたFFタイプのセルクラスを返す．
-  ///
-  /// @sa ClibSeqAttr
+  /// @return attr に合致するセルクラスのリストを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibSeqAttr, ClibCellClassList
   ClibCellClassList
   find_ff_class(
     ClibSeqAttr attr ///< [in] FFタイプの属性
@@ -395,8 +472,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 指定されたラッチタイプのセルクラスを返す．
-  ///
-  /// @sa ClibSeqAttr
+  /// @return attr に合致するセルクラスのリストを返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibSeqAttr, ClibCellClassList
   ClibCellClassList
   find_latch_class(
     ClibSeqAttr attr ///< [in] FFタイプの属性
@@ -410,37 +488,42 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 総パタン数を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   pg_pat_num() const;
 
   /// @brief パタンを返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibPatGraph
   ClibPatGraph
   pg_pat(
     SizeType id ///< [in] パタン番号 ( 0 <= id < pg_pat_num() )
   ) const;
 
   /// @brief パタンの最大の入力数を得る．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   pg_max_input() const;
 
   /// @brief 総ノード数を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   pg_node_num() const;
 
   /// @brief ノードの種類を返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibPatTYpe
   ClibPatType
   pg_node_type(
     SizeType id ///< [in] ノード番号 ( 0 <= id < pg_node_num() )
   ) const;
 
   /// @brief ノードが入力ノードの時に入力番号を返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
-  /// - 入力ノードでない場合の返り値は不定
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @exception std::logic_error id のノードが入力でなかった．
   SizeType
   pg_input_id(
     SizeType id ///< [in] ノード番号 ( 0 <= id < pg_node_num() )
@@ -448,30 +531,37 @@ public:
 
   /// @brief 入力のノード番号を返す．
   /// @return input_id の入力に対応するノードのノード番号
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
   SizeType
   pg_input_node(
     SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < pg_max_input() )
   ) const;
 
   /// @brief 総枝数を返す．
+  /// @exception std::logic_error is_valid() = false の場合
   SizeType
   pg_edge_num() const;
 
   /// @brief 枝のファンイン元のノード番号を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
   SizeType
   pg_edge_from(
     SizeType id ///< [in] 枝番号 ( 0 <= id < edge_num() )
   ) const;
 
   /// @brief 枝のファンアウト先のノード番号を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
   SizeType
   pg_edge_to(
     SizeType id ///< [in] 枝番号 ( 0 <= id < edge_num() )
   ) const;
 
   /// @brief 枝のファンアウト先の入力位置( 0 or 1 ) を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
   SizeType
   pg_edge_pos(
     SizeType id ///< [in] 枝番号 ( 0 <= id < edge_num() )
@@ -480,6 +570,8 @@ public:
   /// @brief 枝の反転属性を返す．
   /// @retval true 反転あり
   /// @retval false 反転なし
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @exception std::out_of_range 範囲外のアクセス
   bool
   pg_edge_inv(
     SizeType id ///< [in] 枝番号 ( 0 <= id < edge_num() )
@@ -497,12 +589,14 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容をバイナリダンプする．
+  /// @exception std::logic_error is_valid() = false の場合
   void
   dump(
     std::ostream& s ///< [in] 出力先のストリーム
   ) const;
 
   /// @brief 内容をバイナリダンプする．
+  /// @exception std::logic_error is_valid() = false の場合
   void
   dump(
     const std::string& filename ///< [in] ファイル名
@@ -523,14 +617,11 @@ public:
   );
 
   /// @brief 内容を出力する(デバッグ用)．
+  /// @exception std::logic_error is_valid() = false の場合
   void
   display(
     std::ostream& s ///< [in] 出力先のストリーム
   ) const;
-
-  /// @brief 内容を表す文字列を返す．
-  std::string
-  to_string() const;
 
   //////////////////////////////////////////////////////////////////////
   /// @}
@@ -543,6 +634,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 等価比較
+  ///
+  /// - 内容ではなく同一の実体を持つ時等しいと見なす．
   bool
   operator==(
     ClibCellLibrary right ///< [in] オペランド

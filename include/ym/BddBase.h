@@ -21,11 +21,9 @@ class DdEdge;
 /// @ingroup DdGroup
 /// @brief Bdd, BddVar, BddLit の基底クラス
 ///
-/// - 基本的に個々の Bdd は一つの BddMgr に属す．
-/// - 例外は invalid な Bdd で関連する BddMgr を持たない．
-/// - Bdd 間の演算は同じ BddMgr に属するもののみ可とする．
-/// - 異なる BddMgr に属する Bdd の演算は std::invalid_argument 例外を
-///   送出する．
+/// - 大まかには Bdd を表すクラス
+/// - インターフェイス上で Bdd と BddVar, BddLit を区別するために
+///   BddBase を継承した別のクラスを用意している．
 //////////////////////////////////////////////////////////////////////
 class BddBase :
   public BddMgrHolder

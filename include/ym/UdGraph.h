@@ -134,6 +134,7 @@ public:
   }
 
   /// @brief 2つのノードを接続する．
+  /// @exception std::out_of_range 範囲外のアクセス
   ///
   /// - 無向グラフなので id1 <= id2 になるように正規化する．
   /// - id1 == id2 も許す(反射)
@@ -183,6 +184,8 @@ public:
 
   /// @brief 枝の情報を返す．
   /// @return 枝を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa UdEdge
   const UdEdge&
   edge(
     SizeType idx ///< [in] 枝番号 ( 0 <= idx < edge_num() )
@@ -196,6 +199,7 @@ public:
   }
 
   /// @brief 全ての枝のリストを返す．
+  /// @sa UdEdge
   const std::vector<UdEdge>&
   edge_list() const
   {
@@ -215,8 +219,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief DIMACS 形式のファイルを読み込む．
-  ///
-  /// エラーの場合には例外が送出される．
+  /// @return 結果の UdGraph を返す．
+  /// @exception std::invalid_argument 読み込みエラー
   static
   UdGraph
   read_dimacs(
@@ -224,8 +228,8 @@ public:
   );
 
   /// @brief DIMACS 形式のファイルを読み込む．
-  ///
-  /// エラーの場合には例外が送出される．
+  /// @return 結果の UdGraph を返す．
+  /// @exception std::invalid_argument 読み込みエラー
   static
   UdGraph
   read_dimacs(
@@ -252,6 +256,7 @@ public:
 
   /// @brief 彩色問題を解く
   /// @return 彩色数を返す．
+  /// @sa JsonValue
   SizeType
   coloring(
     std::vector<SizeType>& color_map, ///< [out] ノードに対する彩色結果(=SizeType)
@@ -262,6 +267,7 @@ public:
 
   /// @brief (最大)独立集合を求める．
   /// @return 独立集合の要素(ノード番号)を収める配列
+  /// @sa JsonValue
   std::vector<SizeType>
   independent_set(
     const JsonValue& option ///< [in] オプション
@@ -270,6 +276,7 @@ public:
 
   /// @brief (最大)クリークを求める．
   /// @return クリークの要素(ノード番号)を収める配列
+  /// @sa JsonValue
   std::vector<SizeType>
   max_clique(
     const JsonValue& option ///< [in] オプション

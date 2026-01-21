@@ -28,7 +28,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   ClibCellElem() = default;
 
   /// @brief 内容を指定したコンストラクタ

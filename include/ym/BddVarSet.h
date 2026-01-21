@@ -19,9 +19,9 @@ BEGIN_NAMESPACE_YM_DD
 /// @ingroup DdGroup
 /// @brief Bdd を用いて変数集合を表すクラス
 ///
-/// 実際には変数を表す関数の論理積を用いている．
-/// 空集合を表す場合には定数1を用いる．
-/// 定数0は用いない．
+/// - 実際には変数を表す関数の論理積を用いている．
+/// - 空集合を表す場合には定数1を用いる．
+/// - 定数0は用いない．
 //////////////////////////////////////////////////////////////////////
 class BddVarSet :
   public BddBase
@@ -31,6 +31,7 @@ class BddVarSet :
 public:
 
   /// @brief 要素のリストを指定したコンストラクタ
+  /// @sa BddVar
   ///
   /// - var_set を省略した場合には空集合となる．
   /// - var_set の要素に不正な BddVar が含まれている場合，
@@ -44,6 +45,9 @@ public:
   );
 
   /// @brief BddVar からの変換コンストラクタ
+  /// @sa BddVar
+  ///
+  /// var のみを要素とする singleton を作る．
   explicit
   BddVarSet(
     const BddVar& var
@@ -77,6 +81,7 @@ public:
   size() const;
 
   /// @brief 変数のリストに変換する．
+  /// @sa BddVar
   std::vector<BddVar>
   var_list() const;
 
@@ -87,6 +92,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 変数を追加する．
+  /// @sa BddVar
   BddVarSet
   operator+(
     const BddVar& right ///< [in] 変数
@@ -105,6 +111,7 @@ public:
   }
 
   /// @brief 変数を自身に追加する．
+  /// @sa BddVar
   BddVarSet&
   operator+=(
     const BddVar& right ///< [in] 変数
@@ -125,6 +132,7 @@ public:
   }
 
   /// @brief 変数を取り除く
+  /// @sa BddVar
   BddVarSet
   operator-(
     const BddVar& right ///< [in] 変数
@@ -134,6 +142,7 @@ public:
   }
 
   /// @brief 変数を自身の集合から取り除く
+  /// @sa BddVar
   BddVarSet&
   operator-=(
     const BddVar& right ///< [in] 変数
@@ -163,6 +172,9 @@ public:
   }
 
   /// @brief 共通集合を求める．
+  /// @sa BddVar
+  ///
+  /// 結果は空集合が singleton になる．
   BddVarSet
   operator&(
     const BddVar& right ///< [in] オペランド
@@ -172,6 +184,9 @@ public:
   }
 
   /// @brief 共通集合を求め代入する．
+  /// @sa BddVar
+  ///
+  /// 結果は空集合が singleton になる．
   BddVarSet&
   operator&=(
     const BddVar& right ///< [in] オペランド
@@ -201,6 +216,7 @@ public:
   }
 
   /// @brief 変数を含むかチェックする．
+  /// @sa BddVar
   bool
   operator&&(
     const BddVar& right ///< [in] 変数

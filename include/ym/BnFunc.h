@@ -115,42 +115,52 @@ public:
   }
 
   /// @brief 関数番号を返す．
+  /// @exception std::logic_error is_valid() = false の時
   SizeType
   id() const;
 
   /// @brief 入力数を返す．
+  /// @exception std::logic_error is_valid() = false の時
   SizeType
   input_num() const;
 
   /// @brief 種類を返す．
+  /// @exception std::logic_error is_valid() = false の時
   Type
   type() const;
 
   /// @brief 種類を表す文字列を返す．
+  /// @exception std::logic_error is_valid() = false の時
   std::string
   type_str() const;
 
   /// @brief プリミティブ型の時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   bool
   is_primitive() const;
 
   /// @brief カバー型の時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   bool
   is_cover() const;
 
   /// @brief 論理式型の時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   bool
   is_expr() const;
 
   /// @brief 真理値表型の時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   bool
   is_tvfunc() const;
 
   /// @brief BDD型の時 true を返す．
+  /// @exception std::logic_error is_valid() = false の時
   bool
   is_bdd() const;
 
   /// @brief 内容を出力する．
+  /// @exception std::logic_error is_valid() = false の時
   void
   print(
     std::ostream& s ///< [in] 出力先のストリーム
@@ -168,8 +178,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief プリミティブ型を返す．
-  ///
-  /// is_primitive() == false の時は std::logic_error 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @excpetion std::logic_error is_primitive() == false の時
+  /// @sa PrimType
   PrimType
   primitive_type() const;
 
@@ -185,14 +196,15 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief カバーを返す．
-  ///
-  /// is_cover() == false の時は std::logic_error 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @excpetion std::logic_error is_cover() == false の時
+  /// @sa SopCover
   const SopCover&
   input_cover() const;
 
   /// @brief 出力の反転属性を返す．
-  ///
-  /// is_cover() == false の時は std::logic_error 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @excpetion std::logic_error is_cover() == false の時
   bool
   output_inv() const;
 
@@ -209,8 +221,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 論理式を返す．
-  ///
-  /// isexpr() == false の時は std::logic_error 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @excpetion std::logic_error is_expr() == false の時
+  /// @sa Expr
   Expr
   expr() const;
 
@@ -227,8 +240,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 真理値表を返す．
-  ///
-  /// is_tvfunc() == false の時は std::logic_error 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @excpetion std::logic_error is_tvfunc() == false の時
+  /// @sa TvFunc
   const TvFunc&
   tvfunc() const;
 
@@ -245,8 +259,9 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief BDDを返す．
-  ///
-  /// is_bdd() == false の時は std::logic_error 例外を送出する．
+  /// @exception std::logic_error is_valid() = false の時
+  /// @excpetion std::logic_error is_bdd() == false の時
+  /// @sa Bdd
   Bdd
   bdd() const;
 

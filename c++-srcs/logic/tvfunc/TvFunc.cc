@@ -621,17 +621,6 @@ TvFunc::npn_canonical_all_map() const
   return map_list;
 }
 
-// @brief 内容を表す文字列を返す．
-std::string
-TvFunc::str(
-  int mode
-) const
-{
-  std::ostringstream buf;
-  print(buf, mode);
-  return buf.str();
-}
-
 // ハッシュ値を返す．
 SizeType
 TvFunc::hash() const
@@ -729,59 +718,52 @@ TvFunc::check_containment(
   return true;
 }
 
-// 内容の出力
-// mode は 2 か 16
-void
-TvFunc::print(
-  std::ostream& s,
-  int mode
-) const
+// @brief 内容を表す2進文字列を返す．
+std::string
+TvFunc::bin_str() const
 {
-  if ( is_invalid() ) {
-    // 空
-    return;
-  }
-
   // value(0) は LSB なので右端となる．
   // 出力するのは左端からなので反転させる必要がある．
   SizeType ni_pow = 1 << mInputNum;
-  const SizeType wordsize = sizeof(TvFunc::WordType) * 8;
-  if ( mode == 2 ) {
-    for ( SizeType p: Range(ni_pow) ) {
-      s << value(ni_pow - p - 1);
+  std::ostringstream s;
+  for ( SizeType p: Range(ni_pow) ) {
+    s << value(ni_pow - p - 1);
+  }
+  return s.str();
+}
+
+// @brief 内容を表す16進文字列を返す．
+std::string
+TvFunc::hex_str() const
+{
+  // value(0) は LSB なので右端となる．
+  // 出力するのは左端からなので反転させる必要がある．
+  SizeType ni_pow = 1 << mInputNum;
+  std::ostringstream s;
+  switch ( mInputNum ) {
+  case 0:
+    if ( value(0) ) {
+      s << "1";
     }
-  }
-  else if ( mode == 16 ) {
-    switch ( mInputNum ) {
-    case 0:
-      if ( value(0) ) {
-	s << "1";
-      }
-      else {
-	s << "0";
-      }
-      break;
-    case 1:
-      {
-	int v = value(0) + value(1) * 2;
-	s << v;
-      }
-      break;
-    default:
-      for ( SizeType p: Range_<SizeType, 4>(ni_pow) ) {
-	SizeType pos = ni_pow - p - 4;
-	int v = value(pos + 0);
-	v += value(pos + 1) * 2;
-	v += value(pos + 2) * 4;
-	v += value(pos + 3) * 8;
-	s << std::hex << v << std::dec;
-      }
-      break;
+    else {
+      s << "0";
     }
+    break;
+  case 1:
+    s << (value(0) + value(1) * 2);
+    break;
+  default:
+    for ( SizeType p: Range_<SizeType, 4>(ni_pow) ) {
+      SizeType pos = ni_pow - p - 4;
+      int v = value(pos + 0);
+      v += value(pos + 1) * 2;
+      v += value(pos + 2) * 4;
+      v += value(pos + 3) * 8;
+      s << std::hex << v << std::dec;
+    }
+    break;
   }
-  else {
-    throw std::invalid_argument{"'mode' should be 2 or 16"};
-  }
+  return s.str();
 }
 
 // @brief バイナリファイルの書き出し

@@ -75,7 +75,7 @@ public:
     return mBody[pos];
   }
 
-  /// @breif 先頭の反復子を得る．
+  /// @brief 先頭の反復子を得る．
   iterator
   begin() const { return mBody; }
 

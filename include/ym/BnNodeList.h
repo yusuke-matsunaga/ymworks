@@ -171,6 +171,27 @@ private:
 /// こちらのほうが効率がよい．
 /// ただし，内容を変更することはできない．
 /// BnModel や BnNode が持っているノードのリストの情報を表すために用いられる．
+///
+/// std::vector<> と同様の反復子を用意しているので範囲for文で用いる
+/// ことができる．
+///
+/// @code
+/// ...
+/// BnNodeList node_list(...);
+/// for ( auto node: node_list ) {
+///   // node には node_list の要素の BnNode が入っている．
+///   ...
+/// }
+/// @endcode
+///
+/// `[]` 演算子も使用可能
+///
+/// @code
+/// for ( SizeType i = 0; i < node_list.size(); ++ i ) {
+///   auto node = node_list[i];
+///   ...
+/// }
+/// @endcode
 //////////////////////////////////////////////////////////////////////
 class BnNodeList
 {

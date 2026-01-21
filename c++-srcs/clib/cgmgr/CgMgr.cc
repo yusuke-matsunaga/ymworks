@@ -256,7 +256,7 @@ CgMgr::_find_class(
   return rep_class;
 }
 
-// @breif パタングラフを生成する．
+// @brief パタングラフを生成する．
 void
 CgMgr::gen_pat()
 {

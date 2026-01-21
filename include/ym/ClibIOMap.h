@@ -18,19 +18,19 @@ BEGIN_NAMESPACE_YM_CLIB
 //////////////////////////////////////////////////////////////////////
 /// @class ClibIOMap ClibIOMap.h "ClibIOMap.h"
 /// @brief セルのピンの割当（変換）方法を表すクラス
-///
-/// 入力ピン，出力ピン，入出力ピンそれぞれの順序および極性の情報を持つ．
-/// ただし，入出力ピンに関しては入力と出力でおなじ順序，極性となる．
-/// 一つのピンに対する順序と極性の情報は ClibPinMap で表す．
-/// ClibPinMap は，変換後のピンに対するもとのピン番号と極性を表している．
-/// これは入力でも出力でも同じなので変換回路として考えると逆向きになる
-/// ことに注意．実際にはこういう定義にしないと入出力ピンの変換を表せない．
-/// 具体的に input_map(0) の結果が {3, false} だった場合，変換後の
-/// 0 番目のピンはもとの 3 番目の入力ピンとなる．
-/// output_map(0) の結果が {4, true} だった場合，変換後の 0 番目の
-/// ピンはもとの 4 番目の出力ピンを反転させたものとなる．
-/// こうすることで，複数の変換に対して結合則が成り立つ．
 /// @sa ClibPinMap
+///
+/// - 入力ピン，出力ピン，入出力ピンそれぞれの順序および極性の情報を持つ．
+/// - ただし，入出力ピンに関しては入力と出力でおなじ順序，極性となる．
+/// - 一つのピンに対する順序と極性の情報は ClibPinMap で表す．
+/// - ClibPinMap は，変換後のピンに対するもとのピン番号と極性を表している．
+/// - これは入力でも出力でも同じなので変換回路として考えると逆向きになる
+///   ことに注意．実際にはこういう定義にしないと入出力ピンの変換を表せない．
+/// - 具体的に input_map(0) の結果が {3, false} だった場合，変換後の
+///   0 番目のピンはもとの 3 番目の入力ピンとなる．
+///   output_map(0) の結果が {4, true} だった場合，変換後の 0 番目の
+///   ピンはもとの 4 番目の出力ピンを反転させたものとなる．
+/// - こうすることで，複数の変換に対して結合則が成り立つ．
 //////////////////////////////////////////////////////////////////////
 class ClibIOMap
 {
@@ -41,7 +41,7 @@ public:
 
   /// @brief 1出力用のコンストラクタ
   ///
-  /// 出力ピンのマッピングは極性のみが意味を持つ．
+  /// - 出力ピンのマッピングは極性のみが意味を持つ．
   explicit
   ClibIOMap(
     const std::vector<ClibPinMap>& input_map, ///< [in] 入力ピンのマッピング
@@ -112,6 +112,8 @@ public:
   }
 
   /// @brief 入力のマッピングを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibPinMap
   ClibPinMap
   input_map(
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < input_num() + inout_num() )
@@ -129,6 +131,7 @@ public:
   }
 
   /// @brief 入力のマッピングのリストを返す．
+  /// @sa ClibPinMap
   const std::vector<ClibPinMap>&
   input_map_list() const
   {
@@ -143,6 +146,8 @@ public:
   }
 
   /// @brief 出力のマッピングを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibPinMap
   ClibPinMap
   output_map(
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < output_num() + inout_num() )
@@ -160,6 +165,7 @@ public:
   }
 
   /// @brief 出力のマッピングのリストを返す．
+  /// @sa ClibPinMap
   const std::vector<ClibPinMap>&
   output_map_list() const
   {
@@ -174,6 +180,8 @@ public:
   }
 
   /// @brief 入出力のマッピングを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa ClibPinMap
   ClibPinMap
   inout_map(
     SizeType pos ///< [in] 位置番号 ( 0 <= pos && pos < inout_num() )
@@ -186,6 +194,7 @@ public:
   }
 
   /// @brief 入出力のマッピングのリストを返す．
+  /// @sa ClibPinMap
   const std::vector<ClibPinMap>&
   inout_map_list() const
   {
@@ -236,12 +245,14 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief バイナリダンプを行う．
+  /// @sa BinEnc
   void
   dump(
     BinEnc& bos ///< [in] 出力先のストリーム
   ) const;
 
   /// @brief バイナリダンプされた内容を読み込む．
+  /// @sa BinDec
   void
   restore(
     BinDec& bis ///< [in] 入力元のストリーム

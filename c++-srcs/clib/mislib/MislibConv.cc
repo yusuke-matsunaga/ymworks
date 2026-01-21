@@ -226,11 +226,11 @@ MislibConv::new_gate(
 
   // 出力ピンを作る．
   cell->add_output(opin_name,
-		   ClibCapacitance::infty(),
+		   ClibCapacitance::infinity(),
 		   ClibCapacitance{0.0},
-		   ClibCapacitance::infty(),
+		   ClibCapacitance::infinity(),
 		   ClibCapacitance{0.0},
-		   ClibTime::infty(),
+		   ClibTime::infinity(),
 		   ClibTime{0.0},
 		   oexpr,
 		   Expr::invalid());

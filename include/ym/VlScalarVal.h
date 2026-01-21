@@ -16,7 +16,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 /// @class VlScalarVal VlScalarVal.h "ym/VlScalarVal.h"
 /// @brief 1ビットの値を表すクラス
-/// @note 具体的には
+///
+/// 具体的には
 ///  - 0
 ///  - 1
 ///  - X ( 0 か 1 か不明 )

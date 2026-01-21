@@ -29,7 +29,7 @@ public:
 
   /// @brief 空のコンストラクタ
   ///
-  /// 不正値となる．
+  /// - 不正値となる．
   AigLiteral() = default;
 
   /// @brief デストラクタ

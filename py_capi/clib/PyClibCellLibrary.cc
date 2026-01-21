@@ -851,25 +851,6 @@ display(
   }
 }
 
-//
-PyObject*
-to_string(
-  PyObject* self,
-  PyObject* Py_UNUSED(args)
-)
-{
-  auto& val = PyClibCellLibrary::_get_ref(self);
-  try {
-    return PyString::ToPyObject(val.to_string());
-  }
-  catch ( std::exception err ) {
-    std::ostringstream buf;
-    buf << "exception" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
 // メソッド定義
 PyMethodDef methods[] = {
   {"read_mislib",
@@ -976,10 +957,6 @@ PyMethodDef methods[] = {
    reinterpret_cast<PyCFunction>(display),
    METH_VARARGS | METH_KEYWORDS,
    PyDoc_STR("display contents")},
-  {"to_string",
-   to_string,
-   METH_NOARGS,
-   PyDoc_STR("")},
   // end-marker
   {nullptr, nullptr, 0, nullptr}
 };

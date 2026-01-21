@@ -113,8 +113,7 @@ public:
 
   /// @brief blif ファイルの読み込みを行う．
   /// @return 結果の BnModel を返す．
-  ///
-  /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
   /// @code
   /// try {
@@ -134,8 +133,7 @@ public:
 
   /// @brief iscas89(.bench) ファイルの読み込みを行う．
   /// @return 結果の BnModel を返す．
-  ///
-  /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
   /// @code
   /// try {
@@ -155,8 +153,7 @@ public:
 
   /// @brief truth ファイルの読み込みを行う．
   /// @return 結果の BnModel を返す．
-  ///
-  /// 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
   /// @code
   /// try {
@@ -176,6 +173,7 @@ public:
 
   /// @brief ファイルの読み込みを行う．
   /// @return 結果の BnModel を返す．
+  /// @exception std::invalid_argument 読み込みが失敗した．
   ///
   /// - format は以下のいずれか
   ///   * blif
@@ -185,7 +183,7 @@ public:
   ///   * .blif -> blif
   ///   * .bench -> iscas89
   ///   * .truth -> truth
-  /// - 読み込みが失敗したら std::invalid_argument 例外を送出する．
+  ///
   ///
   /// @code
   /// try {
@@ -216,8 +214,8 @@ public:
 
   /// @brief 内容を出力する．
   ///
-  /// 形式は独自のもの．
-  /// 主にデバッグ用
+  /// - 形式は独自のもの．
+  /// - 主にデバッグ用
   void
   write(
     std::ostream& s ///< [in] 出力先のストリーム
@@ -245,14 +243,28 @@ public:
   dff_num() const;
 
   /// @brief DFFを返す．
+  /// @exception std::out_of_range dff_id が範囲外の場合
+  /// @sa BnDff
   ///
-  /// dff_id が範囲外の場合は std::out_of_range 例外が送出される．
+  /// @code
+  /// for ( SizeType i = 0; i < model.dff_num(); ++ i ) {
+  ///   auto dff = model.dff(i);
+  ///   ...
+  /// }
+  /// @endcode
   BnDff
   dff(
     SizeType dff_id ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
   ) const;
 
   /// @brief DFFのリストを返す．
+  /// @sa BnDffList
+  ///
+  /// @code
+  /// for ( auto dff: model.dff_list() ) {
+  ///   ...
+  /// }
+  /// @endcode
   BnDffList
   dff_list() const;
 
@@ -261,8 +273,15 @@ public:
   node_num() const;
 
   /// @brief ノードを返す．
+  /// @exception std::out_of_range id が範囲外の場合
+  /// @sa BnNode
   ///
-  /// id が範囲外の場合は std::out_of_range 例外が送出される．
+  /// @code
+  /// for ( SizeType i = 0; i < model.node_num(); ++ i ) {
+  ///   auto node = model.node(i);
+  ///   ...
+  /// }
+  /// @endcode
   BnNode
   node(
     SizeType id ///< [in] ノード番号 ( 0 <= id < node_num() )
@@ -273,14 +292,28 @@ public:
   input_num() const;
 
   /// @brief 入力ノードを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa BnNode
   ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @code
+  /// for ( SizeType i = 0; i < model.input_num(); ++ i ) {
+  ///   auto node = model.input(i);
+  ///   ...
+  /// }
+  /// @endcode
   BnNode
   input(
     SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < input_num() )
   ) const;
 
   /// @brief 入力ノードのリストを返す．
+  /// @sa BnNodeList
+  ///
+  /// @code
+  /// for ( auto node: model.input_list(); ++ i ) {
+  ///   ...
+  /// }
+  /// @endcode
   BnNodeList
   input_list() const;
 
@@ -289,14 +322,28 @@ public:
   output_num() const;
 
   /// @brief 出力ノードを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa BnNode
   ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @code
+  /// for ( SizeType i = 0; i < model.output_num(); ++ i ) {
+  ///   auto node = model.output(i);
+  ///   ...
+  /// }
+  /// @endcode
   BnNode
   output(
     SizeType output_id ///< [in] 出力番号 ( 0 <= output_id < output_num() )
   ) const;
 
   /// @brief 出力のノードのリストを返す．
+  /// @sa BnNodeList
+  ///
+  /// @code
+  /// for ( auto node: model.output_list(); ++ i ) {
+  ///   ...
+  /// }
+  /// @endcode
   BnNodeList
   output_list() const;
 
@@ -305,16 +352,30 @@ public:
   logic_num() const;
 
   /// @brief 論理ノードを返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa BnNode
   ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @code
+  /// for ( SizeType i = 0; i < model.logic_num(); ++ i ) {
+  ///   auto node = model.logic(i);
+  ///   ...
+  /// }
+  /// @endcode
   BnNode
   logic(
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < logic_num() )
   ) const;
 
   /// @brief 論理ノードのリストを返す．
+  /// @sa BnNodeList
   ///
-  /// 入力からのトポロジカル順になっている．
+  /// - 入力側からのトポロジカル順になっている．
+  ///
+  /// @code
+  /// for ( auto node: model.logic_list(); ++ i ) {
+  ///   ...
+  /// }
+  /// @endcode
   BnNodeList
   logic_list() const;
 
@@ -323,8 +384,15 @@ public:
   func_num() const;
 
   /// @brief 関数情報を取り出す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa BnFunc
   ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @code
+  /// for ( SizeType i = 0; i < model.func_num(); ++ i ) {
+  ///   auto node = model.func(i);
+  ///   ...
+  /// }
+  /// @endcode
   BnFunc
   func(
     SizeType func_id ///< [in] 関数番号 ( 0 <= func_id < func_num() )
@@ -341,6 +409,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief オプション情報を表す JSON オブジェクトを返す．
+  /// @sa JsonValue
   ///
   /// 以下の情報を持つ．
   /// - 'name': <名前の文字列>
@@ -365,24 +434,21 @@ public:
   comment_list() const;
 
   /// @brief 入力名を返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::out_of_range 範囲外のアクセス
   std::string
   input_name(
     SizeType input_id ///< [in] 入力番号 ( 0 <= input_id < input_num() )
   ) const;
 
   /// @brief 出力名を返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::out_of_range 範囲外のアクセス
   std::string
   output_name(
     SizeType output_id ///< [in] 出力番号 ( 0 <= output_id < output_num() )
   ) const;
 
   /// @brief DFF名を返す．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::out_of_range 範囲外のアクセス
   std::string
   dff_name(
     SizeType dff_id ///< [in] ラッチ番号 ( 0 <= dff_id < dff_num() )
@@ -399,6 +465,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief オプション情報をセットする．
+  /// @sa JsonValue
   void
   set_option(
     const JsonValue& option ///< [in] 追加するオプション
@@ -417,8 +484,7 @@ public:
   );
 
   /// @brief 入力名をセットする．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::out_of_range 範囲外のアクセス
   void
   set_input_name(
     SizeType input_id,      ///< [in] 入力番号 ( 0 <= input_id < input_num() )
@@ -426,8 +492,7 @@ public:
   );
 
   /// @brief 出力名をセットする．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::out_of_range 範囲外のアクセス
   void
   set_output_name(
     SizeType output_id,      ///< [in] 出力番号 ( 0 <= output_id < output_num() )
@@ -435,8 +500,7 @@ public:
   );
 
   /// @brief DFF名をセットする．
-  ///
-  /// - 範囲外のアクセスは std::out_of_range 例外を送出する．
+  /// @exception std::out_of_range 範囲外のアクセス
   void
   set_dff_name(
     SizeType dff_id,        ///< [in] DFF番号 ( 0 <= dff_id < dff_num() )
@@ -455,6 +519,7 @@ public:
 
   /// @brief DFFを作る．
   /// @return 生成したDFFを返す．
+  /// @sa BnDff
   ///
   /// リセット値は 'X', '0', '1' を仮定しているが，
   /// 実際には設定された値をただ保持しているだけで
@@ -466,10 +531,10 @@ public:
   );
 
   /// @brief DFFの入力ノードを設定する．
+  /// @exception std::invalid_argument 条件に合わない時
   ///
   /// - dff は同じ BnModel に属するDFFでなければならない．
   /// - src は同じ BnModel に属するノードでなければならない．
-  /// - 条件に合わない時は， std::invalid_argument 例外が送出される．
   void
   set_dff_src(
     const BnDff& dff, ///< [in] DFF
@@ -478,6 +543,7 @@ public:
 
   /// @brief 入力ノードを作る．
   /// @return 生成したノードを返す．
+  /// @sa BnNode
   BnNode
   new_input(
     const std::string& name = {} ///< [in] 名前
@@ -485,9 +551,10 @@ public:
 
   /// @brief 出力ノードを作る．
   /// @return 生成した出力ノードの出力番号を返す．
+  /// @exception std::invalid_argument 条件に合わない時
+  /// @sa BnNode
   ///
   /// - src は同じ BnModel に属するノードでなければならない．
-  /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   SizeType
   new_output(
     BnNode src,                  ///< [in] ソースノード
@@ -496,9 +563,10 @@ public:
 
   /// @brief プリミティブ型の論理ノードを作る．
   /// @return 生成したノードを返す．
+  /// @exception std::invalid_argument 条件に合わない時
+  /// @sa BnNode, PrimType
   ///
   /// - fanin_list の要素は同じ BnModel に属するノードでなければならない．
-  /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_primitive(
     PrimType primitive_type,              ///< [in] プリミティブの種類
@@ -507,10 +575,11 @@ public:
 
   /// @brief カバー型の論理ノードを登録する．
   /// @return 生成したノードを返す．
+  /// @exception std::invalid_argument 条件に合わない時
+  /// @sa BnNode, SopCover
   ///
   /// - fanin_list の要素は同じ BnModel に属するノードでなければならない．
   /// - fanin_list の要素数は input_cover の入力数と等しくなければならない．
-  /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_cover(
     const SopCover& input_cover,          ///< [in] 入力カバー
@@ -520,10 +589,11 @@ public:
 
   /// @brief 論理式型の論理ノードを登録する．
   /// @return 生成したノードを返す．
+  /// @exception std::invalid_argument 条件に合わない時
+  /// @sa BnNode, Expr
   ///
   /// - fanin_list の要素は同じ BnModel に属するノードでなければならない．
   /// - fanin_list の要素数は expr の入力数と等しくなければならない．
-  /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_expr(
     const Expr& expr,                     ///< [in] 論理式
@@ -532,10 +602,11 @@ public:
 
   /// @brief 真理値表型の論理ノードを登録する．
   /// @return 生成したノードを返す．
+  /// @exception std::invalid_argument 条件に合わない時
+  /// @sa BnNode, TvFunc
   ///
   /// - fanin_list の要素は同じ BnModel に属するノードでなければならない．
   /// - fanin_list の要素数は func の入力数と等しくなければならない．
-  /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_tvfunc(
     const TvFunc& func,                   ///< [in] 真理値表型の関数
@@ -544,10 +615,11 @@ public:
 
   /// @brief BDD型の論理ノードを登録する．
   /// @return 生成したノードを返す．
+  /// @exception std::invalid_argument 条件に合わない時
+  /// @sa BnNode, Bdd
   ///
   /// - fanin_list の要素は同じ BnModel に属するノードでなければならない．
   /// - fanin_list の要素数は bdd の入力数と等しくなければならない．
-  /// - 条件に合わない時は std::invalid_argument 例外を送出する．
   BnNode
   new_bdd(
     const Bdd& bdd,                       ///< [in] BDD

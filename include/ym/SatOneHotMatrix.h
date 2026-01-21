@@ -20,7 +20,9 @@ BEGIN_NAMESPACE_YM_SAT
 ///
 /// elem_size 個の要素のなかから sel_size 個を選ぶ組み合わせを表す．
 /// 正確には順列を表す．
+///
 /// 内部では elem_size x sel_size の２次元配列(行列)を持つ．
+///
 /// 各行，各列の変数に対して one-hot 制約が課されている．
 //////////////////////////////////////////////////////////////////////
 class SatOneHotMatrix
@@ -58,6 +60,8 @@ public:
   }
 
   /// @brief 値に対応する変数を返す．
+  /// @exception std::out_of_range 範囲外のアクセス
+  /// @sa SatLiteral
   SatLiteral
   var(
     SizeType sel_val, ///< [in] 選択番号 ( 0 <= sel_val < sel_size() )
@@ -70,6 +74,7 @@ public:
   }
 
   /// @brief 値に対応する変数のリストを返す．
+  /// @sa SatLiteral
   const std::vector<SatLiteral>&
   vars() const
   {
@@ -77,6 +82,8 @@ public:
   }
 
   /// @brief SATの解から値を得る．
+  /// @sa SatModel
+  /// @exception std::out_of_range 範囲外のアクセス
   SizeType
   val(
     const SatModel& model, ///< [in] SATの解

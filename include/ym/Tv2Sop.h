@@ -18,9 +18,9 @@ BEGIN_NAMESPACE_YM
 /// @class Tv2Sop Tv2Sop.h "Tv2Sop.h"
 /// @ingroup TvGroup
 /// @brief TvFunc に対して積和形論理式に関連した処理を行うクラス
+/// @sa TvFunc, SopCube
 ///
 /// 実はただの関数群の定義
-/// @sa TvFunc, SopCube
 //////////////////////////////////////////////////////////////////////
 class Tv2Sop
 {

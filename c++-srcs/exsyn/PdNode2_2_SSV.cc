@@ -130,7 +130,7 @@ PdNode2_2_SSV::get_opr(
   throw std::logic_error{"one-hot constraint is not satisfied"};
 }
 
-// @breif step 番目の入力(演算)を使用している時 true となるリテラルを追加する．
+// @brief step 番目の入力(演算)を使用している時 true となるリテラルを追加する．
 void
 PdNode2_2_SSV::add_use_lit(
   SizeType step,

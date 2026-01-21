@@ -454,15 +454,6 @@ ClibCellLibrary::display(
   writer.run(s);
 }
 
-// @brief 内容を表す文字列を返す．
-std::string
-ClibCellLibrary::to_string() const
-{
-  std::ostringstream buf;
-  display(buf);
-  return buf.str();
-}
-
 // @brief 内容をバイナリダンプする．
 void
 ClibCellLibrary::dump(
