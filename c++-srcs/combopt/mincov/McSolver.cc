@@ -137,7 +137,7 @@ McSolver::heuristic(
   return cost;
 }
 
-// @grief greedy アルゴリズムで解を求める．
+// @brief greedy アルゴリズムで解を求める．
 void
 McSolver::greedy(
   const McMatrix& matrix,
@@ -188,7 +188,7 @@ McSolver::greedy(
   }
 }
 
-// @grief naive な random アルゴリズムで解を求める．
+// @brief naive な random アルゴリズムで解を求める．
 void
 McSolver::random(
   const McMatrix& matrix,

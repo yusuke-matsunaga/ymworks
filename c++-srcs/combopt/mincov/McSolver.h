@@ -93,7 +93,7 @@ private:
   // 内部で用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @grief greedy アルゴリズムで解を求める．
+  /// @brief greedy アルゴリズムで解を求める．
   /// @param[in] matrix 対象の行列
   /// @param[out] solution 選ばれた列集合
   void
@@ -102,7 +102,7 @@ private:
     std::vector<int>& solution
   );
 
-  /// @grief naive な random アルゴリズムで解を求める．
+  /// @brief naive な random アルゴリズムで解を求める．
   /// @param[in] matrix 対象の行列
   /// @param[out] solution 選ばれた列集合
   void

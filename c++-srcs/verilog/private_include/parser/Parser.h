@@ -1864,7 +1864,7 @@ public:
   void
   init_genelse();
 
-  /// @grief generate-if の else 節の終了
+  /// @brief generate-if の else 節の終了
   void
   end_genelse();
 

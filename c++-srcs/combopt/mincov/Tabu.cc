@@ -18,7 +18,7 @@ BEGIN_NAMESPACE_YM_MINCOV
 // クラス Tabu
 //////////////////////////////////////////////////////////////////////
 
-// @grief greedy アルゴリズムで解を求める．
+// @brief greedy アルゴリズムで解を求める．
 void
 Tabu::solve(
   const McMatrix& matrix,

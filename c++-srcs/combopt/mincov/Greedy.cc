@@ -28,7 +28,7 @@ Greedy::Greedy(
 {
 }
 
-// @grief greedy アルゴリズムで解を求める．
+// @brief greedy アルゴリズムで解を求める．
 SizeType
 Greedy::solve(
   std::vector<SizeType>& solution
