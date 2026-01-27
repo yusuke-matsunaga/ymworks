@@ -201,6 +201,42 @@ class CxxWriter(Writer):
         line += ';'
         self.write_line(line)
 
+    def gen_assign2(self, lval, rval_list, *,
+                    autodef=False,
+                    autoref=False,
+                    casttype=None):
+        """代入文を出力する．(右辺式が複数行の場合)
+        """
+        n = len(rval_list)
+        assert n > 0
+        if n == 1:
+            self.gen_assign(lval, rval_list[0],
+                            autodef=autodef,
+                            autoref=autoref,
+                            casttype=casttype)
+            return
+        if autodef:
+            line = 'auto '
+        elif autoref:
+            line = 'auto& '
+        else:
+            line = ''
+        line += f'{lval} = '
+        rval0 = rval_list[0]
+        indent = len(line)
+        spc = ' ' * indent
+        if casttype is None:
+            line += rval0
+        else:
+            line += f'static_cast<{casttype}>({rval0}'
+        self.write_line(line)
+        for i in range(1, n):
+            rval = rval_list[i]
+            line = spc + rval
+            if i == n - 1:
+                line += ';'
+            self.write_line(line)
+
     def gen_stmt(self, stmt):
         self.write_line(f'{stmt};')
 

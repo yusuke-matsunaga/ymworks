@@ -199,6 +199,7 @@ class PyObjGen(GenBase):
                  typename=None,
                  objectname=None,
                  pyname,
+                 doc_str="default",
                  header_include_files=[],
                  source_include_files=[]):
         super().__init__()
@@ -271,7 +272,9 @@ class PyObjGen(GenBase):
         self.flags = 'Py_TPFLAGS_DEFAULT'
 
         # 説明文
-        self.doc_str = f'Python extended object for {self.classname}'
+        if doc_str == "default":
+            doc_str = f'Python extended object for {self.classname}'
+        self.doc_str = doc_str
 
     def add_preamble(self, func_body):
         if self.__preamble_gen is not None:
@@ -1153,8 +1156,29 @@ class PyObjGen(GenBase):
                  comment='new 関数')
 
     def make_tp_init(self, writer):
+
         def gen_tp(writer, tp_name, rval):
             writer.gen_assign(f'{self.typename}.tp_{tp_name}', rval)
+
+        def gen_tp_doc(writer):
+            doc_str = self.doc_str
+            if isinstance(doc_str, str):
+                gen_tp(writer, 'doc', f'PyDoc_STR("{doc_str}")')
+            else:
+                n = len(doc_str)
+                rval_list = []
+                for i, s in enumerate(doc_str):
+                    if i == 0:
+                        rval = f'PyDoc_STR("{s}'
+                    else:
+                        rval = f'"{s}'
+                    if i < (n - 1):
+                        rval += r'\n"'
+                    else:
+                        rval += '")'
+                    rval_list.append(rval)
+                writer.gen_assign2(f'{self.typename}.tp_doc', rval_list)
+
         gen_tp(writer, 'name', f'"{self.pyname}"')
         gen_tp(writer, 'basicsize', self.basicsize)
         gen_tp(writer, 'itemsize', self.itemsize)
@@ -1175,7 +1199,7 @@ class PyObjGen(GenBase):
         if self.__str_gen is not None:
             self.__str_gen.gen_tp(writer)
         gen_tp(writer, 'flags', self.flags)
-        gen_tp(writer, 'doc', f'PyDoc_STR("{self.doc_str}")')
+        gen_tp_doc(writer)
         if self.__iter_gen is not None:
             self.__iter_gen.gen_tp(writer)
         if self.__iternext_gen is not None:

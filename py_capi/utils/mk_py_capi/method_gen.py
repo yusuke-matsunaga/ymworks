@@ -110,8 +110,7 @@ class MethodGen:
             args = [arg0, arg1]
             if method.arg_parser.has_keywords():
                 args += [CArg.Kwds()]
-            with writer.gen_func_block(comment=method.doc_str,
-                                       return_type='PyObject*',
+            with writer.gen_func_block(return_type='PyObject*',
                                        func_name=method.func_name,
                                        args=args):
                 method.arg_parser(writer)
@@ -149,8 +148,24 @@ class MethodGen:
                     line += ' | METH_STATIC'
                 line += ','
                 writer.write_line(line)
-                line = f'PyDoc_STR("{method.doc_str}")}},'
-                writer.write_line(line)
+                if isinstance(method.doc_str, str):
+                    line = f'PyDoc_STR("{method.doc_str}")}},'
+                    writer.write_line(line)
+                else:
+                    line = f'PyDoc_STR("'
+                    indent = len(line) - 1
+                    spc = ' ' * indent
+                    line += method.doc_str[0]
+                    line += r'\n"'
+                    writer.write_line(line)
+                    n = len(method.doc_str)
+                    for i in range(1, n):
+                        line = spc + '"' + method.doc_str[i]
+                        if i < n - 1:
+                            line += r'\n"'
+                        else:
+                            line += '")},'
+                        writer.write_line(line)
                 writer.indent_dec(1)
             writer.gen_comment('end-marker')
             writer.write_line('{nullptr, nullptr, 0, nullptr}')
