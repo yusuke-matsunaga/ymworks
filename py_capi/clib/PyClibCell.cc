@@ -85,7 +85,6 @@ richcompare_func(
   }
 }
 
-// return pin
 PyObject*
 pin(
   PyObject* self,
@@ -120,7 +119,6 @@ pin(
   }
 }
 
-// return list of pins
 PyObject*
 meth_pin_list(
   PyObject* self,
@@ -139,7 +137,6 @@ meth_pin_list(
   }
 }
 
-// return input pin
 PyObject*
 input(
   PyObject* self,
@@ -169,7 +166,6 @@ input(
   }
 }
 
-// return list of input pins
 PyObject*
 meth_input_list(
   PyObject* self,
@@ -188,7 +184,6 @@ meth_input_list(
   }
 }
 
-// return output pin
 PyObject*
 output(
   PyObject* self,
@@ -218,7 +213,6 @@ output(
   }
 }
 
-// return list of output pins
 PyObject*
 meth_output_list(
   PyObject* self,
@@ -237,7 +231,6 @@ meth_output_list(
   }
 }
 
-// return inout pin
 PyObject*
 inout(
   PyObject* self,
@@ -267,7 +260,6 @@ inout(
   }
 }
 
-// return list of inout pins
 PyObject*
 meth_inout_list(
   PyObject* self,
@@ -286,7 +278,6 @@ meth_inout_list(
   }
 }
 
-// return input/inout pin
 PyObject*
 input2(
   PyObject* self,
@@ -316,7 +307,6 @@ input2(
   }
 }
 
-// return output/inout pin
 PyObject*
 output2(
   PyObject* self,
@@ -346,7 +336,6 @@ output2(
   }
 }
 
-// return internal pin
 PyObject*
 internal(
   PyObject* self,
@@ -376,7 +365,6 @@ internal(
   }
 }
 
-// return list of internal pins
 PyObject*
 meth_internal_list(
   PyObject* self,
@@ -395,7 +383,6 @@ meth_internal_list(
   }
 }
 
-// return bus
 PyObject*
 bus(
   PyObject* self,
@@ -425,7 +412,6 @@ bus(
   }
 }
 
-// return list of buses
 PyObject*
 meth_bus_list(
   PyObject* self,
@@ -444,7 +430,6 @@ meth_bus_list(
   }
 }
 
-// return bundle
 PyObject*
 bundle(
   PyObject* self,
@@ -474,7 +459,6 @@ bundle(
   }
 }
 
-// return list of bundles
 PyObject*
 meth_bundle_list(
   PyObject* self,
@@ -493,7 +477,6 @@ meth_bundle_list(
   }
 }
 
-// return list of timing information
 PyObject*
 timing_list(
   PyObject* self,
@@ -536,7 +519,6 @@ timing_list(
   }
 }
 
-// True if LOGIC cell
 PyObject*
 is_logic(
   PyObject* self,
@@ -555,7 +537,6 @@ is_logic(
   }
 }
 
-// True if FF cell
 PyObject*
 is_ff(
   PyObject* self,
@@ -574,7 +555,6 @@ is_ff(
   }
 }
 
-// True if LATCH cell
 PyObject*
 is_latch(
   PyObject* self,
@@ -593,7 +573,6 @@ is_latch(
   }
 }
 
-// True if the output has logic expression
 PyObject*
 has_logic(
   PyObject* self,
@@ -628,7 +607,6 @@ has_logic(
   }
 }
 
-// return logic expression of the output
 PyObject*
 logic_expr(
   PyObject* self,
@@ -658,7 +636,6 @@ logic_expr(
   }
 }
 
-// True if the output has tristate expression
 PyObject*
 has_tristate(
   PyObject* self,
@@ -688,7 +665,6 @@ has_tristate(
   }
 }
 
-// return tristate expression of the output
 PyObject*
 tristate_expr(
   PyObject* self,
@@ -718,7 +694,6 @@ tristate_expr(
   }
 }
 
-// True if having CLEAR pin
 PyObject*
 has_clear(
   PyObject* self,
@@ -737,7 +712,6 @@ has_clear(
   }
 }
 
-// True if having PRESET pin
 PyObject*
 has_preset(
   PyObject* self,

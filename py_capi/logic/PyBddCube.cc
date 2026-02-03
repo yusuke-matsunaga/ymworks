@@ -164,7 +164,6 @@ richcompare_func(
   }
 }
 
-// make an universal cube(empty cube)
 PyObject*
 universal_cube(
   PyObject* Py_UNUSED(self),
@@ -182,7 +181,6 @@ universal_cube(
   }
 }
 
-// make invalid BddCube object
 PyObject*
 invalid(
   PyObject* Py_UNUSED(self),
@@ -200,7 +198,6 @@ invalid(
   }
 }
 
-// return True if univeral cube
 PyObject*
 is_universal_cube(
   PyObject* self,
@@ -219,7 +216,6 @@ is_universal_cube(
   }
 }
 
-// return True if invalid
 PyObject*
 is_invalid(
   PyObject* self,
@@ -238,7 +234,6 @@ is_invalid(
   }
 }
 
-//
 PyObject*
 bdd(
   PyObject* self,

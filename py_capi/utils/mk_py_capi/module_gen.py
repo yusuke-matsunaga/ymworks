@@ -146,6 +146,7 @@ class ModuleGen(GenBase):
                  submodule_list=[],
                  include_dir_list=[],
                  target_list=[],
+                 has_pytest=False,
                  ex_init=None):
         super().__init__()
         self.modulename = modulename
@@ -166,6 +167,9 @@ class ModuleGen(GenBase):
 
         # ターゲットのリスト
         self.target_list = target_list
+
+        # pytest の有無
+        self.has_pytest = has_pytest
 
         # 追加の初期化コード
         self.ex_init_gen = ex_init
@@ -354,7 +358,8 @@ class ModuleGen(GenBase):
     def make_add_subdirectory(self, writer):
         for name, _ in self.submodule_list:
             writer.gen_add_subdirectory(name)
-        writer.gen_add_subdirectory('pytest')
+        if self.has_pytest:
+            writer.gen_add_subdirectory('pytest')
 
     def make_set_sources(self, writer):
         writer.write_line(f'set ( {self.modulename}_SOURCES')

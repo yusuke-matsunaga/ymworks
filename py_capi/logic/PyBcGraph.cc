@@ -48,7 +48,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// return OP node
 PyObject*
 op(
   PyObject* self,
@@ -78,7 +77,6 @@ op(
   }
 }
 
-// return output edge
 PyObject*
 output(
   PyObject* self,
@@ -108,7 +106,6 @@ output(
   }
 }
 
-// return output level
 PyObject*
 output_level(
   PyObject* self,
@@ -138,7 +135,6 @@ output_level(
   }
 }
 
-// return edge level
 PyObject*
 edge_level(
   PyObject* self,
@@ -175,7 +171,6 @@ edge_level(
   }
 }
 
-// add OP
 PyObject*
 add_op(
   PyObject* self,
@@ -222,7 +217,6 @@ add_op(
   }
 }
 
-// add TVOP
 PyObject*
 add_tvop(
   PyObject* self,
@@ -269,7 +263,6 @@ add_tvop(
   }
 }
 
-// add output
 PyObject*
 add_output(
   PyObject* self,
@@ -306,7 +299,6 @@ add_output(
   }
 }
 
-// add output of constant 0
 PyObject*
 add_zero_output(
   PyObject* self,
@@ -325,7 +317,6 @@ add_zero_output(
   }
 }
 
-// add output of constant 1
 PyObject*
 add_one_output(
   PyObject* self,

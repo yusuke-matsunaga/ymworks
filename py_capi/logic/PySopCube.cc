@@ -224,7 +224,6 @@ richcompare_func(
   }
 }
 
-// make a copy
 PyObject*
 copy(
   PyObject* self,
@@ -243,7 +242,6 @@ copy(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,
@@ -262,7 +260,6 @@ is_valid(
   }
 }
 
-// True if invalid
 PyObject*
 is_invalid(
   PyObject* self,
@@ -281,7 +278,6 @@ is_invalid(
   }
 }
 
-// True if tautology
 PyObject*
 is_tautology(
   PyObject* self,
@@ -300,7 +296,6 @@ is_tautology(
   }
 }
 
-// get pat
 PyObject*
 get_pat(
   PyObject* self,
@@ -341,7 +336,6 @@ get_pat(
   }
 }
 
-// check if the specified literal is present
 PyObject*
 check_literal(
   PyObject* self,
@@ -378,7 +372,6 @@ check_literal(
   }
 }
 
-// return a list of literals
 PyObject*
 literal_list(
   PyObject* self,
@@ -397,7 +390,6 @@ literal_list(
   }
 }
 
-// check containment
 PyObject*
 check_containment(
   PyObject* self,
@@ -438,7 +430,6 @@ check_containment(
   }
 }
 
-// convert to 'Expr'
 PyObject*
 expr(
   PyObject* self,
@@ -457,7 +448,6 @@ expr(
   }
 }
 
-// convert to 'TvFunc'
 PyObject*
 tvfunc(
   PyObject* self,

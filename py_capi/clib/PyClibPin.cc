@@ -47,7 +47,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// True if INPUT
 PyObject*
 is_input(
   PyObject* self,
@@ -66,7 +65,6 @@ is_input(
   }
 }
 
-// True if OUTPUT
 PyObject*
 is_output(
   PyObject* self,
@@ -85,7 +83,6 @@ is_output(
   }
 }
 
-// True if INOUT
 PyObject*
 is_inout(
   PyObject* self,
@@ -104,7 +101,6 @@ is_inout(
   }
 }
 
-// True if INTERNAL
 PyObject*
 is_internal(
   PyObject* self,

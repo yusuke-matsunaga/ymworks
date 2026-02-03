@@ -48,7 +48,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// calculate RISE delay
 PyObject*
 calc_rise_delay(
   PyObject* self,
@@ -95,7 +94,6 @@ calc_rise_delay(
   }
 }
 
-// calculate FALL delay
 PyObject*
 calc_fall_delay(
   PyObject* self,
@@ -142,7 +140,6 @@ calc_fall_delay(
   }
 }
 
-// calculate RISE transition
 PyObject*
 calc_rise_transition(
   PyObject* self,
@@ -189,7 +186,6 @@ calc_rise_transition(
   }
 }
 
-// calculate FALL transition
 PyObject*
 calc_fall_transition(
   PyObject* self,
@@ -236,7 +232,6 @@ calc_fall_transition(
   }
 }
 
-// return rise pin resistance
 PyObject*
 rise_pin_resistance(
   PyObject* self,
@@ -266,7 +261,6 @@ rise_pin_resistance(
   }
 }
 
-// return fall pin resistance
 PyObject*
 fall_pin_resistance(
   PyObject* self,
@@ -296,7 +290,6 @@ fall_pin_resistance(
   }
 }
 
-// return rise delay intercept
 PyObject*
 rise_delay_intercept(
   PyObject* self,
@@ -326,7 +319,6 @@ rise_delay_intercept(
   }
 }
 
-// return fall delay intercept
 PyObject*
 fall_delay_intercept(
   PyObject* self,

@@ -78,7 +78,6 @@ richcompare_func(
   }
 }
 
-// True if PRIMITIVE type
 PyObject*
 is_primitive(
   PyObject* self,
@@ -97,7 +96,6 @@ is_primitive(
   }
 }
 
-// True if COVER type
 PyObject*
 is_cover(
   PyObject* self,
@@ -116,7 +114,6 @@ is_cover(
   }
 }
 
-// True if EXPR type
 PyObject*
 is_expr(
   PyObject* self,
@@ -135,7 +132,6 @@ is_expr(
   }
 }
 
-// True if TVFUNC type
 PyObject*
 is_tvfunc(
   PyObject* self,
@@ -154,7 +150,6 @@ is_tvfunc(
   }
 }
 
-// True if BDD type
 PyObject*
 is_bdd(
   PyObject* self,
@@ -173,7 +168,6 @@ is_bdd(
   }
 }
 
-// print contents
 PyObject*
 print(
   PyObject* self,

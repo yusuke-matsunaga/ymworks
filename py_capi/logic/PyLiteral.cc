@@ -133,7 +133,6 @@ richcompare_func(
   }
 }
 
-//
 PyObject*
 set(
   PyObject* self,
@@ -171,7 +170,6 @@ set(
   }
 }
 
-//
 PyObject*
 is_valid(
   PyObject* self,
@@ -190,7 +188,6 @@ is_valid(
   }
 }
 
-//
 PyObject*
 is_positive(
   PyObject* self,
@@ -209,7 +206,6 @@ is_positive(
   }
 }
 
-//
 PyObject*
 is_negative(
   PyObject* self,
@@ -228,7 +224,6 @@ is_negative(
   }
 }
 
-//
 PyObject*
 make_positive(
   PyObject* self,
@@ -247,7 +242,6 @@ make_positive(
   }
 }
 
-//
 PyObject*
 make_negative(
   PyObject* self,

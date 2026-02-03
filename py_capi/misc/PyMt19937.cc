@@ -44,7 +44,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// generate a random number
 PyObject*
 eval(
   PyObject* self,

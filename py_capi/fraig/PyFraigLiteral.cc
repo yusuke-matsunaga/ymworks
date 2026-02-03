@@ -169,7 +169,6 @@ richcompare_func(
   }
 }
 
-// return ZERO literal
 PyObject*
 zero(
   PyObject* Py_UNUSED(self),
@@ -187,7 +186,6 @@ zero(
   }
 }
 
-// return ONE literal
 PyObject*
 one(
   PyObject* Py_UNUSED(self),
@@ -205,7 +203,6 @@ one(
   }
 }
 
-// True if ZERO
 PyObject*
 is_zero(
   PyObject* self,
@@ -224,7 +221,6 @@ is_zero(
   }
 }
 
-// True if ONE
 PyObject*
 is_one(
   PyObject* self,
@@ -243,7 +239,6 @@ is_one(
   }
 }
 
-// True if constant(ZERO or ONE)
 PyObject*
 is_const(
   PyObject* self,
@@ -262,7 +257,6 @@ is_const(
   }
 }
 
-// True if AND node
 PyObject*
 is_and(
   PyObject* self,

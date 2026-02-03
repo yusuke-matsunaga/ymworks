@@ -47,7 +47,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// make new Input
 PyObject*
 new_input(
   PyObject* self,
@@ -66,7 +65,6 @@ new_input(
   }
 }
 
-// make new AND
 PyObject*
 new_and(
   PyObject* self,
@@ -103,7 +101,6 @@ new_and(
   }
 }
 
-// make new OR
 PyObject*
 new_or(
   PyObject* self,
@@ -140,7 +137,6 @@ new_or(
   }
 }
 
-// make new XOR
 PyObject*
 new_xor(
   PyObject* self,
@@ -177,7 +173,6 @@ new_xor(
   }
 }
 
-// do EQUIVALENCE CHECKING
 PyObject*
 check_equiv(
   PyObject* self,
@@ -224,7 +219,6 @@ check_equiv(
   }
 }
 
-// set log level
 PyObject*
 set_loglevel(
   PyObject* self,

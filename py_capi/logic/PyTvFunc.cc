@@ -301,7 +301,6 @@ richcompare_func(
   }
 }
 
-// make TvFunc object from string
 PyObject*
 from_str(
   PyObject* Py_UNUSED(self),
@@ -337,7 +336,6 @@ from_str(
   }
 }
 
-// make TvFunc object from BIN string
 PyObject*
 from_bin_str(
   PyObject* Py_UNUSED(self),
@@ -370,7 +368,6 @@ from_bin_str(
   }
 }
 
-// make TvFunc object from HEX string
 PyObject*
 from_hex_str(
   PyObject* Py_UNUSED(self),
@@ -403,7 +400,6 @@ from_hex_str(
   }
 }
 
-// make invalid TvFunc object
 PyObject*
 invalid(
   PyObject* Py_UNUSED(self),
@@ -421,7 +417,6 @@ invalid(
   }
 }
 
-// make ZERO TvFunc object
 PyObject*
 zero(
   PyObject* Py_UNUSED(self),
@@ -450,7 +445,6 @@ zero(
   }
 }
 
-// make ONE TvFunc object
 PyObject*
 one(
   PyObject* Py_UNUSED(self),
@@ -479,7 +473,6 @@ one(
   }
 }
 
-// make literal type TvFunc object
 PyObject*
 literal(
   PyObject* Py_UNUSED(self),
@@ -530,7 +523,6 @@ literal(
   }
 }
 
-// make positive literal type TvFunc object
 PyObject*
 positive_literal(
   PyObject* Py_UNUSED(self),
@@ -566,7 +558,6 @@ positive_literal(
   }
 }
 
-// make negative literal type TvFunc object
 PyObject*
 negative_literal(
   PyObject* Py_UNUSED(self),
@@ -602,7 +593,6 @@ negative_literal(
   }
 }
 
-// make a cofactor
 PyObject*
 cofactor(
   PyObject* self,
@@ -651,7 +641,6 @@ cofactor(
   }
 }
 
-// make a cofactor
 PyObject*
 cofactor_int(
   PyObject* self,
@@ -702,7 +691,6 @@ cofactor_int(
   }
 }
 
-// transform
 PyObject*
 xform(
   PyObject* self,
@@ -739,7 +727,6 @@ xform(
   }
 }
 
-// shrink unused inputs
 PyObject*
 shrink_map(
   PyObject* self,
@@ -758,7 +745,6 @@ shrink_map(
   }
 }
 
-// get canonical map
 PyObject*
 npn_canonical_map(
   PyObject* self,
@@ -777,7 +763,6 @@ npn_canonical_map(
   }
 }
 
-// get list of all canonical maps
 PyObject*
 npn_canonical_all_map(
   PyObject* self,
@@ -796,7 +781,6 @@ npn_canonical_all_map(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,
@@ -815,7 +799,6 @@ is_valid(
   }
 }
 
-// True if invalid
 PyObject*
 is_invalid(
   PyObject* self,
@@ -834,7 +817,6 @@ is_invalid(
   }
 }
 
-// True if ZERO
 PyObject*
 is_zero(
   PyObject* self,
@@ -853,7 +835,6 @@ is_zero(
   }
 }
 
-// True if ONE
 PyObject*
 is_one(
   PyObject* self,
@@ -872,7 +853,6 @@ is_one(
   }
 }
 
-// return truth table value at the specified index
 PyObject*
 value(
   PyObject* self,
@@ -907,7 +887,6 @@ value(
   }
 }
 
-// return the number of minterms of ZERO
 PyObject*
 count_zero(
   PyObject* self,
@@ -926,7 +905,6 @@ count_zero(
   }
 }
 
-// return the number of minterms of ONE
 PyObject*
 count_one(
   PyObject* self,
@@ -945,7 +923,6 @@ count_one(
   }
 }
 
-// return Walsh-0 coefficient
 PyObject*
 walsh_0(
   PyObject* self,
@@ -964,7 +941,6 @@ walsh_0(
   }
 }
 
-// return Walsh-1 coefficient
 PyObject*
 walsh_1(
   PyObject* self,
@@ -998,7 +974,6 @@ walsh_1(
   }
 }
 
-// return Walsh-2 coefficient
 PyObject*
 walsh_2(
   PyObject* self,
@@ -1039,7 +1014,6 @@ walsh_2(
   }
 }
 
-// check if the specified variable is a support
 PyObject*
 check_sup(
   PyObject* self,
@@ -1073,7 +1047,6 @@ check_sup(
   }
 }
 
-// check unateness on the specified variable
 PyObject*
 check_unate(
   PyObject* self,
@@ -1107,7 +1080,6 @@ check_unate(
   }
 }
 
-// check synmmetry
 PyObject*
 check_sym(
   PyObject* self,
@@ -1155,7 +1127,6 @@ check_sym(
   }
 }
 
-// analyze the function type
 PyObject*
 analyze(
   PyObject* self,
@@ -1174,7 +1145,6 @@ analyze(
   }
 }
 
-// return all primes
 PyObject*
 all_primes(
   PyObject* Py_UNUSED(self),
@@ -1227,7 +1197,6 @@ all_primes(
   }
 }
 
-// return irredundant SOP
 PyObject*
 isop(
   PyObject* Py_UNUSED(self),

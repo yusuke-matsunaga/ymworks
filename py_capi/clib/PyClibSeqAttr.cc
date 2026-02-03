@@ -73,7 +73,6 @@ richcompare_func(
   }
 }
 
-// True if having slave clock
 PyObject*
 has_slave_clock(
   PyObject* self,
@@ -92,7 +91,6 @@ has_slave_clock(
   }
 }
 
-// True if having clear pin
 PyObject*
 has_clear(
   PyObject* self,
@@ -111,7 +109,6 @@ has_clear(
   }
 }
 
-// True if having preset pin
 PyObject*
 has_preset(
   PyObject* self,
@@ -130,7 +127,6 @@ has_preset(
   }
 }
 
-// return MAX INDEX
 PyObject*
 max_index(
   PyObject* Py_UNUSED(self),

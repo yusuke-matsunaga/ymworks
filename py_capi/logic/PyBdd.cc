@@ -404,7 +404,6 @@ richcompare_func(
   }
 }
 
-// make ZERO Bdd object
 PyObject*
 zero(
   PyObject* Py_UNUSED(self),
@@ -422,7 +421,6 @@ zero(
   }
 }
 
-// make ONE Bdd object
 PyObject*
 one(
   PyObject* Py_UNUSED(self),
@@ -440,7 +438,6 @@ one(
   }
 }
 
-// make invalid Bdd object
 PyObject*
 invalid(
   PyObject* Py_UNUSED(self),
@@ -458,7 +455,6 @@ invalid(
   }
 }
 
-// make cofactor
 PyObject*
 cofactor(
   PyObject* self,
@@ -515,7 +511,6 @@ cofactor(
   }
 }
 
-// ITE op
 PyObject*
 ite(
   PyObject* Py_UNUSED(self),
@@ -571,7 +566,6 @@ ite(
   }
 }
 
-// do simplify with DontCare
 PyObject*
 simplify(
   PyObject* Py_UNUSED(self),
@@ -617,7 +611,6 @@ simplify(
   }
 }
 
-// COMPOSE op
 PyObject*
 compose(
   PyObject* self,
@@ -664,7 +657,6 @@ compose(
   }
 }
 
-// multiway COMPOSE op
 PyObject*
 multi_compose(
   PyObject* self,
@@ -701,7 +693,6 @@ multi_compose(
   }
 }
 
-// remap variable ordering
 PyObject*
 remap_vars(
   PyObject* self,
@@ -738,7 +729,6 @@ remap_vars(
   }
 }
 
-// return True if invalid
 PyObject*
 is_invalid(
   PyObject* self,
@@ -757,7 +747,6 @@ is_invalid(
   }
 }
 
-// return True if ZERO
 PyObject*
 is_zero(
   PyObject* self,
@@ -776,7 +765,6 @@ is_zero(
   }
 }
 
-// return True if ONE
 PyObject*
 is_one(
   PyObject* self,
@@ -795,7 +783,6 @@ is_one(
   }
 }
 
-// return True if constant(ZERO or ONE)
 PyObject*
 is_const(
   PyObject* self,
@@ -814,7 +801,6 @@ is_const(
   }
 }
 
-// check support variable
 PyObject*
 check_sup(
   PyObject* self,
@@ -851,7 +837,6 @@ check_sup(
   }
 }
 
-// check symmmetry
 PyObject*
 check_sym(
   PyObject* self,
@@ -905,7 +890,6 @@ check_sym(
   }
 }
 
-// get support variable
 PyObject*
 get_support(
   PyObject* self,
@@ -924,7 +908,6 @@ get_support(
   }
 }
 
-// get ONE path
 PyObject*
 get_onepath(
   PyObject* self,
@@ -943,7 +926,6 @@ get_onepath(
   }
 }
 
-// get ZERO path
 PyObject*
 get_zeropath(
   PyObject* self,
@@ -962,7 +944,6 @@ get_zeropath(
   }
 }
 
-// decompose root node
 PyObject*
 root_decomp(
   PyObject* self,
@@ -987,7 +968,6 @@ root_decomp(
   }
 }
 
-// return root variable
 PyObject*
 root_var(
   PyObject* self,
@@ -1006,7 +986,6 @@ root_var(
   }
 }
 
-// return negative cofactor of root variable
 PyObject*
 root_cofactor0(
   PyObject* self,
@@ -1025,7 +1004,6 @@ root_cofactor0(
   }
 }
 
-// return positive cofactor of root variable
 PyObject*
 root_cofactor1(
   PyObject* self,
@@ -1044,7 +1022,6 @@ root_cofactor1(
   }
 }
 
-// evaluate input vector
 PyObject*
 eval(
   PyObject* self,
@@ -1079,7 +1056,6 @@ eval(
   }
 }
 
-// convert to truth table
 PyObject*
 to_truth(
   PyObject* self,
@@ -1116,7 +1092,6 @@ to_truth(
   }
 }
 
-// return node size of the BDDs
 PyObject*
 bdd_size(
   PyObject* Py_UNUSED(self),
@@ -1152,7 +1127,6 @@ bdd_size(
   }
 }
 
-// return True if identical
 PyObject*
 is_identical(
   PyObject* Py_UNUSED(self),

@@ -75,7 +75,6 @@ richcompare_func(
   }
 }
 
-// True if INPUT type
 PyObject*
 is_input(
   PyObject* self,
@@ -94,7 +93,6 @@ is_input(
   }
 }
 
-// True if LOGIC type
 PyObject*
 is_logic(
   PyObject* self,
@@ -113,7 +111,6 @@ is_logic(
   }
 }
 
-// True if PRIMARY INPUT type
 PyObject*
 is_primary_input(
   PyObject* self,
@@ -132,7 +129,6 @@ is_primary_input(
   }
 }
 
-// True if DFF OUTPUT type
 PyObject*
 is_dff_output(
   PyObject* self,
@@ -151,7 +147,6 @@ is_dff_output(
   }
 }
 
-// return fanin node
 PyObject*
 fanin(
   PyObject* self,
@@ -181,7 +176,6 @@ fanin(
   }
 }
 
-// return list of fanin nodes
 PyObject*
 fanin_list(
   PyObject* self,

@@ -25,7 +25,6 @@ add_subdirectory( bn )
 add_subdirectory( aig )
 add_subdirectory( sat )
 add_subdirectory( fraig )
-add_subdirectory( pytest )
 
 
 # ===================================================================

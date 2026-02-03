@@ -85,7 +85,6 @@ richcompare_func(
   }
 }
 
-// read BLIF file
 PyObject*
 read_blif(
   PyObject* Py_UNUSED(self),
@@ -118,7 +117,6 @@ read_blif(
   }
 }
 
-// read ISCAS89(.bench) file
 PyObject*
 read_iscas89(
   PyObject* Py_UNUSED(self),
@@ -151,7 +149,6 @@ read_iscas89(
   }
 }
 
-// read TRUTH(.truth) file
 PyObject*
 read_truth(
   PyObject* Py_UNUSED(self),
@@ -184,7 +181,6 @@ read_truth(
   }
 }
 
-// read file (format: [blif, iscas89, truth])
 PyObject*
 read(
   PyObject* Py_UNUSED(self),
@@ -224,7 +220,6 @@ read(
   }
 }
 
-// write
 PyObject*
 write(
   PyObject* self,
@@ -256,7 +251,6 @@ write(
   }
 }
 
-// make a DEEP copy
 PyObject*
 copy(
   PyObject* self,
@@ -275,7 +269,6 @@ copy(
   }
 }
 
-// return DFF
 PyObject*
 dff(
   PyObject* self,
@@ -305,7 +298,6 @@ dff(
   }
 }
 
-// return DFF name
 PyObject*
 dff_name(
   PyObject* self,
@@ -335,7 +327,6 @@ dff_name(
   }
 }
 
-// return list of DFFs
 PyObject*
 dff_list(
   PyObject* self,
@@ -354,7 +345,6 @@ dff_list(
   }
 }
 
-// return BnNode
 PyObject*
 node(
   PyObject* self,
@@ -384,7 +374,6 @@ node(
   }
 }
 
-// return Input Node
 PyObject*
 input(
   PyObject* self,
@@ -414,7 +403,6 @@ input(
   }
 }
 
-// return Input Name
 PyObject*
 input_name(
   PyObject* self,
@@ -444,7 +432,6 @@ input_name(
   }
 }
 
-// return list of inputs
 PyObject*
 input_list(
   PyObject* self,
@@ -463,7 +450,6 @@ input_list(
   }
 }
 
-// return Output Node
 PyObject*
 output(
   PyObject* self,
@@ -493,7 +479,6 @@ output(
   }
 }
 
-// return Output Name
 PyObject*
 output_name(
   PyObject* self,
@@ -523,7 +508,6 @@ output_name(
   }
 }
 
-// return list of outputs
 PyObject*
 output_list(
   PyObject* self,
@@ -542,7 +526,6 @@ output_list(
   }
 }
 
-// return Logic Node
 PyObject*
 logic(
   PyObject* self,
@@ -572,7 +555,6 @@ logic(
   }
 }
 
-// return list of logic nodes
 PyObject*
 logic_list(
   PyObject* self,
@@ -591,7 +573,6 @@ logic_list(
   }
 }
 
-// return Function
 PyObject*
 func(
   PyObject* self,
@@ -621,7 +602,6 @@ func(
   }
 }
 
-// return list of comment lines
 PyObject*
 comment_list(
   PyObject* self,
@@ -640,7 +620,6 @@ comment_list(
   }
 }
 
-// set option
 PyObject*
 set_option(
   PyObject* self,
@@ -678,7 +657,6 @@ set_option(
   }
 }
 
-// set name
 PyObject*
 set_name(
   PyObject* self,
@@ -713,7 +691,6 @@ set_name(
   }
 }
 
-// add comment
 PyObject*
 add_comment(
   PyObject* self,
@@ -748,7 +725,6 @@ add_comment(
   }
 }
 
-// new DFF
 PyObject*
 new_dff(
   PyObject* self,
@@ -785,7 +761,6 @@ new_dff(
   }
 }
 
-// set DFF source input
 PyObject*
 set_dff_src(
   PyObject* self,
@@ -833,7 +808,6 @@ set_dff_src(
   }
 }
 
-// new input node
 PyObject*
 new_input(
   PyObject* self,
@@ -867,7 +841,6 @@ new_input(
   }
 }
 
-// new output node
 PyObject*
 new_output(
   PyObject* self,
@@ -911,7 +884,6 @@ new_output(
   }
 }
 
-// new primitive-type node
 PyObject*
 new_primitive(
   PyObject* self,
@@ -958,7 +930,6 @@ new_primitive(
   }
 }
 
-// new cover-type node
 PyObject*
 new_cover(
   PyObject* self,
@@ -1012,7 +983,6 @@ new_cover(
   }
 }
 
-// new expr-type node
 PyObject*
 new_expr(
   PyObject* self,
@@ -1059,7 +1029,6 @@ new_expr(
   }
 }
 
-// new tvfunc-type node
 PyObject*
 new_tvfunc(
   PyObject* self,
@@ -1106,7 +1075,6 @@ new_tvfunc(
   }
 }
 
-// new BDD-type node
 PyObject*
 new_bdd(
   PyObject* self,

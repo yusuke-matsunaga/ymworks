@@ -72,7 +72,6 @@ richcompare_func(
   }
 }
 
-// make INVALID object
 PyObject*
 invalid(
   PyObject* Py_UNUSED(self),
@@ -90,7 +89,6 @@ invalid(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,

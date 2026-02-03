@@ -73,7 +73,6 @@ richcompare_func(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,
@@ -92,7 +91,6 @@ is_valid(
   }
 }
 
-// True if invalid
 PyObject*
 is_invalid(
   PyObject* self,

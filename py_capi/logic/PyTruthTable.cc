@@ -45,7 +45,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// make TruthTable from file
 PyObject*
 read_file(
   PyObject* Py_UNUSED(self),
@@ -78,7 +77,6 @@ read_file(
   }
 }
 
-// name TruthTable from BIN string
 PyObject*
 from_bin(
   PyObject* Py_UNUSED(self),
@@ -111,7 +109,6 @@ from_bin(
   }
 }
 
-// name TruthTable from HEX string
 PyObject*
 from_hex(
   PyObject* Py_UNUSED(self),
@@ -144,7 +141,6 @@ from_hex(
   }
 }
 
-// get value
 PyObject*
 get_value(
   PyObject* self,
@@ -177,7 +173,6 @@ get_value(
   }
 }
 
-// set value
 PyObject*
 set_value(
   PyObject* self,
@@ -221,7 +216,6 @@ set_value(
   }
 }
 
-// return BIN format string
 PyObject*
 bin_str(
   PyObject* self,
@@ -240,7 +234,6 @@ bin_str(
   }
 }
 
-// return HEX format string
 PyObject*
 hex_str(
   PyObject* self,

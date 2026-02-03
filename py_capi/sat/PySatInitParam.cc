@@ -44,7 +44,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// read JSON file and return new SatInitParam object
 PyObject*
 from_json(
   PyObject* Py_UNUSED(self),

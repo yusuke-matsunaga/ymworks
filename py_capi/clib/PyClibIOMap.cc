@@ -130,7 +130,6 @@ richcompare_func(
   }
 }
 
-// make IDENTITY map
 PyObject*
 identity(
   PyObject* Py_UNUSED(self),
@@ -165,7 +164,6 @@ identity(
   }
 }
 
-// return input map
 PyObject*
 input_map(
   PyObject* self,
@@ -195,7 +193,6 @@ input_map(
   }
 }
 
-// return list of input maps
 PyObject*
 meth_input_map_list(
   PyObject* self,
@@ -214,7 +211,6 @@ meth_input_map_list(
   }
 }
 
-// return output map
 PyObject*
 output_map(
   PyObject* self,
@@ -244,7 +240,6 @@ output_map(
   }
 }
 
-// return list of output maps
 PyObject*
 meth_output_map_list(
   PyObject* self,
@@ -263,7 +258,6 @@ meth_output_map_list(
   }
 }
 
-// return inout map
 PyObject*
 inout_map(
   PyObject* self,
@@ -293,7 +287,6 @@ inout_map(
   }
 }
 
-// return list of inout maps
 PyObject*
 meth_inout_map_list(
   PyObject* self,
@@ -312,7 +305,6 @@ meth_inout_map_list(
   }
 }
 
-// INVERSE operation
 PyObject*
 inverse(
   PyObject* self,

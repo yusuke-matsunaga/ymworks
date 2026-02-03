@@ -78,7 +78,6 @@ richcompare_func(
   }
 }
 
-// return cell
 PyObject*
 cell(
   PyObject* self,
@@ -108,7 +107,6 @@ cell(
   }
 }
 
-// return list of cells
 PyObject*
 meth_cell_list(
   PyObject* self,

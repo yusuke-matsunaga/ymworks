@@ -46,7 +46,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// return variable type
 PyObject*
 variable_type(
   PyObject* self,
@@ -76,7 +75,6 @@ variable_type(
   }
 }
 
-// return index size
 PyObject*
 index_num(
   PyObject* self,
@@ -106,7 +104,6 @@ index_num(
   }
 }
 
-// return index value
 PyObject*
 index(
   PyObject* self,
@@ -139,7 +136,6 @@ index(
   }
 }
 
-// return grid_value
 PyObject*
 grid_value(
   PyObject* self,
@@ -176,7 +172,6 @@ grid_value(
   }
 }
 
-// return value
 PyObject*
 value(
   PyObject* self,

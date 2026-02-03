@@ -331,6 +331,7 @@ class JsonValueGen(PyObjGen):
         def deconv_gen(writer):
             # PyObject* の特殊な値の場合の処理
             val_map_list = [('nullptr', 'JsonValue::null()', '"null オブジェクト"'),
+                            ('Py_None', 'JsonValue::null()', '"null オブジェクト"'),
                             ('Py_True', 'JsonValue(true)', '"true オブジェクト"'),
                             ('Py_False', 'JsonValue(false)', '"false オブジェクト"')]
             for obj_val, val, comment in val_map_list:

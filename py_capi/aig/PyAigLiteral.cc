@@ -171,7 +171,6 @@ richcompare_func(
   }
 }
 
-// return INVALID literal
 PyObject*
 invalid(
   PyObject* Py_UNUSED(self),
@@ -189,7 +188,6 @@ invalid(
   }
 }
 
-// return ZERO literal
 PyObject*
 zero(
   PyObject* Py_UNUSED(self),
@@ -207,7 +205,6 @@ zero(
   }
 }
 
-// return ONE literal
 PyObject*
 one(
   PyObject* Py_UNUSED(self),
@@ -225,7 +222,6 @@ one(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,
@@ -244,7 +240,6 @@ is_valid(
   }
 }
 
-// True if invalid
 PyObject*
 is_invalid(
   PyObject* self,
@@ -263,7 +258,6 @@ is_invalid(
   }
 }
 
-// True if inverted
 PyObject*
 inv(
   PyObject* self,
@@ -282,7 +276,6 @@ inv(
   }
 }
 
-// True if ZERO
 PyObject*
 is_zero(
   PyObject* self,
@@ -301,7 +294,6 @@ is_zero(
   }
 }
 
-// True if ONE
 PyObject*
 is_one(
   PyObject* self,
@@ -320,7 +312,6 @@ is_one(
   }
 }
 
-// True if constant(ZERO or ONE)
 PyObject*
 is_const(
   PyObject* self,
@@ -339,7 +330,6 @@ is_const(
   }
 }
 
-// INVERT OP
 PyObject*
 invert(
   PyObject* self,

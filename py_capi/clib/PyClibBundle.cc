@@ -75,7 +75,6 @@ richcompare_func(
   }
 }
 
-// return PIN
 PyObject*
 pin(
   PyObject* self,
@@ -105,7 +104,6 @@ pin(
   }
 }
 
-// return list of pins
 PyObject*
 meth_pin_list(
   PyObject* self,

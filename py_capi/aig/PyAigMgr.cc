@@ -52,7 +52,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// read AAG file
 PyObject*
 read_aag(
   PyObject* Py_UNUSED(self),
@@ -85,7 +84,6 @@ read_aag(
   }
 }
 
-// read AIG file
 PyObject*
 read_aig(
   PyObject* Py_UNUSED(self),
@@ -118,7 +116,6 @@ read_aig(
   }
 }
 
-// read BLIF file
 PyObject*
 read_blif(
   PyObject* Py_UNUSED(self),
@@ -151,7 +148,6 @@ read_blif(
   }
 }
 
-// read ISCAS89(.bench) file
 PyObject*
 read_iscas89(
   PyObject* Py_UNUSED(self),
@@ -184,7 +180,6 @@ read_iscas89(
   }
 }
 
-// read file (format should be aag, aig, blif or iscas89)
 PyObject*
 read(
   PyObject* Py_UNUSED(self),
@@ -224,7 +219,6 @@ read(
   }
 }
 
-// convert from BnModel
 PyObject*
 from_bn(
   PyObject* Py_UNUSED(self),
@@ -260,7 +254,6 @@ from_bn(
   }
 }
 
-// write file in AAG format
 PyObject*
 write_aag(
   PyObject* self,
@@ -292,7 +285,6 @@ write_aag(
   }
 }
 
-// write file in AIG format
 PyObject*
 write_aig(
   PyObject* self,
@@ -324,7 +316,6 @@ write_aig(
   }
 }
 
-// write file in specified format
 PyObject*
 write(
   PyObject* self,
@@ -363,7 +354,6 @@ write(
   }
 }
 
-// make a DEEP copy
 PyObject*
 copy(
   PyObject* self,
@@ -382,7 +372,6 @@ copy(
   }
 }
 
-// return Input Literal
 PyObject*
 input(
   PyObject* self,
@@ -412,7 +401,6 @@ input(
   }
 }
 
-// return Input Name
 PyObject*
 input_name(
   PyObject* self,
@@ -442,7 +430,6 @@ input_name(
   }
 }
 
-// return Output Literal
 PyObject*
 output(
   PyObject* self,
@@ -472,7 +459,6 @@ output(
   }
 }
 
-// return Output Name
 PyObject*
 output_name(
   PyObject* self,
@@ -502,7 +488,6 @@ output_name(
   }
 }
 
-// return DFF Output Literal
 PyObject*
 dff_output(
   PyObject* self,
@@ -532,7 +517,6 @@ dff_output(
   }
 }
 
-// return DFF Input Literal
 PyObject*
 dff_input(
   PyObject* self,
@@ -562,7 +546,6 @@ dff_input(
   }
 }
 
-// return DFF Name
 PyObject*
 dff_name(
   PyObject* self,
@@ -592,7 +575,6 @@ dff_name(
   }
 }
 
-// return list of comments
 PyObject*
 comment_list(
   PyObject* self,
@@ -611,7 +593,6 @@ comment_list(
   }
 }
 
-// True if lit is INPUT
 PyObject*
 is_input(
   PyObject* self,
@@ -641,7 +622,6 @@ is_input(
   }
 }
 
-// True if lit is PRIMARY INPUT
 PyObject*
 is_primary_input(
   PyObject* self,
@@ -671,7 +651,6 @@ is_primary_input(
   }
 }
 
-// return INPUT ID of lit
 PyObject*
 input_id(
   PyObject* self,
@@ -701,7 +680,6 @@ input_id(
   }
 }
 
-// True if lit is DFF OUTPUT
 PyObject*
 is_dff_output(
   PyObject* self,
@@ -731,7 +709,6 @@ is_dff_output(
   }
 }
 
-// return DFF ID of lit
 PyObject*
 dff_id(
   PyObject* self,
@@ -761,7 +738,6 @@ dff_id(
   }
 }
 
-// True if lit is AND
 PyObject*
 is_and(
   PyObject* self,
@@ -791,7 +767,6 @@ is_and(
   }
 }
 
-// return fanin literal
 PyObject*
 fanin(
   PyObject* self,
@@ -824,7 +799,6 @@ fanin(
   }
 }
 
-// return fanin0 literal
 PyObject*
 fanin0(
   PyObject* self,
@@ -854,7 +828,6 @@ fanin0(
   }
 }
 
-// return fanin1 literal
 PyObject*
 fanin1(
   PyObject* self,
@@ -884,7 +857,6 @@ fanin1(
   }
 }
 
-// return list of expanded fanin literals
 PyObject*
 ex_fanin_list(
   PyObject* self,
@@ -914,7 +886,6 @@ ex_fanin_list(
   }
 }
 
-// make new Input
 PyObject*
 new_input(
   PyObject* self,
@@ -948,7 +919,6 @@ new_input(
   }
 }
 
-// make new Output
 PyObject*
 new_output(
   PyObject* self,
@@ -992,7 +962,6 @@ new_output(
   }
 }
 
-// make new DFF
 PyObject*
 new_dff(
   PyObject* self,
@@ -1026,7 +995,6 @@ new_dff(
   }
 }
 
-// set DFF input
 PyObject*
 set_dff_input(
   PyObject* self,
@@ -1067,7 +1035,6 @@ set_dff_input(
   }
 }
 
-// make new AND
 PyObject*
 new_and(
   PyObject* self,
@@ -1104,7 +1071,6 @@ new_and(
   }
 }
 
-// make new OR
 PyObject*
 new_or(
   PyObject* self,
@@ -1141,7 +1107,6 @@ new_or(
   }
 }
 
-// make new XOR
 PyObject*
 new_xor(
   PyObject* self,
@@ -1178,7 +1143,6 @@ new_xor(
   }
 }
 
-// make new PRIMITIVE
 PyObject*
 new_primitive(
   PyObject* self,
@@ -1225,7 +1189,6 @@ new_primitive(
   }
 }
 
-// make AIG from EXPR
 PyObject*
 from_expr(
   PyObject* self,
@@ -1277,7 +1240,6 @@ from_expr(
   }
 }
 
-// make AIG from EXPR list
 PyObject*
 from_expr_list(
   PyObject* self,
@@ -1329,7 +1291,6 @@ from_expr_list(
   }
 }
 
-// make AIG from COVER
 PyObject*
 from_cover(
   PyObject* self,
@@ -1381,7 +1342,6 @@ from_cover(
   }
 }
 
-// make AIG from CUBE
 PyObject*
 from_cube(
   PyObject* self,
@@ -1433,7 +1393,6 @@ from_cube(
   }
 }
 
-// do LOCAL REWRITING
 PyObject*
 rewrite(
   PyObject* self,

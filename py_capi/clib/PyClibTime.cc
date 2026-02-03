@@ -180,7 +180,6 @@ richcompare_func(
   }
 }
 
-// make INIFITY object
 PyObject*
 infinity(
   PyObject* Py_UNUSED(self),

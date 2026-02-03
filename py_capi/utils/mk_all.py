@@ -52,7 +52,8 @@ for subname in subname_list:
     module_gen = ModuleGen(modulename=subname,
                            submodule=True,
                            pyclass_gen_list=submodule.gen_list,
-                           namespace='YM')
+                           namespace='YM',
+                           has_pytest=True)
     module_gen.make_all(include_dir=include_dir,
                         source_dir=source_dir)
     init_func = f'PyInit_{subname}'

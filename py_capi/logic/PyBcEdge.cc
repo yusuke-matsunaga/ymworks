@@ -101,7 +101,6 @@ richcompare_func(
   }
 }
 
-// make ZERO edge
 PyObject*
 zero(
   PyObject* Py_UNUSED(self),
@@ -119,7 +118,6 @@ zero(
   }
 }
 
-// make ONE edge
 PyObject*
 one(
   PyObject* Py_UNUSED(self),
@@ -137,7 +135,6 @@ one(
   }
 }
 
-// make INPUT edge
 PyObject*
 input(
   PyObject* Py_UNUSED(self),
@@ -173,7 +170,6 @@ input(
   }
 }
 
-// make OP edge
 PyObject*
 op(
   PyObject* Py_UNUSED(self),
@@ -209,7 +205,6 @@ op(
   }
 }
 
-// True if INPUT edge
 PyObject*
 is_input(
   PyObject* self,
@@ -228,7 +223,6 @@ is_input(
   }
 }
 
-// True if OP edge
 PyObject*
 is_op(
   PyObject* self,
@@ -247,7 +241,6 @@ is_op(
   }
 }
 
-// True if ZERO edge
 PyObject*
 is_zero(
   PyObject* self,
@@ -266,7 +259,6 @@ is_zero(
   }
 }
 
-// True if ONE edge
 PyObject*
 is_one(
   PyObject* self,
@@ -285,7 +277,6 @@ is_one(
   }
 }
 
-// return string representation
 PyObject*
 to_string(
   PyObject* self,

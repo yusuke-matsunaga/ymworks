@@ -273,7 +273,6 @@ richcompare_func(
   }
 }
 
-// True if empty set
 PyObject*
 is_empty_set(
   PyObject* self,
@@ -292,7 +291,6 @@ is_empty_set(
   }
 }
 
-// return size
 PyObject*
 size(
   PyObject* self,
@@ -311,7 +309,6 @@ size(
   }
 }
 
-// convert to list of 'BddVar's
 PyObject*
 var_list(
   PyObject* self,
@@ -330,7 +327,6 @@ var_list(
   }
 }
 
-//
 PyObject*
 bdd(
   PyObject* self,

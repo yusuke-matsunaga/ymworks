@@ -134,7 +134,6 @@ richcompare_func(
   }
 }
 
-// make invalid BddVar object
 PyObject*
 invalid(
   PyObject* Py_UNUSED(self),
@@ -152,7 +151,6 @@ invalid(
   }
 }
 
-// return True if invalid
 PyObject*
 is_invalid(
   PyObject* self,
@@ -171,7 +169,6 @@ is_invalid(
   }
 }
 
-// return positive literal of this variable
 PyObject*
 positive_literal(
   PyObject* self,
@@ -190,7 +187,6 @@ positive_literal(
   }
 }
 
-// return negative literal of this variable
 PyObject*
 negative_literal(
   PyObject* self,
@@ -209,7 +205,6 @@ negative_literal(
   }
 }
 
-//
 PyObject*
 bdd(
   PyObject* self,

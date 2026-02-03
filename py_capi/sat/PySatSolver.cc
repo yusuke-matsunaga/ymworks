@@ -54,7 +54,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// make new variable
 PyObject*
 new_variable(
   PyObject* self,
@@ -88,7 +87,6 @@ new_variable(
   }
 }
 
-// add clause
 PyObject*
 add_clause(
   PyObject* self,
@@ -112,7 +110,6 @@ add_clause(
   }
 }
 
-// add clauses representing 'BUF' gate
 PyObject*
 add_buffgate(
   PyObject* self,
@@ -160,7 +157,6 @@ add_buffgate(
   }
 }
 
-// add clauses representing 'NOT' gate
 PyObject*
 add_notgate(
   PyObject* self,
@@ -208,7 +204,6 @@ add_notgate(
   }
 }
 
-// add clauses representing 'AND' gate
 PyObject*
 add_andgate(
   PyObject* self,
@@ -233,7 +228,6 @@ add_andgate(
   }
 }
 
-// add clauses representing 'NAND' gate
 PyObject*
 add_nandgate(
   PyObject* self,
@@ -258,7 +252,6 @@ add_nandgate(
   }
 }
 
-// add clauses representing 'OR' gate
 PyObject*
 add_orgate(
   PyObject* self,
@@ -283,7 +276,6 @@ add_orgate(
   }
 }
 
-// add clauses representing 'NOR' gate
 PyObject*
 add_norgate(
   PyObject* self,
@@ -308,7 +300,6 @@ add_norgate(
   }
 }
 
-// add clauses representing 'XOR' gate
 PyObject*
 add_xorgate(
   PyObject* self,
@@ -333,7 +324,6 @@ add_xorgate(
   }
 }
 
-// add clauses representing 'XNOR' gate
 PyObject*
 add_xnorgate(
   PyObject* self,
@@ -358,7 +348,6 @@ add_xnorgate(
   }
 }
 
-// add clauses representing given Expr
 PyObject*
 add_expr(
   PyObject* self,
@@ -405,7 +394,6 @@ add_expr(
   }
 }
 
-// add clauses representing given AIG
 PyObject*
 add_aig(
   PyObject* self,
@@ -452,7 +440,6 @@ add_aig(
   }
 }
 
-// add clauses representing 'HALF ADDER'
 PyObject*
 add_half_adder(
   PyObject* self,
@@ -520,7 +507,6 @@ add_half_adder(
   }
 }
 
-// add clauses representing 'FULL ADDER'
 PyObject*
 add_full_adder(
   PyObject* self,
@@ -598,7 +584,6 @@ add_full_adder(
   }
 }
 
-// add clauses representing 'ADDER'
 PyObject*
 add_adder(
   PyObject* self,
@@ -676,7 +661,6 @@ add_adder(
   }
 }
 
-// add clauses representing 'COUNTER'
 PyObject*
 add_counter(
   PyObject* self,
@@ -720,7 +704,6 @@ add_counter(
   }
 }
 
-// add clauses representing 'AT MOST ONE'
 PyObject*
 add_at_most_one(
   PyObject* self,
@@ -744,7 +727,6 @@ add_at_most_one(
   }
 }
 
-// add clauses representing 'AT MOST TWO'
 PyObject*
 add_at_most_two(
   PyObject* self,
@@ -768,7 +750,6 @@ add_at_most_two(
   }
 }
 
-// add clauses representing 'AT MOST K'
 PyObject*
 add_at_most_k(
   PyObject* self,
@@ -809,7 +790,6 @@ add_at_most_k(
   }
 }
 
-// add clauses representing 'AT LEAST ONE'
 PyObject*
 add_at_least_one(
   PyObject* self,
@@ -833,7 +813,6 @@ add_at_least_one(
   }
 }
 
-// add clauses representing 'AT LEAST TWO'
 PyObject*
 add_at_least_two(
   PyObject* self,
@@ -857,7 +836,6 @@ add_at_least_two(
   }
 }
 
-// add clauses representing 'AT LEAST K'
 PyObject*
 add_at_least_k(
   PyObject* self,
@@ -898,7 +876,6 @@ add_at_least_k(
   }
 }
 
-// add clauses representing 'AT EXACT ONE'
 PyObject*
 add_exact_one(
   PyObject* self,
@@ -922,7 +899,6 @@ add_exact_one(
   }
 }
 
-// add clauses representing 'AT EXACT TWO'
 PyObject*
 add_exact_two(
   PyObject* self,
@@ -946,7 +922,6 @@ add_exact_two(
   }
 }
 
-// add clauses representing 'AT EXACT K'
 PyObject*
 add_exact_k(
   PyObject* self,
@@ -987,7 +962,6 @@ add_exact_k(
   }
 }
 
-// add clauses representing 'AT NOT ONE'
 PyObject*
 add_not_one(
   PyObject* self,
@@ -1011,7 +985,6 @@ add_not_one(
   }
 }
 
-// add clauses representing 'EQ'
 PyObject*
 add_eq(
   PyObject* self,
@@ -1063,7 +1036,6 @@ add_eq(
   }
 }
 
-// add clauses representing 'NE'
 PyObject*
 add_ne(
   PyObject* self,
@@ -1115,7 +1087,6 @@ add_ne(
   }
 }
 
-// add clauses representing 'LT'
 PyObject*
 add_lt(
   PyObject* self,
@@ -1167,7 +1138,6 @@ add_lt(
   }
 }
 
-// add clauses representing 'LE'
 PyObject*
 add_le(
   PyObject* self,
@@ -1219,7 +1189,6 @@ add_le(
   }
 }
 
-// add clauses representing 'GT'
 PyObject*
 add_gt(
   PyObject* self,
@@ -1271,7 +1240,6 @@ add_gt(
   }
 }
 
-// add clauses representing 'GE'
 PyObject*
 add_ge(
   PyObject* self,
@@ -1323,7 +1291,6 @@ add_ge(
   }
 }
 
-// make SatCondBlock
 PyObject*
 condblock(
   PyObject* self,
@@ -1346,7 +1313,6 @@ condblock(
   }
 }
 
-// solve SAT problem
 PyObject*
 solve(
   PyObject* self,
@@ -1394,7 +1360,6 @@ solve(
   }
 }
 
-// return the model for SAT problem
 PyObject*
 model(
   PyObject* self,
@@ -1414,7 +1379,6 @@ model(
   }
 }
 
-// read model value for specified literal
 PyObject*
 read_model(
   PyObject* self,
@@ -1453,7 +1417,6 @@ read_model(
   }
 }
 
-// return conflict literals of the last SAT problem
 PyObject*
 conflict_literals(
   PyObject* self,

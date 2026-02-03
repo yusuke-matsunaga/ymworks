@@ -381,7 +381,6 @@ richcompare_func(
   }
 }
 
-// make a copy
 PyObject*
 copy(
   PyObject* self,
@@ -400,7 +399,6 @@ copy(
   }
 }
 
-// return number of literals
 PyObject*
 literal_num(
   PyObject* self,
@@ -454,7 +452,6 @@ literal_num(
   }
 }
 
-// convert to list of list of literals
 PyObject*
 literal_list(
   PyObject* self,
@@ -473,7 +470,6 @@ literal_list(
   }
 }
 
-// get pat
 PyObject*
 get_pat(
   PyObject* self,
@@ -517,7 +513,6 @@ get_pat(
   }
 }
 
-// return common cube
 PyObject*
 common_cube(
   PyObject* self,
@@ -536,7 +531,6 @@ common_cube(
   }
 }
 
-// cofactor operation
 PyObject*
 cofactor(
   PyObject* self,
@@ -574,7 +568,6 @@ cofactor(
   }
 }
 
-// cofactor operation(intern version)
 PyObject*
 cofactor_int(
   PyObject* self,
@@ -616,7 +609,6 @@ cofactor_int(
   }
 }
 
-// return the best kernel
 PyObject*
 best_kernel(
   PyObject* self,
@@ -635,7 +627,6 @@ best_kernel(
   }
 }
 
-// Quick Factor
 PyObject*
 quick_factor(
   PyObject* self,
@@ -654,7 +645,6 @@ quick_factor(
   }
 }
 
-// Good Factor
 PyObject*
 good_factor(
   PyObject* self,
@@ -673,7 +663,6 @@ good_factor(
   }
 }
 
-// Bool Factor
 PyObject*
 bool_factor(
   PyObject* self,
@@ -692,7 +681,6 @@ bool_factor(
   }
 }
 
-// convert to 'Expr'
 PyObject*
 expr(
   PyObject* self,
@@ -711,7 +699,6 @@ expr(
   }
 }
 
-// convert to 'TvFunc'
 PyObject*
 tvfunc(
   PyObject* self,
@@ -730,7 +717,6 @@ tvfunc(
   }
 }
 
-// write SopCover
 PyObject*
 write(
   PyObject* self,
@@ -762,7 +748,6 @@ write(
   }
 }
 
-// read SopCover
 PyObject*
 read(
   PyObject* Py_UNUSED(self),

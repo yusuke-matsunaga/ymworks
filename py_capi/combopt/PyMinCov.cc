@@ -43,7 +43,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// resize
 PyObject*
 resize(
   PyObject* self,
@@ -77,7 +76,6 @@ resize(
   }
 }
 
-// set column cost
 PyObject*
 set_col_cost(
   PyObject* self,
@@ -111,7 +109,6 @@ set_col_cost(
   }
 }
 
-// insert element
 PyObject*
 insert_elem(
   PyObject* self,
@@ -145,7 +142,6 @@ insert_elem(
   }
 }
 
-// return column cost
 PyObject*
 col_cost(
   PyObject* self,
@@ -175,7 +171,6 @@ col_cost(
   }
 }
 
-// solve minimum covering problem
 PyObject*
 solve(
   PyObject* self,

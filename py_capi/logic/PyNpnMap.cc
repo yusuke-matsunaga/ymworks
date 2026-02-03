@@ -152,7 +152,6 @@ richcompare_func(
   }
 }
 
-// make the identity map
 PyObject*
 identity(
   PyObject* Py_UNUSED(self),
@@ -188,7 +187,6 @@ identity(
   }
 }
 
-// clear
 PyObject*
 clear(
   PyObject* self,
@@ -208,7 +206,6 @@ clear(
   }
 }
 
-// resize
 PyObject*
 resize(
   PyObject* self,
@@ -240,7 +237,6 @@ resize(
   }
 }
 
-// set itself to identity map
 PyObject*
 set_identity(
   PyObject* self,
@@ -278,7 +274,6 @@ set_identity(
   }
 }
 
-// set input mapping
 PyObject*
 set_imap(
   PyObject* self,
@@ -319,7 +314,6 @@ set_imap(
   }
 }
 
-// set output polatity
 PyObject*
 set_oinv(
   PyObject* self,
@@ -354,7 +348,6 @@ set_oinv(
   }
 }
 
-// get input mapping
 PyObject*
 imap(
   PyObject* self,

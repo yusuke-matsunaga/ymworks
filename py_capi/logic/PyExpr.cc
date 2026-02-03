@@ -299,7 +299,6 @@ richcompare_func(
   }
 }
 
-// make an invalid object
 PyObject*
 invalid(
   PyObject* Py_UNUSED(self),
@@ -317,7 +316,6 @@ invalid(
   }
 }
 
-// make a ZERO expression
 PyObject*
 zero(
   PyObject* Py_UNUSED(self),
@@ -335,7 +333,6 @@ zero(
   }
 }
 
-// make a ONE expression
 PyObject*
 one(
   PyObject* Py_UNUSED(self),
@@ -353,7 +350,6 @@ one(
   }
 }
 
-// make a literal object
 PyObject*
 literal(
   PyObject* Py_UNUSED(self),
@@ -399,7 +395,6 @@ literal(
   }
 }
 
-// make a positive literal object
 PyObject*
 positive_literal(
   PyObject* Py_UNUSED(self),
@@ -422,7 +417,6 @@ positive_literal(
   }
 }
 
-// make a negative literal object
 PyObject*
 negative_literal(
   PyObject* Py_UNUSED(self),
@@ -445,7 +439,6 @@ negative_literal(
   }
 }
 
-// AND op
 PyObject*
 and_op(
   PyObject* Py_UNUSED(self),
@@ -473,7 +466,6 @@ and_op(
   }
 }
 
-// OR op
 PyObject*
 or_op(
   PyObject* Py_UNUSED(self),
@@ -501,7 +493,6 @@ or_op(
   }
 }
 
-// XOR op
 PyObject*
 xor_op(
   PyObject* Py_UNUSED(self),
@@ -529,7 +520,6 @@ xor_op(
   }
 }
 
-// make an Expr object from string
 PyObject*
 from_string(
   PyObject* Py_UNUSED(self),
@@ -564,7 +554,6 @@ from_string(
   }
 }
 
-// COMPOSE op
 PyObject*
 compose(
   PyObject* self,
@@ -608,7 +597,6 @@ compose(
   }
 }
 
-// remap variable assignment
 PyObject*
 remap_var(
   PyObject* self,
@@ -651,7 +639,6 @@ remap_var(
   }
 }
 
-// simplify
 PyObject*
 simplify(
   PyObject* self,
@@ -671,7 +658,6 @@ simplify(
   }
 }
 
-// evaluate input vector
 PyObject*
 eval(
   PyObject* self,
@@ -710,7 +696,6 @@ eval(
   }
 }
 
-// convert to TvFunc
 PyObject*
 tvfunc(
   PyObject* self,
@@ -734,7 +719,6 @@ tvfunc(
   }
 }
 
-// check if valid
 PyObject*
 is_valid(
   PyObject* self,
@@ -753,7 +737,6 @@ is_valid(
   }
 }
 
-// check if invalid
 PyObject*
 is_invalid(
   PyObject* self,
@@ -772,7 +755,6 @@ is_invalid(
   }
 }
 
-// check if zero
 PyObject*
 is_zero(
   PyObject* self,
@@ -791,7 +773,6 @@ is_zero(
   }
 }
 
-// check if one
 PyObject*
 is_one(
   PyObject* self,
@@ -810,7 +791,6 @@ is_one(
   }
 }
 
-// check if constant
 PyObject*
 is_constant(
   PyObject* self,
@@ -829,7 +809,6 @@ is_constant(
   }
 }
 
-// check if positive literal
 PyObject*
 is_positive_literal(
   PyObject* self,
@@ -848,7 +827,6 @@ is_positive_literal(
   }
 }
 
-// check if negative Literal
 PyObject*
 is_negative_literal(
   PyObject* self,
@@ -867,7 +845,6 @@ is_negative_literal(
   }
 }
 
-// check if Literal type
 PyObject*
 is_literal(
   PyObject* self,
@@ -886,7 +863,6 @@ is_literal(
   }
 }
 
-// check if AND type
 PyObject*
 is_and(
   PyObject* self,
@@ -905,7 +881,6 @@ is_and(
   }
 }
 
-// check if OR type
 PyObject*
 is_or(
   PyObject* self,
@@ -924,7 +899,6 @@ is_or(
   }
 }
 
-// check if XOR type
 PyObject*
 is_xor(
   PyObject* self,
@@ -943,7 +917,6 @@ is_xor(
   }
 }
 
-// check if OP type
 PyObject*
 is_op(
   PyObject* self,
@@ -962,7 +935,6 @@ is_op(
   }
 }
 
-// check if simple type
 PyObject*
 is_simple(
   PyObject* self,
@@ -981,7 +953,6 @@ is_simple(
   }
 }
 
-// check if simple AND type
 PyObject*
 is_simple_and(
   PyObject* self,
@@ -1000,7 +971,6 @@ is_simple_and(
   }
 }
 
-// check if simple OR type
 PyObject*
 is_simple_or(
   PyObject* self,
@@ -1019,7 +989,6 @@ is_simple_or(
   }
 }
 
-// check if simple XOR type
 PyObject*
 is_simple_xor(
   PyObject* self,
@@ -1038,7 +1007,6 @@ is_simple_xor(
   }
 }
 
-// check if SOP type
 PyObject*
 is_sop(
   PyObject* self,
@@ -1057,7 +1025,6 @@ is_sop(
   }
 }
 
-// analyze type of root node
 PyObject*
 analyze(
   PyObject* self,
@@ -1076,7 +1043,6 @@ analyze(
   }
 }
 
-// get varid
 PyObject*
 get_varid(
   PyObject* self,
@@ -1095,7 +1061,6 @@ get_varid(
   }
 }
 
-// get literal
 PyObject*
 get_literal(
   PyObject* self,
@@ -1114,7 +1079,6 @@ get_literal(
   }
 }
 
-// get operand list
 PyObject*
 get_operand_list(
   PyObject* self,
@@ -1133,7 +1097,6 @@ get_operand_list(
   }
 }
 
-// get literal num
 PyObject*
 literal_num(
   PyObject* self,
@@ -1189,7 +1152,6 @@ literal_num(
   }
 }
 
-// get literal num in SOP form
 PyObject*
 sop_literal_num(
   PyObject* self,
@@ -1245,7 +1207,6 @@ sop_literal_num(
   }
 }
 
-// get cube num in SOP form
 PyObject*
 sop_cube_num(
   PyObject* self,

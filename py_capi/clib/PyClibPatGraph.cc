@@ -73,7 +73,6 @@ richcompare_func(
   }
 }
 
-// return EDGE ID
 PyObject*
 edge(
   PyObject* self,
@@ -103,7 +102,6 @@ edge(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,

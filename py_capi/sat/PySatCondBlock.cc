@@ -33,7 +33,6 @@ PyTypeObject SatCondBlock_Type = {
   // 残りは PySatCondBlock::init() 中で初期化する．
 };
 
-//
 PyObject*
 __enter__(
   PyObject* self,
@@ -52,7 +51,6 @@ __enter__(
   }
 }
 
-//
 PyObject*
 __exit__(
   PyObject* self,

@@ -44,7 +44,6 @@ dealloc_func(
   Py_TYPE(self)->tp_free(self);
 }
 
-// resize
 PyObject*
 resize(
   PyObject* self,
@@ -75,7 +74,6 @@ resize(
   }
 }
 
-// connect
 PyObject*
 connect(
   PyObject* self,
@@ -109,7 +107,6 @@ connect(
   }
 }
 
-// True if reflective graph
 PyObject*
 is_reflective(
   PyObject* self,
@@ -128,7 +125,6 @@ is_reflective(
   }
 }
 
-// return Edge
 PyObject*
 edge(
   PyObject* self,
@@ -158,7 +154,6 @@ edge(
   }
 }
 
-// read DIMACS format
 PyObject*
 read_dimacs(
   PyObject* Py_UNUSED(self),
@@ -191,7 +186,6 @@ read_dimacs(
   }
 }
 
-// write in DIMCAS format
 PyObject*
 write_dimacs(
   PyObject* self,
@@ -226,7 +220,6 @@ write_dimacs(
   }
 }
 
-// do minimum coloring
 PyObject*
 coloring(
   PyObject* self,
@@ -266,7 +259,6 @@ coloring(
   }
 }
 
-// get max clique
 PyObject*
 max_clique(
   PyObject* self,

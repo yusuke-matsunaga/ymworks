@@ -34,7 +34,6 @@ PyTypeObject DjDec_Type = {
   // 残りは PyDjDec::init() 中で初期化する．
 };
 
-// do Disjoint Support Decomposition
 PyObject*
 decompose(
   PyObject* Py_UNUSED(self),

@@ -72,7 +72,6 @@ richcompare_func(
   }
 }
 
-// return Infinity Object
 PyObject*
 infinity(
   PyObject* Py_UNUSED(self),

@@ -79,7 +79,6 @@ richcompare_func(
   }
 }
 
-// True if valid mgr
 PyObject*
 is_valid(
   PyObject* self,
@@ -98,7 +97,6 @@ is_valid(
   }
 }
 
-// make a variable
 PyObject*
 variable(
   PyObject* self,
@@ -128,7 +126,6 @@ variable(
   }
 }
 
-// make a variable BDD
 PyObject*
 variable_bdd(
   PyObject* self,
@@ -158,7 +155,6 @@ variable_bdd(
   }
 }
 
-//
 PyObject*
 literal(
   PyObject* self,
@@ -195,7 +191,6 @@ literal(
   }
 }
 
-//
 PyObject*
 literal_bdd(
   PyObject* self,
@@ -232,7 +227,6 @@ literal_bdd(
   }
 }
 
-//
 PyObject*
 positive_literal(
   PyObject* self,
@@ -262,7 +256,6 @@ positive_literal(
   }
 }
 
-//
 PyObject*
 positive_literal_bdd(
   PyObject* self,
@@ -292,7 +285,6 @@ positive_literal_bdd(
   }
 }
 
-//
 PyObject*
 negative_literal(
   PyObject* self,
@@ -322,7 +314,6 @@ negative_literal(
   }
 }
 
-//
 PyObject*
 negative_literal_bdd(
   PyObject* self,
@@ -352,7 +343,6 @@ negative_literal_bdd(
   }
 }
 
-// make a copy of BDD
 PyObject*
 copy(
   PyObject* self,
@@ -389,7 +379,6 @@ copy(
   }
 }
 
-// make a BDD from truth table
 PyObject*
 from_truth(
   PyObject* self,
@@ -438,7 +427,6 @@ from_truth(
   }
 }
 
-// make a BDD from Expr
 PyObject*
 from_expr(
   PyObject* self,
@@ -490,7 +478,6 @@ from_expr(
   }
 }
 
-// enable GC
 PyObject*
 enable_gc(
   PyObject* self,
@@ -510,7 +497,6 @@ enable_gc(
   }
 }
 
-// disable GC
 PyObject*
 disable_gc(
   PyObject* self,

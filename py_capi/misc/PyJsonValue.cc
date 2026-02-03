@@ -177,7 +177,6 @@ richcompare_func(
   }
 }
 
-// make a null object
 PyObject*
 null(
   PyObject* Py_UNUSED(self),
@@ -187,7 +186,6 @@ null(
   return PyJsonValue::ToPyObject(JsonValue::null());
 }
 
-// make a dictionary type object
 PyObject*
 object(
   PyObject* Py_UNUSED(self),
@@ -205,7 +203,6 @@ object(
   }
 }
 
-// make an array type object
 PyObject*
 array(
   PyObject* Py_UNUSED(self),
@@ -223,7 +220,6 @@ array(
   }
 }
 
-// check if null
 PyObject*
 is_null(
   PyObject* self,
@@ -235,7 +231,6 @@ is_null(
   return PyBool_FromLong(ans);
 }
 
-// check if string-type
 PyObject*
 is_string(
   PyObject* self,
@@ -247,7 +242,6 @@ is_string(
   return PyBool_FromLong(ans);
 }
 
-// check if number-type
 PyObject*
 is_number(
   PyObject* self,
@@ -259,7 +253,6 @@ is_number(
   return PyBool_FromLong(ans);
 }
 
-// check if int-type
 PyObject*
 is_int(
   PyObject* self,
@@ -271,7 +264,6 @@ is_int(
   return PyBool_FromLong(ans);
 }
 
-// check if float-type
 PyObject*
 is_float(
   PyObject* self,
@@ -283,7 +275,6 @@ is_float(
   return PyBool_FromLong(ans);
 }
 
-// check if bool-type
 PyObject*
 is_bool(
   PyObject* self,
@@ -295,7 +286,6 @@ is_bool(
   return PyBool_FromLong(ans);
 }
 
-// check if bool-type
 PyObject*
 is_object(
   PyObject* self,
@@ -307,7 +297,6 @@ is_object(
   return PyBool_FromLong(ans);
 }
 
-// check if bool-type
 PyObject*
 is_array(
   PyObject* self,
@@ -319,7 +308,6 @@ is_array(
   return PyBool_FromLong(ans);
 }
 
-// check if having the key
 PyObject*
 has_key(
   PyObject* self,
@@ -350,7 +338,6 @@ has_key(
   return PyBool_FromLong(ans);
 }
 
-// get string value
 PyObject*
 get_string(
   PyObject* self,
@@ -374,7 +361,6 @@ get_string(
   }
 }
 
-// get int value
 PyObject*
 get_int(
   PyObject* self,
@@ -398,7 +384,6 @@ get_int(
   }
 }
 
-// get float value
 PyObject*
 get_float(
   PyObject* self,
@@ -422,7 +407,6 @@ get_float(
   }
 }
 
-// get bool value
 PyObject*
 get_bool(
   PyObject* self,
@@ -446,7 +430,6 @@ get_bool(
   }
 }
 
-// get array value
 PyObject*
 get_array(
   PyObject* self,
@@ -469,7 +452,6 @@ get_array(
   }
 }
 
-// write JSON data to file
 PyObject*
 write(
   PyObject* self,
@@ -510,7 +492,6 @@ write(
   Py_RETURN_NONE;
 }
 
-// read JSON data from string
 PyObject*
 parse(
   PyObject* Py_UNUSED(self),
@@ -544,7 +525,6 @@ parse(
   }
 }
 
-// read JSON data from file
 PyObject*
 read(
   PyObject* Py_UNUSED(self),
@@ -578,7 +558,6 @@ read(
   }
 }
 
-// return list of keys
 PyObject*
 key_list(
   PyObject* self,
@@ -602,7 +581,6 @@ key_list(
   }
 }
 
-// return list of items
 PyObject*
 item_list(
   PyObject* self,
@@ -636,7 +614,6 @@ item_list(
   }
 }
 
-// add an array element
 PyObject*
 add(
   PyObject* self,
@@ -674,7 +651,6 @@ add(
   }
 }
 
-// add a dictionary element
 PyObject*
 add_with_key(
   PyObject* self,
@@ -915,6 +891,11 @@ PyJsonValue::Deconv::operator()(
 )
 {
   if ( obj == nullptr ) {
+    // "null オブジェクト"
+    val = JsonValue::null();
+    return true;
+  }
+  if ( obj == Py_None ) {
     // "null オブジェクト"
     val = JsonValue::null();
     return true;

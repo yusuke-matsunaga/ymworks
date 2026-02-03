@@ -75,7 +75,6 @@ richcompare_func(
   }
 }
 
-// return operand edge
 PyObject*
 operand(
   PyObject* self,
@@ -105,7 +104,6 @@ operand(
   }
 }
 
-// return string representation
 PyObject*
 to_string(
   PyObject* self,

@@ -199,7 +199,6 @@ richcompare_func(
   }
 }
 
-// make invalid BddLit object
 PyObject*
 invalid(
   PyObject* Py_UNUSED(self),
@@ -217,7 +216,6 @@ invalid(
   }
 }
 
-// return True if invalid
 PyObject*
 is_invalid(
   PyObject* self,
@@ -236,7 +234,6 @@ is_invalid(
   }
 }
 
-// return True if positive literal
 PyObject*
 is_positive(
   PyObject* self,
@@ -255,7 +252,6 @@ is_positive(
   }
 }
 
-// return True if negative literal
 PyObject*
 is_negative(
   PyObject* self,
@@ -274,7 +270,6 @@ is_negative(
   }
 }
 
-// return positive literal of the same variable
 PyObject*
 positive_literal(
   PyObject* self,
@@ -293,7 +288,6 @@ positive_literal(
   }
 }
 
-// return negative literal of the same variable
 PyObject*
 negative_literal(
   PyObject* self,
@@ -312,7 +306,6 @@ negative_literal(
   }
 }
 
-//
 PyObject*
 bdd(
   PyObject* self,
@@ -331,7 +324,6 @@ bdd(
   }
 }
 
-// return the complement of this literal
 PyObject*
 complement(
   PyObject* self,

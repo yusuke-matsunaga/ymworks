@@ -185,7 +185,6 @@ richcompare_func(
   }
 }
 
-// make a copy
 PyObject*
 copy(
   PyObject* self,
@@ -208,7 +207,6 @@ copy(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,
@@ -227,7 +225,6 @@ is_valid(
   }
 }
 
-// True if positive literal
 PyObject*
 is_positive(
   PyObject* self,
@@ -246,7 +243,6 @@ is_positive(
   }
 }
 
-// True if negative literal
 PyObject*
 is_negative(
   PyObject* self,
@@ -265,7 +261,6 @@ is_negative(
   }
 }
 
-// return the positive literal of the same variable
 PyObject*
 make_positive(
   PyObject* self,
@@ -284,7 +279,6 @@ make_positive(
   }
 }
 
-// return the negative literal of the same variable
 PyObject*
 make_negative(
   PyObject* self,

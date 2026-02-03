@@ -87,7 +87,6 @@ richcompare_func(
   }
 }
 
-// read mislig(genlib)
 PyObject*
 read_mislib(
   PyObject* Py_UNUSED(self),
@@ -120,7 +119,6 @@ read_mislib(
   }
 }
 
-// read liberty(.lib)
 PyObject*
 read_liberty(
   PyObject* Py_UNUSED(self),
@@ -153,7 +151,6 @@ read_liberty(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,
@@ -172,7 +169,6 @@ is_valid(
   }
 }
 
-// return list of piece-defines
 PyObject*
 meth_piece_define(
   PyObject* self,
@@ -191,7 +187,6 @@ meth_piece_define(
   }
 }
 
-// return cell
 PyObject*
 cell(
   PyObject* self,
@@ -226,7 +221,6 @@ cell(
   }
 }
 
-// return list of cells
 PyObject*
 meth_cell_list(
   PyObject* self,
@@ -245,7 +239,6 @@ meth_cell_list(
   }
 }
 
-// return cell group
 PyObject*
 cell_group(
   PyObject* self,
@@ -275,7 +268,6 @@ cell_group(
   }
 }
 
-// return list of cell groups
 PyObject*
 meth_cell_group_list(
   PyObject* self,
@@ -294,7 +286,6 @@ meth_cell_group_list(
   }
 }
 
-// return cell class
 PyObject*
 npn_class(
   PyObject* self,
@@ -324,7 +315,6 @@ npn_class(
   }
 }
 
-// return list of cell classes
 PyObject*
 meth_npn_class_list(
   PyObject* self,
@@ -343,7 +333,6 @@ meth_npn_class_list(
   }
 }
 
-// get AND function cell group
 PyObject*
 and_func(
   PyObject* self,
@@ -373,7 +362,6 @@ and_func(
   }
 }
 
-// get NAND function cell group
 PyObject*
 nand_func(
   PyObject* self,
@@ -403,7 +391,6 @@ nand_func(
   }
 }
 
-// get OR function cell group
 PyObject*
 or_func(
   PyObject* self,
@@ -433,7 +420,6 @@ or_func(
   }
 }
 
-// get NOR function cell group
 PyObject*
 nor_func(
   PyObject* self,
@@ -463,7 +449,6 @@ nor_func(
   }
 }
 
-// get XOR function cell group
 PyObject*
 xor_func(
   PyObject* self,
@@ -493,7 +478,6 @@ xor_func(
   }
 }
 
-// get XNOR function cell group
 PyObject*
 xnor_func(
   PyObject* self,
@@ -523,7 +507,6 @@ xnor_func(
   }
 }
 
-// find FF cell class
 PyObject*
 find_ff_class(
   PyObject* self,
@@ -560,7 +543,6 @@ find_ff_class(
   }
 }
 
-// find LATCH cell class
 PyObject*
 find_latch_class(
   PyObject* self,
@@ -597,7 +579,6 @@ find_latch_class(
   }
 }
 
-// return PatGraph
 PyObject*
 pg_pat(
   PyObject* self,
@@ -627,7 +608,6 @@ pg_pat(
   }
 }
 
-// return Node Type
 PyObject*
 pg_node_type(
   PyObject* self,
@@ -657,7 +637,6 @@ pg_node_type(
   }
 }
 
-// return Input ID of the specified node
 PyObject*
 pg_input_id(
   PyObject* self,
@@ -687,7 +666,6 @@ pg_input_id(
   }
 }
 
-// return Node ID of the specified input
 PyObject*
 pg_input_node(
   PyObject* self,
@@ -717,7 +695,6 @@ pg_input_node(
   }
 }
 
-// return Edge information(souce-id, sink-id, fanin-pos, inv)
 PyObject*
 pg_edge(
   PyObject* self,
@@ -751,7 +728,6 @@ pg_edge(
   }
 }
 
-// dump
 PyObject*
 dump(
   PyObject* self,
@@ -786,7 +762,6 @@ dump(
   }
 }
 
-// restore
 PyObject*
 restore(
   PyObject* Py_UNUSED(self),
@@ -819,7 +794,6 @@ restore(
   }
 }
 
-// display contents
 PyObject*
 display(
   PyObject* self,

@@ -76,7 +76,6 @@ richcompare_func(
   }
 }
 
-// return idmap
 PyObject*
 idmap(
   PyObject* self,
@@ -106,7 +105,6 @@ idmap(
   }
 }
 
-// return list of idmaps
 PyObject*
 meth_idmap_list(
   PyObject* self,
@@ -125,7 +123,6 @@ meth_idmap_list(
   }
 }
 
-// return CellGroup
 PyObject*
 cell_group(
   PyObject* self,
@@ -155,7 +152,6 @@ cell_group(
   }
 }
 
-// return list of CellGroups
 PyObject*
 meth_cell_group_list(
   PyObject* self,
@@ -174,7 +170,6 @@ meth_cell_group_list(
   }
 }
 
-// True if valid
 PyObject*
 is_valid(
   PyObject* self,
@@ -193,7 +188,6 @@ is_valid(
   }
 }
 
-// True if invalid
 PyObject*
 is_invalid(
   PyObject* self,
