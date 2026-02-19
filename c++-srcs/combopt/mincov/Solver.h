@@ -102,39 +102,6 @@ protected:
   );
 
 
-protected:
-  //////////////////////////////////////////////////////////////////////
-  // オプション解析用の便利関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief ブール値を取り出す．
-  static
-  bool
-  get_bool(
-    const JsonValue& opt_obj,   ///< [in] オプションを表す JSON オブジェクト
-    const std::string& keyword, ///< [in] キーワード文字列
-    bool default_val = false    ///< [in] デフォルト値
-  );
-
-  /// @brief int値を取り出す．
-  static
-  int
-  get_int(
-    const JsonValue& opt_obj,   ///< [in] オプションを表す JSON オブジェクト
-    const std::string& keyword, ///< [in] キーワード文字列
-    int default_val = 0         ///< [in] デフォルト値
-  );
-
-  /// @brief 文字列値を取り出す．
-  static
-  std::string
-  get_string(
-    const JsonValue& opt_obj,           ///< [in] オプションを表す JSON オブジェクト
-    const std::string& keyword,         ///< [in] キーワード文字列
-    const std::string& default_val = {} ///< [in] デフォルト値
-  );
-
-
 private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ

@@ -67,7 +67,8 @@ Exact::Exact(
   const JsonValue& opt_obj
 ) : Solver{matrix, opt_obj},
     mLbCalc{new_LbCalc(opt_obj)},
-    mDoPartition{get_bool(opt_obj, "partition")}
+    mSelector{new_Selector(opt_obj)},
+    mDoPartition{get_bool(opt_obj, "partition", false)}
 {
 }
 

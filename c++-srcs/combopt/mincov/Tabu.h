@@ -5,11 +5,10 @@
 /// @brief Tabu のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2005-2011, 2014, 2018 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-
-#include "ym/mincov_nsdef.h"
+#include "Solver.h"
 
 
 BEGIN_NAMESPACE_YM_MINCOV
@@ -17,41 +16,30 @@ BEGIN_NAMESPACE_YM_MINCOV
 //////////////////////////////////////////////////////////////////////
 /// @class Tabu Tabu.h "Tabu.h"
 /// @brief Minimum Covering 問題を tabu search で解くクラス
-///
-/// 実はクラスである必要はほとんどない．
 //////////////////////////////////////////////////////////////////////
-class Tabu
+class Tabu:
+  public Solver
 {
+public:
+
+  /// @brief コンストラクタ
+  Tabu(
+    McMatrix& matrix,        ///< [in] 対象の行列
+    const JsonValue& opt_obj ///< [in] オプションを表す JSON オブジェクト
+  );
+
+
 public:
   //////////////////////////////////////////////////////////////////////
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 最小被覆問題を解く．
-  /// @param[in] matrix 対象の行列
-  /// @param[in] selector 列を選ぶ関数オブジェクト
-  /// @param[out] solution 選ばれた列集合
-  static
-  void
+  /// @return 解のコストを返す．
+  SizeType
   solve(
-    const McMatrix& matrix,
-    Selector& selector,
-    std::vector<int>& solution
-  );
-
-  /// @brief デバッグフラグをセットする．
-  /// @param[in] flag セットする値
-  static
-  void
-  set_debug_flag(
-    bool flag
-  );
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
+    std::vector<SizeType>& solution ///< [out] 選ばれた列集合
+  ) override;
 
 
 private:
@@ -59,9 +47,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // デバッグフラグ
-  static
-  bool mDebug;
+  // 列を選択するクラス
+  std::unique_ptr<Selector> mSelector;
 
 };
 

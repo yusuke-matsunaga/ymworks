@@ -17,6 +17,8 @@
 # サブディレクトリの設定
 # ===================================================================
 
+add_subdirectory( gtest )
+
 
 # ===================================================================
 #  ソースの設定
@@ -35,6 +37,7 @@ set ( mincov_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/lb/MisNodeHeap.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/MaxClique.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/MinCov.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/McPerturbator.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/sel/Selector.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/sel/SelCS.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/sel/SelNaive.cc

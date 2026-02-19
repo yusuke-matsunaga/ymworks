@@ -27,11 +27,7 @@ LbCalc::new_obj(
   const JsonValue& opt_obj
 )
 {
-  auto type_str = std::string{"CS"};
-  if ( opt_obj.has_key("type") ) {
-    auto type_obj = opt_obj.at("type");
-    type_str = opt_obj.get_string();
-  }
+  auto type_str = get_string(opt_obj, "type", "CS");
   if ( type_str == "CS" ) {
     return std::unique_ptr<LbCalc>{new LbCS};
   }

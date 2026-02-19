@@ -34,11 +34,7 @@ Solver::new_obj(
   const JsonValue& opt_obj
 )
 {
-  auto algorithm = std::string{"greedy"};
-  if ( opt_obj.has_key("algorithm") ) {
-    algorithm = get_string(opt_obj["algorithm"], "algorithm");
-  }
-
+  auto algorithm = get_string(opt_obj, "algorithm", "greedy");
   if ( algorithm == "exact" ) {
     return std::unique_ptr<Solver>{new Exact{matrix, opt_obj}};
   }
@@ -58,8 +54,8 @@ Solver::Solver(
   McMatrix& matrix,
   const JsonValue& opt_obj
 ) : mMatrix{matrix},
-    mDebug{get_int(opt_obj, "debug")},
-    mDebugDepth{get_int(opt_obj, "debug_depth")}
+    mDebug{get_int(opt_obj, "debug", 0)},
+    mDebugDepth{get_int(opt_obj, "debug_depth", 2)}
 {
 }
 
@@ -93,63 +89,6 @@ Solver::new_LbCalc(
     lb_opt = opt_obj.at("lower_bound");
   }
   return LbCalc::new_obj(lb_opt);
-}
-
-bool
-Solver::get_bool(
-  const JsonValue& opt_obj,
-  const std::string& keyword,
-  bool default_val
-)
-{
-  if ( opt_obj.has_key(keyword) ) {
-    auto value = opt_obj.at(keyword);
-    if ( !value.is_bool() ) {
-      std::ostringstream buf;
-      buf << keyword << " should be boolean";
-      throw std::invalid_argument{buf.str()};
-    }
-    return value.get_bool();
-  }
-  return default_val;
-}
-
-int
-Solver::get_int(
-  const JsonValue& opt_obj,
-  const std::string& keyword,
-  int default_val
-)
-{
-  if ( opt_obj.has_key(keyword) ) {
-    auto value = opt_obj.at(keyword);
-    if ( !value.is_int() ) {
-      std::ostringstream buf;
-      buf << keyword << " should be an integer";
-      throw std::invalid_argument{buf.str()};
-    }
-    return value.get_int();
-  }
-  return default_val;
-}
-
-std::string
-Solver::get_string(
-  const JsonValue& opt_obj,
-  const std::string& keyword,
-  const std::string& default_val
-)
-{
-  if ( opt_obj.has_key(keyword) ) {
-    auto value = opt_obj.at(keyword);
-    if ( !value.is_string() ) {
-      std::ostringstream buf;
-      buf << keyword << " should be a string";
-      throw std::invalid_argument{buf.str()};
-    }
-    return value.get_string();
-  }
-  return default_val;
 }
 
 END_NAMESPACE_YM_MINCOV

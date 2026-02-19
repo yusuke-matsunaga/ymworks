@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/combopt.h"
-#include "ym/json.h"
+#include "ym/JsonValue.h"
 
 
 BEGIN_NAMESPACE_YM_MINCOV
@@ -42,6 +42,7 @@ public:
     SizeType row_pos; ///< 行番号
     SizeType col_pos; ///< 列番号
   };
+
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -217,36 +218,8 @@ public:
   SizeType
   solve(
     std::vector<SizeType>& solution, ///< [out] 選ばれた列集合
-    const JsonValue& option          ///< [in] オプションを表すJSONオブジェクト
-  );
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる下請け関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 最小被覆問題を解く．
-  /// @return 解のコスト
-  SizeType
-  exact(
-    std::vector<SizeType>& solution, ///< [out] 選ばれた列集合
-    const JsonValue& option          ///< [in] オプションを表すJSONオブジェクト
-  );
-
-  /// @brief ヒューリスティックで最小被覆問題を解く．
-  /// @return 解のコスト
-  SizeType
-  heuristic(
-    std::vector<SizeType>& solution, ///< [out] 選ばれた列集合
-    const JsonValue& option          ///< [in] オプションを表すJSONオブジェクト
-  );
-
-  /// @brief mElemList をチェックする．
-  ///
-  /// 要素を持たない行があったら警告する．
-  void
-  sanity_check();
+    const JsonValue& option = {}     ///< [in] オプションを表すJSONオブジェクト
+  ) const;
 
   /// @brief 解を検証する．
   /// @retval true 正しい解だった．
@@ -255,7 +228,31 @@ private:
   verify_solution(
     const std::vector<SizeType>& solution, ///< [in] 解のリスト
     std::vector<SizeType>& uncov_row_list  ///< [in] 被覆されていない行のリスト
-  );
+  ) const;
+
+  /// @brief 解を検証する．
+  /// @retval true 正しい解だった．
+  /// @retval false 被覆されていない行があった．
+  bool
+  verify_solution(
+    const std::vector<SizeType>& solution ///< [in] 解のリスト
+  ) const
+  {
+    std::vector<SizeType> dummy;
+    return verify_solution(solution, dummy);
+  }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる下請け関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief mElemList をチェックする．
+  ///
+  /// 要素を持たない行があったら警告する．
+  void
+  sanity_check() const;
 
   /// @brief row_pos が範囲内かチェックする．
   void

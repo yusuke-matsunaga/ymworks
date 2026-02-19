@@ -48,9 +48,7 @@ McMatrix::McMatrix(
     mColSize{cost_array.size()},
     mColHeadArray(mColSize),
     mColArray(mColSize, nullptr),
-    mCostArray{cost_array},
-    mDelStack(mRowSize + mColSize),
-    mDelList(std::max(mRowSize, mColSize))
+    mCostArray{cost_array}
 {
   for ( auto row_pos: Range(mRowSize) ) {
     mRowHeadArray[row_pos].init(row_pos, false);
@@ -62,40 +60,33 @@ McMatrix::McMatrix(
     mColArray[col_pos] = alloc_cell(-1, col_pos);
   }
 
+  mDelStack.reserve(mRowSize + mColSize);
+
   // 要素を設定する．
   insert_elem_list(elem_list);
 }
 
-#if 0
-// @brief コピーコンストラクタ
-McMatrix::McMatrix(
-  const McMatrix& src
-)
-{
-  // サイズを設定する．
-  resize(src.row_size(), src.col_size());
-
-  // 内容をコピーする．
-  copy(src);
-}
-
-// @brief コピー代入演算子
-McMatrix&
-McMatrix::operator=(
-  const McMatrix& src
-)
-{
-  if ( this != &src ) {
-    resize(src.row_size(), src.col_size());
-    copy(src);
-  }
-  return *this;
-}
-#endif
-
 // @brief デストラクタ
 McMatrix::~McMatrix()
 {
+}
+
+// @brief 必須列の列番号のリストを返す．
+std::vector<SizeType>
+McMatrix::essential_cols() const
+{
+  std::vector<SizeType> col_list;
+  std::vector<bool> mark(mColSize, false);
+  for ( auto row_pos1: row_head_list() ) {
+    if ( row_elem_num(row_pos1) == 1 ) {
+      auto col_pos = row_list(row_pos1).front();
+      if ( !mark[col_pos] ) {
+	mark[col_pos] = true;
+	col_list.push_back(col_pos);
+      }
+    }
+  }
+  return col_list;
 }
 
 // @brief 要素を追加する．
@@ -130,7 +121,9 @@ McMatrix::insert_elem(
 	// pcell と ncell の間に cell を挿入する．
 	break;
       }
-      ASSERT_COND( ncell != row_dummy );
+      if ( ncell == row_dummy ) {
+	throw std::logic_error{"something goes wrong"};
+      }
     }
   }
 
@@ -159,14 +152,15 @@ McMatrix::insert_elem(
       ncell = pcell->mDownLink;
       if ( ncell->row_pos() == row_pos ) {
 	// 列番号が重複しているので無視する．
-	ASSERT_NOT_REACHED;
 	return;
       }
       if ( ncell->row_pos() > row_pos ) {
 	// pcell と ncell の間に cell を挿入する．
 	break;
       }
-      ASSERT_COND( ncell != col_dummy );
+      if ( ncell == col_dummy ) {
+	throw std::logic_error{"something goes wrong"};
+      }
     }
   }
   cell->mUpLink = pcell;
@@ -199,8 +193,9 @@ McMatrix::select_col(
   for ( auto row_pos: col_list(col_pos) ) {
     delete_row(row_pos);
   }
-
-  ASSERT_COND( col_elem_num(col_pos) == 0 );
+  if ( col_elem_num(col_pos) > 0 ) {
+    throw std::logic_error{"something goes wrong"};
+  }
   delete_col(col_pos);
 }
 
@@ -233,7 +228,13 @@ McMatrix::reduce(
   }
 
   // 必須列を探し，列の選択を行う．
-  if ( essential_col(selected_cols) ) {
+  bool has_ec = false;
+  for ( auto col_pos: essential_cols() ) {
+    select_col(col_pos);
+    selected_cols.push_back(col_pos);
+    has_ec = true;
+  }
+  if ( has_ec ) {
     reduced = true;
     if ( mcmatrix_debug > 0 ) {
       std::cout << " after essential_col: "
@@ -266,16 +267,30 @@ McMatrix::reduce_loop(
   }
 }
 
+// @brief 変化がなくなるまで reduce() を呼ぶ．(deleted_cols がないバージョン)
+void
+McMatrix::reduce_loop(
+  std::vector<SizeType>& selected_cols,
+  const McColComp& col_comp
+)
+{
+  std::vector<SizeType> dummy_cols;
+  reduce_loop(selected_cols, dummy_cols, col_comp);
+}
+
 // @brief 行支配による縮約を行う．
 bool
 McMatrix::row_dominance()
 {
   bool change = false;
 
+  // 削除する行番号のマーク
+  std::vector<bool> mark(mRowSize, false);
   // 削除する行番号のリスト
-  SizeType del_wpos = 0;
+  std::vector<SizeType> del_list;
+  del_list.reserve(active_row_num());
   for ( auto row_pos1: row_head_list() ) {
-    if ( mRowMark[row_pos1] ) {
+    if ( mark[row_pos1] ) {
       // すでに削除の印がついていたらスキップ
       continue;
     }
@@ -300,15 +315,14 @@ McMatrix::row_dominance()
 	continue;
       }
 
+      if ( mark[row_pos2] ) {
+	// 削除された行も比較しない.
+	continue;
+      }
       if ( row_elem_num(row_pos2) < row_elem_num(row_pos1) ) {
 	// 要素数が少ない行も比較しない．
 	continue;
       }
-      if ( mRowMark[row_pos2] ) {
-	// 削除された行も比較しない.
-	continue;
-      }
-
       // どちらかが dirty でなければチェックする必要はない．
       if ( !dirty1 && !mRowHeadArray[row_pos2].is_dirty() ) {
 	continue;
@@ -317,10 +331,8 @@ McMatrix::row_dominance()
       // row1 に含まれる要素をすべて row2 が含んでいる場合
       // row1 が row2 を支配している．
       if ( check_containment(row_list(row_pos2), row_list(row_pos1)) ) {
-	mRowMark[row_pos2] = 1;
-	mDelList[del_wpos] = row_pos2;
-	++ del_wpos;
-	change = true;
+	mark[row_pos2] = true;
+	del_list.push_back(row_pos2);
 	if ( mcmatrix_debug > 1 ) {
 	  std::cout << "Row#" << row_pos2 << " is dominated by Row#"
 		    << row_pos1
@@ -335,15 +347,11 @@ McMatrix::row_dominance()
   }
 
   // 実際に削除する．
-  for ( auto i: Range(del_wpos) ) {
-    auto row = mDelList[i];
+  for ( auto row: del_list ) {
     delete_row(row);
-    mRowMark[row] = 0;
   }
 
-  ASSERT_COND( check_mark_sanity() );
-
-  return change;
+  return !del_list.empty();
 }
 
 // @brief 列支配による縮約を行う．
@@ -353,12 +361,23 @@ McMatrix::col_dominance(
   const McColComp& col_comp
 )
 {
-  SizeType del_wpos = 0;
+  // 削除する列番号のマーク
+  std::vector<bool> mark(mColSize, false);
+  // 削除する列番号のリスト
+  std::vector<SizeType> del_list;
+  del_list.reserve(active_col_num());
   for ( auto col_pos1: col_head_list() ) {
+    if ( mark[col_pos1] ) {
+      // 削除済みはスキップ
+      continue;
+    }
+
     if ( col_elem_num(col_pos1) == 0 ) {
       // 要素を持たない列は無条件で削除する．
-      mDelList[del_wpos] = col_pos1;
-      ++ del_wpos;
+      del_list.push_back(col_pos1);
+      if ( mcmatrix_debug > 1 ) {
+	std::cout << "Col#" << col_pos1 << " has no elements" << std::endl;
+      }
       continue;
     }
 
@@ -369,7 +388,7 @@ McMatrix::col_dominance(
     SizeType min_num = col_size() + 1;
     SizeType min_row = 0;
     for ( auto row_pos: col_list(col_pos1) ) {
-      SizeType row_num = row_elem_num(row_pos);
+      auto row_num = row_elem_num(row_pos);
       if ( min_num > row_num ) {
 	min_num = row_num;
 	min_row = row_pos;
@@ -382,31 +401,29 @@ McMatrix::col_dominance(
 	// 自分自身は比較しない．
 	continue;
       }
-      if ( mColMark[col_pos2] ) {
+      if ( mark[col_pos2] ) {
 	// 削除済みならスキップ
 	continue;
       }
-      if ( col_elem_num(col_pos2) < col_elem_num(col_pos1) ) {
-	// ただし col1 よりも要素数の少ない列は調べる必要はない．
+      if ( col_elem_num(col_pos2) > col_elem_num(col_pos1) ) {
+	// ただし col1 よりも要素数の多い列は調べる必要はない．
 	continue;
       }
-
       // どちらかが dirty でなければチェックする必要はない．
       if ( !dirty1 && !mColHeadArray[col_pos2].is_dirty() ) {
 	continue;
       }
 
-      // col1 に含まれる要素を col2 がすべて含んでいる場合
-      // col2 は col_head1 を支配している．
-      if ( check_containment(col_list(col_pos2), col_list(col_pos1)) ) {
-	if ( col_comp(col_pos1, col_pos2) ) {
-	  // col1 を col2 を置き換えてコストが上がらない場合には col1 を削除できる．
-	  mColMark[col_pos1] = 1;
-	  mDelList[del_wpos] = col_pos1;
-	  ++ del_wpos;
+      // col2 に含まれる要素を col1 がすべて含んでいる場合
+      // col1 は col2 を支配している．
+      if ( check_containment(col_list(col_pos1), col_list(col_pos2)) ) {
+	if ( col_comp(col_pos2, col_pos1) ) {
+	  // col2 を col1 を置き換えてコストが上がらない場合には col2 を削除できる．
+	  mark[col_pos2] = true;
+	  del_list.push_back(col_pos2);
 	  if ( mcmatrix_debug > 1 ) {
-	    std::cout << "Col#" << col_pos1 << " is dominated by Col#"
-		      << col_pos2
+	    std::cout << "Col#" << col_pos2 << " is dominated by Col#"
+		      << col_pos1
 		      << std::endl;
 	  }
 	  break;
@@ -420,49 +437,13 @@ McMatrix::col_dominance(
   }
 
   // 実際に削除する．
-  deleted_cols.reserve(deleted_cols.size() + del_wpos);
-  for ( auto i: Range(del_wpos) ) {
-    auto col = mDelList[i];
+  deleted_cols.reserve(deleted_cols.size() + del_list.size());
+  for ( auto col: del_list ) {
     delete_col(col);
     deleted_cols.push_back(col);
-    mColMark[col] = 0;
   }
 
-  ASSERT_COND( check_mark_sanity() );
-
-  return del_wpos > 0;
-}
-
-// @brief 必須列による縮約を行う．
-bool
-McMatrix::essential_col(
-  std::vector<SizeType>& selected_cols
-)
-{
-  auto old_size = selected_cols.size();
-  for ( auto row_pos1: row_head_list() ) {
-    if ( row_elem_num(row_pos1) == 1 ) {
-      auto col_pos = row_list(row_pos1).front();
-      if ( !mColMark[col_pos] ) {
-	mColMark[col_pos] = 1;
-	selected_cols.push_back(col_pos);
-	if ( mcmatrix_debug > 1 ) {
-	  std::cout << "Col#" << col_pos << " is essential"
-		    << std::endl;
-	}
-      }
-    }
-  }
-  auto size = selected_cols.size();
-  for ( auto i: Range(old_size, size) ) {
-    auto col_pos = selected_cols[i];
-    select_col(col_pos);
-    mColMark[col_pos] = 0;
-  }
-
-  ASSERT_COND( check_mark_sanity() );
-
-  return size > old_size;
+  return !del_list.empty();
 }
 
 // @brief 行を削除する．
@@ -482,8 +463,10 @@ McMatrix::delete_row(
     // cell を列方向のリンクから切り離す．
     auto prev = cell->col_prev();
     auto next = cell->col_next();
-    ASSERT_COND( prev->col_next() == cell );
-    ASSERT_COND( next->col_prev() == cell );
+    if ( prev->col_next() != cell ||
+	 next->col_prev() != cell ) {
+      throw std::logic_error{"something goes wrong"};
+    }
     prev->mDownLink = next;
     next->mUpLink = prev;
     // cell の列の要素数を1つ減らす．
@@ -508,8 +491,10 @@ McMatrix::restore_row(
     // cell を列方向のリンクに戻す．
     auto prev = cell->col_prev();
     auto next = cell->col_next();
-    ASSERT_COND( prev->col_next() == next );
-    ASSERT_COND( next->col_prev() == prev );
+    if ( prev->col_next() != next ||
+	 next->col_prev() != prev ) {
+      throw std::logic_error{"something goes wrong"};
+    }
     prev->mDownLink = cell;
     next->mUpLink = cell;
     // cell の列の要素数を1つ増やす．
@@ -535,8 +520,10 @@ McMatrix::delete_col(
     // cell を行方向のリンクから切り離す．
     auto prev = cell->row_prev();
     auto next = cell->row_next();
-    ASSERT_COND( prev->row_next() == cell );
-    ASSERT_COND( next->row_prev() == cell );
+    if ( prev->row_next() != cell ||
+	 next->row_prev() != cell ) {
+      throw std::logic_error{"something goes wrong"};
+    }
     prev->mRightLink = next;
     next->mLeftLink = prev;
     // cell の行の要素数を1つ減らす．
@@ -562,8 +549,10 @@ McMatrix::restore_col(
     // cell を行方向のリンクに戻す．
     auto prev = cell->row_prev();
     auto next = cell->row_next();
-    ASSERT_COND( prev->row_next() == next );
-    ASSERT_COND( next->row_prev() == prev) ;
+    if ( prev->row_next() != next ||
+	 next->row_prev() != prev ) {
+      throw std::logic_error{"something goes wrong"};
+    }
     prev->mRightLink = cell;
     next->mLeftLink = cell;
     // cell の行の要素数を1つ増やす．
@@ -606,18 +595,15 @@ McMatrix::resize(
   mCellList.clear();
   mRowHeadArray.clear();
   mRowArray.clear();
-  mRowMark.clear();
   mColHeadArray.clear();
   mColArray.clear();
   mCostArray.clear();
-  mColMark.clear();
 
   mRowSize = row_size;
   mColSize = col_size;
 
   mRowHeadArray.resize(mRowSize);
   mRowArray.resize(mRowSize, nullptr);
-  mRowMark.resize(mRowSize, 0);
   for ( auto row_pos: Range(mRowSize) ) {
     mRowHeadArray[row_pos].init(row_pos, false);
     mRowArray[row_pos] = alloc_cell(row_pos, -1);
@@ -626,19 +612,12 @@ McMatrix::resize(
   mColHeadArray.resize(mColSize);
   mColArray.resize(mColSize, nullptr);
   mCostArray.resize(mColSize, 1);
-  mColMark.resize(mColSize, 0);
   for ( auto col_pos: Range(mColSize) ) {
     mColHeadArray[col_pos].init(col_pos, true);
     mColArray[col_pos] = alloc_cell(-1, col_pos);
   }
 
-  mDelStack.resize(row_size + col_size);
-  mStackTop = 0;
-
-  auto rc_max = std::max(mRowSize, mColSize);
-  mDelList.resize(rc_max);
-
-  ASSERT_COND( check_mark_sanity() );
+  mDelStack.reserve(row_size + col_size);
 }
 
 // @brief 内容をコピーする．
@@ -647,8 +626,10 @@ McMatrix::copy(
   const McMatrix& src
 )
 {
-  ASSERT_COND( row_size() == src.row_size() );
-  ASSERT_COND( col_size() == src.col_size() );
+  if ( row_size() != src.row_size() ||
+       col_size() != src.col_size() ) {
+    throw std::invalid_argument{"size mismatch"};
+  }
 
   for ( auto row_pos: Range_<SizeType>(row_size()) ) {
     for ( auto col_pos: row_list(row_pos) ) {
@@ -699,23 +680,6 @@ McMatrix::verify(
   return true;
 }
 
-// @brief mRowMark, mColMark の sanity check
-bool
-McMatrix::check_mark_sanity()
-{
-  for ( auto row: Range(row_size()) ) {
-    if ( mRowMark[row] != 0 ) {
-      return false;
-    }
-  }
-  for ( auto col: Range(col_size()) ) {
-    if ( mColMark[col] != 0 ) {
-      return false;
-    }
-  }
-  return true;
-}
-
 // @brief セルの生成
 McCell*
 McMatrix::alloc_cell(
@@ -734,15 +698,27 @@ McMatrix::print(
   std::ostream& s
 ) const
 {
+  s << "Cols:";
   for ( auto col_pos: Range(col_size()) ) {
+    if ( col_deleted(col_pos) ) {
+      continue;
+    }
+    s << " #" << col_pos;
     if ( col_cost(col_pos) != 1 ) {
-      s << "Col#" << col_pos
-	<< ": " << col_cost(col_pos)
-	<< std::endl;
+      s << ": " << col_cost(col_pos);
     }
   }
+  s << std::endl;
+  s << "Rows:";
   for ( auto row_pos: Range(row_size()) ) {
-    s << "Row#" << row_pos << ":";
+    if ( row_deleted(row_pos) ) {
+      continue;
+    }
+    s << " #" << row_pos << ":";
+  }
+  s << std::endl;
+  for ( auto row_pos: row_head_list() ) {
+    s << "Row#" << row_pos << ": ";
     for ( auto col_pos: row_list(row_pos) ) {
       s << " " << col_pos;
     }

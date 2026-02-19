@@ -3,9 +3,8 @@
 /// @brief Tabu の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2005-2010, 2014, 2018 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
-
 
 #include "Tabu.h"
 #include "McMatrix.h"
@@ -18,24 +17,30 @@ BEGIN_NAMESPACE_YM_MINCOV
 // クラス Tabu
 //////////////////////////////////////////////////////////////////////
 
-// @brief greedy アルゴリズムで解を求める．
-void
+// @brief コンストラクタ
+Tabu::Tabu(
+  McMatrix& matrix,
+  const JsonValue& opt_obj
+) : Solver(maxtirx, opt_obj),
+{
+}
+
+// @brief tabu search アルゴリズムで解を求める．
+SizeType
 Tabu::solve(
-  const McMatrix& matrix,
-  Selector& selector,
-  std::vector<int>& solution
+  std::vector<SizeType>& solution
 )
 {
-  if ( mDebug ) {
+  if ( debug() ) {
     std::cout << "Tabu::solve() start"
 	      << std::endl;
   }
 
   // 作業用に行列のコピーを作る．
-  McMatrix cur_matrix(matrix);
+  auto cur_matrix = matrix();
 
   // 初期解を Greedy で作る．
-  std::vector<int> cur_solution;
+  std::vector<SizeType> cur_solution;
   while ( cur_matrix.row_num() > 0 ) {
     // 次の分岐のための列をとってくる．
     int col = selector(cur_matrix);
@@ -44,7 +49,7 @@ Tabu::solve(
     cur_matrix.select_col(col);
     cur_solution.push_back(col);
 
-    if ( mDebug ) {
+    if ( debug() ) {
       std::cout << "Col#" << col << " is selected heuristically"
 		<< std::endl;
     }
@@ -63,16 +68,5 @@ Tabu::solve(
 
   return matrix.cost(solution);
 }
-
-// @brief デバッグフラグをセットする．
-void
-Tabu::set_debug_flag(
-  bool flag
-)
-{
-  mDebug = flag;
-}
-
-bool Tabu::mDebug = false;
 
 END_NAMESPACE_YM_MINCOV

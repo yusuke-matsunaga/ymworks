@@ -150,6 +150,10 @@ public:
     return mColHeadArray[col_pos].num();
   }
 
+  /// @brief 必須列の列番号のリストを返す．
+  std::vector<SizeType>
+  essential_cols() const;
+
   /// @brief 列の削除フラグを調べる．
   bool
   col_deleted(
@@ -242,11 +246,26 @@ public:
   );
 
   /// @brief 変化がなくなるまで reduce() を呼ぶ．
+  ///
+  /// * この関数は行支配，列支配，必須列を変化がなくなるまで適用する．
+  /// * selected_cols, deleted_cols はこの関数内で初期化されず，
+  ///   追加されるだけなので注意．
   void
   reduce_loop(
     std::vector<SizeType>& selected_cols,  ///< [out] この縮約で選択された列を格納するベクタ
     std::vector<SizeType>& deleted_cols,   ///< [out] この縮約で削除された列を格納するベクタ
     const McColComp& col_comp	      ///< [in]  列の比較関数オブジェクト
+    = McColComp{}
+  );
+
+  /// @brief 変化がなくなるまで reduce() を呼ぶ．(deleted_cols がないバージョン)
+  ///
+  /// * この関数は行支配，列支配，必須列を変化がなくなるまで適用する．
+  /// * selected_colsはこの関数内で初期化されず，追加されるだけなので注意．
+  void
+  reduce_loop(
+    std::vector<SizeType>& selected_cols,  ///< [out] この縮約で選択された列を格納するベクタ
+    const McColComp& col_comp	           ///< [in]  列の比較関数オブジェクト
     = McColComp{}
   );
 
@@ -320,16 +339,8 @@ private:
   /// @retval false 縮約が行われなかった．
   bool
   col_dominance(
-    std::vector<SizeType>& deleted_cols, ///< [out] この縮約で削除された列を格納するベクタ
+    std::vector<SizeType>& deleted_cols, ///< [out] 削除された列を格納するベクタ
     const McColComp& col_comp ///< [in]  列の比較関数オブジェクト
-  );
-
-  /// @brief 必須列による縮約を行う．
-  /// @retval true 縮約が行われた．
-  /// @retval false 縮約が行われなかった．
-  bool
-  essential_col(
-    std::vector<SizeType>& selected_cols ///< [out] この縮約で選択された列を格納するベクタ
   );
 
   /// @brief 行を復元する．
@@ -348,7 +359,7 @@ private:
   bool
   stack_empty()
   {
-    return mStackTop == 0;
+    return mDelStack.empty();
   }
 
   /// @brief スタックに削除した行/列のヘッダと積む．
@@ -357,16 +368,16 @@ private:
     McHead* head
   )
   {
-    mDelStack[mStackTop] = head;
-    ++ mStackTop;
+    mDelStack.push_back(head);
   }
 
   /// @brief スタックから取り出す．
   McHead*
   pop()
   {
-    -- mStackTop;
-    return mDelStack[mStackTop];
+    auto head = mDelStack.back();
+    mDelStack.pop_back();
+    return head;
   }
 
   /// @brief 行の削除フラグをセットする．
@@ -388,12 +399,6 @@ private:
   {
     mColHeadArray[col_pos].set_deleted(flag);
   }
-
-  /// @brief mRowMark, mColMark の sanity check
-  /// @retval true mRowMark, mColMark の内容が全て 0 だった．
-  /// @retval false mRowMark, mColMark に非0の要素が含まれていた．
-  bool
-  check_mark_sanity();
 
   /// @brief セルの生成
   McCell*
@@ -445,24 +450,6 @@ private:
 
   // 削除の履歴を覚えておくスタック
   std::vector<McHead*> mDelStack;
-
-  // mDelStack のポインタ
-  SizeType mStackTop{0};
-
-  // 作業用に使う行のマーク配列
-  // サイズは mRowSize
-  mutable
-  std::vector<SizeType> mRowMark;
-
-  // 作業用に使う列のマーク配列
-  // サイズは mColSize
-  mutable
-  std::vector<SizeType> mColMark;
-
-  // 作業用に使う配列
-  // サイズは max(mRowSize, mColSize)
-  mutable
-  std::vector<SizeType> mDelList;
 
 };
 
