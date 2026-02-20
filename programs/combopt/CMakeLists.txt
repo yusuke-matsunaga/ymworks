@@ -38,6 +38,7 @@
 
 add_subdirectory( coloring )
 add_subdirectory( max_clique )
+add_subdirectory( mincov )
 
 
 # ===================================================================
