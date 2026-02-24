@@ -188,6 +188,12 @@ public:
     std::ostream& s ///< [in] 出力先のストリーム
   ) const;
 
+  /// @brief 内容の概要を出力する．
+  void
+  print_stats(
+    std::ostream& s ///< [in] 出力先のストリーム
+  ) const;
+
 
 public:
   //////////////////////////////////////////////////////////////////////

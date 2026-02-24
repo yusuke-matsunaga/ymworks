@@ -699,4 +699,22 @@ McMatrix::print(
   }
 }
 
+// @brief 内容の概要を出力する．
+void
+McMatrix::print_stats(
+  std::ostream& s
+) const
+{
+  SizeType n = 0;
+  for ( auto row: row_head_list() ) {
+    for ( auto col: row_list(row) ) {
+      ++ n;
+    }
+  }
+  s << active_row_num() << " X "
+    << active_col_num()
+    << ": # of Non-Zero elements = "
+    << n << std::endl;
+}
+
 END_NAMESPACE_YM_MINCOV
