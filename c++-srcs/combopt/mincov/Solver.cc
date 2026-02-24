@@ -91,4 +91,19 @@ Solver::new_LbCalc(
   return LbCalc::new_obj(lb_opt);
 }
 
+// @brief 行列の内容を出力する．
+void
+Solver::print_matrix(
+  std::ostream& s
+) const
+{
+  if ( debug() > 1 ) {
+    matrix().print(s);
+  }
+  else if ( debug() > 0 ) {
+    matrix().print_stats(s);
+  }
+
+}
+
 END_NAMESPACE_YM_MINCOV

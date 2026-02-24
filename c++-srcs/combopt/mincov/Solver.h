@@ -67,6 +67,13 @@ protected:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 対象の行列を返す．
+  const McMatrix&
+  matrix() const
+  {
+    return mMatrix;
+  }
+
+  /// @brief 対象の行列を返す．
   McMatrix&
   matrix()
   {
@@ -86,6 +93,12 @@ protected:
   {
     return mDebugDepth;
   }
+
+  /// @brief 行列の内容を出力する．
+  void
+  print_matrix(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const;
 
   /// @brief Selector オブジェクトを作る．
   static

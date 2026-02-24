@@ -37,7 +37,7 @@ Greedy::solve(
   if ( debug() ) {
     std::cout << "Greedy::solve() start"
 	      << std::endl;
-    matrix().print(std::cout);
+    print_matrix(std::cout);
   }
 
   while ( matrix().active_row_num() > 0 ) {
@@ -64,7 +64,7 @@ Greedy::solve(
     if ( debug() ) {
       std::cout << "After reduction"
 		<< std::endl;
-      matrix().print(std::cout);
+      print_matrix(std::cout);
     }
   }
 

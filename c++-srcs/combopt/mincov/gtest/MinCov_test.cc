@@ -42,6 +42,33 @@ TEST(MinCovTest, greedy)
   EXPECT_EQ( 2, ns );
 }
 
+TEST(MinCovTest, greedy2)
+{
+  SizeType nr = 3;
+  SizeType nc = 4;
+  auto elem_list = std::vector<MinCov::ElemType>{
+    {0, 0}, {0, 2},
+    {1, 1}, {1, 2},
+    {2, 0}, {2, 3}
+  };
+
+  MinCov mincov;
+  for ( auto& elem: elem_list ) {
+    mincov.insert_elem(elem.row_pos, elem.col_pos);
+  }
+
+  EXPECT_EQ( nr, mincov.row_size() );
+  EXPECT_EQ( nc, mincov.col_size() );
+
+  auto option = JsonValue::object();
+  option.add("algorithm", JsonValue("greedy"));
+
+  std::vector<SizeType> solution;
+  auto ns = mincov.solve(solution, option);
+
+  EXPECT_EQ( 2, ns );
+}
+
 TEST(MinCovTest, exact)
 {
   SizeType nr = 3;

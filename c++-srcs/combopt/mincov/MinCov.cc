@@ -43,23 +43,6 @@ MinCov::solve(
   return cost;
 }
 
-// @brief mElemList をチェックする．
-void
-MinCov::sanity_check() const
-{
-  std::vector<bool> row_mark(row_size(), false);
-  for ( auto& elem: mElemList ) {
-    SizeType row_pos = elem.row_pos;
-    row_mark[row_pos] = true;
-  }
-  for ( auto row_pos: Range(row_size()) ) {
-    if ( !row_mark[row_pos] ) {
-      std::cout << "Warning: Row#" << row_pos << " has no elem"
-		<< std::endl;
-    }
-  }
-}
-
 // @brief 解を検証する．
 bool
 MinCov::verify_solution(
