@@ -43,6 +43,9 @@ public:
     SizeType col_pos; ///< 列番号
   };
 
+  /// @brief コストの辞書
+  using CostDict = std::unordered_map<SizeType, SizeType>;
+
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -51,46 +54,6 @@ public:
 
   /// @brief 空のコンストラクタ
   MinCov() = default;
-
-  /// @brief サイズを指定したコンストラクタ
-  ///
-  /// * 空の行列となる．
-  /// * 列のコストはすべて1になる．
-  MinCov(
-    SizeType row_size, ///< [in] 行数
-    SizeType col_size  ///< [in] 列数
-  ) : mRowSize{row_size},
-      mColSize{col_size},
-      mColCostArray(col_size, 1)
-  {
-  }
-
-  /// @brief コスト配列をしていしたコンストラクタ
-  ///
-  /// * 列のサイズは col_cost_array のサイズから得られる．
-  /// * 空の行列となる．
-  MinCov(
-    SizeType row_size,                          ///< [in] 行数
-    const std::vector<SizeType>& col_cost_array ///< [in] 列のコストの配列
-  ) : mRowSize{row_size},
-      mColSize{col_cost_array.size()},
-      mColCostArray{col_cost_array}
-  {
-  }
-
-  /// @brief コピーコンストラクタ
-  MinCov(const MinCov& src) = default;
-
-  /// @brief ムーブコンストラクタ
-  MinCov(MinCov&& src) = default;
-
-  /// @brief コピー代入演算子
-  MinCov&
-  operator=(const MinCov& src) = default;
-
-  /// @brief ムーブ代入演算子
-  MinCov&
-  operator=(MinCov&& src) = default;
 
   /// @brief デストラクタ
   ~MinCov() = default;
@@ -101,36 +64,13 @@ public:
   // 内容を設定する関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 問題のサイズを設定する．
-  ///
-  /// * 空の行列となる．
-  /// * 列のコストはすべて1になる．
+  /// @brief クリアする．
   void
-  resize(
-    SizeType row_size, ///< [in] 行数
-    SizeType col_size  ///< [in] 列数
-  )
+  clear()
   {
-    mRowSize = row_size;
-    mColSize = col_size;
-    mColCostArray.clear();
-    mColCostArray.resize(col_size, 1);
-    mElemList.clear();
-  }
-
-  /// @brief 問題のサイズとコスト配列を設定する．
-  ///
-  /// * 列のサイズは col_cost_array のサイズから得られる．
-  /// * 空の行列となる．
-  void
-  resize(
-    SizeType row_size,                          ///< [in] 行数
-    const std::vector<SizeType>& col_cost_array ///< [in] 列のコスト配列
-  )
-  {
-    mRowSize = row_size;
-    mColSize = col_cost_array.size();
-    mColCostArray = col_cost_array;
+    mMaxRow = 0;
+    mMaxCol = 0;
+    mColCostDict.clear();
     mElemList.clear();
   }
 
@@ -141,9 +81,7 @@ public:
     SizeType cost     ///< [in] コスト
   )
   {
-    _check_col(col_pos);
-
-    mColCostArray[col_pos] = cost;
+    mColCostDict.emplace(col_pos, cost);
   }
 
   /// @brief 要素を追加する．
@@ -155,9 +93,8 @@ public:
     SizeType col_pos  ///< [in] 追加する要素の列番号
   )
   {
-    _check_row(row_pos);
-    _check_col(col_pos);
-
+    mMaxRow = std::max(mMaxRow, row_pos);
+    mMaxCol = std::max(mMaxCol, col_pos);
     mElemList.push_back(ElemType{row_pos, col_pos});
   }
 
@@ -171,14 +108,14 @@ public:
   SizeType
   row_size() const
   {
-    return mRowSize;
+    return mMaxRow + 1;
   }
 
   /// @brief 列数を得る．
   SizeType
   col_size() const
   {
-    return mColSize;
+    return mMaxCol + 1;
   }
 
   /// @brief 列のコストを得る．
@@ -187,16 +124,17 @@ public:
     SizeType col_pos ///< [in] 列番号 ( 0 <= col_pos < col_size )
   ) const
   {
-    _check_col(col_pos);
-
-    return mColCostArray[col_pos];
+    if ( mColCostDict.count(col_pos) == 0 ) {
+      return 1;
+    }
+    return mColCostDict.at(col_pos);
   }
 
-  /// @brief 列のコスト配列を得る．
-  const std::vector<SizeType>&
-  col_cost_array() const
+  /// @brief 列のコストの辞書を得る．
+  const CostDict&
+  col_cost_dict() const
   {
-    return mColCostArray;
+    return mColCostDict;
   }
 
   /// @brief 要素のリストを得る．
@@ -254,43 +192,21 @@ private:
   void
   sanity_check() const;
 
-  /// @brief row_pos が範囲内かチェックする．
-  void
-  _check_row(
-    SizeType row_pos
-  ) const
-  {
-    if ( row_pos >= row_size() ) {
-      throw std::out_of_range{"row_pos is out of range"};
-    }
-  }
-
-  /// @brief col_pos が範囲内かチェックする．
-  void
-  _check_col(
-    SizeType col_pos
-  ) const
-  {
-    if ( col_pos >= col_size() ) {
-      throw std::out_of_range{"col_pos is out of range"};
-    }
-  }
-
 
 private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 行数
-  SizeType mRowSize{0};
+  // 行番号の最大値
+  SizeType mMaxRow{0};
 
-  // 列数
-  SizeType mColSize{0};
+  // 列番号を最大値
+  SizeType mMaxCol{0};
 
-  // 列のコスト配列
-  // サイズは mColSize
-  std::vector<SizeType> mColCostArray;
+  // 列のコスト辞書
+  // 存在しない場合は1と仮定する．
+  CostDict mColCostDict;
 
   // 要素のリスト
   std::vector<ElemType> mElemList;

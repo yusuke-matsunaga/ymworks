@@ -25,7 +25,7 @@ MinCov::solve(
   const JsonValue& option
 ) const
 {
-  McMatrix matrix{row_size(), mColCostArray, mElemList};
+  McMatrix matrix(*this);
   auto solver = Solver::new_obj(matrix, option);
   SizeType cost = solver->solve(solution);
 
@@ -67,7 +67,7 @@ MinCov::verify_solution(
   std::vector<SizeType>& uncov_row_list
 ) const
 {
-  McMatrix matrix{row_size(), mColCostArray, mElemList};
+  McMatrix matrix(*this);
   std::vector<bool> row_mark(row_size(), false);
   for ( auto col: solution ) {
     for ( auto row: matrix.col_list(col) ) {

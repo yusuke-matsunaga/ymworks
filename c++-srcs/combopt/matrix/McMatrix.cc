@@ -39,31 +39,50 @@ McColComp::operator()(
 
 // @brief コンストラクタ
 McMatrix::McMatrix(
-  SizeType row_size,
-  const std::vector<SizeType>& cost_array,
-  const std::vector<ElemType>& elem_list
-) : mRowSize{row_size},
+  const MinCov& mincov
+) : mRowSize{mincov.row_size()},
     mRowHeadArray(mRowSize),
     mRowArray(mRowSize, nullptr),
-    mColSize{cost_array.size()},
+    mColSize{mincov.col_size()},
     mColHeadArray(mColSize),
     mColArray(mColSize, nullptr),
-    mCostArray{cost_array}
+    mCostArray(mColSize, 1)
 {
+  // 行の初期化
   for ( auto row_pos: Range(mRowSize) ) {
     mRowHeadArray[row_pos].init(row_pos, false);
     mRowArray[row_pos] = alloc_cell(row_pos, -1);
   }
 
+  // 列の初期化
+  auto& cost_dict = mincov.col_cost_dict();
   for ( auto col_pos: Range(mColSize) ) {
     mColHeadArray[col_pos].init(col_pos, true);
     mColArray[col_pos] = alloc_cell(-1, col_pos);
+    if ( cost_dict.count(col_pos) > 0 ) {
+      mCostArray[col_pos] = cost_dict.at(col_pos);
+    }
   }
 
+  // スタックの容量を設定しておく．
   mDelStack.reserve(mRowSize + mColSize);
 
+  // 挿入を効率良く行うため要素を整列させる．
+  auto tmp_list = mincov.elem_list();
+  std::sort(tmp_list.begin(), tmp_list.end(),
+	    [](const ElemType& a, const ElemType& b) {
+	      if ( a.row_pos < b.row_pos ) {
+		return true;
+	      }
+	      if ( a.row_pos > b.row_pos ) {
+		return false;
+	      }
+	      return a.col_pos < b.col_pos;
+	    });
   // 要素を設定する．
-  insert_elem_list(elem_list);
+  for ( auto& elem: tmp_list ) {
+    insert_elem(elem);
+  }
 }
 
 // @brief デストラクタ
@@ -170,17 +189,6 @@ McMatrix::insert_elem(
   col_head->inc_num();
   if ( col_head->num() == 1 ) {
     mColHeadList.insert(col_head);
-  }
-}
-
-// @brief 要素を追加する．
-void
-McMatrix::insert_elem_list(
-  const std::vector<ElemType>& elem_list
-)
-{
-  for ( auto& elem: elem_list ) {
-    insert_elem(elem);
   }
 }
 
@@ -583,41 +591,6 @@ McMatrix::restore()
       restore_col(head);
     }
   }
-}
-
-// @brief サイズを変更する．
-void
-McMatrix::resize(
-  SizeType row_size,
-  SizeType col_size
-)
-{
-  mCellList.clear();
-  mRowHeadArray.clear();
-  mRowArray.clear();
-  mColHeadArray.clear();
-  mColArray.clear();
-  mCostArray.clear();
-
-  mRowSize = row_size;
-  mColSize = col_size;
-
-  mRowHeadArray.resize(mRowSize);
-  mRowArray.resize(mRowSize, nullptr);
-  for ( auto row_pos: Range(mRowSize) ) {
-    mRowHeadArray[row_pos].init(row_pos, false);
-    mRowArray[row_pos] = alloc_cell(row_pos, -1);
-  }
-
-  mColHeadArray.resize(mColSize);
-  mColArray.resize(mColSize, nullptr);
-  mCostArray.resize(mColSize, 1);
-  for ( auto col_pos: Range(mColSize) ) {
-    mColHeadArray[col_pos].init(col_pos, true);
-    mColArray[col_pos] = alloc_cell(-1, col_pos);
-  }
-
-  mDelStack.reserve(row_size + col_size);
 }
 
 // @brief 内容をコピーする．

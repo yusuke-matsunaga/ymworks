@@ -28,31 +28,11 @@ class MinCovGen(PyObjGen):
         def new_func(writer):
             writer.gen_auto_assign('self', 'type->tp_alloc(type, 0)')
             self.gen_obj_conv(writer, objname='self', varname='my_obj')
-            writer.gen_stmt('new (&my_obj->mVal) MinCov(row_size, col_size)')
+            writer.gen_stmt('new (&my_obj->mVal) MinCov')
             writer.gen_return_self()
-        self.add_new(func_body=new_func,
-                     arg_list=[OptArg(),
-                               KwdArg(),
-                               UlongArg(name='row_size',
-                                        cvarname='row_size',
-                                        cvardefault=0),
-                               UlongArg(name='col_size',
-                                        cvarname='col_size',
-                                        cvardefault=0)])
+        self.add_new(func_body=new_func)
 
         self.add_dealloc(None)
-
-        def meth_resize(writer):
-            writer.gen_stmt('val.resize(row_size, col_size)')
-            writer.gen_return_py_none()
-        self.add_method('resize',
-                        func_body=meth_resize,
-                        arg_list=[KwdArg(),
-                                  UlongArg(name='row_size',
-                                           cvarname='row_size'),
-                                  UlongArg(name='col_size',
-                                           cvarname='col_size')],
-                        doc_str='resize')
 
         def meth_set_col_cost(writer):
             writer.gen_stmt('val.set_col_cost(col_pos, cost)')
@@ -99,14 +79,6 @@ class MinCovGen(PyObjGen):
                         arg_list=[UlongArg(name='col_pos',
                                            cvarname='col_pos')],
                         doc_str='return column cost')
-
-        def get_col_cost_array(writer):
-            writer.gen_return_pyobject('PyList<SizeType, PyUlong>',
-                                       'val.col_cost_array()')
-        self.add_getter('get_col_cost_array',
-                        func_body=get_col_cost_array)
-        self.add_attr('col_cost_array',
-                      getter_name='get_col_cost_array')
 
         def meth_solve(writer):
             writer.gen_vardecl(typename='std::vector<SizeType>',

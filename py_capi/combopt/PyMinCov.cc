@@ -44,39 +44,6 @@ dealloc_func(
 }
 
 PyObject*
-resize(
-  PyObject* self,
-  PyObject* args,
-  PyObject* kwds
-)
-{
-  static const char* kwlist[] = {
-    "row_size",
-    "col_size",
-    nullptr
-  };
-  unsigned long row_size;
-  unsigned long col_size;
-  if ( !PyArg_ParseTupleAndKeywords(args, kwds, "$kk",
-                                    const_cast<char**>(kwlist),
-                                    &row_size,
-                                    &col_size) ) {
-    return nullptr;
-  }
-  auto& val = PyMinCov::_get_ref(self);
-  try {
-    val.resize(row_size, col_size);
-    Py_RETURN_NONE;
-  }
-  catch ( std::exception err ) {
-    std::ostringstream buf;
-    buf << "exception" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
-PyObject*
 set_col_cost(
   PyObject* self,
   PyObject* args,
@@ -212,10 +179,6 @@ solve(
 
 // メソッド定義
 PyMethodDef methods[] = {
-  {"resize",
-   reinterpret_cast<PyCFunction>(resize),
-   METH_VARARGS | METH_KEYWORDS,
-   PyDoc_STR("resize")},
   {"set_col_cost",
    reinterpret_cast<PyCFunction>(set_col_cost),
    METH_VARARGS | METH_KEYWORDS,
@@ -272,29 +235,10 @@ get_col_size(
   }
 }
 
-PyObject*
-get_col_cost_array(
-  PyObject* self,
-  void* Py_UNUSED(closure)
-)
-{
-  auto& val = PyMinCov::_get_ref(self);
-  try {
-    return PyList<SizeType, PyUlong>::ToPyObject(val.col_cost_array());
-  }
-  catch ( std::exception err ) {
-    std::ostringstream buf;
-    buf << "exception" << ": " << err.what();
-    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
-    return nullptr;
-  }
-}
-
 // getter/setter定義
 PyGetSetDef getsets[] = {
   {"row_size", get_row_size, nullptr, PyDoc_STR(""), nullptr},
   {"col_size", get_col_size, nullptr, PyDoc_STR(""), nullptr},
-  {"col_cost_array", get_col_cost_array, nullptr, PyDoc_STR(""), nullptr},
   // end-marker
   {nullptr, nullptr, nullptr, nullptr}
 };
@@ -308,22 +252,16 @@ new_func(
 )
 {
   static const char* kwlist[] = {
-    "row_size",
-    "col_size",
     nullptr
   };
-  unsigned long row_size = 0;
-  unsigned long col_size = 0;
-  if ( !PyArg_ParseTupleAndKeywords(args, kwds, "|$kk",
-                                    const_cast<char**>(kwlist),
-                                    &row_size,
-                                    &col_size) ) {
+  // 余分な引数を取らないことを確認しておく．
+  if ( !PyArg_ParseTupleAndKeywords(args, kwds, "", const_cast<char**>(kwlist)) ) {
     return nullptr;
   }
   try {
     auto self = type->tp_alloc(type, 0);
     auto my_obj = reinterpret_cast<MinCov_Object*>(self);
-    new (&my_obj->mVal) MinCov(row_size, col_size);
+    new (&my_obj->mVal) MinCov;
     return self;
   }
   catch ( std::invalid_argument err ) {

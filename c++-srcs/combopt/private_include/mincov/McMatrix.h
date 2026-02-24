@@ -31,25 +31,14 @@ BEGIN_NAMESPACE_YM_MINCOV
 class McMatrix
 {
   using ElemType = MinCov::ElemType;
+  using CostDict = MinCov::CostDict;
 
 public:
 
   /// @brief コンストラクタ
+  explicit
   McMatrix(
-    SizeType row_size,                          ///< [in] 行数
-    SizeType col_size,		                ///< [in] 列数
-    const std::vector<ElemType>& elem_list = {} ///< [in] 要素のリスト
-  ) : McMatrix{row_size, std::vector<SizeType>(col_size, 1), elem_list}
-  {
-  }
-
-  /// @brief コンストラクタ
-  ///
-  /// 列数は cost_array.size() から得る．
-  McMatrix(
-    SizeType row_size,                          ///< [in] 行数
-    const std::vector<SizeType>& cost_array,    ///< [in] コストの配列
-    const std::vector<ElemType>& elem_list = {} ///< [in] 要素のリスト
+    const MinCov& mincov ///< [in] 被覆問題
   );
 
   /// @brief デストラクタ
@@ -202,24 +191,6 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // 内容を設定する関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 要素を追加する．
-  void
-  insert_elem(
-    const ElemType& elem ///< [in] 追加する要素
-  );
-
-  /// @brief 要素のリストを追加する．
-  void
-  insert_elem_list(
-    const std::vector<ElemType>& elem_list ///< [in] 要素のリスト
-  );
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
   // 内容を変更する関数
   //////////////////////////////////////////////////////////////////////
 
@@ -313,13 +284,10 @@ private:
   // 内部で用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief サイズを変更する．
-  ///
-  /// 内容はクリアされる．
+  /// @brief 要素を追加する．
   void
-  resize(
-    SizeType row_size, ///< [in] 行数
-    SizeType col_size  ///< [in] 列数
+  insert_elem(
+    const ElemType& elem ///< [in] 追加する要素
   );
 
   /// @brief 内容をコピーする．

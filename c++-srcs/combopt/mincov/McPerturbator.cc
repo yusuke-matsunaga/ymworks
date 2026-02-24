@@ -23,9 +23,7 @@ McPerturbator::operator()(
 )
 {
   // 対象の行列
-  auto matrix = McMatrix(mMinCov.row_size(),
-			 mMinCov.col_cost_array(),
-			 mMinCov.elem_list());
+  auto matrix = McMatrix(mMinCov);
 
   // 新しい解
   std::vector<SizeType> new_solution;

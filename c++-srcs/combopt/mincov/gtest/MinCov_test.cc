@@ -25,7 +25,7 @@ TEST(MinCovTest, greedy)
     {2, 0}, {2, 3}
   };
 
-  MinCov mincov(nr, nc);
+  MinCov mincov;
   for ( auto& elem: elem_list ) {
     mincov.insert_elem(elem.row_pos, elem.col_pos);
   }
@@ -52,7 +52,7 @@ TEST(MinCovTest, exact)
     {2, 0}, {2, 3}
   };
 
-  MinCov mincov(nr, nc);
+  MinCov mincov;
   for ( auto& elem: elem_list ) {
     mincov.insert_elem(elem.row_pos, elem.col_pos);
   }
@@ -79,7 +79,7 @@ TEST(MinCovTest, perturb)
     {2, 0}, {2, 3}
   };
 
-  MinCov mincov(nr, nc);
+  MinCov mincov;
   for ( auto& elem: elem_list ) {
     mincov.insert_elem(elem.row_pos, elem.col_pos);
   }

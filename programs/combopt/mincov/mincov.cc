@@ -35,9 +35,7 @@ read_pi(
     throw std::invalid_argument{buf.str()};
   }
 
-  std::vector<MinCov::ElemType> elem_list;
-  SizeType max_row = 0;
-  SizeType max_col = 0;
+  MinCov mincov;
   std::string line;
   while ( getline(s, line) ) {
     if ( line.size() == 0 ) {
@@ -60,19 +58,8 @@ read_pi(
       // End-Of-Data
       break;
     }
-    elem_list.push_back(MinCov::ElemType{static_cast<SizeType>(row), static_cast<SizeType>(col)});
-    if ( max_row < row ) {
-      max_row = row;
-    }
-    if ( max_col < col ) {
-      max_col = col;
-    }
-  }
-  SizeType row_size = max_row + 1;
-  SizeType col_size = max_col + 1;
-  MinCov mincov(row_size, col_size);
-  for ( auto elem: elem_list ) {
-    mincov.insert_elem(elem.row_pos, elem.col_pos);
+    mincov.insert_elem(static_cast<SizeType>(row),
+		       static_cast<SizeType>(col));
   }
   return mincov;
 }
