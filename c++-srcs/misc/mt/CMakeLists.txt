@@ -36,38 +36,19 @@
 # サブディレクトリの設定
 # ===================================================================
 
-add_subdirectory( binder )
-add_subdirectory( binio )
-add_subdirectory( file_info )
-add_subdirectory( gen )
-add_subdirectory( itvl )
-add_subdirectory( json )
-add_subdirectory( misc )
-add_subdirectory( msg )
-add_subdirectory( mt )
-add_subdirectory( popt )
-add_subdirectory( textproc )
+#add_subdirectory( gtest )
 
 
 # ===================================================================
 #  ソースの設定
 # ===================================================================
 
+set ( mt_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/MtMgr.cc
+  PARENT_SCOPE
+  )
+
 
 # ===================================================================
 #  ターゲットの設定
 # ===================================================================
-
-ym_add_object_library ( ym_misc
-  ${binder_SOURCES}
-  ${binio_SOURCES}
-  ${file_info_SOURCES}
-  ${gen_SOURCES}
-  ${itvl_SOURCES}
-  ${json_SOURCES}
-  ${misc_SOURCES}
-  ${msg_SOURCES}
-  ${mt_SOURCES}
-  ${popt_SOURCES}
-  ${textproc_SOURCES}
-  )
