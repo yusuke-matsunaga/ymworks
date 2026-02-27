@@ -15,6 +15,15 @@
 
 BEGIN_NAMESPACE_YM_MINCOV
 
+TEST(MinCovTest, empty)
+{
+  MinCov mincov;
+
+  EXPECT_EQ( 0, mincov.row_size() );
+  EXPECT_EQ( 0, mincov.col_size() );
+  EXPECT_EQ( 0, mincov.elem_num() );
+}
+
 TEST(MinCovTest, greedy)
 {
   SizeType nr = 3;

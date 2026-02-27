@@ -68,8 +68,8 @@ public:
   void
   clear()
   {
-    mMaxRow = 0;
-    mMaxCol = 0;
+    mRowSize = 0;
+    mColSize = 0;
     mColCostDict.clear();
     mElemList.clear();
   }
@@ -93,8 +93,8 @@ public:
     SizeType col_pos  ///< [in] 追加する要素の列番号
   )
   {
-    mMaxRow = std::max(mMaxRow, row_pos);
-    mMaxCol = std::max(mMaxCol, col_pos);
+    mRowSize = std::max(mRowSize, row_pos + 1);
+    mColSize = std::max(mColSize, col_pos + 1);
     mElemList.push_back(ElemType{row_pos, col_pos});
   }
 
@@ -108,14 +108,14 @@ public:
   SizeType
   row_size() const
   {
-    return mMaxRow + 1;
+    return mRowSize;
   }
 
   /// @brief 列数を得る．
   SizeType
   col_size() const
   {
-    return mMaxCol + 1;
+    return mColSize;
   }
 
   /// @brief 列のコストを得る．
@@ -193,11 +193,11 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 行番号の最大値
-  SizeType mMaxRow{0};
+  // 行数
+  SizeType mRowSize{0};
 
-  // 列番号を最大値
-  SizeType mMaxCol{0};
+  // 列数
+  SizeType mColSize{0};
 
   // 列のコスト辞書
   // 存在しない場合は1と仮定する．
