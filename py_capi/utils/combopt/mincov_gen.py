@@ -80,6 +80,13 @@ class MinCovGen(PyObjGen):
                                            cvarname='col_pos')],
                         doc_str='return column cost')
 
+        def get_elem_num(writer):
+            writer.gen_return_py_ulong('val.elem_num()')
+        self.add_getter('get_elem_num',
+                        func_body=get_elem_num)
+        self.add_attr('elem_num',
+                      getter_name='get_elem_num')
+
         def meth_solve(writer):
             writer.gen_vardecl(typename='std::vector<SizeType>',
                                varname='solution')

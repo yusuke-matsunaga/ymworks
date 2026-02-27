@@ -235,10 +235,29 @@ get_col_size(
   }
 }
 
+PyObject*
+get_elem_num(
+  PyObject* self,
+  void* Py_UNUSED(closure)
+)
+{
+  auto& val = PyMinCov::_get_ref(self);
+  try {
+    return PyUlong::ToPyObject(val.elem_num());
+  }
+  catch ( std::exception err ) {
+    std::ostringstream buf;
+    buf << "exception" << ": " << err.what();
+    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
+    return nullptr;
+  }
+}
+
 // getter/setter定義
 PyGetSetDef getsets[] = {
   {"row_size", get_row_size, nullptr, PyDoc_STR(""), nullptr},
   {"col_size", get_col_size, nullptr, PyDoc_STR(""), nullptr},
+  {"elem_num", get_elem_num, nullptr, PyDoc_STR(""), nullptr},
   // end-marker
   {nullptr, nullptr, nullptr, nullptr}
 };

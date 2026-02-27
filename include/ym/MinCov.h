@@ -144,6 +144,13 @@ public:
     return mElemList;
   }
 
+  /// @brief 非ゼロの要素数を得る．
+  SizeType
+  elem_num() const
+  {
+    return mElemList.size();
+  }
+
 
 public:
   //////////////////////////////////////////////////////////////////////
