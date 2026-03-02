@@ -70,7 +70,7 @@ Solver::new_Selector(
 )
 {
   JsonValue sel_opt;
-  if ( opt_obj.has_key("selector") ) {
+  if ( opt_obj.is_object() && opt_obj.has_key("selector") ) {
     sel_opt = opt_obj.at("selector");
     if ( !sel_opt.is_object() ) {
       throw std::invalid_argument{"selector should be a JSON-object"};
@@ -85,7 +85,7 @@ Solver::new_LbCalc(
 )
 {
   JsonValue lb_opt;
-  if ( opt_obj.has_key("lower_bound") ) {
+  if ( opt_obj.is_object() && opt_obj.has_key("lower_bound") ) {
     lb_opt = opt_obj.at("lower_bound");
   }
   return LbCalc::new_obj(lb_opt);
