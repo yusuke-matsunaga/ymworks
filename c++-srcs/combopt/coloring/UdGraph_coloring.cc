@@ -75,11 +75,7 @@ UdGraph::coloring(
   const JsonValue& option
 ) const
 {
-  auto algorithm = std::string{"dsatur"}; // デフォルトフォールバック
-  if ( option.is_object() && option.has_key("algorithm") ) {
-    auto alg_obj = option.get("algorithm");
-    algorithm = alg_obj.get_string();
-  }
+  auto algorithm = option.get_string_elem("algorithm", "dsatur");
   if ( algorithm == "dsatur" ) {
     return dsatur(*this, color_map);
   }

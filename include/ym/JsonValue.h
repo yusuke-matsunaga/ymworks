@@ -211,12 +211,147 @@ public:
     const std::string& key ///< [in] キー
   ) const;
 
+  /// @brief bool 値の要素を取り出す．
+  /// @return 結果を返す．
+  /// @exception std::logic_error option が辞書型でない || 結果が bool 型でない
+  ///
+  /// * 自身が Null オブジェクトの場合やキーに対応する値がなかった場合，
+  ///   default_val が返される．
+  bool
+  get_bool_elem(
+    const std::string& key, ///< [in] キー
+    bool default_val        ///< [in] デフォルト値
+  ) const
+  {
+    if ( is_object() && has_key(key) ) {
+      auto val = at(key);
+      if ( val.is_bool() ) {
+	return val.get_bool();
+      }
+      else {
+	std::ostringstream buf;
+	buf << "the value for '" << key << "' should be a bool";
+	throw std::logic_error{buf.str()};
+      }
+    }
+    return default_val;
+  }
+
+  /// @brief int 値の要素を取り出す．
+  /// @return 結果を返す．
+  /// @exception std::logic_error option が辞書型でない || 結果が int 型でない
+  ///
+  /// * 自身が Null オブジェクトの場合やキーに対応する値がなかった場合，
+  ///   default_val が返される．
+  int
+  get_int_elem(
+    const std::string& key, ///< [in] キー
+    int default_val	    ///< [in] デフォルト値
+  ) const
+  {
+    if ( is_object() && has_key(key) ) {
+      auto val = at(key);
+      if ( val.is_int() ) {
+	return val.get_int();
+      }
+      else {
+	std::ostringstream buf;
+	buf << "the value for '" << key << "' should be an int";
+	throw std::logic_error{buf.str()};
+      }
+    }
+    return default_val;
+  }
+
+  /// @brief string 値の要素を取り出す．
+  /// @return 結果を返す．
+  /// @exception std::logic_error option が辞書型でない || 結果が string 型でない
+  ///
+  /// * 自身が Null オブジェクトの場合やキーに対応する値がなかった場合，
+  ///   default_val が返される．
+  std::string
+  get_string_elem(
+    const std::string& key,	 ///< [in] キー
+    const std::string& default_val ///< [in] デフォルト値
+  ) const
+  {
+    if ( is_object() && has_key(key) ) {
+      auto val = at(key);
+      if ( val.is_string() ) {
+	return val.get_string();
+      }
+      else {
+	std::ostringstream buf;
+	buf << "the value for '" << key << "' should be a string";
+	throw std::logic_error{buf.str()};
+      }
+    }
+    return default_val;
+  }
+
+  /// @brief 辞書型の要素を取り出す．
+  /// @return 結果を返す．
+  /// @exception std::logic_error option が辞書型でない || 結果が辞書型でない
+  ///
+  /// * 自身が Null オブジェクトの場合やキーに対応する値がなかった場合，
+  ///   default_val が返される．
+  JsonValue
+  get_object_elem(
+    const std::string& key,	 ///< [in] キー
+    const JsonValue& default_val ///< [in] デフォルト値
+    = {}
+  ) const
+  {
+    if ( is_object() && has_key(key) ) {
+      auto val = at(key);
+      if ( !val.is_null() ) {
+	if ( val.is_object() ) {
+	  return val;
+	}
+	else {
+	  std::ostringstream buf;
+	  buf << "the value for '" << key << "' should be a json object";
+	  throw std::logic_error{buf.str()};
+	}
+      }
+    }
+    return default_val;
+  }
+
+  /// @brief 配列型の要素を取り出す．
+  /// @return 結果を返す．
+  /// @exception std::logic_error option が辞書型でない || 結果が配列型でない
+  ///
+  /// * 自身が Null オブジェクトの場合やキーに対応する値がなかった場合，
+  ///   default_val が返される．
+  std::vector<JsonValue>
+  get_array_elem(
+    const std::string& key,	              ///< [in] キー
+    const std::vector<JsonValue>& default_val ///< [in] デフォルト値
+    = {}
+  ) const
+  {
+    if ( is_object() && has_key(key) ) {
+      auto val = at(key);
+      if ( val.is_array() ) {
+	return val.get_array();
+      }
+      else {
+	std::ostringstream buf;
+	buf << "the value for '" << key << "' should be a string";
+	throw std::logic_error{buf.str()};
+      }
+    }
+    return default_val;
+  }
+
   /// @brief キーに対応する要素を取り出す．
   ///
+  /// - is_null() の時は null を返す．
   /// - is_object() == false の時は std::logic_error 例外を送出する．
   /// - key に対応する値がない場合には null を返す．
   JsonValue
-  get(
+  get_elem(
     const std::string& key ///< [in] キー
   ) const;
 
@@ -482,96 +617,6 @@ private:
   std::shared_ptr<JsonObj> mPtr;
 
 };
-
-/// @relates JsonValue
-/// @brief bool 値を取り出す．
-/// @return 結果を返す．
-/// @exception std::logic_error option が辞書型でない || 結果が bool 型でない
-///
-/// * option が Null オブジェクトの場合やキーに対応する値がなかった場合，
-///   default_val が返される．
-inline
-bool
-get_bool(
-  const JsonValue& option, ///< [in] 辞書型の Json オブジェクト
-  const std::string& key,  ///< [in] キー
-  bool default_val         ///< [in] デフォルト値
-)
-{
-  bool bool_var = default_val;
-  if ( option.is_object() && option.has_key(key) ) {
-    auto val = option.at(key);
-    if ( val.is_bool() ) {
-      bool_var = val.get_bool();
-    }
-    else {
-      std::ostringstream buf;
-      buf << "the value for '" << key << "' should be a bool";
-      throw std::logic_error{buf.str()};
-    }
-  }
-  return bool_var;
-}
-
-/// @relates JsonValue
-/// @brief int 値を取り出す．
-/// @return 結果を返す．
-/// @exception std::logic_error option が辞書型でない || 結果が int 型でない
-///
-/// * option が Null オブジェクトの場合やキーに対応する値がなかった場合，
-///   default_val が返される．
-inline
-int
-get_int(
-  const JsonValue& option, ///< [in] 辞書型の Json オブジェクト
-  const std::string& key,  ///< [in] キー
-  int default_val	   ///< [in] デフォルト値
-)
-{
-  int int_var = default_val;
-  if ( option.is_object() && option.has_key(key) ) {
-    auto val = option.at(key);
-    if ( val.is_int() ) {
-      int_var = val.get_int();
-    }
-    else {
-      std::ostringstream buf;
-      buf << "the value for '" << key << "' should be an int";
-      throw std::logic_error{buf.str()};
-    }
-  }
-  return int_var;
-}
-
-/// @relates JsonValue
-/// @brief string 値を取り出す．
-/// @return 結果を返す．
-/// @exception std::logic_error option が辞書型でない || 結果が string 型でない
-///
-/// * option が Null オブジェクトの場合やキーに対応する値がなかった場合，
-///   default_val が返される．
-inline
-std::string
-get_string(
-  const JsonValue& option,       ///< [in] 辞書型の Json オブジェクト
-  const std::string& key,	 ///< [in] キー
-  const std::string& default_val ///< [in] デフォルト値
-)
-{
-  std::string string_var = default_val;
-  if ( option.is_object() && option.has_key(key) ) {
-    auto val = option.at(key);
-    if ( val.is_string() ) {
-      string_var = val.get_string();
-    }
-    else {
-      std::ostringstream buf;
-      buf << "the value for '" << key << "' should be a string";
-      throw std::logic_error{buf.str()};
-    }
-  }
-  return string_var;
-}
 
 /// @relates JsonValue
 /// @brief ストリーム入力演算子

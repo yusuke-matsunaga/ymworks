@@ -68,7 +68,7 @@ Exact::Exact(
 ) : Solver{matrix, opt_obj},
     mLbCalc{new_LbCalc(opt_obj)},
     mSelector{new_Selector(opt_obj)},
-    mDoPartition{get_bool(opt_obj, "partition", false)}
+    mDoPartition{opt_obj.get_bool_elem("partition", false)}
 {
 }
 

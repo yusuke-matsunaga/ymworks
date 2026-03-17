@@ -21,7 +21,7 @@ Selector::new_obj(
   const JsonValue& option
 )
 {
-  auto type_str = get_string(option, "type", "simple");
+  auto type_str = option.get_string_elem("type", "simple");
   if ( type_str == "simple" ) {
     return std::unique_ptr<Selector>{new SelSimple};
   }

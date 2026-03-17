@@ -234,13 +234,15 @@ JsonValue::at(
 
 // @brief キーに対応する要素を取り出す．
 JsonValue
-JsonValue::get(
+JsonValue::get_elem(
   const std::string& key
 ) const
 {
-  _check_object();
-  if ( has_key(key) ) {
-    return at(key);
+  if ( !is_null() ) {
+    _check_object();
+    if ( has_key(key) ) {
+      return at(key);
+    }
   }
   return JsonValue::null();
 }

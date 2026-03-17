@@ -27,12 +27,7 @@ UdGraph::max_clique(
 {
   nsMaxClique::MclqGraph graph{*this};
 
-  auto algorithm = std::string{"greedy"}; // デフォルトフォールバック
-  if ( option.is_object() && option.has_key("algorithm") ) {
-    auto alg_obj = option.get("algorithm");
-    algorithm = alg_obj.get_string();
-  }
-
+  auto algorithm = option.get_string_elem("algorithm", "greedy");
   if ( algorithm == "exact" ) {
     return MclqExact(graph);
   }

@@ -34,7 +34,7 @@ Solver::new_obj(
   const JsonValue& opt_obj
 )
 {
-  auto algorithm = get_string(opt_obj, "algorithm", "greedy");
+  auto algorithm = opt_obj.get_string_elem("algorithm", "greedy");
   if ( algorithm == "exact" ) {
     return std::unique_ptr<Solver>{new Exact{matrix, opt_obj}};
   }
@@ -54,8 +54,8 @@ Solver::Solver(
   McMatrix& matrix,
   const JsonValue& opt_obj
 ) : mMatrix{matrix},
-    mDebug{get_int(opt_obj, "debug", 0)},
-    mDebugDepth{get_int(opt_obj, "debug_depth", 2)}
+    mDebug{opt_obj.get_int_elem("debug", 0)},
+    mDebugDepth{opt_obj.get_int_elem("debug_depth", 2)}
 {
 }
 
@@ -69,13 +69,7 @@ Solver::new_Selector(
   const JsonValue& opt_obj
 )
 {
-  JsonValue sel_opt;
-  if ( opt_obj.is_object() && opt_obj.has_key("selector") ) {
-    sel_opt = opt_obj.at("selector");
-    if ( !sel_opt.is_object() ) {
-      throw std::invalid_argument{"selector should be a JSON-object"};
-    }
-  }
+  auto sel_opt = opt_obj.get_object_elem("selector");
   return Selector::new_obj(sel_opt);
 }
 
@@ -84,10 +78,7 @@ Solver::new_LbCalc(
   const JsonValue& opt_obj
 )
 {
-  JsonValue lb_opt;
-  if ( opt_obj.is_object() && opt_obj.has_key("lower_bound") ) {
-    lb_opt = opt_obj.at("lower_bound");
-  }
+  auto lb_opt = opt_obj.get_object_elem("lower_bound");
   return LbCalc::new_obj(lb_opt);
 }
 
