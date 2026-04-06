@@ -316,6 +316,25 @@ operator>=(
 }
 
 /// @relates SatLiteral
+/// @brief SatLiteral のリストを連結する．
+///
+/// 重複のチェックは行っていない．
+inline
+std::vector<SatLiteral>
+concat_lits(
+  const std::vector<SatLiteral>& lits1,
+  const std::vector<SatLiteral>& lits2
+)
+{
+  auto n1 = lits1.size();
+  auto n2 = lits2.size();
+  std::vector<SatLiteral> tmp_lits(n1 + n2);
+  std::copy(lits1.begin(), lits1.end(), tmp_lits.begin());
+  std::copy(lits2.begin(), lits2.end(), tmp_lits.begin() + n1);
+  return tmp_lits;
+}
+
+/// @relates SatLiteral
 /// @brief SatLiteral の内容を ostream に出力する関数
 /// @return s
 inline
