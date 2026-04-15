@@ -147,6 +147,11 @@ public:
   std::vector<JsonValue>
   get_array() const;
 
+  /// @brief 複製する．
+  virtual
+  JsonObj*
+  duplicate();
+
   /// @brief 内容を JSON 文字列に変換する．
   virtual
   std::string
@@ -255,6 +260,10 @@ public:
     const std::string& key ///< [in] キー
   ) const override;
 
+  /// @brief 複製する．
+  JsonObj*
+  duplicate() override;
+
   /// @brief 内容を JSON 文字列に変換する．
   std::string
   to_json(
@@ -334,6 +343,10 @@ public:
   /// - 配列型でない時は無効
   std::vector<JsonValue>
   get_array() const override;
+
+  /// @brief 複製する．
+  JsonObj*
+  duplicate() override;
 
   /// @brief 内容を JSON 文字列に変換する．
   std::string

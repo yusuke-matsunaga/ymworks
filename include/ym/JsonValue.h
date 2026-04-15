@@ -544,6 +544,10 @@ private:
     JsonObj* value ///< [in] 値
   );
 
+  /// @brief 他のオブジェクトから共有されていない状態にする．
+  void
+  _uniquify();
+
   /// @brief 文字列型かたどうかチェックする．
   void
   _check_string() const

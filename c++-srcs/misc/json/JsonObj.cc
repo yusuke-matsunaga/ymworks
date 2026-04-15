@@ -208,6 +208,14 @@ JsonObj::get_array() const
   return {};
 }
 
+// @brief 複製する．
+JsonObj*
+JsonObj::duplicate()
+{
+  // デフォルトでは自分自身を返す．
+  return this;
+}
+
 // @brief JsonValue の内容を取り出す．
 JsonObj*
 JsonObj::obj_ptr(
@@ -318,6 +326,13 @@ JsonDict::get_value(
     throw std::out_of_range{buf.str()};
   }
   return mDict.at(key);
+}
+
+// @brief 複製する．
+JsonObj*
+JsonDict::duplicate()
+{
+  return new JsonDict(mDict);
 }
 
 // @brief 内容を JSON 文字列に変換する．
@@ -432,6 +447,13 @@ std::vector<JsonValue>
 JsonArray::get_array() const
 {
   return mArray;
+}
+
+// @brief 複製する．
+JsonObj*
+JsonArray::duplicate()
+{
+  return new JsonArray(mArray);
 }
 
 // @brief 内容を JSON 文字列に変換する．

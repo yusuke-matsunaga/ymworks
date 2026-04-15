@@ -371,6 +371,7 @@ JsonValue::add(
 )
 {
   _check_array();
+  _uniquify();
   mPtr->add(value);
 }
 
@@ -382,7 +383,18 @@ JsonValue::add(
 )
 {
   _check_object();
+  _uniquify();
   mPtr->add(key, value);
+}
+
+// @brief 他のオブジェクトから共有されていない状態にする．
+void
+JsonValue::_uniquify()
+{
+  if ( mPtr.use_count() > 1 ) {
+    auto ptr = mPtr->duplicate();
+    mPtr = std::shared_ptr<JsonObj>{ptr};
+  }
 }
 
 // @brief ストリーム入力演算子
