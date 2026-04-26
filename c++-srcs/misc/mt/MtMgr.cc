@@ -66,7 +66,7 @@ MtMgr::run(
   std::vector<std::thread> thr_list(thread_num);
   // スレッドを生成する．
   for ( SizeType i = 0; i < thread_num; ++ i ) {
-    thr_list[i] = std::thread{[&](){th_func(i);}};
+    thr_list[i] = std::thread{th_func, i};
   }
   // 子スレッドが終了するまで待つ．
   for ( auto& thr: thr_list ) {
