@@ -20,23 +20,69 @@ BEGIN_NAMESPACE_YM
 /// @class IntervalTimer IntervalTimer.h "IntervalTimer.h"
 /// @brief 時間経過で割り込み処理を行うクラス
 ///
-/// 意味的には別スレッドで指定された時間後に割り込み関数を呼び出すだけだが，
-/// 本スレッドがそれ以前に終了しているとエラーとなるので，実際には
-/// 1秒ごとに本スレッドが終了していないかチェックしている．
-/// それでも最大で1秒は本スレッド終了後に子スレッドが生きていることになるが，
-/// 許容範囲と考える．
+/// 別スレッドで指定された時間後に割り込み関数を呼び出す．
+/// 本スレッドがそれ以前に終了する場合は stop() 関数で終了を通知する．
+/// stop() はこのオブジェクトのデストラクタで呼び出されるので
+/// スコープを適切に設定しているなら stop() を明示的に呼び出す必要はない．
 //////////////////////////////////////////////////////////////////////
 class IntervalTimer
 {
 public:
 
   /// @brief コンストラクタ
+  ///
+  /// interval が 0 の時はなにもしない．
   IntervalTimer(
-    SizeType interval,    ///< [in] 間隔(秒)
-    bool periodic = false ///< [in] 周期的なイベントの時 true にするフラグ
-  ) : mInterval{interval},
-      mPeriodic{periodic}
+    SizeType interval,              ///< [in] 間隔(秒)
+    std::function<void()> callback, ///< [in] コールバック関数
+    bool periodic = false           ///< [in] 周期的なイベントの時 true にするフラグ
+  ) : mInterval{interval}
   {
+    if ( mInterval == 0 ) {
+      return;
+    }
+
+    mAlive = true;
+    if ( periodic ) {
+      // 周期的なイベント
+      mThread = std::thread([&] {
+	for ( ; ; ) {
+	  std::unique_lock lck{mMtx};
+	  if ( !mAlive ) {
+	    // 本スレッドが終了していたら終わる．
+	    break;
+	  }
+	  // mInterval 秒待つ
+	  mCV.wait_for(lck, std::chrono::seconds(mInterval));
+	  if ( mAlive ) {
+	    // コールバック関数を呼び出す．
+	    callback();
+	  }
+	}
+      });
+    }
+    else {
+      // one-shot イベント
+      mThread = std::thread([&] {
+	std::unique_lock lck{mMtx};
+	if ( !mAlive ) {
+	  // 本スレッドが終了していたら終わる．
+	  return;
+	}
+	// mInterval 秒待つ
+	mCV.wait_for(lck, std::chrono::seconds(mInterval));
+	if ( mAlive ) {
+	  // コールバック関数を呼び出す．
+	  callback();
+	}
+      });
+    }
+  }
+
+  /// @brief デストラクタ
+  ~IntervalTimer()
+  {
+    stop();
   }
 
 
@@ -45,38 +91,20 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief タイマーを起動する．
-  void
-  start(
-    std::function<void()> callback ///< [in] コールバック関数
-  )
-  {
-    mAlive = true;
-    std::thread interval_thread([&] {
-      for ( ; ; ) {
-	for ( SizeType i = 0; i < mInterval; ++ i ) {
-	  // 1秒間停止する．
-	  std::this_thread::sleep_for(std::chrono::seconds(1));
-	  if ( !mAlive ) {
-	    // 本スレッドが終了していたら終わる．
-	    return;
-	  }
-	}
-	// コールバック関数を呼び出す．
-	callback();
-	if ( !mPeriodic ) {
-	  break;
-	}
-      }
-    });
-    interval_thread.detach();
-  }
-
   /// @brief タイマーを終了する．
   void
   stop()
   {
-    mAlive = false;
+    if ( mThread.joinable() ) {
+      if ( mAlive ) {
+	{
+	  std::lock_guard lck{mMtx};
+	  mAlive = false;
+	}
+	mCV.notify_all();
+      }
+      mThread.join();
+    }
   }
 
 
@@ -85,14 +113,20 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 間隔(秒)
-  SizeType mInterval{0};
-
-  // 周期的なイベントの時 true にするフラグ
-  bool mPeriodic{false};
+  // インターバル(秒)
+  SizeType mInterval;
 
   // 動作中を表すフラグ
-  std::atomic<bool> mAlive{false};
+  bool mAlive{false};
+
+  // mAlive 用のミューテックス
+  std::mutex mMtx;
+
+  // 通知用の条件変数
+  std::condition_variable mCV;
+
+  // タイマー用のスレッド
+  std::thread mThread;
 
 };
 

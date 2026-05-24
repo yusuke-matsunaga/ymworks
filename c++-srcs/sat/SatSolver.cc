@@ -76,16 +76,11 @@ SatSolver::solve(
   SizeType time_limit
 )
 {
-  IntervalTimer itimer{time_limit};
-  if ( time_limit > 0 ) {
-    itimer.start([&](){ mImpl->stop(); });
-  }
-
   mLogger->solve(assumptions);
 
+  auto timer = IntervalTimer(time_limit, [&]() { mImpl->stop(); });
   auto stat = mImpl->solve(assumptions, mModel, mConflictLiterals);
-
-  itimer.stop();
+  timer.stop();
 
   if ( stat == SatBool3::False ) {
     sort(mConflictLiterals.begin(), mConflictLiterals.end());

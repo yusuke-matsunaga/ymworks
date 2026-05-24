@@ -41,9 +41,7 @@ itimer_test(
 
   std::atomic<bool> stop = false;
 
-  IntervalTimer itimer{10};
-
-  itimer.start([&](){ stop = true; });
+  IntervalTimer itimer(10, [&](){ stop = true; });
 
   for ( int i = 0; i < n; ++ i ) {
     auto v = fib(i);
@@ -52,9 +50,6 @@ itimer_test(
       break;
     }
   }
-
-  itimer.stop();
-
 
   return 0;
 }
