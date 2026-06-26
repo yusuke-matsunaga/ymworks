@@ -27,10 +27,19 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 実際のスレッド数を返す．
+  ///
+  /// thread_numが 0 の時には可能な最大数にする．
+  static
+  SizeType
+  actual_thread_num(
+    SizeType thread_num ///< [in] 指定するスレッド数
+  );
+
   /// @brief 均一なマルチスレッド実行を行う．
   ///
   /// - 全てのスレッドの終了を待つ．
-  /// - thread_num が 0 の時は可能な最大数を用いる．
+  /// - スレッド数は actual_thread_num(thread_num) を用いる．
   static
   void
   run(
@@ -41,7 +50,7 @@ public:
   /// @brief スレッド番号を引数にした関数のマルチスレッド実行を行う．
   ///
   /// - 全てのスレッドの終了を待つ．
-  /// - thread_num が 0 の時は可能な最大数を用いる．
+  /// - スレッド数は actual_thread_num(thread_num) を用いる．
   static
   void
   run(

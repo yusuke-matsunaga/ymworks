@@ -11,26 +11,21 @@
 
 BEGIN_NAMESPACE_YM
 
-BEGIN_NONAMESPACE
-
-// スレッド数を補正する．
-// - 具体的には 0 の時には可能な最大数にする．
-inline
-void
-correct_thread_num(
-  SizeType& thread_num
-)
-{
-  if ( thread_num == 0 ) {
-    thread_num = std::thread::hardware_concurrency();
-  }
-}
-
-END_NONAMESPACE
-
 //////////////////////////////////////////////////////////////////////
 // クラス MtMgr
 //////////////////////////////////////////////////////////////////////
+
+// @brief 実際のスレッド数を返す．
+SizeType
+MtMgr::actual_thread_num(
+  SizeType thread_num
+)
+{
+  if ( thread_num == 0 ) {
+    return std::thread::hardware_concurrency();
+  }
+  return thread_num;
+}
 
 // @brief 均一なマルチスレッド実行を行う．
 void
@@ -40,7 +35,7 @@ MtMgr::run(
 )
 {
   // スレッド数を決める．
-  correct_thread_num(thread_num);
+  thread_num = actual_thread_num(thread_num);
   // スレッドのリスト
   std::vector<std::thread> thr_list(thread_num);
   // スレッドを生成する．
@@ -61,7 +56,7 @@ MtMgr::run(
 )
 {
   // スレッド数を決める．
-  correct_thread_num(thread_num);
+  thread_num = actual_thread_num(thread_num);
   // スレッドのリスト
   std::vector<std::thread> thr_list(thread_num);
   // スレッドを生成する．
