@@ -567,6 +567,7 @@ endfunction ()
 #                     )
 function( ym_add_gtest )
   set (_def_mode 0 )
+  set (_address_sanitize 0 )
   foreach ( _pos RANGE 0 ${ARGC} )
     if ( ${_pos} EQUAL ${ARGC} )
       break()
@@ -577,6 +578,8 @@ function( ym_add_gtest )
       set ( _target_name   "${_arg}" )
     elseif ( ${_arg} STREQUAL "DEFINITIONS" )
       set ( _def_mode 1 )
+    elseif ( ${_arg} STREQUAL "ADDRESS_SANITIZE" )
+      set ( _address_sanitize 1 )
     else ()
       if ( ${_def_mode} EQUAL 0 )
 	list ( APPEND _sources ${_arg} )
@@ -591,6 +594,7 @@ function( ym_add_gtest )
     ${_sources}
     )
 
+
   target_compile_options ( ${_target_name}
     PRIVATE "-g" "-fPIC"
     )
@@ -602,6 +606,16 @@ function( ym_add_gtest )
   if ( DEFINED _definitions )
     target_compile_definitions ( ${_target_name}
       PRIVATE ${_definitions}
+      )
+  endif ()
+
+  if ( ${_address_sanitize} )
+    target_compile_options ( ${_target_name}
+      PRIVATE "-fsanitize=address"
+      )
+
+    target_link_options ( ${_target_name}
+      PRIVATE "-fsanitize=address"
       )
   endif ()
 
