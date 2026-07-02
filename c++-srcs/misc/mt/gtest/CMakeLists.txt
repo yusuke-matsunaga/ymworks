@@ -28,7 +28,7 @@ ym_add_gtest ( misc_MtMgrTest
   )
 
 target_compile_options ( misc_MtMgrTest
-  PRIVATE "-fsanitize=address"
+  PRIVATE "-g" "-fsanitize=address"
   )
 
 target_link_options ( misc_MtMgrTest
