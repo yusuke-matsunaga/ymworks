@@ -22,4 +22,5 @@ ym_add_gtest( combopt_MinCov_test
   MinCov_test.cc
   $<TARGET_OBJECTS:ym_combopt_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )

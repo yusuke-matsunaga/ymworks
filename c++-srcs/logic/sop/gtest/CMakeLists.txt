@@ -26,12 +26,14 @@ ym_add_gtest ( logic_sop_SopCube_test
   SopCubeTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( logic_sop_SopCover_test
   SopCoverTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 

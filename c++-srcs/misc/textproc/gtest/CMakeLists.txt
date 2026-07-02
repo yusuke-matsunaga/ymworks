@@ -21,6 +21,7 @@
 ym_add_gtest ( misc_ShString_test
   ShString_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( misc_Scanner_test
@@ -28,4 +29,5 @@ ym_add_gtest ( misc_Scanner_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )

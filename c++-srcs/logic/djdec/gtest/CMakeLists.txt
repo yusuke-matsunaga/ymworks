@@ -30,6 +30,7 @@ ym_add_gtest ( logic_djdec_BddDecMgr_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( logic_djdec_TvDecMgr_test
@@ -38,6 +39,7 @@ ym_add_gtest ( logic_djdec_TvDecMgr_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 

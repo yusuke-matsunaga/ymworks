@@ -21,14 +21,17 @@
 ym_add_gtest ( misc_Array_test
   Array_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( misc_Range_test
   Range_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( misc_UnionFindSet_test
   UnionFindSet_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )

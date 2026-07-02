@@ -26,24 +26,28 @@ ym_add_gtest ( logic_factor_LitSet_test
   LitSetTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( logic_factor_Kernel_test
   KernelTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( logic_factor_BoolDivision_test
   BoolDivisionTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( logic_factor_GenFactor_test
   GenFactorTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 

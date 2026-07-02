@@ -28,6 +28,7 @@ ym_add_gtest ( clib_DotlibScanner_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 
@@ -39,6 +40,7 @@ ym_add_gtest ( clib_FuncScanner_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( clib_FuncScanner_test
@@ -64,6 +66,7 @@ ym_add_gtest ( clib_DotlibParser_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( clib_DotlibParser_test
@@ -82,6 +85,7 @@ ym_add_gtest ( clib_DotlibParser_test2
   $<TARGET_OBJECTS:ym_clib_obj_d>
   DEFINITIONS
   "-DDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( clib_DotlibParser_test2

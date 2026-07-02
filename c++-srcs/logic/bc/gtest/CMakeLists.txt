@@ -30,6 +30,7 @@ ym_add_gtest ( logic_bc_BcEdge_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( logic_bc_BcOp_test
@@ -38,6 +39,7 @@ ym_add_gtest ( logic_bc_BcOp_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( logic_bc_BcGraph_test
@@ -46,6 +48,7 @@ ym_add_gtest ( logic_bc_BcGraph_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 

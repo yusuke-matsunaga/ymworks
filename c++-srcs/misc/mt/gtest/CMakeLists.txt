@@ -25,12 +25,5 @@ include_directories (
 ym_add_gtest ( misc_MtMgrTest
   MtMgrTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
-  )
-
-target_compile_options ( misc_MtMgrTest
-  PRIVATE "-g" "-fsanitize=address"
-  )
-
-target_link_options ( misc_MtMgrTest
-  PRIVATE "-fsanitize=address"
+  ADDRESS_SANITIZE
   )

@@ -30,6 +30,7 @@ ym_add_gtest ( clib_MislibScanner_test
   $<TARGET_OBJECTS:ym_clib_obj_d>
   DEFINITIONS
   "-DDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( clib_MislibScanner_test
@@ -48,6 +49,7 @@ ym_add_gtest ( clib_MislibParser_test
   $<TARGET_OBJECTS:ym_clib_obj_d>
   DEFINITIONS
   "-DDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( clib_MislibParser_test

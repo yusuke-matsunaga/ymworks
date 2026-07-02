@@ -25,14 +25,17 @@ include_directories(
 ym_add_gtest(aig_rwt_PatMgr_test
   PatMgrTest.cc
   ${YM_SUBMODULE_OBJ_D_LIST}
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest(aig_rwt_CutMgr_test
   CutMgrTest.cc
   ${YM_SUBMODULE_OBJ_D_LIST}
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest(aig_rwt_Npn4_test
   Npn4Test.cc
   ${YM_SUBMODULE_OBJ_D_LIST}
+  ADDRESS_SANITIZE
   )

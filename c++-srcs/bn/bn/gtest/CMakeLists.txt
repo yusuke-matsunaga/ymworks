@@ -26,6 +26,7 @@ ym_add_gtest( bn_BnModel_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( bn_BnModel_copymove_test
@@ -35,6 +36,7 @@ ym_add_gtest( bn_BnModel_copymove_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 

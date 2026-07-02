@@ -23,4 +23,5 @@ ym_add_gtest ( misc_PathList_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   DEFINITIONS
   "-DDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )

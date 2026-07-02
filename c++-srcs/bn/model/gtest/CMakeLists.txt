@@ -26,6 +26,7 @@ ym_add_gtest( bn_ModelImpl_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 

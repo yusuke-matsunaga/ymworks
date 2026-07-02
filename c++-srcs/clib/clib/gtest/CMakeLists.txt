@@ -25,6 +25,7 @@
 ym_add_gtest ( clib_ClibArea_test
   # 実は ClibArea.h のみに依存している．
   ClibAreaTest.cc
+  ADDRESS_SANITIZE
   )
 
 
@@ -34,6 +35,7 @@ ym_add_gtest ( clib_ClibArea_test
 ym_add_gtest ( clib_ClibCapacitance_test
   # 実は ClibCapacitance.h のみに依存している．
   ClibCapacitanceTest.cc
+  ADDRESS_SANITIZE
   )
 
 
@@ -43,6 +45,7 @@ ym_add_gtest ( clib_ClibCapacitance_test
 ym_add_gtest ( clib_ClibResistance_test
   # 実は ClibResistance.h のみに依存している．
   ClibResistanceTest.cc
+  ADDRESS_SANITIZE
   )
 
 # ===================================================================
@@ -53,6 +56,7 @@ ym_add_gtest ( clib_ClibSeqAttr_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 
@@ -62,6 +66,7 @@ ym_add_gtest ( clib_ClibSeqAttr_test
 ym_add_gtest ( clib_ClibTime_test
   # 実は ClibTime.h のみに依存している．
   ClibTimeTest.cc
+  ADDRESS_SANITIZE
   )
 
 
@@ -75,6 +80,7 @@ ym_add_gtest ( clib_ClibClib_test
   $<TARGET_OBJECTS:ym_clib_obj_d>
   DEFINITIONS
   "-DDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 
@@ -88,6 +94,7 @@ ym_add_gtest ( clib_ClibCellLibrary_test
   $<TARGET_OBJECTS:ym_clib_obj_d>
   DEFINITIONS
   "-DDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 
@@ -99,6 +106,7 @@ ym_add_gtest ( clib_ClibIOMap_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 

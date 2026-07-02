@@ -28,6 +28,7 @@ ym_add_gtest( logic_dd_DdEdge_test
   DdEdge_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( logic_dd_BddMgr_test
@@ -35,6 +36,7 @@ ym_add_gtest( logic_dd_BddMgr_test
   BddTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( logic_dd_Bdd_test
@@ -42,6 +44,7 @@ ym_add_gtest( logic_dd_Bdd_test
   BddTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( logic_dd_BddVar_test
@@ -49,36 +52,42 @@ ym_add_gtest( logic_dd_BddVar_test
   BddTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( logic_dd_BddLit_test
   BddLit_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( logic_dd_BddVarSet_test
   BddVarSet_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( logic_dd_BddCube_test
   BddCube_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( logic_dd_BddIsop_test
   BddIsopTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( logic_dd_ZddTest
   ZddTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 

@@ -24,6 +24,7 @@ ym_add_gtest( bn_FuncImpl_test
   $<TARGET_OBJECTS:ym_bn_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest( bn_BnFunc_test
@@ -31,6 +32,7 @@ ym_add_gtest( bn_BnFunc_test
   $<TARGET_OBJECTS:ym_bn_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 

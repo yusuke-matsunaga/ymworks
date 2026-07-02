@@ -26,12 +26,14 @@ ym_add_gtest ( logic_Literal_test
   LiteralTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( logic_Val3_test
   Val3_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
+  ADDRESS_SANITIZE
   )
 
 

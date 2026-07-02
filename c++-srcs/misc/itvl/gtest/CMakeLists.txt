@@ -21,6 +21,7 @@
 ym_add_gtest ( misc_ItvlTree_test
   ItvlTree_test.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( misc_ItvlTree_test

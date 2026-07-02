@@ -24,6 +24,7 @@ ym_add_gtest( aig_read_aig_test
   ${YM_SUBMODULE_OBJ_D_LIST}
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 

@@ -25,6 +25,7 @@ ym_add_gtest ( sat_CnfSize_test
   $<TARGET_OBJECTS:ym_bn_obj_d>
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_SatInitParam_test
@@ -36,6 +37,7 @@ ym_add_gtest ( sat_SatInitParam_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   DEFINITIONS
   "-DTESTDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_SatInitParam2_test
@@ -45,6 +47,7 @@ ym_add_gtest ( sat_SatInitParam2_test
   $<TARGET_OBJECTS:ym_bn_obj_d>
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 set_property ( TEST sat_SatInitParam2_test
@@ -58,6 +61,7 @@ ym_add_gtest ( sat_SatInitParam3_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 set_property ( TEST sat_SatInitParam3_test
@@ -71,6 +75,7 @@ ym_add_gtest ( sat_SatBool3_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_SatLiteral_test
@@ -80,6 +85,7 @@ ym_add_gtest ( sat_SatLiteral_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_add_clause_test
@@ -90,6 +96,7 @@ ym_add_gtest ( sat_add_clause_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_tseitinenc_test
@@ -100,6 +107,7 @@ ym_add_gtest ( sat_tseitinenc_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_add_expr_test
@@ -109,6 +117,7 @@ ym_add_gtest ( sat_add_expr_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_add_aig_test
@@ -118,6 +127,7 @@ ym_add_gtest ( sat_add_aig_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_adder_test
@@ -128,6 +138,7 @@ ym_add_gtest ( sat_adder_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_counter_test
@@ -138,6 +149,7 @@ ym_add_gtest ( sat_counter_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_at_most_test
@@ -148,6 +160,7 @@ ym_add_gtest ( sat_at_most_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_comp_test
@@ -158,6 +171,7 @@ ym_add_gtest ( sat_comp_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_comp_const_test
@@ -168,6 +182,7 @@ ym_add_gtest ( sat_comp_const_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_conflict_test
@@ -178,6 +193,7 @@ ym_add_gtest ( sat_conflict_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_SatOrderedSet_test
@@ -187,6 +203,7 @@ ym_add_gtest ( sat_SatOrderedSet_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_SatOneHotVar_test
@@ -196,6 +213,7 @@ ym_add_gtest ( sat_SatOneHotVar_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_SatOneHotMatrix_test
@@ -205,6 +223,7 @@ ym_add_gtest ( sat_SatOneHotMatrix_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_SatOneHotMatrix_test2
@@ -214,6 +233,7 @@ ym_add_gtest ( sat_SatOneHotMatrix_test2
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_Dimacs_test
@@ -225,6 +245,7 @@ ym_add_gtest ( sat_Dimacs_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   DEFINITIONS
   "-DTESTDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_SatSolver_test
@@ -234,6 +255,7 @@ ym_add_gtest ( sat_SatSolver_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( sat_timer_test
@@ -243,4 +265,5 @@ ym_add_gtest ( sat_timer_test
   $<TARGET_OBJECTS:ym_aig_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )

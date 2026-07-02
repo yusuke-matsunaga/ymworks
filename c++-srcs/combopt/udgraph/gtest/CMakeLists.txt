@@ -24,4 +24,5 @@ ym_add_gtest( combopt_dimacs_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   DEFINITIONS
   "-DTESTDATA_DIR=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )

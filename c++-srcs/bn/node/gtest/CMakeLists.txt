@@ -26,6 +26,7 @@ ym_add_gtest( bn_NodeImpl_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( bn_NodeImpl_test
@@ -39,6 +40,7 @@ ym_add_gtest( bn_BnNode_test
   $<TARGET_OBJECTS:ym_logic_obj_d>
   DEFINITIONS
   "-DDATAPATH=\"${TESTDATA_DIR}\""
+  ADDRESS_SANITIZE
   )
 
 

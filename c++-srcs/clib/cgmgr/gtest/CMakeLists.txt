@@ -28,6 +28,7 @@ ym_add_gtest ( clib_CgLogicSig_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( clib_CgLogicSig_test
@@ -41,6 +42,7 @@ add_executable( foo_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 target_compile_options ( foo_test
@@ -66,6 +68,7 @@ ym_add_gtest ( clib_CgGenLogicSig_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( clib_CgGenLogicSig_test
@@ -82,6 +85,7 @@ ym_add_gtest ( clib_CgFFSig_test
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
+  ADDRESS_SANITIZE
   )
 
 target_include_directories( clib_CgFFSig_test

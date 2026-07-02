@@ -25,21 +25,25 @@ include_directories (
 ym_add_gtest ( misc_JsonObjTest
   JsonObjTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( misc_JsonValueTest
   JsonValueTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( misc_JsonScannerTest
   JsonScannerTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( misc_JsonParserTest
   JsonParserTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
+  ADDRESS_SANITIZE
   )
 
 ym_add_gtest ( misc_JsonTest
@@ -47,4 +51,5 @@ ym_add_gtest ( misc_JsonTest
   $<TARGET_OBJECTS:ym_misc_obj_d>
   DEFINITIONS
   "-DTESTDATA_DIR=\"${TESTDATA_DIR}/json/\""
+  ADDRESS_SANITIZE
   )
