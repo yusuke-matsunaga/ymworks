@@ -40,7 +40,7 @@ void
 Engine_Naive::make_op_list()
 {
   // 演算ノードを作る．
-  auto selecter = get_string(option(), "selecter", "OSV");
+  auto selecter = option().get_string_elem("selecter", "OSV");
   switch ( mMaxInput ) {
   case 2:
     if ( selecter == "SSV" ) {

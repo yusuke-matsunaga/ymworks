@@ -138,9 +138,9 @@ gen_boolchain(
   const JsonValue& option
 )
 {
-  auto mode = get_string(option, "mode", "");
-  auto max_input = get_int(option, "max_input", 2);
-  SizeType limit = get_int(option, "limit", 0);
+  auto mode = option.get_string_elem("mode", "");
+  auto max_input = option.get_int_elem("max_input", 2);
+  SizeType limit = option.get_int_elem("limit", 0);
   if ( limit == 0 ) {
     limit = std::numeric_limits<SizeType>::max();
   }

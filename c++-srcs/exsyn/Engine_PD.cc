@@ -54,7 +54,7 @@ void
 Engine_PD::make_op_list()
 {
   // 演算ノードを作る．
-  auto selecter = get_string(option(), "selecter", "OSV");
+  auto selecter = option().get_string_elem("selecter", "OSV");
   if ( selecter == "SSV" ) {
     gen_op_list_SSV();
   }

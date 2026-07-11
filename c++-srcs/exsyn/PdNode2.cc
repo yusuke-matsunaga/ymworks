@@ -41,7 +41,7 @@ PdNode2::new_op(
   const JsonValue& option
 )
 {
-  auto selecter = get_string(option, "selecter", "OSV");
+  auto selecter = option.get_string_elem("selecter", "OSV");
   if ( opr0 >= 0 ) {
     // オペランド0は固定
     // ということはオペランド1も固定

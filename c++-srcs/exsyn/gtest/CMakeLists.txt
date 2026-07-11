@@ -69,24 +69,10 @@ ym_add_gtest ( exsyn_BdGen_test
   )
 endif ()
 
-add_executable ( and2_test
-  and2_test.cc
-  ${YM_SUBMODULE_OBJ_D_LIST}
-  ADDRESS_SANITIZE
-  )
-
 ym_add_gtest ( exsyn_XformInfo_test
   XformInfo_test.cc
   ${YM_SUBMODULE_OBJ_D_LIST}
   ADDRESS_SANITIZE
-  )
-
-target_compile_options ( and2_test
-  PRIVATE "-g"
-  )
-
-target_link_libraries ( and2_test
-  ${YM_LIB_DEPENDS}
   )
 
 add_executable ( or3_test
@@ -99,19 +85,5 @@ target_compile_options ( or3_test
   )
 
 target_link_libraries ( or3_test
-  ${YM_LIB_DEPENDS}
-  )
-
-add_executable ( level_test
-  level_test.cc
-  ${YM_SUBMODULE_OBJ_D_LIST}
-  ADDRESS_SANITIZE
-  )
-
-target_compile_options ( level_test
-  PRIVATE "-g"
-  )
-
-target_link_libraries ( level_test
   ${YM_LIB_DEPENDS}
   )

@@ -33,7 +33,7 @@ do_multithread(
 )
 {
   // スレッド数
-  int thread_num = get_int(option, "thread_num", 0);
+  int thread_num = option.get_int_elem("thread_num", 0);
   if ( thread_num == 0 ) {
     // デフォルト
     thread_num = std::thread::hardware_concurrency();
@@ -159,11 +159,11 @@ ExSyn::gen_boolchain(
   const JsonValue& option
 )
 {
-  auto verbose = get_bool(option, "verbose", false);
-  auto debug = get_bool(option, "debug", false);
-  auto mode = get_string(option, "mode", "");
-  auto max_input = get_int(option, "max_input", 2);
-  SizeType limit = get_int(option, "limit", 0);
+  auto verbose = option.get_bool_elem("verbose", false);
+  auto debug = option.get_bool_elem("debug", false);
+  auto mode = option.get_string_elem("mode", "");
+  auto max_input = option.get_int_elem("max_input", 2);
+  SizeType limit = option.get_int_elem("limit", 0);
   if ( limit == 0 ) {
     limit = std::numeric_limits<SizeType>::max();
   }

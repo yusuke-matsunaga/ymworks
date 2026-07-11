@@ -54,19 +54,19 @@ EngineBase::solve()
 {
   make_op_list();
 
-  if ( get_bool(option(), "use_all_inputs", true) ) {
+  if ( option().get_bool_elem("use_all_inputs", true) ) {
     add_use_all_inputs();
   }
 
-  if ( get_bool(option(), "use_all_steps", true) ) {
+  if ( option().get_bool_elem("use_all_steps", true) ) {
     add_use_all_steps();
   }
 
-  if ( get_bool(option(), "no_reapplication", true) ) {
+  if ( option().get_bool_elem("no_reapplication", true) ) {
     add_no_reapplication();
   }
 
-  if ( get_bool(option(), "op_order", true) ) {
+  if ( option().get_bool_elem("op_order", true) ) {
     add_op_order();
   }
 
