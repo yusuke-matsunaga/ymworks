@@ -17,6 +17,26 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 /// @class VlExpr VlExpr.h "ym/vl/VlExpr.h"
 /// @brief エラボレーション中の expression を表す基底クラス
+///
+/// VpiObjType は以下のいずれか
+/// - primary 系
+///   - IntegerVar
+///   - Net
+///   - Parameter
+///   - RealVar
+///   - Reg
+///   - SpecParam
+///   - TimeVar
+/// - bit_select 系
+///   - BitSelect
+///   - NetBit
+///   - RegBit
+/// - part_select 系
+///   - PartSelect
+///   - VarSelect
+/// - FuncCall
+/// - SysFuncCall
+/// - Operattion
 //////////////////////////////////////////////////////////////////////
 class VlExpr :
   public VlObj
