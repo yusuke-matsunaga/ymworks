@@ -157,6 +157,10 @@ public:
   ///  - kVpiDeassign
   ///  - kVpiForce
   ///  - kVpiRelease
+  ///
+  /// 生成されるのは以下の種類のみ
+  /// - プライマリ(ビット指定，範囲指定も含む)
+  /// - 連結演算
   virtual
   const VlExpr*
   lhs() const = 0;
