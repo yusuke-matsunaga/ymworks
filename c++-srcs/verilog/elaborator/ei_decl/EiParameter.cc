@@ -14,6 +14,7 @@
 #include "ym/BitVector.h"
 
 #include "ym/pt/PtDecl.h"
+#include "ym/pt/PtExpr.h"
 #include "ym/pt/PtItem.h"
 #include "ym/pt/PtMisc.h"
 
@@ -31,8 +32,7 @@ EiFactory::new_ParamHead(
   const PtDeclHead* pt_head
 )
 {
-  auto head = new EiParamHead{parent, pt_head};
-  return head;
+  return new EiParamHead(parent, pt_head);
 }
 
 // @brief parameter 宣言のヘッダを生成する．
@@ -40,19 +40,14 @@ ElbParamHead*
 EiFactory::new_ParamHead(
   const VlScope* parent,
   const PtDeclHead* pt_head,
-  const PtExpr* left,
-  const PtExpr* right,
-  int left_val,
-  int right_val
+  const PtRange* pt_range,
+  const RangeVal& range
 )
 {
-  ASSERT_COND( left != nullptr );
-  ASSERT_COND( right != nullptr );
-
-  auto head = new EiParamHeadV{parent, pt_head,
-			       left, right,
-			       left_val, right_val};
-  return head;
+  if ( pt_range == nullptr ) {
+    throw std::logic_error{"pt_range == nullptr"};
+  }
+  return new EiParamHeadV(parent, pt_head, pt_range, range);
 }
 
 // @brief parameter 宣言を生成する．
@@ -63,25 +58,21 @@ EiFactory::new_Parameter(
   bool is_local
 )
 {
-  EiParameter* param = nullptr;
-
   switch ( head->type() ) {
   case VpiObjType::Parameter:
   case VpiObjType::SpecParam:
     if ( is_local ) {
-      param = new EiLocalParam{head, pt_item};
+      return new EiLocalParam(head, pt_item);
     }
     else {
-      param = new EiParameter{head, pt_item};
+      return new EiParameter(head, pt_item);
     }
     break;
 
   default:
-    ASSERT_NOT_REACHED;
     break;
   }
-
-  return param;
+  throw std::logic_error{"Should not be reached"};
 }
 
 
@@ -325,13 +316,11 @@ EiParamHead::pt_head() const
 EiParamHeadV::EiParamHeadV(
   const VlScope* parent,
   const PtDeclHead* pt_head,
-  const PtExpr* left,
-  const PtExpr* right,
-  int left_val,
-  int right_val
-) : EiParamHead{parent, pt_head}
+  const PtRange* pt_range,
+  const RangeVal& range
+) : EiParamHead(parent, pt_head),
+    mRange(pt_range, range)
 {
-  mRange.set(left, right, left_val, right_val);
 }
 
 // @brief デストラクタ
@@ -359,28 +348,28 @@ EiParamHeadV::has_range() const
 int
 EiParamHeadV::left_range_val() const
 {
-  return mRange.left_range_val();
+  return mRange.left;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
 EiParamHeadV::right_range_val() const
 {
-  return mRange.right_range_val();
+  return mRange.right;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
 EiParamHeadV::left_range_string() const
 {
-  return mRange.left_range_string();
+  return mRange.left_string();
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
 EiParamHeadV::right_range_string() const
 {
-  return mRange.right_range_string();
+  return mRange.right_string();
 }
 
 // @brief left_range >= right_range の時に true を返す．
@@ -403,7 +392,7 @@ EiParamHeadV::bit_size(
   const VlValue& val
 ) const
 {
-  return mRange.size();
+  return mRange.calc_size();
 }
 
 // @brief オフセット値の取得
@@ -423,7 +412,8 @@ EiParamHeadV::value_type(
   const VlValue& val
 ) const
 {
-  return VlValueType{pt_head()->is_signed(), true, mRange.size()};
+  return VlValueType(pt_head()->is_signed(), true,
+		     mRange.calc_size());
 }
 
 
@@ -679,7 +669,7 @@ EiParameter::set_init_expr(
 EiLocalParam::EiLocalParam(
   ElbParamHead* head,
   const PtNamedBase* pt_item
-) : EiParameter{head, pt_item}
+) : EiParameter(head, pt_item)
 {
 }
 

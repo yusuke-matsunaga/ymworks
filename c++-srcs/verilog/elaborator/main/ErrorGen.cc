@@ -12,6 +12,7 @@
 #include "ym/pt/PtModule.h"
 #include "ym/pt/PtDecl.h"
 #include "ym/pt/PtItem.h"
+#include "ym/pt/PtStmt.h"
 #include "ym/pt/PtExpr.h"
 #include "ym/vl/VlDeclArray.h"
 #include "ym/vl/VlExpr.h"
@@ -791,6 +792,19 @@ ErrorGen::no_such_sysfunction(
 		  "No such system function.");
 }
 
+// @brief 該当するシステムタスクが存在しない．
+void
+ErrorGen::no_such_systask(
+  const char* file,     ///< [in] ファイル名
+  int line,		  ///< [in] 行番号
+  const PtStmt* pt_stmt ///< [in] 対象の構文木要素
+)
+{
+  stmt_common(file, line, pt_stmt,
+	      "ELABXXX",
+	      "No such system task.");
+}
+
 // @brief 関数ではない．
 void
 ErrorGen::not_a_function(
@@ -813,6 +827,19 @@ ErrorGen::n_of_arguments_mismatch(
 )
 {
   expr_common(file, line, pt_expr,
+	      "ELABXXX",
+	      "# of arguments does not match.");
+}
+
+// @brief 引数の数が合わない．
+void
+ErrorGen::n_of_arguments_mismatch(
+  const char* file,
+  int line,
+  const PtStmt* pt_stmt
+)
+{
+  stmt_common(file, line, pt_stmt,
 	      "ELABXXX",
 	      "# of arguments does not match.");
 }
@@ -1030,6 +1057,19 @@ ErrorGen::expr_common(
 )
 {
   error_common(file, line, pt_expr->file_region(), label, msg);
+}
+
+// @brief PtStmt に関するエラーメッセージを生成する共通部分
+void
+ErrorGen::stmt_common(
+  const char* file,
+  int line,
+  const PtStmt* pt_stmt,
+  const char* label,
+  const std::string& msg
+)
+{
+  error_common(file, line, pt_stmt->file_region(), label, msg);
 }
 
 // @brief エラーメッセージを生成する共通部分

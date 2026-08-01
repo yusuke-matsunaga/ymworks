@@ -38,7 +38,6 @@ ExprGen::instantiate_opr(
   switch ( op_type ) {
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
-    ASSERT_COND( opr_size == 1 );
     ErrorGen::illegal_edge_descriptor(__FILE__, __LINE__, pt_expr);
     break;
 
@@ -54,7 +53,6 @@ ExprGen::instantiate_opr(
   case VpiOpType::Plus:
   case VpiOpType::Minus:
   case VpiOpType::Not:
-    ASSERT_COND( opr_size == 1 );
     opr0 = instantiate_expr(parent, env, pt_expr->operand0());
     if ( real_check && opr0->value_type().is_real_type() ) {
       ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr->operand0());
@@ -87,7 +85,6 @@ ExprGen::instantiate_opr(
   case VpiOpType::Gt:
   case VpiOpType::Le:
   case VpiOpType::Lt:
-    ASSERT_COND( opr_size == 2 );
     opr0 = instantiate_expr(parent, env, pt_expr->operand0());
     opr1 = instantiate_expr(parent, env, pt_expr->operand1());
     if ( real_check ) {
@@ -103,7 +100,6 @@ ExprGen::instantiate_opr(
 
   case VpiOpType::Condition:
   case VpiOpType::MinTypMax:
-    ASSERT_COND( opr_size == 3 );
     opr0 = instantiate_expr(parent, env, pt_expr->operand0());
     opr1 = instantiate_expr(parent, env, pt_expr->operand1());
     opr2 = instantiate_expr(parent, env, pt_expr->operand2());
@@ -148,8 +144,7 @@ ExprGen::instantiate_opr(
     break;
 
   default:
-    ASSERT_NOT_REACHED;
-    return nullptr;
+    throw std::logic_error{"Should not be reached"};
   }
 
   // attribute instance の生成

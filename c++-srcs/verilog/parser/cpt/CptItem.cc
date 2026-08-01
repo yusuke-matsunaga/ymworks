@@ -206,16 +206,9 @@ CptItem::is_signed() const
   return false;
 }
 
-// @brief 範囲の左側の式の取得
-const PtExpr*
-CptItem::left_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲の右側の式の取得
-const PtExpr*
-CptItem::right_range() const
+// @brief 範囲の取得
+const PtRange*
+CptItem::range() const
 {
   return nullptr;
 }
@@ -977,18 +970,16 @@ CptSizedFunc::CptSizedFunc(
   const char* name,
   bool automatic,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   PtiIOHeadArray&& iohead_array,
   PtiDeclHeadArray&& declhead_array,
   const PtStmt* stmt
-) : CptFunction{file_region,
+) : CptFunction(file_region,
 		name, automatic, sign,
 		std::move(iohead_array),
 		std::move(declhead_array),
-		stmt},
-    mLeftRange{left},
-    mRightRange{right}
+		stmt),
+    mRange{range}
 {
 }
 
@@ -997,18 +988,11 @@ CptSizedFunc::~CptSizedFunc()
 {
 }
 
-// 範囲の MSB を得る．
-const PtExpr*
-CptSizedFunc::left_range() const
+// 範囲を得る．
+const PtRange*
+CptSizedFunc::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲の LSB を得る．
-const PtExpr*
-CptSizedFunc::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 
@@ -1026,11 +1010,11 @@ CptTypedFunc::CptTypedFunc(
   PtiIOHeadArray&& iohead_array,
   PtiDeclHeadArray&& declhead_array,
   const PtStmt* stmt
-) : CptFunction{file_region,
+) : CptFunction(file_region,
 		name, automatic, sign,
 		std::move(iohead_array),
 		std::move(declhead_array),
-		stmt},
+		stmt),
     mDataType{data_type}
 {
 }
@@ -1061,8 +1045,8 @@ CptFactory::new_DefParamH(
 {
   ++ mNumDefParamH;
   void* p = mAlloc.get_memory(sizeof(CptDefParamH));
-  auto obj = new (p) CptDefParamH{file_region,
-				  PtiArray<const PtDefParam>(mAlloc, elem_array)};
+  auto obj = new (p) CptDefParamH(file_region,
+				  PtiArray<const PtDefParam>(mAlloc, elem_array));
   return obj;
 }
 
@@ -1076,9 +1060,9 @@ CptFactory::new_DefParam(
 {
   ++ mNumDefParam;
   void* p = mAlloc.get_memory(sizeof(CptDefParam));
-  auto obj = new (p) CptDefParam{file_region,
+  auto obj = new (p) CptDefParam(file_region,
 				 PtiArray<const PtNameBranch>(),
-				 name, value};
+				 name, value);
   return obj;
 }
 
@@ -1093,9 +1077,9 @@ CptFactory::new_DefParam(
   void* p = mAlloc.get_memory(sizeof(CptDefParam));
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptDefParam{file_region,
+  auto obj = new (p) CptDefParam(file_region,
 				 PtiArray<const PtNameBranch>(mAlloc, nb_array),
-				 tail_name, value};
+				 tail_name, value);
   return obj;
 }
 
@@ -1112,15 +1096,15 @@ CptFactory::new_ContAssignH(
     if ( delay == nullptr ) {
       ++ mNumContAssignH;
       void* p = mAlloc.get_memory(sizeof(CptContAssignH));
-      auto obj = new (p) CptContAssignH{file_region,
-					PtiArray<const PtContAssign>(mAlloc, elem_array)};
+      auto obj = new (p) CptContAssignH(file_region,
+					PtiArray<const PtContAssign>(mAlloc, elem_array));
       return obj;
     }
     else {
       ++ mNumContAssignHD;
       void* p = mAlloc.get_memory(sizeof(CptContAssignHD));
-      auto obj = new (p) CptContAssignHD{file_region, delay,
-					 PtiArray<const PtContAssign>(mAlloc, elem_array)};
+      auto obj = new (p) CptContAssignHD(file_region, delay,
+					 PtiArray<const PtContAssign>(mAlloc, elem_array));
       return obj;
     }
   }
@@ -1128,15 +1112,15 @@ CptFactory::new_ContAssignH(
     if ( delay == nullptr ) {
       ++ mNumContAssignHS;
       void* p = mAlloc.get_memory(sizeof(CptContAssignHS));
-      auto obj = new (p) CptContAssignHS{file_region, strength,
-					 PtiArray<const PtContAssign>(mAlloc, elem_array)};
+      auto obj = new (p) CptContAssignHS(file_region, strength,
+					 PtiArray<const PtContAssign>(mAlloc, elem_array));
       return obj;
     }
     else {
       ++ mNumContAssignHSD;
       void* p = mAlloc.get_memory(sizeof(CptContAssignHSD));
-      auto obj = new (p) CptContAssignHSD{file_region, strength, delay,
-					  PtiArray<const PtContAssign>(mAlloc, elem_array)};
+      auto obj = new (p) CptContAssignHSD(file_region, strength, delay,
+					  PtiArray<const PtContAssign>(mAlloc, elem_array));
       return obj;
     }
   }
@@ -1153,7 +1137,7 @@ CptFactory::new_ContAssign(
   ++ mNumContAssign;
   // 実は file_region は不要
   void* p = mAlloc.get_memory(sizeof(CptContAssign));
-  auto obj = new (p) CptContAssign{lhs, rhs};
+  auto obj = new (p) CptContAssign(lhs, rhs);
   return obj;
 }
 
@@ -1166,7 +1150,7 @@ CptFactory::new_Initial(
 {
   ++ mNumInitial;
   void* p = mAlloc.get_memory(sizeof(CptInitial));
-  auto obj = new (p) CptInitial{file_region, body};
+  auto obj = new (p) CptInitial(file_region, body);
   return obj;
 }
 
@@ -1179,7 +1163,7 @@ CptFactory::new_Always(
 {
   ++ mNumAlways;
   void* p = mAlloc.get_memory(sizeof(CptAlways));
-  auto obj = new (p) CptAlways{file_region, body};
+  auto obj = new (p) CptAlways(file_region, body);
   return obj;
 }
 
@@ -1196,10 +1180,10 @@ CptFactory::new_Task(
 {
   ++ mNumTask;
   void* p = mAlloc.get_memory(sizeof(CptTask));
-  auto obj = new (p) CptTask{file_region, name, automatic,
+  auto obj = new (p) CptTask(file_region, name, automatic,
 			     PtiArray<const PtIOHead>(mAlloc, iohead_array),
 			     PtiArray<const PtDeclHead>(mAlloc, declhead_array),
-			     stmt};
+			     stmt);
   return obj;
 }
 
@@ -1217,10 +1201,10 @@ CptFactory::new_Function(
 {
   ++ mNumFunction;
   void* p = mAlloc.get_memory(sizeof(CptFunction));
-  auto obj = new (p) CptFunction{file_region, name, automatic, sign,
+  auto obj = new (p) CptFunction(file_region, name, automatic, sign,
 				 PtiArray<const PtIOHead>(mAlloc, iohead_array),
 				 PtiArray<const PtDeclHead>(mAlloc, declhead_array),
-				 stmt};
+				 stmt);
   return obj;
 }
 
@@ -1231,8 +1215,7 @@ CptFactory::new_SizedFunc(
   const char* name,
   bool automatic,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const std::vector<const PtIOHead*>& iohead_array,
   const std::vector<const PtDeclHead*>& declhead_array,
   const PtStmt* stmt
@@ -1240,12 +1223,12 @@ CptFactory::new_SizedFunc(
 {
   ++ mNumSizedFunc;
   void* p = mAlloc.get_memory(sizeof(CptSizedFunc));
-  auto obj = new (p) CptSizedFunc{file_region,
+  auto obj = new (p) CptSizedFunc(file_region,
 				  name, automatic,
-				  sign, left, right,
+				  sign, range,
 				  PtiArray<const PtIOHead>(mAlloc, iohead_array),
 				  PtiArray<const PtDeclHead>(mAlloc, declhead_array),
-				  stmt};
+				  stmt);
   return obj;
 }
 
@@ -1264,12 +1247,12 @@ CptFactory::new_TypedFunc(
 {
   ++ mNumTypedFunc;
   void* p = mAlloc.get_memory(sizeof(CptTypedFunc));
-  auto obj = new (p) CptTypedFunc{file_region, name,
+  auto obj = new (p) CptTypedFunc(file_region, name,
 				  automatic, sign,
 				  func_type,
 				  PtiArray<const PtIOHead>(mAlloc, iohead_array),
 				  PtiArray<const PtDeclHead>(mAlloc, declhead_array),
-				  stmt};
+				  stmt);
   return obj;
 }
 

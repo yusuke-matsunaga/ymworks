@@ -34,8 +34,7 @@ private:
     VpiNetType net_type,
     VpiVarType var_type,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtRange* range
   );
 
   /// @brief デストラクタ
@@ -71,13 +70,9 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲のMSBの取得
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲のLSBの取得
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲の取得
+  const PtRange*
+  range() const override;
 
   /// @brief 要素数の取得
   SizeType
@@ -125,11 +120,8 @@ private:
   // 符号の有無
   bool mSigned;
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
   // 要素の配列
   PtiIOItemArray mItemArray;
@@ -209,8 +201,7 @@ private:
     const FileRegion& file_region,
     PtDeclType type,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right,
+    const PtRange* range,
     VpiVarType var_type,
     VpiNetType net_type,
     VpiVsType vs_type,
@@ -239,13 +230,9 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲のMSBの取得
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲のLSBの取得
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲の取得
+  const PtRange*
+  range() const override;
 
   /// @brief データ型の取得
   VpiVarType
@@ -304,11 +291,8 @@ private:
   // 符号の有無
   bool mSigned;
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
   // データ型
   VpiVarType mVarType;

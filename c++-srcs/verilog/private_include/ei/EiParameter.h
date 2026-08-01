@@ -9,8 +9,7 @@
 /// All rights reserved.
 
 #include "elaborator/ElbParameter.h"
-#include "EiRange.h"
-
+#include "elaborator/RangeVal.h"
 #include "ym/VlValue.h"
 
 
@@ -148,10 +147,8 @@ public:
   EiParamHeadV(
     const VlScope* parent,     ///< [in] 親のスコープ
     const PtDeclHead* pt_head, ///< [in] パース木の宣言ヘッダ
-    const PtExpr* left,        ///< [in] 範囲の左側の式
-    const PtExpr* right,       ///< [in] 範囲の右側の式
-    int left_val,              ///< [in] 範囲の左側の値
-    int right_val              ///< [in] 範囲の右側の値
+    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -227,8 +224,8 @@ protected:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲
-  EiRangeImpl mRange;
+  // 範囲の情報
+  RangeInfo mRange;
 
 };
 

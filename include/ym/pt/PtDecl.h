@@ -58,19 +58,12 @@ public:
   bool
   is_signed() const = 0;
 
-  /// @brief 範囲のMSBの取得
-  /// @retval 範囲のMSB
+  /// @brief 範囲の取得
+  /// @retval 範囲
   /// @retval nullptr 範囲を持たないとき
   virtual
-  const PtExpr*
-  left_range() const = 0;
-
-  /// @brief 範囲のLSBの取得
-  /// @retval 範囲のLSB
-  /// @retval nullptr 範囲を持たないとき
-  virtual
-  const PtExpr*
-  right_range() const = 0;
+  const PtRange*
+  range() const = 0;
 
   /// @brief 要素数の取得
   virtual
@@ -150,19 +143,12 @@ public:
   bool
   is_signed() const = 0;
 
-  /// @brief 範囲のMSBの取得
-  /// @retval 範囲のMSB 範囲を持つとき
+  /// @brief 範囲Bの取得
+  /// @retval 範囲 範囲を持つとき
   /// @retval nullptr 範囲を持たないとき
   virtual
-  const PtExpr*
-  left_range() const = 0;
-
-  /// @brief 範囲のLSBの取得
-  /// @retval 範囲のLSB 範囲を持つとき
-  /// @retval nullptr 範囲を持たないとき
-  virtual
-  const PtExpr*
-  right_range() const = 0;
+  const PtRange*
+  range() const = 0;
 
   /// @brief データ型の取得
   /// @retval データ型 kParam, kLocalParam, kVar の場合

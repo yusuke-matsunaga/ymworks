@@ -91,7 +91,9 @@ UdpGen::instantiate_udp(
   SizeType index{0};
   for ( auto port: pt_udp->port_list() ) {
     auto name = port->ext_name();
-    ASSERT_COND( iodict.count(name) > 0 );
+    if ( iodict.count(name) == 0 ) {
+      throw std::logic_error{"iodict.count(name) == 0"};
+    }
     auto tmp = iodict.at(name);
     auto pt_header = tmp.first;
     auto pt_item = tmp.second;
@@ -107,7 +109,9 @@ UdpGen::instantiate_udp(
   }
   if ( pt_init_value ) {
     // このチェックはパース時に済んでいるはずなので念のため．
-    ASSERT_COND( ptype == VpiPrimType::Seq );
+    if ( ptype != VpiPrimType::Seq ) {
+      throw std::logic_error{"ptype != VpiPrimType"};
+    }
 
     const auto& ifr = pt_init_value->file_region();
 

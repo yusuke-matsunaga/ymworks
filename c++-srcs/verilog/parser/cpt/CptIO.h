@@ -69,17 +69,11 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲のMSBの取得
-  /// @retval 範囲のMSB
+  /// @brief 範囲の取得
+  /// @retval 範囲
   /// @retval nullptr 範囲を持たないとき
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲のLSBの取得
-  /// @retval 範囲のLSB
-  /// @retval nullptr 範囲を持たないとき
-  const PtExpr*
-  right_range() const override;
+  const PtRange*
+  range() const override;
 
   /// @brief 要素数の取得
   SizeType
@@ -160,8 +154,7 @@ public:
     VpiAuxType aux_type,	   ///< [in] 補助的な型
     VpiNetType net_type,	   ///< [in] 補助的なネット型
     bool sign,                     ///< [in] 符号つきの時 true にするフラグ
-    const PtExpr* left,            ///< [in] 範囲の左側の式
-    const PtExpr* right            ///< [in] 範囲の右側の式
+    const PtRange* range           ///< [in] パース木の範囲定義
   );
 
   /// @brief デストラクタ
@@ -173,13 +166,9 @@ public:
   // PtIOH の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 範囲のMSBの取得
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲のLSBの取得
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲の取得
+  const PtRange*
+  range() const override;
 
 
 private:
@@ -187,11 +176,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
 };
 

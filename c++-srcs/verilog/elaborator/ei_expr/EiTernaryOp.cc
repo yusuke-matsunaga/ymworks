@@ -28,21 +28,17 @@ EiFactory::new_TernaryOp(
   ElbExpr* opr2
 )
 {
-  ElbExpr* expr = nullptr;
   switch ( op_type ) {
   case VpiOpType::Condition:
-    expr = new EiConditionOp{pt_expr, opr0, opr1, opr2};
-    break;
+    return new EiConditionOp(pt_expr, opr0, opr1, opr2);
 
   case VpiOpType::MinTypMax:
-    expr = new EiMinTypMaxOp{pt_expr, opr0, opr1, opr2};
-    break;
+    return new EiMinTypMaxOp(pt_expr, opr0, opr1, opr2);
 
   default:
-    ASSERT_NOT_REACHED;
     break;
   }
-  return expr;
+  throw std::logic_error{"Should not be reached"};
 }
 
 
@@ -56,7 +52,7 @@ EiTernaryOp::EiTernaryOp(
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3
-) : EiOperation{pt_expr},
+) : EiOperation(pt_expr),
     mOpr{opr1, opr2, opr3}
 {
 }
@@ -89,8 +85,9 @@ EiTernaryOp::operand(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < 3 );
-
+  if ( pos >= 3 ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mOpr[pos];
 }
 
@@ -105,7 +102,7 @@ EiConditionOp::EiConditionOp(
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3
-) : EiTernaryOp{pt_expr, opr1, opr2, opr3}
+) : EiTernaryOp(pt_expr, opr1, opr2, opr3)
 {
   // 三項演算子の場合は第1オペランドが self determined で
   // 結果は第2オペランドと第3オペランドから決まる．
@@ -155,7 +152,7 @@ EiMinTypMaxOp::EiMinTypMaxOp(
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3
-) : EiTernaryOp{pt_expr, opr1, opr2, opr3}
+) : EiTernaryOp(pt_expr, opr1, opr2, opr3)
 {
   // とりあえず真ん中の式を使う．
   mType = opr2->value_type();

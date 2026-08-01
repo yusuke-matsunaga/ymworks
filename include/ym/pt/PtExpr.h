@@ -88,23 +88,11 @@ public:
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < index_num() )
   ) const = 0;
 
-  /// @brief 範囲指定モードの取得
-  /// @return 範囲指定モード
+  /// @brief 範囲指定を表す構文木を返す．
+  /// @return 範囲指定
   virtual
-  VpiRangeMode
-  range_mode() const = 0;
-
-  /// @brief 範囲の左側の式の取得
-  /// @return 範囲の左側の式
-  virtual
-  const PtExpr*
-  left_range() const = 0;
-
-  /// @brief 範囲の右側の式の取得
-  /// @return 範囲の右側の式
-  virtual
-  const PtExpr*
-  right_range() const = 0;
+  const PtPart*
+  part() const = 0;
 
   /// @brief 定数の種類の取得
   /// @return 定数の種類
@@ -164,6 +152,42 @@ public:
   virtual
   std::string
   decompile() const = 0;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class PtPart PtDecl.h <ym/pt/PtDecl.h>
+/// @ingroup VlParser
+/// @ingroup PtGroup
+/// @brief 範囲指定を表すクラス
+///
+/// - Const: [a:b]
+/// - Plust: [a+:b]
+/// - Minus: [a-:b]
+//////////////////////////////////////////////////////////////////////
+class PtPart :
+  public PtBase
+{
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtRange の継承クラスが実装する仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 範囲指定のモードを返す．
+  virtual
+  VpiRangeMode
+  mode() const = 0;
+
+  /// @brief 1番目の式を取り出す．
+  virtual
+  const PtExpr*
+  left() const = 0;
+
+  /// @brief 2番めの式を取り出す．
+  virtual
+  const PtExpr*
+  right() const = 0;
 
 };
 

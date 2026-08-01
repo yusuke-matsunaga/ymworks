@@ -28,8 +28,7 @@ EiFactory::new_Delay(
   const std::vector<ElbExpr*>& expr_list
 )
 {
-  auto delay = new EiDelay{pt_obj, expr_list};
-  return delay;
+  return new EiDelay(pt_obj, expr_list);
 }
 
 
@@ -79,8 +78,9 @@ EiDelay::expr(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < elem_num() );
-
+  if ( pos >= elem_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mElemList[pos];
 }
 

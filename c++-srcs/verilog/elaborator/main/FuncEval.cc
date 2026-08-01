@@ -38,12 +38,16 @@ FuncEval::operator()(
 )
 {
   // 入力変数の値をセットする．
-  SizeType io_num{mFunction->io_num()};
-  ASSERT_COND( arg_list.size() == io_num );
+  auto io_num = mFunction->io_num();
+  if ( io_num != arg_list.size() ) {
+    throw std::logic_error{"io_num != arg_list.size()"};
+  }
 
   for ( SizeType index = 0; index < io_num; ++ index ) {
     auto io = mFunction->io(index);
-    ASSERT_COND( io->direction() == VpiDir::Input );
+    if ( io->direction() != VpiDir::Input ) {
+      throw std::logic_error{"io->direction() != VpiDir::Input"};
+    }
     auto decl = io->decl();
     reg_val(decl, arg_list[index]);
   }
@@ -124,7 +128,7 @@ FuncEval::evaluate_stmt(
 
   default:
     // 上記以外はエラー
-    ASSERT_NOT_REACHED;
+    throw std::logic_error{"Should not be reached"};
     break;
   }
 
@@ -174,8 +178,12 @@ FuncEval::evaluate_assign(
   const VlStmt* stmt
 )
 {
-  ASSERT_COND( stmt->control() == nullptr );
-  ASSERT_COND( stmt->is_blocking() );
+  if ( stmt->control() != nullptr ) {
+    throw std::logic_error{"stmt->control() != nullptr"};
+  }
+  if ( !stmt->is_blocking() ) {
+    throw std::logic_error{"!stmt->is_blocking()"};
+  }
 
   auto rhs = stmt->rhs();
   auto val = evaluate_expr(rhs);
@@ -253,7 +261,9 @@ FuncEval::assign_value(
 
     SizeType offset;
     bool stat = declarray->calc_array_offset(index_array, offset);
-    ASSERT_COND( stat );
+    if ( !stat ) {
+      throw std::logic_error{"!stat"};
+    }
 
     if ( expr->is_primary() ) {
       // プライマリ
@@ -437,7 +447,7 @@ FuncEval::match(
       eq_val = eq_with_xz(val, label_val);
     }
     else {
-      ASSERT_NOT_REACHED;
+      throw std::logic_error{"Should not be reached"};
     }
     return eq_val.logic_value().to_bool();
   }
@@ -468,8 +478,7 @@ FuncEval::evaluate_expr(
            // bitselect, partselect も馥府．
     return evaluate_primary(expr);
   }
-  ASSERT_NOT_REACHED;
-  return VlValue();
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief 演算子に対して式の値を評価する．
@@ -570,8 +579,7 @@ FuncEval::evaluate_opr(
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
     // これらは使えない．
-    ASSERT_NOT_REACHED;
-    return VlValue();
+    throw std::logic_error{"Should not be reached"};
   }
 }
 
@@ -607,12 +615,14 @@ FuncEval::evaluate_primary(
 
     SizeType offset;
     bool stat = declarray->calc_array_offset(index_array, offset);
-    ASSERT_COND( stat );
+    if ( !stat ) {
+      throw std::logic_error{"!stat"};
+    }
 
     base_val = get_val(declarray, offset);
   }
   else {
-    ASSERT_NOT_REACHED;
+    throw std::logic_error{"Should not be reached"};
   }
 
   if ( expr->is_primary() ) {
@@ -633,8 +643,7 @@ FuncEval::evaluate_primary(
     return VlValue(bv.part_select_op(left_index, right_index));
   }
 
-  ASSERT_NOT_REACHED;
-  return VlValue();
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief 関数呼び出しに対して式の値を評価する．
@@ -647,13 +656,15 @@ FuncEval::evaluate_funccall(
 
   // 引数の値を評価する．
   SizeType n_io = expr->argument_num();
-  ASSERT_COND( n_io == func->io_num() );
+  if ( n_io != func->io_num() ) {
+    throw std::logic_error{"n_io != func->io_num()"};
+  }
   std::vector<VlValue> arg_list(n_io);
   for ( SizeType i = 0; i < n_io; ++ i ) {
     arg_list[i] = evaluate_expr(expr->argument(i));
   }
 
-  FuncEval eval{func};
+  FuncEval eval(func);
   return eval(arg_list);
 }
 
@@ -726,7 +737,9 @@ FuncEval::reg_val(
   BitVector bv;
   if ( mValMap.count(key) > 0 ) {
     auto val0 = mValMap.at(key);
-    ASSERT_COND( val0.is_bitvector_compat() );
+    if ( !val0.is_bitvector_compat() ) {
+      throw std::logic_error{"!val0.is_bitvector_compat()"};
+    }
     bv = val0.bitvector_value();
   }
   else {
@@ -764,7 +777,9 @@ FuncEval::reg_val(
   BitVector bv;
   if ( mValMap.count(key) > 0 ) {
     auto val0 = mValMap.at(key);
-    ASSERT_COND( val0.is_bitvector_compat() );
+    if ( !val0.is_bitvector_compat() ) {
+      throw std::logic_error{"!val0.is_bitvector_compat()"};
+    }
     bv = val0.bitvector_value();
   }
   else {
@@ -792,7 +807,9 @@ FuncEval::get_val(
 )
 {
   Key key{obj, offset};
-  ASSERT_COND( mValMap.count(key) > 0 );
+  if ( mValMap.count(key) == 0 ) {
+    throw std::logic_error{"mValMap.count(key) == 0"};
+  }
   return mValMap.at(key);
 }
 

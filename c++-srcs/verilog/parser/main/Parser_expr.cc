@@ -122,12 +122,10 @@ const PtExpr*
 Parser::new_Primary(
   const FileRegion& fr,
   const char* name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto expr = mFactory->new_Primary(fr, name, mode, left, right);
+  auto expr = mFactory->new_Primary(fr, name, part);
   return expr;
 }
 
@@ -137,13 +135,12 @@ Parser::new_Primary(
   const FileRegion& fr,
   const char* name,
   PtrList<const PtExpr>* index_list,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto expr = mFactory->new_Primary(fr, name, index_list->to_vector(),
-				    mode, left, right);
+  auto expr = mFactory->new_Primary(fr, name,
+				    index_list->to_vector(),
+				    part);
   return expr;
 }
 
@@ -175,12 +172,10 @@ const PtExpr*
 Parser::new_Primary(
   const FileRegion& fr,
   PuHierName* hname,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto expr = mFactory->new_Primary(fr, hname, mode, left, right);
+  auto expr = mFactory->new_Primary(fr, hname, part);
   return expr;
 }
 
@@ -190,13 +185,12 @@ Parser::new_Primary(
   const FileRegion& fr,
   PuHierName* hname,
   PtrList<const PtExpr>* index_list,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto expr = mFactory->new_Primary(fr, hname, index_list->to_vector(),
-				    mode, left, right);
+  auto expr = mFactory->new_Primary(fr, hname,
+				    index_list->to_vector(),
+				    part);
   return expr;
 }
 
@@ -229,12 +223,10 @@ const PtExpr*
 Parser::new_CPrimary(
   const FileRegion& fr,
   const char* name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto expr = mFactory->new_CPrimary(fr, name, mode, left, right);
+  auto expr = mFactory->new_CPrimary(fr, name, part);
   return expr;
 }
 
@@ -357,6 +349,18 @@ Parser::new_StringConst(
 {
   auto expr = mFactory->new_StringConst(fr, value);
   return expr;
+}
+
+// @brief 範囲指定の生成
+const PtPart*
+Parser::new_Part(
+  const FileRegion& fr,
+  VpiRangeMode mode,
+  const PtExpr* expr1,
+  const PtExpr* expr2
+)
+{
+  auto poart = mFactory->new_Part(fr, mode, expr1, expr2);
 }
 
 END_NAMESPACE_YM_VERILOG

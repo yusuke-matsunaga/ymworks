@@ -26,21 +26,18 @@ EiFactory::new_UnaryOp(
   ElbExpr* opr1
 )
 {
-  ElbExpr* expr = nullptr;
   switch ( op_type ) {
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
-    expr = new EiEventEdgeOp{pt_expr, opr1};
-    break;
+    return new EiEventEdgeOp(pt_expr, opr1);
 
   case VpiOpType::BitNeg:
-    expr = new EiBitNegOp{pt_expr, opr1};
+    return new EiBitNegOp(pt_expr, opr1);
     break;
 
   case VpiOpType::Plus:
   case VpiOpType::Minus:
-    expr = new EiUnaryArithOp{pt_expr, opr1};
-    break;
+    return new EiUnaryArithOp(pt_expr, opr1);
 
   case VpiOpType::UnaryAnd:
   case VpiOpType::UnaryNand:
@@ -48,18 +45,16 @@ EiFactory::new_UnaryOp(
   case VpiOpType::UnaryNor:
   case VpiOpType::UnaryXor:
   case VpiOpType::UnaryXNor:
-    expr = new EiReductionOp{pt_expr, opr1};
-    break;
+    return new EiReductionOp(pt_expr, opr1);
 
   case VpiOpType::Not:
-    expr = new EiNotOp{pt_expr, opr1};
-    break;
+    return new EiNotOp(pt_expr, opr1);
 
   default:
-    ASSERT_NOT_REACHED;
     break;
   }
-  return expr;
+
+  throw std::logic_error{"Should not be reached"};
 }
 
 
@@ -71,7 +66,7 @@ EiFactory::new_UnaryOp(
 EiUnaryOp::EiUnaryOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1
-) : EiOperation{pt_expr},
+) : EiOperation(pt_expr),
     mOpr1{opr1}
 {
 }
@@ -120,7 +115,7 @@ EiUnaryOp::operand_list() const
 EiNotOp::EiNotOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1
-) : EiUnaryOp{pt_expr, opr1}
+) : EiUnaryOp(pt_expr, opr1)
 {
   // オペランドのサイズは self determined
   opr1->set_selfsize();
@@ -157,12 +152,12 @@ EiNotOp::_set_reqsize(
 EiBitNegOp::EiBitNegOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1
-) : EiUnaryOp{pt_expr, opr1}
+) : EiUnaryOp(pt_expr, opr1),
+    mType{opr1->value_type()}
 {
-  // オペランドの型とサイズをそのまま使う．
-  mType = opr1->value_type();
-
-  ASSERT_COND( !mType.is_real_type() );
+  if ( mType.is_real_type() ) {
+    throw std::logic_error{"mType.is_real_type()"};
+  }
 }
 
 // @brief デストラクタ
@@ -196,12 +191,14 @@ EiBitNegOp::_set_reqsize(
 EiReductionOp::EiReductionOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1
-) : EiUnaryOp{pt_expr, opr1}
+) : EiUnaryOp(pt_expr, opr1)
 {
-  ASSERT_COND( !opr1->value_type().is_real_type() );
-
   // オペランドのサイズは self determined
   opr1->set_selfsize();
+
+  if ( opr1->value_type().is_real_type() ) {
+    throw std::logic_error{"opr1->value_type().is_real_type()"};
+  }
 }
 
 // @brief デストラクタ
@@ -214,7 +211,7 @@ VlValueType
 EiReductionOp::value_type() const
 {
   // 結果は常に符号無し1ビット
-  return VlValueType{false, true, 1};
+  return VlValueType(false, true, 1);
 }
 
 // @brief 要求される式の型を計算してセットする．
@@ -235,7 +232,7 @@ EiReductionOp::_set_reqsize(
 EiUnaryArithOp::EiUnaryArithOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1
-) : EiUnaryOp{pt_expr, opr1}
+) : EiUnaryOp(pt_expr, opr1)
 {
 }
 
@@ -270,7 +267,7 @@ EiUnaryArithOp::_set_reqsize(
 EiEventEdgeOp::EiEventEdgeOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1
-) : EiUnaryOp{pt_expr, opr1}
+) : EiUnaryOp(pt_expr, opr1)
 {
 }
 

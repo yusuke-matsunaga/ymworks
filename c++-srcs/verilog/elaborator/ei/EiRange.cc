@@ -37,8 +37,8 @@ EiRange::set(
   mPtRange = src.pt_range();
   mLeftRange = src.left_range();
   mRightRange = src.right_range();
-  mLeftVal = src.left_range_val();
-  mRightVal = src.right_range_val();
+  mVal.left = src.left_range_val();
+  mVal.right = src.right_range_val();
 }
 
 // @brief 型の取得
@@ -59,21 +59,21 @@ EiRange::file_region() const
 SizeType
 EiRange::size() const
 {
-  return calc_size(mLeftVal, mRightVal);
+  return mVal.calc_size();
 }
 
 // @brief MSB の値を返す．
 int
 EiRange::left_range_val() const
 {
-  return mLeftVal;
+  return mVal.left;
 }
 
 // @brief LSB の値を返す．
 int
 EiRange::right_range_val() const
 {
-  return mRightVal;
+  return mVal.right;
 }
 
 // @brief MSB を表す文字列を返す．
@@ -96,7 +96,7 @@ EiRange::is_in(
   int index
 ) const
 {
-  return is_in(mLeftVal, mRightVal, index);
+  return mVal.is_in(index);
 }
 
 // @brief LSB からのオフセット値の取得
@@ -106,7 +106,7 @@ EiRange::calc_offset(
   SizeType& offset
 ) const
 {
-  return calc_offset(mLeftVal, mRightVal, index, offset);
+  return mVal.calc_offset(index, offset);
 }
 
 // @brief MSB からのオフセット値の取得
@@ -116,7 +116,7 @@ EiRange::calc_roffset(
   SizeType& offset
 ) const
 {
-  return calc_roffset(mLeftVal, mRightVal, index, offset);
+  return mVal.calc_roffset(index, offset);
 }
 
 // @brief offset の逆関数
@@ -125,7 +125,7 @@ EiRange::index(
   SizeType offset
 ) const
 {
-  return index(mLeftVal, mRightVal, offset);
+  return mVal.index(offset);
 }
 
 // @brief roffset の逆関数
@@ -134,121 +134,7 @@ EiRange::rindex(
   SizeType roffset
 ) const
 {
-  return rindex(mLeftVal, mRightVal, roffset);
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス EiRangeImpl
-//////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-EiRangeImpl::EiRangeImpl(
-) : mLeftRange{nullptr},
-    mRightRange{nullptr}
-{
-}
-
-// デストラクタ
-EiRangeImpl::~EiRangeImpl()
-{
-}
-
-// @brief 値を設定する．
-void
-EiRangeImpl::set(
-  const PtExpr* left,
-  const PtExpr* right,
-  int left_val,
-  int right_val
-)
-{
-  mLeftRange = left;
-  mRightRange = right;
-  mLeftVal = left_val;
-  mRightVal = right_val;
-}
-
-// @brief サイズを返す．
-SizeType
-EiRangeImpl::size() const
-{
-  return EiRange::calc_size(mLeftVal, mRightVal);
-}
-
-// @brief MSB の値を返す．
-int
-EiRangeImpl::left_range_val() const
-{
-  return mLeftVal;
-}
-
-// @brief LSB の値を返す．
-int
-EiRangeImpl::right_range_val() const
-{
-  return mRightVal;
-}
-
-// @brief MSB を表す文字列を返す．
-std::string
-EiRangeImpl::left_range_string() const
-{
-  return mLeftRange->decompile();
-}
-
-// @brief LSB を表す文字列を返す．
-std::string
-EiRangeImpl::right_range_string() const
-{
-  return mRightRange->decompile();
-}
-
-// index が範囲内に入っていたら true を返す．
-bool
-EiRangeImpl::is_in(
-  int index
-) const
-{
-  return EiRange::is_in(mLeftVal, mRightVal, index);
-}
-
-// @brief LSB からのオフセット値の取得
-bool
-EiRangeImpl::calc_offset(
-  int index,
-  SizeType& offset
-) const
-{
-  return EiRange::calc_offset(mLeftVal, mRightVal, index, offset);
-}
-
-// @brief MSB からのオフセット値の取得
-bool
-EiRangeImpl::calc_roffset(
-  int index,
-  SizeType& offset
-) const
-{
-  return EiRange::calc_roffset(mLeftVal, mRightVal, index, offset);
-}
-
-// offset の逆関数
-int
-EiRangeImpl::index(
-  SizeType offset
-) const
-{
-  return EiRange::index(mLeftVal, mRightVal, offset);
-}
-
-// roffset の逆関数
-int
-EiRangeImpl::rindex(
-  SizeType roffset
-) const
-{
-  return EiRange::rindex(mLeftVal, mRightVal, roffset);
+  return mVal.rindex(roffset);
 }
 
 

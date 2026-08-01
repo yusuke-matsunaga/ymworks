@@ -22,6 +22,7 @@
 #include "ym/vl/VlStmt.h"
 
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbUserSystf.h"
 
 
 BEGIN_NONAMESPACE
@@ -129,7 +130,9 @@ ExprGen::instantiate_funccall(
       ErrorGen::not_a_function(__FILE__, __LINE__, pt_expr);
     }
     child_func = handle->taskfunc();
-    ASSERT_COND( child_func );
+    if ( child_func == nullptr ) {
+      throw std::logic_error{"child_func == nullptr"};
+    }
   }
 
   // 引数の生成
@@ -185,15 +188,17 @@ ExprGen::instantiate_sysfunccall(
     ErrorGen::no_such_sysfunction(__FILE__, __LINE__, pt_expr);
   }
 
-#warning "TODO: 2011-02-09-04 引数の個数と型のチェック"
-  // これは user_systf の仮想関数として実装すべき
+  // 引数の数のチェック
+  auto n = pt_expr->operand_num();
+  if ( !user_systf->check_n_of_args(n) ) {
+    ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, pt_expr);
+  }
 
   // 引数の生成
-  SizeType n{pt_expr->operand_num()};
   std::vector<ElbExpr*> arg_list(n);
   for ( SizeType i = 0; i < n; ++ i ) {
     auto pt_expr1 = pt_expr->operand(i);
-    ElbExpr* arg{nullptr};
+    ElbExpr* arg = nullptr;
     if ( pt_expr ) {
       arg = instantiate_arg(parent, env, pt_expr1);
     }
@@ -201,12 +206,14 @@ ExprGen::instantiate_sysfunccall(
       // 関数呼び出しと異なり，空の引数がありうる．
       ;
     }
+    if ( !user_systf->check_argument(i, arg) ) {
+      ErrorGen::illegal_argument_type(__FILE__, __LINE__, pt_expr);
+    }
     arg_list[i] = arg;
   }
 
   // system function call の生成
-  auto expr = mgr().new_SysFuncCall(pt_expr, user_systf, arg_list);
-  return expr;
+  return mgr().new_SysFuncCall(pt_expr, user_systf, arg_list);
 }
 
 END_NAMESPACE_YM_VERILOG

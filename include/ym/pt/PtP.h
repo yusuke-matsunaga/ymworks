@@ -122,6 +122,7 @@ class PtIOItem;
 class PtDeclHead;
 class PtDeclItem;
 class PtRange;
+class PtPart;
 
 // in PtItem.h
 class PtItem;

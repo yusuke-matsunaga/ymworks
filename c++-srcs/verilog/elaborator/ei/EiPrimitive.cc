@@ -14,6 +14,7 @@
 #include "ym/vl/VlExpr.h"
 
 #include "ym/pt/PtItem.h"
+#include "ym/pt/PtExpr.h"
 #include "ym/pt/PtMisc.h"
 
 #include "ym/ClibCell.h"
@@ -36,14 +37,12 @@ EiFactory::new_PrimHead(
   bool has_delay
 )
 {
-  EiPrimHead* head = nullptr;
   if ( has_delay ) {
-    head = new EiPrimHeadD{parent, pt_header};
+    return new EiPrimHeadD(parent, pt_header);
   }
   else {
-    head = new EiPrimHead{parent, pt_header};
+    return new EiPrimHead(parent, pt_header);
   }
-  return head;
 }
 
 // @brief UDPプリミティブのヘッダを生成する．
@@ -55,14 +54,12 @@ EiFactory::new_UdpHead(
   bool has_delay
 )
 {
-  EiPrimHead* head = nullptr;
   if ( has_delay ) {
-    head = new EiPrimHeadUD{parent, pt_header, udp};
+    return new EiPrimHeadUD(parent, pt_header, udp);
   }
   else {
-    head = new EiPrimHeadU{parent, pt_header, udp};
+    return new EiPrimHeadU(parent, pt_header, udp);
   }
-  return head;
 }
 
 // @brief セルプリミティブのヘッダを生成する．
@@ -73,8 +70,7 @@ EiFactory::new_CellHead(
   const ClibCell& cell
 )
 {
-  auto head = new EiPrimHeadC{parent, pt_header, cell};
-  return head;
+  return new EiPrimHeadC(parent, pt_header, cell);
 }
 
 // @brief プリミティブインスタンスを生成する．
@@ -84,8 +80,7 @@ EiFactory::new_Primitive(
   const PtInst* pt_inst
 )
 {
-  auto prim = new EiPrimitive2{head, pt_inst};
-  return prim;
+  return new EiPrimitive2(head, pt_inst);
 }
 
 // @brief プリミティブ配列インスタンスを生成する．
@@ -93,17 +88,11 @@ ElbPrimArray*
 EiFactory::new_PrimitiveArray(
   ElbPrimHead* head,
   const PtInst* pt_inst,
-  const PtExpr* left,
-  const PtExpr* right,
-  int left_val,
-  int right_val
+  const PtRange* pt_range,
+  const RangeVal& range
 )
 {
-  EiRangeImpl range;
-  range.set(left, right, left_val, right_val);
-
-  auto prim_array = new EiPrimArray{head, pt_inst, range};
-  return prim_array;
+  return new EiPrimArray(head, pt_inst, pt_range, range);
 }
 
 // @brief セルプリミティブインスタンスを生成する．
@@ -114,8 +103,7 @@ EiFactory::new_CellPrimitive(
   const PtInst* pt_inst
 )
 {
-  auto prim = new EiPrimitive2{head, cell, pt_inst};
-  return prim;
+  return new EiPrimitive2(head, cell, pt_inst);
 }
 
 // @brief セルプリミティブ配列インスタンスを生成する．
@@ -124,17 +112,11 @@ EiFactory::new_CellPrimitiveArray(
   ElbPrimHead* head,
   const ClibCell& cell,
   const PtInst* pt_inst,
-  const PtExpr* left,
-  const PtExpr* right,
-  int left_val,
-  int right_val
+  const PtRange* pt_range,
+  const RangeVal& range
 )
 {
-  EiRangeImpl range;
-  range.set(left, right, left_val, right_val);
-
-  auto prim_array = new EiPrimArray{head, cell, pt_inst, range};
-  return prim_array;
+  return new EiPrimArray(head, cell, pt_inst, pt_range, range);
 }
 
 
@@ -270,7 +252,7 @@ EiPrimHead::set_delay(
 EiPrimHeadD::EiPrimHeadD(
   const VlScope* parent,
   const PtItem* pt_header
-) : EiPrimHead{parent, pt_header}
+) : EiPrimHead(parent, pt_header)
 {
 }
 
@@ -305,7 +287,7 @@ EiPrimHeadU::EiPrimHeadU(
   const VlScope* parent,
   const PtItem* pt_header,
   const VlUdpDefn* udp
-) : EiPrimHead{parent, pt_header},
+) : EiPrimHead(parent, pt_header),
     mUdp{udp}
 {
 }
@@ -346,7 +328,7 @@ EiPrimHeadUD::EiPrimHeadUD(
   const VlScope* parent,
   const PtItem* pt_header,
   const VlUdpDefn* udp
-) : EiPrimHeadU{parent, pt_header, udp}
+) : EiPrimHeadU(parent, pt_header, udp)
 {
 }
 
@@ -381,7 +363,7 @@ EiPrimHeadC::EiPrimHeadC(
   const VlScope* parent,
   const PtItem* pt_header,
   const ClibCell& cell
-) : EiPrimHead{parent, pt_header},
+) : EiPrimHead(parent, pt_header),
     mCell{cell}
 {
 }
@@ -421,13 +403,14 @@ EiPrimHeadC::cell() const
 EiPrimArray::EiPrimArray(
   ElbPrimHead* head,
   const PtInst* pt_inst,
-  const EiRangeImpl& range
+  const PtRange* pt_range,
+  const RangeVal& range
 ) : mHead{head},
     mPtInst{pt_inst},
-    mRange{range},
-    mArray(mRange.size())
+    mRange(pt_range, range),
+    mArray(mRange.calc_size())
 {
-  SizeType n = mRange.size();
+  SizeType n = mRange.calc_size();
   SizeType port_num = pt_inst->port_num();
   for ( SizeType i = 0; i < n; ++ i ) {
     SizeType index = mRange.index(i);
@@ -440,13 +423,14 @@ EiPrimArray::EiPrimArray(
   ElbPrimHead* head,
   const ClibCell& cell,
   const PtInst* pt_inst,
-  const EiRangeImpl& range
+  const PtRange* pt_range,
+  const RangeVal& range
 ) : mHead{head},
     mPtInst{pt_inst},
-    mRange{range},
-    mArray(mRange.size())
+    mRange(pt_range, range),
+    mArray(mRange.calc_size())
 {
-  SizeType n = mRange.size();
+  SizeType n = mRange.calc_size();
   SizeType port_num = pt_inst->port_num();
   for ( SizeType i = 0; i < n; ++ i ) {
     SizeType index = mRange.index(i);
@@ -545,35 +529,35 @@ EiPrimArray::delay() const
 int
 EiPrimArray::left_range_val() const
 {
-  return mRange.left_range_val();
+  return mRange.left;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
 EiPrimArray::right_range_val() const
 {
-  return mRange.right_range_val();
+  return mRange.right;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
 EiPrimArray::left_range_string() const
 {
-  return mRange.left_range_string();
+  return mRange.left_string();
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
 EiPrimArray::right_range_string() const
 {
-  return mRange.right_range_string();
+  return mRange.right_string();
 }
 
 // @brief 要素数を返す．
 SizeType
 EiPrimArray::elem_num() const
 {
-  return mRange.size();
+  return mRange.calc_size();
 }
 
 // @brief 要素のプリミティブを返す．
@@ -595,11 +579,8 @@ EiPrimArray::elem_by_index(
   if ( mRange.calc_offset(index, offset) ) {
     return &mArray[offset];
   }
-  else {
-    // 範囲外
-    ASSERT_NOT_REACHED;
-    return nullptr;
-  }
+  // 範囲外
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief 要素のプリミティブを取り出す．
@@ -621,11 +602,8 @@ EiPrimArray::_primitive_by_index(
   if ( mRange.calc_offset(index, offset) ) {
     return &mArray[offset];
   }
-  else {
-    // 範囲外
-    ASSERT_NOT_REACHED;
-    return nullptr;
-  }
+  // 範囲外
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief ヘッダを得る．
@@ -773,7 +751,9 @@ EiPrimitive::init_port(
   SizeType input_num;
   int stat = get_port_size(prim_type(), port_num,
 			   output_num, inout_num, input_num);
-  ASSERT_COND( stat == 0 );
+  if ( stat != 0 ) {
+    throw std::logic_error{"stat != 0"};
+  }
 
   SizeType index = 0;
   for ( SizeType i = 0; i < output_num; ++ i, ++ index ) {
@@ -809,7 +789,7 @@ EiPrimitive::init_port(
       dir = VpiDir::Inout;
     }
     else {
-      ASSERT_NOT_REACHED;
+      throw std::logic_error{"Should not reached"};
     }
     mPortArray[id].set(this, id, dir);
   }

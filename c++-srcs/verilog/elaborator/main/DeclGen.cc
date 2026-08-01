@@ -22,6 +22,7 @@
 #include "elaborator/ElbTaskFunc.h"
 #include "elaborator/ElbRange.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/RangeVal.h"
 
 
 #define DOUT std::cout
@@ -87,44 +88,46 @@ DeclGen::instantiate_iodecl(
   const std::vector<const PtIOHead*>& pt_head_array
 )
 {
-  const VlScope* scope{nullptr};
+  auto scope = (const VlScope*){nullptr};
   if ( module ) {
     scope = module;
   }
   else if ( taskfunc ) {
     scope = taskfunc;
   }
-  ASSERT_COND( scope != nullptr );
+  if ( scope == nullptr ) {
+    throw std::logic_error{"scope == nullptr"};
+  }
 
   for ( auto pt_head: pt_head_array ) {
     auto def_aux_type = pt_head->aux_type();
-    bool sign = pt_head->is_signed();
-    auto pt_left = pt_head->left_range();
-    auto pt_right = pt_head->right_range();
-    bool has_range = (pt_left != nullptr) && (pt_right != nullptr);
+    auto sign = pt_head->is_signed();
+    auto pt_range = pt_head->range();
+    auto has_range = (pt_range != nullptr);
 
     // 範囲指定を持っている場合には範囲を計算する．
-    int left_val{0};
-    int right_val{0};
+    RangeVal range;
     if ( has_range ) {
-      std::tie(left_val, right_val) = evaluate_range(scope, pt_left, pt_right);
+      range = evaluate_range(scope, pt_range);
     }
 
     // ヘッダ情報の生成
     // ちなみに IOHead は範囲の情報を持たない．
-    ElbIOHead* head{nullptr};
+    auto head = (ElbIOHead*){nullptr};
     if ( module ) {
       head = mgr().new_IOHead(module, pt_head);
     }
     else if ( taskfunc ) {
       head = mgr().new_IOHead(taskfunc, pt_head);
     }
-    ASSERT_COND( head != nullptr );
+    if ( head == nullptr ) {
+      throw std::logic_error{"head == nullptr"};
+    }
 
     for ( auto pt_item: pt_head->item_list() ) {
       // IO定義と変数/ネット定義が一致しているか調べる．
       auto handle = mgr().find_obj(scope, pt_item->name());
-      ElbDecl* decl{nullptr};
+      auto decl = (ElbDecl*){nullptr};
       if ( handle ) {
 	// 同名の要素が見つかった．
 	if ( def_aux_type != VpiAuxType::None ) {
@@ -156,7 +159,7 @@ DeclGen::instantiate_iodecl(
 
 	  // 不適切な型だった場合．
 	  // 上の decl = nullptr にした時もここに来る．
-	  bool is_module{module != nullptr};
+	  auto is_module = module != nullptr;
 	  ErrorGen::illegal_io(__FILE__, __LINE__,
 			       pt_item, handle->full_name(),
 			       is_module);
@@ -167,29 +170,25 @@ DeclGen::instantiate_iodecl(
 	// decl と型が一致しているか調べる．
 	// IEEE 1364-2001 12.3.3 Port declarations
 	if ( decl->has_range() ) {
-	  int left_val2{decl->left_range_val()};
-	  int right_val2{decl->right_range_val()};
+	  int left_val2 = decl->left_range_val();
+	  int right_val2 = decl->right_range_val();
 	  if ( !has_range ) {
 	    // decl は範囲を持っているが IO は持っていない．
 	    // これはエラーにしなくてよいのだろうか？
 	    // たぶんコンパイルオプションで制御すべき
 	    if ( allow_empty_io_range() ) {
-	      left_val = left_val2;
-	      right_val = right_val2;
+	      range.left = left_val2;
+	      range.right = right_val2;
 	    }
 	    else {
 	      ErrorGen::conflict_io_range(__FILE__, __LINE__,
 					  pt_item);
 	    }
 	  }
-	  else if ( left_val != left_val2 || right_val != right_val2 ) {
+	  else if ( range.left != left_val2 || range.right != right_val2 ) {
 	    // 範囲が異なっていた．
 	    ErrorGen::conflict_io_range(__FILE__, __LINE__,
 					pt_item);
-	    DOUT << "IO range: [" << left_val << ":" << right_val << "]"
-		 << std::endl
-		 << "Decl range: [" << left_val2 << ":" << right_val2 << "]"
-		 << std::endl;
 	    continue;
 	  }
 	}
@@ -225,20 +224,21 @@ DeclGen::instantiate_iodecl(
 	}
 
 	// ヘッダを生成する．
-	ElbDeclHead* head{nullptr};
+	auto head = (ElbDeclHead*){nullptr};
 	if ( has_range ) {
 	  head = mgr().new_DeclHead(scope, pt_head, aux_type,
-				    pt_left, pt_right,
-				    left_val, right_val);
+				    pt_range, range);
 	}
 	else {
 	  head = mgr().new_DeclHead(scope, pt_head, aux_type);
 	}
-	ASSERT_COND( head != nullptr );
+	if ( head == nullptr ) {
+	  throw std::logic_error{"head == nullptr"};
+	}
 
 	// 初期値を生成する．
 	auto pt_init = pt_item->init_value();
-	ElbExpr* init{nullptr};
+	auto init = (ElbExpr*){nullptr};
 	if ( module ) {
 	  if ( pt_init != nullptr ) {
 	    // 初期値を持つ場合
@@ -253,16 +253,18 @@ DeclGen::instantiate_iodecl(
 	}
 	else {
 	  // task/function の IO 宣言には初期値はない．
-	  ASSERT_COND( pt_init == nullptr );
+	  if ( pt_init != nullptr ) {
+	    throw std::logic_error{"pt_init != nullptr"};
+	  }
 	}
 
-	int tag{0};
+	int tag = 0;
 	switch ( aux_type ) {
 	case VpiAuxType::Net: tag = vpiNet; break;
 	case VpiAuxType::Reg: tag = vpiReg; break;
 	case VpiAuxType::Var: tag = vpiVariables; break;
 	default:
-	  ASSERT_NOT_REACHED;
+	  throw std::logic_error{"Should not be reached"};
 	}
 	decl = mgr().new_Decl(tag, head, pt_item, init);
       }
@@ -349,16 +351,12 @@ DeclGen::instantiate_param_head(
 )
 {
   auto module = scope->parent_module();
-  auto pt_left = pt_head->left_range();
-  auto* pt_right = pt_head->right_range();
-  ElbParamHead* param_head{nullptr};
-  if ( pt_left && pt_right ) {
-    int left_val;
-    int right_val;
-    std::tie(left_val, right_val) = evaluate_range(scope, pt_left, pt_right);
+  auto pt_range = pt_head->range();
+  auto param_head = (ElbParamHead*)nullptr;
+  if ( pt_range != nullptr ) {
+    auto range = evaluate_range(scope, pt_range);
     param_head = mgr().new_ParamHead(scope, pt_head,
-				     pt_left, pt_right,
-				     left_val, right_val);
+				     pt_range, range);
   }
   else {
     param_head = mgr().new_ParamHead(scope, pt_head);
@@ -369,7 +367,9 @@ DeclGen::instantiate_param_head(
     auto param = mgr().new_Parameter(param_head,
 				     pt_item,
 				     is_local);
-    ASSERT_COND( param );
+    if ( param == nullptr ) {
+      throw std::logic_error{"param == nullptr"};
+    }
 
     // attribute instance の生成
     auto attr_list = attribute_list(pt_head);
@@ -403,25 +403,23 @@ DeclGen::instantiate_net_head(
   const PtDeclHead* pt_head
 )
 {
-  auto pt_left = pt_head->left_range();
-  auto pt_right = pt_head->right_range();
+  auto pt_range = pt_head->range();
   auto pt_delay = pt_head->delay();
-  bool has_delay = (pt_delay != nullptr);
+  auto has_delay = (pt_delay != nullptr);
 
-  ElbDeclHead* net_head{nullptr};
-  if ( pt_left && pt_right ) {
-    int left_val;
-    int right_val;
-    std::tie(left_val, right_val) = evaluate_range(scope, pt_left, pt_right);
+  auto net_head = (ElbDeclHead*)nullptr;
+  if ( pt_range != nullptr ) {
+    auto range = evaluate_range(scope, pt_range);
     net_head = mgr().new_DeclHead(scope, pt_head,
-				  pt_left, pt_right,
-				  left_val, right_val,
+				  pt_range, range,
 				  has_delay);
   }
   else {
     net_head = mgr().new_DeclHead(scope, pt_head);
   }
-  ASSERT_COND( net_head );
+  if ( net_head == nullptr ) {
+    throw std::logic_error{"net_head == nullptr"};
+  }
 
   if ( pt_delay ) {
     add_phase3stub(make_stub(this, &DeclGen::link_net_delay,
@@ -432,12 +430,14 @@ DeclGen::instantiate_net_head(
     // init_value() が 0 でなければ初期割り当てを持つということ．
     auto pt_init = pt_item->init_value();
 
-    SizeType dim_size{pt_item->range_num()};
+    auto dim_size = pt_item->range_num();
     if ( dim_size > 0 ) {
       // 配列
 
       // 初期割り当ては構文規則上持てないはず
-      ASSERT_COND( !pt_init );
+      if ( pt_init != nullptr ) {
+	throw std::logic_error{"pt_init != nullptr"};
+      }
 
       // 範囲の配列を作る．
       std::vector<ElbRangeSrc> range_src;
@@ -530,31 +530,31 @@ DeclGen::instantiate_reg_head(
   const PtDeclHead* pt_head
 )
 {
-  auto pt_left = pt_head->left_range();
-  auto pt_right = pt_head->right_range();
+  auto pt_range = pt_head->range();
 
-  ElbDeclHead* reg_head{nullptr};
-  if ( pt_left && pt_right ) {
-    int left_val;
-    int right_val;
-    std::tie(left_val, right_val) = evaluate_range(scope, pt_left, pt_right);
+  auto reg_head = (ElbDeclHead*)nullptr;
+  if ( pt_range != nullptr ) {
+    auto range = evaluate_range(scope, pt_range);
     reg_head = mgr().new_DeclHead(scope, pt_head,
-				  pt_left, pt_right,
-				  left_val, right_val);
+				  pt_range, range);
   }
   else {
     reg_head = mgr().new_DeclHead(scope, pt_head);
   }
-  ASSERT_COND( reg_head != nullptr );
+  if ( reg_head == nullptr ) {
+    throw std::logic_error{"reg_head == nullptr"};
+  }
 
   for ( auto pt_item: pt_head->item_list() ) {
     auto pt_init = pt_item->init_value();
-    SizeType dim_size = pt_item->range_num();
+    auto dim_size = pt_item->range_num();
     if ( dim_size > 0 ) {
       // 配列の場合
 
       // 配列は初期値を持たない．
-      ASSERT_COND( !pt_init );
+      if ( pt_init != nullptr ) {
+	throw std::logic_error{"pt_init != nullptr"};
+      }
 
       // 範囲の配列を作る．
       std::vector<ElbRangeSrc> range_src;
@@ -580,7 +580,7 @@ DeclGen::instantiate_reg_head(
     }
     else {
       // 単独の要素
-      const VlExpr* init{nullptr};
+      auto init = (const VlExpr*){nullptr};
       if ( pt_init != nullptr ) {
 	// 初期値を持つ場合
 	// 初期値は constant_expression なので今作る．
@@ -612,17 +612,21 @@ DeclGen::instantiate_var_head(
   const PtDeclHead* pt_head
 )
 {
-  ASSERT_COND( pt_head->data_type() != VpiVarType::None );
+  if ( pt_head->data_type() == VpiVarType::None ) {
+    throw std::logic_error{"pt_head->data_type() == VpiVarType::None"};
+  }
 
   auto var_head = mgr().new_DeclHead(scope, pt_head);
   for ( auto pt_item: pt_head->item_list() ) {
     auto pt_init = pt_item->init_value();
-    SizeType dim_size{pt_item->range_num()};
+    auto dim_size = pt_item->range_num();
     if ( dim_size > 0 ) {
       // 配列の場合
 
       // 配列は初期値を持たない．
-      ASSERT_COND( !pt_init );
+      if ( pt_init != nullptr ) {
+	throw std::logic_error{"pt_init != nullptr"};
+      }
 
       // 範囲の配列を作る．
       std::vector<ElbRangeSrc> range_src;
@@ -648,7 +652,7 @@ DeclGen::instantiate_var_head(
     }
     else {
       // 単独の変数
-      const VlExpr* init{nullptr};
+      auto init = (const VlExpr*){nullptr};
       if ( pt_init != nullptr ) {
 	// 初期値を持つ場合
 	// 初期値は constant_expression なので今作る．
@@ -682,7 +686,7 @@ DeclGen::instantiate_event_head(
 {
   auto event_head = mgr().new_DeclHead(scope, pt_head);
   for ( auto pt_item: pt_head->item_list() ) {
-    SizeType dim_size{pt_item->range_num()};
+    auto dim_size = pt_item->range_num();
     if ( dim_size > 0 ) {
       // 配列
 
@@ -757,18 +761,14 @@ DeclGen::instantiate_dimension_list(
   std::vector<ElbRangeSrc>& range_src
 )
 {
-  SizeType n{pt_item->range_num()};
+  auto n = pt_item->range_num();
   range_src.reserve(n);
 
   for ( auto pt_range: pt_item->range_list() ) {
-    auto pt_left = pt_range->left();
-    auto pt_right = pt_range->right();
-    int left_val;
-    int right_val;
-    std::tie(left_val, right_val) = evaluate_range(scope, pt_left, pt_right);
+    auto range = evaluate_range(scope, pt_range);
     range_src.push_back(ElbRangeSrc(pt_range,
-				    pt_left, pt_right,
-				    left_val, right_val));
+				    pt_range->left(), pt_range->right(),
+				    range.left, range.right));
   }
 
   return true;

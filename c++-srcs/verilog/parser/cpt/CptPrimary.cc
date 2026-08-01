@@ -138,7 +138,7 @@ CptPrimaryCI::CptPrimaryCI(
   const FileRegion& file_region,
   const char* name,
   PtiExprArray&& index_array
-) : CptPrimaryI{file_region, name, std::move(index_array)}
+) : CptPrimaryI(file_region, name, std::move(index_array))
 {
 }
 
@@ -164,14 +164,10 @@ CptPrimaryCI::is_const_index() const
 CptPrimaryR::CptPrimaryR(
   const FileRegion& file_region,
   const char* name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 ) : CptPrimaryBase{name},
     mFileRegion{file_region},
-    mMode{mode},
-    mLeftRange{left},
-    mRightRange{right}
+    mPart{part}
 {
 }
 
@@ -187,25 +183,11 @@ CptPrimaryR::file_region() const
   return mFileRegion;
 }
 
-// 範囲指定モードの取得
-VpiRangeMode
-CptPrimaryR::range_mode() const
+// 範囲指定の取得
+const PtPart*
+CptPrimaryR::part() const
 {
-  return mMode;
-}
-
-// range の MSB を取出す．
-const PtExpr*
-CptPrimaryR::left_range() const
-{
-  return mLeftRange;
-}
-
-// range の LSB を取出す．
-const PtExpr*
-CptPrimaryR::right_range() const
-{
-  return mRightRange;
+  return mPart;
 }
 
 // index_list も range も持たないとき true を返す．
@@ -224,10 +206,8 @@ CptPrimaryR::is_simple() const
 CptPrimaryCR::CptPrimaryCR(
   const FileRegion& file_region,
   const char* name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptPrimaryR{file_region, name, mode, left, right}
+  const PtPart* part
+) : CptPrimaryR(file_region, name, part)
 {
 }
 
@@ -253,13 +233,9 @@ CptPrimaryIR::CptPrimaryIR(
   const FileRegion& file_region,
   const char* name,
   PtiExprArray&& index_array,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptPrimaryI{file_region, name, std::move(index_array)},
-    mMode{mode},
-    mLeftRange{left},
-    mRightRange{right}
+  const PtPart* part
+) : CptPrimaryI(file_region, name, std::move(index_array)),
+    mPart{part}
 {
 }
 
@@ -268,25 +244,11 @@ CptPrimaryIR::~CptPrimaryIR()
 {
 }
 
-// 範囲指定モード
-VpiRangeMode
-CptPrimaryIR::range_mode() const
+// 範囲指定を取り出す．
+const PtPart*
+CptPrimaryIR::part() const
 {
-  return mMode;
-}
-
-// range の MSB を取出す．
-const PtExpr*
-CptPrimaryIR::left_range() const
-{
-  return mLeftRange;
-}
-
-// range の LSB を取出す．
-const PtExpr*
-CptPrimaryIR::right_range() const
-{
-  return mRightRange;
+  return mPart;
 }
 
 
@@ -299,7 +261,7 @@ CptPrimaryH::CptPrimaryH(
   const FileRegion& file_region,
   PtiNameBranchArray&& nb_array,
   const char* tail_name
-) : CptPrimaryBase{tail_name},
+) : CptPrimaryBase(tail_name),
     mFileRegion{file_region},
     mNbArray{std::move(nb_array)}
 {
@@ -344,7 +306,7 @@ CptPrimaryHI::CptPrimaryHI(
   PtiNameBranchArray&& nb_array,
   const char* tail_name,
   PtiExprArray&& index_array
-) : CptPrimaryI{file_region, tail_name, std::move(index_array)},
+) : CptPrimaryI(file_region, tail_name, std::move(index_array)),
     mNbArray{std::move(nb_array)}
 {
 }
@@ -381,7 +343,8 @@ CptPrimaryHCI::CptPrimaryHCI(
   PtiNameBranchArray&& nb_array,
   const char* tail_name,
   PtiExprArray&& index_array
-) : CptPrimaryHI{file_region, std::move(nb_array), tail_name, std::move(index_array)}
+) : CptPrimaryHI(file_region, std::move(nb_array),
+		 tail_name, std::move(index_array))
 {
 }
 
@@ -407,10 +370,8 @@ CptPrimaryHR::CptPrimaryHR(
   const FileRegion& file_region,
   PtiNameBranchArray&& nb_array,
   const char* tail_name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptPrimaryR{file_region, tail_name, mode, left, right},
+  const PtPart* part
+) : CptPrimaryR(file_region, tail_name, part),
     mNbArray{std::move(nb_array)}
 {
 }
@@ -447,12 +408,10 @@ CptPrimaryHIR::CptPrimaryHIR(
   PtiNameBranchArray&& nb_array,
   const char* tail_name,
   PtiExprArray&& index_array,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptPrimaryIR{file_region, tail_name,
+  const PtPart* part
+) : CptPrimaryIR(file_region, tail_name,
 		 std::move(index_array),
-		 mode, left, right},
+		 part),
     mNbArray{std::move(nb_array)}
 {
 }
@@ -492,7 +451,7 @@ CptFactory::new_Primary(
 {
   ++ mNumPrimary;
   void* p = mAlloc.get_memory(sizeof(CptPrimary));
-  auto obj = new (p) CptPrimary{file_region, name};
+  auto obj = new (p) CptPrimary(file_region, name);
   return obj;
 }
 
@@ -506,8 +465,8 @@ CptFactory::new_Primary(
 {
   ++ mNumPrimaryI;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryI));
-  auto obj = new (p) CptPrimaryI{file_region, name,
-				 PtiArray<const PtExpr>{mAlloc, index_array}};
+  auto obj = new (p) CptPrimaryI(file_region, name,
+				 PtiArray<const PtExpr>{mAlloc, index_array});
   return obj;
 }
 
@@ -516,14 +475,12 @@ const PtExpr*
 CptFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
   ++ mNumPrimaryR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryR));
-  auto obj = new (p) CptPrimaryR{file_region, name, mode, left, right};
+  auto obj = new (p) CptPrimaryR(file_region, name, part);
   return obj;
 }
 
@@ -533,16 +490,14 @@ CptFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
   const std::vector<const PtExpr*>& index_array,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
   ++ mNumPrimaryIR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryIR));
-  auto obj = new (p) CptPrimaryIR{file_region, name,
+  auto obj = new (p) CptPrimaryIR(file_region, name,
 				  PtiArray<const PtExpr>{mAlloc, index_array},
-				  mode, left, right};
+				  part);
   return obj;
 }
 
@@ -557,9 +512,9 @@ CptFactory::new_Primary(
   void* p = mAlloc.get_memory(sizeof(CptPrimaryH));
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryH{file_region,
+  auto obj = new (p) CptPrimaryH(file_region,
 				 PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				 tail_name};
+				 tail_name);
   return obj;
 }
 
@@ -575,10 +530,10 @@ CptFactory::new_Primary(
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHI));
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryHI{file_region,
+  auto obj = new (p) CptPrimaryHI(file_region,
 				  PtiArray<const PtNameBranch>{mAlloc, nb_array},
 				  tail_name,
-				  PtiArray<const PtExpr>{mAlloc, index_array}};
+				  PtiArray<const PtExpr>{mAlloc, index_array});
   return obj;
 }
 
@@ -587,19 +542,16 @@ const PtExpr*
 CptFactory::new_Primary(
   const FileRegion& file_region,
   PuHierName* hname,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
   ++ mNumPrimaryHR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHR));
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryHR{file_region,
+  auto obj = new (p) CptPrimaryHR(file_region,
 				  PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				  tail_name, mode,
-				  left, right};
+				  tail_name, part);
   return obj;
 }
 
@@ -609,20 +561,18 @@ CptFactory::new_Primary(
   const FileRegion& file_region,
   PuHierName* hname,
   const std::vector<const PtExpr*>& index_array,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
   ++ mNumPrimaryHIR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHIR));
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryHIR{file_region,
+  auto obj = new (p) CptPrimaryHIR(file_region,
 				   PtiArray<const PtNameBranch>{mAlloc, nb_array},
 				   tail_name,
 				   PtiArray<const PtExpr>{mAlloc, index_array},
-				   mode, left, right};
+				   part);
   return obj;
 }
 
@@ -636,8 +586,8 @@ CptFactory::new_CPrimary(
 {
   ++ mNumPrimaryCI;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCI));
-  auto obj = new (p) CptPrimaryCI{file_region, name,
-				  PtiArray<const PtExpr>{mAlloc, index_array}};
+  auto obj = new (p) CptPrimaryCI(file_region, name,
+				  PtiArray<const PtExpr>{mAlloc, index_array});
   return obj;
 }
 
@@ -646,14 +596,12 @@ const PtExpr*
 CptFactory::new_CPrimary(
   const FileRegion& file_region,
   const char* name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
   ++ mNumPrimaryCR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCR));
-  auto obj = new (p) CptPrimaryCR{file_region, name, mode, left, right};
+  auto obj = new (p) CptPrimaryCR(file_region, name, part);
   return obj;
 }
 
@@ -669,10 +617,10 @@ CptFactory::new_CPrimary(
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCI));
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryHCI{file_region,
+  auto obj = new (p) CptPrimaryHCI(file_region,
 				   PtiArray<const PtNameBranch>{mAlloc, nb_array},
 				   tail_name,
-				   PtiArray<const PtExpr>{mAlloc, index_array}};
+				   PtiArray<const PtExpr>{mAlloc, index_array});
   return obj;
 }
 

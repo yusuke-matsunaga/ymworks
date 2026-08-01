@@ -108,20 +108,10 @@ public:
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < index_num() )
   ) const override;
 
-  /// @brief 範囲指定モードの取得
-  /// @return 範囲指定モード
-  VpiRangeMode
-  range_mode() const override;
-
-  /// @brief 範囲の左側の式の取得
-  /// @return 範囲の左側の式
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲の右側の式の取得
-  /// @return 範囲の右側の式
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲指定の取得
+  /// @return 範囲指定
+  const PtPart*
+  part() const override;
 
   /// @brief 定数の種類の取得
   /// @return 定数の種類
@@ -434,9 +424,7 @@ public:
     const char* tail_name,
     bool const_index,
     PtiExprArray&& index_array = PtiExprArray(),
-    VpiRangeMode mode = VpiRangeMode::No,
-    const PtExpr* left = nullptr,
-    const PtExpr* right = nullptr
+    const PtPart* part = nullptr
   );
 
   /// @brief デストラクタ
@@ -477,17 +465,9 @@ public:
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < index_num() )
   ) const override;
 
-  /// @brief 範囲指定モードの取得
-  VpiRangeMode
-  range_mode() const override;
-
-  /// @brief range の MSB を取出す．
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief range の LSB を取出す．
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲指定を取り出す．
+  const PtPart*
+  part() const override;
 
 
 private:
@@ -507,14 +487,8 @@ private:
   // インデックスの配列
   PtiExprArray mIndexArray;
 
-  // 範囲のモード
-  VpiRangeMode mMode;
-
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲指定
+  const PtPart* mPart;
 
 };
 
@@ -591,6 +565,74 @@ private:
 
   // 実数の値
   double mRealValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class SptPart SptExpr.h "SptExpr.h"
+/// @brief PtPart の実装クラス
+//////////////////////////////////////////////////////////////////////
+class SptPart :
+  public PtPart
+{
+public:
+
+  /// @brief コンストラクタ
+  SptPart(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    VpiRangeMode mode,    ///< [in] 範囲指定のモード
+    const PtExpr* expr1,  ///< [in] 1番目の式
+    const PtExpr* expr2   ///< [in] 2番目の式
+  ) : mFileRegion{fr},
+      mMode{mode},
+      mLeft{expr1},
+      mRight{expr2}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~SptPart() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+  /// @brief 範囲指定のモードを返す．
+  VpiRangeMode
+  mode() const override;
+
+  /// @brief 1番目の式を取り出す．
+  const PtExpr*
+  left() const override;
+
+  /// @brief 2番めの式を取り出す．
+  const PtExpr*
+  right() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+  // モード
+  VpiRangeMode mMode;
+
+  // 1番目の式
+  const PtExpr* mLeft;
+
+  // 2番目の式
+  const PtExpr* mRight;
 
 };
 

@@ -482,15 +482,10 @@ public:
   const char*
   name() const override;
 
-  /// @brief 範囲の左側の式の取得
-  /// @return 範囲の左側の式
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲の右側の式の取得
-  /// @return 範囲の右側の式
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲の取得
+  /// @return 範囲
+  const PtRange*
+  range() const override;
 
   /// @brief ポートの要素数の取得
   SizeType
@@ -569,8 +564,7 @@ public:
   CptInstR(
     const FileRegion& file_region,
     const char* name,
-    const PtExpr* left,
-    const PtExpr* right,
+    const PtRange* range,
     PtiConnectionArray&& con_array
   );
 
@@ -583,13 +577,9 @@ public:
   // PtInst の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief range の MSB を取出す．
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief range の LSB を取出す．
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲を取出す．
+  const PtRange*
+  range() const override;
 
 
 private:
@@ -597,11 +587,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
 };
 

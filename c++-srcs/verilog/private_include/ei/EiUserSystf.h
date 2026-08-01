@@ -19,7 +19,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// IEEE Std 1364-2001 26.6.14 UDP
 //////////////////////////////////////////////////////////////////////
 class EiUserSystf :
-  public VlUserSystf
+  public ElbUserSystf
 {
 public:
 
@@ -62,6 +62,27 @@ public:
   /// @brief SizedFunc の場合にサイズを返す．
   int
   size() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbUserSystf の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 引数の個数をチェックする．
+  virtual
+  bool
+  check_n_of_args(
+    SizeType arg_num ///< [in] 引数の個数
+  ) const;
+
+  /// @brief 引数の型をチェックする．
+  virtual
+  bool
+  check_argument(
+    SizeType pos,           ///< [in] 位置番号
+    const ElbExpr* argument ///< [in] 引数
+  ) const;
 
 };
 

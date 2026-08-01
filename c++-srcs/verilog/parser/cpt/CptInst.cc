@@ -82,7 +82,7 @@ CptGateHS::CptGateHS(
   VpiPrimType prim_type,
   const PtStrength* strength,
   PtiInstArray&& inst_array
-) : CptGateH{file_region, prim_type, std::move(inst_array)},
+) : CptGateH(file_region, prim_type, std::move(inst_array)),
     mStrength{strength}
 {
 }
@@ -110,7 +110,7 @@ CptGateHD::CptGateHD(
   VpiPrimType prim_type,
   const PtDelay* delay,
   PtiInstArray&& inst_array
-) : CptGateH{file_region, prim_type, std::move(inst_array)},
+) : CptGateH(file_region, prim_type, std::move(inst_array)),
     mDelay{delay}
 {
 }
@@ -139,7 +139,7 @@ CptGateHSD::CptGateHSD(
   const PtStrength* strength,
   const PtDelay* delay,
   PtiInstArray&& inst_array
-) : CptGateH{file_region, prim_type, std::move(inst_array)},
+) : CptGateH(file_region, prim_type, std::move(inst_array)),
     mStrength{strength},
     mDelay{delay}
 {
@@ -233,7 +233,7 @@ CptMuHP::CptMuHP(
   const char* def_name,
   PtiConnectionArray&& con_array,
   PtiInstArray&& inst_array
-) : CptMuH{file_region, def_name, std::move(inst_array)},
+) : CptMuH(file_region, def_name, std::move(inst_array)),
     mParamAssignArray{std::move(con_array)}
 {
 }
@@ -270,7 +270,7 @@ CptMuHS::CptMuHS(
   const char* def_name,
   const PtStrength* strength,
   PtiInstArray&& inst_array
-) : CptMuH{file_region, def_name, std::move(inst_array)},
+) : CptMuH(file_region, def_name, std::move(inst_array)),
     mStrength{strength}
 {
 }
@@ -298,7 +298,7 @@ CptMuHD::CptMuHD(
   const char* def_name,
   const PtDelay* delay,
   PtiInstArray&& inst_array
-) : CptMuH{file_region, def_name, std::move(inst_array)},
+) : CptMuH(file_region, def_name, std::move(inst_array)),
     mDelay{delay}
 {
 }
@@ -327,7 +327,7 @@ CptMuHSD::CptMuHSD(
   const PtStrength* strength,
   const PtDelay* delay,
   PtiInstArray&& inst_array
-) : CptMuH{file_region, def_name, std::move(inst_array)},
+) : CptMuH(file_region, def_name, std::move(inst_array)),
     mStrength{strength},
     mDelay{delay}
 {
@@ -385,16 +385,9 @@ CptInst::name() const
   return nullptr;
 }
 
-// @brief 範囲の左側の式の取得
-const PtExpr*
-CptInst::left_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲の右側の式の取得
-const PtExpr*
-CptInst::right_range() const
+// @brief 範囲の取得
+const PtRange*
+CptInst::range() const
 {
   return nullptr;
 }
@@ -425,7 +418,7 @@ CptInstN::CptInstN(
   const FileRegion& file_region,
   const char* name,
   PtiConnectionArray&& con_array
-) : CptInst{file_region, std::move(con_array)},
+) : CptInst(file_region, std::move(con_array)),
     mName{name}
 {
 }
@@ -451,12 +444,10 @@ CptInstN::name() const
 CptInstR::CptInstR(
   const FileRegion& file_region,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   PtiConnectionArray&& con_array
-) : CptInstN{file_region, name, std::move(con_array)},
-    mLeftRange{left},
-    mRightRange{right}
+) : CptInstN(file_region, name, std::move(con_array)),
+    mRange{range}
 {
 }
 
@@ -465,18 +456,11 @@ CptInstR::~CptInstR()
 {
 }
 
-// range の MSB を取出す．
-const PtExpr*
-CptInstR::left_range() const
+// 範囲を取出す．
+const PtRange*
+CptInstR::range() const
 {
-  return mLeftRange;
-}
-
-// range の LSB を取出す．
-const PtExpr*
-CptInstR::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 
@@ -498,15 +482,15 @@ CptFactory::new_GateH(
     if ( delay == nullptr ) {
       ++ mNumGateH;
       void* p = mAlloc.get_memory(sizeof(CptGateH));
-      auto obj = new (p) CptGateH{file_region, type,
-				  PtiArray<const PtInst>(mAlloc, inst_array)};
+      auto obj = new (p) CptGateH(file_region, type,
+				  PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
     else {
       ++ mNumGateHD;
       void* p = mAlloc.get_memory(sizeof(CptGateHD));
-      auto obj = new (p) CptGateHD{file_region, type, delay,
-				   PtiArray<const PtInst>(mAlloc, inst_array)};
+      auto obj = new (p) CptGateHD(file_region, type, delay,
+				   PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
   }
@@ -514,15 +498,15 @@ CptFactory::new_GateH(
     if ( delay == nullptr ) {
       ++ mNumGateHS;
       void* p = mAlloc.get_memory(sizeof(CptGateHS));
-      auto obj = new (p) CptGateHS{file_region, type, strength,
-				   PtiArray<const PtInst>(mAlloc, inst_array)};
+      auto obj = new (p) CptGateHS(file_region, type, strength,
+				   PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
     else {
       ++ mNumGateHSD;
       void* p = mAlloc.get_memory(sizeof(CptGateHSD));
-      auto obj = new (p) CptGateHSD{file_region, type, strength, delay,
-				    PtiArray<const PtInst>(mAlloc, inst_array)};
+      auto obj = new (p) CptGateHSD(file_region, type, strength, delay,
+				    PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
   }
@@ -542,15 +526,15 @@ CptFactory::new_MuH(
     if ( delay == nullptr ) {
       ++ mNumMuH;
       void* p = mAlloc.get_memory(sizeof(CptMuH));
-      auto obj = new (p) CptMuH{file_region, def_name,
-				PtiArray<const PtInst>(mAlloc, inst_array)};
+      auto obj = new (p) CptMuH(file_region, def_name,
+				PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
     else {
       ++ mNumMuHS;
       void* p = mAlloc.get_memory(sizeof(CptMuHS));
-      auto obj = new (p) CptMuHS{file_region, def_name, strength,
-				 PtiArray<const PtInst>(mAlloc, inst_array)};
+      auto obj = new (p) CptMuHS(file_region, def_name, strength,
+				 PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
   }
@@ -558,15 +542,15 @@ CptFactory::new_MuH(
     if ( delay == nullptr ) {
       ++ mNumMuHD;
       void* p = mAlloc.get_memory(sizeof(CptMuHD));
-      auto obj = new (p) CptMuHD{file_region, def_name, delay,
-				 PtiArray<const PtInst>(mAlloc, inst_array)};
+      auto obj = new (p) CptMuHD(file_region, def_name, delay,
+				 PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
     else {
       ++ mNumMuHSD;
       void* p = mAlloc.get_memory(sizeof(CptMuHSD));
-      auto obj = new (p) CptMuHSD{file_region, def_name, strength, delay,
-				  PtiArray<const PtInst>(mAlloc, inst_array)};
+      auto obj = new (p) CptMuHSD(file_region, def_name, strength, delay,
+				  PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
   }
@@ -583,9 +567,9 @@ CptFactory::new_MuH(
 {
   ++ mNumMuHP;
   void* p = mAlloc.get_memory(sizeof(CptMuHP));
-  auto obj = new (p) CptMuHP{file_region, def_name,
+  auto obj = new (p) CptMuHP(file_region, def_name,
 			     PtiArray<const PtConnection>(mAlloc, con_array),
-			     PtiArray<const PtInst>(mAlloc, inst_array)};
+			     PtiArray<const PtInst>(mAlloc, inst_array));
   return obj;
 }
 
@@ -594,33 +578,30 @@ const PtInst*
 CptFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const std::vector<const PtConnection*>& con_array
 )
 {
   if ( name == nullptr ) {
     ++ mNumInst;
     void* p = mAlloc.get_memory(sizeof(CptInst));
-    auto obj = new (p) CptInst{file_region,
-			       PtiArray<const PtConnection>(mAlloc, con_array)};
+    auto obj = new (p) CptInst(file_region,
+			       PtiArray<const PtConnection>(mAlloc, con_array));
     return obj;
   }
 
-  if ( left == nullptr ) {
-    ASSERT_COND( right == nullptr );
+  if ( range == nullptr ) {
     ++ mNumInstN;
     void* p = mAlloc.get_memory(sizeof(CptInstN));
-    auto obj = new (p) CptInstN{file_region, name,
-				PtiArray<const PtConnection>(mAlloc, con_array)};
+    auto obj = new (p) CptInstN(file_region, name,
+				PtiArray<const PtConnection>(mAlloc, con_array));
     return obj;
   }
 
-  ASSERT_COND( right != nullptr );
   ++ mNumInstR;
   void* p = mAlloc.get_memory(sizeof(CptInstR));
-  auto obj = new (p) CptInstR{file_region, name, left, right,
-			      PtiArray<const PtConnection>(mAlloc, con_array)};
+  auto obj = new (p) CptInstR(file_region, name, range,
+			      PtiArray<const PtConnection>(mAlloc, con_array));
   return obj;
 }
 

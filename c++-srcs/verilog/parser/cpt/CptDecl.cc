@@ -44,16 +44,9 @@ CptDeclHead::is_signed() const
   return false;
 }
 
-// @brief 範囲のMSBの取得
-const PtExpr*
-CptDeclHead::left_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲のLSBの取得
-const PtExpr*
-CptDeclHead::right_range() const
+// @brief 範囲の取得
+const PtRange*
+CptDeclHead::range() const
 {
   return nullptr;
 }
@@ -126,7 +119,7 @@ CptDeclHead::set_elem(
 // コンストラクタ
 CptParamH::CptParamH(
   const FileRegion& file_region
-) : CptDeclHead{file_region}
+) : CptDeclHead(file_region)
 {
 }
 
@@ -150,7 +143,7 @@ CptParamH::type() const
 // コンストラクタ
 CptLocalParamH::CptLocalParamH(
   const FileRegion& file_region
-) : CptDeclHead{file_region}
+) : CptDeclHead(file_region)
 {
 }
 
@@ -174,11 +167,9 @@ CptLocalParamH::type() const
 // コンストラクタ
 CptParamHV::CptParamHV(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptParamH{file_region},
-    mLeftRange{left},
-    mRightRange{right}
+  const PtRange* range
+) : CptParamH(file_region),
+    mRange{range}
 {
 }
 
@@ -195,18 +186,11 @@ CptParamHV::is_signed() const
   return false;
 }
 
-// 範囲のMSBの取得
-const PtExpr*
-CptParamHV::left_range() const
+// 範囲の取得
+const PtRange*
+CptParamHV::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲のLSBの取得
-const PtExpr*
-CptParamHV::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 
@@ -217,9 +201,8 @@ CptParamHV::right_range() const
 // コンストラクタ
 CptParamHSV::CptParamHSV(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptParamHV{file_region, left, right}
+  const PtRange* range
+) : CptParamHV(file_region, range)
 {
 }
 
@@ -244,9 +227,8 @@ CptParamHSV::is_signed() const
 // コンストラクタ
 CptLocalParamHV::CptLocalParamHV(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptParamHV{file_region, left, right}
+  const PtRange* range
+) : CptParamHV(file_region, range)
 {
 }
 
@@ -270,9 +252,8 @@ CptLocalParamHV::type() const
 // コンストラクタ
 CptLocalParamHSV::CptLocalParamHSV(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptParamHSV{file_region, left, right}
+  const PtRange* range
+) : CptParamHSV(file_region, range)
 {
 }
 
@@ -297,7 +278,7 @@ CptLocalParamHSV::type() const
 CptParamHT::CptParamHT(
   const FileRegion& file_region,
   VpiVarType var_type
-) : CptDeclHead{file_region},
+) : CptDeclHead(file_region),
     mVarType{var_type}
 {
 }
@@ -344,7 +325,7 @@ CptParamHT::data_type() const
 CptLocalParamHT::CptLocalParamHT(
   const FileRegion& file_region,
   VpiVarType var_type
-) : CptParamHT{file_region, var_type}
+) : CptParamHT(file_region, var_type)
 {
 }
 
@@ -368,7 +349,7 @@ CptLocalParamHT::type() const
 // コンストラクタ
 CptRegH::CptRegH(
   const FileRegion& file_region
-) : CptDeclHead{file_region}
+) : CptDeclHead(file_region)
 {
 }
 
@@ -392,7 +373,7 @@ CptRegH::type() const
 // コンストラクタ
 CptRegHS::CptRegHS(
   const FileRegion& file_region
-) : CptRegH{file_region}
+) : CptRegH(file_region)
 {
 }
 
@@ -417,11 +398,9 @@ CptRegHS::is_signed() const
 // コンストラクタ
 CptRegHV::CptRegHV(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 ) : CptRegH{file_region},
-    mLeftRange{left},
-    mRightRange{right}
+    mRange{range}
 {
 }
 
@@ -437,18 +416,11 @@ CptRegHV::is_signed() const
   return false;
 }
 
-// 範囲のMSBの取得
-const PtExpr*
-CptRegHV::left_range() const
+// 範囲の取得
+const PtRange*
+CptRegHV::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲のLSBの取得
-const PtExpr*
-CptRegHV::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 
@@ -459,9 +431,8 @@ CptRegHV::right_range() const
 // コンストラクタ
 CptRegHSV::CptRegHSV(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptRegHV{file_region, left, right}
+  const PtRange* range
+) : CptRegHV(file_region, range)
 {
 }
 
@@ -486,7 +457,7 @@ CptRegHSV::is_signed() const
 CptVarH::CptVarH(
   const FileRegion& file_region,
   VpiVarType var_type
-) : CptDeclHead{file_region},
+) : CptDeclHead(file_region),
     mVarType{var_type}
 {
 }
@@ -532,7 +503,7 @@ CptVarH::data_type() const
 // コンストラクタ
 CptGenvarH::CptGenvarH(
   const FileRegion& file_region
-) : CptDeclHead{file_region}
+) : CptDeclHead(file_region)
 {
 }
 
@@ -558,9 +529,10 @@ CptNetH::CptNetH(
   const FileRegion& file_region,
   VpiNetType net_type,
   bool sign
-) : CptDeclHead{file_region}
+) : CptDeclHead(file_region)
 {
-  mFlags = (static_cast<std::uint32_t>(net_type) << 1) | static_cast<std::uint32_t>(sign);
+  mFlags = (static_cast<std::uint32_t>(net_type) << 1) |
+    static_cast<std::uint32_t>(sign);
 }
 
 // デストラクタ
@@ -600,7 +572,7 @@ CptNetHS::CptNetHS(
   VpiNetType net_type,
   bool sign,
   const PtStrength* strength
-) : CptNetH{file_region, net_type, sign},
+) : CptNetH(file_region, net_type, sign),
     mStrength{strength}
 {
 }
@@ -628,7 +600,7 @@ CptNetHD::CptNetHD(
   VpiNetType net_type,
   bool sign,
   const PtDelay* delay
-) : CptNetH{file_region, net_type, sign},
+) : CptNetH(file_region, net_type, sign),
     mDelay{delay}
 {
 }
@@ -657,7 +629,7 @@ CptNetHSD::CptNetHSD(
   bool sign,
   const PtStrength* strength,
   const PtDelay* delay
-) : CptNetH{file_region, net_type, sign},
+) : CptNetH(file_region, net_type, sign),
     mStrength{strength},
     mDelay{delay}
 {
@@ -693,11 +665,9 @@ CptNetHV::CptNetHV(
   VpiNetType net_type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 ) : CptNetH{file_region, net_type, sign},
-    mLeftRange{left},
-    mRightRange{right}
+    mRange{range}
 {
   mFlags |= (static_cast<std::uint32_t>(vstype) << 5);
 }
@@ -714,18 +684,11 @@ CptNetHV::vs_type() const
   return static_cast<VpiVsType>(mFlags >> 5);
 }
 
-// 範囲のMSBの取得
-const PtExpr*
-CptNetHV::left_range() const
+// 範囲の取得
+const PtRange*
+CptNetHV::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲のLSBの取得
-const PtExpr*
-CptNetHV::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 
@@ -739,11 +702,9 @@ CptNetHVS::CptNetHVS(
   VpiNetType net_type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtStrength* strength
-) : CptNetHV{file_region, net_type,
-	     vstype, sign, left, right},
+) : CptNetHV(file_region, net_type, vstype, sign, range),
     mStrength{strength}
 {
 }
@@ -771,11 +732,10 @@ CptNetHVD::CptNetHVD(
   VpiNetType net_type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtDelay* delay
-) : CptNetHV{file_region, net_type,
-	     vstype, sign, left, right},
+) : CptNetHV(file_region, net_type,
+	     vstype, sign, range),
     mDelay{delay}
 {
 }
@@ -803,12 +763,11 @@ CptNetHVSD::CptNetHVSD(
   VpiNetType net_type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtStrength* strength,
   const PtDelay* delay
-) : CptNetHV{file_region, net_type,
-	     vstype, sign, left, right},
+) : CptNetHV(file_region, net_type,
+	     vstype, sign, range),
     mStrength{strength},
     mDelay{delay}
 {
@@ -865,7 +824,7 @@ CptEventH::type() const
 // コンストラクタ
 CptSpecParamH::CptSpecParamH(
   const FileRegion& file_region
-) : CptDeclHead{file_region}
+) : CptDeclHead(file_region)
 {
 }
 
@@ -889,11 +848,9 @@ CptSpecParamH::type() const
 // コンストラクタ
 CptSpecParamHV::CptSpecParamHV(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptSpecParamH{file_region},
-    mLeftRange{left},
-    mRightRange{right}
+  const PtRange* range
+) : CptSpecParamH(file_region),
+    mRange{range}
 {
 }
 
@@ -902,18 +859,11 @@ CptSpecParamHV::~CptSpecParamHV()
 {
 }
 
-// 範囲のMSBの取得
-const PtExpr*
-CptSpecParamHV::left_range() const
+// 範囲の取得
+const PtRange*
+CptSpecParamHV::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲のLSBの取得
-const PtExpr*
-CptSpecParamHV::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 
@@ -953,8 +903,7 @@ CptDeclItemBase::range(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::logic_error{"Should not be reached"};
 }
 
 // 初期値の取得
@@ -973,7 +922,7 @@ CptDeclItemBase::init_value() const
 CptDeclItem::CptDeclItem(
   const FileRegion& file_region,
   const char* name
-) : CptDeclItemBase{name},
+) : CptDeclItemBase(name),
     mLoc{file_region}
 {
 }
@@ -1000,7 +949,7 @@ CptDeclItemR::CptDeclItemR(
   const FileRegion& file_region,
   const char* name,
   PtiRangeArray&& range_array
-) : CptDeclItemBase{name},
+) : CptDeclItemBase(name),
     mFileRegion{file_region},
     mRangeArray{std::move(range_array)}
 {
@@ -1044,10 +993,12 @@ CptDeclItemI::CptDeclItemI(
   const FileRegion& file_region,
   const char* name,
   const PtExpr* init_value
-) : CptDeclItem{file_region, name},
+) : CptDeclItem(file_region, name),
     mInitValue{init_value}
 {
-  ASSERT_COND( init_value );
+  if ( init_value == nullptr ) {
+    throw std::logic_error{"init_value == nullptr"};
+  }
 }
 
 // デストラクタ
@@ -1122,53 +1073,48 @@ PtiDeclHead*
 CptFactory::new_ParamH(
   const FileRegion& file_region,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   bool local
 )
 {
   if ( local ) {
-    if ( left == nullptr ) {
-      ASSERT_COND( right == nullptr );
+    if ( range == nullptr ) {
       ++ mNumLocalParamH;
       void* p = mAlloc.get_memory(sizeof(CptLocalParamH));
-      auto obj = new (p) CptLocalParamH{file_region};
+      auto obj = new (p) CptLocalParamH(file_region);
       return obj;
     }
     else {
-      ASSERT_COND( right != nullptr );
       ++ mNumLocalParamHV;
       if ( sign ) {
 	void* p = mAlloc.get_memory(sizeof(CptLocalParamHSV));
-	auto obj = new (p) CptLocalParamHSV{file_region, left, right};
+	auto obj = new (p) CptLocalParamHSV(file_region, range);
 	return obj;
       }
       else {
 	void* p = mAlloc.get_memory(sizeof(CptLocalParamHV));
-	auto obj = new (p) CptLocalParamHV{file_region, left, right};
+	auto obj = new (p) CptLocalParamHV(file_region, range);
 	return obj;
       }
     }
   }
   else {
-    if ( left == nullptr ) {
-      ASSERT_COND( right == nullptr );
+    if ( range == nullptr ) {
       ++ mNumParamH;
       void* p = mAlloc.get_memory(sizeof(CptParamH));
-      auto obj = new (p) CptParamH{file_region};
+      auto obj = new (p) CptParamH(file_region);
       return obj;
     }
     else {
-      ASSERT_COND( right != nullptr );
       ++ mNumParamHV;
       if ( sign ) {
 	void* p = mAlloc.get_memory(sizeof(CptParamHSV));
-	auto obj = new (p) CptParamHSV{file_region, left, right};
+	auto obj = new (p) CptParamHSV(file_region, range);
 	return obj;
       }
       else {
 	void* p = mAlloc.get_memory(sizeof(CptParamHV));
-	auto obj = new (p) CptParamHV{file_region, left, right};
+	auto obj = new (p) CptParamHV(file_region, range);
 	return obj;
       }
     }
@@ -1186,13 +1132,13 @@ CptFactory::new_ParamH(
   if ( local ) {
     ++ mNumLocalParamHT;
     void* p = mAlloc.get_memory(sizeof(CptLocalParamHT));
-    auto obj = new (p) CptLocalParamHT{file_region, var_type};
+    auto obj = new (p) CptLocalParamHT(file_region, var_type);
     return obj;
   }
   else {
     ++ mNumParamHT;
     void* p = mAlloc.get_memory(sizeof(CptParamHT));
-    auto obj = new (p) CptParamHT{file_region, var_type};
+    auto obj = new (p) CptParamHT(file_region, var_type);
     return obj;
   }
 }
@@ -1201,22 +1147,19 @@ CptFactory::new_ParamH(
 PtiDeclHead*
 CptFactory::new_SpecParamH(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  if ( left == nullptr ) {
-    ASSERT_COND( right == nullptr );
+  if ( range == nullptr ) {
     ++ mNumSpecParamH;
     void* p = mAlloc.get_memory(sizeof(CptSpecParamH));
     auto obj = new (p) CptSpecParamH(file_region);
     return obj;
   }
   else {
-    ASSERT_COND( right != nullptr );
     ++ mNumSpecParamHV;
     void* p = mAlloc.get_memory(sizeof(CptSpecParamHV));
-    auto obj = new (p) CptSpecParamHV{file_region, left, right};
+    auto obj = new (p) CptSpecParamHV(file_region, range);
     return obj;
   }
 }
@@ -1229,7 +1172,7 @@ CptFactory::new_EventH(
 {
   ++ mNumEventH;
   void* p = mAlloc.get_memory(sizeof(CptEventH));
-  auto obj = new (p) CptEventH{file_region};
+  auto obj = new (p) CptEventH(file_region);
   return obj;
 }
 
@@ -1241,7 +1184,7 @@ CptFactory::new_GenvarH(
 {
   ++ mNumGenvarH;
   void* p = mAlloc.get_memory(sizeof(CptGenvarH));
-  auto obj = new (p) CptGenvarH{file_region};
+  auto obj = new (p) CptGenvarH(file_region);
   return obj;
 }
 
@@ -1254,7 +1197,7 @@ CptFactory::new_VarH(
 {
   ++ mNumVarH;
   void* p = mAlloc.get_memory(sizeof(CptVarH));
-  auto obj = new (p) CptVarH{file_region, var_type};
+  auto obj = new (p) CptVarH(file_region, var_type);
   return obj;
 }
 
@@ -1263,12 +1206,10 @@ PtiDeclHead*
 CptFactory::new_RegH(
   const FileRegion& file_region,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  if ( left == nullptr ) {
-    ASSERT_COND( right == nullptr );
+  if ( range== nullptr ) {
     ++ mNumRegH;
     if ( sign ) {
       void* p = mAlloc.get_memory(sizeof(CptRegHS));
@@ -1277,21 +1218,20 @@ CptFactory::new_RegH(
     }
     else {
       void* p = mAlloc.get_memory(sizeof(CptRegH));
-      auto obj = new (p) CptRegH{file_region};
+      auto obj = new (p) CptRegH(file_region);
       return obj;
     }
   }
   else {
-    ASSERT_COND( right != nullptr );
     ++ mNumRegHV;
     if ( sign ) {
       void* p = mAlloc.get_memory(sizeof(CptRegHSV));
-      auto obj = new (p) CptRegHSV{file_region, left, right};
+      auto obj = new (p) CptRegHSV(file_region, range);
       return obj;
     }
     else {
       void* p = mAlloc.get_memory(sizeof(CptRegHV));
-      auto obj = new (p) CptRegHV{file_region, left, right};
+      auto obj = new (p) CptRegHV(file_region, range);
       return obj;
     }
   }
@@ -1304,27 +1244,23 @@ CptFactory::new_NetH(
   VpiNetType type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtStrength* strength,
   const PtDelay* delay
 )
 {
-  if ( left == nullptr ) {
-    ASSERT_COND( right == nullptr );
+  if ( range == nullptr ) {
     if ( strength == nullptr ) {
       if ( delay == nullptr ) {
 	++ mNumNetH;
 	void* p = mAlloc.get_memory(sizeof(CptNetH));
-	auto obj = new (p) CptNetH{file_region, type, sign};
+	auto obj = new (p) CptNetH(file_region, type, sign);
 	return obj;
       }
       else {
 	++ mNumNetHD;
 	void* p = mAlloc.get_memory(sizeof(CptNetHD));
-	auto obj = new (p) CptNetHD{file_region,
-				    type, sign,
-				    delay};
+	auto obj = new (p) CptNetHD(file_region, type, sign, delay);
 	return obj;
       }
     }
@@ -1332,37 +1268,32 @@ CptFactory::new_NetH(
       if ( delay == nullptr ) {
 	++ mNumNetHS;
 	void* p = mAlloc.get_memory(sizeof(CptNetHS));
-	auto obj = new (p) CptNetHS{file_region,
-				    type, sign,
-				    strength};
+	auto obj = new (p) CptNetHS(file_region, type, sign, strength);
 	return obj;
       }
       else {
 	++mNumNetHSD;
 	void* p = mAlloc.get_memory(sizeof(CptNetHSD));
-	auto obj = new (p) CptNetHSD{file_region,
-				     type, sign,
-				     strength, delay};
+	auto obj = new (p) CptNetHSD(file_region, type, sign,
+				     strength, delay);
 	return obj;
       }
     }
   }
   else {
-    ASSERT_COND( right != nullptr );
     if ( strength == nullptr ) {
       if ( delay == nullptr ) {
 	++ mNumNetHV;
 	void* p = mAlloc.get_memory(sizeof(CptNetHV));
-	auto obj = new (p) CptNetHV{file_region,
-				    type, vstype, sign, left, right};
+	auto obj = new (p) CptNetHV(file_region, type, vstype,
+				    sign, range);
 	return obj;
       }
       else {
 	++ mNumNetHVD;
 	void* p = mAlloc.get_memory(sizeof(CptNetHVD));
-	auto obj = new (p) CptNetHVD{file_region,
-				     type, vstype, sign, left, right,
-				     delay};
+	auto obj = new (p) CptNetHVD(file_region, type, vstype,
+				     sign, range, delay);
 	return obj;
       }
     }
@@ -1370,17 +1301,15 @@ CptFactory::new_NetH(
       if ( delay == nullptr ) {
 	++ mNumNetHVS;
 	void* p = mAlloc.get_memory(sizeof(CptNetHVS));
-	auto obj = new (p) CptNetHVS{file_region,
-				     type, vstype, sign, left, right,
-				     strength};
+	auto obj = new (p) CptNetHVS(file_region, type, vstype,
+				     sign, range, strength);
 	return obj;
       }
       else {
 	++ mNumNetHVSD;
 	void* p = mAlloc.get_memory(sizeof(CptNetHVSD));
-	auto obj = new (p) CptNetHVSD{file_region,
-				      type, vstype, sign, left, right,
-				      strength, delay};
+	auto obj = new (p) CptNetHVSD(file_region, type, vstype,
+				      sign, range, strength, delay);
 	return obj;
       }
     }
@@ -1396,7 +1325,7 @@ CptFactory::new_DeclItem(
 {
   ++ mNumDeclItem;
   void* p = mAlloc.get_memory(sizeof(CptDeclItem));
-  auto obj = new (p) CptDeclItem{file_region, name};
+  auto obj = new (p) CptDeclItem(file_region, name);
   return obj;
 }
 
@@ -1409,7 +1338,7 @@ CptFactory::new_DeclItem(
 {
   ++ mNumDeclItemI;
   void* p = mAlloc.get_memory(sizeof(CptDeclItemI));
-  auto obj = new (p) CptDeclItemI{file_region, name, init_value};
+  auto obj = new (p) CptDeclItemI(file_region, name, init_value);
   return obj;
 }
 
@@ -1422,8 +1351,8 @@ CptFactory::new_DeclItem(
 {
   ++ mNumDeclItemR;
   void* p = mAlloc.get_memory(sizeof(CptDeclItemR));
-  auto obj = new (p) CptDeclItemR{file_region, name,
-				  PtiArray<const PtRange>(mAlloc, range_array)};
+  auto obj = new (p) CptDeclItemR(file_region, name,
+				  PtiArray<const PtRange>(mAlloc, range_array));
   return obj;
 }
 
@@ -1436,7 +1365,7 @@ CptFactory::new_Range(
 {
   ++ mNumRange;
   void* p = mAlloc.get_memory(sizeof(CptRange));
-  auto obj = new (p) CptRange{fr, msb, lsb};
+  auto obj = new (p) CptRange(fr, msb, lsb);
   return obj;
 }
 

@@ -206,7 +206,9 @@ EiTcBase::argument(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < argument_num() );
+  if ( pos >= argument_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mArgumentList[pos];
 }
 

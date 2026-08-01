@@ -115,16 +115,30 @@ ExprEval::evaluate_bitvector(
 }
 
 // @brief 範囲を表す式を評価する．
-std::pair<int, int>
+RangeVal
 ExprEval::evaluate_range(
   const VlScope* parent,
-  const PtExpr* pt_left,
-  const PtExpr* pt_right
+  const PtRange* pt_range
 )
 {
-  int left_val = evaluate_int(parent, pt_left);
-  int right_val = evaluate_int(parent, pt_right);
-  return std::make_pair(left_val, right_val);
+  int left_val = evaluate_int(parent, pt_range->left());
+  int right_val = evaluate_int(parent, pt_range->right());
+  return RangeVal{left_val, right_val};
+}
+
+// @brief 範囲を表す式を評価する．
+RangeVal
+ExprEval::evaluate_range(
+  const VlScope* parent,
+  const PtPart* pt_part
+)
+{
+  if ( pt_part->mode() != VpiRangeMode::Const ) {
+    throw std::logic_error{"pt_part->mode() != VpiRangeMode::Const"};
+  }
+  int left_val = evaluate_int(parent, pt_part->left());
+  int right_val = evaluate_int(parent, pt_part->right());
+  return RangeVal{left_val, right_val};
 }
 
 // @brief 式の値を評価する．
@@ -171,7 +185,7 @@ ExprEval::evaluate_opr(
 )
 {
   auto op_type = pt_expr->op_type();
-  SizeType op_size{pt_expr->operand_num()};
+  auto op_size = pt_expr->operand_num();
 
   // オペランドの値の評価を行う．
   std::vector<VlValue> val(op_size);
@@ -349,7 +363,7 @@ ExprEval::evaluate_opr(
 
   case VpiOpType::MinTypMax:
     // 本当はエラー
-    ASSERT_NOT_REACHED;
+    throw std::logic_error{"Should not be reached"};
     break;
 
   case VpiOpType::Concat:
@@ -359,7 +373,7 @@ ExprEval::evaluate_opr(
     return multi_concat(val);
 
   default:
-    ASSERT_NOT_REACHED;
+    throw std::logic_error{"Should not be reached"};
     break;
   }
 
@@ -380,24 +394,25 @@ ExprEval::evaluate_primary(
     ErrorGen::hname_in_ce(__FILE__, __LINE__, pt_expr);
   }
 
-  SizeType isize = pt_expr->index_num();
-  bool has_bit_select = (isize == 1);
-  bool has_range_select = (pt_expr->left_range() && pt_expr->right_range());
+  auto isize = pt_expr->index_num();
+  auto has_bit_select = (isize == 1);
+  auto pt_part = pt_expr->part();
+  auto has_range_select = (pt_part != nullptr);
 
   if (  isize > 1 || (isize == 1 && has_range_select) ) {
     // 配列型ではない．
     ErrorGen::dimension_mismatch(__FILE__, __LINE__, pt_expr);
   }
 
-  int index1{0};
-  int index2{0};
+  int index1 = 0;
+  int index2 = 0;
   if ( has_bit_select ) {
     index1 = evaluate_int(parent, pt_expr->index(0));
   }
   if ( has_range_select ) {
-    auto pt_left = pt_expr->left_range();
+    auto pt_left = pt_part->left();
     index1 = evaluate_int(parent, pt_left);
-    auto pt_right = pt_expr->right_range();
+    auto pt_right = pt_part->right();
     index2 = evaluate_int(parent, pt_right);
   }
 
@@ -413,19 +428,19 @@ ExprEval::evaluate_primary(
   if ( genvar ) {
     if ( has_bit_select ) {
       // ビット選択
-      BitVector bv{genvar->value()};
+      auto bv = BitVector(genvar->value());
       return VlValue{bv.bit_select_op(index1)};
     }
     else if ( has_range_select ) {
       // 範囲選択
-      BitVector bv{genvar->value()};
+      auto bv = BitVector(genvar->value());
       if ( index1 < index2 ) {
 	ErrorGen::range_order(__FILE__, __LINE__, pt_expr);
       }
-      return VlValue{bv.part_select_op(index1, index2)};
+      return VlValue(bv.part_select_op(index1, index2));
     }
     else {
-      return VlValue{genvar->value()};
+      return VlValue(genvar->value());
     }
   }
 
@@ -442,7 +457,7 @@ ExprEval::evaluate_primary(
   if ( param->value_type().is_real_type() ) {
     if ( has_bit_select || has_range_select ) {
       ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr);
-      return VlValue{};
+      return VlValue();
     }
   }
   else {
@@ -451,19 +466,19 @@ ExprEval::evaluate_primary(
       if ( !val.is_bitvector_compat() ) {
 	ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr);
       }
-      SizeType offset{0};
+      SizeType offset = 0;
       if ( !param->calc_bit_offset(index1, offset) ) {
 	// インデックスが範囲外だった．
 	// エラーではなく X になる．
-	return VlValue{VlScalarVal::x()};
+	return VlValue(VlScalarVal::x());
       }
-      return VlValue{val.bitvector_value().bit_select_op(offset)};
+      return VlValue(val.bitvector_value().bit_select_op(offset));
     }
     else if ( has_range_select ) {
       if ( !val.is_bitvector_compat() ) {
 	ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr);
       }
-      switch ( pt_expr->range_mode() ) {
+      switch ( pt_part->mode() ) {
       case VpiRangeMode::Const:
 	{
 	  bool big = (index1 >= index2);
@@ -475,7 +490,7 @@ ExprEval::evaluate_primary(
 
       case VpiRangeMode::Plus:
 	if ( param->is_big_endian() ) {
-	  int range{index2};
+	  auto range = index2;
 	  index2 = index1;
 	  index1 = index1 + range - 1;
 	}
@@ -489,7 +504,7 @@ ExprEval::evaluate_primary(
 	  index2 = index1 - index2 + 1;
 	}
 	else {
-	  int range{index2};
+	  auto range = index2;
 	  index2 = index1;
 	  index1 = index1 - range + 1;
 	}
@@ -497,7 +512,7 @@ ExprEval::evaluate_primary(
 	break;
 
       case VpiRangeMode::No:
-	ASSERT_NOT_REACHED;
+	throw std::logic_error{"Should not be reached"};
 	break;
       }
 
@@ -516,7 +531,7 @@ ExprEval::evaluate_primary(
       else {
 	bw = index1 - index2 + 1;
       }
-      return VlValue{BitVector{VlScalarVal::x(), bw}};
+      return VlValue(BitVector(VlScalarVal::x(), bw));
     }
   }
 
@@ -530,19 +545,19 @@ ExprEval::evaluate_const(
   const PtExpr* pt_expr
 )
 {
-  SizeType size{pt_expr->const_size()};
-  bool is_signed{false};
-  SizeType base{0};
+  auto size = pt_expr->const_size();
+  auto is_signed = false;
+  SizeType base = 0;
   switch ( pt_expr->const_type() ) {
   case VpiConstType::Int:
     if ( pt_expr->const_str() == nullptr ) {
       auto val = static_cast<int>(pt_expr->const_uint32());
-      return VlValue{val};
+      return VlValue(val);
     }
     break;
 
   case VpiConstType::Real:
-    return VlValue{pt_expr->const_real()};
+    return VlValue(pt_expr->const_real());
 
   case VpiConstType::SignedBinary:
     is_signed = true;
@@ -573,15 +588,15 @@ ExprEval::evaluate_const(
     break;
 
   case VpiConstType::String:
-    return VlValue{BitVector{pt_expr->const_str()}};
+    return VlValue(BitVector(pt_expr->const_str()));
 
   default:
-    ASSERT_NOT_REACHED;
+    throw std::logic_error{"Should not be reached"};
     break;
   }
 
   // ここに来たということはビットベクタ型
-  return VlValue{BitVector{size, is_signed, base, pt_expr->const_str()}};
+  return VlValue(BitVector(size, is_signed, base, pt_expr->const_str()));
 }
 
 // @brief PtFuncCall から式の値を評価する．
@@ -629,7 +644,7 @@ ExprEval::evaluate_funccall(
   }
 
   // 引数の生成
-  SizeType n{pt_expr->operand_num()};
+ auto n = pt_expr->operand_num();
   if ( n != child_func->io_num() ) {
     // 引数の数が合わなかった．
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, pt_expr);
@@ -658,7 +673,7 @@ ExprEval::evaluate_funccall(
   }
 
   // 関数の評価を行う．
-  FuncEval eval{child_func};
+  FuncEval eval(child_func);
   auto val = eval(arg_list);
   return val;
 }

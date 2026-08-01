@@ -479,7 +479,9 @@ EiCaseItem::expr(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < expr_num() );
+  if ( pos >= expr_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mExprList[pos];
 }
 
@@ -537,8 +539,7 @@ EiCaseStmt::case_type() const
   case PtStmtType::CaseZ: return VpiCaseType::Z;
   default: break;
   }
-  ASSERT_NOT_REACHED;
-  return VpiCaseType::Exact;
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief 条件式を返す．
@@ -561,7 +562,9 @@ EiCaseStmt::caseitem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < caseitem_num() );
+  if ( pos >= caseitem_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mCaseItemList[pos];
 }
 

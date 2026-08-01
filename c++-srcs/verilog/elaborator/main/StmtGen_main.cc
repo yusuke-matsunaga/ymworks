@@ -9,6 +9,7 @@
 #include "StmtGen.h"
 #include "ElbEnv.h"
 #include "ElbStub.h"
+#include "ErrorGen.h"
 
 #include "ym/pt/PtStmt.h"
 #include "ym/pt/PtExpr.h"
@@ -16,6 +17,7 @@
 #include "ym/vl/VlStmt.h"
 
 #include "elaborator/ElbTaskFunc.h"
+#include "elaborator/ElbUserSystf.h"
 #include "elaborator/ElbExpr.h"
 
 #include "ym/MsgMgr.h"
@@ -53,7 +55,9 @@ StmtGen::phase1_stmt(
   // 1. 内部にステートメントを持つステートメントは再帰する．
   // 2. 自身がスコープとなるもの (named-begin, named-fork) はスコープ
   //    を生成し，phase2 用のキューに登録す．
-  ASSERT_COND( pt_stmt != nullptr );
+  if ( pt_stmt == nullptr ) {
+    throw std::logic_error{"pt_stmt == nullptr"};
+  }
 
   switch ( pt_stmt->type() ) {
   case PtStmtType::Disable:
@@ -126,7 +130,7 @@ StmtGen::phase1_stmt(
     break;
 
   default:
-    ASSERT_NOT_REACHED;
+    throw std::logic_error{"Should not be reached"};
   }
 }
 
@@ -172,7 +176,9 @@ StmtGen::instantiate_stmt(
     break;
 
   case PtStmtType::NbAssign:
-    ASSERT_COND(!env.inside_function() );
+    if ( env.inside_function() ) {
+      throw std::logic_error{"env.inside_function()"};
+    }
     stmt = instantiate_assign(parent, process, env, pt_stmt, false);
     break;
 
@@ -279,7 +285,7 @@ StmtGen::instantiate_stmt(
     break;
 
   default:
-    ASSERT_NOT_REACHED;
+    throw std::logic_error{"Should not be reached"};
   }
   if ( stmt ) {
     // attribute instance の生成
@@ -389,7 +395,9 @@ StmtGen::instantiate_enable(
   }
 
   auto task = handle->taskfunc();
-  ASSERT_COND( task != nullptr );
+  if ( task == nullptr ) {
+    throw std::logic_error{"task == nullptr"};
+  }
 
   // 引数を生成する．
   std::vector<ElbExpr*> arg_list;
@@ -423,36 +431,37 @@ StmtGen::instantiate_sysenable(
   // UserSystf を取り出す．
   auto user_systf = mgr().find_user_systf(name);
   if ( user_systf == nullptr ) {
-    std::ostringstream buf;
-    buf << name << " : No such system task.";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    fr,
-		    MsgType::Error,
-		    "ELAB",
-		    buf.str());
-    return nullptr;
+    ErrorGen::no_such_systask(__FILE__, __LINE__, pt_stmt);
+  }
+
+  // 引数の数のチェック
+  auto n = pt_stmt->arg_num();
+  if ( !user_systf->check_n_of_args(n) ) {
+    ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, pt_stmt);
   }
 
   // 引数を生成する．
-  std::vector<ElbExpr*> arg_list;
-  arg_list.reserve(pt_stmt->arg_num());
-  for ( auto pt_expr: pt_stmt->arg_list() ) {
+  std::vector<ElbExpr*> arg_list(n);
+  for ( SizeType i = 0; i < n; ++ i ) {
+    auto pt_expr = pt_stmt->arg(i);
     // 空の引数があるのでエラーと区別する．
+    ElbExpr* arg = nullptr;
     if ( pt_expr ) {
-      auto arg = instantiate_arg(parent, env, pt_expr);
-      if ( !arg ) {
-	// エラーが起こった
-	return nullptr;
-      }
+      arg = instantiate_arg(parent, env, pt_expr);
       arg_list.push_back(arg);
     }
     else {
       arg_list.push_back(nullptr);
     }
+    if ( !user_systf->check_argument(i, arg) ) {
+      ErrorGen::illegal_argument_type(__FILE__, __LINE__, pt_expr);
+    }
+    arg_list[i] = arg;
   }
 
   // system task call ステートメントの生成
-  auto stmt = mgr().new_SysTaskCall(parent, process, pt_stmt, user_systf, arg_list);
+  auto stmt = mgr().new_SysTaskCall(parent, process, pt_stmt,
+				    user_systf, arg_list);
   return stmt;
 }
 

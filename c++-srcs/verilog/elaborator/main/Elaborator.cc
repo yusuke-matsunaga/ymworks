@@ -116,7 +116,9 @@ Elaborator::operator()(
   const PtMgr& pt_mgr
 )
 {
-  ASSERT_COND( !mDone );
+  if ( mDone ) {
+    throw std::logic_error{"mDone"};
+  }
 
   auto& pt_udp_list = pt_mgr.pt_udp_list();
   auto& pt_module_list = pt_mgr.pt_module_list();

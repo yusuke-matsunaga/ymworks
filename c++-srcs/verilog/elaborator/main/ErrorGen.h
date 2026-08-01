@@ -565,6 +565,15 @@ public:
     const PtExpr* pt_expr ///< [in] 対象の構文木要素
   );
 
+  /// @brief 該当するシステムタスクが存在しない．
+  static
+  void
+  no_such_systask(
+    const char* file,     ///< [in] ファイル名
+    int line,		  ///< [in] 行番号
+    const PtStmt* pt_stmt ///< [in] 対象の構文木要素
+  );
+
   /// @brief 関数ではない．
   static
   void
@@ -581,6 +590,15 @@ public:
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
     const PtExpr* pt_expr ///< [in] 対象の構文木要素
+  );
+
+  /// @brief 引数の数が合わない．
+  static
+  void
+  n_of_arguments_mismatch(
+    const char* file,     ///< [in] ファイル名
+    int line,		  ///< [in] 行番号
+    const PtStmt* pt_stmt ///< [in] 対象の構文木要素
   );
 
   /// @brief 引数の型が合わない．
@@ -737,6 +755,17 @@ private:
     const char* file,      ///< [in] ファイル名
     int line,		   ///< [in] 行番号
     const PtExpr* pt_expr, ///< [in] 対象の構文木要素
+    const char* label,     ///< [in] エラーラベル
+    const std::string& msg ///< [in] エラーメッセージ
+  );
+
+  /// @brief PtStmt に関するエラーメッセージを生成する共通部分
+  static
+  void
+  stmt_common(
+    const char* file,      ///< [in] ファイル名
+    int line,		   ///< [in] 行番号
+    const PtStmt* pt_stmt, ///< [in] 対象の構文木要素
     const char* label,     ///< [in] エラーラベル
     const std::string& msg ///< [in] エラーメッセージ
   );

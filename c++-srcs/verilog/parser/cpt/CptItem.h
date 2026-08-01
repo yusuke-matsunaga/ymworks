@@ -148,15 +148,10 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲の左側の式の取得
-  /// @return 範囲の左側の式
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲の右側の式の取得
-  /// @return 範囲の右側の式
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲の取得
+  /// @return 範囲
+  const PtRange*
+  range() const override;
 
   /// @brief 戻値のデータ型の取得
   /// @return 戻値のデータ型
@@ -956,8 +951,7 @@ public:
     const char* name,
     bool automatic,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right,
+    const PtRange* range,
     PtiIOHeadArray&& iohead_array,
     PtiDeclHeadArray&& declhead_array,
     const PtStmt* stmt
@@ -972,13 +966,9 @@ public:
   // PtTf の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 範囲の MSB を得る．
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲の LSB を得る．
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲を得る．
+  const PtRange*
+  range() const override;
 
 
 private:
@@ -986,11 +976,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
 };
 

@@ -137,7 +137,7 @@ ItemGen::phase1_item(
       break;
 
     default:
-      ASSERT_NOT_REACHED;
+      throw std::logic_error{"Should not be reached"};
       break;
     }
   }
@@ -397,7 +397,9 @@ ItemGen::phase1_genfor(
   };
 
   auto name0 = pt_genfor->name();
-  ASSERT_COND( name0 != nullptr );
+  if ( name0 == nullptr ) {
+    throw std::logic_error{"name0 == nullptr"};
+  }
 
   auto handle = mgr().find_obj(parent, pt_genfor->loop_var());
   if ( !handle ) {

@@ -133,6 +133,8 @@ fr_merge(
   const PtCaseItem* caseitem;
 
   const PtExpr* expr;
+  const PtRange* range;
+  const PtPart* part;
 
   const PtStrength* strength;
   const PtDelay* delay;
@@ -463,6 +465,10 @@ fr_merge(
 
 %type <expr> index
 
+%type <range> range
+
+%type <part> part
+
 %type <nettype> net_type
 %type <vstype> vstype
 %type <inttype> sign
@@ -677,9 +683,9 @@ paramport_head
 {
   $$ = parser.new_ParamH(@$);
 }
-| PARAMETER sign '[' expression ':' expression ']'
+| PARAMETER sign range
 {
-  $$ = parser.new_ParamH(@$, $2, $4, $6);
+  $$ = parser.new_ParamH(@$, $2, $3);
 }
 | PARAMETER data_type
 {
@@ -775,17 +781,9 @@ port_reference
 {
   parser.new_PortRef(@$, $1, $2);
 }
-| IDENTIFIER '[' expression ':' expression ']'
+| IDENTIFIER part
 {
-  parser.new_PortRef(@$, $1, VpiRangeMode::Const, $3, $5);
-}
-| IDENTIFIER '[' expression PLUSCOLON expression ']'
-{
-  parser.new_PortRef(@$, $1, VpiRangeMode::Plus, $3, $5);
-}
-| IDENTIFIER '[' expression MINUSCOLON expression ']'
-{
-  parser.new_PortRef(@$, $1, VpiRangeMode::Minus, $3, $5);
+  parser.new_PortRef(@$, $1, $2);
 }
 ;
 
@@ -835,13 +833,13 @@ portdecl_head
 {
   $$ = parser.new_NetIOHead(@$, VpiDir::Inout, $2, $3);
 }
-| INOUT          sign '[' expression ':' expression ']'
+| INOUT          sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Inout, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Inout, $2, $3);
 }
-| INOUT net_type sign '[' expression ':' expression ']'
+| INOUT net_type sign range
 {
-  $$ = parser.new_NetIOHead(@$, VpiDir::Inout, $2, $3, $5, $7);
+  $$ = parser.new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4);
 }
 | INPUT          sign
 {
@@ -851,13 +849,13 @@ portdecl_head
 {
   $$ = parser.new_NetIOHead(@$, VpiDir::Input, $2, $3);
 }
-| INPUT          sign '[' expression ':' expression ']'
+| INPUT          sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Input, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Input, $2, $3);
 }
-| INPUT net_type sign '[' expression ':' expression ']'
+| INPUT net_type sign range
 {
-  $$ = parser.new_NetIOHead(@$, VpiDir::Input, $2, $3, $5, $7);
+  $$ = parser.new_NetIOHead(@$, VpiDir::Input, $2, $3, $4);
 }
 | OUTPUT          sign
 {
@@ -867,21 +865,21 @@ portdecl_head
 {
   $$ = parser.new_NetIOHead(@$, VpiDir::Output, $2, $3);
 }
-| OUTPUT          sign '[' expression ':' expression ']'
+| OUTPUT          sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Output, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Output, $2, $3);
 }
-| OUTPUT net_type sign '[' expression ':' expression ']'
+| OUTPUT net_type sign range
 {
-  $$ = parser.new_NetIOHead(@$, VpiDir::Output, $2, $3, $5, $7);
+  $$ = parser.new_NetIOHead(@$, VpiDir::Output, $2, $3, $4);
 }
 | OUTPUT REG sign
 {
   $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3);
 }
-| OUTPUT REG sign '[' expression ':' expression ']'
+| OUTPUT REG sign range
 {
-  $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3, $5, $7);
+  $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3, $4);
 }
 | OUTPUT INTEGER
 {
@@ -1197,9 +1195,9 @@ parameter_declhead
 {
   $$ = parser.new_ParamH(@$);
 }
-| PARAMETER sign '[' expression ':' expression ']'
+| PARAMETER sign range
 {
-  $$ = parser.new_ParamH(@$, $2, $4, $6);
+  $$ = parser.new_ParamH(@$, $2, $3);
 }
 | PARAMETER data_type
 {
@@ -1209,9 +1207,9 @@ parameter_declhead
 {
   $$ = parser.new_LocalParamH(@$);
 }
-| LOCALPARAM sign '[' expression ':' expression ']'
+| LOCALPARAM sign range
 {
-  $$ = parser.new_LocalParamH(@$, $2, $4, $6);
+  $$ = parser.new_LocalParamH(@$, $2, $3);
 }
 | LOCALPARAM data_type
 {
@@ -1238,9 +1236,9 @@ specparam_declhead
 {
   $$ = parser.new_SpecParamH(@$);
 }
-| SPECPARAM '[' expression ':' expression ']'
+| SPECPARAM range
 {
-  $$ = parser.new_SpecParamH(@$, $3, $5);
+  $$ = parser.new_SpecParamH(@$, $2);
 }
 ;
 
@@ -1273,13 +1271,13 @@ inout_declhead
 {
   $$ = parser.new_NetIOHead(@$, VpiDir::Inout, $2, $3);
 }
-| INOUT          sign '[' expression ':' expression ']'
+| INOUT          sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Inout, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Inout, $2, $3);
 }
-| INOUT net_type sign '[' expression ':' expression ']'
+| INOUT net_type sign range
 {
-  $$ = parser.new_NetIOHead(@$, VpiDir::Inout, $2, $3, $5, $7);
+  $$ = parser.new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4);
 }
 ;
 
@@ -1307,13 +1305,13 @@ input_declhead
 {
   $$ = parser.new_NetIOHead(@$, VpiDir::Input, $2, $3);
 }
-| INPUT          sign '[' expression ':' expression ']'
+| INPUT          sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Input, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Input, $2, $3);
 }
-| INPUT net_type sign '[' expression ':' expression ']'
+| INPUT net_type sign range
 {
-  $$ = parser.new_NetIOHead(@$, VpiDir::Input, $2, $3, $5, $7);
+  $$ = parser.new_NetIOHead(@$, VpiDir::Input, $2, $3, $4);
 }
 ;
 
@@ -1371,13 +1369,13 @@ output_declhead1
 {
   $$ = parser.new_NetIOHead(@$, VpiDir::Output, $2, $3);
 }
-| OUTPUT          sign '[' expression ':' expression ']'
+| OUTPUT          sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Output, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Output, $2, $3);
 }
-| OUTPUT net_type sign '[' expression ':' expression ']'
+| OUTPUT net_type sign range
 {
-  $$ = parser.new_NetIOHead(@$, VpiDir::Output, $2, $3, $5, $7);
+  $$ = parser.new_NetIOHead(@$, VpiDir::Output, $2, $3, $4);
 }
 ;
 
@@ -1401,9 +1399,9 @@ output_declhead2
 {
   $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3);
 }
-| OUTPUT REG sign '[' expression ':' expression ']'
+| OUTPUT REG sign range
 {
-  $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3, $5, $7);
+  $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3, $4);
 }
 | OUTPUT INTEGER
 {
@@ -1550,21 +1548,21 @@ net_declhead1
   // net のデフォルトは1ビット
   $$ = parser.new_NetH(@$, $1, $2, $3);
 }
-| net_type        sign '[' expression ':' expression ']'
+| net_type        sign range
 {
-  $$ = parser.new_NetH(@$, $1, VpiVsType::None, $2, $4, $6);
+  $$ = parser.new_NetH(@$, $1, VpiVsType::None, $2, $3);
 }
-| net_type vstype sign '[' expression ':' expression ']'
+| net_type vstype sign range
 {
-  $$ = parser.new_NetH(@$, $1, $2, $3, $5, $7);
+  $$ = parser.new_NetH(@$, $1, $2, $3, $4);
 }
-| net_type        sign '[' expression ':' expression ']' delay3
+| net_type        sign range delay3
 {
-  $$ = parser.new_NetH(@$, $1, VpiVsType::None, $2, $4, $6, $8);
+  $$ = parser.new_NetH(@$, $1, VpiVsType::None, $2, $3, $4);
 }
-| net_type vstype sign '[' expression ':' expression ']' delay3
+| net_type vstype sign range delay3
 {
-  $$ = parser.new_NetH(@$, $1, $2, $3, $5, $7, $9);
+  $$ = parser.new_NetH(@$, $1, $2, $3, $4, $5);
 }
 | TRIREG sign
 {
@@ -1576,21 +1574,21 @@ net_declhead1
   // 1ビット
   $$ = parser.new_NetH(@$, VpiNetType::TriReg, $2, $3);
 }
-| TRIREG        sign '[' expression ':' expression ']'
+| TRIREG        sign range
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $2, $4, $6);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $2, $3);
 }
-| TRIREG vstype sign '[' expression ':' expression ']'
+| TRIREG vstype sign range
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $2, $3, $5, $7);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $2, $3, $4);
 }
-| TRIREG        sign '[' expression ':' expression ']' delay3
+| TRIREG        sign range delay3
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $2, $4, $6, $8);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $2, $3, $4);
 }
-| TRIREG vstype sign '[' expression ':' expression ']' delay3
+| TRIREG vstype sign range delay3
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $2, $3, $5, $7, $9);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $2, $3, $4, $5);
 }
 ;
 
@@ -1608,21 +1606,21 @@ net_declhead2
   // 1ビット
   $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $2, $4);
 }
-| TRIREG charge_strength        sign '[' expression ':' expression ']'
+| TRIREG charge_strength        sign range
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $3, $5, $7, $2);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $3, $4, $2);
 }
-| TRIREG charge_strength vstype sign '[' expression ':' expression ']'
+| TRIREG charge_strength vstype sign range
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $4, $6, $8, $2);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $4, $5, $2);
 }
-| TRIREG charge_strength        sign '[' expression ':' expression ']' delay3
+| TRIREG charge_strength        sign range delay3
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $3, $5, $7, $2, $9);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $3, $4, $2, $5);
 }
-| TRIREG charge_strength vstype sign '[' expression ':' expression ']' delay3
+| TRIREG charge_strength vstype sign range delay3
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $4, $6, $8, $2, $10);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $4, $5, $2, $6);
 }
 ;
 
@@ -1642,21 +1640,21 @@ net_declhead3
   // 1ビット
   $$ = parser.new_NetH(@$, $1, $3, $2, $4);
 }
-| net_type drive_strength        sign '[' expression ':' expression ']'
+| net_type drive_strength        sign range
 {
-  $$ = parser.new_NetH(@$, $1, VpiVsType::None, $3, $5, $7, $2);
+  $$ = parser.new_NetH(@$, $1, VpiVsType::None, $3, $4, $2);
 }
-| net_type drive_strength vstype sign '[' expression ':' expression ']'
+| net_type drive_strength vstype sign range
 {
-  $$ = parser.new_NetH(@$, $1, $3, $4, $6, $8, $2);
+  $$ = parser.new_NetH(@$, $1, $3, $4, $5, $2);
 }
-| net_type drive_strength        sign '[' expression ':' expression ']' delay3
+| net_type drive_strength        sign range delay3
 {
-  $$ = parser.new_NetH(@$, $1, VpiVsType::None, $3, $5, $7, $2, $9);
+  $$ = parser.new_NetH(@$, $1, VpiVsType::None, $3, $4, $2, $5);
 }
-| net_type drive_strength vstype sign '[' expression ':' expression ']' delay3
+| net_type drive_strength vstype sign range delay3
 {
-  $$ = parser.new_NetH(@$, $1, $3, $4, $6, $8, $2, $10);
+  $$ = parser.new_NetH(@$, $1, $3, $4, $5, $2, $6);
 }
 
 | TRIREG drive_strength sign
@@ -1669,21 +1667,21 @@ net_declhead3
   // 1ビット
   $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $2, $4);
 }
-| TRIREG drive_strength        sign '[' expression ':' expression ']'
+| TRIREG drive_strength        sign range
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $3, $5, $7, $2);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $3, $4, $2);
 }
-| TRIREG drive_strength vstype sign '[' expression ':' expression ']'
+| TRIREG drive_strength vstype sign range
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $4, $6, $8, $2);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $4, $5, $2);
 }
-| TRIREG drive_strength        sign '[' expression ':' expression ']' delay3
+| TRIREG drive_strength        sign range delay3
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $3, $5, $7, $2, $9);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, VpiVsType::None, $3, $4, $2, $5);
 }
-| TRIREG drive_strength vstype sign '[' expression ':' expression ']' delay3
+| TRIREG drive_strength vstype sign range delay3
 {
-  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $4, $6, $8, $2, $10);
+  $$ = parser.new_NetH(@$, VpiNetType::TriReg, $3, $4, $5, $2, $6);
 }
 ;
 
@@ -1746,9 +1744,9 @@ reg_declhead
 {
   $$ = parser.new_RegH(@$, $2);
 }
-| REG sign '[' expression ':' expression ']'
+| REG sign range
 {
-  $$ = parser.new_RegH(@$, $2, $4, $6);
+  $$ = parser.new_RegH(@$, $2, $3);
 }
 ;
 
@@ -2289,15 +2287,15 @@ specparam_assignment
 
 // [SPEC*] nzlist_of_dimensions ::= dimension { dimension }
 nzlist_of_dimensions
-: '[' expression ':' expression ']'
+: range
 {
   $$ = parser.new_list<const PtRange>();
-  $$->push_back(parser.new_Range(@$, $2, $4));
+  $$->push_back($1);
 }
-| nzlist_of_dimensions '[' expression ':' expression ']'
+| nzlist_of_dimensions range
 {
   $$ = $1;
-  $$->push_back(parser.new_Range(FileRegion(@2, @6), $3, $5));
+  $$->push_back($2);
 }
 ;
 
@@ -2306,7 +2304,28 @@ nzlist_of_dimensions
 // [SPEC] lsb_constant_expression ::= constant_expression
 // この msb_constant_expression/lsb_constant_expression などは構文規則と
 // 意味づけを混同している良い(悪い)例である．
+range
+: '[' expression ':' expression ']'
+{
+  $$ = parser.new_Range(@$, $2, $4);
+}
+;
 
+// 範囲指定
+part
+: '[' expression ':' expression ']'
+{
+  $$ = parser.new_Part(@$, VpiRangeMode::Const, $2, $4);
+}
+| '[' expression PLUSCOLON expression ']'
+{
+  $$ = parser.new_Part(@$, VpiRangeMode::Plus, $2, $4);
+}
+| '[' expression MINUSCOLON expression ']'
+{
+  $$ = parser.new_Part(@$, VpiRangeMode::Minus, $2, $4);
+}
+;
 
 //////////////////////////////////////////////////////////////////////
 // A.2.6 Function declarations
@@ -2346,14 +2365,14 @@ function_declaration
     $$ = nullptr;
   }
 }
-| function_head opt_auto sign '[' expression ':' expression ']' IDENTIFIER ';'
+| function_head opt_auto sign range IDENTIFIER ';'
   nzlist_of_fitem_decl
   statement
   function_tail
 {
   // 関数内で使用できないステートメントが含まれていないかチェック
-  if ( parser.check_function_statement($12) ) {
-    $$ = parser.new_SizedFunc(@$, $9, $2, $3, $5, $7, $12);
+  if ( parser.check_function_statement($8) ) {
+    $$ = parser.new_SizedFunc(@$, $5, $2, $3, $4, $8);
   }
   else {
     $$ = nullptr;
@@ -2385,15 +2404,15 @@ function_declaration
     $$ = nullptr;
   }
 }
-| function_head opt_auto sign '[' expression ':' expression ']'
+| function_head opt_auto sign range
   IDENTIFIER function_port_block ';'
-list_of_bitem_decl
+  list_of_bitem_decl
   statement
   function_tail
 {
   // 関数内で使用できないステートメントが含まれていないかチェック
-  if ( parser.check_function_statement($13) ) {
-    $$ = parser.new_SizedFunc(@$, $9, $2, $3, $5, $7, $13);
+  if ( parser.check_function_statement($9) ) {
+    $$ = parser.new_SizedFunc(@$, $5, $2, $3, $4, $9);
   }
   else {
     $$ = nullptr;
@@ -2673,13 +2692,13 @@ tf_input_declhead
 {
   $$ = parser.new_RegIOHead(@$, VpiDir::Input, $3);
 }
-| INPUT     sign '[' expression ':' expression ']'
+| INPUT     sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Input, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Input, $2, $3);
 }
-| INPUT REG sign '[' expression ':' expression ']'
+| INPUT REG sign range
 {
-  $$ = parser.new_RegIOHead(@$, VpiDir::Input, $3, $5, $7);
+  $$ = parser.new_RegIOHead(@$, VpiDir::Input, $3, $4);
 }
 | INPUT task_port_type
 {
@@ -2716,13 +2735,13 @@ tf_output_declhead
 {
   $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3);
 }
-| OUTPUT     sign '[' expression ':' expression ']'
+| OUTPUT     sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Output, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Output, $2, $3);
 }
-| OUTPUT REG sign '[' expression ':' expression ']'
+| OUTPUT REG sign range
 {
-  $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3, $5, $7);
+  $$ = parser.new_RegIOHead(@$, VpiDir::Output, $3, $4);
 }
 | OUTPUT task_port_type
 {
@@ -2759,13 +2778,13 @@ tf_inout_declhead
 {
   $$ = parser.new_RegIOHead(@$, VpiDir::Inout, $3);
 }
-| INOUT     sign '[' expression ':' expression ']'
+| INOUT     sign range
 {
-  $$ = parser.new_IOHead(@$, VpiDir::Inout, $2, $4, $6);
+  $$ = parser.new_IOHead(@$, VpiDir::Inout, $2, $3);
 }
-| INOUT REG sign '[' expression ':' expression ']'
+| INOUT REG sign range
 {
-  $$ = parser.new_RegIOHead(@$, VpiDir::Inout, $3, $5, $7);
+  $$ = parser.new_RegIOHead(@$, VpiDir::Inout, $3, $4);
 }
 | INOUT task_port_type
 {
@@ -3088,10 +3107,10 @@ cmos_switch_instance
 {
   parser.new_InstN(@$, $1, $3, $5, $7, $9);
 }
-| IDENTIFIER '[' expression ':' expression ']'
+| IDENTIFIER range
   '(' net_lvalue ',' expression ',' expression ',' expression ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8, $10, $12, $14);
+  parser.new_InstV(@$, $1, $2, $4, $6, $8, $10);
 }
 ;
 
@@ -3111,10 +3130,10 @@ enable_gate_instance
 {
   parser.new_InstN(@$, $1, $3, $5, $7);
 }
-| IDENTIFIER '[' expression ':' expression ']'
+| IDENTIFIER range
   '(' net_lvalue ',' expression ',' expression ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8, $10, $12);
+  parser.new_InstV(@$, $1, $2, $4, $6, $8);
 }
 ;
 
@@ -3134,10 +3153,10 @@ mos_switch_instance
 {
   parser.new_InstN(@$, $1, $3, $5, $7);
 }
-| IDENTIFIER '[' expression ':' expression ']'
+| IDENTIFIER range
   '(' net_lvalue ',' expression ',' expression ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8, $10, $12);
+  parser.new_InstV(@$, $1, $2, $4, $6, $8);
 }
 ;
 
@@ -3154,9 +3173,9 @@ n_input_gate_instance
 {
   parser.new_InstN(@$, $1, $3);
 }
-| IDENTIFIER '[' expression ':' expression ']' '(' n_input_gate_terminals ')'
+| IDENTIFIER range '(' n_input_gate_terminals ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8);
+  parser.new_InstV(@$, $1, $2, $4);
 }
 ;
 
@@ -3194,9 +3213,9 @@ n_output_gate_instance
 {
   parser.new_InstN(@$, $1, $3);
 }
-| IDENTIFIER '[' expression ':' expression ']' '(' n_output_gate_terminals ')'
+| IDENTIFIER range '(' n_output_gate_terminals ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8);
+  parser.new_InstV(@$, $1, $2, $4);
 }
 ;
 
@@ -3232,9 +3251,9 @@ pass_switch_instance
 {
   parser.new_InstN(@$, $1, $3, $5);
 }
-| IDENTIFIER '[' expression ':' expression ']' '(' net_lvalue ',' net_lvalue ')'
+| IDENTIFIER range '(' net_lvalue ',' net_lvalue ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8, $10);
+  parser.new_InstV(@$, $1, $2, $4, $6);
 }
 ;
 
@@ -3253,10 +3272,9 @@ pass_enable_switch_instance
 {
   parser.new_InstN(@$, $1, $3, $5, $7);
 }
-| IDENTIFIER '[' expression ':' expression ']'
-  '(' net_lvalue ',' net_lvalue ',' expression ')'
+| IDENTIFIER range '(' net_lvalue ',' net_lvalue ',' expression ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8, $10, $12);
+  parser.new_InstV(@$, $1, $2, $4, $6, $8);
 }
 ;
 
@@ -3273,9 +3291,9 @@ pull_gate_instance
 {
   parser.new_InstN(@$, $1, $3);
 }
-| IDENTIFIER '[' expression ':' expression ']' '(' net_lvalue ')'
+| IDENTIFIER range '(' net_lvalue ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8);
+  parser.new_InstV(@$, $1, $2, $4);
 }
 ;
 
@@ -3647,15 +3665,13 @@ mu_instance
 {
   parser.new_InstN(@$, $1, $3);
 }
-| IDENTIFIER '[' expression ':' expression ']'
-  '(' list_of_ordered_port_connections ')'
+| IDENTIFIER range '(' list_of_ordered_port_connections ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8);
+  parser.new_InstV(@$, $1, $2, $4);
 }
-| IDENTIFIER '[' expression ':' expression ']'
-  '(' list_of_named_port_connections ')'
+| IDENTIFIER range '(' list_of_named_port_connections ')'
 {
-  parser.new_InstV(@$, $1, $3, $5, $8);
+  parser.new_InstV(@$, $1, $2, $4);
 }
 ;
 
@@ -5488,17 +5504,9 @@ specify_terminal
 {
   $$ = parser.new_CPrimary(@$, $1, $2);
 }
-| IDENTIFIER '[' expression ':' expression ']'
+| IDENTIFIER part
 {
-  $$ = parser.new_CPrimary(@$, $1, VpiRangeMode::Const, $3, $5);
-}
-| IDENTIFIER '[' expression PLUSCOLON expression ']'
-{
-  $$ = parser.new_CPrimary(@$, $1, VpiRangeMode::Plus, $3, $5);
-}
-| IDENTIFIER '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_CPrimary(@$, $1, VpiRangeMode::Minus, $3, $5);
+  $$ = parser.new_CPrimary(@$, $1, $2);
 }
 ;
 
@@ -6484,53 +6492,21 @@ primary
 {
   $$ = parser.new_Primary(@$, $1, $2);
 }
-| hierarchical_identifier                 '[' expression ':' expression ']'
+| IDENTIFIER                 part
 {
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Const, $3, $5);
+  $$ = parser.new_Primary(@$, $1, $2);
 }
-| IDENTIFIER                 '[' expression ':' expression ']'
+| hierarchical_identifier    part
 {
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Const, $3, $5);
+  $$ = parser.new_Primary(@$, $1, $2);
 }
-| hierarchical_identifier                 '[' expression PLUSCOLON expression ']'
+| hierarchical_identifier nzlist_of_index part
 {
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Plus, $3, $5);
+  $$ = parser.new_Primary(@$, $1, $2, $3);
 }
-| IDENTIFIER                 '[' expression PLUSCOLON expression ']'
+| IDENTIFIER nzlist_of_index part
 {
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Plus, $3, $5);
-}
-| hierarchical_identifier                 '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Minus, $3, $5);
-}
-| IDENTIFIER                 '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Minus, $3, $5);
-}
-| hierarchical_identifier nzlist_of_index '[' expression ':' expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Const, $4, $6);
-}
-| IDENTIFIER nzlist_of_index '[' expression ':' expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Const, $4, $6);
-}
-| hierarchical_identifier nzlist_of_index '[' expression PLUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Plus, $4, $6);
-}
-| IDENTIFIER nzlist_of_index '[' expression PLUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Plus, $4, $6);
-}
-| hierarchical_identifier nzlist_of_index '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Minus, $4, $6);
-}
-| IDENTIFIER nzlist_of_index '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Minus, $4, $6);
+  $$ = parser.new_Primary(@$, $1, $2, $3);
 }
 | concatenation
 {
@@ -6645,53 +6621,21 @@ lvalue
 {
   $$ = parser.new_Primary(@$, $1, $2);
 }
-| hierarchical_identifier                 '[' expression ':' expression ']'
+| hierarchical_identifier part
 {
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Const, $3, $5);
+  $$ = parser.new_Primary(@$, $1, $2);
 }
-| IDENTIFIER                 '[' expression ':' expression ']'
+| IDENTIFIER part
 {
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Const, $3, $5);
+  $$ = parser.new_Primary(@$, $1, $2);
 }
-| hierarchical_identifier                 '[' expression PLUSCOLON expression ']'
+| hierarchical_identifier nzlist_of_index part
 {
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Plus, $3, $5);
+  $$ = parser.new_Primary(@$, $1, $2, $3);
 }
-| IDENTIFIER                 '[' expression PLUSCOLON expression ']'
+| IDENTIFIER nzlist_of_index part
 {
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Plus, $3, $5);
-}
-| hierarchical_identifier                 '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Minus, $3, $5);
-}
-| IDENTIFIER                 '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, VpiRangeMode::Minus, $3, $5);
-}
-| hierarchical_identifier nzlist_of_index '[' expression ':' expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Const, $4, $6);
-}
-| IDENTIFIER nzlist_of_index '[' expression ':' expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Const, $4, $6);
-}
-| hierarchical_identifier nzlist_of_index '[' expression PLUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Plus,  $4, $6);
-}
-| IDENTIFIER nzlist_of_index '[' expression PLUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Plus,  $4, $6);
-}
-| hierarchical_identifier nzlist_of_index '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Minus, $4, $6);
-}
-| IDENTIFIER nzlist_of_index '[' expression MINUSCOLON expression ']'
-{
-  $$ = parser.new_Primary(@$, $1, $2, VpiRangeMode::Minus, $4, $6);
+  $$ = parser.new_Primary(@$, $1, $2, $3);
 }
 | '{' nzlist_of_lvalues '}'
 {

@@ -33,7 +33,7 @@ EiFactory::new_ParamAssign(
   const VlValue& rhs_value
 )
 {
-  return new EiParamAssign{module, pt_obj, param, rhs_expr, rhs_value};
+  return new EiParamAssign(module, pt_obj, param, rhs_expr, rhs_value);
 }
 
 // @brief 名前によるパラメータ割り当て文を生成する．
@@ -46,7 +46,7 @@ EiFactory::new_NamedParamAssign(
   const VlValue& rhs_value
 )
 {
-  return new EiParamAssign2{module, pt_obj, param, rhs_expr, rhs_value};
+  return new EiParamAssign2(module, pt_obj, param, rhs_expr, rhs_value);
 }
 
 // @brief defparam 文を生成する．
@@ -60,8 +60,8 @@ EiFactory::new_DefParam(
   const VlValue& rhs_value
 )
 {
-  return new EiDefParam{module, pt_header, pt_defparam,
-			param, rhs_expr, rhs_value};
+  return new EiDefParam(module, pt_header, pt_defparam,
+			param, rhs_expr, rhs_value);
 }
 
 
@@ -150,7 +150,7 @@ EiParamAssign2::EiParamAssign2(
   ElbParameter* param,
   const PtExpr* rhs_expr,
   const VlValue& rhs_value
-) : EiParamAssign{parent, pt_obj, param, rhs_expr, rhs_value}
+) : EiParamAssign(parent, pt_obj, param, rhs_expr, rhs_value)
 {
 }
 

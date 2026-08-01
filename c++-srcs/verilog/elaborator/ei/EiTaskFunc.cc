@@ -18,6 +18,7 @@
 
 #include "ym/BitVector.h"
 #include "ym/pt/PtDecl.h"
+#include "ym/pt/PtExpr.h"
 #include "ym/pt/PtItem.h"
 
 
@@ -32,21 +33,19 @@ ElbTaskFunc*
 EiFactory::new_Function(
   const VlScope* parent,
   const PtItem* pt_item,
-  const PtExpr* left,
-  const PtExpr* right,
-  int left_val,
-  int right_val,
+  const PtRange* pt_range,
+  const RangeVal& range,
   bool const_func
 )
 {
-  ASSERT_COND( left != nullptr && right != nullptr );
+  if ( pt_range == nullptr ) {
+    throw std::logic_error{"pt_range == nullptr"};
+  }
 
   // IO数を数え配列を初期化する．
   auto io_num = pt_item->ioitem_num();
-  auto func = new EiFunctionV{parent, pt_item, io_num,
-			      left, right, left_val, right_val,
-			      const_func};
-  return func;
+  return new EiFunctionV(parent, pt_item, io_num,
+			 pt_range, range, const_func);
 }
 
 // @brief function を生成する．
@@ -59,8 +58,7 @@ EiFactory::new_Function(
 {
   // IO数を数え配列を初期化する．
   auto io_num = pt_item->ioitem_num();
-  auto func = new EiFunction{parent, pt_item, io_num, const_func};
-  return func;
+  return new EiFunction(parent, pt_item, io_num, const_func);
 }
 
 // @brief task を生成する．
@@ -72,8 +70,7 @@ EiFactory::new_Task(
 {
   // IO数を数え配列を初期化する．
   auto io_num = pt_item->ioitem_num();
-  auto task = new EiTask{parent, pt_item, io_num};
-  return task;
+  return new EiTask(parent, pt_item, io_num);
 }
 
 
@@ -190,7 +187,7 @@ EiTask::EiTask(
   const VlScope* parent,
   const PtItem* pt_item,
   SizeType io_num
-) : EiTaskFunc{parent, pt_item, io_num}
+) : EiTaskFunc(parent, pt_item, io_num)
 {
 }
 
@@ -299,7 +296,7 @@ EiFunction::EiFunction(
   const PtItem* pt_item,
   SizeType io_num,
   bool const_func
-) : EiTaskFunc{parent, pt_item, io_num},
+) : EiTaskFunc(parent, pt_item, io_num),
     mConstFunc{const_func}
 {
 }
@@ -445,14 +442,12 @@ EiFunctionV::EiFunctionV(
   const VlScope* parent,
   const PtItem* pt_item,
   SizeType io_num,
-  const PtExpr* left,
-  const PtExpr* right,
-  int left_val,
-  int right_val,
+  const PtRange* pt_range,
+  const RangeVal& range,
   bool const_func
-) : EiFunction{parent, pt_item, io_num, const_func}
+) : EiFunction(parent, pt_item, io_num, const_func),
+    mRange(pt_range, range)
 {
-  mRange.set(left, right, left_val, right_val);
 }
 
 // @brief デストラクタ
@@ -471,35 +466,35 @@ EiFunctionV::has_range() const
 int
 EiFunctionV::left_range_val() const
 {
-  return mRange.left_range_val();
+  return mRange.left;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
 EiFunctionV::right_range_val() const
 {
-  return mRange.right_range_val();
+  return mRange.right;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
 EiFunctionV::left_range_string() const
 {
-  return mRange.left_range_string();
+  return mRange.left_string();
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
 EiFunctionV::right_range_string() const
 {
-  return mRange.right_range_string();
+  return mRange.right_string();
 }
 
 // @brief 出力のビット幅を返す．
 SizeType
 EiFunctionV::bit_size() const
 {
-  return mRange.size();
+  return mRange.calc_size();
 }
 
 END_NAMESPACE_YM_VERILOG

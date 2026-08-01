@@ -36,7 +36,7 @@ ExprGen::instantiate_primary(
 )
 {
   // 識別子の階層
-  bool has_hname{(pt_expr->namebranch_num() > 0)};
+  auto has_hname = (pt_expr->namebranch_num() > 0);
   if ( has_hname ) {
     if ( env.is_constant() ) {
       // 階層つき識別子はだめ
@@ -52,10 +52,10 @@ ExprGen::instantiate_primary(
   auto name = pt_expr->name();
 
   // 識別子の添字の次元
-  SizeType isize{pt_expr->index_num()};
+  auto isize = pt_expr->index_num();
 
   // 名前に対応したオブジェクトのハンドル
-  ObjHandle* handle{nullptr};
+  auto handle = (ObjHandle*){nullptr};
   if ( env.is_constant() ) {
     handle = find_const_handle(parent, pt_expr);
   }
@@ -85,7 +85,9 @@ ExprGen::instantiate_primary(
 
 	handle = mgr().find_obj(parent, name);
 	// 今作ったはずなので絶対見つかるはず．
-	ASSERT_COND( handle );
+	if ( handle == nullptr ) {
+	  throw std::logic_error{"handle == nullptr"};
+	}
       }
     }
     if ( handle == nullptr ) {
@@ -119,7 +121,7 @@ ExprGen::instantiate_primary(
     }
     else if ( isize == 1 ) {
       auto pt_expr1 = pt_expr->index(0);
-      int index{evaluate_int(parent, pt_expr1)};
+      auto index = evaluate_int(parent, pt_expr1);
       auto scope = handle->array_elem(index);
       if ( scope ) {
 	return mgr().new_ArgHandle(pt_expr, scope);
@@ -164,7 +166,9 @@ ExprGen::instantiate_primary(
 					 has_bit_select);
 
   auto decl_base = primary->decl_base();
-  ASSERT_COND( decl_base != nullptr );
+  if ( decl_base == nullptr ) {
+    throw std::logic_error{"decl_base == nullptr"};
+  }
   auto decl_type = decl_base->type();
 
   // 式をチェックする．
@@ -174,184 +178,159 @@ ExprGen::instantiate_primary(
 
   if ( has_bit_select ) {
     // ビット指定付きの場合
-    auto pt_expr1{pt_expr->index(isize - 1)};
+    auto pt_expr1 = pt_expr->index(isize - 1);
     bool is_const;
-    int index_val{evaluate_int_if_const(parent, pt_expr1, is_const)};
+    int index_val = evaluate_int_if_const(parent, pt_expr1, is_const);
     if ( is_const ) {
       // 固定インデックスだった．
       SizeType offset;
-      bool stat2{decl_base->calc_bit_offset(index_val, offset)};
+      auto stat2 = decl_base->calc_bit_offset(index_val, offset);
       if ( !stat2 ) {
-#if 0
 	// インデックスが範囲外
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			pt_expr1->file_region(),
-			MsgType::Warning,
-			"ELAB",
-			"Bit-Select index is out of range.");
-#else
-#warning "TODO: 要解決"
-#endif
 	// ただ値が X になるだけでエラーにはならないそうだ．
+	put_warning(__FILE__, __LINE__,
+		    pt_expr1->file_region(),
+		    "ELAB",
+		    "Bit-Select index is out of range.");
       }
       return mgr().new_BitSelect(pt_expr, primary, pt_expr1, index_val);
     }
     else {
       // 可変インデックスだった．
-      auto index{instantiate_expr(parent, index_env, pt_expr1)};
+      auto index = instantiate_expr(parent, index_env, pt_expr1);
       return mgr().new_BitSelect(pt_expr, primary, index);
     }
   }
   if ( has_range_select ) {
     // 範囲指定付きの場合
-    switch ( pt_expr->range_mode() ) {
+    auto pt_part = pt_expr->part();
+    switch ( pt_part->mode() ) {
     case VpiRangeMode::Const:
-      {
-	auto pt_left = pt_expr->left_range();
-	int index1_val{evaluate_int(parent, pt_left)};
-	auto pt_right = pt_expr->right_range();
-	int index2_val{evaluate_int(parent, pt_right)};
-	bool big{(index1_val >= index2_val)};
-	if ( big ^ decl_base->is_big_endian() ) {
-	  // 範囲の順番が逆
-	  ErrorGen::range_order(__FILE__, __LINE__, pt_expr);
+    {
+      auto pt_left = pt_part->left();
+      auto index1_val = evaluate_int(parent, pt_left);
+      auto pt_right = pt_part->right();
+      auto index2_val = evaluate_int(parent, pt_right);
+      auto big = (index1_val >= index2_val);
+      if ( big ^ decl_base->is_big_endian() ) {
+	// 範囲の順番が逆
+	ErrorGen::range_order(__FILE__, __LINE__, pt_expr);
+      }
+
+      SizeType offset;
+      auto stat3 = decl_base->calc_bit_offset(index1_val, offset);
+      if ( !stat3 ) {
+	// 左のインデックスが範囲外
+	// ただ値が X になるだけでエラーにはならないそうだ．
+	put_warning(__FILE__, __LINE__,
+		    pt_left->file_region(),
+		    "ELAB",
+		    "Left index is out of range.");
+      }
+
+      auto stat4 = decl_base->calc_bit_offset(index2_val, offset);
+      if ( !stat4 ) {
+	// 右のインデックスが範囲外
+	// ただ値が X になるだけでエラーにはならないそうだ．
+	put_warning(__FILE__, __LINE__,
+		    pt_right->file_region(),
+		    "ELAB",
+		    "Right index is out of range.");
+      }
+
+      return mgr().new_PartSelect(pt_expr, primary,
+				  pt_left, pt_right,
+				  index1_val, index2_val);
+    }
+
+    case VpiRangeMode::Plus:
+    {
+      auto pt_range = pt_part->right();
+      auto range_val = evaluate_int(parent, pt_range);
+      auto pt_base = pt_part->left();
+      bool is_const;
+      auto base_val = evaluate_int_if_const(parent, pt_base, is_const);
+      if ( is_const ) {
+	// 固定インデックスだった．
+	int index1_val;
+	int index2_val;
+	if ( decl_base->is_big_endian() ) {
+	  index1_val = base_val + range_val - 1;
+	  index2_val = base_val;
+	}
+	else {
+	  index1_val = base_val;
+	  index2_val = base_val + range_val - 1;
 	}
 
 	SizeType offset;
-	bool stat3{decl_base->calc_bit_offset(index1_val, offset)};
-	if ( !stat3 ) {
-	  // 左のインデックスが範囲外
-#if 0
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  pt_left->file_region(),
-			  MsgType::Warning,
-			  "ELAB",
-			  "Left index is out of range.");
-#else
-#warning "TODO: 要解決"
-#endif
+	auto stat3 = decl_base->calc_bit_offset(index1_val, offset);
+	auto stat4 = decl_base->calc_bit_offset(index2_val, offset);
+	if ( !stat3 || !stat4 ) {
+	  // 左か右のインデックスが範囲外
 	  // ただ値が X になるだけでエラーにはならないそうだ．
+	  put_warning(__FILE__, __LINE__,
+		      pt_expr->file_region(),
+		      "ELAB",
+		      "Index is out of range.");
 	}
-
-	bool stat4{decl_base->calc_bit_offset(index2_val, offset)};
-	if ( !stat4 ) {
-#if 0
-	  // 右のインデックスが範囲外
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  pt_right->file_region(),
-			  MsgType::Warning,
-			  "ELAB",
-			  "Right index is out of range.");
-#else
-#warning "TODO: 要解決"
-#endif
-	  // ただ値が X になるだけでエラーにはならないそうだ．
-	}
-
 	return mgr().new_PartSelect(pt_expr, primary,
-				    pt_left, pt_right,
+				    pt_base, pt_range,
 				    index1_val, index2_val);
       }
-
-    case VpiRangeMode::Plus:
-      {
-	auto pt_range = pt_expr->right_range();
-	int range_val{evaluate_int(parent, pt_range)};
-	auto pt_base = pt_expr->left_range();
-	bool is_const;
-	int base_val{evaluate_int_if_const(parent, pt_base, is_const)};
-	if ( is_const ) {
-	  // 固定インデックスだった．
-	  int index1_val;
-	  int index2_val;
-	  if ( decl_base->is_big_endian() ) {
-	    index1_val = base_val + range_val - 1;
-	    index2_val = base_val;
-	  }
-	  else {
-	    index1_val = base_val;
-	    index2_val = base_val + range_val - 1;
-	  }
-
-	  SizeType offset;
-	  bool stat3{decl_base->calc_bit_offset(index1_val, offset)};
-	  bool stat4{decl_base->calc_bit_offset(index2_val, offset)};
-	  if ( !stat3 || !stat4 ) {
-	    // 左か右のインデックスが範囲外
-#if 0
-	    MsgMgr::put_msg(__FILE__, __LINE__,
-			    pt_expr->file_region(),
-			    MsgType::Warning,
-			    "ELAB",
-			    "Index is out of range.");
-#else
-#warning "TODO: 要解決"
-#endif
-	    // ただ値が X になるだけでエラーにはならないそうだ．
-	  }
-	  return mgr().new_PartSelect(pt_expr, primary,
-					  pt_base, pt_range,
-					  index1_val, index2_val);
-	}
-	else {
-	  // 可変インデックスだった．
-	  auto base = instantiate_expr(parent, index_env, pt_base);
-	  return mgr().new_PlusPartSelect(pt_expr, primary,
-					  base, pt_range, range_val);
-	}
+      else {
+	// 可変インデックスだった．
+	auto base = instantiate_expr(parent, index_env, pt_base);
+	return mgr().new_PlusPartSelect(pt_expr, primary,
+					base, pt_range, range_val);
       }
+    }
 
     case VpiRangeMode::Minus:
-      {
-	auto pt_range = pt_expr->right_range();
-	int range_val{evaluate_int(parent, pt_range)};
-	auto pt_base = pt_expr->left_range();
-	bool is_const;
-	int base_val{evaluate_int_if_const(parent, pt_base, is_const)};
-	if ( is_const ) {
-	  // 固定インデックスだった．
-	  int index1_val;
-	  int index2_val;
-	  if ( decl_base->is_big_endian() ) {
-	    index1_val = base_val;
-	    index2_val = base_val - range_val + 1;
-	  }
-	  else {
-	    index1_val = base_val - range_val + 1;
-	    index2_val = base_val;
-	  }
-
-	  SizeType offset;
-	  bool stat3{decl_base->calc_bit_offset(index1_val, offset)};
-	  bool stat4{decl_base->calc_bit_offset(index2_val, offset)};
-	  if ( !stat3 || !stat4 ) {
-	    // 左か右のインデックスが範囲外
-#if 0
-	    MsgMgr::put_msg(__FILE__, __LINE__,
-			    pt_expr->file_region(),
-			    MsgType::Warning,
-			    "ELAB",
-			    "Index is out of range.");
-#else
-#warning "TODO: 要解決"
-#endif
-	    // ただ値が X になるだけでエラーにはならないそうだ．
-	  }
-	  return mgr().new_PartSelect(pt_expr, primary,
-					  pt_base, pt_range,
-					  index1_val, index2_val);
+    {
+      auto pt_range = pt_part->right();
+      auto range_val = evaluate_int(parent, pt_range);
+      auto pt_base = pt_part->left();
+      bool is_const;
+      auto base_val = evaluate_int_if_const(parent, pt_base, is_const);
+      if ( is_const ) {
+	// 固定インデックスだった．
+	int index1_val;
+	int index2_val;
+	if ( decl_base->is_big_endian() ) {
+	  index1_val = base_val;
+	  index2_val = base_val - range_val + 1;
 	}
 	else {
-	  // 可変インデックスだった．
-	  auto base = instantiate_expr(parent, index_env, pt_base);
-	  return mgr().new_MinusPartSelect(pt_expr, primary,
-					   base, pt_range, range_val);
+	  index1_val = base_val - range_val + 1;
+	  index2_val = base_val;
 	}
+
+	SizeType offset;
+	auto stat3 = decl_base->calc_bit_offset(index1_val, offset);
+	auto stat4 = decl_base->calc_bit_offset(index2_val, offset);
+	if ( !stat3 || !stat4 ) {
+	  // 左か右のインデックスが範囲外
+	  // ただ値が X になるだけでエラーにはならないそうだ．
+	  put_warning(__FILE__, __LINE__,
+		      pt_expr->file_region(),
+		      "ELAB",
+		      "Index is out of range.");
+	}
+	return mgr().new_PartSelect(pt_expr, primary,
+				    pt_base, pt_range,
+				    index1_val, index2_val);
       }
+      else {
+	// 可変インデックスだった．
+	auto base = instantiate_expr(parent, index_env, pt_base);
+	return mgr().new_MinusPartSelect(pt_expr, primary,
+					 base, pt_range, range_val);
+      }
+    }
 
     case VpiRangeMode::No:
-      ASSERT_NOT_REACHED;
-      break;
+      throw std::logic_error{"Should not be reached"};
     }
   }
   return primary;
@@ -364,9 +343,12 @@ ExprGen::instantiate_namedevent(
   const PtExpr* pt_expr
 )
 {
-  ASSERT_COND( pt_expr->type()        == PtExprType::Primary );
-  ASSERT_COND( pt_expr->left_range()  == nullptr );
-  ASSERT_COND( pt_expr->right_range() == nullptr );
+  if ( pt_expr->type() != PtExprType::Primary ) {
+    throw std::logic_error{"pt_expr->type() != PtExprType::Primary"};
+  }
+  if ( pt_expr->part() != nullptr ) {
+    throw std::logic_error{"pt_expr->part() != nullptr"};
+  }
 
   // 名前に対応したオブジェクトのハンドルを求める．
   auto handle = mgr().find_obj_up(parent, pt_expr, nullptr);
@@ -390,7 +372,9 @@ ExprGen::instantiate_namedevent(
 					 has_bit_select);
 
   auto decl_base = primary->decl_base();
-  ASSERT_COND( decl_base != nullptr );
+  if ( decl_base == nullptr ) {
+    throw std::logic_error{"decl_base == nullptr"};
+  }
   auto decl_type = decl_base->type();
   if ( decl_type != VpiObjType::NamedEvent ) {
     // 型が違う
@@ -434,22 +418,23 @@ ExprGen::instantiate_genvar(
   int val
 )
 {
-  bool has_range_select{(pt_expr->left_range() && pt_expr->right_range())};
-  SizeType isize{pt_expr->index_num()};
+  auto has_range_select = (pt_expr->part() != nullptr);
+  auto isize = pt_expr->index_num();
   if (  isize > 1 || (isize == 1 && has_range_select) ) {
     // 配列型ではない．
     ErrorGen::dimension_mismatch(__FILE__, __LINE__, pt_expr);
   }
 
-  bool has_bit_select{(isize == 1)};
+  auto has_bit_select = (isize == 1);
   if ( has_bit_select ) {
-    int index1{evaluate_int(parent, pt_expr->index(0))};
+    auto index1 = evaluate_int(parent, pt_expr->index(0));
     val >>= index1;
     val &= 1;
   }
   else if ( has_range_select ) {
-    int index1{evaluate_int(parent, pt_expr->left_range())};
-    int index2{evaluate_int(parent, pt_expr->right_range())};
+    auto pt_part = pt_expr->part();
+    auto index1 = evaluate_int(parent, pt_part->left());
+    auto index2 = evaluate_int(parent, pt_part->right());
     val >>= index2;
     val &= ((1 << (index1 - index2 + 1)) - 1);
   }
@@ -471,15 +456,15 @@ ExprGen::instantiate_primary_sub(
 )
 {
   // 配列の次元
-  SizeType dsize{0};
+  SizeType dsize = 0;
   // プライマリ式の次元 (ビット指定を含んでいる可能性あり)
-  SizeType isize {pt_expr->index_num()};
+  auto isize = pt_expr->index_num();
 
   // 範囲指定があるとき true となるフラグ
-  has_range_select = (pt_expr->left_range() && pt_expr->right_range());
+  has_range_select = (pt_expr->part() != nullptr);
 
   // 答え
-  ElbExpr* primary{nullptr};
+  auto primary = (ElbExpr*){nullptr};
   VlValueType value_type;
   if ( handle->type() == VpiObjType::Parameter ) {
     // パラメータの場合
@@ -509,14 +494,14 @@ ExprGen::instantiate_primary_sub(
       value_type = declarray->value_type();
 
       // 添字が定数ならオフセットを計算する．
-      SizeType offset{0};
-      SizeType mlt{1};
-      bool const_index{true};
+      SizeType offset = 0;
+      SizeType mlt = 1;
+      auto const_index = true;
       for ( SizeType i = 0; i < dsize; ++ i ) {
-	SizeType j{dsize - i - 1};
+	auto j = dsize - i - 1;
 	auto pt_expr1 = pt_expr->index(j);
 	bool is_const;
-	int index_val{evaluate_int_if_const(parent, pt_expr1, is_const)};
+	auto index_val = evaluate_int_if_const(parent, pt_expr1, is_const);
 	if ( is_const ) {
 	  offset += index_val * mlt;
 	  mlt *= declarray->range(j)->size();

@@ -30,8 +30,7 @@ EiFactory::new_BitSelect(
   int index_val
 )
 {
-  auto expr = new EiConstBitSelect{pt_expr, base_expr, index_expr, index_val};
-  return expr;
+  return new EiConstBitSelect(pt_expr, base_expr, index_expr, index_val);
 }
 
 // @brief 固定ビット選択式を生成する．
@@ -42,8 +41,7 @@ EiFactory::new_BitSelect(
   int index_val
 )
 {
-  auto expr = new EiConstBitSelect{pt_expr, base_expr, nullptr, index_val};
-  return expr;
+  return new EiConstBitSelect(pt_expr, base_expr, nullptr, index_val);
 }
 
 // @brief 可変ビット選択式を生成する．
@@ -54,8 +52,7 @@ EiFactory::new_BitSelect(
   ElbExpr* index_expr
 )
 {
-  auto expr = new EiVarBitSelect{pt_expr, base_expr, index_expr};
-  return expr;
+  return new EiVarBitSelect(pt_expr, base_expr, index_expr);
 }
 
 
@@ -67,7 +64,7 @@ EiFactory::new_BitSelect(
 EiBitSelect::EiBitSelect(
   const PtExpr* pt_expr,
   ElbExpr* base_expr
-) : EiExprBase{pt_expr},
+) : EiExprBase(pt_expr),
     mBaseExpr{base_expr}
 {
 }
@@ -93,7 +90,7 @@ EiBitSelect::type() const
 VlValueType
 EiBitSelect::value_type() const
 {
-  return VlValueType{false, true, 1};
+  return VlValueType(false, true, 1);
 }
 
 // @brief 定数の時 true を返す．
@@ -167,7 +164,9 @@ EiBitSelect::lhs_elem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( pos == 0 );
+  if ( pos != 0 ) {
+    throw std::logic_error{"pos != 0"};
+  }
 
   return this;
 }
@@ -199,7 +198,7 @@ EiConstBitSelect::EiConstBitSelect(
   ElbExpr* base_expr,
   const PtExpr* index_expr,
   int index_val
-) : EiBitSelect{pt_expr, base_expr},
+) : EiBitSelect(pt_expr, base_expr),
     mIndexExpr{index_expr},
     mIndexVal{index_val}
 {
@@ -241,7 +240,7 @@ EiVarBitSelect::EiVarBitSelect(
   const PtExpr* pt_expr,
   ElbExpr* base_expr,
   ElbExpr* index_expr
-) : EiBitSelect{pt_expr, base_expr},
+) : EiBitSelect(pt_expr, base_expr),
     mIndexExpr{index_expr}
 {
 }

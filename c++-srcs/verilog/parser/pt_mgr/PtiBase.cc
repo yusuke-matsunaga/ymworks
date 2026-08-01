@@ -17,7 +17,6 @@ BEGIN_NAMESPACE_YM_VERILOG
 // クラス PtiExpr
 //////////////////////////////////////////////////////////////////////
 
-
 BEGIN_NONAMESPACE
 
 std::string
@@ -325,16 +324,17 @@ decompile_impl(
       for ( SizeType i = 0; i < n; ++ i) {
 	ans += "[" + expr->index(i)->decompile() + "]";
       }
-      if ( expr->range_mode() != VpiRangeMode::No ) {
+      if ( expr->part() != nullptr ) {
+	auto part = expr->part();
 	const char* delim = nullptr;
-	switch ( expr->range_mode() ) {
+	switch ( part->mode() ) {
 	case VpiRangeMode::Const: delim = ":"; break;
 	case VpiRangeMode::Plus:  delim = "+:"; break;
 	case VpiRangeMode::Minus: delim = "-:"; break;
 	case VpiRangeMode::No:    ASSERT_NOT_REACHED;
 	}
-	ans += "[" + expr->left_range()->decompile() + delim +
-	  expr->right_range()->decompile() + "]";
+	ans += "[" + part->left()->decompile() + delim +
+	  part->right()->decompile() + "]";
       }
       return ans;
     }

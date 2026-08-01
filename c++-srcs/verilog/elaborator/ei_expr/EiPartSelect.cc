@@ -30,10 +30,9 @@ EiFactory::new_PartSelect(
   int index2_val
 )
 {
-  auto expr = new EiConstPartSelect{pt_expr, parent_expr,
-				    index1, index2,
-				    index1_val, index2_val};
-  return expr;
+  return new EiConstPartSelect(pt_expr, parent_expr,
+			       index1, index2,
+			       index1_val, index2_val);
 }
 
 // @brief 固定部分選択式を生成する．
@@ -45,10 +44,9 @@ EiFactory::new_PartSelect(
   int index2
 )
 {
-  auto expr = new EiConstPartSelect{pt_expr, parent_expr,
-				    nullptr, nullptr,
-				    index1, index2};
-  return expr;
+  return new EiConstPartSelect(pt_expr, parent_expr,
+			       nullptr, nullptr,
+			       index1, index2);
 }
 
 // @brief 可変部分選択式を生成する．
@@ -61,10 +59,8 @@ EiFactory::new_PlusPartSelect(
   SizeType range_val
 )
 {
-  auto expr = new EiPlusPartSelect{pt_expr, parent_expr,
-				   base, range, range_val};
-
-  return expr;
+  return new EiPlusPartSelect(pt_expr, parent_expr,
+			      base, range, range_val);
 }
 
 // @brief 可変部分選択式を生成する．
@@ -77,9 +73,8 @@ EiFactory::new_MinusPartSelect(
   SizeType range_val
 )
 {
-  auto expr = new EiMinusPartSelect{pt_expr, parent_expr,
-				    base, range, range_val};
-  return expr;
+  return new EiMinusPartSelect(pt_expr, parent_expr,
+			       base, range, range_val);
 }
 
 
@@ -91,7 +86,7 @@ EiFactory::new_MinusPartSelect(
 EiPartSelect::EiPartSelect(
   const PtExpr* pt_expr,
   ElbExpr* parent_expr
-) : EiExprBase{pt_expr},
+) : EiExprBase(pt_expr),
     mParentExpr{parent_expr}
 {
 }
@@ -179,7 +174,9 @@ EiPartSelect::lhs_elem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( pos == 0 );
+  if ( pos != 0 ) {
+    throw std::logic_error{"pos != 0"};
+  }
   return this;
 }
 
@@ -212,7 +209,7 @@ EiConstPartSelect::EiConstPartSelect(
   const PtExpr* index2,
   int index1_val,
   int index2_val
-) : EiPartSelect{pt_expr, parent_expr},
+) : EiPartSelect(pt_expr, parent_expr),
     mLeftRange{index1},
     mRightRange{index2},
     mLeftVal{index1_val},
@@ -293,7 +290,7 @@ EiVarPartSelect::EiVarPartSelect(
   ElbExpr* base,
   const PtExpr* range,
   SizeType range_width
-) : EiPartSelect{pt_expr, parent_expr},
+) : EiPartSelect(pt_expr, parent_expr),
     mBaseExpr{base},
     mRangeExpr{range},
     mRangeWidth{range_width}
@@ -309,7 +306,7 @@ EiVarPartSelect::~EiVarPartSelect()
 VlValueType
 EiVarPartSelect::value_type() const
 {
-  return VlValueType{false, true, mRangeWidth};
+  return VlValueType(false, true, mRangeWidth);
 }
 
 // @brief 固定選択子の時 true を返す．
@@ -345,7 +342,7 @@ EiPlusPartSelect::EiPlusPartSelect(
   ElbExpr* base,
   const PtExpr* range,
   SizeType range_val
-) : EiVarPartSelect{pt_expr, parent_expr, base, range, range_val}
+) : EiVarPartSelect(pt_expr, parent_expr, base, range, range_val)
 {
 }
 
@@ -373,7 +370,7 @@ EiMinusPartSelect::EiMinusPartSelect(
   ElbExpr* base,
   const PtExpr* range,
   SizeType range_val
-) : EiVarPartSelect{pt_expr, parent_expr, base, range, range_val}
+) : EiVarPartSelect(pt_expr, parent_expr, base, range, range_val)
 {
 }
 

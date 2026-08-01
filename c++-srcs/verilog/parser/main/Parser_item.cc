@@ -238,13 +238,12 @@ Parser::new_SizedFunc(
   const char* name,
   bool automatic,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtStmt* stmt
 )
 {
   auto item = mFactory->new_SizedFunc(fr, name, automatic,
-				      sign, left, right,
+				      sign, range,
 				      get_tf_io_array(),
 				      mCurDeclArray,
 				      stmt);

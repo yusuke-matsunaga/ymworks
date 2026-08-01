@@ -143,7 +143,7 @@ Parser::new_Inst(
 )
 {
   auto convec = con_list->to_vector();
-  auto item = mFactory->new_Inst(fr, nullptr, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, nullptr, nullptr, convec);
   add_inst(item);
 }
 
@@ -155,7 +155,7 @@ Parser::new_Inst(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1);
-  auto item = mFactory->new_Inst(fr, nullptr, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, nullptr, nullptr, convec);
   add_inst(item);
 }
 
@@ -168,7 +168,7 @@ Parser::new_Inst(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2);
-  auto item = mFactory->new_Inst(fr, nullptr, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, nullptr, nullptr, convec);
   add_inst(item);
 }
 
@@ -182,7 +182,7 @@ Parser::new_Inst(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2, expr3);
-  auto item = mFactory->new_Inst(fr, nullptr, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, nullptr, nullptr, convec);
   add_inst(item);
 }
 
@@ -197,7 +197,7 @@ Parser::new_Inst(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2, expr3, expr4);
-  auto item = mFactory->new_Inst(fr, nullptr, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, nullptr, nullptr, convec);
   add_inst(item);
 }
 
@@ -210,7 +210,7 @@ Parser::new_InstN(
 )
 {
   auto convec = con_list->to_vector();
-  auto item = mFactory->new_Inst(fr, name, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, name, nullptr, convec);
   add_inst(item);
 }
 
@@ -223,7 +223,7 @@ Parser::new_InstN(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1);
-  auto item = mFactory->new_Inst(fr, name, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, name, nullptr, convec);
   add_inst(item);
 }
 
@@ -237,7 +237,7 @@ Parser::new_InstN(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2);
-  auto item = mFactory->new_Inst(fr, name, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, name, nullptr, convec);
   add_inst(item);
 }
 
@@ -252,7 +252,7 @@ Parser::new_InstN(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2, expr3);
-  auto item = mFactory->new_Inst(fr, name, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, name, nullptr, convec);
   add_inst(item);
 }
 
@@ -268,7 +268,7 @@ Parser::new_InstN(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2, expr3, expr4);
-  auto item = mFactory->new_Inst(fr, name, nullptr, nullptr, convec);
+  auto item = mFactory->new_Inst(fr, name, nullptr, convec);
   add_inst(item);
 }
 
@@ -277,13 +277,12 @@ void
 Parser::new_InstV(
   const FileRegion& fr,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   PtrList<const PtConnection>* con_list
 )
 {
   auto convec = con_list->to_vector();
-  auto item = mFactory->new_Inst(fr, name, left, right, convec);
+  auto item = mFactory->new_Inst(fr, name, range, convec);
   add_inst(item);
 }
 
@@ -292,13 +291,12 @@ void
 Parser::new_InstV(
   const FileRegion& fr,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtExpr* expr1
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1);
-  auto item = mFactory->new_Inst(fr, name, left, right, convec);
+  auto item = mFactory->new_Inst(fr, name, range, convec);
   add_inst(item);
 }
 
@@ -307,14 +305,13 @@ void
 Parser::new_InstV(
   const FileRegion& fr,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtExpr* expr1,
   const PtExpr* expr2
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2);
-  auto item = mFactory->new_Inst(fr, name, left, right, convec);
+  auto item = mFactory->new_Inst(fr, name, range, convec);
   add_inst(item);
 }
 
@@ -323,15 +320,14 @@ void
 Parser::new_InstV(
   const FileRegion& fr,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtExpr* expr1,
   const PtExpr* expr2,
   const PtExpr* expr3
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2, expr3);
-  auto item = mFactory->new_Inst(fr, name, left, right, convec);
+  auto item = mFactory->new_Inst(fr, name, range, convec);
   add_inst(item);
 }
 
@@ -340,8 +336,7 @@ void
 Parser::new_InstV(
   const FileRegion& fr,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtExpr* expr1,
   const PtExpr* expr2,
   const PtExpr* expr3,
@@ -349,7 +344,7 @@ Parser::new_InstV(
 )
 {
   auto convec = mFactory->new_OrderedConVector(expr1, expr2, expr3, expr4);
-  auto item = mFactory->new_Inst(fr, name, left, right, convec);
+  auto item = mFactory->new_Inst(fr, name, range, convec);
   add_inst(item);
 }
 

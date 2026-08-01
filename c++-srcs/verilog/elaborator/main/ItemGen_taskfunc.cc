@@ -13,8 +13,7 @@
 #include "ym/pt/PtItem.h"
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbTaskFunc.h"
-
-#include "ym/MsgMgr.h"
+#include "elaborator/RangeVal.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -49,28 +48,27 @@ ItemGen::phase1_tf(
 	 << std::endl;
   }
 
-  ElbTaskFunc* taskfunc{nullptr};
+  auto taskfunc = (ElbTaskFunc*)nullptr;
   if ( pt_item->type() == PtItemType::Task ) {
     taskfunc = mgr().new_Task(parent, pt_item);
   }
   else {
-    ASSERT_COND( pt_item->type() == PtItemType::Func );
+    if ( pt_item->type() != PtItemType::Func ) {
+      throw std::logic_error{"pt_item->type() != PtItemType::Func"};
+    }
 
-    auto pt_left = pt_item->left_range();
-    auto pt_right = pt_item->right_range();
-    if ( pt_left && pt_right ) {
-      int left_val;
-      int right_val;
-      std::tie(left_val, right_val) = evaluate_range(parent, pt_left, pt_right);
+    auto pt_range = pt_item->range();
+    if ( pt_range != nullptr ) {
+      auto range = evaluate_range(parent, pt_range);
       taskfunc = mgr().new_Function(parent, pt_item,
-				    pt_left, pt_right,
-				    left_val, right_val,
-				    false);
+				    pt_range, range, false);
     }
     else {
       taskfunc = mgr().new_Function(parent, pt_item, false);
     }
-    ASSERT_COND( taskfunc != nullptr );
+    if ( taskfunc == nullptr ) {
+      throw std::logic_error{"taskfunc == nullptr"};
+    }
   }
 
   // 宣言要素の生成(phase1 では parameter と genvar のみ)
@@ -83,11 +81,10 @@ ItemGen::phase1_tf(
   {
     std::ostringstream buf;
     buf << "instantiating task/func : " << taskfunc->full_name() << ".";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    pt_item->file_region(),
-		    MsgType::Info,
-		    "ELAB",
-		    buf.str());
+    put_info(__FILE__, __LINE__,
+	     pt_item->file_region(),
+	     "ELAB",
+	     buf.str());
   }
 
   // 本体のステートメント内部のスコープの生成
@@ -131,16 +128,18 @@ ItemGen::phase2_tf(
     // 関数名と同名の変数の生成
     int left_val = taskfunc->left_range_val();
     int right_val = taskfunc->right_range_val();
-    ElbDeclHead* head{nullptr};
+    RangeVal range{left_val, right_val};
+    auto head = (ElbDeclHead*)nullptr;
     if ( taskfunc->has_range() ) {
       head = mgr().new_DeclHead(taskfunc, pt_item,
-				pt_item->left_range(), pt_item->right_range(),
-				left_val, right_val);
+				pt_item->range(), range);
     }
     else {
       head = mgr().new_DeclHead(taskfunc, pt_item);
     }
-    ASSERT_COND( head );
+    if ( head == nullptr ) {
+      throw std::logic_error{"head == nullptr"};
+    }
 
     int tag{ (pt_item->data_type() == VpiVarType::None) ? vpiReg : vpiVariables };
     auto decl = mgr().new_Decl(tag, head, pt_item);
@@ -205,30 +204,28 @@ ItemGen::instantiate_constant_function(
 	 << std::endl;
   }
 
-  auto pt_left = pt_function->left_range();
-  auto pt_right = pt_function->right_range();
+  auto pt_range = pt_function->range();
 
-  ElbTaskFunc* func{nullptr};
-  const VlScope* scope{nullptr};
-  ElbDeclHead* head{nullptr};
-  if ( pt_left && pt_right ) {
-    int left_val;
-    int right_val;
-    std::tie(left_val, right_val) = evaluate_range(parent, pt_left, pt_right);
+  auto func = (ElbTaskFunc*)nullptr;
+  auto scope = (const VlScope*)nullptr;
+  auto head = (ElbDeclHead*)nullptr;
+  if ( pt_range != nullptr ) {
+    auto range = evaluate_range(parent, pt_range);
     func = mgr().new_Function(parent, pt_function,
-			      pt_left, pt_right,
-			      left_val, right_val,
-			      true);
+			      pt_range, range, true);
     head = mgr().new_DeclHead(func, pt_function,
-			      pt_left, pt_right,
-			      left_val, right_val);
+			      pt_range, range);
   }
   else {
     func = mgr().new_Function(parent, pt_function, true);
     head = mgr().new_DeclHead(func, pt_function);
   }
-  ASSERT_COND( func );
-  ASSERT_COND( head );
+  if ( func == nullptr ) {
+    throw std::logic_error{"func == nullptr"};
+  }
+  if ( head == nullptr ) {
+    throw std::logic_error{"head == nullptr"};
+  }
 
   // 登録しておく．
   reg_constant_function(func);

@@ -15,6 +15,7 @@
 
 #include "ym/pt/PtModule.h"
 #include "ym/pt/PtDecl.h"
+#include "ym/pt/PtExpr.h"
 #include "ym/pt/PtItem.h"
 
 
@@ -33,11 +34,7 @@ EiFactory::new_Module(
   const PtInst* pt_inst
 )
 {
-  auto module = new EiModule2{parent,
-			      pt_module,
-			      pt_head,
-			      pt_inst};
-  return module;
+  return new EiModule2(parent, pt_module, pt_head, pt_inst);
 }
 
 // @brief module array を生成する．
@@ -47,21 +44,12 @@ EiFactory::new_ModuleArray(
   const PtModule* pt_module,
   const PtItem* pt_head,
   const PtInst* pt_inst,
-  const PtExpr* left,
-  const PtExpr* right,
-  int left_val,
-  int right_val
+  const PtRange* pt_range,
+  const RangeVal& range
 )
 {
-  EiRangeImpl range;
-  range.set(left, right, left_val, right_val);
-
-  auto module_array = new EiModuleArray{parent,
-					pt_module,
-					pt_head,
-					pt_inst,
-					range};
-  return module_array;
+  return new EiModuleArray(parent, pt_module, pt_head,
+			   pt_inst, pt_range, range);
 }
 
 
@@ -471,7 +459,9 @@ EiModule::init_port(
   VpiDir dir
 )
 {
-  ASSERT_COND( 0 <= index && index < port_num() );
+  if ( index >= port_num() ) {
+    throw std::out_of_range{"index is out of range"};
+  }
   mPortList[index].init(this, pt_port, index, low_conn, dir);
 }
 
@@ -483,7 +473,9 @@ EiModule::set_port_high_conn(
   bool conn_by_name
 )
 {
-  ASSERT_COND( 0 <= index && index < port_num() );
+  if ( index >= port_num() ) {
+    throw std::out_of_range{"index is out of range"};
+  }
   mPortList[index].set_high_conn(high_conn, conn_by_name);
 }
 
@@ -639,10 +631,11 @@ EiModuleArray::EiModuleArray(
   const PtModule* pt_module,
   const PtItem* pt_head,
   const PtInst* pt_inst,
-  const EiRangeImpl& range
-) : mHead{parent, pt_module, pt_head, pt_inst},
-    mRange{range},
-    mArray(range.size())
+  const PtRange* pt_range,
+  const RangeVal& range
+) : mHead(parent, pt_module, pt_head, pt_inst),
+    mRange(pt_range, range),
+    mArray(mRange.calc_size())
 {
   auto port_num = pt_module->port_num();
   auto io_num = pt_module->iodecl_num();
@@ -690,35 +683,35 @@ EiModuleArray::name() const
 int
 EiModuleArray::left_range_val() const
 {
-  return mRange.left_range_val();
+  return mRange.left;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
 EiModuleArray::right_range_val() const
 {
-  return mRange.right_range_val();
+  return mRange.right;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
 EiModuleArray::left_range_string() const
 {
-  return mRange.left_range_string();
+  return mRange.left_string();
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
 EiModuleArray::right_range_string() const
 {
-  return mRange.right_range_string();
+  return mRange.right_string();
 }
 
 // @brief 要素数を返す．
 SizeType
 EiModuleArray::elem_num() const
 {
-  return mRange.size();
+  return mRange.calc_size();
 }
 
 // @brief 要素を返す．
@@ -727,7 +720,9 @@ EiModuleArray::elem_by_offset(
   SizeType offset
 ) const
 {
-  ASSERT_COND( 0 <= offset && offset < elem_num() );
+  if ( offset >= elem_num() ) {
+    throw std::out_of_range{"offset is out of range"};
+  }
   return &mArray[offset];
 }
 
@@ -741,11 +736,8 @@ EiModuleArray::elem_by_index(
   if ( mRange.calc_offset(index, offset) ) {
     return elem_by_offset(offset);
   }
-  else {
-    // index が範囲外だった．
-    ASSERT_NOT_REACHED;
-    return nullptr;
-  }
+  // index が範囲外だった．
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief 要素を取り出す．
@@ -772,7 +764,7 @@ EiModuleArray::head()
 }
 
 // @brief 範囲を返す．
-const EiRangeImpl&
+const RangeVal&
 EiModuleArray::range() const
 {
   return mRange;

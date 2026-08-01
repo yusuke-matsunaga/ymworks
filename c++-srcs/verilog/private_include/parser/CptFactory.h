@@ -161,8 +161,7 @@ public:
     const FileRegion& fr,
     VpiDir dir,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtRange* range
   ) override;
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (reg 型)
@@ -171,8 +170,7 @@ public:
     const FileRegion& fr,
     VpiDir dir,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtRange* range
   ) override;
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (ネット型)
@@ -182,8 +180,7 @@ public:
     VpiDir dir,
     VpiNetType net_type,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtRange* range
   ) override;
 
   /// @brief IO 宣言のヘッダの生成 (変数型)
@@ -212,8 +209,7 @@ public:
   new_ParamH(
     const FileRegion& fr,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right,
+    const PtRange* range,
     bool local
   ) override;
 
@@ -229,8 +225,7 @@ public:
   PtiDeclHead*
   new_SpecParamH(
     const FileRegion& fr,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtRange* range
   ) override;
 
   /// @brief イベント宣言のヘッダの生成
@@ -257,8 +252,7 @@ public:
   new_RegH(
     const FileRegion& fr,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtRange* range
   ) override;
 
   /// @brief 範囲指定型 net 宣言のヘッダの生成 (strength, 遅延あり)
@@ -268,8 +262,7 @@ public:
     VpiNetType type,
     VpiVsType vstype,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right,
+    const PtRange* range,
     const PtStrength* strength,
     const PtDelay* delay
   ) override;
@@ -394,8 +387,7 @@ public:
     const char* name,
     bool automatic,
     bool sign,
-    const PtExpr* left,
-    const PtExpr* right,
+    const PtRange* range,
     const std::vector<const PtIOHead*>& iohead_array,
     const std::vector<const PtDeclHead*>& declhead_array,
     const PtStmt* stmt
@@ -448,8 +440,7 @@ public:
   new_Inst(
     const FileRegion& fr,
     const char* name,
-    const PtExpr* left,
-    const PtExpr* right,
+    const PtRange* range,
     const std::vector<const PtConnection*>& con_array
   ) override;
 
@@ -937,9 +928,7 @@ public:
   new_Primary(
     const FileRegion& fr,
     const char* name,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   ) override;
 
   /// @brief インデックスと範囲指定付き primary の生成
@@ -948,9 +937,7 @@ public:
     const FileRegion& fr,
     const char* name,
     const std::vector<const PtExpr*>& index_array,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   ) override;
 
   /// @brief primary の生成 (階層付き)
@@ -973,9 +960,7 @@ public:
   new_Primary(
     const FileRegion& fr,
     PuHierName* hname,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   ) override;
 
   /// @brief インデックスと範囲指定付き primary の生成 (階層付き)
@@ -984,9 +969,7 @@ public:
     const FileRegion& fr,
     PuHierName* hname,
     const std::vector<const PtExpr*>& index_array,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   ) override;
 
   /// @brief constant primary の生成
@@ -1002,9 +985,7 @@ public:
   new_CPrimary(
     const FileRegion& fr,
     const char* name,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   ) override;
 
   /// @brief インデックス付き constant primary の生成 (階層付き)
@@ -1182,6 +1163,15 @@ public:
   new_NameBranch(
     const char* name,
     int index
+  ) override;
+
+  /// @brief 範囲指定の生成
+  const PtPart*
+  new_Part(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    VpiRangeMode mode,    ///< [in] 範囲指定のモード
+    const PtExpr* expr1,  ///< [in] 1番目の式
+    const PtExpr* expr2   ///< [in] 2番目の式
   ) override;
 
 

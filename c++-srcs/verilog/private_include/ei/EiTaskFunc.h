@@ -354,14 +354,12 @@ public:
 
   /// @brief コンストラクタ
   EiFunctionV(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item, ///< [in] パース木の定義
-    SizeType io_num,       ///< [in] IOの数
-    const PtExpr* left,    ///< [in] 範囲の MSB の式
-    const PtExpr* right,   ///< [in] 範囲の LSB の式
-    int left_val,          ///< [in] 範囲の MSB の値
-    int right_val,         ///< [in] 範囲の LSB の値
-    bool const_func        ///< [in] 定数関数フラグ
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const PtItem* pt_item,   ///< [in] パース木の定義
+    SizeType io_num,         ///< [in] IOの数
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range,   ///< [in] 範囲の値
+    bool const_func          ///< [in] 定数関数フラグ
   );
 
   /// @brief デストラクタ
@@ -403,8 +401,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲
-  EiRangeImpl mRange;
+  // 範囲の情報
+  RangeInfo mRange;
 
 };
 

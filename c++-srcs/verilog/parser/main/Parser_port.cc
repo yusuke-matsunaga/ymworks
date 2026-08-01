@@ -36,7 +36,7 @@ Parser::new_Port1(
   if ( mPortRefList.size() == 1 ) {
     auto portref = mPortRefList.front();
     const char* name = nullptr;
-    if ( portref->index_num() == 0 && portref->left_range() == nullptr ) {
+    if ( portref->index_num() == 0 && portref->part() == nullptr ) {
       name = portref->name();
     }
     mPortRefList.clear();
@@ -182,12 +182,10 @@ void
 Parser::new_PortRef(
   const FileRegion& fr,
   const char* name,
-  VpiRangeMode range_mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto primary = mFactory->new_Primary(fr, name, range_mode, left, right);
+  auto primary = mFactory->new_Primary(fr, name, part);
   add_portref(primary);
 }
 

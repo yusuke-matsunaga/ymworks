@@ -22,6 +22,7 @@
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/RangeVal.h"
 
 #include "ym/MsgMgr.h"
 
@@ -157,7 +158,9 @@ ModuleGen::phase1_module_item(
     }
 
     auto param = handle->parameter();
-    ASSERT_COND( param );
+    if ( param == nullptr ) {
+      throw std::logic_error{"param == nullptr"};
+    }
 
     auto expr = param_con.mExpr;
     auto value = param_con.mValue;
@@ -276,8 +279,6 @@ ModuleGen::instantiate_portref(
   if ( pt_portref->index_num() == 0 ) {
     pt_index = pt_portref->index(0);
   }
-  auto pt_left = pt_portref->left_range();
-  auto pt_right = pt_portref->right_range();
   if ( pt_index ) {
     int index_val = evaluate_int(module, pt_index);
     SizeType offset;
@@ -288,25 +289,23 @@ ModuleGen::instantiate_portref(
     }
     return mgr().new_BitSelect(pt_portref, primary, pt_index, index_val);
   }
-  if ( pt_left && pt_right ) {
-    int left_val;
-    int right_val;
-    std::tie(left_val, right_val) = evaluate_range(module, pt_left, pt_right);
-
+  auto pt_part = pt_portref->part();
+  if ( pt_part != nullptr ) {
+    auto range = evaluate_range(module, pt_part);
     SizeType offset;
-    bool stat1 = decl->calc_bit_offset(left_val, offset);
+    bool stat1 = decl->calc_bit_offset(range.left, offset);
     if ( !stat1 ) {
       // 左の添字が範囲外
-      warning_left_index_out_of_range(pt_left->file_region());
+      warning_left_index_out_of_range(pt_part->left()->file_region());
     }
-    bool stat2 = decl->calc_bit_offset(right_val, offset);
+    bool stat2 = decl->calc_bit_offset(range.right, offset);
     if ( !stat2 ) {
       // 右の添字が範囲外
-      warning_right_index_out_of_range(pt_right->file_region());
+      warning_right_index_out_of_range(pt_part->right()->file_region());
     }
     return mgr().new_PartSelect(pt_portref, primary,
-				pt_left, pt_right,
-				left_val, right_val);
+				pt_part->left(), pt_part->right(),
+				range.left, range.right);
   }
   return primary;
 }

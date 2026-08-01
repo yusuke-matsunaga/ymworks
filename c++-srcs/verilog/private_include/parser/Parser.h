@@ -224,9 +224,7 @@ public:
   new_PortRef(
     const FileRegion& fr,    ///< [in] ファイル位置の情報
     const char* name,        ///< [in] ポートに接続している内部の識別子名
-    VpiRangeMode range_mode, ///< [in] 範囲指定のモード
-    const PtExpr* left,      ///< [in] 範囲指定の左側の式
-    const PtExpr* right      ///< [in] 範囲指摘の右側の式
+    const PtPart* part       ///< [in] 範囲指定
   );
 
 
@@ -274,8 +272,7 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiDir dir,           ///< [in] IO の種類(方向)
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right   ///< [in] 範囲の右側の式
+    const PtRange* range  ///< [in] 範囲
   );
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (reg 型)
@@ -284,8 +281,7 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiDir dir,           ///< [in] IO の種類(方向)
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right   ///< [in] 範囲の右側の式
+    const PtRange* range  ///< [in] 範囲
   );
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (ネット型)
@@ -295,8 +291,7 @@ public:
     VpiDir dir,           ///< [in] IO の種類(方向)
     VpiNetType net_type,  ///< [in] 補助的なネット型
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right   ///< [in] 範囲の右側の式
+    const PtRange* range  ///< [in] 範囲
   );
 
   /// @brief IO 宣言の要素の生成
@@ -332,8 +327,7 @@ public:
   new_ParamH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right   ///< [in] 範囲の右側の式
+    const PtRange* range  ///< [in] 範囲
   );
 
   /// @brief 組み込み型パラメータ宣言のヘッダの生成
@@ -354,8 +348,7 @@ public:
   new_LocalParamH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right   ///< [in] 範囲の右側の式
+    const PtRange* range  ///< [in] 範囲
   );
 
   /// @brief 組み込み型パラメータ宣言のヘッダの生成
@@ -376,8 +369,7 @@ public:
   PtiDeclHead*
   new_SpecParamH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right   ///< [in] 範囲の右側の式
+    const PtRange* range  ///< [in] 範囲
   );
 
   /// @brief イベント宣言のヘッダの生成
@@ -412,8 +404,7 @@ public:
   new_RegH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     bool sign,            ///< [in] 符号付きの時 true となるフラグ
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right   ///< [in] 範囲の右側の式
+    const PtRange* range  ///< [in] 範囲
   );
 
   /// @brief 1ビット型 net 宣言のヘッダの生成
@@ -459,8 +450,7 @@ public:
     VpiNetType type,      ///< [in] net の型
     VpiVsType vstype,     ///< [in] vector/scalar 指定
     bool sign,            ///< [in] 符号の有無を表すフラグ
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right   ///< [in] 範囲の右側の式
+    const PtRange* range  ///< [in] 範囲
   );
 
   /// @brief 範囲指定型 net 宣言のヘッダの生成 (strengthあり)
@@ -470,8 +460,7 @@ public:
     VpiNetType type,            ///< [in] net の型
     VpiVsType vstype,           ///< [in] vector/scalar 指定
     bool sign,                  ///< [in] 符号の有無を表すフラグ
-    const PtExpr* left,         ///< [in] 範囲の左側の式
-    const PtExpr* right,        ///< [in] 範囲の右側の式
+    const PtRange* range,       ///< [in] 範囲
     const PtStrength* strength  ///< [in] 信号強度
   );
 
@@ -482,8 +471,7 @@ public:
     VpiNetType type,	  ///< [in] net の型
     VpiVsType vstype,	  ///< [in] vector/scalar 指定
     bool sign,		  ///< [in] 符号の有無を表すフラグ
-    const PtExpr* left,	  ///< [in] 範囲の左側の式
-    const PtExpr* right,  ///< [in] 範囲の右側の式
+    const PtRange* range, ///< [in] 範囲
     const PtDelay* delay  ///< [in] 遅延
   );
 
@@ -494,8 +482,7 @@ public:
     VpiNetType type,	        ///< [in] net の型
     VpiVsType vstype,	        ///< [in] vector/scalar 指定
     bool sign,		        ///< [in] 符号の有無を表すフラグ
-    const PtExpr* left,	        ///< [in] 範囲の左側の式
-    const PtExpr* right,        ///< [in] 範囲の右側の式
+    const PtRange* range,       ///< [in] 範囲
     const PtStrength* strength, ///< [in] 信号強度
     const PtDelay* delay        ///< [in] 遅延
   );
@@ -635,8 +622,7 @@ public:
     const char* name,     ///< [in] function 名
     bool automatic,       ///< [in] automatic task の時に true となるフラグ
     bool sign,		  ///< [in] signed 属性がついていたら true となるフラグ
-    const PtExpr* left,	  ///< [in] 範囲の左側の式
-    const PtExpr* right,  ///< [in] 範囲の右側の式
+    const PtRange* range, ///< [in] 範囲
     const PtStmt* stmt    ///< [in] 本体のステートメント
   );
 
@@ -817,8 +803,7 @@ public:
   new_InstV(
     const FileRegion& fr,                 ///< [in] ファイル位置の情報
     const char* name,                     ///< [in] 名前
-    const PtExpr* left,                   ///< [in] 範囲の左側の式
-    const PtExpr* right,                  ///< [in] 範囲の右側の式
+    const PtRange* range,                 ///< [in] 範囲
     PtrList<const PtConnection>* con_list ///< [in] ポート割り当ての配列
   );
 
@@ -827,8 +812,7 @@ public:
   new_InstV(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right,  ///< [in] 範囲の右側の式
+    const PtRange* range, ///< [in] 範囲
     const PtExpr* expr1   ///< [in] ポート割り当て式1
   );
 
@@ -837,8 +821,7 @@ public:
   new_InstV(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right,  ///< [in] 範囲の右側の式
+    const PtRange* range, ///< [in] 範囲
     const PtExpr* expr1,  ///< [in] ポート割り当て式1
     const PtExpr* expr2   ///< [in] ポート割り当て式2
   );
@@ -848,8 +831,7 @@ public:
   new_InstV(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right,  ///< [in] 範囲の右側の式
+    const PtRange* range, ///< [in] 範囲
     const PtExpr* expr1,  ///< [in] ポート割り当て式1
     const PtExpr* expr2,  ///< [in] ポート割り当て式2
     const PtExpr* expr3   ///< [in] ポート割り当て式3
@@ -860,8 +842,7 @@ public:
   new_InstV(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right,  ///< [in] 範囲の右側の式
+    const PtRange* range, ///< [in] 範囲
     const PtExpr* expr1,  ///< [in] ポート割り当て式1
     const PtExpr* expr2,  ///< [in] ポート割り当て式2
     const PtExpr* expr3,  ///< [in] ポート割り当て式3
@@ -1412,9 +1393,7 @@ public:
   new_Primary(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    VpiRangeMode mode,    ///< [in] 範囲指定のモード
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right	  ///< [in] 範囲の右側の式
+    const PtPart* part    ///< [in] 範囲指定
   );
 
   /// @brief インデックスと範囲指定付き primary の生成
@@ -1424,9 +1403,7 @@ public:
     const FileRegion& fr,              ///< [in] ファイル位置の情報
     const char* name,                  ///< [in] 名前
     PtrList<const PtExpr>* index_list, ///< [in] インデックスのリスト
-    VpiRangeMode mode,                 ///< [in] 範囲指定のモード
-    const PtExpr* left,                ///< [in] 範囲の左側の式
-    const PtExpr* right		       ///< [in] 範囲の右側の式
+    const PtPart* part                 ///< [in] 範囲指定
   );
 
   /// @brief primary の生成 (階層付き)
@@ -1452,9 +1429,7 @@ public:
   new_Primary(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     PuHierName* hname,    ///< [in] 階層名
-    VpiRangeMode mode,    ///< [in] 範囲指定のモード
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right	  ///< [in] 範囲の右側の式
+    const PtPart* part    ///< [in] 範囲指定
   );
 
   /// @brief インデックスと範囲指定付き primary の生成 (階層付き)
@@ -1464,9 +1439,7 @@ public:
     const FileRegion& fr,              ///< [in] ファイル位置の情報
     PuHierName* hname,                 ///< [in] 階層名
     PtrList<const PtExpr>* index_list, ///< [in] インデックスのリスト
-    VpiRangeMode mode,                 ///< [in] 範囲指定のモード
-    const PtExpr* left,                ///< [in] 範囲の左側の式
-    const PtExpr* right		       ///< [in] 範囲の右側の式
+    const PtPart* part                 ///< [in] 範囲指定
   );
 
   /// @brief constant primary の生成
@@ -1493,9 +1466,7 @@ public:
   new_CPrimary(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    VpiRangeMode mode,    ///< [in] 範囲指定のモード
-    const PtExpr* left,   ///< [in] 範囲の左側の式
-    const PtExpr* right	  ///< [in] 範囲の右側の式
+    const PtPart* part    ///< [in] 範囲指定
   );
 
   /// @brief インデックス付き constant primary の生成 (階層付き)
@@ -1772,6 +1743,15 @@ public:
     PuHierName* hname, ///< [in] 階層名の上位部分
     int index,         ///< [in] インデックス
     const char* name   ///< [in] 追加する名前
+  );
+
+  /// @brief 範囲指定の生成
+  const PtPart*
+  new_Part(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    VpiRangeMode mode,    ///< [in] 範囲指定のモード
+    const PtExpr* expr1,  ///< [in] 1番目の式
+    const PtExpr* expr2   ///< [in] 2番目の式
   );
 
 

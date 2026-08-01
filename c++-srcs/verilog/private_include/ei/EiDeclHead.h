@@ -244,10 +244,8 @@ public:
   EiDeclHeadPtV(
     const VlScope* parent,     ///< [in] ヘッダ
     const PtDeclHead* pt_head, ///< [in] パース木の宣言ヘッダ
-    const PtExpr* left,        ///< [in] 範囲の左側の式
-    const PtExpr* right,       ///< [in] 範囲の右側の式
-    int left_val,              ///< [in] 範囲の左側の値
-    int right_val              ///< [in] 範囲の右側の値
+    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -306,8 +304,8 @@ protected:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲
-  EiRangeImpl mRange;
+  // 範囲の情報
+  RangeInfo mRange;
 
 };
 
@@ -325,10 +323,8 @@ public:
   EiDeclHeadPtVD(
     const VlScope* parent,     ///< [in] ヘッダ
     const PtDeclHead* pt_head, ///< [in] パース木の宣言ヘッダ
-    const PtExpr* left,	       ///< [in] 範囲の左側の式
-    const PtExpr* right,       ///< [in] 範囲の右側の式
-    int left_val,	       ///< [in] 範囲の左側の値
-    int right_val	       ///< [in] 範囲の右側の値
+    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -488,10 +484,8 @@ public:
     const VlScope* parent,   ///< [in] ヘッダ
     const PtIOHead* pt_head, ///< [in] パース木のIO宣言ヘッダ
     VpiAuxType aux_type,     ///< [in] 補助的なデータ型
-    const PtExpr* left,	     ///< [in] 範囲の左側の式
-    const PtExpr* right,     ///< [in] 範囲の右側の式
-    int left_val,	     ///< [in] 範囲の左側の値
-    int right_val	     ///< [in] 範囲の右側の値
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range    ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -550,8 +544,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲
-  EiRangeImpl mRange;
+  // 範囲の情報
+  RangeInfo mRange;
 
 };
 
@@ -669,12 +663,10 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadPt3V(
-    const VlScope* parent, ///< [in] ヘッダ
-    const PtItem* pt_item, ///< [in] パース木の宣言ヘッダ
-    const PtExpr* left,	   ///< [in] 範囲の左側の式
-    const PtExpr* right,   ///< [in] 範囲の右側の式
-    int left_val,	   ///< [in] 範囲の左側の値
-    int right_val	   ///< [in] 範囲の右側の値
+    const VlScope* parent,   ///< [in] ヘッダ
+    const PtItem* pt_item,   ///< [in] パース木の宣言ヘッダ
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range    ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -733,8 +725,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲
-  EiRangeImpl mRange;
+  // 範囲の情報
+  RangeInfo mRange;
 
 };
 

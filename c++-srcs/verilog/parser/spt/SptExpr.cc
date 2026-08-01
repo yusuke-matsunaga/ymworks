@@ -136,23 +136,9 @@ SptExpr::index(
   return nullptr;
 }
 
-// @brief 範囲指定モードの取得
-VpiRangeMode
-SptExpr::range_mode() const
-{
-  return VpiRangeMode::No;
-}
-
-// @brief 範囲の左側の式の取得
-const PtExpr*
-SptExpr::left_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲の右側の式の取得
-const PtExpr*
-SptExpr::right_range() const
+// @brief 範囲指定の取得
+const PtPart*
+SptExpr::part() const
 {
   return nullptr;
 }
@@ -212,7 +198,7 @@ SptExpr::is_simple() const
 {
   if ( type() == PtExprType::Primary &&
        index_num() == 0 &&
-       left_range() == nullptr ) {
+       part() == nullptr ) {
     return true;
   }
   return false;
@@ -230,7 +216,7 @@ SptOpr1::SptOpr1(
   const PtExpr* opr1,
   const PtExpr* opr2,
   const PtExpr* opr3
-) : SptExpr{file_region, PtExprType::Opr},
+) : SptExpr(file_region, PtExprType::Opr),
     mOpType{op_type},
     mExprList{opr1, opr2, opr3}
 {
@@ -336,7 +322,7 @@ SptOpr2::SptOpr2(
   const FileRegion& file_region,
   VpiOpType op_type,
   PtiExprArray&& opr_array
-) : SptExpr{file_region, PtExprType::Opr},
+) : SptExpr(file_region, PtExprType::Opr),
     mOpType{op_type},
     mExprArray{std::move(opr_array)}
 {
@@ -418,7 +404,7 @@ SptFuncCall::SptFuncCall(
   PtiNameBranchArray&& nb_array,
   const char* name,
   PtiExprArray&& arg_array
-) : SptExpr{file_region, type},
+) : SptExpr(file_region, type),
     mNbArray{std::move(nb_array)},
     mName{name},
     mArgArray{std::move(arg_array)}
@@ -502,17 +488,13 @@ SptPrimary::SptPrimary(
   const char* tail_name,
   bool const_index,
   PtiExprArray&& index_array,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
-) : SptExpr{file_region, PtExprType::Primary},
+  const PtPart* part
+) : SptExpr(file_region, PtExprType::Primary),
     mNbArray{std::move(nb_array)},
     mName{tail_name},
     mConstIndex{const_index},
     mIndexArray{std::move(index_array)},
-    mMode{mode},
-    mLeftRange{left},
-    mRightRange{right}
+    mPart{part}
 {
 }
 
@@ -567,25 +549,11 @@ SptPrimary::index(
   return mIndexArray[pos];
 }
 
-// @brief 範囲指定モードの取得
-VpiRangeMode
-SptPrimary::range_mode() const
+// @brief 範囲指定の取得
+const PtPart*
+SptPrimary::part() const
 {
-  return mMode;
-}
-
-// @brief 範囲の左側の式の取得
-const PtExpr*
-SptPrimary::left_range() const
-{
-  return mLeftRange;
-}
-
-// @brief 範囲の右側の式の取得
-const PtExpr*
-SptPrimary::right_range() const
-{
-  return mRightRange;
+  return mPart;
 }
 
 
@@ -601,7 +569,7 @@ SptConstant::SptConstant(
   std::uint32_t ivalue,
   const char* svalue,
   double rvalue
-) : SptExpr{file_region, PtExprType::Const},
+) : SptExpr(file_region, PtExprType::Const),
     mConstType{const_type},
     mSize{size},
     mIntValue{ivalue},
@@ -660,6 +628,39 @@ SptConstant::const_type() const
 
 
 //////////////////////////////////////////////////////////////////////
+// クラス SptPart
+//////////////////////////////////////////////////////////////////////
+
+// @brief ファイル位置を返す．
+FileRegion
+SptPart::file_region() const
+{
+  return mFileRegion;
+}
+
+// @brief 範囲指定のモードを返す．
+VpiRangeMode
+SptPart::mode() const
+{
+  return mMode;
+}
+
+// @brief 1番目の式を取り出す．
+const PtExpr*
+SptPart::left() const
+{
+  return mLeft;
+}
+
+// @brief 2番めの式を取り出す．
+const PtExpr*
+SptPart::right() const
+{
+  return mRight;
+}
+
+
+//////////////////////////////////////////////////////////////////////
 // expression 関係
 //////////////////////////////////////////////////////////////////////
 
@@ -671,8 +672,8 @@ SptFactory::new_Opr(
   const PtExpr* opr
 )
 {
-  auto node = new SptOpr1{file_region, type,
-			  opr, nullptr, nullptr};
+  auto node = new SptOpr1(file_region, type,
+			  opr, nullptr, nullptr);
   return node;
 }
 
@@ -685,8 +686,8 @@ SptFactory::new_Opr(
   const PtExpr* opr2
 )
 {
-  auto node = new SptOpr1{file_region, type,
-			  opr1, opr2, nullptr};
+  auto node = new SptOpr1(file_region, type,
+			  opr1, opr2, nullptr);
   return node;
 }
 
@@ -700,8 +701,8 @@ SptFactory::new_Opr(
   const PtExpr* opr3
 )
 {
-  auto node = new SptOpr1{file_region, type,
-			  opr1, opr2, opr3};
+  auto node = new SptOpr1(file_region, type,
+			  opr1, opr2, opr3);
   return node;
 }
 
@@ -712,8 +713,8 @@ SptFactory::new_Concat(
   const std::vector<const PtExpr*>& expr_array
 )
 {
-  auto node = new SptOpr2{file_region, VpiOpType::Concat,
-			  PtiArray<const PtExpr>{mAlloc, expr_array}};
+  auto node = new SptOpr2(file_region, VpiOpType::Concat,
+			  PtiArray<const PtExpr>{mAlloc, expr_array});
   return node;
 }
 
@@ -724,8 +725,8 @@ SptFactory::new_MultiConcat(
   const std::vector<const PtExpr*>& expr_array
 )
 {
-  auto node = new SptOpr2{file_region, VpiOpType::MultiConcat,
-			  PtiArray<const PtExpr>{mAlloc, expr_array}};
+  auto node = new SptOpr2(file_region, VpiOpType::MultiConcat,
+			  PtiArray<const PtExpr>{mAlloc, expr_array});
   return node;
 }
 
@@ -738,8 +739,8 @@ SptFactory::new_MinTypMax(
   const PtExpr* val2
 )
 {
-  auto node = new SptOpr1{file_region, VpiOpType::MinTypMax,
-			  val0, val1, val2};
+  auto node = new SptOpr1(file_region, VpiOpType::MinTypMax,
+			  val0, val1, val2);
   return node;
 }
 
@@ -750,10 +751,9 @@ SptFactory::new_Primary(
   const char* name
 )
 {
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
                              PtiNameBranchArray{},
-			     name,
-			     false};
+			     name, false);
   return node;
 }
 
@@ -765,11 +765,10 @@ SptFactory::new_Primary(
   const std::vector<const PtExpr*>& index_array
 )
 {
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray(),
-			     name,
-			     false,
-			     PtiArray<const PtExpr>{mAlloc, index_array}};
+			     name, false,
+			     PtiArray<const PtExpr>{mAlloc, index_array});
   return node;
 }
 
@@ -778,17 +777,14 @@ const PtExpr*
 SptFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray(),
-			     name,
-			     false,
+			     name, false,
 			     PtiExprArray(),
-			     mode, left, right};
+			     part);
   return node;
 }
 
@@ -798,17 +794,14 @@ SptFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
   const std::vector<const PtExpr*>& index_array,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray(),
-			     name,
-			     false,
+			     name, false,
 			     PtiExprArray(mAlloc, index_array),
-			     mode, left, right};
+			     part);
   return node;
 }
 
@@ -821,10 +814,9 @@ SptFactory::new_Primary(
 {
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray{mAlloc, nb_array},
-			     tail_name,
-			     false};
+			     tail_name, false);
   return node;
 }
 
@@ -838,11 +830,10 @@ SptFactory::new_Primary(
 {
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray{mAlloc, nb_array},
-			     tail_name,
-			     false,
-			     PtiExprArray{mAlloc, index_array}};
+			     tail_name, false,
+			     PtiExprArray{mAlloc, index_array});
   return node;
 }
 
@@ -851,19 +842,16 @@ const PtExpr*
 SptFactory::new_Primary(
   const FileRegion& file_region,
   PuHierName* hname,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray{mAlloc, nb_array},
-			     tail_name,
-			     false,
+			     tail_name, false,
 			     PtiExprArray(),
-			     mode, left, right};
+			     part);
   return node;
 }
 
@@ -873,19 +861,16 @@ SptFactory::new_Primary(
   const FileRegion& file_region,
   PuHierName* hname,
   const std::vector<const PtExpr*>& index_array,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray{mAlloc, nb_array},
-			     tail_name,
-			     false,
+			     tail_name, false,
 			     PtiExprArray{mAlloc, index_array},
-			     mode, left, right};
+			     part);
   return node;
 }
 
@@ -897,11 +882,10 @@ SptFactory::new_CPrimary(
   const std::vector<const PtExpr*>& index_array
 )
 {
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray(),
-			     name,
-			     true,
-			     PtiExprArray{mAlloc, index_array}};
+			     name, true,
+			     PtiExprArray{mAlloc, index_array});
   return node;
 }
 
@@ -910,17 +894,14 @@ const PtExpr*
 SptFactory::new_CPrimary(
   const FileRegion& file_region,
   const char* name,
-  VpiRangeMode mode,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtPart* part
 )
 {
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray(),
-			     name,
-			     true,
+			     name, true,
 			     PtiExprArray(),
-			     mode, left, right};
+			     part);
   return node;
 }
 
@@ -934,11 +915,10 @@ SptFactory::new_CPrimary(
 {
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto node = new SptPrimary{file_region,
+  auto node = new SptPrimary(file_region,
 			     PtiNameBranchArray{mAlloc, nb_array},
-			     tail_name,
-			     true,
-			     PtiExprArray{mAlloc, index_array}};
+			     tail_name, true,
+			     PtiExprArray{mAlloc, index_array});
   return node;
 }
 
@@ -950,10 +930,10 @@ SptFactory::new_FuncCall(
   const std::vector<const PtExpr*>& arg_array
 )
 {
-  auto node = new SptFuncCall{file_region, PtExprType::FuncCall,
+  auto node = new SptFuncCall(file_region, PtExprType::FuncCall,
 			      PtiNameBranchArray(),
 			      name,
-			      PtiExprArray{mAlloc, arg_array}};
+			      PtiExprArray{mAlloc, arg_array});
   return node;
 }
 
@@ -967,10 +947,10 @@ SptFactory::new_FuncCall(
 {
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto node = new SptFuncCall{file_region, PtExprType::FuncCall,
+  auto node = new SptFuncCall(file_region, PtExprType::FuncCall,
 			      PtiNameBranchArray{mAlloc, nb_array},
 			      tail_name,
-			      PtiExprArray{mAlloc, arg_array}};
+			      PtiExprArray{mAlloc, arg_array});
   return node;
 }
 
@@ -982,10 +962,10 @@ SptFactory::new_SysFuncCall(
   const std::vector<const PtExpr*>& arg_array
 )
 {
-  auto node = new SptFuncCall{file_region, PtExprType::SysFuncCall,
+  auto node = new SptFuncCall(file_region, PtExprType::SysFuncCall,
 			      PtiNameBranchArray(),
 			      name,
-			      PtiExprArray{mAlloc, arg_array}};
+			      PtiExprArray{mAlloc, arg_array});
   return node;
 }
 
@@ -996,8 +976,8 @@ SptFactory::new_IntConst(
   std::uint32_t value
 )
 {
-  auto node = new SptConstant{file_region, VpiConstType::Int,
-			      0, value, nullptr, 0.0};
+  auto node = new SptConstant(file_region, VpiConstType::Int,
+			      0, value, nullptr, 0.0);
   return node;
 }
 
@@ -1008,8 +988,8 @@ SptFactory::new_IntConst(
   const char* value
 )
 {
-  auto node = new SptConstant{file_region, VpiConstType::Int,
-			      0, 0, value, 0.0};
+  auto node = new SptConstant(file_region, VpiConstType::Int,
+			      0, 0, value, 0.0);
   return node;
 }
 
@@ -1021,8 +1001,8 @@ SptFactory::new_IntConst(
   const char* value
 )
 {
-  auto node = new SptConstant{file_region, const_type,
-			      0, 0, value, 0.0};
+  auto node = new SptConstant(file_region, const_type,
+			      0, 0, value, 0.0);
   return node;
 }
 
@@ -1035,8 +1015,8 @@ SptFactory::new_IntConst(
   const char* value
 )
 {
-  auto node = new SptConstant{file_region, const_type,
-			      size, 0, value, 0.0};
+  auto node = new SptConstant(file_region, const_type,
+			      size, 0, value, 0.0);
   return node;
 }
 
@@ -1047,8 +1027,8 @@ SptFactory::new_RealConst(
   double value
 )
 {
-  auto node = new SptConstant{file_region, VpiConstType::Real,
-			      0, 0, nullptr, value};
+  auto node = new SptConstant(file_region, VpiConstType::Real,
+			      0, 0, nullptr, value);
   return node;
 }
 
@@ -1059,8 +1039,21 @@ SptFactory::new_StringConst(
   const char* value
 )
 {
-  auto node = new SptConstant{file_region, VpiConstType::String,
-			      0, 0, value, 0.0};
+  auto node = new SptConstant(file_region, VpiConstType::String,
+			      0, 0, value, 0.0);
+  return node;
+}
+
+// @brief 範囲指定の生成
+const PtPart*
+SptFactory::new_Part(
+  const FileRegion& fr,
+  VpiRangeMode mode,
+  const PtExpr* expr1,
+  const PtExpr* expr2
+)
+{
+  auto node = new SptPart(fr, mode, expr1, expr2);
   return node;
 }
 

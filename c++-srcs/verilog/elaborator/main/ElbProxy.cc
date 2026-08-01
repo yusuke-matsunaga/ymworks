@@ -326,14 +326,23 @@ ElbProxy::evaluate_bitvector(
 }
 
 // @brief 範囲を表す式を評価する．
-std::pair<int, int>
+RangeVal
 ElbProxy::evaluate_range(
   const VlScope* parent,
-  const PtExpr* pt_left,
-  const PtExpr* pt_right
+  const PtRange* pt_range
 )
 {
-  return mExprEval->evaluate_range(parent, pt_left, pt_right);
+  return mExprEval->evaluate_range(parent, pt_range);
+}
+
+// @brief 範囲を表す式を評価する．
+RangeVal
+ElbProxy::evaluate_range(
+  const VlScope* parent,
+  const PtPart* pt_part
+)
+{
+  return mExprEval->evaluate_range(parent, pt_part);
 }
 
 // @brief 構文木要素に対応する属性リストを返す．

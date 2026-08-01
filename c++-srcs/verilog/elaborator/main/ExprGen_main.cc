@@ -78,7 +78,7 @@ ExprGen::instantiate_expr(
     return instantiate_primary(parent, env, pt_expr);
 
   default:
-    ASSERT_NOT_REACHED;
+    throw std::logic_error{"Should not be reached"};
   }
 
   // コンパイラを騙すためのダミー
@@ -92,7 +92,9 @@ ExprGen::instantiate_constant_expr(
   const PtExpr* pt_expr
 )
 {
-  ASSERT_COND( pt_expr != nullptr );
+  if ( pt_expr == nullptr ) {
+    throw std::logic_error{"pt_expr == nullptr"};
+  }
 
   ElbConstantEnv env;
   return instantiate_expr(parent, env, pt_expr);
@@ -117,17 +119,19 @@ ExprGen::instantiate_event_expr(
     switch ( pt_expr->op_type() ) {
     case VpiOpType::Posedge:
     case VpiOpType::Negedge:
-      { // これのみがイベント式の特徴
-	ASSERT_COND(pt_expr->operand_num() == 1 );
-	auto opr0 = instantiate_expr(parent, env, pt_expr->operand0());
-	auto expr = mgr().new_UnaryOp(pt_expr, pt_expr->op_type(), opr0);
-
-	// attribute instance の生成
-	auto attr_list = attribute_list(pt_expr);
-	mgr().reg_attr(expr, attr_list);
-
-	return expr;
+    { // これのみがイベント式の特徴
+      if ( pt_expr->operand_num() != 1 ) {
+	throw std::logic_error{"pt_operand_num() != 1"};
       }
+      auto opr0 = instantiate_expr(parent, env, pt_expr->operand0());
+      auto expr = mgr().new_UnaryOp(pt_expr, pt_expr->op_type(), opr0);
+
+      // attribute instance の生成
+      auto attr_list = attribute_list(pt_expr);
+      mgr().reg_attr(expr, attr_list);
+
+      return expr;
+    }
 
     default:
       // それ以外の場合は通常の処理を行う．
@@ -161,9 +165,7 @@ ExprGen::instantiate_event_expr(
     break;
   }
 
-  ASSERT_NOT_REACHED;
-  // コンパイラの不平をごまかすためのダミー
-  return nullptr;
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief PtExpr からシステム関数の引数を生成する．
@@ -244,8 +246,7 @@ ExprGen::instantiate_lhs(
     break;
   }
 
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief PtExpr から左辺式を生成する
@@ -307,8 +308,7 @@ ExprGen::instantiate_lhs_sub(
     break;
   }
 
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief PtDelay から ElbExpr を生成する．
@@ -331,7 +331,9 @@ ExprGen::instantiate_delay(
     if ( expr == nullptr ) break;
     expr_array.push_back(expr);
   }
-  ASSERT_COND( !expr_array.empty() );
+  if ( expr_array.empty() ) {
+    throw std::logic_error{"expr_array.empty()"};
+  }
 
   return instantiate_delay_sub(parent, pt_delay, expr_array);
 }
@@ -349,8 +351,10 @@ ExprGen::instantiate_delay(
     return nullptr;
   }
 
-  SizeType n{pt_header->paramassign_num()};
-  ASSERT_COND( n == 1 );
+  auto n = pt_header->paramassign_num();
+  if ( n != 1 ) {
+    throw std::logic_error{"n != 1"};
+  }
 
   auto pt_con = pt_header->paramassign(0);
   std::vector<const PtExpr*> expr_array{pt_con->expr()};
@@ -366,7 +370,9 @@ ExprGen::instantiate_delay_sub(
   const std::vector<const PtExpr*>& pt_expr_array
 )
 {
-  ASSERT_COND( pt_expr_array.size() <= 3 );
+  if ( pt_expr_array.size() > 3 ) {
+    throw std::logic_error{"pt_expr_array.size() > 3"};
+  }
 
   try {
     // TODO : 環境の条件をチェック

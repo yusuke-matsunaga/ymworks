@@ -256,10 +256,11 @@ PtDumper::put(
       else {
 	ASSERT_COND( pr->index_num() == 0 );
       }
-      if ( pr->range_mode() != VpiRangeMode::No ) {
-	put("mRangeMode", pr->range_mode());
-	put("mLeftRange", pr->left_range());
-	put("mRightRange", pr->right_range());
+      if ( pr->part() != nullptr ) {
+	auto part = pr->part();
+	put("mRangeMode", part->mode());
+	put("mLeftRange", part->left());
+	put("mRightRange", part->right());
       }
     }
   }
@@ -296,8 +297,8 @@ PtDumper::put(
   put("mNetType", io->net_type());
   put("mVarType", io->var_type());
   put("mSigned", io->is_signed());
-  put("mLeftRange", io->left_range());
-  put("mRightRange", io->right_range());
+  put("mLeftRange", io->range()->left());
+  put("mRightRange", io->range()->right());
 
   for ( auto item: io->item_list() ) {
     PtHeader x(*this, "mElem", "IOElem");
@@ -378,8 +379,8 @@ PtDumper::put(
 #endif
 
   put("mSigned", decl->is_signed());
-  put("mLeftRange", decl->left_range());
-  put("mRightRange", decl->right_range());
+  put("mLeftRange", decl->range()->left());
+  put("mRightRange", decl->range()->right());
   put("mVsType", decl->vs_type());
   put("mStrength", decl->strength());
   put("mDelay", decl->delay());
@@ -484,10 +485,10 @@ PtDumper::put(
   case PtItemType::Task:
   case PtItemType::Func:
     put("mAutomatic", item->automatic());
-    if ( item->left_range() ) {
+    if ( item->range() ) {
       put("mSigned", item->is_signed());
-      put("mLeftRange", item->left_range());
-      put("mRightRange", item->right_range());
+      put("mLeftRange", item->range()->left());
+      put("mRightRange", item->range()->right());
     }
     put("mName", item->name());
     put_decls(item->iohead_list(),
@@ -506,9 +507,9 @@ PtDumper::put(
       if ( gi->name() != nullptr ) {
 	put("mName", gi->name());
       }
-      if ( gi->left_range() ) {
-	put("mLeftRange", gi->left_range());
-	put("mRightrange", gi->right_range());
+      if ( gi->range() ) {
+	put("mLeftRange", gi->range()->left());
+	put("mRightrange", gi->range()->right());
       }
       for ( auto con: gi->port_list() ) {
 	put("mPortCon", con);
@@ -528,9 +529,9 @@ PtDumper::put(
 
       put("mFileRegion", mui->file_region());
       put("mName", mui->name());
-      if ( mui->left_range() ) {
-	put("mLeftRange", mui->left_range());
-	put("mRightRange", mui->right_range());
+      if ( mui->range() ) {
+	put("mLeftRange", mui->range()->left());
+	put("mRightRange", mui->range()->right());
       }
       for ( auto con: mui->port_list() ) {
 	put("mPortCon", con);
@@ -930,10 +931,11 @@ PtDumper::put(
 	const PtExpr* index = expr->index(i);
 	put("mIndex", index);
       }
-      if ( expr->left_range() ) {
-	put("mRangeMode", expr->range_mode());
-	put("mLeftRange", expr->left_range());
-	put("mRightRange", expr->right_range());
+      auto part = expr->part();
+      if ( part != nullptr ) {
+	put("mRangeMode", part->mode());
+	put("mLeftRange", part->left());
+	put("mRightRange", part->right());
       }
     }
     break;

@@ -104,8 +104,9 @@ EiBlockStmt::child_stmt(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < child_stmt_num() );
-
+  if ( pos >= child_stmt_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mStmtList[pos];
 }
 

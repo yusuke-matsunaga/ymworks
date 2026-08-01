@@ -27,8 +27,7 @@ EiFactory::new_ImpNet(
   VpiNetType net_type
 )
 {
-  auto decl = new EiImpNet{parent, pt_expr, net_type};
-  return decl;
+  return new EiImpNet(parent, pt_expr, net_type);
 }
 
 

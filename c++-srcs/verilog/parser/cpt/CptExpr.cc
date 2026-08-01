@@ -109,23 +109,9 @@ CptExpr::index(
   return nullptr;
 }
 
-// @brief 範囲指定モードの取得
-VpiRangeMode
-CptExpr::range_mode() const
-{
-  return VpiRangeMode::No;
-}
-
-// @brief 範囲の左側の式の取得
-const PtExpr*
-CptExpr::left_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲の右側の式の取得
-const PtExpr*
-CptExpr::right_range() const
+// @brief 範囲指定の取得
+const PtPart*
+CptExpr::part() const
 {
   return nullptr;
 }
@@ -1075,6 +1061,69 @@ CptStringConstant::const_str() const
 
 
 //////////////////////////////////////////////////////////////////////
+// クラス CptPart
+//////////////////////////////////////////////////////////////////////
+
+// ファイル位置を返す．
+FileRegion
+CptPart::file_region() const
+{
+  return mFileRegion;
+}
+
+// @brief 1番目の式を取り出す．
+const PtExpr*
+CptPart::left() const
+{
+  return mLeft;
+}
+
+// @brief 2番めの式を取り出す．
+const PtExpr*
+CptPart::right() const
+{
+  return mRight;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPartC
+//////////////////////////////////////////////////////////////////////
+
+// @brief 範囲指定のモードを返す．
+VpiRangeMode
+CptPartC::mode() const
+{
+  return VpiRangeMode::Const;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPartP
+//////////////////////////////////////////////////////////////////////
+
+// @brief 範囲指定のモードを返す．
+VpiRangeMode
+CptPartP::mode() const
+{
+  return VpiRangeMode::Plus;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPartM
+//////////////////////////////////////////////////////////////////////
+
+// @brief 範囲指定のモードを返す．
+VpiRangeMode
+CptPartM::mode() const
+{
+  return VpiRangeMode::Minus;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////
 // expression 関係
 //////////////////////////////////////////////////////////////////////
 
@@ -1293,6 +1342,33 @@ CptFactory::new_StringConst(
   auto p = mAlloc.get_memory(sizeof(CptStringConstant));
   auto obj = new (p) CptStringConstant{file_region, value};
   return obj;
+}
+
+// @brief 範囲指定の生成
+const PtPart*
+CptFactory::new_Part(
+  const FileRegion& fr,
+  VpiRangeMode mode,
+  const PtExpr* expr1,
+  const PtExpr* expr2
+)
+{
+  if ( mode == VpiRangeMode::Const ) {
+    auto p = mAlloc.get_memory(sizeof(CptPartC));
+    auto obj = new (p) CptPartC(fr, expr1, expr2);
+    return obj;
+  }
+  if ( mode == VpiRangeMode::Plus ) {
+    auto p = mAlloc.get_memory(sizeof(CptPartP));
+    auto obj = new (p) CptPartP(fr, expr1, expr2);
+    return obj;
+  }
+  if ( mode == VpiRangeMode::Minus ) {
+    auto p = mAlloc.get_memory(sizeof(CptPartM));
+    auto obj = new (p) CptPartM(fr, expr1, expr2);
+    return obj;
+  }
+  throw std::logic_error{"Should not be reached"};
 }
 
 END_NAMESPACE_YM_VERILOG

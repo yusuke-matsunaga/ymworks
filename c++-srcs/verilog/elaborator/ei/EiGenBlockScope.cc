@@ -24,8 +24,7 @@ EiFactory::new_GenBlock(
   const PtItem* pt_item
 )
 {
-  auto scope = new EiGenBlockScope{parent, pt_item};
-  return scope;
+  return new EiGenBlockScope(parent, pt_item);
 }
 
 // @brief generate for block を生成する．
@@ -36,8 +35,7 @@ EiFactory::new_GfBlock(
   int gvi
 )
 {
-  auto scope = new EiGfBlockScope{parent, pt_item, gvi};
-  return scope;
+  return new EiGfBlockScope(parent, pt_item, gvi);
 }
 
 
@@ -49,7 +47,7 @@ EiFactory::new_GfBlock(
 EiGenBlockScope::EiGenBlockScope(
   const VlScope* parent,
   const PtItem* pt_item
-) : EiScope{parent},
+) : EiScope(parent),
     mPtItem{pt_item}
 {
 }
@@ -83,7 +81,7 @@ EiGfBlockScope::EiGfBlockScope(
   const VlScope* parent,
   const PtItem* pt_item,
   int index
-) : EiGenBlockScope{parent, pt_item},
+) : EiGenBlockScope(parent, pt_item),
     mIndex{index}
 {
 }

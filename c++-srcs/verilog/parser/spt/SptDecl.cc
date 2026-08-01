@@ -24,16 +24,14 @@ SptIOHead::SptIOHead(
   VpiNetType net_type,
   VpiVarType var_type,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 ) : mFileRegion{file_region},
     mDir{dir},
     mAuxType{aux_type},
     mNetType{net_type},
     mVarType{var_type},
     mSigned{sign},
-    mLeftRange{left},
-    mRightRange{right}
+    mRange{range}
 {
 }
 
@@ -84,18 +82,11 @@ SptIOHead::is_signed() const
   return mSigned;
 }
 
-// 範囲のMSBの取得
-const PtExpr*
-SptIOHead::left_range() const
+// 範囲の取得
+const PtRange*
+SptIOHead::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲のLSBの取得
-const PtExpr*
-SptIOHead::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 // @brief 要素数の取得
@@ -175,8 +166,7 @@ SptDeclHead::SptDeclHead(
   const FileRegion& file_region,
   PtDeclType type,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   VpiVarType var_type,
   VpiNetType net_type,
   VpiVsType vs_type,
@@ -185,8 +175,7 @@ SptDeclHead::SptDeclHead(
 ) : mFileRegion{file_region},
     mType{type},
     mSigned{sign},
-    mLeftRange{left},
-    mRightRange{right},
+    mRange{range},
     mVarType{var_type},
     mNetType{net_type},
     mVsType{vs_type},
@@ -221,18 +210,11 @@ SptDeclHead::is_signed() const
   return mSigned;
 }
 
-// 範囲のMSBの取得
-const PtExpr*
-SptDeclHead::left_range() const
+// 範囲の取得
+const PtRange*
+SptDeclHead::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲のLSBの取得
-const PtExpr*
-SptDeclHead::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 // データ型の取得
@@ -409,13 +391,12 @@ SptFactory::new_IOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right)
+  const PtRange* range
+)
 {
-  auto node = new SptIOHead{file_region,
-			    dir, VpiAuxType::None, VpiNetType::None,
-			    VpiVarType::None,
-			    sign, left, right};
+  auto node = new SptIOHead(file_region, dir,
+			    VpiAuxType::None, VpiNetType::None,
+			    VpiVarType::None, sign, range);
   return node;
 }
 
@@ -425,14 +406,12 @@ SptFactory::new_RegIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto node = new SptIOHead{file_region,
-			    dir, VpiAuxType::Reg, VpiNetType::None,
-			    VpiVarType::None,
-			    sign, left, right};
+  auto node = new SptIOHead(file_region, dir,
+			    VpiAuxType::Reg, VpiNetType::None, VpiVarType::None,
+			    sign, range);
   return node;
 }
 
@@ -443,14 +422,12 @@ SptFactory::new_NetIOHead(
   VpiDir dir,
   VpiNetType net_type,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto node = new SptIOHead{file_region,
-			    dir, VpiAuxType::Net, net_type,
-			    VpiVarType::None,
-			    sign, left, right};
+  auto node = new SptIOHead(file_region, dir,
+			    VpiAuxType::Net, net_type, VpiVarType::None,
+			    sign, range);
   return node;
 }
 
@@ -462,10 +439,9 @@ SptFactory::new_VarIOHead(
   VpiVarType var_type
 )
 {
-  auto node = new SptIOHead{file_region,
-			    dir, VpiAuxType::Var, VpiNetType::None,
-			    var_type,
-			    false, nullptr, nullptr};
+  auto node = new SptIOHead(file_region, dir,
+			    VpiAuxType::Var, VpiNetType::None, var_type,
+			    false, nullptr);
   return node;
 }
 
@@ -477,7 +453,7 @@ SptFactory::new_IOItem(
   const PtExpr* init_value
 )
 {
-  auto node = new SptIOItem{file_region, name, init_value};
+  auto node = new SptIOItem(file_region, name, init_value);
   return node;
 }
 
@@ -491,17 +467,14 @@ PtiDeclHead*
 SptFactory::new_ParamH(
   const FileRegion& file_region,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   bool local
 )
 {
   auto type = local ? PtDeclType::LocalParam : PtDeclType::Param;
-  auto node = new SptDeclHead{file_region,
-			      type,
-			      sign, left, right,
+  auto node = new SptDeclHead(file_region, type, sign, range,
 			      VpiVarType::None, VpiNetType::None, VpiVsType::None,
-			      nullptr, nullptr};
+			      nullptr, nullptr);
   return node;
 }
 
@@ -514,11 +487,10 @@ SptFactory::new_ParamH(
 )
 {
   auto type = local ? PtDeclType::LocalParam : PtDeclType::Param;
-  auto node = new SptDeclHead{file_region,
-			      type,
-			      false, nullptr, nullptr,
+  auto node = new SptDeclHead(file_region, type,
+			      false, nullptr,
 			      var_type, VpiNetType::None, VpiVsType::None,
-			      nullptr, nullptr};
+			      nullptr, nullptr);
   return node;
 }
 
@@ -526,15 +498,13 @@ SptFactory::new_ParamH(
 PtiDeclHead*
 SptFactory::new_SpecParamH(
   const FileRegion& file_region,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto node = new SptDeclHead{file_region,
-			      PtDeclType::SpecParam,
-			      false, left, right,
+  auto node = new SptDeclHead(file_region, PtDeclType::SpecParam,
+			      false, range,
 			      VpiVarType::None, VpiNetType::None, VpiVsType::None,
-			      nullptr, nullptr};
+			      nullptr, nullptr);
   return node;
 }
 
@@ -544,11 +514,10 @@ SptFactory::new_EventH(
   const FileRegion& file_region
 )
 {
-  auto node = new SptDeclHead{file_region,
-			      PtDeclType::Event,
-			      false, nullptr, nullptr,
+  auto node = new SptDeclHead(file_region, PtDeclType::Event,
+			      false, nullptr,
 			      VpiVarType::None, VpiNetType::None, VpiVsType::None,
-			      nullptr, nullptr};
+			      nullptr, nullptr);
   return node;
 }
 
@@ -558,11 +527,10 @@ SptFactory::new_GenvarH(
   const FileRegion& file_region
 )
 {
-  auto node = new SptDeclHead{file_region,
-			      PtDeclType::Genvar,
-			      false, nullptr, nullptr,
+  auto node = new SptDeclHead(file_region, PtDeclType::Genvar,
+			      false, nullptr,
 			      VpiVarType::None, VpiNetType::None, VpiVsType::None,
-			      nullptr, nullptr};
+			      nullptr, nullptr);
   return node;
 }
 
@@ -582,11 +550,10 @@ SptFactory::new_VarH(
   default:
     break;
   }
-  auto node = new SptDeclHead{file_region,
-			      PtDeclType::Var,
-			      sign, nullptr, nullptr,
+  auto node = new SptDeclHead(file_region, PtDeclType::Var,
+			      sign, nullptr,
 			      var_type, VpiNetType::None, VpiVsType::None,
-			      nullptr, nullptr};
+			      nullptr, nullptr);
   return node;
 }
 
@@ -595,15 +562,13 @@ PtiDeclHead*
 SptFactory::new_RegH(
   const FileRegion& file_region,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto node = new SptDeclHead{file_region,
-			      PtDeclType::Reg,
-			      sign, left, right,
+  auto node = new SptDeclHead(file_region, PtDeclType::Reg,
+			      sign, range,
 			      VpiVarType::None, VpiNetType::None, VpiVsType::None,
-			      nullptr, nullptr};
+			      nullptr, nullptr);
   return node;
 }
 
@@ -614,17 +579,15 @@ SptFactory::new_NetH(
   VpiNetType type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtStrength* strength,
   const PtDelay* delay
 )
 {
-  auto node = new SptDeclHead{file_region,
-			      PtDeclType::Net,
-			      sign, left, right,
+  auto node = new SptDeclHead(file_region, PtDeclType::Net,
+			      sign, range,
 			      VpiVarType::None, type, vstype,
-			      strength, delay};
+			      strength, delay);
   return node;
 }
 
@@ -635,9 +598,9 @@ SptFactory::new_DeclItem(
   const char* name
 )
 {
-  auto node = new SptDeclItem{file_region, name,
-    PtiArray<const PtRange>{},
-    nullptr};
+  auto node = new SptDeclItem(file_region, name,
+			      PtiArray<const PtRange>{},
+			      nullptr);
   return node;
 }
 
@@ -649,9 +612,9 @@ SptFactory::new_DeclItem(
   const PtExpr* init_value
 )
 {
-  auto node = new SptDeclItem{file_region, name,
-    PtiArray<const PtRange>{},
-    init_value};
+  auto node = new SptDeclItem(file_region, name,
+			      PtiArray<const PtRange>{},
+			      init_value);
   return node;
 }
 
@@ -663,9 +626,9 @@ SptFactory::new_DeclItem(
   const std::vector<const PtRange*>& range_array
 )
 {
-  auto node = new SptDeclItem{file_region, name,
+  auto node = new SptDeclItem(file_region, name,
 			      PtiArray<const PtRange>(mAlloc, range_array),
-			      nullptr};
+			      nullptr);
   return node;
 }
 
@@ -677,7 +640,7 @@ SptFactory::new_Range(
   const PtExpr* lsb
 )
 {
-  auto node = new SptRange{file_region, msb, lsb};
+  auto node = new SptRange(file_region, msb, lsb);
   return node;
 }
 

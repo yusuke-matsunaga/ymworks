@@ -24,8 +24,7 @@ EiFactory::new_Lhs(
   const std::vector<ElbExpr*>& lhs_elem_array
 )
 {
-  auto lhs = new EiLhs{pt_expr, opr_array, lhs_elem_array};
-  return lhs;
+  return new EiLhs(pt_expr, opr_array, lhs_elem_array);
 }
 
 
@@ -38,7 +37,7 @@ EiLhs::EiLhs(
   const PtExpr* pt_expr,
   const std::vector<ElbExpr*>& opr_array,
   const std::vector<ElbExpr*>& lhs_elem_array
-) : EiConcatOp{pt_expr, opr_array},
+) : EiConcatOp(pt_expr, opr_array),
     mArray{lhs_elem_array}
 {
 }
@@ -62,7 +61,9 @@ EiLhs::lhs_elem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < lhs_elem_num() );
+  if ( pos >= lhs_elem_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mArray[pos];
 }
 

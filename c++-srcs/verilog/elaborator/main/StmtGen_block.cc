@@ -87,7 +87,9 @@ StmtGen::instantiate_namedparblock(
 )
 {
   auto block = mgr().find_namedobj(parent, pt_stmt->name());
-  ASSERT_COND( block );
+  if ( block == nullptr ) {
+    throw std::logic_error{"block == nullptr"};
+  }
 
   auto stmt_list = instantiate_stmt_list(block, process, env, pt_stmt);
   auto stmt = mgr().new_NamedFork(block, process, pt_stmt, stmt_list);
@@ -104,7 +106,9 @@ StmtGen::instantiate_namedseqblock(
 )
 {
   auto block = mgr().find_namedobj(parent, pt_stmt->name());
-  ASSERT_COND( block );
+  if ( block == nullptr ) {
+    throw std::logic_error{"block == nullptr"};
+  }
 
   auto stmt_list = instantiate_stmt_list(block, process, env, pt_stmt);
   auto stmt = mgr().new_NamedBegin(block, process, pt_stmt, stmt_list);

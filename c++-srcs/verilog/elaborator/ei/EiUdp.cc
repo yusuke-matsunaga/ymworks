@@ -31,9 +31,8 @@ EiFactory::new_UdpDefn(
 {
   auto port_num = pt_udp->port_num();
   auto table_size = pt_udp->table_num();
-  auto udp = new EiUdpDefn{pt_udp, is_protected,
-			   port_num, table_size};
-  return udp;
+  return new EiUdpDefn(pt_udp, is_protected,
+		       port_num, table_size);
 }
 
 
@@ -102,7 +101,9 @@ EiUdpDefn::input(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < port_num() - 1 );
+  if ( pos >= port_num() - 1 ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return &mIODeclList[pos];
 }
 
@@ -150,7 +151,9 @@ EiUdpDefn::table_entry(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < table_size() );
+  if ( pos >= table_size() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return &mTableEntryList[pos];
 }
 
@@ -162,7 +165,9 @@ EiUdpDefn::set_io(
   const PtIOItem* pt_item
 )
 {
-  ASSERT_COND( 0 <= pos && pos < table_size() );
+  if ( pos >= table_size() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   mIODeclList[pos].set(pt_header, pt_item);
 }
 
@@ -228,7 +233,9 @@ EiUdpIO::name() const
 VpiDir
 EiUdpIO::direction() const
 {
-  ASSERT_COND( mPtHeader->direction() != VpiDir::Inout );
+  if ( mPtHeader->direction() == VpiDir::Inout ) {
+    throw std::logic_error{"mPtHeader->direction() == VpiDir::Inout"};
+  }
   return mPtHeader->direction();
 }
 
@@ -382,7 +389,9 @@ EiTableEntry::val(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < size() );
+  if ( pos >= size() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mValArray[pos];
 }
 

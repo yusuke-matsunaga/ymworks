@@ -23,6 +23,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 class BitVector;
 class ElbEnv;
+struct RangeVal;
 class ElbError;
 class ElbParamCon;
 class ElbScope;
@@ -505,11 +506,22 @@ protected:
   ///
   /// * 定数式でなければ EvalError 例外を送出する．
   /// * 評価結果が int でなければ EvalError 例外を送出する．
-  std::pair<int, int>
+  RangeVal
+  evaluate_range(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const PtRange* pt_range ///< [in] 範囲を表すパーす木
+  );
+
+  /// @brief 範囲を表す式を評価する．
+  /// @param[return] 範囲の MSB と LSB の値のペアを返す．
+  ///
+  /// * pt_part->mode() が VpiRangeMode::Const でなければ例外を送出する．
+  /// * 定数式でなければ EvalError 例外を送出する．
+  /// * 評価結果が int でなければ EvalError 例外を送出する．
+  RangeVal
   evaluate_range(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_left, ///< [in] 範囲のMSBを表すパース木
-    const PtExpr* pt_right ///< [in] 範囲のLSBを表すパース木
+    const PtPart* pt_part  ///< [in] 範囲指定を表すパーす木
   );
 
 

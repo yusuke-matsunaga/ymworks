@@ -244,17 +244,11 @@ public:
   bool
   is_signed() const = 0;
 
-  /// @brief 範囲の左側の式の取得
-  /// @return 範囲の左側の式
+  /// @brief 範囲の取得
+  /// @return 範囲
   virtual
-  const PtExpr*
-  left_range() const = 0;
-
-  /// @brief 範囲の右側の式の取得
-  /// @return 範囲の右側の式
-  virtual
-  const PtExpr*
-  right_range() const = 0;
+  const PtRange*
+  range() const = 0;
 
   /// @brief 戻値のデータ型の取得
   /// @return 戻値のデータ型
@@ -533,17 +527,11 @@ public:
   // PtInst の継承クラスが実装する仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 範囲の左側の式の取得
-  /// @return 範囲の左側の式
+  /// @brief 範囲の取得
+  /// @return 範囲
   virtual
-  const PtExpr*
-  left_range() const = 0;
-
-  /// @brief 範囲の右側の式の取得
-  /// @return 範囲の右側の式
-  virtual
-  const PtExpr*
-  right_range() const = 0;
+  const PtRange*
+  range() const = 0;
 
   /// @brief ポートの要素数の取得
   virtual

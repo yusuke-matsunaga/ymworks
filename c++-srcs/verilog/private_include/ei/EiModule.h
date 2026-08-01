@@ -550,7 +550,8 @@ public:
     const PtModule* pt_module, ///< [in] モジュールテンプレート
     const PtItem* pt_head,     ///< [in] パース木のヘッダ定義
     const PtInst* pt_inst,     ///< [in] パース木のインスタンス定義
-    const EiRangeImpl& range   ///< [in] 範囲
+    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -649,7 +650,7 @@ public:
   head();
 
   /// @brief 範囲を返す．
-  const EiRangeImpl&
+  const RangeVal&
   range() const;
 
 
@@ -661,8 +662,8 @@ private:
   // ヘッダ
   EiModuleHead mHead;
 
-  // 範囲
-  EiRangeImpl mRange;
+  // 範囲の情報
+  RangeInfo mRange;
 
   // 要素の配列
   std::vector<EiModule1> mArray;

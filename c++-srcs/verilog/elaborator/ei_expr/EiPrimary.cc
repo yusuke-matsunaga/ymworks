@@ -31,8 +31,7 @@ EiFactory::new_Primary(
   const VlDecl* obj
 )
 {
-  auto expr = new EiPrimary{pt_expr, obj};
-  return expr;
+  return new EiPrimary(pt_expr, obj);
 }
 
 // @brief プライマリ式を生成する．
@@ -42,8 +41,7 @@ EiFactory::new_Primary(
   const VlDecl* obj
 )
 {
-  auto expr = new EiDeclPrimary{pt_item, obj};
-  return expr;
+  return new EiDeclPrimary(pt_item, obj);
 }
 
 // @brief プライマリ式を生成する．
@@ -53,8 +51,7 @@ EiFactory::new_Primary(
   ElbParameter* obj
 )
 {
-  auto expr = new EiParamPrimary{pt_expr, obj};
-  return expr;
+  return new EiParamPrimary(pt_expr, obj);
 }
 
 // @brief プライマリ式を生成する(配列要素版)．
@@ -65,8 +62,7 @@ EiFactory::new_Primary(
   const std::vector<ElbExpr*>& index_list
 )
 {
-  auto expr = new EiArrayElemPrimary{pt_expr, obj, index_list};
-  return expr;
+  return new EiArrayElemPrimary(pt_expr, obj, index_list);
 }
 
 // @brief プライマリ式を生成する(固定インデックスの配列要素版)．
@@ -77,8 +73,7 @@ EiFactory::new_Primary(
   SizeType offset
 )
 {
-  auto expr = new EiConstArrayElemPrimary{pt_expr, obj, offset};
-  return expr;
+  return new EiConstArrayElemPrimary(pt_expr, obj, offset);
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
@@ -88,8 +83,7 @@ EiFactory::new_ArgHandle(
   const VlScope* arg
 )
 {
-  auto expr = new EiScopePrimary{pt_expr, arg};
-  return expr;
+  return new EiScopePrimary(pt_expr, arg);
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
@@ -99,8 +93,7 @@ EiFactory::new_ArgHandle(
   const VlPrimitive* arg
 )
 {
-  auto expr = new EiPrimitivePrimary{pt_expr, arg};
-  return expr;
+  return new EiPrimitivePrimary(pt_expr, arg);
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
@@ -110,8 +103,7 @@ EiFactory::new_ArgHandle(
   const VlDeclArray* arg
 )
 {
-  auto expr = new EiDeclArrayPrimary{pt_expr, arg};
-  return expr;
+  return new EiDeclArrayPrimary(pt_expr, arg);
 }
 
 
@@ -122,7 +114,7 @@ EiFactory::new_ArgHandle(
 // @brief コンストラクタ
 EiPrimaryBase::EiPrimaryBase(
   const PtExpr* pt_expr
-) : EiExprBase{pt_expr}
+) : EiExprBase(pt_expr)
 {
 }
 
@@ -156,7 +148,7 @@ EiPrimaryBase::_set_reqsize(
 EiPrimary::EiPrimary(
   const PtExpr* pt_expr,
   const VlDecl* obj
-) : EiPrimaryBase{pt_expr},
+) : EiPrimaryBase(pt_expr),
     mObj{obj}
 {
 }
@@ -214,7 +206,9 @@ EiPrimary::lhs_elem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( pos == 0 );
+  if ( pos != 0 ) {
+    throw std::logic_error{"pos != 0"};
+  }
   return this;
 }
 
@@ -306,7 +300,9 @@ EiDeclPrimary::lhs_elem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( pos == 0 );
+  if ( pos != 0 ) {
+    throw std::logic_error{"pos != 0"};
+  }
   return this;
 }
 
@@ -415,7 +411,9 @@ EiDeclArrayPrimary::lhs_elem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( pos == 0 );
+  if ( pos != 0 ) {
+    throw std::logic_error{"pos != 0"};
+  }
   return this;
 }
 
@@ -451,7 +449,7 @@ EiDeclArrayPrimary::pt_obj() const
 EiParamPrimary::EiParamPrimary(
   const PtExpr* pt_expr,
   ElbParameter* obj
-) : EiPrimaryBase{pt_expr},
+) : EiPrimaryBase(pt_expr),
     mObj{obj}
 {
 }
@@ -513,7 +511,7 @@ EiArrayElemPrimary::EiArrayElemPrimary(
   const PtExpr* pt_expr,
   const VlDeclArray* obj,
   const std::vector<ElbExpr*>& index_list
-) : EiPrimaryBase{pt_expr},
+) : EiPrimaryBase(pt_expr),
     mObj{obj},
     mIndexList{index_list}
 {
@@ -589,7 +587,9 @@ EiArrayElemPrimary::lhs_elem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( pos == 0 );
+  if ( pos != 0 ) {
+    throw std::logic_error{"pos != 0"};
+  }
   return this;
 }
 
@@ -610,7 +610,7 @@ EiConstArrayElemPrimary::EiConstArrayElemPrimary(
   const PtExpr* pt_expr,
   const VlDeclArray* obj,
   SizeType offset
-) : EiPrimaryBase{pt_expr},
+) : EiPrimaryBase(pt_expr),
     mObj{obj},
     mOffset{offset}
 {
@@ -700,7 +700,9 @@ EiConstArrayElemPrimary::lhs_elem(
   SizeType pos
 ) const
 {
-  ASSERT_COND( pos == 0 );
+  if ( pos != 0 ) {
+    throw std::logic_error{"pos != 0"};
+  }
   return this;
 }
 
@@ -767,7 +769,7 @@ EiScopePrimary::scope_obj() const
 EiPrimitivePrimary::EiPrimitivePrimary(
   const PtExpr* pt_expr,
   const VlPrimitive* obj
-) : EiPrimaryBase{pt_expr},
+) : EiPrimaryBase(pt_expr),
     mObj{obj}
 {
 }

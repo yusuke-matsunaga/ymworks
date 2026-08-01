@@ -27,8 +27,7 @@ EiFactory::new_FuncCall(
   const std::vector<ElbExpr*>& arg_list
 )
 {
-  auto expr = new EiFuncCall{pt_expr, func, arg_list};
-  return expr;
+  return new EiFuncCall(pt_expr, func, arg_list);
 }
 
 // @brief システム関数呼び出し式を生成する．
@@ -39,8 +38,7 @@ EiFactory::new_SysFuncCall(
   const std::vector<ElbExpr*>& arg_list
 )
 {
-  auto expr = new EiSysFuncCall{pt_expr, user_systf, arg_list};
-  return expr;
+  return new EiSysFuncCall(pt_expr, user_systf, arg_list);
 }
 
 
@@ -52,7 +50,7 @@ EiFactory::new_SysFuncCall(
 EiFcBase::EiFcBase(
   const PtExpr* pt_expr,
   const std::vector<ElbExpr*>& arg_list
-) : EiExprBase{pt_expr},
+) : EiExprBase(pt_expr),
     mArgList{arg_list}
 {
 }
@@ -75,8 +73,9 @@ EiFcBase::argument(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < argument_num() );
-
+  if ( pos >= argument_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mArgList[pos];
 }
 
@@ -106,7 +105,7 @@ EiFuncCall::EiFuncCall(
   const PtExpr* pt_expr,
   const VlTaskFunc* func,
   const std::vector<ElbExpr*>& arg_list
-) : EiFcBase{pt_expr, arg_list},
+) : EiFcBase(pt_expr, arg_list),
     mFunc{func}
 {
 }
@@ -144,9 +143,10 @@ EiFuncCall::value_type() const
     return VlValueType(true, true, mFunc->bit_size());
 
   default:
-    ASSERT_NOT_REACHED;
+    break;
   }
-  return VlValueType();
+
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief 定数の時 true を返す．
@@ -188,7 +188,7 @@ EiSysFuncCall::EiSysFuncCall(
   const PtExpr* pt_expr,
   const VlUserSystf* user_systf,
   const std::vector<ElbExpr*>& arg_list
-) : EiFcBase{pt_expr, arg_list},
+) : EiFcBase(pt_expr, arg_list),
     mUserSystf{user_systf}
 {
 }
@@ -209,7 +209,9 @@ EiSysFuncCall::type() const
 VlValueType
 EiSysFuncCall::value_type() const
 {
-  ASSERT_COND( mUserSystf->system_function() );
+  if ( !mUserSystf->system_function() ) {
+    throw std::logic_error{"!mUserSystf->system_function()"};
+  }
 
   switch ( mUserSystf->function_type() ) {
   case VpiFuncType::Int:
@@ -228,9 +230,10 @@ EiSysFuncCall::value_type() const
     return VlValueType(true, true, mUserSystf->size());
 
   default:
-    ASSERT_NOT_REACHED;
+    break;
   }
-  return VlValueType();
+
+  throw std::logic_error{"Should not be reached"};
 }
 
 // @brief 定数の時 true を返す．

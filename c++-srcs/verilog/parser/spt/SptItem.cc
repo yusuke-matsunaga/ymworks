@@ -223,16 +223,9 @@ SptItem::is_signed() const
   return false;
 }
 
-// @brief 範囲の左側の式の取得
-const PtExpr*
-SptItem::left_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲の右側の式の取得
-const PtExpr*
-SptItem::right_range() const
+// @brief 範囲の取得
+const PtRange*
+SptItem::range() const
 {
   return nullptr;
 }
@@ -423,7 +416,7 @@ SptItem::next_expr() const
 SptDefParamH::SptDefParamH(
   const FileRegion& file_region,
   PtiDefParamArray&& dp_array
-) : SptItem{file_region, PtItemType::DefParam},
+) : SptItem(file_region, PtItemType::DefParam),
     mArray{std::move(dp_array)}
 {
 }
@@ -522,7 +515,7 @@ SptContAssignH::SptContAssignH(
   const PtStrength* strength,
   const PtDelay* delay,
   PtiContAssignArray&& ca_array
-) : SptItem{file_region, PtItemType::ContAssign},
+) : SptItem(file_region, PtItemType::ContAssign),
     mStrength{strength},
     mDelay{delay},
     mArray{std::move(ca_array)}
@@ -617,10 +610,12 @@ SptProcess::SptProcess(
   const FileRegion& file_region,
   PtItemType type,
   const PtStmt* body
-) : SptItem{file_region, type},
+) : SptItem(file_region, type),
     mBody{body}
 {
-  ASSERT_COND( body );
+  if ( body == nullptr ) {
+    throw std::logic_error{"body == nullptr"};
+  }
 }
 
 // デストラクタ
@@ -647,18 +642,16 @@ SptTf::SptTf(
   const char* name,
   bool automatic,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   VpiVarType data_type,
   PtiIOHeadArray&& iohead_array,
   PtiDeclHeadArray&& declhead_array,
   const PtStmt* stmt
-) : SptItem{file_region, type},
+) : SptItem(file_region, type),
     mName{name},
     mAutomatic{automatic},
     mSigned{sign},
-    mLeftRange{left},
-    mRightRange{right},
+    mRange{range},
     mDataType{data_type},
     mIOHeadArray{std::move(iohead_array)},
     mDeclHeadArray{std::move(declhead_array)},
@@ -743,18 +736,11 @@ SptTf::is_signed() const
   return mSigned;
 }
 
-// 範囲の左側の式の取得
-const PtExpr*
-SptTf::left_range() const
+// 範囲の取得
+const PtRange*
+SptTf::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲の右側の式の取得
-const PtExpr*
-SptTf::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 // データ型の取得
@@ -797,7 +783,7 @@ SptGateH::SptGateH(
   const PtStrength* strength,
   const PtDelay* delay,
   PtiInstArray&& elem_array
-) : SptItem{file_region, PtItemType::GateInst},
+) : SptItem(file_region, PtItemType::GateInst),
     mPrimType{prim_type},
     mStrength{strength},
     mDelay{delay},
@@ -858,7 +844,7 @@ SptMuH::SptMuH(
   const PtStrength* strength,
   const PtDelay* delay,
   PtiInstArray&& elem_array
-) : SptItem{file_region, PtItemType::MuInst},
+) : SptItem(file_region, PtItemType::MuInst),
     mName{def_name},
     mParamArray{std::move(con_array)},
     mStrength{strength},
@@ -934,13 +920,11 @@ SptMuH::inst(
 SptInst::SptInst(
   const FileRegion& file_region,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   PtiConnectionArray&& con_array
 ) : mFileRegion{file_region},
     mName{name},
-    mLeftRange{left},
-    mRightRange{right},
+    mRange{range},
     mPortArray{std::move(con_array)}
 {
 }
@@ -964,18 +948,11 @@ SptInst::name() const
   return mName;
 }
 
-// 範囲の左側の式の取得
-const PtExpr*
-SptInst::left_range() const
+// 範囲の取得
+const PtRange*
+SptInst::range() const
 {
-  return mLeftRange;
-}
-
-// 範囲の右側の式の取得
-const PtExpr*
-SptInst::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 // @brief ポートの要素数の取得
@@ -1006,8 +983,8 @@ SptFactory::new_DefParamH(
   const std::vector<const PtDefParam*>& elem_array
 )
 {
-  auto node = new SptDefParamH{file_region,
-			       PtiDefParamArray(mAlloc, elem_array)};
+  auto node = new SptDefParamH(file_region,
+			       PtiDefParamArray(mAlloc, elem_array));
   return node;
 }
 
@@ -1019,9 +996,9 @@ SptFactory::new_DefParam(
   const PtExpr* value
 )
 {
-  auto node = new SptDefParam{file_region,
+  auto node = new SptDefParam(file_region,
 			      PtiNameBranchArray(),
-			      name, value};
+			      name, value);
   return node;
 }
 
@@ -1035,9 +1012,9 @@ SptFactory::new_DefParam(
 {
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto node = new SptDefParam{file_region,
+  auto node = new SptDefParam(file_region,
 			      PtiNameBranchArray(mAlloc, nb_array),
-			      tail_name, value};
+			      tail_name, value);
   return node;
 }
 
@@ -1063,7 +1040,7 @@ SptFactory::new_ContAssign(
   const PtExpr* rhs
 )
 {
-  auto node = new SptContAssign{file_region, lhs, rhs};
+  auto node = new SptContAssign(file_region, lhs, rhs);
   return node;
 }
 
@@ -1074,9 +1051,9 @@ SptFactory::new_Initial(
   const PtStmt* body
 )
 {
-  auto node = new SptProcess{file_region,
+  auto node = new SptProcess(file_region,
 			     PtItemType::Initial,
-			     body};
+			     body);
   return node;
 }
 
@@ -1087,9 +1064,9 @@ SptFactory::new_Always(
   const PtStmt* body
 )
 {
-  auto node = new SptProcess{file_region,
+  auto node = new SptProcess(file_region,
 			     PtItemType::Always,
-			     body};
+			     body);
   return node;
 }
 
@@ -1104,14 +1081,14 @@ SptFactory::new_Task(
   const PtStmt* stmt
 )
 {
-  auto node = new SptTf{file_region,
+  auto node = new SptTf(file_region,
 			PtItemType::Task,
 			name, automatic,
-			false, nullptr, nullptr,
+			false, nullptr,
 			VpiVarType::None,
 			PtiIOHeadArray(mAlloc, iohead_array),
 			PtiDeclHeadArray(mAlloc, declhead_array),
-			stmt};
+			stmt);
   return node;
 }
 
@@ -1127,14 +1104,14 @@ SptFactory::new_Function(
   const PtStmt* stmt
 )
 {
-  auto node = new SptTf{file_region,
+  auto node = new SptTf(file_region,
 			PtItemType::Func,
 			name, automatic,
-			sign, nullptr, nullptr,
+			sign, nullptr,
 			VpiVarType::None,
 			PtiIOHeadArray(mAlloc, iohead_array),
 			PtiDeclHeadArray(mAlloc, declhead_array),
-			stmt};
+			stmt);
   return node;
 }
 
@@ -1145,21 +1122,20 @@ SptFactory::new_SizedFunc(
   const char* name,
   bool automatic,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const std::vector<const PtIOHead*>& iohead_array,
   const std::vector<const PtDeclHead*>& declhead_array,
   const PtStmt* stmt
 )
 {
-  auto node = new SptTf{file_region,
+  auto node = new SptTf(file_region,
 			PtItemType::Func,
 			name, automatic,
-			sign, left, right,
+			sign, range,
 			VpiVarType::None,
 			PtiIOHeadArray(mAlloc, iohead_array),
 			PtiDeclHeadArray(mAlloc, declhead_array),
-			stmt};
+			stmt);
   return node;
 }
 
@@ -1176,14 +1152,14 @@ SptFactory::new_TypedFunc(
   const PtStmt* stmt
 )
 {
-  auto node = new SptTf{file_region,
+  auto node = new SptTf(file_region,
 			PtItemType::Func,
 			name, automatic,
-			sign, nullptr, nullptr,
+			sign, nullptr,
 			func_type,
 			PtiIOHeadArray(mAlloc, iohead_array),
 			PtiDeclHeadArray(mAlloc, declhead_array),
-			stmt};
+			stmt);
   return node;
 }
 
@@ -1197,10 +1173,10 @@ SptFactory::new_GateH(
   const std::vector<const PtInst*>& elem_array
 )
 {
-  auto node = new SptGateH{file_region,
+  auto node = new SptGateH(file_region,
 			   type,
 			   strength, delay,
-			   PtiInstArray(mAlloc, elem_array)};
+			   PtiInstArray(mAlloc, elem_array));
   return node;
 }
 
@@ -1214,10 +1190,10 @@ SptFactory::new_MuH(
   const std::vector<const PtInst*>& elem_array
 )
 {
-  auto node = new SptMuH{file_region, def_name,
+  auto node = new SptMuH(file_region, def_name,
 			 PtiConnectionArray(),
 			 strength, delay,
-			 PtiInstArray(mAlloc, elem_array)};
+			 PtiInstArray(mAlloc, elem_array));
   return node;
 }
 
@@ -1230,10 +1206,10 @@ SptFactory::new_MuH(
   const std::vector<const PtInst*>& elem_array
 )
 {
-  auto node = new SptMuH{file_region, def_name,
+  auto node = new SptMuH(file_region, def_name,
 			 PtiConnectionArray(mAlloc, con_array),
 			 nullptr, nullptr,
-			 PtiInstArray(mAlloc, elem_array)};
+			 PtiInstArray(mAlloc, elem_array));
   return node;
 }
 
@@ -1245,8 +1221,8 @@ SptFactory::new_Inst(
   const std::vector<const PtConnection*>& con_array
 )
 {
-  auto node = new SptInst{file_region, nullptr, nullptr, nullptr,
-			  PtiConnectionArray(mAlloc, con_array)};
+  auto node = new SptInst(file_region, nullptr, nullptr,
+			  PtiConnectionArray(mAlloc, con_array));
   return node;
 }
 
@@ -1258,8 +1234,8 @@ SptFactory::new_InstN(
   const std::vector<const PtConnection*>& con_array
 )
 {
-  auto node = new SptInst{file_region, name, nullptr, nullptr,
-			  PtiConnectionArray(mAlloc, con_array)};
+  auto node = new SptInst(file_region, name, nullptr,
+			  PtiConnectionArray(mAlloc, con_array));
   return node;
 }
 #endif
@@ -1269,13 +1245,12 @@ const PtInst*
 SptFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const std::vector<const PtConnection*>& con_array
 )
 {
-  auto node = new SptInst{file_region, name, left, right,
-			  PtiConnectionArray(mAlloc, con_array)};
+  auto node = new SptInst(file_region, name, range,
+			  PtiConnectionArray(mAlloc, con_array));
   return node;
 }
 

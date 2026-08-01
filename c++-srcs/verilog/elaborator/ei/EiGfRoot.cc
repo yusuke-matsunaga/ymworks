@@ -25,8 +25,7 @@ EiFactory::new_GfRoot(
   const PtItem* pt_item
 )
 {
-  auto gfroot = new EiGfRoot{parent, pt_item};
-  return gfroot;
+  return new EiGfRoot(parent, pt_item);
 }
 
 

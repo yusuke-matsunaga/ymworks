@@ -27,8 +27,7 @@ EiFactory::new_DelayControl(
   ElbExpr* delay
 )
 {
-  auto control = new EiDelayControl(pt_control, delay);
-  return control;
+  return new EiDelayControl(pt_control, delay);
 }
 
 // @brief イベントコントロールを生成する．
@@ -38,8 +37,7 @@ EiFactory::new_EventControl(
   const std::vector<ElbExpr*>& event_list
 )
 {
-  auto control = new EiEventControl(pt_control, event_list);
-  return control;
+  return new EiEventControl(pt_control, event_list);
 }
 
 // @brief リピートコントロールを生成する．
@@ -50,8 +48,7 @@ EiFactory::new_RepeatControl(
   const std::vector<ElbExpr*>& event_list
 )
 {
-  auto control = new EiRepeatControl(pt_control, rep, event_list);
-  return control;
+  return new EiRepeatControl(pt_control, rep, event_list);
 }
 
 
@@ -124,7 +121,7 @@ EiControl::event_list() const
 EiDelayControl::EiDelayControl(
   const PtControl* pt_control,
   ElbExpr* delay
-) : EiControl{pt_control},
+) : EiControl(pt_control),
     mDelay{delay}
 {
 }
@@ -157,7 +154,7 @@ EiDelayControl::delay() const
 EiEventControl::EiEventControl(
   const PtControl* pt_control,
   const std::vector<ElbExpr*>& event_list
-) : EiControl{pt_control},
+) : EiControl(pt_control),
     mEventList{event_list}
 {
 }
@@ -187,7 +184,9 @@ EiEventControl::event(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < event_num() );
+  if ( pos >= event_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mEventList[pos];
 }
 
@@ -208,7 +207,7 @@ EiRepeatControl::EiRepeatControl(
   const PtControl* pt_control,
   ElbExpr* rep,
   const std::vector<ElbExpr*>& event_list
-) : EiEventControl{pt_control, event_list},
+) : EiEventControl(pt_control, event_list),
     mExpr{rep}
 {
 }

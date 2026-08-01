@@ -101,10 +101,8 @@ public:
     const PtModule* pt_module, ///< [in] モジュールテンプレート
     const PtItem* pt_head,     ///< [in] パース木のヘッダ定義
     const PtInst* pt_inst,     ///< [in] パース木のインスタンス定義
-    const PtExpr* left,        ///< [in] 範囲の MSB の式
-    const PtExpr* right,       ///< [in] 範囲の LSB の式
-    int left_val,              ///< [in] 範囲の MSB の値
-    int right_val              ///< [in] 範囲の LSB の値
+    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   ) override;
 
   /// @brief module IO ヘッダを生成する．
@@ -126,10 +124,8 @@ public:
   new_DeclHead(
     const VlScope* parent,     ///< [in] 親のスコープ
     const PtDeclHead* pt_head, ///< [in] パース木の宣言ヘッダ
-    const PtExpr* left,        ///< [in] 範囲の左側の式
-    const PtExpr* right,       ///< [in] 範囲の右側の式
-    int left_val,              ///< [in] 範囲の MSB の値
-    int right_val,             ///< [in] 範囲の LSB の値
+    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range,     ///< [in] 範囲の値
     bool has_delay = false     ///< [in] 遅延値を持つとき true
   ) override;
 
@@ -147,10 +143,8 @@ public:
     const VlScope* parent,   ///< [in] 親のスコープ
     const PtIOHead* pt_head, ///< [in] パース木のIO宣言ヘッダ
     VpiAuxType aux_type,     ///< [in] 補助的なデータ型
-    const PtExpr* left,      ///< [in] 範囲の左側の式
-    const PtExpr* right,     ///< [in] 範囲の右側の式
-    int left_val,            ///< [in] 範囲の MSB の値
-    int right_val            ///< [in] 範囲の LSB の値
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range    ///< [in] 範囲の値
   ) override;
 
   /// @brief 宣言要素のヘッダを生成する．(IODecl 中の宣言用)
@@ -164,12 +158,10 @@ public:
   /// @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
   ElbDeclHead*
   new_DeclHead(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item, ///< [in] パース木の関数定義
-    const PtExpr* left,    ///< [in] 範囲の左側の式
-    const PtExpr* right,   ///< [in] 範囲の右側の式
-    int left_val,          ///< [in] 範囲の MSB の値
-    int right_val          ///< [in] 範囲の LSB の値
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const PtItem* pt_item,   ///< [in] パース木の関数定義
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range    ///< [in] 範囲の値
   ) override;
 
   /// @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
@@ -198,8 +190,8 @@ public:
   /// @brief 宣言要素の配列を生成する．
   const VlDeclArray*
   new_DeclArray(
-    ElbDeclHead* head,                   ///< [in] ヘッダ
-    const PtNamedBase* pt_item,          ///< [in] パース木の宣言要素
+    ElbDeclHead* head,                        ///< [in] ヘッダ
+    const PtNamedBase* pt_item,               ///< [in] パース木の宣言要素
     const std::vector<ElbRangeSrc>& range_src ///< [in] 範囲の配列
   ) override;
 
@@ -215,10 +207,8 @@ public:
   new_ParamHead(
     const VlScope* parent,     ///< [in] 親のスコープ
     const PtDeclHead* pt_head, ///< [in] パース木の宣言ヘッダ
-    const PtExpr* left,        ///< [in] 範囲の左側の式
-    const PtExpr* right,       ///< [in] 範囲の右側の式
-    int left_val,              ///< [in] 範囲の MSB の値
-    int right_val              ///< [in] 範囲の LSB の値
+    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   ) override;
 
   /// @brief parameter 宣言を生成する．
@@ -329,12 +319,10 @@ public:
   /// @brief プリミティブ配列インスタンスを生成する．
   ElbPrimArray*
   new_PrimitiveArray(
-    ElbPrimHead* head,     ///< [in] ヘッダ
-    const PtInst* pt_inst, ///< [in] インスタンス定義
-    const PtExpr* left,    ///< [in] 範囲の MSB の式
-    const PtExpr* right,   ///< [in] 範囲の LSB の式
-    int left_val,          ///< [in] 範囲の MSB の値
-    int right_val          ///< [in] 範囲の LSB の値
+    ElbPrimHead* head,       ///< [in] ヘッダ
+    const PtInst* pt_inst,   ///< [in] インスタンス定義
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range    ///< [in] 範囲の値
   ) override;
 
   /// @brief セルプリミティブインスタンスを生成する．
@@ -348,25 +336,21 @@ public:
   /// @brief セルプリミティブ配列インスタンスを生成する．
   ElbPrimArray*
   new_CellPrimitiveArray(
-    ElbPrimHead* head,     ///< [in] ヘッダ
-    const ClibCell& cell,  ///< [in] セル
-    const PtInst* pt_inst, ///< [in] インスタンス定義
-    const PtExpr* left,    ///< [in] 範囲の MSB の式
-    const PtExpr* right,   ///< [in] 範囲の LSB の式
-    int left_val,          ///< [in] 範囲の MSB の値
-    int right_val          ///< [in] 範囲の LSB の値
+    ElbPrimHead* head,       ///< [in] ヘッダ
+    const ClibCell& cell,    ///< [in] セル
+    const PtInst* pt_inst,   ///< [in] インスタンス定義
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range    ///< [in] 範囲の値
   ) override;
 
   /// @brief function を生成する．
   ElbTaskFunc*
   new_Function(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item, ///< [in] パース木の定義
-    const PtExpr* left,    ///< [in] 範囲の MSB の式
-    const PtExpr* right,   ///< [in] 範囲の LSB の式
-    int left_val,          ///< [in] 範囲の MSB の値
-    int right_val,         ///< [in] 範囲の LSB の値
-    bool const_func        ///< [in] 定数関数フラグ
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const PtItem* pt_item,   ///< [in] パース木の定義
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range,   ///< [in] 範囲の値
+    bool const_func          ///< [in] 定数関数フラグ
   ) override;
 
   /// @brief function を生成する．

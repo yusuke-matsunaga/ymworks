@@ -27,38 +27,32 @@ EiFactory::new_BinaryOp(
   ElbExpr* opr1
 )
 {
-  ElbExpr* expr = nullptr;
   switch( op_type ) {
   case VpiOpType::BitAnd:
   case VpiOpType::BitOr:
   case VpiOpType::BitXNor:
   case VpiOpType::BitXor:
-    expr = new EiBinaryBitOp{pt_expr, opr0, opr1};
-    break;
+    return new EiBinaryBitOp(pt_expr, opr0, opr1);
 
   case VpiOpType::Add:
   case VpiOpType::Sub:
   case VpiOpType::Mult:
   case VpiOpType::Div:
   case VpiOpType::Mod:
-    expr = new EiBinaryArithOp{pt_expr, opr0, opr1};
-    break;
+    return new EiBinaryArithOp(pt_expr, opr0, opr1);
 
   case VpiOpType::Power:
-    expr = new EiPowerOp{pt_expr, opr0, opr1};
-    break;
+    return new EiPowerOp(pt_expr, opr0, opr1);
 
   case VpiOpType::LShift:
   case VpiOpType::RShift:
   case VpiOpType::ArithLShift:
   case VpiOpType::ArithRShift:
-    expr = new EiShiftOp{pt_expr, opr0, opr1};
-    break;
+    return new EiShiftOp(pt_expr, opr0, opr1);
 
   case VpiOpType::LogAnd:
   case VpiOpType::LogOr:
-    expr = new EiBinaryLogOp{pt_expr, opr0, opr1};
-    break;
+    return new EiBinaryLogOp(pt_expr, opr0, opr1);
 
   case VpiOpType::CaseEq:
   case VpiOpType::CaseNeq:
@@ -68,14 +62,13 @@ EiFactory::new_BinaryOp(
   case VpiOpType::Gt:
   case VpiOpType::Le:
   case VpiOpType::Lt:
-    expr = new EiCompareOp{pt_expr, opr0, opr1};
-    break;
+    return new EiCompareOp(pt_expr, opr0, opr1);
 
   default:
-    ASSERT_NOT_REACHED;
     break;
   }
-  return expr;
+
+  throw std::logic_error{"Should not be reached"};
 }
 
 
@@ -88,7 +81,7 @@ EiBinaryOp::EiBinaryOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiOperation{pt_expr},
+) : EiOperation(pt_expr),
     mOpr{opr1, opr2}
 {
 }
@@ -118,8 +111,9 @@ EiBinaryOp::operand(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < 2 );
-
+  if ( pos >= 2 ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mOpr[pos];
 }
 
@@ -140,7 +134,7 @@ EiCompareOp::EiCompareOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp{pt_expr, opr1, opr2}
+) : EiBinaryOp(pt_expr, opr1, opr2)
 {
   // 比較演算は大きい方の型を用いる．
   auto type1 = opr1->value_type();
@@ -184,7 +178,7 @@ EiBinaryLogOp::EiBinaryLogOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp{pt_expr, opr1, opr2}
+) : EiBinaryOp(pt_expr, opr1, opr2)
 {
   // 論理演算の場合はオペランドも1ビットスカラーのはずだが
   // 仕様書には max(L(i), L(j)) なんて書いてある．
@@ -227,7 +221,7 @@ EiBinaryBitOp::EiBinaryBitOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp{pt_expr, opr1, opr2}
+) : EiBinaryOp(pt_expr, opr1, opr2)
 {
   // オペランドのサイズの大きい方で決まる．
   auto type1 = opr1->value_type();
@@ -235,7 +229,9 @@ EiBinaryBitOp::EiBinaryBitOp(
 
   mType = calc_type(type1, type2);
 
-  ASSERT_COND( !mType.is_real_type() );
+  if ( mType.is_real_type() ) {
+    throw std::logic_error{"mType.is_real_type()"};
+  }
 }
 
 // @brief デストラクタ
@@ -271,7 +267,7 @@ EiBinaryArithOp::EiBinaryArithOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp{pt_expr, opr1, opr2}
+) : EiBinaryOp(pt_expr, opr1, opr2)
 {
   // オペランドのサイズの大きい方で決まる．
   auto type1 = opr1->value_type();
@@ -313,7 +309,7 @@ EiPowerOp::EiPowerOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp{pt_expr, opr1, opr2}
+) : EiBinaryOp(pt_expr, opr1, opr2)
 {
   // 巾乗演算の場合, どちらかのオペランドが real, integer, signed
   // なら結果は real, どちらも unsigned の時のみ unsigned となる．
@@ -361,13 +357,16 @@ EiShiftOp::EiShiftOp(
   const PtExpr* pt_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp{pt_expr, opr1, opr2}
+) : EiBinaryOp(pt_expr, opr1, opr2)
 {
   // シフト演算子は第1オペランドの型とサイズをそのまま引き継ぐ
   mType = opr1->value_type();
-  ASSERT_COND( !mType.is_real_type() );
-
-  ASSERT_COND( !opr2->value_type().is_real_type() );
+  if ( mType.is_real_type() ) {
+    throw std::logic_error{"mType.is_real_type()"};
+  }
+  if ( opr2->value_type().is_real_type() ) {
+    throw std::logic_error{"opr2->value_type().is_real_type()"};
+  }
 
   // 第2オペランドのサイズは self determined
   opr2->set_selfsize();

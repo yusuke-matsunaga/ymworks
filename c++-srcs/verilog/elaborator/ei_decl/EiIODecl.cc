@@ -26,8 +26,7 @@ EiFactory::new_IOHead(
   const PtIOHead* pt_header
 )
 {
-  auto head = new EiModIOHead{module, pt_header};
-  return head;
+  return new EiModIOHead(module, pt_header);
 }
 
 // @brief タスク/関数 IO ヘッダを生成する．
@@ -38,12 +37,10 @@ EiFactory::new_IOHead(
 )
 {
   if ( taskfunc->type() == VpiObjType::Task ) {
-    auto head = new EiTaskIOHead{taskfunc, pt_header};
-    return head;
+    return new EiTaskIOHead(taskfunc, pt_header);
   }
   else { // VpiObjType::Function
-    auto head = new EiFunctionIOHead{taskfunc, pt_header};
-    return head;
+    return new EiFunctionIOHead(taskfunc, pt_header);
   }
 }
 
@@ -101,7 +98,7 @@ EiIOHead::function() const
 EiModIOHead::EiModIOHead(
   const VlModule* module,
   const PtIOHead* pt_header
-) : EiIOHead{pt_header},
+) : EiIOHead(pt_header),
     mModule{module}
 {
 }
@@ -127,7 +124,7 @@ EiModIOHead::module() const
 EiTaskIOHead::EiTaskIOHead(
   const VlTaskFunc* task,
   const PtIOHead* pt_header
-) : EiIOHead{pt_header},
+) : EiIOHead(pt_header),
     mTask{task}
 {
 }
@@ -153,7 +150,7 @@ EiTaskIOHead::task() const
 EiFunctionIOHead::EiFunctionIOHead(
   const VlTaskFunc* func,
   const PtIOHead* pt_header
-) : EiIOHead{pt_header},
+) : EiIOHead(pt_header),
     mFunction{func}
 {
 }

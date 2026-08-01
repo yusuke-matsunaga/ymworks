@@ -30,14 +30,12 @@ EiFactory::new_Decl(
   const VlExpr* init
 )
 {
-  ElbDecl* decl = nullptr;
   if ( init ) {
-    decl = new EiDeclI{head, pt_item, init};
+    return new EiDeclI(head, pt_item, init);
   }
   else {
-    decl = new EiDecl{head, pt_item};
+    return new EiDecl(head, pt_item);
   }
-  return decl;
 }
 
 
@@ -281,7 +279,7 @@ EiDeclI::EiDeclI(
   ElbDeclHead* head,
   const PtNamedBase* pt_item,
   const VlExpr* init
-) : EiDecl{head, pt_item},
+) : EiDecl(head, pt_item),
     mInit{init}
 {
 }

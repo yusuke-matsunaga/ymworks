@@ -83,16 +83,9 @@ CptIOHBase::is_signed() const
   return static_cast<bool>(mAttr & 1);
 }
 
-// @brief 範囲のMSBの取得
-const PtExpr*
-CptIOHBase::left_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲のLSBの取得
-const PtExpr*
-CptIOHBase::right_range() const
+// @brief 範囲の取得
+const PtRange*
+CptIOHBase::range() const
 {
   return nullptr;
 }
@@ -135,10 +128,8 @@ CptIOH::CptIOH(
   VpiNetType net_type,
   VpiVarType var_type,
   bool sign
-) : CptIOHBase{file_region,
-	       dir, aux_type,
-	       net_type, var_type,
-	       sign}
+) : CptIOHBase(file_region, dir, aux_type,
+	       net_type, var_type, sign)
 {
 }
 
@@ -159,14 +150,10 @@ CptIOHV::CptIOHV(
   VpiAuxType aux_type,
   VpiNetType net_type,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
-) : CptIOHBase{file_region,
-	       dir, aux_type,
-	       net_type, VpiVarType::None,
-	       sign},
-    mLeftRange{left},
-    mRightRange{right}
+  const PtRange* range
+) : CptIOHBase(file_region, dir, aux_type,
+	       net_type, VpiVarType::None, sign),
+    mRange{range}
 {
 }
 
@@ -175,18 +162,11 @@ CptIOHV::~CptIOHV()
 {
 }
 
-// @brief 範囲のMSBの取得
-const PtExpr*
-CptIOHV::left_range() const
+// @brief 範囲の取得
+const PtRange*
+CptIOHV::range() const
 {
-  return mLeftRange;
-}
-
-// @brief 範囲のLSBの取得
-const PtExpr*
-CptIOHV::right_range() const
-{
-  return mRightRange;
+  return mRange;
 }
 
 
@@ -239,10 +219,12 @@ CptIOItemI::CptIOItemI(
   const FileRegion& file_region,
   const char* name,
   const PtExpr* init_value
-) : CptIOItem{file_region, name},
+) : CptIOItem(file_region, name),
     mInitValue{init_value}
 {
-  ASSERT_COND( init_value );
+  if ( init_value == nullptr ) {
+    throw std::logic_error{"init_value == nullptr"};
+  }
 }
 
 // @brief デストラクタ
@@ -275,25 +257,21 @@ CptFactory::new_IOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  if ( left == nullptr ) {
-    ASSERT_COND( right == nullptr );
+  if ( range == nullptr ) {
     ++ mNumIOH;
     void* p = mAlloc.get_memory(sizeof(CptIOH));
-    auto obj = new (p) CptIOH{file_region, dir, VpiAuxType::None,
-			      VpiNetType::None, VpiVarType::None, sign};
+    auto obj = new (p) CptIOH(file_region, dir, VpiAuxType::None,
+			      VpiNetType::None, VpiVarType::None, sign);
     return obj;
   }
   else {
-    ASSERT_COND( right != nullptr );
     ++ mNumIOHV;
     void* p = mAlloc.get_memory(sizeof(CptIOHV));
-    auto obj = new (p) CptIOHV{file_region, dir, VpiAuxType::None,
-			       VpiNetType::None,
-			       sign, left, right};
+    auto obj = new (p) CptIOHV(file_region, dir, VpiAuxType::None,
+			       VpiNetType::None, sign, range);
     return obj;
   }
 }
@@ -304,24 +282,21 @@ CptFactory::new_RegIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  if ( left == nullptr ) {
-    ASSERT_COND( right == nullptr );
+  if ( range == nullptr ) {
     ++ mNumIOH;
     void* p = mAlloc.get_memory(sizeof(CptIOH));
-    auto obj = new (p) CptIOH{file_region, dir, VpiAuxType::Reg,
-			      VpiNetType::None, VpiVarType::None, sign};
+    auto obj = new (p) CptIOH(file_region, dir, VpiAuxType::Reg,
+			      VpiNetType::None, VpiVarType::None, sign);
     return obj;
   }
   else {
     ++ mNumIOHV;
     void* p = mAlloc.get_memory(sizeof(CptIOHV));
-    auto obj = new (p) CptIOHV{file_region, dir, VpiAuxType::Reg,
-			       VpiNetType::None,
-			       sign, left, right};
+    auto obj = new (p) CptIOHV(file_region, dir, VpiAuxType::Reg,
+			       VpiNetType::None, sign, range);
     return obj;
   }
 }
@@ -333,24 +308,21 @@ CptFactory::new_NetIOHead(
   VpiDir dir,
   VpiNetType net_type,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  if ( left == nullptr ) {
-    ASSERT_COND( right == nullptr );
+  if ( range == nullptr ) {
     ++ mNumIOH;
     void* p = mAlloc.get_memory(sizeof(CptIOH));
-    auto obj = new (p) CptIOH{file_region, dir, VpiAuxType::Net,
-			      net_type, VpiVarType::None, sign};
+    auto obj = new (p) CptIOH(file_region, dir, VpiAuxType::Net,
+			      net_type, VpiVarType::None, sign);
     return obj;
   }
   else {
     ++ mNumIOHV;
     void* p = mAlloc.get_memory(sizeof(CptIOHV));
-    auto obj = new (p) CptIOHV{file_region, dir, VpiAuxType::Net,
-			       net_type,
-			       sign, left, right};
+    auto obj = new (p) CptIOHV(file_region, dir, VpiAuxType::Net,
+			       net_type, sign, range);
     return obj;
   }
 }
@@ -365,8 +337,8 @@ CptFactory::new_VarIOHead(
 {
   ++ mNumIOH;
   void* p = mAlloc.get_memory(sizeof(CptIOH));
-  auto obj = new (p) CptIOH{file_region, dir, VpiAuxType::Var,
-			    VpiNetType::None, var_type, false};
+  auto obj = new (p) CptIOH(file_region, dir, VpiAuxType::Var,
+			    VpiNetType::None, var_type, false);
   return obj;
 }
 
@@ -381,13 +353,13 @@ CptFactory::new_IOItem(
   if ( init_value == nullptr ) {
     ++ mNumIOItem;
     void* p = mAlloc.get_memory(sizeof(CptIOItem));
-    auto obj = new (p) CptIOItem{file_region, name};
+    auto obj = new (p) CptIOItem(file_region, name);
     return obj;
   }
   else {
     ++ mNumIOItemI;
     void* p = mAlloc.get_memory(sizeof(CptIOItemI));
-    auto obj = new (p) CptIOItemI{file_region, name, init_value};
+    auto obj = new (p) CptIOItemI(file_region, name, init_value);
     return obj;
   }
 }

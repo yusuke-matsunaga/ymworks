@@ -9,6 +9,7 @@
 #include "ItemGen.h"
 #include "ElbEnv.h"
 #include "ErrorGen.h"
+#include "ElbError.h"
 
 #include "ym/BitVector.h"
 
@@ -22,8 +23,7 @@
 #include "elaborator/ElbUdp.h"
 #include "elaborator/ElbPrimitive.h"
 #include "elaborator/ElbExpr.h"
-
-#include "ym/MsgMgr.h"
+#include "elaborator/RangeVal.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -75,33 +75,26 @@ ItemGen::instantiate_gateheader(
     switch ( ElbPrimitive::get_port_size(pt_head->prim_type(), port_num,
 					 output_num, inout_num, input_num) ) {
     case -1:
-      MsgMgr::put_msg(__FILE__, __LINE__,
-		      pt_inst->file_region(),
-		      MsgType::Error,
-		      "ELAB",
-		      "Too few port connections.");
+      put_error(ElbError(__FILE__, __LINE__,
+			 pt_inst->file_region(),
+			 "ELAB",
+			 "Too few port connections."));
       continue;
 
     case 1:
-      MsgMgr::put_msg(__FILE__, __LINE__,
-		      pt_inst->file_region(),
-		      MsgType::Error,
-		      "ELAB",
-		      "Too many port connections.");
+      put_error(ElbError(__FILE__, __LINE__,
+			 pt_inst->file_region(),
+			 "ELAB",
+			 "Too many port connections."));
       continue;
     }
 
-    auto pt_left = pt_inst->left_range();
-    auto pt_right = pt_inst->right_range();
-    if ( pt_left && pt_right ) {
+    auto pt_range = pt_inst->range();
+    if ( pt_range != nullptr ) {
       // 配列の場合
-      int left_val;
-      int right_val;
-      std::tie(left_val, right_val) = evaluate_range(parent, pt_left, pt_right);
-      auto prim_array = mgr().new_PrimitiveArray(prim_head,
-						 pt_inst,
-						 pt_left, pt_right,
-						 left_val, right_val);
+      auto range = evaluate_range(parent, pt_range);
+      auto prim_array = mgr().new_PrimitiveArray(prim_head, pt_inst,
+						 pt_range, range);
 
       // attribute instance の生成
       auto attr_list = attribute_list(pt_head);
@@ -110,11 +103,10 @@ ItemGen::instantiate_gateheader(
       {
 	std::ostringstream buf;
 	buf << "instantiating primitive array: " << prim_array->full_name();
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			fr,
-			MsgType::Info,
-			"ELAB",
-			buf.str());
+	put_info(__FILE__, __LINE__,
+		 fr,
+		 "ELAB",
+		 buf.str());
       }
 
       add_phase3stub(make_stub(this, &ItemGen::link_prim_array,
@@ -131,11 +123,10 @@ ItemGen::instantiate_gateheader(
       {
 	std::ostringstream buf;
 	buf << "instantiating primitive: " << prim->full_name();
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			fr,
-			MsgType::Info,
-			"ELAB",
-			buf.str());
+	put_info(__FILE__, __LINE__,
+		 fr,
+		 "ELAB",
+		 buf.str());
       }
 
       add_phase3stub(make_stub(this, &ItemGen::link_primitive,
@@ -165,7 +156,7 @@ ItemGen::instantiate_udpheader(
   }
 
   for ( auto pt_inst: pt_head->inst_list() ) {
-    SizeType port_num = pt_inst->port_num();
+    auto port_num = pt_inst->port_num();
     if ( port_num > 0 && pt_inst->port(0)->name() != nullptr ) {
       ErrorGen::named_port_in_udp_instance(__FILE__, __LINE__, pt_inst);
     }
@@ -174,17 +165,12 @@ ItemGen::instantiate_udpheader(
       ErrorGen::port_num_mismatch(__FILE__, __LINE__, pt_inst);
     }
 
-    auto pt_left = pt_inst->left_range();
-    auto pt_right = pt_inst->right_range();
-    if ( pt_left && pt_right ) {
+    auto pt_range = pt_inst->range();
+    if ( pt_range != nullptr ) {
       // 配列
-      int left_val;
-      int right_val;
-      std::tie(left_val, right_val) = evaluate_range(parent, pt_left, pt_right);
-      auto prim_array = mgr().new_PrimitiveArray(prim_head,
-						 pt_inst,
-						 pt_left, pt_right,
-						 left_val, right_val);
+      auto range = evaluate_range(parent, pt_range);
+      auto prim_array = mgr().new_PrimitiveArray(prim_head, pt_inst,
+						 pt_range, range);
 
       // attribute instance の生成
       auto attr_list = attribute_list(pt_head);
@@ -236,17 +222,12 @@ ItemGen::instantiate_cell(
     }
 
     // インスタンスの生成を行う．
-    auto pt_left = pt_inst->left_range();
-    auto pt_right = pt_inst->right_range();
-    if ( pt_left && pt_right ) {
+    auto pt_range = pt_inst->range();
+    if ( pt_range != nullptr ) {
       // 配列
-      int left_val;
-      int right_val;
-      std::tie(left_val, right_val) = evaluate_range(parent, pt_left, pt_right);
-      auto prim_array = mgr().new_PrimitiveArray(prim_head,
-						 pt_inst,
-						 pt_left, pt_right,
-						 left_val, right_val);
+      auto range = evaluate_range(parent, pt_range);
+      auto prim_array = mgr().new_PrimitiveArray(prim_head, pt_inst,
+						 pt_range, range);
 
       // attribute instance の生成
       auto attr_list = attribute_list(pt_head);

@@ -26,8 +26,7 @@ EiFactory::new_ConcatOp(
   const std::vector<ElbExpr*>& opr_list
 )
 {
-  auto op = new EiConcatOp{pt_expr, opr_list};
-  return op;
+  return new EiConcatOp(pt_expr, opr_list);
 }
 
 // @brief 反復連結演算子を生成する．
@@ -39,8 +38,7 @@ EiFactory::new_MultiConcatOp(
   const std::vector<ElbExpr*>& opr_list
 )
 {
-  auto op = new EiMultiConcatOp{pt_expr, rep_num, rep_expr, opr_list};
-  return op;
+  return new EiMultiConcatOp(pt_expr, rep_num, rep_expr, opr_list);
 }
 
 
@@ -52,13 +50,15 @@ EiFactory::new_MultiConcatOp(
 EiConcatOp::EiConcatOp(
   const PtExpr* pt_expr,
   const std::vector<ElbExpr*>& opr_list
-) : EiOperation{pt_expr},
+) : EiOperation(pt_expr),
     mOprList{opr_list}
 {
   mSize = 0;
   for ( auto opr: mOprList ) {
     auto type1 = opr->value_type();
-    ASSERT_COND( !type1.is_real_type() );
+    if ( type1.is_real_type() ) {
+      throw std::logic_error{"type1.is_real_type()"};
+    }
 
     SizeType size1 = type1.size();
     mSize += size1;
@@ -78,7 +78,7 @@ EiConcatOp::~EiConcatOp()
 VlValueType
 EiConcatOp::value_type() const
 {
-  return VlValueType{false, true, mSize};
+  return VlValueType(false, true, mSize);
 }
 
 // @brief 定数の時 true を返す．
@@ -115,8 +115,9 @@ EiConcatOp::operand(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < operand_num() );
-
+  if ( pos >= operand_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mOprList[pos];
 }
 
@@ -145,7 +146,7 @@ EiMultiConcatOp::EiMultiConcatOp(
   SizeType rep_num,
   ElbExpr* rep_expr,
   const std::vector<ElbExpr*>& opr_list
-) : EiConcatOp{pt_expr, opr_list},
+) : EiConcatOp(pt_expr, opr_list),
     mRepNum{rep_num},
     mRepExpr{rep_expr}
 {
@@ -160,7 +161,7 @@ EiMultiConcatOp::~EiMultiConcatOp()
 VlValueType
 EiMultiConcatOp::value_type() const
 {
-  return VlValueType{false, true, bit_size() * mRepNum};
+  return VlValueType(false, true, bit_size() * mRepNum);
 }
 
 // @brief オペランド数を返す．

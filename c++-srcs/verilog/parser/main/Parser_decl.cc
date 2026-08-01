@@ -23,7 +23,7 @@ Parser::new_IOHead(
   bool sign
 )
 {
-  auto decl = mFactory->new_IOHead(fr, dir, sign, nullptr, nullptr);
+  auto decl = mFactory->new_IOHead(fr, dir, sign, nullptr);
   return decl;
 }
 
@@ -35,7 +35,7 @@ Parser::new_RegIOHead(
   bool sign
 )
 {
-  auto decl = mFactory->new_RegIOHead(fr, dir, sign, nullptr, nullptr);
+  auto decl = mFactory->new_RegIOHead(fr, dir, sign, nullptr);
   return decl;
 }
 
@@ -48,7 +48,7 @@ Parser::new_NetIOHead(
   bool sign
 )
 {
-  auto decl = mFactory->new_NetIOHead(fr, dir, net_type, sign, nullptr, nullptr);
+  auto decl = mFactory->new_NetIOHead(fr, dir, net_type, sign, nullptr);
   return decl;
 }
 
@@ -70,11 +70,10 @@ Parser::new_IOHead(
   const FileRegion& fr,
   VpiDir dir,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto decl = mFactory->new_IOHead(fr, dir, sign, left, right);
+  auto decl = mFactory->new_IOHead(fr, dir, sign, range);
   return decl;
 }
 
@@ -84,11 +83,10 @@ Parser::new_RegIOHead(
   const FileRegion& fr,
   VpiDir dir,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto decl = mFactory->new_RegIOHead(fr, dir, sign, left, right);
+  auto decl = mFactory->new_RegIOHead(fr, dir, sign, range);
   return decl;
 }
 
@@ -99,11 +97,10 @@ Parser::new_NetIOHead(
   VpiDir dir,
   VpiNetType net_type,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto decl = mFactory->new_NetIOHead(fr, dir, net_type, sign, left, right);
+  auto decl = mFactory->new_NetIOHead(fr, dir, net_type, sign, range);
   return decl;
 }
 
@@ -146,7 +143,7 @@ Parser::new_ParamH(
   const FileRegion& fr
 )
 {
-  auto decl = mFactory->new_ParamH(fr, false, nullptr, nullptr);
+  auto decl = mFactory->new_ParamH(fr, false, nullptr);
   return decl;
 }
 
@@ -155,11 +152,10 @@ PtiDeclHead*
 Parser::new_ParamH(
   const FileRegion& fr,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto decl = mFactory->new_ParamH(fr, sign, left, right);
+  auto decl = mFactory->new_ParamH(fr, sign, range);
   return decl;
 }
 
@@ -185,7 +181,7 @@ Parser::new_LocalParamH(
   const FileRegion& fr
 )
 {
-  auto decl = mFactory->new_ParamH(fr, false, nullptr, nullptr, true);
+  auto decl = mFactory->new_ParamH(fr, false, nullptr, true);
   return decl;
 }
 
@@ -194,11 +190,10 @@ PtiDeclHead*
 Parser::new_LocalParamH(
   const FileRegion& fr,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto decl = mFactory->new_ParamH(fr, sign, left, right, true);
+  auto decl = mFactory->new_ParamH(fr, sign, range, true);
   return decl;
 }
 
@@ -224,7 +219,7 @@ Parser::new_SpecParamH(
   const FileRegion& fr
 )
 {
-  auto decl = mFactory->new_SpecParamH(fr, nullptr, nullptr);
+  auto decl = mFactory->new_SpecParamH(fr, nullptr);
   return decl;
 }
 
@@ -232,11 +227,10 @@ Parser::new_SpecParamH(
 PtiDeclHead*
 Parser::new_SpecParamH(
   const FileRegion& fr,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto decl = mFactory->new_SpecParamH(fr, left, right);
+  auto decl = mFactory->new_SpecParamH(fr, range);
   return decl;
 }
 
@@ -278,7 +272,7 @@ Parser::new_RegH(
   bool sign
 )
 {
-  auto decl = mFactory->new_RegH(fr, sign, nullptr, nullptr);
+  auto decl = mFactory->new_RegH(fr, sign, nullptr);
   return decl;
 }
 
@@ -287,11 +281,10 @@ PtiDeclHead*
 Parser::new_RegH(
   const FileRegion& fr,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
-  auto decl = mFactory->new_RegH(fr, sign, left, right);
+  auto decl = mFactory->new_RegH(fr, sign, range);
   return decl;
 }
 
@@ -304,7 +297,7 @@ Parser::new_NetH(
 )
 {
   auto decl = mFactory->new_NetH(fr, type, VpiVsType::None,
-				 sign, nullptr, nullptr,
+				 sign, nullptr,
 				 nullptr, nullptr);
   return decl;
 }
@@ -319,7 +312,7 @@ Parser::new_NetH(
 )
 {
   auto decl = mFactory->new_NetH(fr, type, VpiVsType::None,
-				 sign, nullptr, nullptr,
+				 sign, nullptr,
 				 strength, nullptr);
   return decl;
 }
@@ -334,7 +327,7 @@ Parser::new_NetH(
 )
 {
   auto decl = mFactory->new_NetH(fr, type, VpiVsType::None,
-				 sign, nullptr, nullptr,
+				 sign, nullptr,
 				 nullptr, delay);
   return decl;
 }
@@ -350,7 +343,7 @@ Parser::new_NetH(
 )
 {
   auto decl = mFactory->new_NetH(fr, type, VpiVsType::None,
-				 sign, nullptr, nullptr,
+				 sign, nullptr,
 				 strength, delay);
   return decl;
 }
@@ -362,12 +355,11 @@ Parser::new_NetH(
   VpiNetType type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right
+  const PtRange* range
 )
 {
   auto decl = mFactory->new_NetH(fr, type, vstype,
-				 sign, left, right,
+				 sign, range,
 				 nullptr, nullptr);
   return decl;
 }
@@ -379,13 +371,12 @@ Parser::new_NetH(
   VpiNetType type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtStrength* strength
 )
 {
   auto decl = mFactory->new_NetH(fr, type, vstype,
-				 sign, left, right,
+				 sign, range,
 				 strength, nullptr);
   return decl;
 }
@@ -397,13 +388,12 @@ Parser::new_NetH(
   VpiNetType type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtDelay* delay
 )
 {
   auto decl = mFactory->new_NetH(fr, type, vstype,
-				 sign, left, right,
+				 sign, range,
 				 nullptr, delay);
   return decl;
 }
@@ -415,14 +405,13 @@ Parser::new_NetH(
   VpiNetType type,
   VpiVsType vstype,
   bool sign,
-  const PtExpr* left,
-  const PtExpr* right,
+  const PtRange* range,
   const PtStrength* strength,
   const PtDelay* delay
 )
 {
   auto decl = mFactory->new_NetH(fr, type, vstype,
-				 sign, left, right,
+				 sign, range,
 				 strength, delay);
   return decl;
 }

@@ -87,20 +87,10 @@ public:
     SizeType pos ///< [in] 位置番号 ( 0 <= pos < index_num() )
   ) const override;
 
-  /// @brief 範囲指定モードの取得
-  /// @return 範囲指定モード
-  VpiRangeMode
-  range_mode() const override;
-
-  /// @brief 範囲の左側の式の取得
-  /// @return 範囲の左側の式
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲の右側の式の取得
-  /// @return 範囲の右側の式
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲指定を表す構文木を返す．
+  /// @return 範囲指定
+  const PtPart*
+  part() const override;
 
   /// @brief 定数の種類の取得
   /// @return 定数の種類
@@ -978,9 +968,7 @@ public:
   CptPrimaryR(
     const FileRegion& file_region,
     const char* name,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   );
 
   // デストラクタ
@@ -996,17 +984,9 @@ public:
   FileRegion
   file_region() const override;
 
-  // 範囲指定モードの取得
-  VpiRangeMode
-  range_mode() const override;
-
-  // range の MSB を取出す．
-  const PtExpr*
-  left_range() const override;
-
-  // range の LSB を取出す．
-  const PtExpr*
-  right_range() const override;
+  // 範囲指定の取得
+  const PtPart*
+  part() const override;
 
   // index_list も range も持たないとき true を返す．
   bool
@@ -1021,14 +1001,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 範囲のモード
-  VpiRangeMode mMode;
-
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲指定
+  const PtPart* mPart;
 
 };
 
@@ -1045,9 +1019,7 @@ public:
   CptPrimaryCR(
     const FileRegion& file_region,
     const char* name,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   );
 
   // デストラクタ
@@ -1079,9 +1051,7 @@ public:
     const FileRegion& file_region,
     const char* name,
     PtiExprArray&& index_array,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   );
 
   // デストラクタ
@@ -1093,17 +1063,9 @@ public:
   // PtPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲指定モードの取得
-  VpiRangeMode
-  range_mode() const override;
-
-  // range の MSB を取出す．
-  const PtExpr*
-  left_range() const override;
-
-  // range の LSB を取出す．
-  const PtExpr*
-  right_range() const override;
+  // 範囲指定を取出す．
+  const PtPart*
+  part() const override;
 
 
 private:
@@ -1111,14 +1073,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲のモード
-  VpiRangeMode mMode;
-
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲指定
+  const PtPart* mPart;
 
 };
 
@@ -1268,9 +1224,7 @@ public:
     const FileRegion& file_region,
     PtiNameBranchArray&& nb_array,
     const char* tail_name,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   );
 
   // デストラクタ
@@ -1318,9 +1272,7 @@ public:
     PtiNameBranchArray&& nb_array,
     const char* tail_name,
     PtiExprArray&& index_array,
-    VpiRangeMode mode,
-    const PtExpr* left,
-    const PtExpr* right
+    const PtPart* part
   );
 
   // デストラクタ
@@ -1639,6 +1591,167 @@ private:
 
   // 値
   const char* mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class CptPart CptExpr.h "CptExpr.h"
+/// @brief PtPart の実装クラス
+//////////////////////////////////////////////////////////////////////
+class CptPart :
+  public PtPart
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPart(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const PtExpr* expr1,  ///< [in] 1番目の式
+    const PtExpr* expr2   ///< [in] 2番目の式
+  ) : mFileRegion{fr},
+      mLeft{expr1},
+      mRight{expr2}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPart() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+  /// @brief 1番目の式を取り出す．
+  const PtExpr*
+  left() const override;
+
+  /// @brief 2番めの式を取り出す．
+  const PtExpr*
+  right() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+  // 1番目の式
+  const PtExpr* mLeft;
+
+  // 2番目の式
+  const PtExpr* mRight;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class CptPartC CptExpr.h "CptExpr.h"
+/// @brief Const モードの CptPart
+//////////////////////////////////////////////////////////////////////
+class CptPartC :
+  public CptPart
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPartC(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const PtExpr* expr1,  ///< [in] 1番目の式
+    const PtExpr* expr2   ///< [in] 2番目の式
+  ) : CptPart(fr, expr1, expr2)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPartC() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 範囲指定のモードを返す．
+  VpiRangeMode
+  mode() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class CptPartP CptExpr.h "CptExpr.h"
+/// @brief Plus モードの CptPart
+//////////////////////////////////////////////////////////////////////
+class CptPartP :
+  public CptPart
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPartP(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const PtExpr* expr1,  ///< [in] 1番目の式
+    const PtExpr* expr2   ///< [in] 2番目の式
+  ) : CptPart(fr, expr1, expr2)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPartP() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 範囲指定のモードを返す．
+  VpiRangeMode
+  mode() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class CptPartM CptExpr.h "CptExpr.h"
+/// @brief Minus モードの CptPart
+//////////////////////////////////////////////////////////////////////
+class CptPartM :
+  public CptPart
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPartM(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const PtExpr* expr1,  ///< [in] 1番目の式
+    const PtExpr* expr2   ///< [in] 2番目の式
+  ) : CptPart(fr, expr1, expr2)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPartM() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 範囲指定のモードを返す．
+  VpiRangeMode
+  mode() const override;
 
 };
 

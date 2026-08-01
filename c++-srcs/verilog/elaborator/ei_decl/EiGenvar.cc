@@ -26,8 +26,7 @@ EiFactory::new_Genvar(
   int val
 )
 {
-  auto genvar = new EiGenvar{parent, pt_item, val};
-  return genvar;
+  return new EiGenvar(parent, pt_item, val);
 }
 
 

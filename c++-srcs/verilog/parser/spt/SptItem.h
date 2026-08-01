@@ -173,19 +173,12 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲の左側の式の取得
-  /// @return 範囲の左側の式
+  /// @brief 範囲の取得
+  /// @return 範囲
   ///
   /// このクラスでは nullptr を返す．
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲の右側の式の取得
-  /// @return 範囲の右側の式
-  ///
-  /// このクラスでは nullptr を返す．
-  const PtExpr*
-  right_range() const override;
+  const PtRange*
+  range() const override;
 
   /// @brief 戻値のデータ型の取得
   /// @return 戻値のデータ型
@@ -634,8 +627,7 @@ private:
     const char* name,                  ///< [in] 名前
     bool automatic,                    ///< [in] automatic 属性
     bool sign,                         ///< [in] 符号の有無
-    const PtExpr* left,                ///< [in] 範囲の左側の式
-    const PtExpr* right,               ///< [in] 範囲の右側の式
+    const PtRange* range,              ///< [in] 範囲
     VpiVarType var_type,               ///< [in] 関数の戻値の型
     PtiIOHeadArray&& iohead_array,     ///< [in] IO宣言のリスト
     PtiDeclHeadArray&& declhead_array, ///< [in] 宣言のリスト
@@ -691,13 +683,9 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲の MSB を得る． 指定なしなら nullptr
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲の LSB を得る． 指定なしなら nullptr
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲を得る． 指定なしなら nullptr
+  const PtRange*
+  range() const override;
 
   /// @brief データ型の取得
   VpiVarType
@@ -730,11 +718,8 @@ private:
   // 符号
   bool mSigned;
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
   // データ型
   VpiVarType mDataType;
@@ -928,8 +913,7 @@ private:
   SptInst(
     const FileRegion& file_region,
     const char* name,
-    const PtExpr* left,
-    const PtExpr* right,
+    const PtRange* range,
     PtiConnectionArray&& con_array
   );
 
@@ -950,13 +934,9 @@ public:
   const char*
   name() const override;
 
-  /// @brief range の MSB を取出す．
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief range の LSB を取出す．
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲を返す．
+  const PtRange*
+  range() const override;
 
   /// @brief ポートの要素数の取得
   SizeType
@@ -980,11 +960,8 @@ private:
   // 名前
   const char* mName;
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
   // ポート割り当ての配列
   PtiConnectionArray mPortArray;

@@ -49,17 +49,11 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲のMSBの取得
-  /// @retval 範囲のMSB 範囲を持つとき
+  /// @brief 範囲Bの取得
+  /// @retval 範囲 範囲を持つとき
   /// @retval nullptr 範囲を持たないとき
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲のLSBの取得
-  /// @retval 範囲のLSB 範囲を持つとき
-  /// @retval nullptr 範囲を持たないとき
-  const PtExpr*
-  right_range() const override;
+  const PtRange*
+  range() const override;
 
   /// @brief データ型の取得
   /// @retval データ型 kParam, kLocalParam, kVar の場合
@@ -200,8 +194,7 @@ public:
   /// @brief コンストラクタ
   CptParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtExpr* left,            ///< [in] 範囲の左側の式
-    const PtExpr* right            ///< [in] 範囲の右側の式
+    const PtRange* range           ///< [in] 範囲
   );
 
   /// @brief デストラクタ
@@ -219,15 +212,10 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲のMSBの取得
-  /// @return 範囲のMSB
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲のLSBの取得
-  /// @return 範囲のLSB
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲Bの取得
+  /// @return 範囲
+  const PtRange*
+  range() const override;
 
 
 private:
@@ -235,11 +223,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
 };
 
@@ -255,8 +240,7 @@ public:
   /// @brief コンストラクタ
   CptParamHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtExpr* left,            ///< [in] 範囲の左側の式
-    const PtExpr* right            ///< [in] 範囲の右側の式
+    const PtRange* range           ///< [in] 範囲
   );
 
   /// @brief デストラクタ
@@ -288,8 +272,7 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtExpr* left,		   ///< [in] 範囲の左側の式
-    const PtExpr* right		   ///< [in] 範囲の右側の式
+    const PtRange* range	   ///< [in] 範囲
   );
 
   /// @brief デストラクタ
@@ -320,8 +303,7 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtExpr* left,		   ///< [in] 範囲の左側の式
-    const PtExpr* right		   ///< [in] 範囲の右側の式
+    const PtRange* range	   ///< [in] 範囲
   );
 
   /// @brief デストラクタ
@@ -495,8 +477,7 @@ public:
   /// @brief コンストラクタ
   CptRegHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtExpr* left,		   ///< [in] 範囲の左側の式
-    const PtExpr* right		   ///< [in] 範囲の右側の式
+    const PtRange* range	   ///< [in] 範囲
   );
 
   /// @brief デストラクタ
@@ -513,15 +494,10 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲のMSBの取得
-  /// @return 範囲のMSB
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲のLSBの取得
-  /// @return 範囲のLSB
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲Bの取得
+  /// @return 範囲
+  const PtRange*
+  range() const override;
 
 
 private:
@@ -529,11 +505,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
 };
 
@@ -549,8 +522,7 @@ public:
   /// @brief コンストラクタ
   CptRegHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtExpr* left,		   ///< [in] 範囲の左側の式
-    const PtExpr* right		   ///< [in] 範囲の右側の式
+    const PtRange* range           ///< [in] パース木の範囲定義
   );
 
   /// @brief デストラクタ
@@ -852,8 +824,7 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,                     ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,            ///< [in] 範囲の左側の式
-    const PtExpr* right            ///< [in] 範囲の右側の式
+    const PtRange* range           ///< [in] パース木の範囲定義
   );
 
   /// @brief デストラクタ
@@ -872,15 +843,10 @@ public:
   VpiVsType
   vs_type() const override;
 
-  /// @brief 範囲のMSBを取り出す．
-  /// @return 範囲のMSB
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲のLSBを取り出す．
-  /// @return 範囲のLSB
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲を取り出す．
+  /// @return 範囲
+  const PtRange*
+  range() const override;
 
 
 private:
@@ -888,11 +854,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
 };
 
@@ -911,8 +874,7 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,		   ///< [in] 範囲の左側の式
-    const PtExpr* right,	   ///< [in] 範囲の右側の式
+    const PtRange* range,          ///< [in] パース木の範囲定義
     const PtStrength* strength     ///< [in] 信号強度
   );
 
@@ -956,8 +918,7 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,		   ///< [in] 範囲の左側の式
-    const PtExpr* right,	   ///< [in] 範囲の右側の式
+    const PtRange* range,          ///< [in] パース木の範囲定義
     const PtDelay* delay           ///< [in] 遅延
   );
 
@@ -1001,8 +962,7 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtExpr* left,		   ///< [in] 範囲の左側の式
-    const PtExpr* right,	   ///< [in] 範囲の右側の式
+    const PtRange* range,          ///< [in] パース木の範囲定義
     const PtStrength* strength,    ///< [in] 信号強度
     const PtDelay* delay           ///< [in] 遅延
   );
@@ -1112,8 +1072,7 @@ public:
   /// @brief コンストラクタ
   CptSpecParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtExpr* left,		   ///< [in] 範囲の左側の式
-    const PtExpr* right		   ///< [in] 範囲の右側の式
+    const PtRange* range           ///< [in] パース木の範囲定義
   );
 
   /// @brief デストラクタ
@@ -1125,15 +1084,10 @@ public:
   // PtDecl の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 範囲の MSB を返す．
-  /// @return 範囲のMSB
-  const PtExpr*
-  left_range() const override;
-
-  /// @brief 範囲の LSB を返す．
-  /// @return 範囲のLSB
-  const PtExpr*
-  right_range() const override;
+  /// @brief 範囲を返す．
+  /// @return 範囲
+  const PtRange*
+  range() const override;
 
 
 private:
@@ -1141,11 +1095,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 範囲のMSB
-  const PtExpr* mLeftRange;
-
-  // 範囲のLSB
-  const PtExpr* mRightRange;
+  // 範囲
+  const PtRange* mRange;
 
 };
 

@@ -37,8 +37,7 @@ EiFactory::new_DeclArray(
     range_array[i].set(range_src[i]);
   }
 
-  auto decl = new EiDeclArray{head, pt_item, range_array};
-  return decl;
+  return new EiDeclArray(head, pt_item, range_array);
 }
 
 

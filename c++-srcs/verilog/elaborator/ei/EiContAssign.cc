@@ -29,14 +29,12 @@ EiFactory::new_CaHead(
   const VlDelay* delay
 )
 {
-  EiCaHead* head = nullptr;
   if ( delay ) {
-    head = new EiCaHeadD{module, pt_head, delay};
+    return new EiCaHeadD(module, pt_head, delay);
   }
   else {
-    head = new EiCaHead{module, pt_head};
+    return new EiCaHead(module, pt_head);
   }
-  return head;
 }
 
 // @brief continuous assignment を生成する．
@@ -48,8 +46,7 @@ EiFactory::new_ContAssign(
   const VlExpr* rhs
 )
 {
-  auto cont_assign = new EiContAssign1{head, pt_obj, lhs, rhs};
-  return cont_assign;
+  return  new EiContAssign1(head, pt_obj, lhs, rhs);
 }
 
 // @brief net 宣言中の continuous assignment を生成する．
@@ -61,8 +58,7 @@ EiFactory::new_ContAssign(
   const VlExpr* rhs
 )
 {
-  auto cont_assign = new EiContAssign2{module, pt_obj, lhs, rhs};
-  return cont_assign;
+  return new EiContAssign2(module, pt_obj, lhs, rhs);
 }
 
 
@@ -129,7 +125,7 @@ EiCaHeadD::EiCaHeadD(
   const VlModule* module,
   const PtItem* pt_head,
   const VlDelay* delay
-) : EiCaHead{module, pt_head},
+) : EiCaHead(module, pt_head),
     mDelay{delay}
 {
 }
@@ -213,7 +209,7 @@ EiContAssign1::EiContAssign1(
   const PtBase* pt_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiContAssign{pt_obj, lhs, rhs},
+) : EiContAssign(pt_obj, lhs, rhs),
     mHead{head}
 {
 }
@@ -269,7 +265,7 @@ EiContAssign2::EiContAssign2(
   const PtBase* pt_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiContAssign{pt_obj, lhs, rhs},
+) : EiContAssign(pt_obj, lhs, rhs),
     mModule{module}
 {
 }

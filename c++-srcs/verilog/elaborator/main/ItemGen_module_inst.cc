@@ -24,6 +24,7 @@
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbModuleArray.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/RangeVal.h"
 
 #include "ym/MsgMgr.h"
 
@@ -89,9 +90,8 @@ ItemGen::phase1_module(
       ErrorGen::noname_module(__FILE__, __LINE__, pt_inst);
     }
 
-    auto pt_left = pt_inst->left_range();
-    auto pt_right = pt_inst->right_range();
-    if ( pt_left && pt_right ) {
+    auto pt_range = pt_inst->range();
+    if ( pt_range != nullptr ) {
       // 配列型は今すぐにはインスタンス化できない．
       add_phase1stub(make_stub(this, &ItemGen::phase1_module_array,
 			       parent, pt_module, pt_head, pt_inst));
@@ -139,23 +139,17 @@ ItemGen::phase1_module_array(
   auto defname = pt_head->name();
 
   auto name = pt_inst->name();
-  auto pt_left = pt_inst->left_range();
-  auto pt_right = pt_inst->right_range();
+  auto pt_range = pt_inst->range();
 
-  int left_val;
-  int right_val;
-  std::tie(left_val, right_val) = evaluate_range(parent, pt_left, pt_right);
-  auto module_array = mgr().new_ModuleArray(parent,
-					    pt_module,
-					    pt_head,
-					    pt_inst,
-					    pt_left, pt_right,
-					    left_val, right_val);
+  auto range = evaluate_range(parent, pt_range);
+  auto module_array = mgr().new_ModuleArray(parent, pt_module,
+					    pt_head, pt_inst,
+					    pt_range, range);
 
   {
     std::ostringstream buf;
     buf << "instantiating module array \"" << name << "\" of \""
-	<< defname << "\" [" << left_val << " : " << right_val << "].";
+	<< defname << "\" [" << range.left << " : " << range.right << "].";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    pt_head->file_region(),
 		    MsgType::Info,
@@ -300,18 +294,24 @@ ItemGen::link_module_array(
     if ( conn_by_name ) {
       // 名前による割り当ての場合はポート名で探す．
       auto port_name = pt_con->name();
-      ASSERT_COND( port_name != nullptr );
+      if ( port_name == nullptr ) {
+	throw std::logic_error{"part_name == nullptr"};
+      }
       if ( port_index.count(port_name) == 0 ) {
 	ErrorGen::illegal_port_name(__FILE__, __LINE__, pt_con);
       }
       index = port_index.at(port_name);
-      ASSERT_COND ( index < port_num );
+      if ( index >= port_num ) {
+	throw std::logic_error{"index >= port_num"};
+      }
     }
     else {
       // 順序に割り当ての場合は単純に pos
       index = pos;
-      // 前にも書いたように YACC の文法で規定されているのでこれは常に真
-      ASSERT_COND ( pt_con->name() == nullptr );
+      // 前にも書いたように YACC の文法で規定されているのでこれは常に偽のはず
+      if ( pt_con->name() != nullptr ) {
+	throw std::logic_error{"pt_con->name() != nullptr"};
+      }
       ++ pos;
     }
 
@@ -348,10 +348,12 @@ ItemGen::link_module_array(
 	}
       }
       else if ( port_size * module_size == expr_size ) {
-	ASSERT_COND( module_size > 1 );
+	if ( module_size <= 1 ) {
+	  throw std::logic_error{"module_size <= 1"};
+	}
 	// tmp を 分割する．
 	for ( SizeType i = 0; i < module_size; ++ i ) {
-	  ElbExpr* tmp1{nullptr};
+	  ElbExpr* tmp1 = nullptr;
 	  if ( port_size == 1 ) {
 	    tmp1 = mgr().new_BitSelect(pt_expr, tmp, i);
 	  }
@@ -377,7 +379,7 @@ ItemGen::link_module_array(
 	ErrorGen::real_type_in_port_list(__FILE__, __LINE__, tmp);
       }
 
-      SizeType expr_size = type.size();
+      auto expr_size = type.size();
       if ( expr_size == port_size ) {
 	// 式のサイズとポートサイズが等しければ全部のモジュールに
 	// 同一の式を接続する．
@@ -478,18 +480,24 @@ ItemGen::link_module(
     if ( conn_by_name ) {
       // 名前による割り当ての場合はポート名で探す．
       auto port_name = pt_con->name();
-      ASSERT_COND( port_name != nullptr );
+      if ( port_name == nullptr ) {
+	throw std::logic_error{"port_name == nullptr"};
+      }
       if ( port_index.count(port_name) == 0 ) {
 	ErrorGen::illegal_port_name(__FILE__, __LINE__, pt_con);
       }
       index = port_index.at(port_name);
-      ASSERT_COND( 0 <= index && index < port_num );
+      if ( index < 0 || index >= port_num ) {
+	throw std::logic_error{"index < 0 || index >= port_num"};
+      }
     }
     else {
       // 順序による割り当ての場合は単純に pos
       index = pos;
-      // 前にも書いたように YACC の文法から下の仮定は常になりたつはず．
-      ASSERT_COND( pt_con->name() == nullptr );
+      // 前にも書いたように YACC の文法から下の仮定は常に成り立たないはず．
+      if ( pt_con->name() != nullptr ) {
+	throw std::logic_error{"pt_con->name() != nullptr"};
+      }
       ++ pos;
     }
 

@@ -584,7 +584,8 @@ public:
   EiPrimArray(
     ElbPrimHead* head,       ///< [in] ヘッダ
     const PtInst* pt_inst,   ///< [in] インスタンス定義
-    const EiRangeImpl& range ///< [in] 範囲
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range    ///< [in] 範囲の値
   );
 
   /// @brief コンストラクタ
@@ -592,7 +593,8 @@ public:
     ElbPrimHead* head,       ///< [in] ヘッダ
     const ClibCell& cell,    ///< [in] セル
     const PtInst* pt_inst,   ///< [in] インスタンス定義
-    const EiRangeImpl& range ///< [in] 範囲
+    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const RangeVal& range    ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -730,8 +732,8 @@ private:
   // パース木のインスタンス定義
   const PtInst* mPtInst;
 
-  // 範囲
-  EiRangeImpl mRange;
+  // 範囲の情報
+  RangeInfo mRange;
 
   // 要素の配列
   std::vector<EiPrimitive1> mArray;

@@ -12,6 +12,7 @@
 #include "ym/VlValue.h"
 #include "ym/pt/PtP.h"
 #include "ElbProxy.h"
+#include "elaborator/RangeVal.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -110,11 +111,22 @@ public:
   ///
   /// * 定数式でなければ EvalConstError 例外を送出する．
   /// * 評価結果が int でなければ EvalIntError 例外を送出する．
-  std::pair<int, int>
+  RangeVal
+  evaluate_range(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const PtRange* pt_range ///< [in] 範囲を表すパース木
+  );
+
+  /// @brief 範囲を表す式を評価する．
+  /// @return 範囲の MSB と LSB の値のペアを返す．
+  ///
+  /// * VpiRangeMode::Const 以外では例外を送出する．
+  /// * 定数式でなければ EvalConstError 例外を送出する．
+  /// * 評価結果が int でなければ EvalIntError 例外を送出する．
+  RangeVal
   evaluate_range(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_left, ///< [in] 範囲のMSBを表すパース木
-    const PtExpr* pt_right ///< [in] 範囲のLSBを表すパース木
+    const PtPart* pt_part  ///< [in] 範囲指定を表すパース木
   );
 
 
