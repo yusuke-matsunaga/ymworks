@@ -241,31 +241,6 @@ public:
     bool sign             ///< [in] 符号付きのとき true となるフラグ
   );
 
-  /// @brief IO 宣言のヘッダの生成 (reg 型)
-  PtiIOHead*
-  new_RegIOHead(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    VpiDir dir,           ///< [in] IO の種類(方向)
-    bool sign             ///< [in] 符号付きのとき true となるフラグ
-  );
-
-  /// @brief IO 宣言のヘッダの生成 (ネット型)
-  PtiIOHead*
-  new_NetIOHead(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    VpiDir dir,           ///< [in] IO の種類(方向)
-    VpiNetType net_type,  ///< [in] 補助的なネット型
-    bool sign
-  );
-
-  /// @brief IO 宣言のヘッダの生成 (変数型)
-  PtiIOHead*
-  new_VarIOHead(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    VpiDir dir,           ///< [in] IO の種類(方向)
-    VpiVarType var_type   ///< [in] 補助的な変数型
-  );
-
   /// @brief 範囲付きの IO 宣言のヘッダの生成
   PtiIOHead*
   new_IOHead(
@@ -275,6 +250,14 @@ public:
     const PtRange* range  ///< [in] 範囲
   );
 
+  /// @brief IO 宣言のヘッダの生成 (reg 型)
+  PtiIOHead*
+  new_RegIOHead(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    VpiDir dir,           ///< [in] IO の種類(方向)
+    bool sign             ///< [in] 符号付きのとき true となるフラグ
+  );
+
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (reg 型)
   PtiIOHead*
   new_RegIOHead(
@@ -282,6 +265,15 @@ public:
     VpiDir dir,           ///< [in] IO の種類(方向)
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
     const PtRange* range  ///< [in] 範囲
+  );
+
+  /// @brief IO 宣言のヘッダの生成 (ネット型)
+  PtiIOHead*
+  new_NetIOHead(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    VpiDir dir,           ///< [in] IO の種類(方向)
+    VpiNetType net_type,  ///< [in] 補助的なネット型
+    bool sign
   );
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (ネット型)
@@ -294,7 +286,17 @@ public:
     const PtRange* range  ///< [in] 範囲
   );
 
+  /// @brief IO 宣言のヘッダの生成 (変数型)
+  PtiIOHead*
+  new_VarIOHead(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    VpiDir dir,           ///< [in] IO の種類(方向)
+    VpiVarType var_type   ///< [in] 補助的な変数型
+  );
+
   /// @brief IO 宣言の要素の生成
+  ///
+  /// 結果は mIOItemList に追加される．
   void
   new_IOItem(
     const FileRegion& fr, ///< [in] ファイル位置の情報
@@ -303,6 +305,8 @@ public:
 
 
   /// @brief 初期値付き IO 宣言の要素の生成
+  ///
+  /// 結果は mIOItemList に追加される．
   void
   new_IOItem(
     const FileRegion& fr,    ///< [in] ファイル位置の情報

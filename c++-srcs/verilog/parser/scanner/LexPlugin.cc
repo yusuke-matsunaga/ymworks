@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 LexPlugin::LexPlugin(
   RawLex& lex,
   const std::string& name
-) : mLex(lex)
+) : mLex{lex}
 {
   mLex.add_plugin(name, this);
 }

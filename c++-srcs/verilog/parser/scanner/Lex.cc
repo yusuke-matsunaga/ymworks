@@ -19,23 +19,24 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-Lex::Lex() :
-  mModuleState{new LexModuleState(*this)}
+Lex::Lex(
+) : mModuleState{new LexModuleState(*this)}
 {
   // 生成されたプラグインは Lex の管理下におかれるのでここでポインタを
   // 保持しておく必要はない．
-  new LpNetType(*this, "default_nettype", mModuleState);
-  new LpTimeScale(*this, "timescale", mModuleState);
-  new LpCellDefine(*this, "celldefine", mModuleState);
-  new LpEndCellDefine(*this, "endcelldefine", mModuleState);
-  new LpUnconnDrive(*this, "unconnected_drive", mModuleState);
-  new LpNounconnDrive(*this, "nounconnected_drive", mModuleState);
-  new LpDecayTime(*this, "default_decay_time", mModuleState);
-  new LpTriregStrength(*this, "default_trireg_strength", mModuleState);
-  new LpDelayMode(*this, "delay_mode_distribute", mModuleState, VpiDefDelayMode::Distrib);
-  new LpDelayMode(*this, "delay_mode_path", mModuleState, VpiDefDelayMode::Path);
-  new LpDelayMode(*this, "delay_mode_unit", mModuleState, VpiDefDelayMode::Unit);
-  new LpDelayMode(*this, "delay_mode_zero", mModuleState, VpiDefDelayMode::Zero);
+  auto state = mModuleState;
+  new LpNetType(*this, "default_nettype", state);
+  new LpTimeScale(*this, "timescale", state);
+  new LpCellDefine(*this, "celldefine", state);
+  new LpEndCellDefine(*this, "endcelldefine", state);
+  new LpUnconnDrive(*this, "unconnected_drive", state);
+  new LpNounconnDrive(*this, "nounconnected_drive", state);
+  new LpDecayTime(*this, "default_decay_time", state);
+  new LpTriregStrength(*this, "default_trireg_strength", state);
+  new LpDelayMode(*this, "delay_mode_distribute", state, VpiDefDelayMode::Distrib);
+  new LpDelayMode(*this, "delay_mode_path", state, VpiDefDelayMode::Path);
+  new LpDelayMode(*this, "delay_mode_unit", state, VpiDefDelayMode::Unit);
+  new LpDelayMode(*this, "delay_mode_zero", state, VpiDefDelayMode::Zero);
 }
 
 // @brief デストラクタ

@@ -63,15 +63,19 @@ public:
     if ( mDict.count(name) == 0 ) {
       mDict.emplace(name, std::unique_ptr<LexPlugin>{plugin});
     }
-    auto& old_plugin = mDict.at(name);
-    if ( old_plugin->is_macro() ) {
-      // 以前のプラグインを削除して上書きする．
-      mDict.erase(name);
-      mDict.emplace(name, std::unique_ptr<LexPlugin>{plugin});
+    else {
+      auto& old_plugin = mDict.at(name);
+      if ( old_plugin->is_macro() ) {
+	// 以前のプラグインを削除して上書きする．
+	mDict.erase(name);
+	mDict.emplace(name, std::unique_ptr<LexPlugin>{plugin});
+      }
+      else {
+	std::ostringstream buf;
+	buf << name << " cannot be overwritten";
+	throw std::invalid_argument{buf.str()};
+      }
     }
-    std::ostringstream buf;
-    buf << name << " cannot be overwritten";
-    throw std::invalid_argument{buf.str()};
   }
 
   /// @brief プラグインの登録を解除する．

@@ -166,9 +166,8 @@ public:
   ) const
   {
     if ( pos >= size() ) {
-      abort();
+      throw std::out_of_range{"pos is out of range"};
     }
-    ASSERT_COND( 0 <= pos && pos < size() );
     return mArray[pos];
   }
 

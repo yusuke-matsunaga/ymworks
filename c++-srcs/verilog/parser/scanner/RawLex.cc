@@ -226,8 +226,7 @@ RawLex::RawLex() :
   mInputMgr{new InputMgr()},
   mDic{RsrvWordDic::the_dic()},
   mCondState{new LexCondState(*this)},
-  mPluginDict{new LexPluginDict},
-  mDebug{false}
+  mPluginDict{new LexPluginDict}
 {
   new LpIfdef(*this, "ifdef", mCondState);
   new LpIfdef(*this, "ifndef", mCondState);

@@ -443,7 +443,7 @@ private:
   std::uint32_t mCurUint;
 
   // module 定義中のとき true となるフラグ
-  bool mModuleMode;
+  bool mModuleMode{false};
 
   // マクロのスタック
   std::vector<MacroSource> mMacroStack;
@@ -464,7 +464,7 @@ private:
   FileLoc mFirstLoc;
 
   // デバッグ時に true にするフラグ
-  bool mDebug;
+  bool mDebug{false};
 
 };
 
