@@ -19,7 +19,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 /// @brief PtDeclH の派生クラスを区別するための列挙型
-enum class PtDeclType {
+enum class PtDeclType : std::uint8_t {
   Param,      ///< @brief parameter
   LocalParam, ///< @brief localparam
   Reg,        ///< @brief reg
@@ -31,7 +31,7 @@ enum class PtDeclType {
 };
 
 /// @brief PtItem の派生クラスの識別コード
-enum class PtItemType {
+enum class PtItemType : std::uint8_t {
   DefParam,
   ContAssign,
   Initial,
@@ -50,7 +50,7 @@ enum class PtItemType {
 };
 
 /// @brief PtStmt の派生クラスの型を表す列挙型
-enum class PtStmtType {
+enum class PtStmtType : std::uint8_t {
   Disable,
   Enable,
   SysEnable,
@@ -80,7 +80,7 @@ enum class PtStmtType {
 };
 
 /// @brief PtExpr の派生クラスを識別するための列挙型
-enum class PtExprType {
+enum class PtExprType : std::uint8_t {
   Opr,         ///< 演算子
   FuncCall,    ///< 関数呼び出し
   SysFuncCall, ///< システム関数呼び出し
@@ -89,7 +89,7 @@ enum class PtExprType {
 };
 
 /// @brief コントロールの型を区別するための列挙型
-enum class PtCtrlType {
+enum class PtCtrlType : std::uint8_t {
   Delay, ///< [in] delay control
   Event, ///< [in] event control
   Repeat ///< [in] repeat control

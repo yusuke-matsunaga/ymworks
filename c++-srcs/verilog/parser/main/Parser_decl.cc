@@ -143,8 +143,7 @@ Parser::new_ParamH(
   const FileRegion& fr
 )
 {
-  auto decl = mFactory->new_ParamH(fr, false, nullptr);
-  return decl;
+  return mFactory->new_ParamH(fr, false, nullptr);
 }
 
 // @brief 範囲指定型パラメータ宣言のヘッダの生成
@@ -155,8 +154,7 @@ Parser::new_ParamH(
   const PtRange* range
 )
 {
-  auto decl = mFactory->new_ParamH(fr, sign, range);
-  return decl;
+  return mFactory->new_ParamH(fr, sign, range);
 }
 
 // @brief 組み込み型パラメータ宣言のヘッダの生成
@@ -166,8 +164,7 @@ Parser::new_ParamH(
   VpiVarType var_type
 )
 {
-  auto decl = mFactory->new_ParamH(fr, var_type);
-  return decl;
+  return mFactory->new_ParamH(fr, var_type);
 }
 
 
@@ -181,8 +178,7 @@ Parser::new_LocalParamH(
   const FileRegion& fr
 )
 {
-  auto decl = mFactory->new_ParamH(fr, false, nullptr, true);
-  return decl;
+  return mFactory->new_ParamH(fr, false, nullptr, true);
 }
 
 // @brief 範囲指定型 local param 宣言のヘッダの生成
@@ -193,8 +189,7 @@ Parser::new_LocalParamH(
   const PtRange* range
 )
 {
-  auto decl = mFactory->new_ParamH(fr, sign, range, true);
-  return decl;
+  return mFactory->new_ParamH(fr, sign, range, true);
 }
 
 // @brief 組み込み型 local param 宣言のヘッダの生成
@@ -204,8 +199,7 @@ Parser::new_LocalParamH(
   VpiVarType var_type
 )
 {
-  auto decl = mFactory->new_ParamH(fr, var_type, true);
-  return decl;
+  return mFactory->new_ParamH(fr, var_type, true);
 }
 
 
@@ -219,8 +213,7 @@ Parser::new_SpecParamH(
   const FileRegion& fr
 )
 {
-  auto decl = mFactory->new_SpecParamH(fr, nullptr);
-  return decl;
+  return mFactory->new_SpecParamH(fr, nullptr);
 }
 
 // @brief 範囲指定型 specparam 宣言のヘッダの生成
@@ -230,8 +223,7 @@ Parser::new_SpecParamH(
   const PtRange* range
 )
 {
-  auto decl = mFactory->new_SpecParamH(fr, range);
-  return decl;
+  return mFactory->new_SpecParamH(fr, range);
 }
 
 // @brief イベント宣言のヘッダの生成
@@ -240,8 +232,7 @@ Parser::new_EventH(
   const FileRegion& fr
 )
 {
-  auto decl = mFactory->new_EventH(fr);
-  return decl;
+  return mFactory->new_EventH(fr);
 }
 
 // @brief genvar 宣言のヘッダの生成
@@ -250,8 +241,7 @@ Parser::new_GenvarH(
   const FileRegion& fr
 )
 {
-  auto decl = mFactory->new_GenvarH(fr);
-  return decl;
+  return mFactory->new_GenvarH(fr);
 }
 
 // @brief 変数宣言のヘッダの生成
@@ -261,8 +251,7 @@ Parser::new_VarH(
   VpiVarType var_type
 )
 {
-  auto decl = mFactory->new_VarH(fr, var_type);
-  return decl;
+  return mFactory->new_VarH(fr, var_type);
 }
 
 // @brief 1ビット型 reg 宣言のヘッダの生成
@@ -272,8 +261,7 @@ Parser::new_RegH(
   bool sign
 )
 {
-  auto decl = mFactory->new_RegH(fr, sign, nullptr);
-  return decl;
+  return mFactory->new_RegH(fr, sign, nullptr);
 }
 
 // @brief 範囲指定型 reg 宣言のヘッダの生成
@@ -284,8 +272,7 @@ Parser::new_RegH(
   const PtRange* range
 )
 {
-  auto decl = mFactory->new_RegH(fr, sign, range);
-  return decl;
+  return mFactory->new_RegH(fr, sign, range);
 }
 
 // @brief 1ビット型 net 宣言のヘッダの生成
@@ -296,25 +283,9 @@ Parser::new_NetH(
   bool sign
 )
 {
-  auto decl = mFactory->new_NetH(fr, type, VpiVsType::None,
-				 sign, nullptr,
-				 nullptr, nullptr);
-  return decl;
-}
-
-// @brief 1ビット型 net 宣言のヘッダの生成 (strength あり)
-PtiDeclHead*
-Parser::new_NetH(
-  const FileRegion& fr,
-  VpiNetType type,
-  bool sign,
-  const PtStrength* strength
-)
-{
-  auto decl = mFactory->new_NetH(fr, type, VpiVsType::None,
-				 sign, nullptr,
-				 strength, nullptr);
-  return decl;
+  return mFactory->new_NetH(fr, type, VpiVsType::None,
+			    sign, nullptr,
+			    strength, nullptr);
 }
 
 // @brief 1ビット型 net 宣言のヘッダの生成 (遅延あり)
@@ -326,10 +297,9 @@ Parser::new_NetH(
   const PtDelay* delay
 )
 {
-  auto decl = mFactory->new_NetH(fr, type, VpiVsType::None,
-				 sign, nullptr,
-				 nullptr, delay);
-  return decl;
+  return mFactory->new_NetH(fr, type, VpiVsType::None,
+			    sign, nullptr,
+			    nullptr, delay);
 }
 
 // @brief 1ビット型 net 宣言のヘッダの生成 (strength, 遅延あり)
@@ -342,10 +312,9 @@ Parser::new_NetH(
   const PtDelay* delay
 )
 {
-  auto decl = mFactory->new_NetH(fr, type, VpiVsType::None,
-				 sign, nullptr,
-				 strength, delay);
-  return decl;
+  return mFactory->new_NetH(fr, type, VpiVsType::None,
+			    sign, nullptr,
+			    strength, delay);
 }
 
 // @brief 範囲指定型 net 宣言のヘッダの生成
@@ -358,10 +327,9 @@ Parser::new_NetH(
   const PtRange* range
 )
 {
-  auto decl = mFactory->new_NetH(fr, type, vstype,
-				 sign, range,
-				 nullptr, nullptr);
-  return decl;
+  return mFactory->new_NetH(fr, type, vstype,
+			    sign, range,
+			    nullptr, nullptr);
 }
 
 // @brief 範囲指定型 net 宣言のヘッダの生成 (strengthあり)
@@ -375,10 +343,9 @@ Parser::new_NetH(
   const PtStrength* strength
 )
 {
-  auto decl = mFactory->new_NetH(fr, type, vstype,
-				 sign, range,
-				 strength, nullptr);
-  return decl;
+  return mFactory->new_NetH(fr, type, vstype,
+			    sign, range,
+			    strength, nullptr);
 }
 
 // @brief 範囲指定型 net 宣言のヘッダの生成 (遅延あり)
@@ -392,10 +359,9 @@ Parser::new_NetH(
   const PtDelay* delay
 )
 {
-  auto decl = mFactory->new_NetH(fr, type, vstype,
-				 sign, range,
-				 nullptr, delay);
-  return decl;
+  return mFactory->new_NetH(fr, type, vstype,
+			    sign, range,
+			    nullptr, delay);
 }
 
 // @brief 範囲指定型 net 宣言のヘッダの生成 (strength, 遅延あり)
@@ -410,10 +376,9 @@ Parser::new_NetH(
   const PtDelay* delay
 )
 {
-  auto decl = mFactory->new_NetH(fr, type, vstype,
-				 sign, range,
-				 strength, delay);
-  return decl;
+  return mFactory->new_NetH(fr, type, vstype,
+			    sign, range,
+			    strength, delay);
 }
 
 
@@ -469,8 +434,7 @@ Parser::new_Range(
   const PtExpr* lsb
 )
 {
-  auto range = mFactory->new_Range(fr, msb, lsb);
-  return range;
+  return mFactory->new_Range(fr, msb, lsb);
 }
 
 END_NAMESPACE_YM_VERILOG

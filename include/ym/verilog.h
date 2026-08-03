@@ -158,7 +158,7 @@ enum class VpiObjType {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiUnconnDrive {
+enum class VpiUnconnDrive : std::uint8_t {
   HighZ = vpiHighZ,
   Pull1 = vpiPull1,
   Pull0 = vpiPull0
@@ -170,7 +170,7 @@ enum class VpiUnconnDrive {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiDefDelayMode {
+enum class VpiDefDelayMode : std::uint8_t {
   None    = vpiDelayModeNone,
   Path    = vpiDelayModePath,
   Distrib = vpiDelayModeDistrib,
@@ -185,7 +185,7 @@ enum class VpiDefDelayMode {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiDir {
+enum class VpiDir : std::uint8_t {
   Input       = vpiInput,
   Output      = vpiOutput,
   Inout       = vpiInout,
@@ -216,7 +216,7 @@ operator<<(
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiNetType {
+enum class VpiNetType : std::uint8_t {
   Wire     = vpiWire,
   Wand     = vpiWand,
   Wor      = vpiWor,
@@ -237,7 +237,7 @@ enum class VpiNetType {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiPrimType {
+enum class VpiPrimType : std::uint8_t {
   And       = vpiAndPrim,
   Nand      = vpiNandPrim,
   Nor       = vpiNorPrim,
@@ -277,7 +277,7 @@ enum class VpiPrimType {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiPolarity {
+enum class VpiPolarity : std::uint8_t {
   Positive = vpiPositive,
   Negative = vpiNegative,
   Unknown  = vpiUnknown
@@ -289,7 +289,7 @@ enum class VpiPolarity {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiEdge {
+enum class VpiEdge : std::uint8_t {
   NoEdge  = vpiNoEdge,
   Edge01  = vpiEdge01,
   Edge10  = vpiEdge10,
@@ -308,7 +308,7 @@ enum class VpiEdge {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiPathType {
+enum class VpiPathType : std::uint8_t {
   Full     = vpiPathFull,
   Parallel = vpiPathParallel
 };
@@ -319,7 +319,7 @@ enum class VpiPathType {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiTchkType {
+enum class VpiTchkType : std::uint8_t {
   Setup      = vpiSetup,
   Hold       = vpiHold,
   Period     = vpiPeriod,
@@ -340,7 +340,7 @@ enum class VpiTchkType {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiOpType {
+enum class VpiOpType : std::uint8_t {
   Minus        = vpiMinusOp,
   Plus         = vpiPlusOp,
   Not          = vpiNotOp,
@@ -393,7 +393,7 @@ enum class VpiOpType {
 /// vpi_user.h の定義値として使える．
 /// ただし kVpiSignedXXXXX はない．
 //////////////////////////////////////////////////////////////////////
-enum class VpiConstType {
+enum class VpiConstType : std::uint8_t {
   Dec          = vpiDecConst,
   Real         = vpiRealConst,
   Binary       = vpiBinaryConst,
@@ -413,7 +413,7 @@ enum class VpiConstType {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiCaseType {
+enum class VpiCaseType : std::uint8_t {
   Exact = vpiCaseExact,
   X     = vpiCaseX,
   Z     = vpiCaseZ
@@ -424,9 +424,9 @@ enum class VpiCaseType {
 /// @brief function の型
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
-/// ただし kVpiRealtimeFunc はない．
+/// ただし VpiRealtimeFunc はない．
 //////////////////////////////////////////////////////////////////////
-enum class VpiFuncType {
+enum class VpiFuncType : std::uint8_t {
   Int         = vpiIntFunc,
   Real        = vpiRealFunc,
   Time        = vpiTimeFunc,
@@ -445,7 +445,7 @@ enum class VpiFuncType {
 /// @note この列挙型の値を強制的に int にキャストしても
 /// vpi_user.h の定義値として使える．
 //////////////////////////////////////////////////////////////////////
-enum class VpiDelayType {
+enum class VpiDelayType : std::uint8_t {
   ModPath      = vpiModPathDelay,
   InterModPath = vpiInterModPathDelay,
   MIP          = vpiMIPDelay
@@ -455,7 +455,7 @@ enum class VpiDelayType {
 //////////////////////////////////////////////////////////////////////
 /// @brief strength の値
 //////////////////////////////////////////////////////////////////////
-enum class VpiStrength {
+enum class VpiStrength : std::uint8_t {
   NoStrength   = 0,
   SupplyDrive  = 1,
   StrongDrive  = 2,
@@ -471,7 +471,7 @@ enum class VpiStrength {
 //////////////////////////////////////////////////////////////////////
 /// @brief 変数のデータ型
 //////////////////////////////////////////////////////////////////////
-enum class VpiVarType {
+enum class VpiVarType : std::uint8_t {
   None     = 0,
   Integer  = 1,
   Real     = 2,
@@ -483,7 +483,7 @@ enum class VpiVarType {
 //////////////////////////////////////////////////////////////////////
 /// @brief 範囲指定のモード
 //////////////////////////////////////////////////////////////////////
-enum class VpiRangeMode {
+enum class VpiRangeMode : std::uint8_t {
   No    = 0, ///< 範囲指定なし
   Const = 1, ///< 固定 (例: [ a : b ])
   Plus  = 2, ///< 可変(プラス) (例: [ a +: b ])
@@ -494,7 +494,7 @@ enum class VpiRangeMode {
 //////////////////////////////////////////////////////////////////////
 /// @brief IO宣言で用いられる補助的な型
 //////////////////////////////////////////////////////////////////////
-enum class VpiAuxType {
+enum class VpiAuxType : std::uint8_t {
   None = 0, ///< [in] 型無し
   Net  = 1, ///< [in] net 型
   Reg  = 2, ///< [in] reg 型
@@ -505,7 +505,7 @@ enum class VpiAuxType {
 //////////////////////////////////////////////////////////////////////
 /// @brief vectored/scalared 指定の値
 //////////////////////////////////////////////////////////////////////
-enum class VpiVsType {
+enum class VpiVsType : std::uint8_t {
   None     = 0, ///< [in] 指定なし
   Vectored = 1, ///< [in] ベクター型
   Scalared = 2  ///< [in] スカラー型
@@ -515,7 +515,7 @@ enum class VpiVsType {
 //////////////////////////////////////////////////////////////////////
 /// @brief specify block item の種類
 //////////////////////////////////////////////////////////////////////
-enum class VpiSpecItemType {
+enum class VpiSpecItemType : std::uint8_t {
   PulsestyleOnEvent  = 0,
   PulsestyleOnDetect = 1,
   Showcancelled      = 2,
@@ -526,7 +526,7 @@ enum class VpiSpecItemType {
 //////////////////////////////////////////////////////////////////////
 /// @brief specify block path の種類
 //////////////////////////////////////////////////////////////////////
-enum class VpiSpecPathType {
+enum class VpiSpecPathType : std::uint8_t {
   Null   = 0,
   If     = 1,
   Ifnone = 2

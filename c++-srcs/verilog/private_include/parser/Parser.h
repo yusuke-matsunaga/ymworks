@@ -492,6 +492,8 @@ public:
   );
 
   /// @brief 宣言要素の生成
+  ///
+  /// 結果は mDeclItemList に追加される．
   void
   new_DeclItem(
     const FileRegion& fr, ///< [in] ファイル位置の情報
@@ -499,6 +501,8 @@ public:
   );
 
   /// @brief 初期値付き宣言要素の生成
+  ///
+  /// 結果は mDeclItemList に追加される．
   void
   new_DeclItem(
     const FileRegion& fr,    ///< [in] ファイル位置の情報
@@ -507,6 +511,8 @@ public:
   );
 
   /// @brief 配列型宣言要素の生成
+  ///
+  /// 結果は mDeclItemList に追加される．
   void
   new_DeclItem(
     const FileRegion& fr,              ///< [in] ファイル位置の情報

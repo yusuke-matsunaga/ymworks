@@ -64,8 +64,7 @@ Parser::new_Concat(
   PtrList<const PtExpr>* expr_list
 )
 {
-  auto expr = mFactory->new_Concat(fr, expr_list->to_vector());
-  return expr;
+  return mFactory->new_Concat(fr, expr_list->to_vector());
 }
 
 // @brief multi-concatination 演算子の生成
@@ -77,8 +76,7 @@ Parser::new_MultiConcat(
 )
 {
   expr_list->push_front(rep);
-  auto expr = mFactory->new_MultiConcat(fr, expr_list->to_vector());
-  return expr;
+  return mFactory->new_MultiConcat(fr, expr_list->to_vector());
 }
 
 // @brief min/typ/max delay 演算子の生成
@@ -90,8 +88,7 @@ Parser::new_MinTypMax(
   const PtExpr* val2
 )
 {
-  auto expr = mFactory->new_MinTypMax(fr, val0, val1, val2);
-  return expr;
+  return mFactory->new_MinTypMax(fr, val0, val1, val2);
 }
 
 // @brief primary の生成
@@ -101,8 +98,7 @@ Parser::new_Primary(
   const char* name
 )
 {
-  auto expr = mFactory->new_Primary(fr, name);
-  return expr;
+  return mFactory->new_Primary(fr, name);
 }
 
 // @brief インデックス付き primary の生成
@@ -113,8 +109,7 @@ Parser::new_Primary(
   PtrList<const PtExpr>* index_array
 )
 {
-  auto expr = mFactory->new_Primary(fr, name, index_array->to_vector());
-  return expr;
+  return mFactory->new_Primary(fr, name, index_array->to_vector());
 }
 
 // @brief 範囲指定付き primary の生成
@@ -125,8 +120,7 @@ Parser::new_Primary(
   const PtPart* part
 )
 {
-  auto expr = mFactory->new_Primary(fr, name, part);
-  return expr;
+  return mFactory->new_Primary(fr, name, part);
 }
 
 // @brief インデックスと範囲指定付き primary の生成
@@ -138,10 +132,9 @@ Parser::new_Primary(
   const PtPart* part
 )
 {
-  auto expr = mFactory->new_Primary(fr, name,
-				    index_list->to_vector(),
-				    part);
-  return expr;
+  return mFactory->new_Primary(fr, name,
+			       index_list->to_vector(),
+			       part);
 }
 
 // @brief primary の生成 (階層付き)
@@ -151,8 +144,7 @@ Parser::new_Primary(
   PuHierName* hname
 )
 {
-  auto expr = mFactory->new_Primary(fr, hname);
-  return expr;
+  return mFactory->new_Primary(fr, hname);
 }
 
 // @brief インデックス付き primary の生成 (階層付き)
@@ -163,8 +155,7 @@ Parser::new_Primary(
   PtrList<const PtExpr>* index_list
 )
 {
-  auto expr = mFactory->new_Primary(fr, hname, index_list->to_vector());
-  return expr;
+  return mFactory->new_Primary(fr, hname, index_list->to_vector());
 }
 
 // @brief 範囲指定付き primary の生成 (階層付き)
@@ -175,8 +166,7 @@ Parser::new_Primary(
   const PtPart* part
 )
 {
-  auto expr = mFactory->new_Primary(fr, hname, part);
-  return expr;
+  return mFactory->new_Primary(fr, hname, part);
 }
 
 // @brief インデックスと範囲指定付き primary の生成 (階層付き)
@@ -188,10 +178,9 @@ Parser::new_Primary(
   const PtPart* part
 )
 {
-  auto expr = mFactory->new_Primary(fr, hname,
-				    index_list->to_vector(),
-				    part);
-  return expr;
+  return mFactory->new_Primary(fr, hname,
+			       index_list->to_vector(),
+			       part);
 }
 
 // @brief constant primary の生成
@@ -202,8 +191,7 @@ Parser::new_CPrimary(
   const PtExpr* index
 )
 {
-  auto expr = mFactory->new_CPrimary(fr, name, {index});
-  return expr;
+  return mFactory->new_CPrimary(fr, name, {index});
 }
 
 // @brief constant primary の生成
@@ -214,8 +202,7 @@ Parser::new_CPrimary(
   PtrList<const PtExpr>* index_list
 )
 {
-  auto expr = mFactory->new_CPrimary(fr, name, index_list->to_vector());
-  return expr;
+  return mFactory->new_CPrimary(fr, name, index_list->to_vector());
 }
 
 // @brief 範囲指定付き constant primary の生成
@@ -226,8 +213,7 @@ Parser::new_CPrimary(
   const PtPart* part
 )
 {
-  auto expr = mFactory->new_CPrimary(fr, name, part);
-  return expr;
+  return mFactory->new_CPrimary(fr, name, part);
 }
 
 // @brief インデックス付き constant primary の生成 (階層付き)
@@ -238,8 +224,7 @@ Parser::new_CPrimary(
   PtrList<const PtExpr>* index_list
 )
 {
-  auto expr = mFactory->new_CPrimary(fr, hname, index_list->to_vector());
-  return expr;
+  return mFactory->new_CPrimary(fr, hname, index_list->to_vector());
 }
 
 // @brief function call の生成
@@ -278,8 +263,7 @@ Parser::new_SysFuncCall(
   PtrList<const PtExpr>* arg_list
 )
 {
-  auto expr = mFactory->new_SysFuncCall(fr, name, arg_list->to_vector());
-  return expr;
+  return mFactory->new_SysFuncCall(fr, name, arg_list->to_vector());
 }
 
 // @brief 整数型の定数の生成
@@ -289,8 +273,7 @@ Parser::new_IntConst(
   std::uint32_t value
 )
 {
-  auto expr = mFactory->new_IntConst(fr, value);
-  return expr;
+  return mFactory->new_IntConst(fr, value);
 }
 
 // @brief 整数型の定数の生成
@@ -300,8 +283,7 @@ Parser::new_IntConst(
   const char* value
 )
 {
-  auto expr = mFactory->new_IntConst(fr, value);
-  return expr;
+  return mFactory->new_IntConst(fr, value);
 }
 
 // @brief 基底付き整数型の定数の生成
@@ -312,8 +294,7 @@ Parser::new_IntConst(
   const char* value
 )
 {
-  auto expr = mFactory->new_IntConst(fr, const_type, value);
-  return expr;
+  return mFactory->new_IntConst(fr, const_type, value);
 }
 
 // @brief サイズと基底付き定数の生成
@@ -325,8 +306,7 @@ Parser::new_IntConst(
   const char* value
 )
 {
-  auto expr = mFactory->new_IntConst(fr, size, const_type, value);
-  return expr;
+  return mFactory->new_IntConst(fr, size, const_type, value);
 }
 
 // @brief 実数型の定数の生成
@@ -336,8 +316,7 @@ Parser::new_RealConst(
   double value
 )
 {
-  auto expr = mFactory->new_RealConst(fr, value);
-  return expr;
+  return mFactory->new_RealConst(fr, value);
 }
 
 // @brief 文字列型の定数の生成
@@ -347,8 +326,7 @@ Parser::new_StringConst(
   const char* value
 )
 {
-  auto expr = mFactory->new_StringConst(fr, value);
-  return expr;
+  return mFactory->new_StringConst(fr, value);
 }
 
 // @brief 範囲指定の生成
@@ -360,7 +338,7 @@ Parser::new_Part(
   const PtExpr* expr2
 )
 {
-  auto poart = mFactory->new_Part(fr, mode, expr1, expr2);
+  return mFactory->new_Part(fr, mode, expr1, expr2);
 }
 
 END_NAMESPACE_YM_VERILOG
