@@ -285,6 +285,20 @@ Parser::new_NetH(
 {
   return mFactory->new_NetH(fr, type, VpiVsType::None,
 			    sign, nullptr,
+			    nullptr, nullptr);
+}
+
+// @brief 1ビット型 net 宣言のヘッダの生成 (strengthあり)
+PtiDeclHead*
+Parser::new_NetH(
+  const FileRegion& fr,
+  VpiNetType type,
+  bool sign,
+  const PtStrength* strength
+)
+{
+  return mFactory->new_NetH(fr, type, VpiVsType::None,
+			    sign, nullptr,
 			    strength, nullptr);
 }
 
