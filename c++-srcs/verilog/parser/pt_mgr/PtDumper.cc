@@ -720,7 +720,7 @@ PtDumper::put(
   case PtStmtType::Wait:          nm = "Wait"; break;
   case PtStmtType::Forever:       nm = "Forever"; break;
   case PtStmtType::Repeat:        nm = "Repeat"; break;
-  case PtStmtType::White:         nm = "While"; break;
+  case PtStmtType::While:         nm = "While"; break;
   case PtStmtType::For:           nm = "For"; break;
   case PtStmtType::PcAssign:      nm = "PcAssign"; break;
   case PtStmtType::Deassign:      nm = "Deassign"; break;
@@ -811,7 +811,7 @@ PtDumper::put(
 
   case PtStmtType::Forever:
   case PtStmtType::Repeat:
-  case PtStmtType::White:
+  case PtStmtType::While:
   case PtStmtType::For:
     put("mInit", stmt->init_stmt());
     put("mExpr", stmt->expr());

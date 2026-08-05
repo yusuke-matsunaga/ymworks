@@ -903,7 +903,7 @@ CptDeclItemBase::range(
   SizeType pos
 ) const
 {
-  throw std::logic_error{"Should not be reached"};
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // 初期値の取得
@@ -980,6 +980,9 @@ CptDeclItemR::range(
   SizeType pos
 ) const
 {
+  if ( pos >= range_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mRangeArray[pos];
 }
 

@@ -305,7 +305,7 @@ decompile_impl(
   case PtExprType::FuncCall:
   case PtExprType::SysFuncCall:
     {
-      std::string ans(expr->name());
+      auto ans = expr->fullname();
       ans += "(";
       auto n = expr->operand_num();
       const char* comma = "";
@@ -319,7 +319,7 @@ decompile_impl(
 
   case PtExprType::Primary:
     {
-      std::string ans{expr->fullname()};
+      auto ans = expr->fullname();
       auto n = expr->index_num();
       for ( SizeType i = 0; i < n; ++ i) {
 	ans += "[" + expr->index(i)->decompile() + "]";

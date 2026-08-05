@@ -157,21 +157,15 @@ Parser::new_GenFor(
   const char* loop_var,
   const PtExpr* init_expr,
   const PtExpr* cond,
-  const char* inc_var,
-  const PtExpr* inc_expr,
+  const char* next_var,
+  const PtExpr* next_expr,
   const char* block_name
 )
 {
-  if ( strcmp(loop_var, inc_var) == 0 ) {
-    auto item = mFactory->new_GenFor(fr, loop_var,
-				     init_expr, cond, inc_expr, block_name,
-				     mCurDeclArray, mCurItemArray);
-    add_item(item);
-  }
-  else {
+  if ( strcmp(loop_var, next_var) != 0 ) {
     std::ostringstream buf;
     buf << "Lhs of the increment statement ("
-	<< inc_var
+	<< next_var
 	<< ") does not match with Lhs of the initial statement ("
 	<< loop_var
 	<< ")";
@@ -180,7 +174,12 @@ Parser::new_GenFor(
 		    MsgType::Error,
 		    "PARSER",
 		    buf.str());
+    return;
   }
+  auto item = mFactory->new_GenFor(fr, loop_var,
+				   init_expr, cond, next_expr, block_name,
+				   mCurDeclArray, mCurItemArray);
+  add_item(item);
 }
 
 END_NAMESPACE_YM_VERILOG

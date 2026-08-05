@@ -177,6 +177,33 @@ public:
   }
 
 
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 比較関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 等価比較演算子
+  bool
+  operator==(
+    const FileRegion& right
+  ) const
+  {
+    return mStartFileInfo == right.mStartFileInfo &&
+    mEndFileInfo == right.mEndFileInfo &&
+    mStartLineColumn == right.mStartLineColumn &&
+    mEndLineColumn == right.mEndLineColumn;
+  }
+
+  /// @brief 非等価比較演算子
+  bool
+  operator!=(
+    const FileRegion& right
+  ) const
+  {
+    return !operator==(right);
+  }
+
+
 private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ

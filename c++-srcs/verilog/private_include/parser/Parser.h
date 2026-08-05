@@ -909,14 +909,17 @@ public:
   );
 
   /// @brief generate for 文の生成
+  ///
+  /// loop_var と next_var が等しくなければ
+  /// エラーメッセージを出力する．
   void
   new_GenFor(
     const FileRegion& fr,    ///< [in] ファイル位置の情報
     const char* loop_var,    ///< [in] ループ変数
     const PtExpr* init_expr, ///< [in] 初期化式
     const PtExpr* cond,      ///< [in] ループ条件式
-    const char* inc_var,     ///< [in] 増加式の左辺の変数
-    const PtExpr* inc_expr,  ///< [in] 増加式
+    const char* next_var,    ///< [in] 増加式の左辺の変数
+    const PtExpr* next_expr, ///< [in] 増加式
     const char* block_name   ///< [in] ブロック名
   );
 

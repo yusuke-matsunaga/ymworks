@@ -21,8 +21,7 @@ Parser::new_DefParamH(
   const FileRegion& fr
 )
 {
-  auto item = mFactory->new_DefParamH(fr, mDefParamList);
-  return item;
+  return mFactory->new_DefParamH(fr, mDefParamList);
 }
 
 // @brief defparam リストを初期化する．
@@ -77,8 +76,7 @@ Parser::new_ContAssignH(
   const FileRegion& fr
 )
 {
-  auto item = mFactory->new_ContAssignH(fr, nullptr, nullptr, mContAssignList);
-  return item;
+  return mFactory->new_ContAssignH(fr, nullptr, nullptr, mContAssignList);
 }
 
 // @brief continuous assign 文のヘッダの生成 (strengthつき)
@@ -88,8 +86,7 @@ Parser::new_ContAssignH(
   const PtStrength* strength
 )
 {
-  auto item = mFactory->new_ContAssignH(fr, strength, nullptr, mContAssignList);
-  return item;
+  return mFactory->new_ContAssignH(fr, strength, nullptr, mContAssignList);
 }
 
 // @brief continuous assign 文のヘッダの生成 (遅延付き)
@@ -99,8 +96,7 @@ Parser::new_ContAssignH(
   const PtDelay* delay
 )
 {
-  auto item = mFactory->new_ContAssignH(fr, nullptr, delay, mContAssignList);
-  return item;
+  return mFactory->new_ContAssignH(fr, nullptr, delay, mContAssignList);
 }
 
 // @brief continuous assign 文のヘッダの生成 (strength, 遅延付き)
@@ -111,8 +107,7 @@ Parser::new_ContAssignH(
   const PtDelay* delay
 )
 {
-  auto item = mFactory->new_ContAssignH(fr, strength, delay, mContAssignList);
-  return item;
+  return mFactory->new_ContAssignH(fr, strength, delay, mContAssignList);
 }
 
 // @brief contassign リストを初期化する．
@@ -156,8 +151,7 @@ Parser::new_Initial(
   const PtStmt* body
 )
 {
-  auto item = mFactory->new_Initial(fr, body);
-  return item;
+  return mFactory->new_Initial(fr, body);
 }
 
 // @brief always 文の生成
@@ -167,8 +161,7 @@ Parser::new_Always(
   const PtStmt* body
 )
 {
-  auto item = mFactory->new_Always(fr, body);
-  return item;
+  return mFactory->new_Always(fr, body);
 }
 
 
@@ -206,11 +199,10 @@ Parser::new_Task(
   const PtStmt* stmt
 )
 {
-  auto item = mFactory->new_Task(fr, name, automatic,
-				 get_tf_io_array(),
-				 mCurDeclArray,
-				 stmt);
-  return item;
+  return mFactory->new_Task(fr, name, automatic,
+			    get_tf_io_array(),
+			    mCurDeclArray,
+			    stmt);
 }
 
 // @brief 1ビット型 function 文の生成
@@ -223,12 +215,11 @@ Parser::new_Function(
   const PtStmt* stmt
 )
 {
-  auto item = mFactory->new_Function(fr, name, automatic,
-				     sign,
-				     get_tf_io_array(),
-				     mCurDeclArray,
-				     stmt);
-  return item;
+  return mFactory->new_Function(fr, name, automatic,
+				sign,
+				get_tf_io_array(),
+				mCurDeclArray,
+				stmt);
 }
 
 // @brief 範囲指定型 function 文の生成
@@ -242,12 +233,11 @@ Parser::new_SizedFunc(
   const PtStmt* stmt
 )
 {
-  auto item = mFactory->new_SizedFunc(fr, name, automatic,
-				      sign, range,
-				      get_tf_io_array(),
-				      mCurDeclArray,
-				      stmt);
-  return item;
+  return mFactory->new_SizedFunc(fr, name, automatic,
+				 sign, range,
+				 get_tf_io_array(),
+				 mCurDeclArray,
+				 stmt);
 }
 
 // @brief 組み込み型 function 文の生成
@@ -261,12 +251,11 @@ Parser::new_TypedFunc(
   const PtStmt* stmt
 )
 {
-  auto item = mFactory->new_TypedFunc(fr, name, automatic,
-				      sign, func_type,
-				      get_tf_io_array(),
-				      mCurDeclArray,
-				      stmt);
-  return item;
+  return mFactory->new_TypedFunc(fr, name, automatic,
+				 sign, func_type,
+				 get_tf_io_array(),
+				 mCurDeclArray,
+				 stmt);
 }
 
 
@@ -313,12 +302,11 @@ Parser::new_PathDecl(
   const PtPathDelay* path_delay
 )
 {
-  auto item = mFactory->new_PathDecl(fr, edge,
-				     input_list->to_vector(), input_pol,
-				     op,
-				     output_list->to_vector(), output_pol,
-				     expr, path_delay);
-  return item;
+  return mFactory->new_PathDecl(fr, edge,
+				input_list->to_vector(), input_pol,
+				op,
+				output_list->to_vector(), output_pol,
+				expr, path_delay);
 }
 
 // @brief パス記述の生成
@@ -335,12 +323,11 @@ Parser::new_PathDecl(
   const PtPathDelay* path_delay
 )
 {
-  auto item = mFactory->new_PathDecl(fr, edge,
-				     input_list->to_vector(), input_pol,
-				     op,
-				     {output}, output_pol,
-				     expr, path_delay);
-  return item;
+  return mFactory->new_PathDecl(fr, edge,
+				input_list->to_vector(), input_pol,
+				op,
+				{output}, output_pol,
+				expr, path_delay);
 }
 
 // @brief path delay value の生成 (値が1個)
@@ -350,8 +337,7 @@ Parser::new_PathDelay(
   const PtExpr* value
 )
 {
-  auto item = mFactory->new_PathDelay(fr, value);
-  return item;
+  return mFactory->new_PathDelay(fr, value);
 }
 
 // @brief path delay value の生成 (値が2個)
@@ -362,8 +348,7 @@ Parser::new_PathDelay(
   const PtExpr* value2
 )
 {
-  auto item = mFactory->new_PathDelay(fr, value1, value2);
-  return item;
+  return mFactory->new_PathDelay(fr, value1, value2);
 }
 
 // @brief path delay value の生成 (値が3個)
@@ -375,8 +360,7 @@ Parser::new_PathDelay(
   const PtExpr* value3
 )
 {
-  auto item = mFactory->new_PathDelay(fr, value1, value2, value3);
-  return item;
+  return mFactory->new_PathDelay(fr, value1, value2, value3);
 }
 
 // @brief path delay value の生成 (値が6個)
@@ -391,10 +375,9 @@ Parser::new_PathDelay(
   const PtExpr* value6
 )
 {
-  auto item = mFactory->new_PathDelay(fr,
-				      value1, value2, value3,
-				      value4, value5, value6);
-  return item;
+  return mFactory->new_PathDelay(fr,
+				 value1, value2, value3,
+				 value4, value5, value6);
 }
 
 // @brief path delay value の生成 (値が12個)
@@ -415,12 +398,11 @@ Parser::new_PathDelay(
   const PtExpr* value12
 )
 {
-  auto item = mFactory->new_PathDelay(fr,
-				      value1, value2, value3,
-				      value4, value5, value6,
-				      value7, value8, value9,
-				      value10, value11, value12);
-  return item;
+  return mFactory->new_PathDelay(fr,
+				 value1, value2, value3,
+				 value4, value5, value6,
+				 value7, value8, value9,
+				 value10, value11, value12);
 }
 
 // @brief task/function 用の IO宣言リストを配列に変換する．

@@ -96,6 +96,8 @@ public:
 
   /// @brief 定数の種類の取得
   /// @return 定数の種類
+  ///
+  /// - 定数型でなければ std::logic_error 例外を送出する．
   virtual
   VpiConstType
   const_type() const = 0;
@@ -103,13 +105,16 @@ public:
   /// @brief 整数型の定数のサイズの取得
   /// @return サイズ
   ///
-  /// サイズ指定の無い場合と整数型の定数でない場合には 0 を返す．
+  /// - サイズ指定の無い場合には 0 を返す．
+  /// - 整数型の定数でない場合には std::logic_error 例外を送出する．
   virtual
   SizeType
   const_size() const = 0;
 
   /// @brief 整数型の値の取得
   /// @return 値
+  ///
+  /// - 整数型の定数でない場合には std::logic_error 例外を送出する．
   virtual
   std::uint32_t
   const_uint32() const = 0;
@@ -117,13 +122,17 @@ public:
   /// @brief 整数型および文字列型の定数の文字列表現の取得
   /// @return 値の文字列表現
   ///
-  /// 整数型時のサイズと基数は含まない．
+  /// - 整数型時のサイズと基数は含まない．
+  /// - 整数型で文字列表現を持たない場合には nullptr を返す．
+  /// - 整数型および文字列型の定数でない場合には std::logic_error 例外を送出する．
   virtual
   const char*
   const_str() const = 0;
 
   /// @brief 実数型の値の取得
   /// @return 値
+  ///
+  /// - 実数型の定数ではに場合には std::logic_error 例外を送出する．
   virtual
   double
   const_real() const = 0;
@@ -137,6 +146,8 @@ public:
 
   /// @brief インデックスの値の取得
   /// @return 階層名の添字として使える式の時にその値を返す．
+  ///
+  /// - is_index_expr() が false の時は std::logic_error 例外を送出する．
   virtual
   int
   index_value() const = 0;

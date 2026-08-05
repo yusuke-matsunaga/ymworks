@@ -35,7 +35,7 @@ CptItem::~CptItem()
 VpiPrimType
 CptItem::prim_type() const
 {
-  return VpiPrimType::And; // ダミー
+  throw std::logic_error{"Not an INSTANCE type"};
 }
 
 // @brief strength の取得
@@ -65,8 +65,7 @@ CptItem::paramassign(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief defparam の要素数の取得
@@ -82,8 +81,7 @@ CptItem::defparam(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief continuous assign の要素数の取得
@@ -99,8 +97,7 @@ CptItem::contassign(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief module/UDP/gate instance の要素数の取得
@@ -116,8 +113,7 @@ CptItem::inst(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 名前の取得
@@ -154,8 +150,7 @@ CptItem::iohead(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 宣言ヘッダの要素数の取得
@@ -171,8 +166,7 @@ CptItem::declhead(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief item リストの要素数の取得
@@ -188,8 +182,7 @@ CptItem::item(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 本体のステートメントの取得
@@ -243,14 +236,14 @@ CptItem::is_in_use() const
 VpiSpecItemType
 CptItem::specitem_type() const
 {
-  return VpiSpecItemType::PulsestyleOnEvent; // ダミー
+  throw std::logic_error{"Not a SPECITEM type"};
 }
 
 // @brief specify block path の種類の取得
 VpiSpecPathType
 CptItem::specpath_type() const
 {
-  return VpiSpecPathType::Null; // ダミー
+  throw std::logic_error{"Not a SPECPATH type"};
 }
 
 // @brief ターミナルの要素数の取得
@@ -266,8 +259,7 @@ CptItem::terminal(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief パス記述の取得
@@ -297,8 +289,7 @@ CptItem::then_declhead(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 条件が成り立ったときに生成される item 配列の要素数の取得
@@ -314,8 +305,7 @@ CptItem::then_item(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
@@ -331,8 +321,7 @@ CptItem::else_declhead(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 条件が成り立たなかったときに生成される item 配列の要素数の取得
@@ -348,8 +337,7 @@ CptItem::else_item(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief case item のリストの要素数の取得
@@ -365,8 +353,7 @@ CptItem::caseitem(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 繰り返し制御用の変数名の取得

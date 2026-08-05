@@ -531,18 +531,18 @@ CptFactory::new_MuH(
       return obj;
     }
     else {
-      ++ mNumMuHS;
-      void* p = mAlloc.get_memory(sizeof(CptMuHS));
-      auto obj = new (p) CptMuHS(file_region, def_name, strength,
+      ++ mNumMuHD;
+      void* p = mAlloc.get_memory(sizeof(CptMuHD));
+      auto obj = new (p) CptMuHD(file_region, def_name, delay,
 				 PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }
   }
   else {
     if ( delay == nullptr ) {
-      ++ mNumMuHD;
-      void* p = mAlloc.get_memory(sizeof(CptMuHD));
-      auto obj = new (p) CptMuHD(file_region, def_name, delay,
+      ++ mNumMuHS;
+      void* p = mAlloc.get_memory(sizeof(CptMuHS));
+      auto obj = new (p) CptMuHS(file_region, def_name, strength,
 				 PtiArray<const PtInst>(mAlloc, inst_array));
       return obj;
     }

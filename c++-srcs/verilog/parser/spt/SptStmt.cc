@@ -90,7 +90,7 @@ SptStmt::stmt_name() const
   case PtStmtType::Wait:      return "wait statement";
   case PtStmtType::Forever:   return "forever statement";
   case PtStmtType::Repeat:    return "repeat statement";
-  case PtStmtType::White:     return "while statement";
+  case PtStmtType::While:     return "while statement";
   case PtStmtType::For:       return "for-loop statement";
   case PtStmtType::PcAssign:  return "procedural continuous assignment";
   case PtStmtType::Deassign:  return "deassign statement";
@@ -690,7 +690,7 @@ SptFactory::new_While(
 )
 {
   auto node = new SptStmt(file_region,
-			  PtStmtType::White,
+			  PtStmtType::While,
 			  body, nullptr, nullptr,
 			  cond, nullptr);
   return node;

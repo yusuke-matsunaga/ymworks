@@ -29,11 +29,17 @@ public:
   FileLineColumn() : mLineColumn{0U} { }
 
   /// @brief 行番号とコラム番号をしていしたコンストラクタ
-  FileLineColumn(int line,   ///< [in] 行番号
-		 int column) ///< [in] コラム番号
+  FileLineColumn(
+    int line,  ///< [in] 行番号
+    int column ///< [in] コラム番号
+  )
   {
-    ASSERT_COND( line >= 0 && line < 0x100000 );
-    ASSERT_COND( column >= 0 && column < 0x1000 );
+    if ( line < 0 || line >= 0x100000 ) {
+      throw std::logic_error{"line < 0 || line >= 0x100000"};
+    }
+    if ( column < 0 || column >= 0x1000 ) {
+      throw std::logic_error{"column < 0 || column >= 0x1000"};
+    }
 
     mLineColumn = (static_cast<std::uint32_t>(line) << 12) |
       (static_cast<std::uint32_t>(column) & 0xFFFU);
@@ -57,6 +63,30 @@ public:
   /// @return コラム位置
   int
   column() const { return static_cast<int>(mLineColumn & 0xFFFU); }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 比較演算
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 等価比較演算子
+  bool
+  operator==(
+    const FileLineColumn& right
+  ) const
+  {
+    return mLineColumn == right.mLineColumn;
+  }
+
+  /// @brief 非等価比較演算子
+  bool
+  operator!=(
+    const FileLineColumn& right
+  ) const
+  {
+    return !operator==(right);
+  }
 
 
 private:

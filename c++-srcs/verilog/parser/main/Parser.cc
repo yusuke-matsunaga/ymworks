@@ -179,7 +179,7 @@ Parser::check_function_statement(
 
   case PtStmtType::Forever:
   case PtStmtType::Repeat:
-  case PtStmtType::White:
+  case PtStmtType::While:
   case PtStmtType::For:
     if ( stmt->init_stmt() ) {
       if ( !check_function_statement(stmt->init_stmt()) ) {

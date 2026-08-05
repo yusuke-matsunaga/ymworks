@@ -67,7 +67,7 @@ enum class PtStmtType : std::uint8_t {
   Wait,
   Forever,
   Repeat,
-  White,
+  While,
   For,
   PcAssign,
   Deassign,

@@ -3947,12 +3947,12 @@ genvar_case_head
 | DEFAULT
 {
   parser.init_generate();
-  $$ = nullptr;
+  $$ = parser.new_list<const PtExpr>();
 }
 | DEFAULT               ':'
 {
   parser.init_generate();
-  $$ = nullptr;
+  $$ = parser.new_list<const PtExpr>();
 }
 ;
 

@@ -71,9 +71,7 @@ public:
     if ( mCell ) {
       return mCell->mPtr;
     }
-    else {
-      return nullptr;
-    }
+    return nullptr;
   }
 
   /// @brief 次の要素を指す．
@@ -95,6 +93,15 @@ public:
     return mCell == right.mCell;
   }
 
+  /// @brief 非等価比較演算子
+  bool
+  operator!=(
+    const PtrListIterator<T>& right
+  ) const
+  {
+    return !operator==(right);
+  }
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -106,18 +113,6 @@ private:
 
 };
 
-
-/// @brief 非等価比較演算子
-template <typename T>
-inline
-bool
-operator!=(
-  const PtrListIterator<T>& left,
-  const PtrListIterator<T>& right
-)
-{
-  return !left.operator==(right);
-}
 
 
 //////////////////////////////////////////////////////////////////////
@@ -155,7 +150,7 @@ public:
   clear()
   {
     for ( auto cell = mTop; cell; ) {
-      auto next{cell->mLink};
+      auto next = cell->mLink;
       delete cell;
       cell = next;
     }
@@ -170,8 +165,7 @@ public:
     T1* elem ///< [in] 追加する要素
   )
   {
-    auto cell = new Cell{elem, nullptr};
-    cell->mLink = mTop;
+    auto cell = new Cell{elem, mTop};
     mTop = cell;
     if ( mEnd == nullptr ) {
       mEnd = cell;
@@ -186,11 +180,11 @@ public:
   )
   {
     auto cell = new Cell{elem, nullptr};
-    if ( mEnd ) {
-      mEnd->mLink = cell;
+    if ( mEnd == nullptr ) {
+      mTop = cell;
     }
     else {
-      mTop = cell;
+      mEnd->mLink = cell;
     }
     mEnd = cell;
     ++ mNum;
@@ -232,9 +226,7 @@ public:
     if ( mTop ) {
       return mTop->mPtr;
     }
-    else {
-      return nullptr;
-    }
+    return nullptr;
   }
 
   /// @brief 末尾の要素を返す．
@@ -244,9 +236,7 @@ public:
     if ( mEnd ) {
       return mEnd->mPtr;
     }
-    else {
-      return nullptr;
-    }
+    return nullptr;
   }
 
 
@@ -265,7 +255,6 @@ public:
       vec.push_back(elem);
     }
     clear();
-    delete this;
     return vec;
   }
 

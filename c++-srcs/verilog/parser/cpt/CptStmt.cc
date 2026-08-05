@@ -41,7 +41,7 @@ const char*
 CptStmt::stmt_name() const
 {
   switch ( type() ) {
-  case PtStmtType::Disable:       return "disable statment";
+  case PtStmtType::Disable:       return "disable statement";
   case PtStmtType::Enable:        return "task enable statement";
   case PtStmtType::SysEnable:     return "system task enable statement";
   case PtStmtType::DelayControl:  return "delay control statement";
@@ -57,7 +57,7 @@ CptStmt::stmt_name() const
   case PtStmtType::Wait:          return "wait statement";
   case PtStmtType::Forever:       return "forever statement";
   case PtStmtType::Repeat:        return "repeat statement";
-  case PtStmtType::White:         return "while statement";
+  case PtStmtType::While:         return "while statement";
   case PtStmtType::For:           return "for-loop statement";
   case PtStmtType::PcAssign:      return "procedural continuous assignment";
   case PtStmtType::Deassign:      return "deassign statement";
@@ -84,8 +84,7 @@ CptStmt::namebranch(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 名前の取得
@@ -108,8 +107,7 @@ CptStmt::arg(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief コントロールの取得
@@ -174,8 +172,7 @@ CptStmt::caseitem(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 初期化代入文の取得
@@ -205,8 +202,7 @@ CptStmt::declhead(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 子供のステートメント配列の要素数の取得
@@ -222,8 +218,7 @@ CptStmt::stmt(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 
@@ -1212,7 +1207,7 @@ CptWhile::~CptWhile()
 PtStmtType
 CptWhile::type() const
 {
-  return PtStmtType::White;
+  return PtStmtType::While;
 }
 
 

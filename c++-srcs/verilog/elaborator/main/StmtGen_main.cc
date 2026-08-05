@@ -79,7 +79,7 @@ StmtGen::phase1_stmt(
   case PtStmtType::Wait:
   case PtStmtType::Forever:
   case PtStmtType::Repeat:
-  case PtStmtType::White:
+  case PtStmtType::While:
   case PtStmtType::For:
     phase1_stmt(parent, pt_stmt->body());
     break;
@@ -244,7 +244,7 @@ StmtGen::instantiate_stmt(
     stmt = instantiate_repeat(parent, process, env, pt_stmt);
     break;
 
-  case PtStmtType::White:
+  case PtStmtType::While:
     stmt = instantiate_while(parent, process, env, pt_stmt);
     break;
 

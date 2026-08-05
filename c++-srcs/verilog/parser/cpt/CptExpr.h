@@ -98,8 +98,7 @@ public:
   const_type() const override;
 
   /// @brief 整数型の定数のサイズの取得
-  /// @return サイズ\n
-  /// サイズ指定の無い場合と整数型の定数でない場合には 0 を返す．
+  /// @return サイズ
   SizeType
   const_size() const override;
 
@@ -110,8 +109,6 @@ public:
 
   /// @brief 整数型および文字列型の定数の文字列表現の取得
   /// @return 値の文字列表現
-  ///
-  /// 整数型時のサイズと基数は含まない．
   const char*
   const_str() const override;
 
@@ -228,14 +225,6 @@ public:
   const PtExpr*
   operand0() const override;
 
-  /// @brief 1番目のオペランドの取得
-  const PtExpr*
-  operand1() const override;
-
-  /// @brief 2番目のオペランドの取得
-  const PtExpr*
-  operand2() const override;
-
   /// @brief オペランドの取得
   /// @return pos 番目のオペランド
   const PtExpr*
@@ -299,16 +288,23 @@ public:
   const PtExpr*
   operand1() const override;
 
-  /// @brief 2番目のオペランドの取得
-  const PtExpr*
-  operand2() const override;
-
   /// @brief オペランドの取得
   /// @return pos 番目のオペランド
   const PtExpr*
   operand(
     SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
   ) const override;
+
+  /// @brief インデックスとして使える式のチェック
+  /// @retval true 階層名の添字として使える式
+  /// @retval false 使えない式
+  bool
+  is_index_expr() const override;
+
+  /// @brief インデックスの値の取得
+  /// @return 階層名の添字として使える式の時にその値を返す．
+  int
+  index_value() const override;
 
 
 private:
@@ -806,6 +802,10 @@ public:
   const char*
   name() const override;
 
+  // index_list も range も持たないとき true を返す．
+  bool
+  is_simple() const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -844,16 +844,6 @@ public:
   // ファイル位置を返す．
   FileRegion
   file_region() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // index_list も range も持たないとき true を返す．
-  bool
-  is_simple() const override;
 
 
 private:
@@ -1350,21 +1340,20 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-// 整数型の定数(サイズ/基数の指定なし)
+// 整数型の定数の基底クラス
 //////////////////////////////////////////////////////////////////////
-class CptIntConstant1 :
+class CptIntConstant :
   public CptConstant
 {
 public:
 
   // コンストラクタ
-  CptIntConstant1(
-    const FileRegion& file_region,
-    std::uint32_t value
+  CptIntConstant(
+    const FileRegion& file_region
   );
 
   // デストラクタ
-  ~CptIntConstant1();
+  ~CptIntConstant();
 
 
 public:
@@ -1382,6 +1371,37 @@ public:
   // PtConstant の仮想関数
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 整数型の定数のサイズの取得
+  /// @return サイズ
+  SizeType
+  const_size() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+// 整数型の定数(サイズ/基数の指定なし)
+//////////////////////////////////////////////////////////////////////
+class CptIntConstant1 :
+  public CptIntConstant
+{
+public:
+
+  // コンストラクタ
+  CptIntConstant1(
+    const FileRegion& file_region,
+    std::uint32_t value
+  );
+
+  // デストラクタ
+  ~CptIntConstant1();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtConstant の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
   // 定数の種類を表す型(vpiIntConst, vpiBinaryConst など) を返す．
   VpiConstType
   const_type() const override;
@@ -1389,6 +1409,10 @@ public:
   // 整数型の値の取得
   std::uint32_t
   const_uint32() const override;
+
+  // 文字列型の値の取得
+  const char*
+  const_str() const override;
 
   /// @brief インデックスの値の取得
   /// @return 階層名の添字として使える式の時にその値を返す．
@@ -1411,7 +1435,7 @@ private:
 // 整数型の定数(基数のみ指定あり)
 //////////////////////////////////////////////////////////////////////
 class CptIntConstant2 :
-  public CptConstant
+  public CptIntConstant
 {
 public:
 
@@ -1458,7 +1482,7 @@ private:
 // 整数型の定数(サイズ/基数の指定あり)
 //////////////////////////////////////////////////////////////////////
 class CptIntConstant3 :
-  public CptConstant
+  public CptIntConstant
 {
 public:
 

@@ -43,6 +43,13 @@ CptPrimaryBase::name() const
   return mName;
 }
 
+// index_list も range も持たないとき true を返す．
+bool
+CptPrimaryBase::is_simple() const
+{
+  return true;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // PtPrimary の実装クラス
@@ -52,7 +59,7 @@ CptPrimaryBase::name() const
 CptPrimary::CptPrimary(
   const FileRegion& file_region,
   const char* name
-) : CptPrimaryBase{name},
+) : CptPrimaryBase(name),
     mFileRegion{file_region}
 {
 }
@@ -69,13 +76,6 @@ CptPrimary::file_region() const
   return mFileRegion;
 }
 
-// index_list も range も持たないとき true を返す．
-bool
-CptPrimary::is_simple() const
-{
-  return true;
-}
-
 
 //////////////////////////////////////////////////////////////////////
 // インデックスつきの終端記号を表すクラス
@@ -86,7 +86,7 @@ CptPrimaryI::CptPrimaryI(
   const FileRegion& file_region,
   const char* name,
   PtiExprArray&& index_array
-) : CptPrimaryBase{name},
+) : CptPrimaryBase(name),
     mFileRegion{file_region},
     mIndexArray{std::move(index_array)}
 {
@@ -117,7 +117,9 @@ CptPrimaryI::index(
   SizeType pos
 ) const
 {
-  ASSERT_COND( 0 <= pos && pos < index_num() );
+  if ( pos >= index_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mIndexArray[pos];
 }
 
@@ -165,7 +167,7 @@ CptPrimaryR::CptPrimaryR(
   const FileRegion& file_region,
   const char* name,
   const PtPart* part
-) : CptPrimaryBase{name},
+) : CptPrimaryBase(name),
     mFileRegion{file_region},
     mPart{part}
 {
@@ -329,6 +331,9 @@ CptPrimaryHI::namebranch(
   SizeType pos
 ) const
 {
+  if ( pos >= namebranch_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mNbArray[pos];
 }
 
@@ -394,6 +399,9 @@ CptPrimaryHR::namebranch(
   SizeType pos
 ) const
 {
+  if ( pos >= namebranch_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mNbArray[pos];
 }
 
@@ -434,6 +442,9 @@ CptPrimaryHIR::namebranch(
   SizeType pos
 ) const
 {
+  if ( pos >= namebranch_num() ) {
+    throw std::out_of_range{"pos is out of range"};
+  }
   return mNbArray[pos];
 }
 
@@ -614,7 +625,7 @@ CptFactory::new_CPrimary(
 )
 {
   ++ mNumPrimaryHCI;
-  void* p = mAlloc.get_memory(sizeof(CptPrimaryCI));
+  void* p = mAlloc.get_memory(sizeof(CptPrimaryHCI));
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
   auto obj = new (p) CptPrimaryHCI(file_region,

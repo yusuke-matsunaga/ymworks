@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 VpiOpType
 CptExpr::op_type() const
 {
-  return VpiOpType::Null;
+  throw std::logic_error{"Not an Operation Type"};
 }
 
 // @brief 階層ブランチの要素数の取得
@@ -38,8 +38,7 @@ CptExpr::namebranch(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 末尾の名前の取得
@@ -60,21 +59,21 @@ CptExpr::operand_num() const
 const PtExpr*
 CptExpr::operand0() const
 {
-  return nullptr;
+  throw std::logic_error{"Does not have operand0"};
 }
 
 // @brief 1番目のオペランドの取得
 const PtExpr*
 CptExpr::operand1() const
 {
-  return nullptr;
+  throw std::logic_error{"Does not have operand1"};
 }
 
 // @brief 2番目のオペランドの取得
 const PtExpr*
 CptExpr::operand2() const
 {
-  return nullptr;
+  throw std::logic_error{"Does not have operand2"};
 }
 
 // @brief オペランドの取得
@@ -83,7 +82,7 @@ CptExpr::operand(
   SizeType pos
 ) const
 {
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 定数インデックスのチェック
@@ -106,7 +105,7 @@ CptExpr::index(
   SizeType pos
 ) const
 {
-  return nullptr;
+  throw std::out_of_range{"pos is out of range"};
 }
 
 // @brief 範囲指定の取得
@@ -120,35 +119,35 @@ CptExpr::part() const
 VpiConstType
 CptExpr::const_type() const
 {
-  return VpiConstType::Int; // ダミー
+  throw std::logic_error{"Not a CONST type"};
 }
 
 // @brief 整数型の定数のサイズの取得
 SizeType
 CptExpr::const_size() const
 {
-  return 0;
+  throw std::logic_error{"Not a CONST type"};
 }
 
 // @brief 整数型の値の取得
 std::uint32_t
 CptExpr::const_uint32() const
 {
-  return 0;
+  throw std::logic_error{"Not a CONST type"};
 }
 
 // @brief 整数型および文字列型の定数の文字列表現の取得
 const char*
 CptExpr::const_str() const
 {
-  return nullptr;
+  throw std::logic_error{"Not a CONST type"};
 }
 
 // @brief 実数型の値の取得
 double
 CptExpr::const_real() const
 {
-  return 0.0;
+  throw std::logic_error{"Not a CONST type"};
 }
 
 // @brief インデックスとして使える式のチェック
@@ -162,14 +161,14 @@ CptExpr::is_index_expr() const
 int
 CptExpr::index_value() const
 {
-  return 0;
+  throw std::logic_error{"is_index_expr() = false"};
 }
 
 // @brief simple primary のチェック
 bool
 CptExpr::is_simple() const
 {
-  return false;
+  throw std::logic_error{"Not a PRIMARY type"};
 }
 
 
@@ -213,11 +212,13 @@ CptOpr1::CptOpr1(
   const FileRegion& file_region,
   VpiOpType op_type,
   const PtExpr* opr
-) : CptOpr{op_type},
+) : CptOpr(op_type),
     mFileRegion{file_region},
     mOpr{opr}
 {
-  ASSERT_COND( opr );
+  if ( opr == nullptr ) {
+    throw std::logic_error{"opr == nullptr"};
+  }
 }
 
 // デストラクタ
@@ -236,30 +237,108 @@ CptOpr1::file_region() const
 bool
 CptOpr1::is_index_expr() const
 {
-  // 算術演算はOKだけどめんどくさいので単項のマイナスのみOKとする．
-  if ( op_type() == VpiOpType::Null || op_type() == VpiOpType::Minus ) {
-    return operand0()->is_index_expr();
-  }
-  else {
+  // posedge, negedge はNG
+  if ( op_type() == VpiOpType::Posedge || op_type() == VpiOpType::Negedge ) {
     return false;
   }
+  // それ以外はオペランドの型で決まる．
+  return operand0()->is_index_expr();
+}
+
+inline
+int
+reduction_xor(
+  int val
+)
+{
+  int rval = 0;
+  for ( SizeType i = 0; i < 64; ++ i ) {
+    if ( val & 1 ) {
+      rval ^= 1;
+    }
+    val >>= 1;
+  }
+  return rval;
 }
 
 // 階層名の添字として使える式の時にその値を返す．
 int
 CptOpr1::index_value() const
 {
+  auto index0 = operand0()->index_value();
   switch ( op_type() ) {
-  case VpiOpType::Null:
-    return operand0()->index_value();
-
   case VpiOpType::Minus:
-    return - operand0()->index_value();
+    return - index0;
+
+  case VpiOpType::Plus:
+    return index0;
+
+  case VpiOpType::Null:
+    return index0;
+
+  case VpiOpType::Not:
+    if ( index0 == 0 ) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+
+  case VpiOpType::BitNeg:
+    return ~index0;
+
+  case VpiOpType::UnaryAnd:
+    if ( index0 == ~0 ) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+
+  case VpiOpType::UnaryNand:
+    if ( index0 == ~0 ) {
+      return 0;
+    }
+    else {
+      return 1;
+    }
+
+  case VpiOpType::UnaryOr:
+    if ( index0 == 0 ) {
+      return 0;
+    }
+    else {
+      return 1;
+    }
+
+  case VpiOpType::UnaryNor:
+    if ( index0 == 0 ) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+
+  case VpiOpType::UnaryXor:
+    if ( reduction_xor(index0) ) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+
+  case VpiOpType::UnaryXNor:
+    if ( reduction_xor(index0) ) {
+      return 0;
+    }
+    else {
+      return 1;
+    }
 
   default:
     break;
   }
-  return 0;
+  throw std::logic_error{"is_index_expr() == false"};
 }
 
 // @brief オペランドの数の取得
@@ -276,20 +355,6 @@ CptOpr1::operand0() const
   return mOpr;
 }
 
-// @brief 1番目のオペランドの取得
-const PtExpr*
-CptOpr1::operand1() const
-{
-  return nullptr;
-}
-
-// @brief 2番目のオペランドの取得
-const PtExpr*
-CptOpr1::operand2() const
-{
-  return nullptr;
-}
-
 // @brief オペランドの取得
 const PtExpr*
 CptOpr1::operand(
@@ -299,9 +364,7 @@ CptOpr1::operand(
   if ( pos == 0 ) {
     return mOpr;
   }
-  else {
-    return nullptr;
-  }
+  throw std::out_of_range{"pos is out of range"};
 }
 
 
@@ -314,11 +377,15 @@ CptOpr2::CptOpr2(
   VpiOpType op_type,
   const PtExpr* opr1,
   const PtExpr* opr2
-) : CptOpr{op_type},
+) : CptOpr(op_type),
     mOpr{opr1, opr2}
 {
-  ASSERT_COND( opr1 );
-  ASSERT_COND( opr2 );
+  if ( opr1 == nullptr ) {
+    throw std::logic_error{"opr1 == nullptr"};
+  }
+  if ( opr2 == nullptr ) {
+    throw std::logic_error{"opr2 == nullptr"};
+  }
 }
 
 // デストラクタ
@@ -330,7 +397,7 @@ CptOpr2::~CptOpr2()
 FileRegion
 CptOpr2::file_region() const
 {
-  return FileRegion{mOpr[0]->file_region(), mOpr[1]->file_region()};
+  return FileRegion(mOpr[0]->file_region(), mOpr[1]->file_region());
 }
 
 // @brief オペランドの数の取得
@@ -354,25 +421,61 @@ CptOpr2::operand1() const
   return mOpr[1];
 }
 
-// @brief 2番目のオペランドの取得
-const PtExpr*
-CptOpr2::operand2() const
-{
-  return nullptr;
-}
-
 // @brief オペランドの取得
 const PtExpr*
 CptOpr2::operand(
   SizeType pos
 ) const
 {
-  if ( pos < 2 ) {
-    return mOpr[pos];
+  if ( pos >= 2 ) {
+    throw std::out_of_range{"pos is out of range"};
   }
-  else {
-    return nullptr;
+  return mOpr[pos];
+}
+
+// @brief インデックスとして使える式のチェック
+bool
+CptOpr2::is_index_expr() const
+{
+  return operand0()->is_index_expr() && operand1()->is_index_expr();
+}
+
+// @brief インデックスの値の取得
+int
+CptOpr2::index_value() const
+{
+  if ( !is_index_expr() ) {
+    throw std::logic_error{"is_index_expr() = false"};
   }
+  auto index0 = operand0()->index_value();
+  auto index1 = operand1()->index_value();
+  switch ( op_type() ) {
+  case VpiOpType::Sub:         return index0 - index1;
+  case VpiOpType::Div:         return index0 / index1;
+  case VpiOpType::Mod:         return index0 % index1;
+  case VpiOpType::Eq:          return index0 == index1;
+  case VpiOpType::Neq:         return index0 != index1;
+  case VpiOpType::CaseEq:      return index0 == index1;
+  case VpiOpType::CaseNeq:     return index0 != index1;
+  case VpiOpType::Gt:          return index0 > index1;
+  case VpiOpType::Ge:          return index0 >= index1;
+  case VpiOpType::Lt:          return index0 < index1;
+  case VpiOpType::Le:          return index0 <= index1;
+  case VpiOpType::LShift:      return index0 << index1;
+  case VpiOpType::RShift:      return index0 >> index1;
+  case VpiOpType::Add:         return index0 + index1;
+  case VpiOpType::Mult:        return index0 * index1;
+  case VpiOpType::LogAnd:      return (index0 != 0) && (index1 != 0);
+  case VpiOpType::LogOr:       return (index0 != 0) || (index1 != 0);
+  case VpiOpType::BitAnd:      return index0 & index1;
+  case VpiOpType::BitOr:       return index0 | index1;
+  case VpiOpType::BitXor:      return index0 ^ index1;
+  case VpiOpType::BitXNor:     return ~(index0 ^ index1);
+  case VpiOpType::ArithLShift: return index0 << index1;
+  case VpiOpType::ArithRShift: return index0 >> index1;
+  default: break;
+  }
+  throw std::logic_error{"Should not be reached"};
 }
 
 
@@ -386,12 +489,18 @@ CptOpr3::CptOpr3(
   const PtExpr* opr1,
   const PtExpr* opr2,
   const PtExpr* opr3
-) : CptOpr{op_type},
+) : CptOpr(op_type),
     mOpr{opr1, opr2, opr3}
 {
-  ASSERT_COND( opr1 );
-  ASSERT_COND( opr2 );
-  ASSERT_COND( opr3 );
+  if ( opr1 == nullptr ) {
+    throw std::logic_error{"opr1 == nullptr"};
+  }
+  if ( opr2 == nullptr ) {
+    throw std::logic_error{"opr2 == nullptr"};
+  }
+  if ( opr3 == nullptr ) {
+    throw std::logic_error{"opr3 == nullptr"};
+  }
 }
 
 // デストラクタ
@@ -403,7 +512,7 @@ CptOpr3::~CptOpr3()
 FileRegion
 CptOpr3::file_region() const
 {
-  return FileRegion{mOpr[0]->file_region(), mOpr[2]->file_region()};
+  return FileRegion(mOpr[0]->file_region(), mOpr[2]->file_region());
 }
 
 // @brief オペランドの数の取得
@@ -440,12 +549,10 @@ CptOpr3::operand(
   SizeType pos
 ) const
 {
-  if ( pos < 3 ) {
-    return mOpr[pos];
+  if ( pos >= 3 ) {
+    throw std::out_of_range{"pos is out of range"};
   }
-  else {
-    return nullptr;
-  }
+  return mOpr[pos];
 }
 
 
@@ -499,36 +606,30 @@ CptConcat::operand_num() const
 const PtExpr*
 CptConcat::operand0() const
 {
-  if ( operand_num() > 0 ) {
-    return mExprArray[0];
+  if ( operand_num() == 0 ) {
+    throw std::logic_error{"Does not have operan0"};
   }
-  else {
-    return nullptr;
-  }
+  return mExprArray[0];
 }
 
 // @brief 1番目のオペランドの取得
 const PtExpr*
 CptConcat::operand1() const
 {
-  if ( operand_num() > 1 ) {
-    return mExprArray[1];
+  if ( operand_num() < 1 ) {
+    throw std::logic_error{"Does not have operan1"};
   }
-  else {
-    return nullptr;
-  }
+  return mExprArray[1];
 }
 
 // @brief 2番目のオペランドの取得
 const PtExpr*
 CptConcat::operand2() const
 {
-  if ( operand_num() > 2 ) {
-    return mExprArray[2];
+  if ( operand_num() < 2 ) {
+    throw std::logic_error{"Does not have operan2"};
   }
-  else {
-    return nullptr;
-  }
+  return mExprArray[2];
 }
 
 // @brief オペランドの取得
@@ -537,12 +638,10 @@ CptConcat::operand(
   SizeType pos
 ) const
 {
-  if ( operand_num() > pos ) {
-    return mExprArray[pos];
+  if ( pos >= operand_num() ) {
+    throw std::out_of_range{"pos is out of range"};
   }
-  else {
-    return nullptr;
-  }
+  return mExprArray[pos];
 }
 
 
@@ -554,7 +653,7 @@ CptConcat::operand(
 CptMultiConcat::CptMultiConcat(
   const FileRegion& file_region,
   PtiExprArray&& expr_array
-) : CptConcat{file_region, std::move(expr_array)}
+) : CptConcat(file_region, std::move(expr_array))
 {
 }
 
@@ -582,9 +681,15 @@ CptMinTypMax::CptMinTypMax(
   const PtExpr* val2
 ) : mValue{val0, val1, val2}
 {
-  ASSERT_COND( val0 );
-  ASSERT_COND( val1 );
-  ASSERT_COND( val2 );
+  if ( val0 == nullptr ) {
+    throw std::logic_error{"val0 == nullptr"};
+  }
+  if ( val1 == nullptr ) {
+    throw std::logic_error{"val1 == nullptr"};
+  }
+  if ( val2 == nullptr ) {
+    throw std::logic_error{"val2 == nullptr"};
+  }
 }
 
 // デストラクタ
@@ -596,7 +701,7 @@ CptMinTypMax::~CptMinTypMax()
 FileRegion
 CptMinTypMax::file_region() const
 {
-  return FileRegion{mValue[0]->file_region(), mValue[2]->file_region()};
+  return FileRegion(mValue[0]->file_region(), mValue[2]->file_region());
 }
 
 // クラスの型を返す．
@@ -644,15 +749,13 @@ CptMinTypMax::operand2() const
 // 値(式)を取出す．
 const PtExpr*
 CptMinTypMax::operand(
-  SizeType idx
+  SizeType pos
 ) const
 {
-  if ( idx < 3 ) {
-    return mValue[idx];
+  if ( pos >= 3 ) {
+    throw std::out_of_range{"pos is out of range"};
   }
-  else {
-    return nullptr;
-  }
+  return mValue[pos];
 }
 
 
@@ -701,36 +804,30 @@ CptFuncCallBase::operand_num() const
 const PtExpr*
 CptFuncCallBase::operand0() const
 {
-  if ( operand_num() > 0 ) {
-    return mArgArray[0];
+  if ( operand_num() == 0 ) {
+    throw std::logic_error{"Does not have operan0"};
   }
-  else {
-    return nullptr;
-  }
+  return mArgArray[0];
 }
 
 // @brief 1番目のオペランドの取得
 const PtExpr*
 CptFuncCallBase::operand1() const
 {
-  if ( operand_num() > 1 ) {
-    return mArgArray[1];
+  if ( operand_num() < 1 ) {
+    throw std::logic_error{"Does not have operan1"};
   }
-  else {
-    return nullptr;
-  }
+  return mArgArray[1];
 }
 
 // @brief 2番目のオペランドの取得
 const PtExpr*
 CptFuncCallBase::operand2() const
 {
-  if ( operand_num() > 2 ) {
-    return mArgArray[2];
+  if ( operand_num() < 2 ) {
+    throw std::logic_error{"Does not have operan2"};
   }
-  else {
-    return nullptr;
-  }
+  return mArgArray[2];
 }
 
 // @brief オペランドの取得
@@ -739,12 +836,10 @@ CptFuncCallBase::operand(
   SizeType pos
 ) const
 {
-  if ( operand_num() > pos ) {
-    return mArgArray[pos];
+  if ( pos >= operand_num() ) {
+    throw std::out_of_range{"pos is out of range"};
   }
-  else {
-    return nullptr;
-  }
+  return mArgArray[pos];
 }
 
 
@@ -757,7 +852,7 @@ CptFuncCall::CptFuncCall(
   const FileRegion& file_region,
   const char* name,
   PtiExprArray&& arg_array
-) : CptFuncCallBase{file_region, name, std::move(arg_array)}
+) : CptFuncCallBase(file_region, name, std::move(arg_array))
 {
 }
 
@@ -784,7 +879,7 @@ CptFuncCallH::CptFuncCallH(
   PtiNameBranchArray&& nb_array,
   const char* tail_name,
   PtiExprArray&& arg_array
-) : CptFuncCall{file_region, tail_name, std::move(arg_array)},
+) : CptFuncCall(file_region, tail_name, std::move(arg_array)),
     mNbArray{std::move(nb_array)}
 {
 }
@@ -820,7 +915,7 @@ CptSysFuncCall::CptSysFuncCall(
   const FileRegion& file_region,
   const char* name,
   PtiExprArray&& arg_array
-) : CptFuncCallBase{file_region, name, std::move(arg_array)}
+) : CptFuncCallBase(file_region, name, std::move(arg_array))
 {
 }
 
@@ -869,6 +964,37 @@ CptConstant::type() const
 
 
 //////////////////////////////////////////////////////////////////////
+// 整数型の定数の基底クラス
+//////////////////////////////////////////////////////////////////////
+
+// コンストラクタ
+CptIntConstant::CptIntConstant(
+  const FileRegion& file_region
+) : CptConstant(file_region)
+{
+}
+
+// デストラクタ
+CptIntConstant::~CptIntConstant()
+{
+}
+
+// 階層名の添字として使える式の時に true を返す．
+bool
+CptIntConstant::is_index_expr() const
+{
+  return true;
+}
+
+// 整数型の定数のサイズの取得
+SizeType
+CptIntConstant::const_size() const
+{
+  return 0;
+}
+
+
+//////////////////////////////////////////////////////////////////////
 // 整数型の定数(サイズ/基数の指定なし)
 //////////////////////////////////////////////////////////////////////
 
@@ -876,7 +1002,7 @@ CptConstant::type() const
 CptIntConstant1::CptIntConstant1(
   const FileRegion& file_region,
   std::uint32_t value
-) : CptConstant{file_region},
+) : CptIntConstant(file_region),
     mValue{value}
 {
 }
@@ -893,18 +1019,18 @@ CptIntConstant1::const_type() const
   return VpiConstType::Int;
 }
 
-// 階層名の添字として使える式の時に true を返す．
-bool
-CptIntConstant1::is_index_expr() const
-{
-  return true;
-}
-
 // 整数型の値の取得
 std::uint32_t
 CptIntConstant1::const_uint32() const
 {
   return mValue;
+}
+
+// 文字列型の値の取得
+const char*
+CptIntConstant1::const_str() const
+{
+  return nullptr;
 }
 
 // @brief インデックスの値の取得
@@ -924,7 +1050,7 @@ CptIntConstant2::CptIntConstant2(
   const FileRegion& file_region,
   VpiConstType const_type,
   const char* value
-) : CptConstant{file_region},
+) : CptIntConstant(file_region),
     mConstType{const_type},
     mValue{value}
 {
@@ -960,7 +1086,7 @@ CptIntConstant3::CptIntConstant3(
   SizeType size,
   VpiConstType const_type,
   const char* value
-) : CptConstant{file_region},
+) : CptIntConstant(file_region),
     mConstType{const_type},
     mSize{size},
     mValue{value}
@@ -1002,7 +1128,7 @@ CptIntConstant3::const_str() const
 CptRealConstant::CptRealConstant(
   const FileRegion& file_region,
   double value
-) : CptConstant{file_region},
+) : CptConstant(file_region),
     mValue{value}
 {
 }
@@ -1035,7 +1161,7 @@ CptRealConstant::const_real() const
 CptStringConstant::CptStringConstant(
   const FileRegion& file_region,
   const char* value
-) : CptConstant{file_region},
+) : CptConstant(file_region),
     mValue{value}
 {
 }
@@ -1137,8 +1263,7 @@ CptFactory::new_Opr(
 {
   ++ mNumOpr1;
   auto p = mAlloc.get_memory(sizeof(CptOpr1));
-  auto obj = new (p) CptOpr1{file_region, type, opr};
-  return obj;
+  return new (p) CptOpr1(file_region, type, opr);
 }
 
 const PtExpr*
@@ -1152,8 +1277,7 @@ CptFactory::new_Opr(
   // 実は file_region は不要
   ++ mNumOpr2;
   auto p = mAlloc.get_memory(sizeof(CptOpr2));
-  auto obj = new (p) CptOpr2{type, opr1, opr2};
-  return obj;
+  return new (p) CptOpr2(type, opr1, opr2);
 }
 
 const PtExpr*
@@ -1168,8 +1292,7 @@ CptFactory::new_Opr(
   // 実は file_region は不要
   ++ mNumOpr3;
   auto p = mAlloc.get_memory(sizeof(CptOpr3));
-  auto obj = new (p) CptOpr3{type, opr1, opr2, opr3};
-  return obj;
+  return new (p) CptOpr3(type, opr1, opr2, opr3);
 }
 
 // concatination を生成する．
@@ -1181,8 +1304,8 @@ CptFactory::new_Concat(
 {
   ++ mNumConcat;
   auto p = mAlloc.get_memory(sizeof(CptConcat));
-  auto obj = new (p) CptConcat{file_region, PtiArray<const PtExpr>(mAlloc, expr_array)};
-  return obj;
+  return new (p) CptConcat(file_region,
+			   PtiArray<const PtExpr>(mAlloc, expr_array));
 }
 
 // multiple concatenation を生成する．
@@ -1194,11 +1317,11 @@ CptFactory::new_MultiConcat(
 {
   ++ mNumMultiConcat;
   auto p = mAlloc.get_memory(sizeof(CptMultiConcat));
-  auto obj = new (p) CptMultiConcat{file_region, PtiArray<const PtExpr>(mAlloc, expr_array)};
-  return obj;
+  return new (p) CptMultiConcat(file_region,
+				PtiArray<const PtExpr>(mAlloc, expr_array));
 }
 
-// multiple concatenation を生成する．
+// min-typ-max を生成する．
 const PtExpr*
 CptFactory::new_MinTypMax(
   const FileRegion& file_region,
@@ -1210,8 +1333,7 @@ CptFactory::new_MinTypMax(
   // 実は file_region は不要
   ++ mNumMinTypMax3;
   auto p = mAlloc.get_memory(sizeof(CptMinTypMax));
-  auto obj = new (p) CptMinTypMax{val0, val1, val2};
-  return obj;
+  return new (p) CptMinTypMax(val0, val1, val2);
 }
 
 // function call を生成する．
@@ -1224,9 +1346,8 @@ CptFactory::new_FuncCall(
 {
   ++ mNumFuncCall;
   auto p = mAlloc.get_memory(sizeof(CptFuncCall));
-  auto obj = new (p) CptFuncCall{file_region, name,
-				 PtiArray<const PtExpr>(mAlloc, arg_array)};
-  return obj;
+  return new (p) CptFuncCall(file_region, name,
+			     PtiArray<const PtExpr>(mAlloc, arg_array));
 }
 
 // function call を生成する．
@@ -1241,11 +1362,10 @@ CptFactory::new_FuncCall(
   auto p = mAlloc.get_memory(sizeof(CptFuncCallH));
   auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptFuncCallH{file_region,
-				  PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				  tail_name,
-				  PtiArray<const PtExpr>{mAlloc, arg_array}};
-  return obj;
+  return new (p) CptFuncCallH(file_region,
+			      PtiArray<const PtNameBranch>{mAlloc, nb_array},
+			      tail_name,
+			      PtiArray<const PtExpr>{mAlloc, arg_array});
 }
 
 // system function call を生成する．
@@ -1258,9 +1378,8 @@ CptFactory::new_SysFuncCall(
 {
   ++ mNumSysFuncCall;
   auto p = mAlloc.get_memory(sizeof(CptSysFuncCall));
-  auto obj = new (p) CptSysFuncCall{file_region, name,
-				    PtiArray<const PtExpr>{mAlloc, arg_array}};
-  return obj;
+  return new CptSysFuncCall(file_region, name,
+			    PtiArray<const PtExpr>{mAlloc, arg_array});
 }
 
 // 定数を生成する．
@@ -1272,8 +1391,7 @@ CptFactory::new_IntConst(
 {
   ++ mNumIntConstant1;
   auto p = mAlloc.get_memory(sizeof(CptIntConstant1));
-  auto obj = new (p) CptIntConstant1{file_region, value};
-  return obj;
+  return new (p) CptIntConstant1(file_region, value);
 }
 
 // 定数を生成する．
@@ -1285,8 +1403,7 @@ CptFactory::new_IntConst(
 {
   ++ mNumIntConstant2;
   auto p = mAlloc.get_memory(sizeof(CptIntConstant2));
-  auto obj = new (p) CptIntConstant2{file_region, VpiConstType::Int, value};
-  return obj;
+  return new (p) CptIntConstant2(file_region, VpiConstType::Int, value);
 }
 
 // 定数を生成する．
@@ -1299,8 +1416,7 @@ CptFactory::new_IntConst(
 {
   ++ mNumIntConstant2;
   auto p = mAlloc.get_memory(sizeof(CptIntConstant2));
-  auto obj = new (p) CptIntConstant2{file_region, const_type, value};
-  return obj;
+  return new (p) CptIntConstant2(file_region, const_type, value);
 }
 
 // 定数を生成する．
@@ -1314,8 +1430,7 @@ CptFactory::new_IntConst(
 {
   ++ mNumIntConstant3;
   auto p = mAlloc.get_memory(sizeof(CptIntConstant3));
-  auto obj = new (p) CptIntConstant3{file_region, size, const_type, value};
-  return obj;
+  return new (p) CptIntConstant3(file_region, size, const_type, value);
 }
 
 // 定数を生成する．
@@ -1327,8 +1442,7 @@ CptFactory::new_RealConst(
 {
   ++ mNumRealConstant;
   auto p = mAlloc.get_memory(sizeof(CptRealConstant));
-  auto obj = new (p) CptRealConstant{file_region, value};
-  return obj;
+  return new (p) CptRealConstant(file_region, value);
 }
 
 // 定数を生成する．
@@ -1340,8 +1454,7 @@ CptFactory::new_StringConst(
 {
   ++ mNumStringConstant;
   auto p = mAlloc.get_memory(sizeof(CptStringConstant));
-  auto obj = new (p) CptStringConstant{file_region, value};
-  return obj;
+  return new (p) CptStringConstant(file_region, value);
 }
 
 // @brief 範囲指定の生成
@@ -1355,18 +1468,15 @@ CptFactory::new_Part(
 {
   if ( mode == VpiRangeMode::Const ) {
     auto p = mAlloc.get_memory(sizeof(CptPartC));
-    auto obj = new (p) CptPartC(fr, expr1, expr2);
-    return obj;
+    return new (p) CptPartC(fr, expr1, expr2);
   }
   if ( mode == VpiRangeMode::Plus ) {
     auto p = mAlloc.get_memory(sizeof(CptPartP));
-    auto obj = new (p) CptPartP(fr, expr1, expr2);
-    return obj;
+    return new (p) CptPartP(fr, expr1, expr2);
   }
   if ( mode == VpiRangeMode::Minus ) {
     auto p = mAlloc.get_memory(sizeof(CptPartM));
-    auto obj = new (p) CptPartM(fr, expr1, expr2);
-    return obj;
+    return new (p) CptPartM(fr, expr1, expr2);
   }
   throw std::logic_error{"Should not be reached"};
 }
