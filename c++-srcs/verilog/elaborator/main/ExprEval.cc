@@ -545,13 +545,14 @@ ExprEval::evaluate_const(
   const PtExpr* pt_expr
 )
 {
+  // ここのロジックは EiFactory::new_Constant() と同様
   auto size = pt_expr->const_size();
   auto is_signed = false;
   SizeType base = 0;
   switch ( pt_expr->const_type() ) {
   case VpiConstType::Int:
     if ( pt_expr->const_str() == nullptr ) {
-      auto val = static_cast<int>(pt_expr->const_uint32());
+      auto val = pt_expr->const_int();
       return VlValue(val);
     }
     break;

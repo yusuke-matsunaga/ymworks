@@ -116,8 +116,8 @@ public:
   ///
   /// - 整数型の定数でない場合には std::logic_error 例外を送出する．
   virtual
-  std::uint32_t
-  const_uint32() const = 0;
+  int
+  const_int() const = 0;
 
   /// @brief 整数型および文字列型の定数の文字列表現の取得
   /// @return 値の文字列表現

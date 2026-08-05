@@ -158,8 +158,8 @@ SptExpr::const_size() const
 }
 
 // @brief 整数型の値の取得
-std::uint32_t
-SptExpr::const_uint32() const
+int
+SptExpr::const_int() const
 {
   return 0;
 }
@@ -189,7 +189,7 @@ SptExpr::is_index_expr() const
 int
 SptExpr::index_value() const
 {
-  return static_cast<int>(const_uint32());
+  return const_int();
 }
 
 // @brief simple primary のチェック
@@ -566,7 +566,7 @@ SptConstant::SptConstant(
   const FileRegion& file_region,
   VpiConstType const_type,
   SizeType size,
-  std::uint32_t ivalue,
+  int ivalue,
   const char* svalue,
   double rvalue
 ) : SptExpr(file_region, PtExprType::Const),
@@ -591,8 +591,8 @@ SptConstant::const_size() const
 }
 
 // @brief 整数型の値の取得
-std::uint32_t
-SptConstant::const_uint32() const
+int
+SptConstant::const_int() const
 {
   return mIntValue;
 }
@@ -973,7 +973,7 @@ SptFactory::new_SysFuncCall(
 const PtExpr*
 SptFactory::new_IntConst(
   const FileRegion& file_region,
-  std::uint32_t value
+  int value
 )
 {
   auto node = new SptConstant(file_region, VpiConstType::Int,

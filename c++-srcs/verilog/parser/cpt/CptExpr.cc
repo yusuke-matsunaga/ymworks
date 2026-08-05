@@ -130,24 +130,24 @@ CptExpr::const_size() const
 }
 
 // @brief 整数型の値の取得
-std::uint32_t
-CptExpr::const_uint32() const
+int
+CptExpr::const_int() const
 {
-  throw std::logic_error{"Not a CONST type"};
+  throw std::logic_error{"Not a INT CONST type"};
 }
 
 // @brief 整数型および文字列型の定数の文字列表現の取得
 const char*
 CptExpr::const_str() const
 {
-  throw std::logic_error{"Not a CONST type"};
+  throw std::logic_error{"Not a INT/STRING CONST type"};
 }
 
 // @brief 実数型の値の取得
 double
 CptExpr::const_real() const
 {
-  throw std::logic_error{"Not a CONST type"};
+  throw std::logic_error{"Not a REAL CONST type"};
 }
 
 // @brief インデックスとして使える式のチェック
@@ -986,6 +986,13 @@ CptIntConstant::is_index_expr() const
   return true;
 }
 
+// @brief インデックスの値の取得
+int
+CptIntConstant::index_value() const
+{
+  return const_int();
+}
+
 // 整数型の定数のサイズの取得
 SizeType
 CptIntConstant::const_size() const
@@ -1001,7 +1008,7 @@ CptIntConstant::const_size() const
 // コンストラクタ
 CptIntConstant1::CptIntConstant1(
   const FileRegion& file_region,
-  std::uint32_t value
+  int value
 ) : CptIntConstant(file_region),
     mValue{value}
 {
@@ -1020,8 +1027,8 @@ CptIntConstant1::const_type() const
 }
 
 // 整数型の値の取得
-std::uint32_t
-CptIntConstant1::const_uint32() const
+int
+CptIntConstant1::const_int() const
 {
   return mValue;
 }
@@ -1031,13 +1038,6 @@ const char*
 CptIntConstant1::const_str() const
 {
   return nullptr;
-}
-
-// @brief インデックスの値の取得
-int
-CptIntConstant1::index_value() const
-{
-  return static_cast<int>(mValue);
 }
 
 
@@ -1066,6 +1066,13 @@ VpiConstType
 CptIntConstant2::const_type() const
 {
   return mConstType;
+}
+
+// 整数型の値の取得
+int
+CptIntConstant2::const_int() const
+{
+  return atoi(mValue);
 }
 
 // 文字列型の値の取得
@@ -1110,6 +1117,13 @@ SizeType
 CptIntConstant3::const_size() const
 {
   return mSize;
+}
+
+// 整数型の値の取得
+int
+CptIntConstant3::const_int() const
+{
+  return atoi(mValue);
 }
 
 // 文字列型の値の取得
@@ -1386,7 +1400,7 @@ CptFactory::new_SysFuncCall(
 const PtExpr*
 CptFactory::new_IntConst(
   const FileRegion& file_region,
-  std::uint32_t value
+  int value
 )
 {
   ++ mNumIntConstant1;

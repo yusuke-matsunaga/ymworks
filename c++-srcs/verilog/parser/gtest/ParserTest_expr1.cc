@@ -30,13 +30,7 @@ TEST_F(ParserTest, Opr1)
     auto expr = parser.new_Opr(fr, type, expr1, nullptr);
 
     ASSERT_TRUE( expr != nullptr );
-    EXPECT_STREQ( nullptr, expr->name() );
-    EXPECT_EQ( 0, expr->namebranch_num() );
-    EXPECT_THROW( expr->namebranch(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	       expr->namebranch_list() );
-    EXPECT_EQ( "", expr->fullname() );
+    check_expr_name(expr);
     EXPECT_EQ( PtExprType::Opr, expr->type() );
     EXPECT_EQ( type, expr->op_type() );
     EXPECT_EQ( 1, expr->operand_num() );
@@ -57,7 +51,7 @@ TEST_F(ParserTest, Opr1)
 		  std::logic_error );
     EXPECT_THROW( expr->const_size(),
 		  std::logic_error );
-    EXPECT_THROW( expr->const_uint32(),
+    EXPECT_THROW( expr->const_int(),
 		  std::logic_error );
     EXPECT_THROW( expr->const_str(),
 		  std::logic_error );
@@ -135,13 +129,7 @@ TEST_F(ParserTest, Opr2)
     auto expr = parser.new_Opr(fr, type, expr1, expr2, nullptr);
 
     ASSERT_TRUE( expr != nullptr );
-    EXPECT_STREQ( nullptr, expr->name() );
-    EXPECT_EQ( 0, expr->namebranch_num() );
-    EXPECT_THROW( expr->namebranch(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	       expr->namebranch_list() );
-    EXPECT_EQ( "", expr->fullname() );
+    check_expr_name(expr);
     EXPECT_EQ( PtExprType::Opr, expr->type() );
     EXPECT_EQ( type, expr->op_type() );
     EXPECT_EQ( 2, expr->operand_num() );
@@ -162,7 +150,7 @@ TEST_F(ParserTest, Opr2)
 		  std::logic_error );
     EXPECT_THROW( expr->const_size(),
 		  std::logic_error );
-    EXPECT_THROW( expr->const_uint32(),
+    EXPECT_THROW( expr->const_int(),
 		  std::logic_error );
     EXPECT_THROW( expr->const_str(),
 		  std::logic_error );
@@ -243,13 +231,7 @@ TEST_F(ParserTest, Opr3)
   auto expr = parser.new_Opr(fr, type, expr1, expr2, expr3, nullptr);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( nullptr, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "", expr->fullname() );
+  check_expr_name(expr);
   EXPECT_EQ( PtExprType::Opr, expr->type() );
   EXPECT_EQ( type, expr->op_type() );
   EXPECT_EQ( 3, expr->operand_num() );
@@ -270,7 +252,7 @@ TEST_F(ParserTest, Opr3)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -300,13 +282,7 @@ TEST_F(ParserTest, Concat)
   auto expr = parser.new_Concat(fr, expr_list);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( nullptr, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "", expr->fullname() );
+  check_expr_name(expr);
   EXPECT_EQ( PtExprType::Opr, expr->type() );
   EXPECT_EQ( VpiOpType::Concat, expr->op_type() );
   EXPECT_EQ( 3, expr->operand_num() );
@@ -327,7 +303,7 @@ TEST_F(ParserTest, Concat)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -359,13 +335,7 @@ TEST_F(ParserTest, MultiConcat)
   auto expr = parser.new_MultiConcat(fr, rep, expr_list);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( nullptr, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "", expr->fullname() );
+  check_expr_name(expr);
   EXPECT_EQ( PtExprType::Opr, expr->type() );
   EXPECT_EQ( VpiOpType::MultiConcat, expr->op_type() );
   EXPECT_EQ( 4, expr->operand_num() );
@@ -387,7 +357,7 @@ TEST_F(ParserTest, MultiConcat)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -413,13 +383,7 @@ TEST_F(ParserTest, MinTypMax)
   auto expr = parser.new_MinTypMax(fr, expr1, expr2, expr3);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( nullptr, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "", expr->fullname() );
+  check_expr_name(expr);
   EXPECT_EQ( PtExprType::Opr, expr->type() );
   EXPECT_EQ( VpiOpType::MinTypMax, expr->op_type() );
   EXPECT_EQ( 3, expr->operand_num() );
@@ -440,7 +404,7 @@ TEST_F(ParserTest, MinTypMax)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );

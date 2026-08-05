@@ -127,8 +127,8 @@ public:
 
   /// @brief 整数型の値の取得
   /// @return 値
-  std::uint32_t
-  const_uint32() const override;
+  int
+  const_int() const override;
 
   /// @brief 整数型および文字列型の定数の文字列表現の取得
   /// @return 値の文字列表現
@@ -506,7 +506,7 @@ public:
     const FileRegion& file_region,
     VpiConstType const_type,
     SizeType size,
-    std::uint32_t ivalue,
+    int ivalue,
     const char* svalue,
     double rvalue
   );
@@ -533,8 +533,8 @@ public:
   const_size() const override;
 
   /// @brief 整数型の値の取得
-  std::uint32_t
-  const_uint32() const override;
+  int
+  const_int() const override;
 
   /// @brief 文字列型の値の取得
   const char*
@@ -558,7 +558,7 @@ private:
   SizeType mSize;
 
   // 整数の値
-  std::uint32_t mIntValue;
+  int mIntValue;
 
   // 文字列の値
   const char* mStrValue;

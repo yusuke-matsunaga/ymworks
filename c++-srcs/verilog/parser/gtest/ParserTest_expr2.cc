@@ -22,13 +22,7 @@ TEST_F(ParserTest, Primary1)
   auto expr = parser.new_Primary(fr, name);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -50,7 +44,7 @@ TEST_F(ParserTest, Primary1)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -77,13 +71,7 @@ TEST_F(ParserTest, Primary2)
   auto expr = parser.new_Primary(fr, name, index_list);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -107,7 +95,7 @@ TEST_F(ParserTest, Primary2)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -132,13 +120,7 @@ TEST_F(ParserTest, Primary3)
   auto expr = parser.new_Primary(fr, name, part);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -160,7 +142,7 @@ TEST_F(ParserTest, Primary3)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -192,13 +174,7 @@ TEST_F(ParserTest, Primary4)
   auto expr = parser.new_Primary(fr, name, index_list, part);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -222,7 +198,7 @@ TEST_F(ParserTest, Primary4)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -244,16 +220,7 @@ TEST_F(ParserTest, PrimaryH1)
   auto expr = parser.new_Primary(fr, hname);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 1, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(1),
-		std::out_of_range );
-  auto nb = expr->namebranch(0);
-  EXPECT_EQ( head, nb->name() );
-  EXPECT_FALSE( nb->has_index() );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{nb},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "head1.net1", expr->fullname() );
+  check_expr_name(expr, name, {head});
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -275,7 +242,7 @@ TEST_F(ParserTest, PrimaryH1)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -304,15 +271,7 @@ TEST_F(ParserTest, PrimaryH2)
   auto expr = parser.new_Primary(fr, hname, index_list);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 1, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(1),
-		std::out_of_range );
-  auto nb = expr->namebranch(0);
-  EXPECT_EQ( head, nb->name() );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{nb},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "head1.net1", expr->fullname() );
+  check_expr_name(expr, name, {head});
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -336,7 +295,7 @@ TEST_F(ParserTest, PrimaryH2)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -363,15 +322,7 @@ TEST_F(ParserTest, PrimaryH3)
   auto expr = parser.new_Primary(fr, hname, part);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 1, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(1),
-		std::out_of_range );
-  auto nb = expr->namebranch(0);
-  EXPECT_EQ( head, nb->name() );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{nb},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "head1.net1", expr->fullname() );
+  check_expr_name(expr, name, {head});
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -393,7 +344,7 @@ TEST_F(ParserTest, PrimaryH3)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -427,15 +378,7 @@ TEST_F(ParserTest, PrimaryH4)
   auto expr = parser.new_Primary(fr, hname, index_list, part);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 1, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(1),
-		std::out_of_range );
-  auto nb = expr->namebranch(0);
-  EXPECT_EQ( head, nb->name() );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{nb},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "head1.net1", expr->fullname() );
+  check_expr_name(expr, name, {head});
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -459,7 +402,7 @@ TEST_F(ParserTest, PrimaryH4)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -481,13 +424,7 @@ TEST_F(ParserTest, CPrimary1)
   auto expr = parser.new_CPrimary(fr, name, index1);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -510,7 +447,7 @@ TEST_F(ParserTest, CPrimary1)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -537,13 +474,7 @@ TEST_F(ParserTest, CPrimary2)
   auto expr = parser.new_CPrimary(fr, name, index_list);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -567,7 +498,7 @@ TEST_F(ParserTest, CPrimary2)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -592,13 +523,7 @@ TEST_F(ParserTest, CPrimary3)
   auto expr = parser.new_CPrimary(fr, name, part);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -620,7 +545,7 @@ TEST_F(ParserTest, CPrimary3)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -649,15 +574,7 @@ TEST_F(ParserTest, CPrimary4)
   auto expr = parser.new_CPrimary(fr, hname, index_list);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 1, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(1),
-		std::out_of_range );
-  auto nb = expr->namebranch(0);
-  EXPECT_EQ( head, nb->name() );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{nb},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "head1.param1", expr->fullname() );
+  check_expr_name(expr, name, {head});
   EXPECT_EQ( PtExprType::Primary, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -681,7 +598,7 @@ TEST_F(ParserTest, CPrimary4)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );

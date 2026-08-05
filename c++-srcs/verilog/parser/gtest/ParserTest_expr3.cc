@@ -9,8 +9,6 @@
 #include <gtest/gtest.h>
 #include "ParserTest.h"
 #include "ym/pt/PtDecl.h"
-#include "ym/pt/PtMisc.h"
-#include "ym/pt/PtExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,13 +27,7 @@ TEST_F(ParserTest, FuncCall1)
   auto expr = parser.new_FuncCall(fr, name, arg_list, nullptr);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::FuncCall, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -57,7 +49,7 @@ TEST_F(ParserTest, FuncCall1)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -87,15 +79,7 @@ TEST_F(ParserTest, FuncCall2)
   auto expr = parser.new_FuncCall(fr, hname, arg_list, nullptr);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 1, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(1),
-		std::out_of_range );
-  auto nb = expr->namebranch(0);
-  EXPECT_EQ( head, nb->name() );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{nb},
-	     expr->namebranch_list() );
-  EXPECT_EQ( "head1.func1", expr->fullname() );
+  check_expr_name(expr, name, {head});
   EXPECT_EQ( PtExprType::FuncCall, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -117,7 +101,7 @@ TEST_F(ParserTest, FuncCall2)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -145,13 +129,7 @@ TEST_F(ParserTest, SysFuncCall)
   auto expr = parser.new_SysFuncCall(fr, name, arg_list);
 
   ASSERT_TRUE( expr != nullptr );
-  EXPECT_STREQ( name, expr->name() );
-  EXPECT_EQ( 0, expr->namebranch_num() );
-  EXPECT_THROW( expr->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
-	     expr->namebranch_list() );
-  EXPECT_EQ( name, expr->fullname() );
+  check_expr_name(expr, name);
   EXPECT_EQ( PtExprType::SysFuncCall, expr->type() );
   EXPECT_THROW( expr->op_type(),
 		std::logic_error );
@@ -173,7 +151,7 @@ TEST_F(ParserTest, SysFuncCall)
 		std::logic_error );
   EXPECT_THROW( expr->const_size(),
 		std::logic_error );
-  EXPECT_THROW( expr->const_uint32(),
+  EXPECT_THROW( expr->const_int(),
 		std::logic_error );
   EXPECT_THROW( expr->const_str(),
 		std::logic_error );
@@ -185,6 +163,122 @@ TEST_F(ParserTest, SysFuncCall)
   EXPECT_THROW( expr->is_simple(),
 		std::logic_error );
   EXPECT_EQ( "$func1(1, 2)", expr->decompile() );
+}
+
+TEST_F(ParserTest, IntConst1)
+{
+  auto fr = make_file_region(1, 2, 3, 4);
+  std::uint32_t val = 1234;
+  auto expr = parser.new_IntConst(fr, val);
+
+  ASSERT_TRUE( expr != nullptr );
+  check_expr_name(expr);
+  EXPECT_EQ( PtExprType::Const, expr->type() );
+  EXPECT_THROW( expr->op_type(),
+		std::logic_error );
+  EXPECT_EQ( 0, expr->operand_num() );
+  EXPECT_THROW( expr->operand(0),
+		std::out_of_range );
+  EXPECT_THROW( expr->operand0(),
+		std::logic_error );
+  EXPECT_THROW( expr->operand1(),
+		std::logic_error );
+  EXPECT_THROW( expr->operand2(),
+		std::logic_error );
+  EXPECT_FALSE( expr->is_const_index() );
+  EXPECT_EQ( 0, expr->index_num() );
+  EXPECT_THROW( expr->index(0),
+		std::out_of_range );
+  EXPECT_EQ( nullptr, expr->part() );
+  EXPECT_EQ( VpiConstType::Int, expr->const_type() );
+  EXPECT_EQ( 0, expr->const_size() );
+  EXPECT_EQ( val, expr->const_int() );
+  EXPECT_STREQ( nullptr, expr->const_str() );
+  EXPECT_THROW( expr->const_real(),
+		std::logic_error );
+  EXPECT_TRUE( expr->is_index_expr() );
+  EXPECT_EQ( val, expr->index_value() );
+  EXPECT_THROW( expr->is_simple(),
+		std::logic_error );
+  EXPECT_EQ( "1234", expr->decompile() );
+}
+
+TEST_F(ParserTest, IntConst2)
+{
+  auto fr = make_file_region(1, 2, 3, 4);
+  const char* val_str = "1234";
+  int val = atoi(val_str);
+  auto expr = parser.new_IntConst(fr, val_str);
+
+  ASSERT_TRUE( expr != nullptr );
+  check_expr_name(expr);
+  EXPECT_EQ( PtExprType::Const, expr->type() );
+  EXPECT_THROW( expr->op_type(),
+		std::logic_error );
+  EXPECT_EQ( 0, expr->operand_num() );
+  EXPECT_THROW( expr->operand(0),
+		std::out_of_range );
+  EXPECT_THROW( expr->operand0(),
+		std::logic_error );
+  EXPECT_THROW( expr->operand1(),
+		std::logic_error );
+  EXPECT_THROW( expr->operand2(),
+		std::logic_error );
+  EXPECT_FALSE( expr->is_const_index() );
+  EXPECT_EQ( 0, expr->index_num() );
+  EXPECT_THROW( expr->index(0),
+		std::out_of_range );
+  EXPECT_EQ( nullptr, expr->part() );
+  EXPECT_EQ( VpiConstType::Int, expr->const_type() );
+  EXPECT_EQ( 0, expr->const_size() );
+  EXPECT_EQ( val, expr->const_int() );
+  EXPECT_STREQ( val_str, expr->const_str() );
+  EXPECT_THROW( expr->const_real(),
+		std::logic_error );
+  EXPECT_TRUE( expr->is_index_expr() );
+  EXPECT_EQ( val, expr->index_value() );
+  EXPECT_THROW( expr->is_simple(),
+		std::logic_error );
+  EXPECT_EQ( val_str, expr->decompile() );
+}
+
+TEST_F(ParserTest, IntConst3)
+{
+  auto fr = make_file_region(1, 2, 3, 4);
+  const char* val_str = "1234";
+  int val = atoi(val_str);
+  auto expr = parser.new_IntConst(fr, val_str);
+
+  ASSERT_TRUE( expr != nullptr );
+  check_expr_name(expr);
+  EXPECT_EQ( PtExprType::Const, expr->type() );
+  EXPECT_THROW( expr->op_type(),
+		std::logic_error );
+  EXPECT_EQ( 0, expr->operand_num() );
+  EXPECT_THROW( expr->operand(0),
+		std::out_of_range );
+  EXPECT_THROW( expr->operand0(),
+		std::logic_error );
+  EXPECT_THROW( expr->operand1(),
+		std::logic_error );
+  EXPECT_THROW( expr->operand2(),
+		std::logic_error );
+  EXPECT_FALSE( expr->is_const_index() );
+  EXPECT_EQ( 0, expr->index_num() );
+  EXPECT_THROW( expr->index(0),
+		std::out_of_range );
+  EXPECT_EQ( nullptr, expr->part() );
+  EXPECT_EQ( VpiConstType::Int, expr->const_type() );
+  EXPECT_EQ( 0, expr->const_size() );
+  EXPECT_EQ( val, expr->const_int() );
+  EXPECT_STREQ( val_str, expr->const_str() );
+  EXPECT_THROW( expr->const_real(),
+		std::logic_error );
+  EXPECT_TRUE( expr->is_index_expr() );
+  EXPECT_EQ( val, expr->index_value() );
+  EXPECT_THROW( expr->is_simple(),
+		std::logic_error );
+  EXPECT_EQ( val_str, expr->decompile() );
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -104,8 +104,8 @@ public:
 
   /// @brief 整数型の値の取得
   /// @return 値
-  std::uint32_t
-  const_uint32() const override;
+  int
+  const_int() const override;
 
   /// @brief 整数型および文字列型の定数の文字列表現の取得
   /// @return 値の文字列表現
@@ -1365,6 +1365,11 @@ public:
   bool
   is_index_expr() const override;
 
+  /// @brief インデックスの値の取得
+  /// @return 階層名の添字として使える式の時にその値を返す．
+  int
+  index_value() const override;
+
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -1390,7 +1395,7 @@ public:
   // コンストラクタ
   CptIntConstant1(
     const FileRegion& file_region,
-    std::uint32_t value
+    int value
   );
 
   // デストラクタ
@@ -1407,17 +1412,12 @@ public:
   const_type() const override;
 
   // 整数型の値の取得
-  std::uint32_t
-  const_uint32() const override;
+  int
+  const_int() const override;
 
-  // 文字列型の値の取得
+  // 整数型の文字列の値の取得
   const char*
   const_str() const override;
-
-  /// @brief インデックスの値の取得
-  /// @return 階層名の添字として使える式の時にその値を返す．
-  int
-  index_value() const override;
 
 
 private:
@@ -1426,7 +1426,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 値
-  std::uint32_t mValue;
+  int mValue;
 
 };
 
@@ -1459,7 +1459,11 @@ public:
   VpiConstType
   const_type() const override;
 
-  // 文字列型の値の取得
+  // 整数型の値の取得
+  int
+  const_int() const override;
+
+  // 整数型の文字列の値の取得
   const char*
   const_str() const override;
 
@@ -1511,7 +1515,11 @@ public:
   SizeType
   const_size() const override;
 
-  // 文字列型の値の取得
+  // 整数型の値の取得
+  int
+  const_int() const override;
+
+  // 文字列の値の取得
   const char*
   const_str() const override;
 

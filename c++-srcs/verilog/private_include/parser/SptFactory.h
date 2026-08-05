@@ -1025,7 +1025,7 @@ public:
   const PtExpr*
   new_IntConst(
     const FileRegion& file_region,
-    std::uint32_t value
+    int value
   ) override;
 
   /// @brief 整数型の定数の生成

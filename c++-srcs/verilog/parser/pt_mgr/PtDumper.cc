@@ -876,16 +876,8 @@ PtDumper::put(
 
       put("mFileRegion", expr->file_region());
       put("mConstType", expr->const_type());
-      if ( 0 ) {
-	PtHeader x(*this, "mConstInt", "int");
-	mStream << expr->const_uint32();
-      }
-      put("mConstInt", expr->const_uint32());
+      put("mConstInt", expr->const_int());
       put("mConstStr", expr->const_str());
-      if ( 0 ) {
-	PtHeader x(*this, "mConstReal", "double");
-	mStream << expr->const_real();
-      }
       put("mConstReal", expr->const_real());
     }
     break;
