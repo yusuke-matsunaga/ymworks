@@ -1,5 +1,5 @@
 ﻿
-/// @file Parser.cc
+/// @file Parser_udp.cc
 /// @brief Parser の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
@@ -7,13 +7,10 @@
 /// All rights reserved.
 
 #include "parser/Parser.h"
-#include "parser/PtMgr.h"
-#include "parser/PtiFactory.h"
-#include "parser/PtiDecl.h"
-
-#include "ym/pt/PtUdp.h"
-#include "ym/pt/PtExpr.h"
-
+#include "parser/AstMgr.h"
+#include "parser/PtFactory.h"
+#include "parser/PtUdp.h"
+#include "parser/PtPort.h"
 #include "ym/MsgMgr.h"
 
 
@@ -52,12 +49,11 @@ Parser::new_Udp1995(
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
-  const PtExpr* init_value,
-  PtrList<const PtAttrInst>* ai_list
+  const AstExpr* init_value,
+  PtAttrInstList* ai_list
 )
 {
-  auto iohead_array = get_module_io_array();
-  const PtIOItem* out_item = nullptr;
+  const AstIOItem* out_item = nullptr;
   bool is_seq = false;
 
   bool sane = true;
@@ -69,9 +65,9 @@ Parser::new_Udp1995(
   // の確認を行う．
   // まず portdecl_list の各要素を名前をキーにした連想配列に格納する．
   // ついでに output の数を数える．
-  std::unordered_map<std::string, const PtIOItem*> iomap;
-  for ( auto io: iohead_array ) {
-    auto item_list{io->item_list()};
+  std::unordered_map<std::string, const AstIOItem*> iomap;
+  for ( auto io: mModuleIOHeadList ) {
+    auto item_list = io->item_list();
     if ( io->direction() == VpiDir::Output ) {
       if ( out_item ) {
 	// 複数の出力宣言があった．
@@ -175,7 +171,7 @@ Parser::new_Udp1995(
     auto reghead = mCurDeclArray[0];
     if ( reghead ) {
       is_seq = true;
-      ASSERT_COND( reghead->type() == PtDeclType::Reg );
+      ASSERT_COND( reghead->type() == AstDeclHead::Reg );
       ASSERT_COND( reghead->item_num() == 1 );
       auto regitem = reghead->item(0);
       ASSERT_COND( regitem );
@@ -204,8 +200,8 @@ Parser::new_Udp1995(
 	    ai_list,
 	    is_seq,
 	    out_item,
-	    get_port_vector(),
-	    iohead_array);
+	    mPortList,
+	    mModuleIOHeadList);
   }
   end_udp();
 }
@@ -217,18 +213,16 @@ Parser::new_Udp2001(
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
-  const PtExpr* init_value,
-  PtrList<const PtAttrInst>* ai_list
+  const AstExpr* init_value,
+  PtAttrInstList* ai_list
 )
 {
-  auto iohead_array = get_module_io_array();
-
   bool is_seq = false;
 
   // YACC の文法が正しく書かれていれば最初のヘッダが出力で
   // 要素数が1となっているはず．
-  ASSERT_COND( iohead_array.size() > 0 );
-  auto out_head = iohead_array[0];
+  ASSERT_COND( mModuleIOHeadList.size() > 0 );
+  auto out_head = mModuleIOHeadList[0];
   ASSERT_COND( out_head->direction() == VpiDir::Output );
   ASSERT_COND( out_head->item_num() == 1 );
   auto out_item = out_head->item(0);
@@ -239,7 +233,7 @@ Parser::new_Udp2001(
   // 残りの要素は入力になっているはず．
 
   // iohead_array から port_array を生成する．
-  auto port_array = new_PortArray(iohead_array);
+  auto port_array = new_PortArray(mModuleIOHeadList);
 
   new_Udp(file_region,
 	  udp_name,
@@ -250,7 +244,7 @@ Parser::new_Udp2001(
 	  is_seq,
 	  out_item,
 	  port_array,
-	  iohead_array);
+	  mModuleIOHeadList);
   end_udp();
 }
 
@@ -261,15 +255,15 @@ Parser::new_Udp(
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
-  const PtExpr* init_value,
-  PtrList<const PtAttrInst>* ai_list,
+  const AstExpr* init_value,
+  PtAttrInstList* ai_list,
   bool is_seq,
-  const PtIOItem* out_item,
-  const std::vector<const PtPort*>& port_array,
-  const std::vector<const PtIOHead*>& iohead_array
+  const AstIOItem* out_item,
+  const std::vector<PtPort*>& port_array,
+  const std::vector<PtIOHead*>& iohead_array
 )
 {
-  const PtUdp* udp = nullptr;
+  const AstUdp* udp = nullptr;
   if ( is_seq ) {
     // 初期値の設定がある．
     if ( init_name ) {
@@ -305,12 +299,12 @@ Parser::new_Udp(
     // このあと elaboration で注意が必要なのは init_value.
     // 場合によってはこれが nullptrで outhead->top()->init_value()
     // が空でない場合がある．
-    udp = mFactory->new_SeqUdp(file_region,
+    udp = mFactory.new_SeqUdp(file_region,
 			      udp_name,
-			      port_array,
-			      iohead_array,
+			      PtPortArray(mAlloc, port_array, true),
+			      PtIOHeadArray(mAlloc, iohead_array, true),
 			      init_value,
-			      mUdpEntryList);
+			      PtUdpEntryArray(mAlloc, mUdpEntryList));
   }
   else {
     if ( init_name ) {
@@ -322,14 +316,14 @@ Parser::new_Udp(
 		      "Combinational primitive can not have the initial value.");
       return;
     }
-    udp = mFactory->new_CmbUdp(file_region,
+    udp = mFactory.new_CmbUdp(file_region,
 			      udp_name,
-			      port_array,
-			      iohead_array,
-			      mUdpEntryList);
+			      PtPortArray(mAlloc, port_array, true),
+			      PtIOHeadArray(mAlloc, iohead_array, true),
+			      PtUdpEntryArray(mAlloc, mUdpEntryList));
   }
 
-  mPtMgr.reg_udp(udp);
+  mAstMgr.reg_udp(udp);
   reg_attrinst(udp, ai_list);
 }
 
@@ -341,9 +335,11 @@ Parser::new_UdpEntry(
   char output_symbol
 )
 {
-  auto output = mFactory->new_UdpValue(output_loc, output_symbol);
-  auto entry = mFactory->new_UdpEntry(fr, get_udp_value_array(), output);
-  add_udp_entry(entry);
+  auto output = mFactory.new_UdpValue(output_loc, output_symbol);
+  auto entry = mFactory.new_UdpEntry(fr,
+				     PtUdpValueArray(mAlloc, mUdpValueList),
+				     output);
+  mUdpEntryList.push_back(entry);
 }
 
 // @brief sequential UDP 用のテーブルエントリの生成
@@ -356,19 +352,11 @@ Parser::new_UdpEntry(
   char output_symbol
 )
 {
-  auto current = mFactory->new_UdpValue(current_loc, current_symbol);
-  auto output = mFactory->new_UdpValue(output_loc, output_symbol);
-  auto entry = mFactory->new_UdpEntry(fr, get_udp_value_array(), current, output);
-  add_udp_entry(entry);
-}
-
-// @brief UdpEntry を追加する．
-inline
-void
-Parser::add_udp_entry(
-  const PtUdpEntry* entry
-)
-{
+  auto current = mFactory.new_UdpValue(current_loc, current_symbol);
+  auto output = mFactory.new_UdpValue(output_loc, output_symbol);
+  auto entry = mFactory.new_UdpEntry(fr,
+				     PtUdpValueArray(mAlloc, mUdpValueList),
+				     current, output);
   mUdpEntryList.push_back(entry);
 }
 
@@ -379,8 +367,8 @@ Parser::new_UdpValue(
   char symbol
 )
 {
-  auto value = mFactory->new_UdpValue(fr, symbol);
-  add_udp_value(value);
+  auto value = mFactory.new_UdpValue(fr, symbol);
+  mUdpValueList.push_back(value);
 }
 
 // @brief UDP のテーブルエントリの要素の値の生成
@@ -391,15 +379,8 @@ Parser::new_UdpValue(
   char symbol2
 )
 {
-  auto value = mFactory->new_UdpValue(fr, symbol1, symbol2);
-  add_udp_value(value);
-}
-
-// @brief UdpValue のリストを初期化する．
-void
-Parser::init_udp_value_list()
-{
-  mUdpValueList.clear();
+  auto value = mFactory.new_UdpValue(fr, symbol1, symbol2);
+  mUdpValueList.push_back(value);
 }
 
 END_NAMESPACE_YM_VERILOG

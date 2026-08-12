@@ -11,9 +11,9 @@
 
 #include "elaborator/ElbExpr.h"
 
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstItem.h"
+#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,15 +26,15 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbDecl*
 EiFactory::new_Decl(
   ElbDeclHead* head,
-  const PtNamedBase* pt_item,
+  const AstNamedBase* ast_item,
   const VlExpr* init
 )
 {
   if ( init ) {
-    return new EiDeclI(head, pt_item, init);
+    return new EiDeclI(head, ast_item, init);
   }
   else {
-    return new EiDecl(head, pt_item);
+    return new EiDecl(head, ast_item);
   }
 }
 
@@ -46,9 +46,9 @@ EiFactory::new_Decl(
 // @brief コンストラクタ
 EiDecl::EiDecl(
   ElbDeclHead* head,
-  const PtNamedBase* pt_item
+  const AstNamedBase* ast_item
 ) : mHead{head},
-    mPtItem{pt_item},
+    mAstItem{ast_item},
     mAuxSign{false}
 {
 }
@@ -69,7 +69,7 @@ EiDecl::type() const
 FileRegion
 EiDecl::file_region() const
 {
-  return mPtItem->file_region();
+  return mAstItem->file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -83,7 +83,7 @@ EiDecl::parent_scope() const
 std::string
 EiDecl::name() const
 {
-  return mPtItem->name();
+  return mAstItem->name();
 }
 
 // @brief 値の型を返す．
@@ -277,9 +277,9 @@ EiDecl::set_signed()
 // @brief コンストラクタ
 EiDeclI::EiDeclI(
   ElbDeclHead* head,
-  const PtNamedBase* pt_item,
+  const AstNamedBase* ast_item,
   const VlExpr* init
-) : EiDecl(head, pt_item),
+) : EiDecl(head, ast_item),
     mInit{init}
 {
 }

@@ -8,9 +8,8 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiPartSelect.h"
-
-#include "ym/pt/PtExpr.h"
-#include "ym/BitVector.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,15 +21,15 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 固定部分選択式を生成する．
 ElbExpr*
 EiFactory::new_PartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr,
-  const PtExpr* index1,
-  const PtExpr* index2,
+  const AstExpr* index1,
+  const AstExpr* index2,
   int index1_val,
   int index2_val
 )
 {
-  return new EiConstPartSelect(pt_expr, parent_expr,
+  return new EiConstPartSelect(ast_expr, parent_expr,
 			       index1, index2,
 			       index1_val, index2_val);
 }
@@ -38,13 +37,13 @@ EiFactory::new_PartSelect(
 // @brief 固定部分選択式を生成する．
 ElbExpr*
 EiFactory::new_PartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr,
   int index1,
   int index2
 )
 {
-  return new EiConstPartSelect(pt_expr, parent_expr,
+  return new EiConstPartSelect(ast_expr, parent_expr,
 			       nullptr, nullptr,
 			       index1, index2);
 }
@@ -52,28 +51,28 @@ EiFactory::new_PartSelect(
 // @brief 可変部分選択式を生成する．
 ElbExpr*
 EiFactory::new_PlusPartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr,
   ElbExpr* base,
-  const PtExpr* range,
+  const AstExpr* range,
   SizeType range_val
 )
 {
-  return new EiPlusPartSelect(pt_expr, parent_expr,
+  return new EiPlusPartSelect(ast_expr, parent_expr,
 			      base, range, range_val);
 }
 
 // @brief 可変部分選択式を生成する．
 ElbExpr*
 EiFactory::new_MinusPartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr,
   ElbExpr* base,
-  const PtExpr* range,
+  const AstExpr* range,
   SizeType range_val
 )
 {
-  return new EiMinusPartSelect(pt_expr, parent_expr,
+  return new EiMinusPartSelect(ast_expr, parent_expr,
 			       base, range, range_val);
 }
 
@@ -84,9 +83,9 @@ EiFactory::new_MinusPartSelect(
 
 // @brief コンストラクタ
 EiPartSelect::EiPartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr
-) : EiExprBase(pt_expr),
+) : EiExprBase(ast_expr),
     mParentExpr{parent_expr}
 {
 }
@@ -203,13 +202,13 @@ EiPartSelect::_set_reqsize(
 
 // @brief コンストラクタ
 EiConstPartSelect::EiConstPartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr,
-  const PtExpr* index1,
-  const PtExpr* index2,
+  const AstExpr* index1,
+  const AstExpr* index2,
   int index1_val,
   int index2_val
-) : EiPartSelect(pt_expr, parent_expr),
+) : EiPartSelect(ast_expr, parent_expr),
     mLeftRange{index1},
     mRightRange{index2},
     mLeftVal{index1_val},
@@ -285,12 +284,12 @@ EiConstPartSelect::right_range_val() const
 
 // @brief コンストラクタ
 EiVarPartSelect::EiVarPartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr,
   ElbExpr* base,
-  const PtExpr* range,
+  const AstExpr* range,
   SizeType range_width
-) : EiPartSelect(pt_expr, parent_expr),
+) : EiPartSelect(ast_expr, parent_expr),
     mBaseExpr{base},
     mRangeExpr{range},
     mRangeWidth{range_width}
@@ -337,12 +336,12 @@ EiVarPartSelect::range_width() const
 
 // @brief コンストラクタ
 EiPlusPartSelect::EiPlusPartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr,
   ElbExpr* base,
-  const PtExpr* range,
+  const AstExpr* range,
   SizeType range_val
-) : EiVarPartSelect(pt_expr, parent_expr, base, range, range_val)
+) : EiVarPartSelect(ast_expr, parent_expr, base, range, range_val)
 {
 }
 
@@ -365,12 +364,12 @@ EiPlusPartSelect::range_mode() const
 
 // @brief コンストラクタ
 EiMinusPartSelect::EiMinusPartSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* parent_expr,
   ElbExpr* base,
-  const PtExpr* range,
+  const AstExpr* range,
   SizeType range_val
-) : EiVarPartSelect(pt_expr, parent_expr, base, range, range_val)
+) : EiVarPartSelect(ast_expr, parent_expr, base, range, range_val)
 {
 }
 

@@ -8,6 +8,7 @@
 
 #include "parser/PtiDecl.h"
 #include "parser/PtiExpr.h"
+#include "ym/BitVector.h"
 #include "ym/pt/PtMisc.h"
 
 
@@ -269,7 +270,7 @@ decompile_impl(
 
       case VpiConstType::Int:
 	if ( expr->const_str() == nullptr ) {
-	  buf << expr->const_int();
+	  buf << expr->const_bitvect();
 	  return buf.str();
 	}
 	break;

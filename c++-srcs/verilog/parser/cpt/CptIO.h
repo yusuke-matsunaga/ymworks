@@ -8,10 +8,9 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/pt/PtDecl.h"
+#include "parser/PtDecl.h"
 #include "ym/FileRegion.h"
-#include "parser/PtiArray.h"
-#include "parser/PtiDecl.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -20,7 +19,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @brief IO宣言のヘッダのベース実装クラス
 //////////////////////////////////////////////////////////////////////
 class CptIOHBase :
-  public PtiIOHead
+  public PtIOHead
 {
 protected:
 
@@ -32,10 +31,18 @@ protected:
     VpiNetType net_type,           ///< [in] 補助的なネット型
     VpiVarType var_type,           ///< [in] 補助的な変数型
     bool sign                      ///< [in] 符号つきの時 true にするフラグ
-  );
+  ) : mFileRegion{file_region}
+  {
+    mAttr =
+      static_cast<unsigned int>(sign) |
+      (static_cast<unsigned int>(dir) << 1) |
+      (static_cast<unsigned int>(aux_type) << 8) |
+      (static_cast<unsigned int>(net_type) << 16) |
+      (static_cast<unsigned int>(var_type) << 24);
+  }
 
   /// @brief デストラクタ
-  ~CptIOHBase();
+  ~CptIOHBase() {}
 
 
 public:
@@ -72,7 +79,7 @@ public:
   /// @brief 範囲の取得
   /// @retval 範囲
   /// @retval nullptr 範囲を持たないとき
-  const PtRange*
+  const AstRange*
   range() const override;
 
   /// @brief 要素数の取得
@@ -80,7 +87,7 @@ public:
   item_num() const override;
 
   /// @brief 要素の取得
-  const PtIOItem*
+  const AstIOItem*
   item(
     SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
   ) const override;
@@ -94,7 +101,7 @@ private:
   /// @brief 要素リストの設定
   void
   set_elem(
-    PtiIOItemArray&& elem_array ///< [in] 要素の配列
+    PtIOItemArray&& elem_array ///< [in] 要素の配列
   ) override;
 
 
@@ -110,7 +117,7 @@ private:
   std::uint32_t mAttr;
 
   // 要素の配列
-  PtiIOItemArray mItemArray;
+  PtIOItemArray mItemArray;
 
 };
 
@@ -131,10 +138,13 @@ public:
     VpiNetType net_type,	   ///< [in] 補助的なネット型
     VpiVarType var_type,	   ///< [in] 補助的な変数型
     bool sign			   ///< [in] 符号つきの時 true にするフラグ
-  );
+  ) : CptIOHBase(file_region, dir, aux_type,
+		 net_type, var_type, sign)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptIOH();
+  ~CptIOH() {}
 
 };
 
@@ -154,11 +164,15 @@ public:
     VpiAuxType aux_type,	   ///< [in] 補助的な型
     VpiNetType net_type,	   ///< [in] 補助的なネット型
     bool sign,                     ///< [in] 符号つきの時 true にするフラグ
-    const PtRange* range           ///< [in] パース木の範囲定義
-  );
+    const AstRange* range          ///< [in] パース木の範囲定義
+  ) : CptIOHBase(file_region, dir, aux_type,
+		 net_type, VpiVarType::None, sign),
+      mRange{range}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptIOHV();
+  ~CptIOHV() {}
 
 
 public:
@@ -167,7 +181,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 範囲の取得
-  const PtRange*
+  const AstRange*
   range() const override;
 
 
@@ -177,7 +191,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const PtRange* mRange;
+  const AstRange* mRange;
 
 };
 
@@ -194,10 +208,13 @@ public:
   CptIOItem(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name               ///< [in] 名前
-  );
+  ) : mLoc{file_region},
+      mName{name}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptIOItem();
+  ~CptIOItem() {}
 
 
 public:
@@ -216,7 +233,7 @@ public:
   /// @brief 初期値の取得
   /// @retval 初期値
   /// @retval nullptr 初期値を持たないとき
-  const PtExpr*
+  const AstExpr*
   init_value() const override;
 
 
@@ -246,11 +263,17 @@ public:
   CptIOItemI(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name,              ///< [in] 名前
-    const PtExpr* init_value       ///< [in] 初期値
-  );
+    const AstExpr* init_value      ///< [in] 初期値
+  ) : CptIOItem(file_region, name),
+      mInitValue{init_value}
+  {
+    if ( init_value == nullptr ) {
+      throw std::logic_error{"init_value == nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptIOItemI();
+  ~CptIOItemI() {}
 
 
 public:
@@ -263,7 +286,7 @@ public:
   file_region() const override;
 
   /// @brief 初期値の取得
-  const PtExpr*
+  const AstExpr*
   init_value() const override;
 
 
@@ -273,7 +296,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 初期値
-  const PtExpr* mInitValue;
+  const AstExpr* mInitValue;
 
 };
 

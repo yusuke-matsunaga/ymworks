@@ -5,13 +5,12 @@
 /// @brief EiImpNet のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "elaborator/ElbDecl.h"
-
-#include "ym/VlScalarVal.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/VlScalarVal.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,9 +26,9 @@ public:
 
   /// @brief コンストラクタ
   EiImpNet(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr, ///< [in] パース木のプライマリ式
-    VpiNetType net_type    ///< [in] ネットの型
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstExpr* ast_expr, ///< [in] パース木のプライマリ式
+    VpiNetType net_type      ///< [in] ネットの型
   );
 
   /// @brief デストラクタ
@@ -197,7 +196,7 @@ private:
   const VlScope* mParent;
 
   // パース木のプライマリ式
-  const PtExpr* mPtExpr;
+  const AstExpr* mAstExpr;
 
   // ネット型
   VpiNetType mNetType;

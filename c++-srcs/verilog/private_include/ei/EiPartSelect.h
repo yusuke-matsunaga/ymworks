@@ -24,7 +24,7 @@ protected:
 
   /// @brief コンストラクタ
   EiPartSelect(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* parent_expr   ///< [in] 対象の式
   );
 
@@ -130,10 +130,10 @@ public:
 
   /// @brief コンストラクタ
   EiConstPartSelect(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* parent_expr,  ///< [in] 対象の式
-    const PtExpr* index1,  ///< [in] パート選択式1
-    const PtExpr* index2,  ///< [in] パート選択式2
+    const AstExpr* index1,  ///< [in] パート選択式1
+    const AstExpr* index2,  ///< [in] パート選択式2
     int index1_val,        ///< [in] パート選択式1の値
     int index2_val         ///< [in] パート選択式2の値
   );
@@ -182,10 +182,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲選択の MSB
-  const PtExpr* mLeftRange;
+  const AstExpr* mLeftRange;
 
   // 範囲選択の LSB
-  const PtExpr* mRightRange;
+  const AstExpr* mRightRange;
 
   // 範囲選択の MSB の値
   int mLeftVal;
@@ -207,10 +207,10 @@ protected:
 
   /// @brief コンストラクタ
   EiVarPartSelect(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* parent_expr,  ///< [in] 対象の式
     ElbExpr* base,         ///< [in] 範囲のベースアドレスを表す式
-    const PtExpr* range,   ///< [in] 範囲を表す式
+    const AstExpr* range,   ///< [in] 範囲を表す式
     SizeType range_width   ///< [in] 範囲の値
   );
 
@@ -249,7 +249,7 @@ private:
   ElbExpr* mBaseExpr;
 
   // 範囲
-  const PtExpr* mRangeExpr;
+  const AstExpr* mRangeExpr;
 
   // 範囲の値
   SizeType mRangeWidth;
@@ -268,10 +268,10 @@ public:
 
   /// @brief コンストラクタ
   EiPlusPartSelect(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* parent_expr,  ///< [in] 対象の式
     ElbExpr* base,	   ///< [in] 範囲のベースアドレスを表す式
-    const PtExpr* range,   ///< [in] 範囲を表す式
+    const AstExpr* range,   ///< [in] 範囲を表す式
     SizeType range_val	   ///< [in] 範囲の値
   );
 
@@ -302,10 +302,10 @@ public:
 
   /// @brief コンストラクタ
   EiMinusPartSelect(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* parent_expr,  ///< [in] 対象の式
     ElbExpr* base,	   ///< [in] 範囲のベースアドレスを表す式
-    const PtExpr* range,   ///< [in] 範囲を表す式
+    const AstExpr* range,   ///< [in] 範囲を表す式
     SizeType range_val	   ///< [in] 範囲の値
   );
 

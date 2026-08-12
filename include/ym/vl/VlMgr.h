@@ -1,5 +1,5 @@
-﻿#ifndef YM_VLMGR_H
-#define YM_VLMGR_H
+﻿#ifndef YM_VL_VLMGR_H
+#define YM_VL_VLMGR_H
 
 /// @file ym/VlMgr.h
 /// @brief VlMgr のヘッダファイル
@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ym/vl/VlFwd.h"
 #include "ym/ClibCellLibrary.h"
 #include "ym/PathList.h"
@@ -17,11 +17,11 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-class PtMgr;
+class AstMgr;
 class ElbMgr;
 
 //////////////////////////////////////////////////////////////////////
-/// @class VlMgr VlMgr.h "ym/VlMgr.h"
+/// @class VlMgr VlMgr.h "ym/vl/VlMgr.h"
 /// @brief Verilog-HDL の elaboration 結果を保持するクラス
 //////////////////////////////////////////////////////////////////////
 class VlMgr
@@ -62,21 +62,21 @@ public:
 
   /// @brief 登録されているモジュールのリストを返す．
   /// @return 登録されているモジュールのリスト
-  /// @sa PtModule
-  const std::vector<const PtModule*>&
-  pt_module_list() const;
+  /// @sa AstModule
+  const std::vector<const AstModule*>&
+  ast_module_list() const;
 
   /// @brief 登録されている UDP のリストを返す．
   /// @return 登録されている UDP のリスト
   /// @sa PtUdp
-  const std::vector<const PtUdp*>&
-  pt_udp_list() const;
+  const std::vector<const AstUdp*>&
+  ast_udp_list() const;
 
   /// @brief attribute instance のリストを表す構文木要素を返す．
-  /// @sa PtAttrInst, PtBase
-  std::vector<const PtAttrInst*>
-  pt_attr_list(
-    const PtBase* pt_obj ///< [in] 対象の構文木要素
+  /// @sa AstAttrInst, AstBase
+  std::vector<const AstAttrInst*>
+  ast_attr_list(
+    const AstBase* pt_obj ///< [in] 対象の構文木要素
   ) const;
 
 
@@ -263,8 +263,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // Pt オブジェクトを管理するクラス
-  std::unique_ptr<PtMgr> mPtMgr;
+  // Ast オブジェクトを管理するクラス
+  std::unique_ptr<AstMgr> mAstMgr;
 
   // Elb オブジェクトを管理するクラス
   std::unique_ptr<ElbMgr> mElbMgr;
@@ -273,4 +273,4 @@ private:
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // YM_VLMGR_H
+#endif // YM_VL_VLMGR_H

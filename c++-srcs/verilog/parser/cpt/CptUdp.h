@@ -8,12 +8,10 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/pt/PtUdp.h"
-#include "ym/pt/PtP.h"
-#include "ym/VlUdpVal.h"
+#include "parser/PtUdp.h"
+#include "ym/vl/VlUdpVal.h"
 #include "ym/FileRegion.h"
-#include "parser/PtiArray.h"
-#include "parser/PtiFwd.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -30,15 +28,23 @@ public:
   CptUdp(
     const FileRegion& file_region,
     const char* name,
-    PtiPortArray&& port_array,
-    PtiIOHeadArray&& iohead_array,
+    PtPortArray&& port_array,
+    PtIOHeadArray&& iohead_array,
     bool is_seq,
-    const PtExpr* init_value,
-    PtiUdpEntryArray&& entry_array
-  );
+    const AstExpr* init_value,
+    PtUdpEntryArray&& entry_array
+  ) : mFileRegion{file_region},
+      mName{name},
+      mPortArray{std::move(port_array)},
+      mIOHeadArray{std::move(iohead_array)},
+      mSeq{is_seq},
+      mInitValue{init_value},
+      mTableArray{std::move(entry_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptUdp();
+  ~CptUdp() {}
 
 
 public:
@@ -63,7 +69,7 @@ public:
   port_num() const override;
 
   /// @brief ポートを取り出す．
-  const PtPort*
+  const AstPort*
   port(
     SizeType pos ///< [in] 位置 ( 0 <= pos < port_num() )
   ) const override;
@@ -73,13 +79,13 @@ public:
   iohead_num() const override;
 
   /// @brief 入出力宣言ヘッダの取得
-  const PtIOHead*
+  const AstIOHead*
   iohead(
     SizeType pos ///< [in] 位置 ( 0 <= pos < iohead_num() )
   ) const override;
 
   /// @brief 初期値を取出す．
-  const PtExpr*
+  const AstExpr*
   init_value() const override;
 
   /// @brief テーブルの要素数を取り出す．
@@ -87,7 +93,7 @@ public:
   table_num() const override;
 
   /// @brief テーブルの要素を取り出す．
-  const PtUdpEntry*
+  const AstUdpEntry*
   table(
     SizeType pos ///< [in] 位置 ( 0 <= pos < table_num() )
   ) const override;
@@ -105,19 +111,19 @@ private:
   const char* mName;
 
   // ポートの配列
-  PtiPortArray mPortArray;
+  PtPortArray mPortArray;
 
   // 入出力宣言の配列
-  PtiIOHeadArray mIOHeadArray;
+  PtIOHeadArray mIOHeadArray;
 
   // sequential primitive の時 true
   bool mSeq;
 
   // 初期値
-  const PtExpr* mInitValue;
+  const AstExpr* mInitValue;
 
   // テーブル要素の配列
-  PtiUdpEntryArray mTableArray;
+  PtUdpEntryArray mTableArray;
 
 };
 
@@ -133,12 +139,16 @@ public:
   /// @brief コンストラクタ
   CptUdpEntry(
     const FileRegion& file_region,
-    PtiUdpValueArray&& input_array,
-    const PtUdpValue* output
-  );
+    PtUdpValueArray&& input_array,
+    const AstUdpValue* output
+  ) : mFileRegion{file_region},
+      mInputArray{std::move(input_array)},
+      mOutput{output}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptUdpEntry();
+  ~CptUdpEntry() {}
 
 
 public:
@@ -155,17 +165,17 @@ public:
   input_num() const override;
 
   /// @brief 入力値を取り出す．
-  const PtUdpValue*
+  const AstUdpValue*
   input(
     SizeType pos ///< [in] 位置 ( 0 <= pos < input_num() )
   ) const override;
 
   /// @brief 現状態の値を取り出す．
-  const PtUdpValue*
+  const AstUdpValue*
   current() const override;
 
   /// @brief 出力の値を取り出す．
-  const PtUdpValue*
+  const AstUdpValue*
   output() const override;
 
 
@@ -178,10 +188,10 @@ private:
   FileRegion mFileRegion;
 
   // 入力パタンの配列
-  PtiUdpValueArray mInputArray;
+  PtUdpValueArray mInputArray;
 
   // 出力のパタン
-  const PtUdpValue* mOutput;
+  const AstUdpValue* mOutput;
 
 };
 
@@ -197,22 +207,25 @@ public:
   /// @brief コンストラクタ
   CptUdpEntryS(
     const FileRegion& file_region,
-    PtiUdpValueArray&& input_array,
-    const PtUdpValue* current,
-    const PtUdpValue* output
-  );
+    PtUdpValueArray&& input_array,
+    const AstUdpValue* current,
+    const AstUdpValue* output
+  ) : CptUdpEntry(file_region, std::move(input_array), output),
+      mCurrent{current}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptUdpEntryS();
+  ~CptUdpEntryS() {}
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtUdpEntry の仮想関数
+  // AstUdpEntry の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 現状態の値を取り出す．
-  const PtUdpValue*
+  const AstUdpValue*
   current() const override;
 
 
@@ -222,7 +235,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 現状態のパタン
-  const PtUdpValue* mCurrent;
+  const AstUdpValue* mCurrent;
 
 };
 
@@ -239,22 +252,28 @@ public:
   CptUdpValue(
     const FileRegion& file_region,
     char symbol
-  );
+  ) : mFileRegion{file_region},
+      mSymbol{symbol}
+  {
+  }
 
   /// @brief コンストラクタ
   CptUdpValue(
     const FileRegion& file_region,
     char symbol1,
     char symbol2
-  );
+  ) : mFileRegion{file_region},
+      mSymbol{symbol1, symbol2}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptUdpValue();
+  ~CptUdpValue() {}
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtUdpValue の仮想関数
+  // AstUdpValue の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．

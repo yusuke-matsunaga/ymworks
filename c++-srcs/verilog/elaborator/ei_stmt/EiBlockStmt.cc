@@ -9,7 +9,7 @@
 #include "ei/EiFactory.h"
 #include "ei/EiBlockStmt.h"
 #include "ym/vl/VlScope.h"
-#include "ym/pt/PtStmt.h"
+#include "ym/vl/AstStmt.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -23,11 +23,11 @@ const VlStmt*
 EiFactory::new_Begin(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiBegin{parent, process, pt_stmt, stmt_list};
+  auto stmt = new EiBegin{parent, process, ast_stmt, stmt_list};
   return stmt;
 }
 
@@ -36,11 +36,11 @@ const VlStmt*
 EiFactory::new_Fork(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiFork{parent, process, pt_stmt, stmt_list};
+  auto stmt = new EiFork{parent, process, ast_stmt, stmt_list};
   return stmt;
 }
 
@@ -49,11 +49,11 @@ const VlStmt*
 EiFactory::new_NamedBegin(
   const VlScope* block,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiNamedBegin{block, process, pt_stmt, stmt_list};
+  auto stmt = new EiNamedBegin{block, process, ast_stmt, stmt_list};
   return stmt;
 }
 
@@ -62,11 +62,11 @@ const VlStmt*
 EiFactory::new_NamedFork(
   const VlScope* block,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiNamedFork{block, process, pt_stmt, stmt_list};
+  auto stmt = new EiNamedFork{block, process, ast_stmt, stmt_list};
   return stmt;
 }
 
@@ -79,9 +79,9 @@ EiFactory::new_NamedFork(
 EiBlockStmt::EiBlockStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
-) : EiStmtBase{parent, process, pt_stmt},
+) : EiStmtBase{parent, process, ast_stmt},
     mStmtList{stmt_list}
 {
 }
@@ -126,9 +126,9 @@ EiBlockStmt::child_stmt_list() const
 EiBegin::EiBegin(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
-) : EiBlockStmt{parent, process, pt_stmt, stmt_list}
+) : EiBlockStmt{parent, process, ast_stmt, stmt_list}
 {
 }
 
@@ -153,9 +153,9 @@ EiBegin::type() const
 EiFork::EiFork(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
-) : EiBlockStmt{parent, process, pt_stmt, stmt_list}
+) : EiBlockStmt{parent, process, ast_stmt, stmt_list}
 {
 }
 
@@ -180,9 +180,9 @@ EiFork::type() const
 EiNamedBlockStmt::EiNamedBlockStmt(
   const VlScope* scope,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
-) : EiBlockStmt{scope->parent_scope(), process, pt_stmt, stmt_list},
+) : EiBlockStmt{scope->parent_scope(), process, ast_stmt, stmt_list},
     mScope{scope}
 {
 }
@@ -208,9 +208,9 @@ EiNamedBlockStmt::scope() const
 EiNamedBegin::EiNamedBegin(
   const VlScope* block,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
-) : EiNamedBlockStmt{block, process, pt_stmt, stmt_list}
+) : EiNamedBlockStmt{block, process, ast_stmt, stmt_list}
 {
 }
 
@@ -235,9 +235,9 @@ EiNamedBegin::type() const
 EiNamedFork::EiNamedFork(
   const VlScope* block,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
-) : EiNamedBlockStmt{block, process, pt_stmt, stmt_list}
+) : EiNamedBlockStmt{block, process, ast_stmt, stmt_list}
 {
 }
 

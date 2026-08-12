@@ -1,23 +1,23 @@
-﻿#ifndef YM_BITVECTOR_H
-#define YM_BITVECTOR_H
+﻿#ifndef YM_VL_BITVECTOR_H
+#define YM_VL_BITVECTOR_H
 
-/// @file ym/BitVector.h
+/// @file ym/vl/BitVector.h
 /// @brief BitVector のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/VlValueType.h"
-#include "ym/VlScalarVal.h"
-#include "ym/VlTime.h"
+#include "ym/vl/VlValueType.h"
+#include "ym/vl/VlScalarVal.h"
+#include "ym/vl/VlTime.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class BitVector BitVector.h <ym/BitVector.h>
+/// @class BitVector BitVector.h "ym/vl/BitVector.h"
 /// @ingroup VlCommon
 /// @brief Verilog-HDL のビットベクタ値を表すクラス
 ///
@@ -37,19 +37,17 @@ public:
   /// @name コンストラクタ/デストラクタ/代入演算子
   /// @{
 
-  /// @brief unsigned int からのコンストラクタ
+  /// @brief 空のコンストラクタ
   ///
-  /// 空のコンストラクタでもある<br>
+  /// 値は1ビットのXとなる．
+  ///
   /// 結果の型は
   /// - サイズは無し
   /// - 符号なし
   /// - 基数は10
-  explicit
-  BitVector(
-    unsigned int val = 0 ///< [in] 値
-  );
+  BitVector();
 
-  /// @brief SizeType からのコンストラクタ
+  /// @brief SizeType からの変換コンストラクタ
   ///
   /// 結果の型は
   /// - サイズは無し
@@ -60,7 +58,7 @@ public:
     SizeType val ///< [in] 値
   );
 
-  /// @brief int からのキャスト用コンストラクタ
+  /// @brief int からの変換コンストラクタ
   ///
   /// 結果の型は
   /// - サイズは無し
@@ -96,7 +94,7 @@ public:
     VlTime time ///< [in] time 値
   );
 
-  /// @brief スカラ値からのキャスト用コンストラクタ
+  /// @brief スカラ値からの変換コンストラクタ
   /// @sa VlScalarVal
   ///
   /// size を指定するとその数分 value を繰り返す．<br>
@@ -110,7 +108,7 @@ public:
     SizeType size = 1         ///< [in] サイズ (ビット幅)
   );
 
-  /// @brief C文字列からの変換用コンストラクタ
+  /// @brief C文字列からの変換コンストラクタ
   ///
   /// 結果の型は
   /// - サイズはあり
@@ -121,7 +119,7 @@ public:
     const char* str ///< [in] 文字列 (C文字列)
   );
 
-  /// @brief string 文字列からの変換用コンストラクタ
+  /// @brief string 文字列からの変換コンストラクタ
   ///
   /// 結果の型は
   /// - サイズはあり
@@ -188,6 +186,9 @@ public:
     SizeType base         ///< [in] 基数
   );
 
+  /// @brief デストラクタ
+  ~BitVector();
+
   /// @brief コピー代入演算子
   /// @return 代入後の自分自身の参照を返す．
   BitVector&
@@ -211,7 +212,7 @@ public:
   /// - 基数は10
   BitVector&
   operator=(
-    unsigned int val ///< [in] 値
+    SizeType val ///< [in] 値
   );
 
   /// @brief int からの代入演算子
@@ -805,7 +806,7 @@ public:
   /// 上の条件を満たしていないときの値は不定
   /// (というか実際にどういう値を返すのかはソースコードを見ればわかる)
   std::uint32_t
-  to_uint32() const { return static_cast<std::uint32_t>(mVal1.get()[0]); }
+  to_uint32() const { return static_cast<std::uint32_t>(mVal1[0]); }
 
   /// @brief int の数値に変換可能なら true を返す．
   ///
@@ -818,7 +819,7 @@ public:
   /// 上の条件を満たしていないときの値は不定
   /// (というか実際にどういう値を返すのかはソースコードを見ればわかる)
   int
-  to_int() const { return static_cast<int>(mVal1.get()[0]); }
+  to_int() const { return static_cast<int>(mVal1[0]); }
 
   /// @brief 値を double 型に変換する．
   ///
@@ -866,8 +867,8 @@ public:
   VlTime
   to_time() const
   {
-    PLI_UINT32 l = static_cast<PLI_UINT32>(mVal1.get()[0]);
-    PLI_UINT32 h = static_cast<PLI_UINT32>(mVal1.get()[1]);
+    PLI_UINT32 l = static_cast<PLI_UINT32>(mVal1[0]);
+    PLI_UINT32 h = static_cast<PLI_UINT32>(mVal1[1]);
     return VlTime(l, h);
   }
 
@@ -980,7 +981,7 @@ private:
 
   // 値をセットする．(1ワードバージョン)
   void
-  set(
+  set_word(
     uword val0,
     uword val1,
     SizeType size,
@@ -991,7 +992,7 @@ private:
 
   // 値をセットする．(ベクタバージョン)
   void
-  set(
+  set_wordptr(
     const uword* val0,
     const uword* val1,
     SizeType src_size,
@@ -1003,7 +1004,7 @@ private:
 
   // 値をセットする．(ベクタバージョン)
   void
-  set(
+  set_wordvector(
     const std::vector<uword>& val0,
     const std::vector<uword>& val1,
     SizeType src_size,
@@ -1094,8 +1095,8 @@ private:
   // 値を保持するベクタ
   // サイズは block(mSize)
   // mVal0:Val1 の組み合わせで値を表す．
-  std::unique_ptr<uword> mVal0;
-  std::unique_ptr<uword> mVal1;
+  uword* mVal0{nullptr};
+  uword* mVal1{nullptr};
 
 
 public:
@@ -1762,4 +1763,4 @@ operator<<(
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // YM_BITVECTOR_H
+#endif // YM_VL_BITVECTOR_H

@@ -9,7 +9,7 @@
 #include "StmtGen.h"
 #include "ElbEnv.h"
 
-#include "ym/pt/PtStmt.h"
+#include "ym/vl/AstStmt.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,7 +29,7 @@ END_NONAMESPACE
 void
 StmtGen::phase2_namedblock(
   const VlScope* parent,
-  const std::vector<const PtDeclHead*>& pt_head_array
+  const std::vector<const AstDeclHead*>& ast_head_array
 )
 {
   if ( debug ) {
@@ -41,7 +41,7 @@ StmtGen::phase2_namedblock(
 	 << "] )" << std::endl;
   }
 
-  instantiate_decl(parent, pt_head_array);
+  instantiate_decl(parent, ast_head_array);
 
   if ( debug ) {
     dout << "phase2_namedblock end" << std::endl
@@ -55,12 +55,11 @@ StmtGen::instantiate_parblock(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto stmt_list = instantiate_stmt_list(parent, process, env, pt_stmt);
-  auto stmt = mgr().new_Fork(parent, process, pt_stmt, stmt_list);
-  return stmt;
+  auto stmt_list = instantiate_stmt_list(parent, process, env, ast_stmt);
+  return mgr().new_Fork(parent, process, ast_stmt, stmt_list);
 }
 
 // @brief sequential block のインスタンス化を行う．
@@ -69,12 +68,11 @@ StmtGen::instantiate_seqblock(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto stmt_list = instantiate_stmt_list(parent, process, env, pt_stmt);
-  auto stmt = mgr().new_Begin(parent, process, pt_stmt, stmt_list);
-  return stmt;
+  auto stmt_list = instantiate_stmt_list(parent, process, env, ast_stmt);
+  return mgr().new_Begin(parent, process, ast_stmt, stmt_list);
 }
 
 // @brief 名前つき parallel block のインスタンス化を行う．
@@ -83,17 +81,16 @@ StmtGen::instantiate_namedparblock(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto block = mgr().find_namedobj(parent, pt_stmt->name());
+  auto block = mgr().find_namedobj(parent, ast_stmt->name());
   if ( block == nullptr ) {
     throw std::logic_error{"block == nullptr"};
   }
 
-  auto stmt_list = instantiate_stmt_list(block, process, env, pt_stmt);
-  auto stmt = mgr().new_NamedFork(block, process, pt_stmt, stmt_list);
-  return stmt;
+  auto stmt_list = instantiate_stmt_list(block, process, env, ast_stmt);
+  return mgr().new_NamedFork(block, process, ast_stmt, stmt_list);
 }
 
 // @brief 名前つき sequential block のインスタンス化を行う．
@@ -102,17 +99,16 @@ StmtGen::instantiate_namedseqblock(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto block = mgr().find_namedobj(parent, pt_stmt->name());
+  auto block = mgr().find_namedobj(parent, ast_stmt->name());
   if ( block == nullptr ) {
     throw std::logic_error{"block == nullptr"};
   }
 
-  auto stmt_list = instantiate_stmt_list(block, process, env, pt_stmt);
-  auto stmt = mgr().new_NamedBegin(block, process, pt_stmt, stmt_list);
-  return stmt;
+  auto stmt_list = instantiate_stmt_list(block, process, env, ast_stmt);
+  return mgr().new_NamedBegin(block, process, ast_stmt, stmt_list);
 }
 
 // @brief Stmt のリストのインスタンス化を行う．
@@ -121,14 +117,14 @@ StmtGen::instantiate_stmt_list(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  SizeType stmt_num = pt_stmt->stmt_num();
+  SizeType stmt_num = ast_stmt->stmt_num();
   std::vector<const VlStmt*> stmt_list;
   stmt_list.reserve(stmt_num);
-  for ( auto pt_stmt1: pt_stmt->stmt_list() ) {
-    auto stmt1 = instantiate_stmt(parent, process, env, pt_stmt1);
+  for ( auto ast_stmt1: ast_stmt->stmt_list() ) {
+    auto stmt1 = instantiate_stmt(parent, process, env, ast_stmt1);
     if ( !stmt1 ) {
       return std::vector<const VlStmt*>{};
     }
@@ -142,11 +138,10 @@ StmtGen::instantiate_stmt_list(
 const VlScope*
 StmtGen::new_StmtBlockScope(
   const VlScope* parent,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto scope = mgr().new_StmtBlockScope(parent, pt_stmt);
-  return scope;
+  return mgr().new_StmtBlockScope(parent, ast_stmt);
 }
 
 END_NAMESPACE_YM_VERILOG

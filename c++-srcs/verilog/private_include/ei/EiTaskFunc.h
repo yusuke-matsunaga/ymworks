@@ -28,7 +28,7 @@ public:
   /// @brief コンストラクタ
   EiTaskFunc(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item, ///< [in] パース木の定義
+    const AstItem* ast_item, ///< [in] パース木の定義
     SizeType io_num        ///< [in] IOの数
   );
 
@@ -97,7 +97,7 @@ public:
   void
   add_iodecl(
     ElbIOHead* head,         ///< [in] ヘッダ
-    const PtIOItem* pt_item, ///< [in] パース木のIO宣言要素
+    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
     const VlDecl* decl       ///< [in] 対応する宣言要素
   ) override;
 
@@ -113,11 +113,11 @@ protected:
   // 継承クラスから用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief PtItem を取り出す．
-  const PtItem*
-  pt_item() const
+  /// @brief AstItem を取り出す．
+  const AstItem*
+  ast_item() const
   {
-    return mPtItem;
+    return mAstItem;
   }
 
 
@@ -130,7 +130,7 @@ private:
   const VlScope* mParent;
 
   // パース木のタスク/関数定義
-  const PtItem* mPtItem;
+  const AstItem* mAstItem;
 
   // 入出力用ヘッダのリスト
   std::vector<ElbIOHead*> mIOHeadList;
@@ -156,7 +156,7 @@ public:
   /// @brief コンストラクタ
   EiTask(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item, ///< [in] パース木の定義
+    const AstItem* ast_item, ///< [in] パース木の定義
     SizeType io_num        ///< [in] IOの数
   );
 
@@ -249,7 +249,7 @@ public:
   /// @brief コンストラクタ
   EiFunction(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item, ///< [in] パース木の定義
+    const AstItem* ast_item, ///< [in] パース木の定義
     SizeType io_num,       ///< [in] IOの数
     bool const_func        ///< [in] constant function の時 true にする．
   );
@@ -355,9 +355,9 @@ public:
   /// @brief コンストラクタ
   EiFunctionV(
     const VlScope* parent,   ///< [in] 親のスコープ
-    const PtItem* pt_item,   ///< [in] パース木の定義
+    const AstItem* ast_item,   ///< [in] パース木の定義
     SizeType io_num,         ///< [in] IOの数
-    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const AstRange* ast_range, ///< [in] パース木の範囲定義
     const RangeVal& range,   ///< [in] 範囲の値
     bool const_func          ///< [in] 定数関数フラグ
   );

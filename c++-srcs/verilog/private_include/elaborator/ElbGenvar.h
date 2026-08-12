@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ElbDecl.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -55,8 +55,8 @@ public:
 
   /// @brief 元となったパース木の定義要素を返す．
   virtual
-  const PtDeclItem*
-  pt_item() const = 0;
+  const AstDeclItem*
+  ast_item() const = 0;
 
 };
 

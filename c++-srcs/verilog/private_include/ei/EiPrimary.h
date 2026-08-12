@@ -24,7 +24,7 @@ public:
 
   /// @brief コンストラクタ
   EiPrimaryBase(
-    const PtExpr* pt_expr ///< [in] パース木の定義要素
+    const AstExpr* ast_expr ///< [in] パース木の定義要素
   );
 
   /// @brief デストラクタ
@@ -66,7 +66,7 @@ public:
 
   /// @brief コンストラクタ
   EiPrimary(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     const VlDecl* obj      ///< [in] 本体のオブジェクト
   );
 
@@ -142,7 +142,7 @@ public:
 
   /// @brief コンストラクタ
   EiDeclPrimary(
-    const PtDeclItem* pt_item, ///< [in] パース木の定義要素
+    const AstDeclItem* ast_item, ///< [in] パース木の定義要素
     const VlDecl* obj          ///< [in] 本体のオブジェクト
   );
 
@@ -222,8 +222,8 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief パース木の定義要素を返す．
-  const PtBase*
-  pt_obj() const override;
+  const AstBase*
+  ast_obj() const override;
 
 
 private:
@@ -232,7 +232,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const PtDeclItem* mPtObj;
+  const AstDeclItem* mAstObj;
 
   // 対象の宣言要素
   const VlDecl* mObj;
@@ -251,7 +251,7 @@ public:
 
   /// @brief コンストラクタ
   EiDeclArrayPrimary(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     const VlDeclArray* obj ///< [in] 本体のオブジェクト
   );
 
@@ -331,8 +331,8 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief パース木の定義要素を返す．
-  const PtBase*
-  pt_obj() const override;
+  const AstBase*
+  ast_obj() const override;
 
 
 private:
@@ -341,7 +341,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const PtExpr* mPtObj;
+  const AstExpr* mAstObj;
 
   // 対象の宣言要素
   const VlDeclArray* mObj;
@@ -360,7 +360,7 @@ public:
 
   /// @brief コンストラクタ
   EiParamPrimary(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbParameter* obj      ///< [in] 本体のオブジェクト
   );
 
@@ -426,7 +426,7 @@ public:
 
   /// @brief コンストラクタ
   EiArrayElemPrimary(
-    const PtExpr* pt_expr,                  ///< [in] パース木の定義要素
+    const AstExpr* ast_expr,                  ///< [in] パース木の定義要素
     const VlDeclArray* obj,                 ///< [in] 本体のオブジェクト
     const std::vector<ElbExpr*>& index_list ///< [in] インデックスのリスト
   );
@@ -516,7 +516,7 @@ public:
 
   /// @brief コンストラクタ
   EiConstArrayElemPrimary(
-    const PtExpr* pt_expr,  ///< [in] パース木の定義要素
+    const AstExpr* ast_expr,  ///< [in] パース木の定義要素
     const VlDeclArray* obj, ///< [in] 本体のオブジェクト
     SizeType offset         ///< [in] オフセット
   );
@@ -614,7 +614,7 @@ public:
 
   /// @brief コンストラクタ
   EiScopePrimary(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     const VlScope* obj     ///< [in] 本体のオブジェクト
   );
 
@@ -672,7 +672,7 @@ public:
 
   /// @brief コンストラクタ
   EiPrimitivePrimary(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     const VlPrimitive* obj ///< [in] 本体のオブジェクト
   );
 

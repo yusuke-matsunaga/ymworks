@@ -7,14 +7,12 @@
 /// All rights reserved.
 
 #include "parser/Parser.h"
-
 #include "scanner/Lex.h"
-
-#include "parser/PtMgr.h"
-#include "parser/PtiFactory.h"
-#include "ym/pt/PtModule.h"
-#include "ym/pt/PtExpr.h"
-
+#include "parser/AstMgr.h"
+#include "parser/PtFactory.h"
+#include "parser/PtModule.h"
+#include "parser/PtPort.h"
+#include "parser/PtItem.h"
 #include "ym/MsgMgr.h"
 
 
@@ -56,12 +54,8 @@ Parser::new_Module1995(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  PtrList<const PtAttrInst>* ai_list)
+  PtAttrInstList* ai_list)
 {
-  auto port_vector = get_port_vector();
-  auto paramport_array = get_paramport_array();
-  auto iohead_array = get_module_io_array();
-
   bool is_cell = lex().cell_define();
   bool is_protected = false; // これどうやって決めるの？
   int time_u = lex().time_unit();
@@ -85,7 +79,7 @@ Parser::new_Module1995(
 
   // ポート宣言とIO宣言のチェックを行う．
   std::unordered_map<std::string, VpiDir> iodecl_dirs;
-  check_IO(port_vector, iohead_array, iodecl_dirs);
+  check_IO(mPortList, mModuleIOHeadList, iodecl_dirs);
 
   // 今度はポートリストに現れている信号線が入出力ポート宣言されているか
   // 調べる．
@@ -111,29 +105,29 @@ Parser::new_Module1995(
 			buf.str());
       }
       else {
-	VpiDir dir = iodecl_dirs.at(name);
-	port->_set_portref_dir(i, dir);
+	auto dir = iodecl_dirs.at(name);
+	port->set_portref_dir(i, dir);
       }
     }
   }
 
-  auto module = mFactory->new_Module(file_region,
-				     module_name,
-				     is_macro,
-				     is_cell,
-				     is_protected,
-				     time_u, time_p,
-				     nettype, unconn,
-				     delay, decay,
-				     named_port,
-				     portfaults, suppress_faults,
-				     config, library, cell,
-				     paramport_array,
-				     port_vector,
-				     iohead_array,
-				     mCurDeclArray,
-				     mCurItemArray);
-  mPtMgr.reg_module(module);
+  auto module = mFactory.new_Module(file_region,
+				    module_name,
+				    is_macro,
+				    is_cell,
+				    is_protected,
+				    time_u, time_p,
+				    nettype, unconn,
+				    delay, decay,
+				    named_port,
+				    portfaults, suppress_faults,
+				    config, library, cell,
+				    PtDeclHeadArray(mAlloc, mParamPortHeadList, true),
+				    PtPortArray(mAlloc, mPortList, true),
+				    PtIOHeadArray(mAlloc, mModuleIOHeadList, true),
+				    PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				    PtItemArray(mAlloc, mCurItemArray, true));
+  mAstMgr.reg_module(module);
   reg_attrinst(module, ai_list, true);
 }
 
@@ -143,12 +137,9 @@ Parser::new_Module2001(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  PtrList<const PtAttrInst>* ai_list
+  PtAttrInstList* ai_list
 )
 {
-  auto paramport_array = get_paramport_array();
-  auto iohead_array = get_module_io_array();
-
   bool is_cell = lex().cell_define();
   bool is_protected = false; // これどうやって決めるの？
   int time_u = lex().time_unit();
@@ -170,35 +161,35 @@ Parser::new_Module2001(
   std::string library; // ?
   std::string cell;    // ?
 
-  if ( !check_PortArray(iohead_array) ) {
+  if ( !check_PortArray(mModuleIOHeadList) ) {
     return;
   }
 
   // iohead_array からポートの配列を作る．
-  auto port_array = new_PortArray(iohead_array);
+  auto port_array = new_PortArray(mModuleIOHeadList);
 
-  auto module = mFactory->new_Module(file_region,
-				     module_name,
-				     is_macro, is_cell, is_protected,
-				     time_u, time_p, nettype,
-				     unconn, delay, decay,
-				     true,
-				     portfaults, suppress_faults,
-				     config, library, cell,
-				     paramport_array,
-				     port_array,
-				     iohead_array,
-				     mCurDeclArray,
-				     mCurItemArray);
-  mPtMgr.reg_module(module);
+  auto module = mFactory.new_Module(file_region,
+				    module_name,
+				    is_macro, is_cell, is_protected,
+				    time_u, time_p, nettype,
+				    unconn, delay, decay,
+				    true,
+				    portfaults, suppress_faults,
+				    config, library, cell,
+				    PtDeclHeadArray(mAlloc, mParamPortHeadList, true),
+				    PtPortArray(mAlloc, port_array, true),
+				    PtIOHeadArray(mAlloc, mModuleIOHeadList, true),
+				    PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				    PtItemArray(mAlloc, mCurItemArray, true));
+  mAstMgr.reg_module(module);
   reg_attrinst(module, ai_list, true);
 }
 
 // @brief ポート宣言とIO宣言の齟齬をチェックする．
 void
 Parser::check_IO(
-  const std::vector<const PtPort*>& port_array,
-  const std::vector<const PtIOHead*>& iohead_array,
+  const std::vector<PtPort*>& port_array,
+  const std::vector<PtIOHead*>& iohead_array,
   std::unordered_map<std::string, VpiDir>& iodecl_dirs
 )
 {

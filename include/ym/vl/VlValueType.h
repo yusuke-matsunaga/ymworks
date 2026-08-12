@@ -1,11 +1,11 @@
-﻿#ifndef YM_VLVALUETYPE_H
-#define YM_VLVALUETYPE_H
+﻿#ifndef YM_VL_VLVALUETYPE_H
+#define YM_VL_VLVALUETYPE_H
 
-/// @file ym/VlValueType.h
+/// @file ym/vl/VlValueType.h
 /// @brief VlValueType のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/verilog.h"
@@ -23,7 +23,7 @@ const SizeType kVpiSizeReal = 64U;
 const SizeType kVpiSizeTime = 64U;
 
 //////////////////////////////////////////////////////////////////////
-/// @class VlValueType VlValueType.h "ym/VlValueType.h"
+/// @class VlValueType VlValueType.h "ym/vl/VlValueType.h"
 /// @brief verilog の値の型を表すクラス
 //////////////////////////////////////////////////////////////////////
 class VlValueType
@@ -269,4 +269,4 @@ operator<<(
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // YM_VLVALUETYPE_H
+#endif // YM_VL_VLVALUETYPE_H

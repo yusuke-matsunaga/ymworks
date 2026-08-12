@@ -10,7 +10,7 @@
 #include "ei/EiAttribute.h"
 #include "elaborator/ElbExpr.h"
 
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,12 +22,12 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief attribute instance のリストを生成する．
 const VlAttribute*
 EiFactory::new_Attribute(
-  const PtAttrSpec* pt_attr,
+  const AstAttrSpec* ast_attr,
   const VlExpr* expr,
   bool def
 )
 {
-  auto attr = new EiAttribute(pt_attr, expr, def);
+  auto attr = new EiAttribute(ast_attr, expr, def);
   return attr;
 }
 
@@ -38,10 +38,10 @@ EiFactory::new_Attribute(
 
 // @brief コンストラクタ
 EiAttribute::EiAttribute(
-  const PtAttrSpec* pt_attr,
+  const AstAttrSpec* ast_attr,
   const VlExpr* expr,
   bool def
-) : mPtAttrSpec{pt_attr},
+) : mAstAttrSpec{ast_attr},
     mExpr{expr},
     mDef{def}
 {
@@ -63,14 +63,14 @@ EiAttribute::type() const
 FileRegion
 EiAttribute::file_region() const
 {
-  return mPtAttrSpec->file_region();
+  return mAstAttrSpec->file_region();
 }
 
 // @brief 属性名を返す．
 const char*
 EiAttribute::name() const
 {
-  return mPtAttrSpec->name();
+  return mAstAttrSpec->name();
 }
 
 // @brief def_attribute なら true を返す．

@@ -8,11 +8,9 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiAssignment.h"
-
 #include "elaborator/ElbExpr.h"
-
 #include "ym/vl/VlControl.h"
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,7 +24,7 @@ const VlStmt*
 EiFactory::new_Assignment(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs,
   bool block,
@@ -35,11 +33,11 @@ EiFactory::new_Assignment(
 {
   const VlStmt* stmt = nullptr;
   if ( block ) {
-    stmt = new EiAssignment{parent, process, pt_stmt,
+    stmt = new EiAssignment{parent, process, ast_stmt,
 			    lhs, rhs, control};
   }
   else {
-    stmt = new EiNbAssignment{parent, process, pt_stmt,
+    stmt = new EiNbAssignment{parent, process, ast_stmt,
 			      lhs, rhs, control};
   }
   return stmt;
@@ -50,12 +48,12 @@ const VlStmt*
 EiFactory::new_AssignStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  auto stmt = new EiAssignStmt{parent, process, pt_stmt,
+  auto stmt = new EiAssignStmt{parent, process, ast_stmt,
 			       lhs, rhs};
   return stmt;
 }
@@ -65,11 +63,11 @@ const VlStmt*
 EiFactory::new_DeassignStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs
 )
 {
-  auto stmt = new EiDeassignStmt{parent, process, pt_stmt,
+  auto stmt = new EiDeassignStmt{parent, process, ast_stmt,
 				 lhs};
 
   return stmt;
@@ -80,12 +78,12 @@ const VlStmt*
 EiFactory::new_ForceStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  auto stmt = new EiForceStmt{parent, process, pt_stmt,
+  auto stmt = new EiForceStmt{parent, process, ast_stmt,
 			      lhs, rhs};
   return stmt;
 }
@@ -95,11 +93,11 @@ const VlStmt*
 EiFactory::new_ReleaseStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs
 )
 {
-  auto stmt = new EiReleaseStmt{parent, process, pt_stmt,
+  auto stmt = new EiReleaseStmt{parent, process, ast_stmt,
 				lhs};
   return stmt;
 }
@@ -113,10 +111,10 @@ EiFactory::new_ReleaseStmt(
 EiAssignBase::EiAssignBase(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiStmtBase{parent, process, pt_stmt},
+) : EiStmtBase{parent, process, ast_stmt},
     mLhs{lhs},
     mRhs{rhs}
 {
@@ -150,11 +148,11 @@ EiAssignBase::rhs() const
 EiNbAssignment::EiNbAssignment(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs,
   const VlControl* control
-) : EiAssignBase{parent, process, pt_stmt, lhs, rhs},
+) : EiAssignBase{parent, process, ast_stmt, lhs, rhs},
     mControl{control}
 {
 }
@@ -187,11 +185,11 @@ EiNbAssignment::control() const
 EiAssignment::EiAssignment(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs,
   const VlControl* control
-) : EiNbAssignment{parent, process, pt_stmt, lhs, rhs, control}
+) : EiNbAssignment{parent, process, ast_stmt, lhs, rhs, control}
 {
 }
 
@@ -216,10 +214,10 @@ EiAssignment::is_blocking() const
 EiAssignStmt::EiAssignStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiAssignBase{parent, process, pt_stmt, lhs, rhs}
+) : EiAssignBase{parent, process, ast_stmt, lhs, rhs}
 {
 }
 
@@ -244,10 +242,10 @@ EiAssignStmt::type() const
 EiForceStmt::EiForceStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiAssignBase{parent, process, pt_stmt, lhs, rhs}
+) : EiAssignBase{parent, process, ast_stmt, lhs, rhs}
 {
 }
 
@@ -272,9 +270,9 @@ EiForceStmt::type() const
 EiDeassignBase::EiDeassignBase(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs
-) : EiStmtBase{parent, process, pt_stmt},
+) : EiStmtBase{parent, process, ast_stmt},
     mLhs{lhs}
 {
 }
@@ -300,9 +298,9 @@ EiDeassignBase::lhs() const
 EiDeassignStmt::EiDeassignStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs
-) : EiDeassignBase{parent, process, pt_stmt, lhs}
+) : EiDeassignBase{parent, process, ast_stmt, lhs}
 {
 }
 
@@ -327,9 +325,9 @@ EiDeassignStmt::type() const
 EiReleaseStmt::EiReleaseStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   const VlExpr* lhs
-) : EiDeassignBase{parent, process, pt_stmt, lhs}
+) : EiDeassignBase{parent, process, ast_stmt, lhs}
 {
 }
 

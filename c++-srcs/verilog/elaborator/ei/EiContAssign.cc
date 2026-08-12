@@ -11,8 +11,8 @@
 #include "elaborator/ElbExpr.h"
 
 #include "ym/vl/VlDelay.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstItem.h"
+#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,15 +25,15 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbCaHead*
 EiFactory::new_CaHead(
   const VlModule* module,
-  const PtItem* pt_head,
+  const AstItem* ast_head,
   const VlDelay* delay
 )
 {
   if ( delay ) {
-    return new EiCaHeadD(module, pt_head, delay);
+    return new EiCaHeadD(module, ast_head, delay);
   }
   else {
-    return new EiCaHead(module, pt_head);
+    return new EiCaHead(module, ast_head);
   }
 }
 
@@ -41,24 +41,24 @@ EiFactory::new_CaHead(
 const VlContAssign*
 EiFactory::new_ContAssign(
   ElbCaHead* head,
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  return  new EiContAssign1(head, pt_obj, lhs, rhs);
+  return  new EiContAssign1(head, ast_obj, lhs, rhs);
 }
 
 // @brief net 宣言中の continuous assignment を生成する．
 const VlContAssign*
 EiFactory::new_ContAssign(
   const VlModule* module,
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  return new EiContAssign2(module, pt_obj, lhs, rhs);
+  return new EiContAssign2(module, ast_obj, lhs, rhs);
 }
 
 
@@ -69,9 +69,9 @@ EiFactory::new_ContAssign(
 // @brief コンストラクタ
 EiCaHead::EiCaHead(
   const VlModule* module,
-  const PtItem* pt_head
+  const AstItem* ast_head
 ) : mModule{module},
-    mPtHead{pt_head}
+    mAstHead{ast_head}
 {
 }
 
@@ -91,8 +91,8 @@ EiCaHead::module() const
 VpiStrength
 EiCaHead::drive0() const
 {
-  if ( mPtHead->strength() ) {
-    return mPtHead->strength()->drive0();
+  if ( mAstHead->strength() ) {
+    return mAstHead->strength()->drive0();
   }
   return VpiStrength::NoStrength;
 }
@@ -101,8 +101,8 @@ EiCaHead::drive0() const
 VpiStrength
 EiCaHead::drive1() const
 {
-  if ( mPtHead->strength() ) {
-    return mPtHead->strength()->drive0();
+  if ( mAstHead->strength() ) {
+    return mAstHead->strength()->drive0();
   }
   return VpiStrength::NoStrength;
 }
@@ -123,9 +123,9 @@ EiCaHead::delay() const
 // @brief コンストラクタ
 EiCaHeadD::EiCaHeadD(
   const VlModule* module,
-  const PtItem* pt_head,
+  const AstItem* ast_head,
   const VlDelay* delay
-) : EiCaHead(module, pt_head),
+) : EiCaHead(module, ast_head),
     mDelay{delay}
 {
 }
@@ -149,10 +149,10 @@ EiCaHeadD::delay() const
 
 // @brief コンストラクタ
 EiContAssign::EiContAssign(
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : mPtObj{pt_obj},
+) : mAstObj{ast_obj},
     mLhs{lhs},
     mRhs{rhs}
 {
@@ -174,7 +174,7 @@ EiContAssign::type() const
 FileRegion
 EiContAssign::file_region() const
 {
-  return mPtObj->file_region();
+  return mAstObj->file_region();
 }
 
 // @brief ビット幅を返す．
@@ -206,10 +206,10 @@ EiContAssign::rhs() const
 // @brief コンストラクタ
 EiContAssign1::EiContAssign1(
   ElbCaHead* head,
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiContAssign(pt_obj, lhs, rhs),
+) : EiContAssign(ast_obj, lhs, rhs),
     mHead{head}
 {
 }
@@ -262,10 +262,10 @@ EiContAssign1::has_net_decl_assign() const
 // @brief コンストラクタ
 EiContAssign2::EiContAssign2(
   const VlModule* module,
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiContAssign(pt_obj, lhs, rhs),
+) : EiContAssign(ast_obj, lhs, rhs),
     mModule{module}
 {
 }

@@ -8,10 +8,9 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/pt/PtMisc.h"
+#include "parser/PtMisc.h"
 #include "ym/FileRegion.h"
-#include "parser/PtiArray.h"
-#include "parser/PtiFwd.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -39,7 +38,7 @@ public:
   /// @brief 遅延式の取得
   /// @retval 遅延を表す式 delay control の場合
   /// @retval nullptr 上記以外
-  const PtExpr*
+  const AstExpr*
   delay() const override;
 
   /// @brief イベントリストの要素数の取得
@@ -51,7 +50,7 @@ public:
   /// @brief イベントリストの要素の取得
   ///
   /// event control/repeat control の場合のみ意味を持つ
-  const PtExpr*
+  const AstExpr*
   event(
     SizeType pos ///< [in] 位置 ( 0 <= pos < event_num() )
   ) const override;
@@ -59,7 +58,7 @@ public:
   /// @brief 繰り返し数の取得
   /// @retval 繰り返し数を表す式 repeat control の場合
   /// @retval nullptr 上記以外
-  const PtExpr*
+  const AstExpr*
   rep_expr() const override;
 
 };
@@ -76,11 +75,17 @@ public:
   /// @brief コンストラクタ
   CptDelayControl(
     const FileRegion& file_region,
-    const PtExpr* value
-  );
+    const AstExpr* value
+  ) : mTopLoc{file_region.start_loc()},
+      mDelay{value}
+  {
+    if ( value == nullptr ) {
+      throw std::logic_error{"value = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptDelayControl();
+  ~CptDelayControl() {}
 
 
 public:
@@ -93,11 +98,11 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  PtCtrlType
+  Type
   type() const override;
 
   /// @brief 遅延式を返す．
-  const PtExpr*
+  const AstExpr*
   delay() const override;
 
 
@@ -110,7 +115,7 @@ private:
   FileLoc mTopLoc;
 
   // 遅延を表す式
-  const PtExpr* mDelay;
+  const AstExpr* mDelay;
 
 };
 
@@ -126,11 +131,14 @@ public:
   /// @brief コンストラクタ
   CptEventControl(
     const FileRegion& file_region,
-    PtiExprArray&& event_array
-  );
+    PtExprArray&& event_array
+  ) : mFileRegion{file_region},
+      mEventArray{std::move(event_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptEventControl();
+  ~CptEventControl() {}
 
 
 public:
@@ -143,7 +151,7 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  PtCtrlType
+  Type
   type() const override;
 
   /// @brief イベントリストの要素数の取得
@@ -155,7 +163,7 @@ public:
   /// @brief イベントリストの要素の取得
   ///
   /// event control/repeat control の場合のみ意味を持つ
-  const PtExpr*
+  const AstExpr*
   event(
     SizeType pos ///< [in] 位置 ( 0 <= pos < event_num() )
   ) const override;
@@ -170,7 +178,7 @@ private:
   FileRegion mFileRegion;
 
   // イベントの配列
-  PtiExprArray mEventArray;
+  PtExprArray mEventArray;
 
 };
 
@@ -186,12 +194,18 @@ public:
   /// @brief コンストラクタ
   CptRepeatControl(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    PtiExprArray&& event_array
-  );
+    const AstExpr* expr,
+    PtExprArray&& event_array
+  ) : CptEventControl{file_region, std::move(event_array)},
+      mRepExpr{expr}
+  {
+    if ( expr == nullptr ) {
+      throw std::logic_error{"expr = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptRepeatControl();
+  ~CptRepeatControl() {}
 
 
 public:
@@ -200,11 +214,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  PtCtrlType
+  Type
   type() const override;
 
   /// @brief 繰り返し数を得る．
-  const PtExpr*
+  const AstExpr*
   rep_expr() const override;
 
 
@@ -214,7 +228,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 繰り返し数を表す式
-  const PtExpr* mRepExpr;
+  const AstExpr* mRepExpr;
 
 };
 
@@ -230,11 +244,14 @@ protected:
   /// @brief コンストラクタ
   CptConnection(
     const FileRegion& file_region,
-    const PtExpr* expr
-  );
+    const AstExpr* expr
+  ) : mFileRegion{file_region},
+      mExpr{expr}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptConnection();
+  ~CptConnection() {}
 
 
 public:
@@ -253,7 +270,7 @@ public:
   name() const override;
 
   /// @brief 式を取り出す．
-  const PtExpr*
+  const AstExpr*
   expr() const override;
 
 
@@ -266,7 +283,7 @@ private:
   FileRegion mFileRegion;
 
   // 接続を表す式
-  const PtExpr* mExpr;
+  const AstExpr* mExpr;
 
 };
 
@@ -282,11 +299,13 @@ public:
   /// @brief コンストラクタ
   CptOrderedCon(
     const FileRegion& file_region,
-    const PtExpr* expr
-  );
+    const AstExpr* expr
+  ) : CptConnection(file_region, expr)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptOrderedCon();
+  ~CptOrderedCon() {}
 
 };
 
@@ -303,11 +322,14 @@ public:
   CptNamedCon(
     const FileRegion& file_region,
     const char* name,
-    const PtExpr* expr
-  );
+    const AstExpr* expr
+  ) : CptConnection(file_region, expr),
+      mName{name}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNamedCon();
+  ~CptNamedCon() {}
 
 
 public:
@@ -344,16 +366,22 @@ public:
     const FileRegion& file_region,
     VpiStrength value1,
     VpiStrength value2
-  );
+  ) : mFileRegion{file_region},
+      mValue{value1, value2, VpiStrength::NoStrength}
+  {
+  }
 
   /// @brief charge strength を表すコンストラクタ
   CptStrength(
     const FileRegion& file_region,
     VpiStrength value1
-  );
+  ) : mFileRegion{file_region},
+      mValue{VpiStrength::NoStrength, VpiStrength::NoStrength, value1}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptStrength();
+  ~CptStrength() {}
 
 
 public:
@@ -403,26 +431,35 @@ public:
   /// @brief 一つの値をとるコンストラクタ
   CptDelay(
     const FileRegion& file_region,
-    const PtExpr* value1
-  );
+    const AstExpr* value1
+  ) : mFileRegion{file_region},
+      mValue{value1, nullptr, nullptr}
+  {
+  }
 
   /// @brief 二つの値をとるコンストラクタ
   CptDelay(
     const FileRegion& file_region,
-    const PtExpr* value1,
-    const PtExpr* value2
-  );
+    const AstExpr* value1,
+    const AstExpr* value2
+  ) : mFileRegion{file_region},
+      mValue{value1, value2, nullptr}
+  {
+  }
 
   /// @brief 三つの値をとるコンストラクタ
   CptDelay(
     const FileRegion& file_region,
-    const PtExpr* value1,
-    const PtExpr* value2,
-    const PtExpr* value3
-  );
+    const AstExpr* value1,
+    const AstExpr* value2,
+    const AstExpr* value3
+  ) : mFileRegion{file_region},
+      mValue{value1, value2, value3}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptDelay();
+  ~CptDelay() {}
 
 
 public:
@@ -435,7 +472,7 @@ public:
   file_region() const override;
 
   /// @brief 値を取り出す．
-  const PtExpr*
+  const AstExpr*
   value(
     SizeType pos
   ) const override;
@@ -450,7 +487,7 @@ private:
   FileRegion mFileRegion;
 
   // 値のリスト
-  const PtExpr* mValue[3];
+  const AstExpr* mValue[3];
 
 };
 
@@ -466,10 +503,12 @@ public:
   /// @brief コンストラクタ
   CptNameBranch(
     const char* name
-  );
+  ) : mName{name}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNameBranch();
+  ~CptNameBranch() {}
 
 
 public:
@@ -516,10 +555,13 @@ public:
   CptNameBranchI(
     const char* name,
     int index
-  );
+  ) : CptNameBranch(name),
+      mIndex{index}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNameBranchI();
+  ~CptNameBranchI() {}
 
 
 public:
@@ -557,11 +599,13 @@ public:
 
   /// @brief コンストラクタ
   CptAttrInst(
-    PtiAttrSpecArray&& as_array
-  );
+    PtAttrSpecArray&& as_array
+  ) : mAttrSpecArray{std::move(as_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptAttrInst();
+  ~CptAttrInst() {}
 
 
 public:
@@ -578,7 +622,7 @@ public:
   attrspec_num() const override;
 
   /// @brief 要素の取得
-  const PtAttrSpec*
+  const AstAttrSpec*
   attrspec(
     SizeType pos ///< [in] 位置 ( 0 <= pos < attrspec_num() )
   ) const override;
@@ -590,7 +634,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // attr spec のリスト
-  PtiAttrSpecArray mAttrSpecArray;
+  PtAttrSpecArray mAttrSpecArray;
 
 };
 
@@ -607,11 +651,15 @@ public:
   CptAttrSpec(
     const FileRegion& file_region,
     const char* name,
-    const PtExpr* expr
-  );
+    const AstExpr* expr
+  ) : mFileRegion{file_region},
+      mName{name},
+      mExpr{expr}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptAttrSpec();
+  ~CptAttrSpec() {}
 
 
 public:
@@ -628,7 +676,7 @@ public:
   name() const override;
 
   /// @brief 式を取り出す．nullptr の場合もある．
-  const PtExpr*
+  const AstExpr*
   expr() const override;
 
 
@@ -644,7 +692,7 @@ private:
   const char* mName;
 
   // 式
-  const PtExpr* mExpr;
+  const AstExpr* mExpr;
 
 };
 

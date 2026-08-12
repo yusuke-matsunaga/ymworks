@@ -7,27 +7,15 @@
 /// All rights reserved.
 
 #include "CptStmt.h"
-#include "parser/CptFactory.h"
-#include "parser/PuHierName.h"
+#include "parser/PtFactory.h"
+#include "parser/PtHierName.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// statement の共通の親クラス
+/// クラス CptStmt
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptStmt::CptStmt(
-  const FileRegion& file_region
-) : mFileRegion{file_region}
-{
-}
-
-// デストラクタ
-CptStmt::~CptStmt()
-{
-}
 
 // ファイル位置の取得
 FileRegion
@@ -41,32 +29,32 @@ const char*
 CptStmt::stmt_name() const
 {
   switch ( type() ) {
-  case PtStmtType::Disable:       return "disable statement";
-  case PtStmtType::Enable:        return "task enable statement";
-  case PtStmtType::SysEnable:     return "system task enable statement";
-  case PtStmtType::DelayControl:  return "delay control statement";
-  case PtStmtType::EventControl:  return "event control statement";
-  case PtStmtType::Assign:        return "assignment";
-  case PtStmtType::NbAssign:      return "nonblocking assignment";
-  case PtStmtType::Event:         return "event statement";
-  case PtStmtType::Null:          return "null statement";
-  case PtStmtType::If:            return "if statement";
-  case PtStmtType::Case:          return "case statement";
-  case PtStmtType::CaseX:         return "casex statement";
-  case PtStmtType::CaseZ:         return "casez statement";
-  case PtStmtType::Wait:          return "wait statement";
-  case PtStmtType::Forever:       return "forever statement";
-  case PtStmtType::Repeat:        return "repeat statement";
-  case PtStmtType::While:         return "while statement";
-  case PtStmtType::For:           return "for-loop statement";
-  case PtStmtType::PcAssign:      return "procedural continuous assignment";
-  case PtStmtType::Deassign:      return "deassign statement";
-  case PtStmtType::Force:         return "force statement";
-  case PtStmtType::Release:       return "release statement";
-  case PtStmtType::NamedParBlock:
-  case PtStmtType::ParBlock:      return "parallel block";
-  case PtStmtType::NamedSeqBlock:
-  case PtStmtType::SeqBlock:      return "sequential block";
+  case Disable:       return "disable statement";
+  case Enable:        return "task enable statement";
+  case SysEnable:     return "system task enable statement";
+  case DelayControl:  return "delay control statement";
+  case EventControl:  return "event control statement";
+  case Assign:        return "assignment";
+  case NbAssign:      return "nonblocking assignment";
+  case Event:         return "event statement";
+  case Null:          return "null statement";
+  case If:            return "if statement";
+  case Case:          return "case statement";
+  case CaseX:         return "casex statement";
+  case CaseZ:         return "casez statement";
+  case Wait:          return "wait statement";
+  case Forever:       return "forever statement";
+  case Repeat:        return "repeat statement";
+  case While:         return "while statement";
+  case For:           return "for-loop statement";
+  case PcAssign:      return "procedural continuous assignment";
+  case Deassign:      return "deassign statement";
+  case Force:         return "force statement";
+  case Release:       return "release statement";
+  case NamedParBlock:
+  case ParBlock:      return "parallel block";
+  case NamedSeqBlock:
+  case SeqBlock:      return "sequential block";
   }
   return "";
 }
@@ -79,7 +67,7 @@ CptStmt::namebranch_num() const
 }
 
 // @brief 階層ブランチの取得
-const PtNameBranch*
+const AstNameBranch*
 CptStmt::namebranch(
   SizeType pos
 ) const
@@ -102,7 +90,7 @@ CptStmt::arg_num() const
 }
 
 // @brief 引数の取得
-const PtExpr*
+const AstExpr*
 CptStmt::arg(
   SizeType pos
 ) const
@@ -111,49 +99,49 @@ CptStmt::arg(
 }
 
 // @brief コントロールの取得
-const PtControl*
+const AstControl*
 CptStmt::control() const
 {
   return nullptr;
 }
 
 // @brief 本体のステートメントの取得
-const PtStmt*
+const AstStmt*
 CptStmt::body() const
 {
   return nullptr;
 }
 
 // @brief 式の取得
-const PtExpr*
+const AstExpr*
 CptStmt::expr() const
 {
   return nullptr;
 }
 
 // @brief 左辺式の取得
-const PtExpr*
+const AstExpr*
 CptStmt::lhs() const
 {
   return nullptr;
 }
 
 // @brief 右辺式の取得
-const PtExpr*
+const AstExpr*
 CptStmt::rhs() const
 {
   return nullptr;
 }
 
 // @brief イベントプライマリの取得
-const PtExpr*
+const AstExpr*
 CptStmt::primary() const
 {
   return nullptr;
 }
 
 // @brief 条件が成り立たなかったとき実行されるステートメントの取得
-const PtStmt*
+const AstStmt*
 CptStmt::else_body() const
 {
   return nullptr;
@@ -167,7 +155,7 @@ CptStmt::caseitem_num() const
 }
 
 // @brief case item の取得
-const PtCaseItem*
+const AstCaseItem*
 CptStmt::caseitem(
   SizeType pos
 ) const
@@ -176,14 +164,14 @@ CptStmt::caseitem(
 }
 
 // @brief 初期化代入文の取得
-const PtStmt*
+const AstStmt*
 CptStmt::init_stmt() const
 {
   return nullptr;
 }
 
 // @brief 繰り返し代入文の取得
-const PtStmt*
+const AstStmt*
 CptStmt::next_stmt() const
 {
   return nullptr;
@@ -197,7 +185,7 @@ CptStmt::declhead_num() const
 }
 
 // @brief 宣言ヘッダの取得
-const PtDeclHead*
+const AstDeclHead*
 CptStmt::declhead(
   SizeType pos
 ) const
@@ -213,7 +201,7 @@ CptStmt::stmt_num() const
 }
 
 // @brief 子供のステートメントの取得
-const PtStmt*
+const AstStmt*
 CptStmt::stmt(
   SizeType pos
 ) const
@@ -223,28 +211,14 @@ CptStmt::stmt(
 
 
 //////////////////////////////////////////////////////////////////////
-// disable 文 を表すクラス
+// クラス CptDisable
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptDisable::CptDisable(
-  const FileRegion& file_region,
-  const char* name
-) : CptStmt{file_region},
-    mName{name}
-{
-}
-
-// デストラクタ
-CptDisable::~CptDisable()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptDisable::type() const
 {
-  return PtStmtType::Disable;
+  return Disable;
 }
 
 // 末尾の名前を返す．
@@ -256,23 +230,8 @@ CptDisable::name() const
 
 
 //////////////////////////////////////////////////////////////////////
-// 階層つき名前を持つ disable 文 を表すクラス
+// クラス CptDisableH
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptDisableH::CptDisableH(
-  const FileRegion& file_region,
-  PtiNameBranchArray&& nb_array,
-  const char* tail_name
-) : CptDisable{file_region, tail_name},
-    mNbArray{std::move(nb_array)}
-{
-}
-
-// デストラクタ
-CptDisableH::~CptDisableH()
-{
-}
 
 // @brief 階層ブランチの要素数の取得
 SizeType
@@ -282,7 +241,7 @@ CptDisableH::namebranch_num() const
 }
 
 // @brief 階層ブランチの取得
-const PtNameBranch*
+const AstNameBranch*
 CptDisableH::namebranch(
   SizeType pos
 ) const
@@ -292,24 +251,8 @@ CptDisableH::namebranch(
 
 
 //////////////////////////////////////////////////////////////////////
-// task enable 文 / system task enable 文に共通な基底クラス
+// クラス CptEnableBase
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptEnableBase::CptEnableBase(
-  const FileRegion& file_region,
-  const char* name,
-  PtiExprArray&& arg_array
-) : CptStmt{file_region},
-    mName{name},
-    mArgArray{std::move(arg_array)}
-{
-}
-
-// デストラクタ
-CptEnableBase::~CptEnableBase()
-{
-}
 
 // 末尾の名前を返す．
 const char*
@@ -326,7 +269,7 @@ CptEnableBase::arg_num() const
 }
 
 // @brief 引数の取得
-const PtExpr*
+const AstExpr*
 CptEnableBase::arg(
   SizeType pos
 ) const
@@ -336,50 +279,20 @@ CptEnableBase::arg(
 
 
 //////////////////////////////////////////////////////////////////////
-// 階層なしの名前を持つ task enable 文を表すクラス
+// クラス CptEnable
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptEnable::CptEnable(
-  const FileRegion& file_region,
-  const char* name,
-  PtiExprArray&& arg_array
-) : CptEnableBase{file_region, name, std::move(arg_array)}
-{
-}
-
-// デストラクタ
-CptEnable::~CptEnable()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptEnable::type() const
 {
-  return PtStmtType::Enable;
+  return Enable;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// 階層つき名前を持つ enable 文 を表すクラス
+// クラス CptEnableH
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptEnableH::CptEnableH(
-  const FileRegion& file_region,
-  PtiNameBranchArray&& nb_array,
-  const char* tail_name,
-  PtiExprArray&& arg_array
-) : CptEnable{file_region, tail_name, std::move(arg_array)},
-    mNbArray{std::move(nb_array)}
-{
-}
-
-// デストラクタ
-CptEnableH::~CptEnableH()
-{
-}
 
 // @brief 階層ブランチの要素数の取得
 SizeType
@@ -389,7 +302,7 @@ CptEnableH::namebranch_num() const
 }
 
 // @brief 階層ブランチの取得
-const PtNameBranch*
+const AstNameBranch*
 CptEnableH::namebranch(
   SizeType pos
 ) const
@@ -399,62 +312,30 @@ CptEnableH::namebranch(
 
 
 //////////////////////////////////////////////////////////////////////
-// system task enable 文 を表すクラス
+// クラス CptSysEnable
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptSysEnable::CptSysEnable(
-  const FileRegion& file_region,
-  const char* task_name,
-  PtiExprArray&& arg_array
-) : CptEnableBase{file_region, task_name, std::move(arg_array)}
-{
-}
-
-// デストラクタ
-CptSysEnable::~CptSysEnable()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptSysEnable::type() const
 {
-  return PtStmtType::SysEnable;
+  return SysEnable;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// CtrlStmt の基底クラス
+// クラス CptCtrlStmt
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptCtrlStmt::CptCtrlStmt(
-  const FileRegion& file_region,
-  const PtControl* delay,
-  const PtStmt* body
-) : CptStmt{file_region},
-    mDelay{delay},
-    mBody{body}
-{
-  ASSERT_COND( delay );
-  ASSERT_COND( body );
-}
-
-// デストラクタ
-CptCtrlStmt::~CptCtrlStmt()
-{
-}
 
 // コントロールを返す．
-const PtControl*
+const AstControl*
 CptCtrlStmt::control() const
 {
-  return mDelay;
+  return mControl;
 }
 
 // 本体を取り出す．
-const PtStmt*
+const AstStmt*
 CptCtrlStmt::body() const
 {
   return mBody;
@@ -462,95 +343,49 @@ CptCtrlStmt::body() const
 
 
 //////////////////////////////////////////////////////////////////////
-// delay control statement 文 を表すクラス
+// クラス CptDcStmt
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptDcStmt::CptDcStmt(
-  const FileRegion& file_region,
-  const PtControl* delay,
-  const PtStmt* body
-) : CptCtrlStmt{file_region, delay, body}
-{
-}
-
-// デストラクタ
-CptDcStmt::~CptDcStmt()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptDcStmt::type() const
 {
-  return PtStmtType::DelayControl;
+  return DelayControl;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// event control statement 文 を表すクラス
+// クラス CptEcStmt
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptEcStmt::CptEcStmt(
-  const FileRegion& file_region,
-  const PtControl* event,
-  const PtStmt* body
-) : CptCtrlStmt{file_region, event, body}
-{
-}
-
-// デストラクタ
-CptEcStmt::~CptEcStmt()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptEcStmt::type() const
 {
-  return PtStmtType::EventControl;
+  return EventControl;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// wait 文 を表すクラス
+// クラス CptWait
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptWait::CptWait(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  const PtStmt* body
-) : CptStmt{file_region},
-    mExpr{expr},
-    mBody{body}
-{
-  ASSERT_COND( expr );
-  ASSERT_COND( body );
-}
-
-// デストラクタ
-CptWait::~CptWait()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptWait::type() const
 {
-  return PtStmtType::Wait;
+  return Wait;
 }
 
 // 条件を返す．
-const PtExpr*
+const AstExpr*
 CptWait::expr() const
 {
   return mExpr;
 }
 
 // 実行すべき本体を返す．
-const PtStmt*
+const AstStmt*
 CptWait::body() const
 {
   return mBody;
@@ -558,26 +393,11 @@ CptWait::body() const
 
 
 //////////////////////////////////////////////////////////////////////
-// 代入文系の基底クラス
+// クラス CptAssignBase
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptAssignBase::CptAssignBase(
-  const FileRegion& file_region,
-  const PtExpr* lhs
-) : CptStmt{file_region},
-    mLhs{lhs}
-{
-  ASSERT_COND( lhs );
-}
-
-// デストラクタ
-CptAssignBase::~CptAssignBase()
-{
-}
-
 // lhs を得る．
-const PtExpr*
+const AstExpr*
 CptAssignBase::lhs() const
 {
   return mLhs;
@@ -585,34 +405,18 @@ CptAssignBase::lhs() const
 
 
 //////////////////////////////////////////////////////////////////////
-// 代入文 を表すクラス
+// クラス CptAssign
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptAssign::CptAssign(
-  const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs
-) : CptAssignBase{file_region, lhs},
-    mRhs{rhs}
-{
-  ASSERT_COND( rhs );
-}
-
-// デストラクタ
-CptAssign::~CptAssign()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptAssign::type() const
 {
-  return PtStmtType::Assign;
+  return Assign;
 }
 
 // rhs を得る．
-const PtExpr*
+const AstExpr*
 CptAssign::rhs() const
 {
   return mRhs;
@@ -620,28 +424,11 @@ CptAssign::rhs() const
 
 
 //////////////////////////////////////////////////////////////////////
-// コントロールつき代入文 を表すクラス
+// クラス CptAssignC
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptAssignC::CptAssignC(
-  const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs,
-  const PtControl* control
-) : CptAssign{file_region, lhs, rhs},
-    mControl{control}
-{
-  ASSERT_COND( control );
-}
-
-// デストラクタ
-CptAssignC::~CptAssignC()
-{
-}
-
 // コントロールを返す．
-const PtControl*
+const AstControl*
 CptAssignC::control() const
 {
   return mControl;
@@ -649,87 +436,42 @@ CptAssignC::control() const
 
 
 //////////////////////////////////////////////////////////////////////
-// ノンブロッキング代入文 を表すクラス
+// クラス CptNbAssign
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptNbAssign::CptNbAssign(
-  const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs
-) : CptAssign{file_region, lhs, rhs}
-{
-}
-
-// デストラクタ
-CptNbAssign::~CptNbAssign()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptNbAssign::type() const
 {
-  return PtStmtType::NbAssign;
+  return NbAssign;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// コントロールつきノンブロッキング代入文 を表すクラス
+// クラス CptNbAssignC
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptNbAssignC::CptNbAssignC(
-  const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs,
-  const PtControl* control
-) : CptAssignC{file_region, lhs, rhs, control}
-{
-}
-
-// デストラクタ
-CptNbAssignC::~CptNbAssignC()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptNbAssignC::type() const
 {
-  return PtStmtType::NbAssign;
+  return NbAssign;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// procedural continuous assignment 文 を表すクラス
+// クラス CptPcAssign
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptPcAssign::CptPcAssign(
-  const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs
-) : CptAssignBase{file_region, lhs},
-    mRhs{rhs}
-{
-  ASSERT_COND( rhs );
-}
-
-// デストラクタ
-CptPcAssign::~CptPcAssign()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptPcAssign::type() const
 {
-  return PtStmtType::PcAssign;
+  return PcAssign;
 }
 
 // 右辺式を返す．
-const PtExpr*
+const AstExpr*
 CptPcAssign::rhs() const
 {
   return mRhs;
@@ -737,109 +479,54 @@ CptPcAssign::rhs() const
 
 
 //////////////////////////////////////////////////////////////////////
-// deassign 文 を表すクラス
+// クラス CptDeassign
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptDeassign::CptDeassign(
-  const FileRegion& file_region,
-  const PtExpr* lhs
-) : CptAssignBase{file_region, lhs}
-{
-}
-
-// デストラクタ
-CptDeassign::~CptDeassign()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptDeassign::type() const
 {
-  return PtStmtType::Deassign;
+  return Deassign;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// force 文 を表すクラス
+// クラス CptForce
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptForce::CptForce(
-  const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs
-) : CptPcAssign{file_region, lhs, rhs}
-{
-}
-
-// デストラクタ
-CptForce::~CptForce()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptForce::type() const
 {
-  return PtStmtType::Force;
+  return Force;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// release 文 を表すクラス
+// クラス CptRelease
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptRelease::CptRelease(
-  const FileRegion& file_region,
-  const PtExpr* lhs
-) : CptDeassign{file_region, lhs}
-{
-}
-
-// デストラクタ
-CptRelease::~CptRelease()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptRelease::type() const
 {
-  return PtStmtType::Release;
+  return Release;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// event statement を表すノード
+// クラス CptEventStmt
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptEventStmt::CptEventStmt(
-  const FileRegion& file_region,
-  const PtExpr* event
-) : CptStmt{file_region},
-    mPrimary{event}
-{
-  ASSERT_COND( event );
-}
-
-// デストラクタ
-CptEventStmt::~CptEventStmt()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptEventStmt::type() const
 {
-  return PtStmtType::Event;
+  return Event;
 }
 
 // イベントプライマリを返す．
-const PtExpr*
+const AstExpr*
 CptEventStmt::primary() const
 {
   return mPrimary;
@@ -847,66 +534,37 @@ CptEventStmt::primary() const
 
 
 //////////////////////////////////////////////////////////////////////
-// null statement 文 を表すクラス
+// クラス CptNullStmt
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptNullStmt::CptNullStmt(
-  const FileRegion& file_region
-) : CptStmt{file_region}
-{
-}
-
-// デストラクタ
-CptNullStmt::~CptNullStmt()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptNullStmt::type() const
 {
-  return PtStmtType::Null;
+  return Null;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// if 文 を表すクラス
+// クラス CptIf
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptIf::CptIf(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  const PtStmt* then_body
-) : CptStmt{file_region},
-    mCond{expr},
-    mThen{then_body}
-{
-  ASSERT_COND( expr );
-}
-
-// デストラクタ
-CptIf::~CptIf()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptIf::type() const
 {
-  return PtStmtType::If;
+  return If;
 }
 
 // 条件式を返す．
-const PtExpr*
+const AstExpr*
 CptIf::expr() const
 {
   return mCond;
 }
 
 // 成り立ったとき実行されるステートメント
-const PtStmt*
+const AstStmt*
 CptIf::body() const
 {
   return mThen;
@@ -914,28 +572,11 @@ CptIf::body() const
 
 
 //////////////////////////////////////////////////////////////////////
-// else 節付きの if 文 を表すクラス
+// クラス CptIfElse
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptIfElse::CptIfElse(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  const PtStmt* then_body,
-  const PtStmt* else_body
-) : CptIf{file_region, expr, then_body},
-    mElse{else_body}
-{
-  ASSERT_COND( expr );
-}
-
-// デストラクタ
-CptIfElse::~CptIfElse()
-{
-}
-
 // 成り立たなかったとき実行されるステートメント
-const PtStmt*
+const AstStmt*
 CptIfElse::else_body() const
 {
   return mElse;
@@ -943,35 +584,18 @@ CptIfElse::else_body() const
 
 
 //////////////////////////////////////////////////////////////////////
-// case 文 を表すクラス
+// クラス CptCase
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptCase::CptCase(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  PtiCaseItemArray&& caseitem_array
-) : CptStmt{file_region},
-    mExpr{expr},
-    mCaseItemArray{std::move(caseitem_array)}
-{
-  ASSERT_COND( expr );
-}
-
-// デストラクタ
-CptCase::~CptCase()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptCase::type() const
 {
-  return PtStmtType::Case;
+  return Case;
 }
 
 // 比較される式を返す．
-const PtExpr*
+const AstExpr*
 CptCase::expr() const
 {
   return mExpr;
@@ -985,7 +609,7 @@ CptCase::caseitem_num() const
 }
 
 // @brief case item の取得
-const PtCaseItem*
+const AstCaseItem*
 CptCase::caseitem(
   SizeType pos
 ) const
@@ -995,77 +619,32 @@ CptCase::caseitem(
 
 
 //////////////////////////////////////////////////////////////////////
-// casex 文 を表すクラス
+// クラス CptCaseX
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptCaseX::CptCaseX(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  PtiCaseItemArray&& caseitem_array
-) : CptCase{file_region, expr, std::move(caseitem_array)}
-{
-}
-
-// デストラクタ
-CptCaseX::~CptCaseX()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptCaseX::type() const
 {
-  return PtStmtType::CaseX;
+  return CaseX;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// casez 文 を表すクラス
+// クラス CptCaseZ
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptCaseZ::CptCaseZ(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  PtiCaseItemArray&& caseitem_array
-) : CptCase{file_region, expr, std::move(caseitem_array)}
-{
-}
-
-// デストラクタ
-CptCaseZ::~CptCaseZ()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptCaseZ::type() const
 {
-  return PtStmtType::CaseZ;
+  return CaseZ;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// caseitem を表すクラス
+// クラス CptCaseItem
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptCaseItem::CptCaseItem(
-  const FileRegion& file_region,
-  PtiExprArray&& label_array,
-  const PtStmt* body
-) : mFileRegion{file_region},
-    mLabelArray{std::move(label_array)},
-    mBody{body}
-{
-  ASSERT_COND( body );
-}
-
-// デストラクタ
-CptCaseItem::~CptCaseItem()
-{
-}
 
 // ファイル位置を返す．
 FileRegion
@@ -1082,7 +661,7 @@ CptCaseItem::label_num() const
 }
 
 // @brief ラベルの取得
-const PtExpr*
+const AstExpr*
 CptCaseItem::label(
   SizeType pos
 ) const
@@ -1091,7 +670,7 @@ CptCaseItem::label(
 }
 
 // 本体のステートメント得る．
-const PtStmt*
+const AstStmt*
 CptCaseItem::body() const
 {
   return mBody;
@@ -1102,23 +681,8 @@ CptCaseItem::body() const
 // LoopStmt のベースクラス
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptLoopStmt::CptLoopStmt(
-  const FileRegion& file_region,
-  const PtStmt* body
-) : CptStmt{file_region},
-    mBody{body}
-{
-  ASSERT_COND( body );
-}
-
-// デストラクタ
-CptLoopStmt::~CptLoopStmt()
-{
-}
-
 // 実行すべき本体を返す．
-const PtStmt*
+const AstStmt*
 CptLoopStmt::body() const
 {
   return mBody;
@@ -1126,59 +690,30 @@ CptLoopStmt::body() const
 
 
 //////////////////////////////////////////////////////////////////////
-// forever 文 を表すクラス
+// クラス CptForever
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptForever::CptForever(
-  const FileRegion& file_region,
-  const PtStmt* body
-) : CptLoopStmt{file_region, body}
-{
-}
-
-// デストラクタ
-CptForever::~CptForever()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptForever::type() const
 {
-  return PtStmtType::Forever;
+  return Forever;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// repeat 文 を表すクラス
+// クラス CptRepeat
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptRepeat::CptRepeat(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  const PtStmt* body
-) : CptLoopStmt{file_region, body},
-    mExpr{expr}
-{
-  ASSERT_COND( expr );
-}
-
-// デストラクタ
-CptRepeat::~CptRepeat()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptRepeat::type() const
 {
-  return PtStmtType::Repeat;
+  return Repeat;
 }
 
 // 繰り返し式を返す．
-const PtExpr*
+const AstExpr*
 CptRepeat::expr() const
 {
   return mExpr;
@@ -1186,71 +721,37 @@ CptRepeat::expr() const
 
 
 //////////////////////////////////////////////////////////////////////
-// while 文 を表すクラス
+// クラス CptStmt
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptWhile::CptWhile(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  const PtStmt* body
-) : CptRepeat{file_region, expr, body}
-{
-}
-
-// デストラクタ
-CptWhile::~CptWhile()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptWhile::type() const
 {
-  return PtStmtType::While;
+  return While;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// for 文 を表すクラス
+// クラス CptFor
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptFor::CptFor(
-  const FileRegion& file_region,
-  const PtStmt* init,
-  const PtExpr* cond,
-  const PtStmt* next,
-  const PtStmt* body
-) : CptRepeat{file_region, cond, body},
-    mInit{init},
-    mNext{next}
-{
-  ASSERT_COND( init );
-  ASSERT_COND( next );
-}
-
-// デストラクタ
-CptFor::~CptFor()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptFor::type() const
 {
-  return PtStmtType::For;
+  return For;
 }
 
 // 初期化代入式を取出す
-const PtStmt*
+const AstStmt*
 CptFor::init_stmt() const
 {
   return mInit;
 }
 
 // 繰り返し代入式を取出す
-const PtStmt*
+const AstStmt*
 CptFor::next_stmt() const
 {
   return mNext;
@@ -1258,22 +759,8 @@ CptFor::next_stmt() const
 
 
 //////////////////////////////////////////////////////////////////////
-// StmtBlock の基底クラス
+// クラス CptStmtBlock
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptStmtBlock::CptStmtBlock(
-  const FileRegion& file_region,
-  PtiStmtArray&& stmt_array
-) : CptStmt{file_region},
-    mStmtArray{std::move(stmt_array)}
-{
-}
-
-// デストラクタ
-CptStmtBlock::~CptStmtBlock()
-{
-}
 
 // @brief 子供のステートメント配列の要素数の取得
 SizeType
@@ -1283,7 +770,7 @@ CptStmtBlock::stmt_num() const
 }
 
 // @brief 子供のステートメントの取得
-const PtStmt*
+const AstStmt*
 CptStmtBlock::stmt(
   SizeType pos
 ) const
@@ -1293,25 +780,8 @@ CptStmtBlock::stmt(
 
 
 //////////////////////////////////////////////////////////////////////
-// 名前と宣言要素を持つ StmtBlock
+// クラス CptStmtBlockN
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptStmtBlockN::CptStmtBlockN(
-  const FileRegion& file_region,
-  const char* name,
-  PtiDeclHeadArray&& declhead_array,
-  PtiStmtArray&& stmt_array
-) : CptStmtBlock{file_region, std::move(stmt_array)},
-    mName{name},
-    mDeclHeadArray{std::move(declhead_array)}
-{
-}
-
-// デストラクタ
-CptStmtBlockN::~CptStmtBlockN()
-{
-}
 
 // 名前を取り出す．
 const char*
@@ -1328,7 +798,7 @@ CptStmtBlockN::declhead_num() const
 }
 
 // @brief 宣言ヘッダの取得
-const PtDeclHead*
+const AstDeclHead*
 CptStmtBlockN::declhead(
   SizeType pos
 ) const
@@ -1338,578 +808,453 @@ CptStmtBlockN::declhead(
 
 
 //////////////////////////////////////////////////////////////////////
-// parallel block を表すノード
+// クラス CptParBlock
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptParBlock::CptParBlock(
-  const FileRegion& file_region,
-  PtiStmtArray&& stmt_array
-) : CptStmtBlock{file_region, std::move(stmt_array)}
-{
-}
-
-// デストラクタ
-CptParBlock::~CptParBlock()
-{
-}
-
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptParBlock::type() const
 {
-  return PtStmtType::ParBlock;
+  return ParBlock;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// 名前と宣言要素を持つ parallel block を表すノード
+// クラス CptParBlockN
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptParBlockN::CptParBlockN(
-  const FileRegion& file_region,
-  const char* name,
-  PtiDeclHeadArray&& declhead_array,
-  PtiStmtArray&& stmt_array
-) : CptStmtBlockN{file_region, name, std::move(declhead_array), std::move(stmt_array)}
-{
-}
-
-// デストラクタ
-CptParBlockN::~CptParBlockN()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptParBlockN::type() const
 {
-  return PtStmtType::NamedParBlock;
+  return NamedParBlock;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// sequential block を表すノード
+// クラス CptSeqBlock
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptSeqBlock::CptSeqBlock(
-  const FileRegion& file_region,
-  PtiStmtArray&& stmt_array
-) : CptStmtBlock{file_region, std::move(stmt_array)}
-{
-}
-
-// デストラクタ
-CptSeqBlock::~CptSeqBlock()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptSeqBlock::type() const
 {
-  return PtStmtType::SeqBlock;
+  return SeqBlock;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// 名前と宣言要素を持つ sequential block を表すノード
+// クラス CptSeqBlockN
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptSeqBlockN::CptSeqBlockN(
-  const FileRegion& file_region,
-  const char* name,
-  PtiDeclHeadArray&& declhead_array,
-  PtiStmtArray&& stmt_array
-) : CptStmtBlockN{file_region, name,
-		  std::move(declhead_array),
-		  std::move(stmt_array)}
-{
-}
-
-// デストラクタ
-CptSeqBlockN::~CptSeqBlockN()
-{
-}
 
 // クラスの型を返す仮想関数
-PtStmtType
+AstStmt::Type
 CptSeqBlockN::type() const
 {
-  return PtStmtType::NamedSeqBlock;
+  return NamedSeqBlock;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// statement 関係
+// クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
 // disable 文を生成する．
-const PtStmt*
-CptFactory::new_Disable(
+PtStmt*
+PtFactory::new_Disable(
   const FileRegion& file_region,
   const char* name
 )
 {
-  ++ mNumDisable;
   void* p = mAlloc.get_memory(sizeof(CptDisable));
-  auto obj = new (p) CptDisable{file_region, name};
-  return obj;
+  return new (p) CptDisable(file_region, name);
 }
 
-const PtStmt*
-CptFactory::new_Disable(
+PtStmt*
+PtFactory::new_Disable(
   const FileRegion& file_region,
-  PuHierName* hname
+  PtHierName* hname
 )
 {
-  ++ mNumDisableH;
   void* p = mAlloc.get_memory(sizeof(CptDisableH));
-  auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptDisableH{file_region,
-				 PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				 tail_name};
-  return obj;
+  return new (p) CptDisableH(file_region,
+			     hname->name_branch_to_array(mAlloc),
+			     tail_name);
 }
 
 // enable 文を生成する．
-const PtStmt*
-CptFactory::new_Enable(
+PtStmt*
+PtFactory::new_Enable(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<const PtExpr*>& arg_array
+  PtExprArray&& arg_array
 )
 {
-  ++ mNumEnable;
   void* p = mAlloc.get_memory(sizeof(CptEnable));
-  auto obj = new (p) CptEnable{file_region, name,
-			       PtiArray<const PtExpr>{mAlloc, arg_array}};
-  return obj;
+  return new (p) CptEnable(file_region, name,
+			   std::move(arg_array));
 }
 
-const PtStmt*
-CptFactory::new_Enable(
+PtStmt*
+PtFactory::new_Enable(
   const FileRegion& file_region,
-  PuHierName* hname,
-  const std::vector<const PtExpr*>& arg_array
+  PtHierName* hname,
+  PtExprArray&& arg_array
 )
 {
-  ++ mNumEnableH;
   void* p = mAlloc.get_memory(sizeof(CptEnableH));
-  auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptEnableH{file_region,
-				PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				tail_name,
-				PtiArray<const PtExpr>{mAlloc, arg_array}};
-  return obj;
+  return new (p) CptEnableH(file_region,
+			    hname->name_branch_to_array(mAlloc),
+			    tail_name,
+			    std::move(arg_array));
 }
 
 // system task enable 文を生成する．
-const PtStmt*
-CptFactory::new_SysEnable(
+PtStmt*
+PtFactory::new_SysEnable(
   const FileRegion& file_region,
   const char* task_name,
-  const std::vector<const PtExpr*>& arg_array
+  PtExprArray&& arg_array
 )
 {
-  ++ mNumSysEnable;
   void* p = mAlloc.get_memory(sizeof(CptSysEnable));
-  auto obj = new (p) CptSysEnable{file_region, task_name,
-				  PtiArray<const PtExpr>{mAlloc, arg_array}};
-  return obj;
+  return new (p) CptSysEnable(file_region, task_name,
+			      std::move(arg_array));
 }
 
 // delay control 文を生成する．
-const PtStmt*
-CptFactory::new_DcStmt(
+PtStmt*
+PtFactory::new_DcStmt(
   const FileRegion& file_region,
-  const PtControl* delay,
-  const PtStmt* body
+  const AstControl* delay,
+  const AstStmt* body
 )
 {
-  ++ mNumDcStmt;
   void* p = mAlloc.get_memory(sizeof(CptDcStmt));
-  auto obj = new (p) CptDcStmt{file_region, delay, body};
-  return obj;
+  return new (p) CptDcStmt(file_region, delay, body);
 }
 
 // event control 文を生成する．
-const PtStmt*
-CptFactory::new_EcStmt(
+PtStmt*
+PtFactory::new_EcStmt(
   const FileRegion& file_region,
-  const PtControl* event,
-  const PtStmt* body
+  const AstControl* event,
+  const AstStmt* body
 )
 {
-  ++ mNumEcStmt;
   void* p = mAlloc.get_memory(sizeof(CptEcStmt));
-  auto obj = new (p) CptEcStmt{file_region, event, body};
-  return obj;
+  return new (p) CptEcStmt(file_region, event, body);
 }
 
 // wait 文を生成する．
-const PtStmt*
-CptFactory::new_Wait(
+PtStmt*
+PtFactory::new_Wait(
   const FileRegion& file_region,
-  const PtExpr* cond,
-  const PtStmt* body
+  const AstExpr* cond,
+  const AstStmt* body
 )
 {
-  ++ mNumWait;
   void* p = mAlloc.get_memory(sizeof(CptWait));
-  auto obj = new (p) CptWait{file_region, cond, body};
-  return obj;
+  return new (p) CptWait(file_region, cond, body);
 }
 
 // assign 文を生成する．
-const PtStmt*
-CptFactory::new_Assign(
+PtStmt*
+PtFactory::new_Assign(
   const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs
+  const AstExpr* lhs,
+  const AstExpr* rhs
 )
 {
-  ++ mNumAssign;
   void* p = mAlloc.get_memory(sizeof(CptAssign));
-  auto obj = new (p) CptAssign{file_region, lhs, rhs};
-  return obj;
+  return new (p) CptAssign(file_region, lhs, rhs);
 }
 
 // assign 文を生成する．
-const PtStmt*
-CptFactory::new_Assign(
+PtStmt*
+PtFactory::new_Assign(
   const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs,
-  const PtControl* control
+  const AstExpr* lhs,
+  const AstExpr* rhs,
+  const AstControl* control
 )
 {
-  ++ mNumAssignC;
   void* p = mAlloc.get_memory(sizeof(CptAssignC));
-  auto obj = new (p) CptAssignC{file_region, lhs, rhs, control};
-  return obj;
+  return new (p) CptAssignC(file_region, lhs, rhs, control);
 }
 
 // nonblocking assign 文を生成する．
-const PtStmt*
-CptFactory::new_NbAssign(
+PtStmt*
+PtFactory::new_NbAssign(
   const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs
+  const AstExpr* lhs,
+  const AstExpr* rhs
 )
 {
-  ++ mNumNbAssign;
   void* p = mAlloc.get_memory(sizeof(CptNbAssign));
-  auto obj = new (p) CptNbAssign{file_region, lhs, rhs};
-  return obj;
+  return new (p) CptNbAssign(file_region, lhs, rhs);
 }
 
 // nonblocking assign 文を生成する．
-const PtStmt*
-CptFactory::new_NbAssign(
+PtStmt*
+PtFactory::new_NbAssign(
   const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs,
-  const PtControl* control
+  const AstExpr* lhs,
+  const AstExpr* rhs,
+  const AstControl* control
 )
 {
-  ++ mNumNbAssignC;
   void* p = mAlloc.get_memory(sizeof(CptNbAssignC));
-  auto obj = new (p) CptNbAssignC{file_region, lhs, rhs, control};
-  return obj;
+  return new (p) CptNbAssignC(file_region, lhs, rhs, control);
 }
 
 // event 文を生成する．
-const PtStmt*
-CptFactory::new_EventStmt(
+PtStmt*
+PtFactory::new_EventStmt(
   const FileRegion& file_region,
-  const PtExpr* event
+  const AstExpr* event
 )
 {
-  ++ mNumEventStmt;
   void* p = mAlloc.get_memory(sizeof(CptEventStmt));
-  auto obj = new (p) CptEventStmt{file_region, event};
-  return obj;
+  return new (p) CptEventStmt(file_region, event);
 }
 
 // null 文を生成する．
-const PtStmt*
-CptFactory::new_NullStmt(
+PtStmt*
+PtFactory::new_NullStmt(
   const FileRegion& file_region
 )
 {
-  ++ mNumNullStmt;
   void* p = mAlloc.get_memory(sizeof(CptNullStmt));
-  auto obj = new (p) CptNullStmt{file_region};
-  return obj;
+  return new (p) CptNullStmt(file_region);
 }
 
 // if 文を生成する．
-const PtStmt*
-CptFactory::new_If(
+PtStmt*
+PtFactory::new_If(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  const PtStmt* then_body
+  const AstExpr* expr,
+  const AstStmt* then_body
 )
 {
-  ++ mNumIf;
   void* p = mAlloc.get_memory(sizeof(CptIf));
-  auto obj = new (p) CptIf{file_region, expr, then_body};
-  return obj;
+  return new (p) CptIf(file_region, expr, then_body);
 }
 
 // if 文を生成する．
-const PtStmt*
-CptFactory::new_If(
+PtStmt*
+PtFactory::new_If(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  const PtStmt* then_body,
-  const PtStmt* else_body
+  const AstExpr* expr,
+  const AstStmt* then_body,
+  const AstStmt* else_body
 )
 {
-  ++ mNumIf;
   void* p = mAlloc.get_memory(sizeof(CptIfElse));
-  auto obj = new (p) CptIfElse{file_region, expr, then_body, else_body};
-  return obj;
+  return new (p) CptIfElse(file_region, expr, then_body, else_body);
 }
 
 // case 文を生成する．
-const PtStmt*
-CptFactory::new_Case(
+PtStmt*
+PtFactory::new_Case(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  const std::vector<const PtCaseItem*>& caseitem_array
+  const AstExpr* expr,
+  PtCaseItemArray&& caseitem_array
 )
 {
-  ++ mNumCase;
   void* p = mAlloc.get_memory(sizeof(CptCase));
-  auto obj = new (p) CptCase{file_region, expr,
-			     PtiArray<const PtCaseItem>{mAlloc, caseitem_array}};
-  return obj;
+  return new (p) CptCase(file_region, expr,
+			 std::move(caseitem_array));
 }
 
 // casex 文を生成する．
-const PtStmt*
-CptFactory::new_CaseX(
+PtStmt*
+PtFactory::new_CaseX(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  const std::vector<const PtCaseItem*>& caseitem_array
+  const AstExpr* expr,
+  PtCaseItemArray&& caseitem_array
 )
 {
-  ++ mNumCaseX;
   void* p = mAlloc.get_memory(sizeof(CptCaseX));
-  auto obj = new (p) CptCaseX{file_region, expr,
-			      PtiArray<const PtCaseItem>{mAlloc, caseitem_array}};
-  return obj;
+  return new (p) CptCaseX(file_region, expr,
+			  std::move(caseitem_array));
 }
 
 // casez 文を生成する．
-const PtStmt*
-CptFactory::new_CaseZ(
+PtStmt*
+PtFactory::new_CaseZ(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  const std::vector<const PtCaseItem*>& caseitem_array
+  const AstExpr* expr,
+  PtCaseItemArray&& caseitem_array
 )
 {
-  ++ mNumCaseZ;
   void* p = mAlloc.get_memory(sizeof(CptCaseZ));
-  auto obj = new (p) CptCaseZ{file_region, expr,
-			      PtiArray<const PtCaseItem>{mAlloc, caseitem_array}};
-  return obj;
+  return new (p) CptCaseZ(file_region, expr,
+			  std::move(caseitem_array));
 }
 
 // case item を生成する．
-const PtCaseItem*
-CptFactory::new_CaseItem(
+PtCaseItem*
+PtFactory::new_CaseItem(
   const FileRegion& file_region,
-  const std::vector<const PtExpr*>& label_array,
-  const PtStmt* body
+  PtExprArray&& label_array,
+  const AstStmt* body
 )
 {
-  ++ mNumCaseItem;
   void* p = mAlloc.get_memory(sizeof(CptCaseItem));
-  auto obj = new (p) CptCaseItem{file_region,
-				 PtiArray<const PtExpr>{mAlloc, label_array},
-				 body};
-  return obj;
+  return new (p) CptCaseItem(file_region,
+			     std::move(label_array),
+			     body);
 }
 
 // forever 文を生成する．
-const PtStmt*
-CptFactory::new_Forever(
+PtStmt*
+PtFactory::new_Forever(
   const FileRegion& file_region,
-  const PtStmt* body
+  const AstStmt* body
 )
 {
-  ++ mNumForever;
   void* p = mAlloc.get_memory(sizeof(CptForever));
-  auto obj = new (p) CptForever{file_region, body};
-  return obj;
+  return new (p) CptForever(file_region, body);
 }
 
 // repeat 文を生成する．
-const PtStmt*
-CptFactory::new_Repeat(
+PtStmt*
+PtFactory::new_Repeat(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  const PtStmt* body
+  const AstExpr* expr,
+  const AstStmt* body
 )
 {
-  ++ mNumRepeat;
   void* p = mAlloc.get_memory(sizeof(CptRepeat));
-  auto obj = new (p) CptRepeat{file_region, expr, body};
-  return obj;
+  return new (p) CptRepeat(file_region, expr, body);
 }
 
 // while 文を生成する．
-const PtStmt*
-CptFactory::new_While(
+PtStmt*
+PtFactory::new_While(
   const FileRegion& file_region,
-  const PtExpr* cond,
-  const PtStmt* body
+  const AstExpr* cond,
+  const AstStmt* body
 )
 {
-  ++ mNumWhile;
   void* p = mAlloc.get_memory(sizeof(CptWhile));
-  auto obj = new (p) CptWhile{file_region, cond, body};
-  return obj;
+  return new (p) CptWhile(file_region, cond, body);
 }
 
 // for 文を生成する．
-const PtStmt*
-CptFactory::new_For(
+PtStmt*
+PtFactory::new_For(
   const FileRegion& file_region,
-  const PtStmt* init,
-  const PtExpr* cond,
-  const PtStmt* next,
-  const PtStmt* body
+  const AstStmt* init,
+  const AstExpr* cond,
+  const AstStmt* next,
+  const AstStmt* body
 )
 {
-  ++ mNumFor;
   void* p = mAlloc.get_memory(sizeof(CptFor));
-  auto obj = new (p) CptFor{file_region, init, cond, next, body};
-  return obj;
+  return new (p) CptFor(file_region, init, cond, next, body);
 }
 
 // procedural continuous assignment 文を生成する．
-const PtStmt*
-CptFactory::new_PcAssign(
+PtStmt*
+PtFactory::new_PcAssign(
   const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs
+  const AstExpr* lhs,
+  const AstExpr* rhs
 )
 {
-  ++ mNumPcAssign;
   void* p = mAlloc.get_memory(sizeof(CptPcAssign));
-  auto obj = new (p) CptPcAssign{file_region, lhs, rhs};
-  return obj;
+  return new (p) CptPcAssign(file_region, lhs, rhs);
 }
 
 // deassign 文を生成する．
-const PtStmt*
-CptFactory::new_Deassign(
+PtStmt*
+PtFactory::new_Deassign(
   const FileRegion& file_region,
-  const PtExpr* lhs
+  const AstExpr* lhs
 )
 {
-  ++ mNumDeassign;
   void* p = mAlloc.get_memory(sizeof(CptDeassign));
-  auto obj = new (p) CptDeassign{file_region, lhs};
-  return obj;
+  return new (p) CptDeassign(file_region, lhs);
 }
 
 // force 文を生成する．
-const PtStmt*
-CptFactory::new_Force(
+PtStmt*
+PtFactory::new_Force(
   const FileRegion& file_region,
-  const PtExpr* lhs,
-  const PtExpr* rhs
+  const AstExpr* lhs,
+  const AstExpr* rhs
 )
 {
-  ++ mNumForce;
   void* p = mAlloc.get_memory(sizeof(CptForce));
-  auto obj = new (p) CptForce{file_region, lhs, rhs};
-  return obj;
+  return new (p) CptForce(file_region, lhs, rhs);
 }
 
 // release 文を生成する．
-const PtStmt*
-CptFactory::new_Release(
+PtStmt*
+PtFactory::new_Release(
   const FileRegion& file_region,
-  const PtExpr* lhs
+  const AstExpr* lhs
 )
 {
-  ++ mNumRelease;
   void* p = mAlloc.get_memory(sizeof(CptRelease));
-  auto obj = new (p) CptRelease{file_region, lhs};
-  return obj;
+  return new (p) CptRelease(file_region, lhs);
 }
 
 // par block を生成する．
-const PtStmt*
-CptFactory::new_ParBlock(
+PtStmt*
+PtFactory::new_ParBlock(
   const FileRegion& file_region,
-  const std::vector<const PtStmt*>& stmt_array
+  PtStmtArray&& stmt_array
 )
 {
-  ++ mNumParBlock;
   void* p = mAlloc.get_memory(sizeof(CptParBlock));
-  auto obj = new (p) CptParBlock{file_region,
-				 PtiArray<const PtStmt>{mAlloc, stmt_array}};
-  return obj;
+  return new (p) CptParBlock(file_region,
+			     std::move(stmt_array));
 }
 
 // par block を生成する．
-const PtStmt*
-CptFactory::new_NamedParBlock(
+PtStmt*
+PtFactory::new_NamedParBlock(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<const PtDeclHead*>& declhead_array,
-  const std::vector<const PtStmt*>& stmt_array
+  PtDeclHeadArray&& declhead_array,
+  PtStmtArray&& stmt_array
 )
 {
-  ++ mNumParBlockN;
   void* p = mAlloc.get_memory(sizeof(CptParBlockN));
-  auto obj = new (p) CptParBlockN{file_region, name,
-				  PtiArray<const PtDeclHead>{mAlloc, declhead_array},
-				  PtiArray<const PtStmt>{mAlloc, stmt_array}};
-  return obj;
+  return new (p) CptParBlockN(file_region, name,
+			      std::move(declhead_array),
+			      std::move(stmt_array));
 }
 
 // seq block を生成する．
-const PtStmt*
-CptFactory::new_SeqBlock(
+PtStmt*
+PtFactory::new_SeqBlock(
   const FileRegion& file_region,
-  const std::vector<const PtStmt*>& stmt_array
+  PtStmtArray&& stmt_array
 )
 {
-  ++ mNumSeqBlock;
   void* p = mAlloc.get_memory(sizeof(CptSeqBlock));
-  auto obj = new (p) CptSeqBlock{file_region,
-				 PtiArray<const PtStmt>{mAlloc, stmt_array}};
-  return obj;
+  return new (p) CptSeqBlock(file_region, std::move(stmt_array));
 }
 
 // seq block を生成する．
-const PtStmt*
-CptFactory::new_NamedSeqBlock(
+PtStmt*
+PtFactory::new_NamedSeqBlock(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<const PtDeclHead*>& declhead_array,
-  const std::vector<const PtStmt*>& stmt_array
+  PtDeclHeadArray&& declhead_array,
+  PtStmtArray&& stmt_array
 )
 {
-  ++ mNumSeqBlockN;
   void* p = mAlloc.get_memory(sizeof(CptSeqBlockN));
-  auto obj = new (p) CptSeqBlockN{file_region, name,
-				  PtiArray<const PtDeclHead>{mAlloc, declhead_array},
-				  PtiArray<const PtStmt>{mAlloc, stmt_array}};
-  return obj;
+  return new (p) CptSeqBlockN(file_region, name,
+			      std::move(declhead_array),
+			      std::move(stmt_array));
 }
 
 END_NAMESPACE_YM_VERILOG

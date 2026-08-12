@@ -1,14 +1,14 @@
-﻿#ifndef PTDUMPER_H
-#define PTDUMPER_H
+﻿#ifndef ASTDUMPER_H
+#define ASTDUMPER_H
 
-/// @file PtDumper.h
-/// @brief PtDumper のヘッダファイル
+/// @file AstDumper.h
+/// @brief AstDumper のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ym/FileLoc.h"
 #include "ym/FileRegion.h"
 
@@ -16,23 +16,23 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class PtDumper PtDumper.h <ym_veriog/pt/PtDumper.h>
+/// @class AstDumper AstDumper.h "parser/AstDumper.h"
 /// @ingroup VlParser
-/// @ingroup PtGroup
-/// @brief Pt クラスの内容を出力するクラス
+/// @ingroup AstGroup
+/// @brief Ast クラスの内容を出力するクラス
 //////////////////////////////////////////////////////////////////////
-class PtDumper
+class AstDumper
 {
-  friend class PtHeader;
+  friend class AstHeader;
 public:
 
   /// @brief コンストラクタ
-  PtDumper(
+  AstDumper(
     std::ostream& s ///< [in] 出力先のストリーム
   );
 
   /// @brief デストラクタ
-  ~PtDumper();
+  ~AstDumper();
 
 
 public:
@@ -40,63 +40,63 @@ public:
   /// @brief UDP とモジュールの内部情報の表示
   void
   put(
-    const std::vector<const PtUdp*>& udp_list,      ///< [in] UDP のリスト
-    const std::vector<const PtModule*>& module_list ///< [in] モジュールのリスト
+    const std::vector<const AstUdp*>& udp_list,      ///< [in] UDP のリスト
+    const std::vector<const AstModule*>& module_list ///< [in] モジュールのリスト
   );
 
 
   /// @brief UDP を表示する
   void
   put(
-    const PtUdp* udp ///< [in] UDP
+    const AstUdp* udp ///< [in] UDP
   );
 
   /// @brief UDP テーブルの値を表示する
   void
   put(
     const char* label,  ///< [in] ラベル
-    const PtUdpValue* v ///< [in] テーブルの値
+    const AstUdpValue* v ///< [in] テーブルの値
   );
 
   /// @brief module を表示する
   void
   put(
-    const PtModule* m ///< [in] モジュール
+    const AstModule* m ///< [in] モジュール
   );
 
   /// @brief IO のヘッダを出力する．
   void
   put(
     const char* label, ///< [in] ラベル
-    const PtIOHead* io ///< [in] IOヘッダ
+    const AstIOHead* io ///< [in] IOヘッダ
   );
 
   /// @brief 宣言のヘッダを出力する．
   void
   put(
     const char* label,     ///< [in] ラベル
-    const PtDeclHead* decl ///< [in] 宣言ヘッダ
+    const AstDeclHead* decl ///< [in] 宣言ヘッダ
   );
 
   /// @brief 要素の出力
   void
   put(
     const char* label, ///< [in] ラベル
-    const PtItem* item ///< [in] 要素
+    const AstItem* item ///< [in] 要素
   );
 
   /// @brief ステートメントの出力
   void
   put(
     const char* label, ///< [in] ラベル
-    const PtStmt* stmt ///< [in] ステートメント
+    const AstStmt* stmt ///< [in] ステートメント
   );
 
   /// @brief 式の内容を出力する
   void
   put(
     const char* label, ///< [in] ラベル
-    const PtExpr* expr ///< [in] 式
+    const AstExpr* expr ///< [in] 式
   );
 
 
@@ -127,22 +127,22 @@ private:
   /// @brief 宣言を出力する．
   void
   put_decls(
-    const std::vector<const PtIOHead*>& iohead_array,
-    const std::vector<const PtDeclHead*>& declhead_array
+    const std::vector<const AstIOHead*>& iohead_array,
+    const std::vector<const AstDeclHead*>& declhead_array
   );
 
   /// @brief 宣言と要素を出力する．
   void
   put_decl_item(
     const char* label,                                ///< [in] ラベル
-    const std::vector<const PtDeclHead*>& decl_array, ///< [in] 宣言の配列
-    const std::vector<const PtItem*>& item_array      ///< [in] 要素の配列
+    const std::vector<const AstDeclHead*>& decl_array, ///< [in] 宣言の配列
+    const std::vector<const AstItem*>& item_array      ///< [in] 要素の配列
   );
 
   /// @brief 階層名の出力
   void
   put(
-    const std::vector<const PtNameBranch*>& nb_array
+    const std::vector<const AstNameBranch*>& nb_array
   );
 
   /// @brief ブール型データの出力
@@ -164,6 +164,13 @@ private:
   put(
     const char* label, ///< [in] ラベル
     std::uint32_t d         ///< [in] 整数値
+  );
+
+  /// @brief ビットベクタ型データの出力
+  void
+  put(
+    const char* label,  ///< [in] ラベル
+    const BitVector& bv ///< [in] 整数値
   );
 
   /// @brief 実数型データの出力
@@ -289,42 +296,42 @@ private:
   void
   put(
     const char* label,         ///< [in] ラベル
-    const PtAttrInst* attr_top ///< [in] 属性インスタンスの先頭
+    const AstAttrInst* attr_top ///< [in] 属性インスタンスの先頭
   );
 
   /// @brief コントロールの内容を表示する．
   void
   put(
     const char* label,    ///< [in] ラベル
-    const PtControl* ctrl ///< [in] コントロール
+    const AstControl* ctrl ///< [in] コントロール
   );
 
   /// @brief strength の内容を表示する．
   void
   put(
     const char* label,    ///< [in] ラベル
-    const PtStrength* str ///< [in] 信号強度
+    const AstStrength* str ///< [in] 信号強度
   );
 
   /// @brief 遅延情報を出力する．
   void
   put(
     const char* label,   ///< [in] ラベル
-    const PtDelay* delay ///< [in] 遅延
+    const AstDelay* delay ///< [in] 遅延
   );
 
   /// @brief 接続情報を表示する．
   void
   put(
     const char* label,      ///< [in] ラベル
-    const PtConnection* con ///< [in] 接続情報
+    const AstConnection* con ///< [in] 接続情報
   );
 
   /// @brief 階層ブランチの情報を出力する
   void
   put(
     const char* label,     ///< [in] ラベル
-    const PtNameBranch* nb ///< [in] 階層ブランチ
+    const AstNameBranch* nb ///< [in] 階層ブランチ
   );
 
   /// @brief 開始マーカを出力する．
@@ -363,4 +370,4 @@ private:
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // PTDUMPER_H
+#endif // ASTDUMPER_H

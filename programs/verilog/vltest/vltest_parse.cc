@@ -7,10 +7,9 @@
 /// All rights reserved.
 
 #include "ym/Timer.h"
-#include "ym/VlMgr.h"
+#include "ym/vl/VlMgr.h"
 #include "VlTestLineWatcher.h"
-#include "parser/PtDumper.h"
-
+#include "parser/AstDumper.h"
 #include "ym/MsgMgr.h"
 #include "ym/StreamMsgHandler.h"
 
@@ -67,9 +66,9 @@ parse_mode(
       }
 
       if ( dump_pt ) {
-	auto& udp_list = vlmgr.pt_udp_list();
-	auto& module_list = vlmgr.pt_module_list();
-	PtDumper dp(std::cout);
+	auto& udp_list = vlmgr.ast_udp_list();
+	auto& module_list = vlmgr.ast_module_list();
+	AstDumper dp(std::cout);
 	dp.enable_file_loc_mode();
 	dp.put(udp_list, module_list);
       }

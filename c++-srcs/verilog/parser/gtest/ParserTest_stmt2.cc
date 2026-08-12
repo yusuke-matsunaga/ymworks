@@ -8,10 +8,11 @@
 
 #include <gtest/gtest.h>
 #include "ParserTest.h"
-#include "ym/pt/PtStmt.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtMisc.h"
+#include "parser/PtStmt.h"
+#include "parser/PtDecl.h"
+#include "parser/PtExpr.h"
+#include "parser/PtItem.h"
+#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -20,7 +21,7 @@ TEST_F(ParserTest, If)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 0U);
+  auto cond = parser.new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto stmt = parser.new_If(fr, cond, body);
@@ -30,15 +31,15 @@ TEST_F(ParserTest, If)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::If, stmt->type() );
+  EXPECT_EQ( AstStmt::If, stmt->type() );
   EXPECT_STREQ( "if statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( body, stmt->body() );
@@ -50,19 +51,19 @@ TEST_F(ParserTest, If)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
@@ -70,7 +71,7 @@ TEST_F(ParserTest, IfElse)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 0U);
+  auto cond = parser.new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto fr3 = make_file_region(3, 3, 3, 3);
@@ -82,15 +83,15 @@ TEST_F(ParserTest, IfElse)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::If, stmt->type() );
+  EXPECT_EQ( AstStmt::If, stmt->type() );
   EXPECT_STREQ( "if statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( body, stmt->body() );
@@ -102,26 +103,26 @@ TEST_F(ParserTest, IfElse)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
 TEST_F(ParserTest, CaseItem)
 {
   auto fr = make_file_region(1, 2, 3, 4);
-  auto expr_list = parser.new_list<const PtExpr>();
+  auto expr_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto expr = parser.new_IntConst(fr1, 1U);
   expr_list->push_back(expr);
@@ -135,7 +136,7 @@ TEST_F(ParserTest, CaseItem)
   EXPECT_EQ( expr, caseitem->label(0) );
   EXPECT_THROW( caseitem->label(1),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{expr},
+  EXPECT_EQ( std::vector<const AstExpr*>{expr},
 	     caseitem->label_list() );
   EXPECT_EQ( body, caseitem->body() );
 }
@@ -144,12 +145,12 @@ TEST_F(ParserTest, Case)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 0U);
+  auto cond = parser.new_IntConst(fr1, 1U);
 
-  auto caseitem_list = parser.new_list<const PtCaseItem>();
+  auto caseitem_list = parser.new_caseitem_list();
 
   auto ci1_fr = make_file_region(1, 2, 3, 4);
-  auto ci1_expr_list = parser.new_list<const PtExpr>();
+  auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
   auto ci1_expr = parser.new_IntConst(fr1, 1U);
   ci1_expr_list->push_back(ci1_expr);
@@ -159,7 +160,7 @@ TEST_F(ParserTest, Case)
   caseitem_list->push_back(caseitem1);
 
   auto ci2_fr = make_file_region(11, 2, 13, 4);
-  auto ci2_expr_list = parser.new_list<const PtExpr>();
+  auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
   auto ci2_expr = parser.new_IntConst(fr1, 2U);
   ci2_expr_list->push_back(ci2_expr);
@@ -175,15 +176,15 @@ TEST_F(ParserTest, Case)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::Case, stmt->type() );
+  EXPECT_EQ( AstStmt::Case, stmt->type() );
   EXPECT_STREQ( "case statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( nullptr, stmt->body() );
@@ -197,19 +198,19 @@ TEST_F(ParserTest, Case)
   EXPECT_EQ( caseitem2, stmt->caseitem(1) );
   EXPECT_THROW( stmt->caseitem(2),
 		std::out_of_range );
-  auto exp_caseitem_list = std::vector<const PtCaseItem*>{caseitem1, caseitem2};
+  auto exp_caseitem_list = std::vector<const AstCaseItem*>{caseitem1, caseitem2};
   EXPECT_EQ( exp_caseitem_list, stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
@@ -217,12 +218,12 @@ TEST_F(ParserTest, CaseX)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 0U);
+  auto cond = parser.new_IntConst(fr1, 1U);
 
-  auto caseitem_list = parser.new_list<const PtCaseItem>();
+  auto caseitem_list = parser.new_caseitem_list();
 
   auto ci1_fr = make_file_region(1, 2, 3, 4);
-  auto ci1_expr_list = parser.new_list<const PtExpr>();
+  auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
   auto ci1_expr = parser.new_IntConst(fr1, 1U);
   ci1_expr_list->push_back(ci1_expr);
@@ -232,7 +233,7 @@ TEST_F(ParserTest, CaseX)
   caseitem_list->push_back(caseitem1);
 
   auto ci2_fr = make_file_region(11, 2, 13, 4);
-  auto ci2_expr_list = parser.new_list<const PtExpr>();
+  auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
   auto ci2_expr = parser.new_IntConst(fr1, 2U);
   ci2_expr_list->push_back(ci2_expr);
@@ -248,15 +249,15 @@ TEST_F(ParserTest, CaseX)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::CaseX, stmt->type() );
+  EXPECT_EQ( AstStmt::CaseX, stmt->type() );
   EXPECT_STREQ( "casex statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( nullptr, stmt->body() );
@@ -270,19 +271,19 @@ TEST_F(ParserTest, CaseX)
   EXPECT_EQ( caseitem2, stmt->caseitem(1) );
   EXPECT_THROW( stmt->caseitem(2),
 		std::out_of_range );
-  auto exp_caseitem_list = std::vector<const PtCaseItem*>{caseitem1, caseitem2};
+  auto exp_caseitem_list = std::vector<const AstCaseItem*>{caseitem1, caseitem2};
   EXPECT_EQ( exp_caseitem_list, stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
@@ -290,12 +291,12 @@ TEST_F(ParserTest, CaseZ)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 0U);
+  auto cond = parser.new_IntConst(fr1, 1U);
 
-  auto caseitem_list = parser.new_list<const PtCaseItem>();
+  auto caseitem_list = parser.new_caseitem_list();
 
   auto ci1_fr = make_file_region(1, 2, 3, 4);
-  auto ci1_expr_list = parser.new_list<const PtExpr>();
+  auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
   auto ci1_expr = parser.new_IntConst(fr1, 1U);
   ci1_expr_list->push_back(ci1_expr);
@@ -305,7 +306,7 @@ TEST_F(ParserTest, CaseZ)
   caseitem_list->push_back(caseitem1);
 
   auto ci2_fr = make_file_region(11, 2, 13, 4);
-  auto ci2_expr_list = parser.new_list<const PtExpr>();
+  auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
   auto ci2_expr = parser.new_IntConst(fr1, 2U);
   ci2_expr_list->push_back(ci2_expr);
@@ -321,15 +322,15 @@ TEST_F(ParserTest, CaseZ)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::CaseZ, stmt->type() );
+  EXPECT_EQ( AstStmt::CaseZ, stmt->type() );
   EXPECT_STREQ( "casez statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( nullptr, stmt->body() );
@@ -343,19 +344,19 @@ TEST_F(ParserTest, CaseZ)
   EXPECT_EQ( caseitem2, stmt->caseitem(1) );
   EXPECT_THROW( stmt->caseitem(2),
 		std::out_of_range );
-  auto exp_caseitem_list = std::vector<const PtCaseItem*>{caseitem1, caseitem2};
+  auto exp_caseitem_list = std::vector<const AstCaseItem*>{caseitem1, caseitem2};
   EXPECT_EQ( exp_caseitem_list, stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
@@ -371,15 +372,15 @@ TEST_F(ParserTest, Forever)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::Forever, stmt->type() );
+  EXPECT_EQ( AstStmt::Forever, stmt->type() );
   EXPECT_STREQ( "forever statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( body, stmt->body() );
@@ -391,19 +392,19 @@ TEST_F(ParserTest, Forever)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
@@ -411,7 +412,7 @@ TEST_F(ParserTest, Repeat)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr1, 0U);
+  auto expr = parser.new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto stmt = parser.new_Repeat(fr, expr, body);
@@ -421,15 +422,15 @@ TEST_F(ParserTest, Repeat)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::Repeat, stmt->type() );
+  EXPECT_EQ( AstStmt::Repeat, stmt->type() );
   EXPECT_STREQ( "repeat statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( body, stmt->body() );
@@ -441,19 +442,19 @@ TEST_F(ParserTest, Repeat)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
@@ -461,7 +462,7 @@ TEST_F(ParserTest, While)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 0U);
+  auto cond = parser.new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto stmt = parser.new_While(fr, cond, body);
@@ -471,15 +472,15 @@ TEST_F(ParserTest, While)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::While, stmt->type() );
+  EXPECT_EQ( AstStmt::While, stmt->type() );
   EXPECT_STREQ( "while statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( body, stmt->body() );
@@ -491,19 +492,19 @@ TEST_F(ParserTest, While)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
@@ -513,7 +514,7 @@ TEST_F(ParserTest, For)
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto init = parser.new_NullStmt(fr1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto cond = parser.new_IntConst(fr1, 0U);
+  auto cond = parser.new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
   auto next = parser.new_NullStmt(fr3);
   auto fr4 = make_file_region(4, 4, 4, 4);
@@ -525,15 +526,15 @@ TEST_F(ParserTest, For)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::For, stmt->type() );
+  EXPECT_EQ( AstStmt::For, stmt->type() );
   EXPECT_STREQ( "for-loop statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( body, stmt->body() );
@@ -545,19 +546,19 @@ TEST_F(ParserTest, For)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( init, stmt->init_stmt() );
   EXPECT_EQ( next, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 0, stmt->stmt_num() );
   EXPECT_THROW( stmt->stmt(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtStmt*>{},
+  EXPECT_EQ( std::vector<const AstStmt*>{},
 	     stmt->stmt_list() );
 }
 
@@ -568,7 +569,7 @@ TEST_F(ParserTest, ParBlock)
   auto stmt1 = parser.new_NullStmt(fr1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto stmt2 = parser.new_NullStmt(fr2);
-  auto stmt_list = parser.new_list<const PtStmt>();
+  auto stmt_list = parser.new_stmt_list();
   stmt_list->push_back(stmt1);
   stmt_list->push_back(stmt2);
   auto stmt = parser.new_ParBlock(fr, stmt_list);
@@ -578,15 +579,15 @@ TEST_F(ParserTest, ParBlock)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::ParBlock, stmt->type() );
+  EXPECT_EQ( AstStmt::ParBlock, stmt->type() );
   EXPECT_STREQ( "parallel block", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( nullptr, stmt->body() );
@@ -598,21 +599,21 @@ TEST_F(ParserTest, ParBlock)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 2, stmt->stmt_num() );
   EXPECT_EQ( stmt1, stmt->stmt(0) );
   EXPECT_EQ( stmt2, stmt->stmt(1) );
   EXPECT_THROW( stmt->stmt(2),
 		std::out_of_range );
-  auto exp_list = std::vector<const PtStmt*>{stmt1, stmt2};
+  auto exp_list = std::vector<const AstStmt*>{stmt1, stmt2};
   EXPECT_EQ( exp_list, stmt->stmt_list() );
 }
 
@@ -630,7 +631,7 @@ TEST_F(ParserTest, NamedParBlock)
   auto stmt1 = parser.new_NullStmt(fr1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto stmt2 = parser.new_NullStmt(fr2);
-  auto stmt_list = parser.new_list<const PtStmt>();
+  auto stmt_list = parser.new_stmt_list();
   stmt_list->push_back(stmt1);
   stmt_list->push_back(stmt2);
   parser.end_block();
@@ -642,15 +643,15 @@ TEST_F(ParserTest, NamedParBlock)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( name, stmt->fullname() );
-  EXPECT_EQ( PtStmtType::NamedParBlock, stmt->type() );
+  EXPECT_EQ( AstStmt::NamedParBlock, stmt->type() );
   EXPECT_STREQ( "parallel block", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( nullptr, stmt->body() );
@@ -662,7 +663,7 @@ TEST_F(ParserTest, NamedParBlock)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
@@ -670,14 +671,14 @@ TEST_F(ParserTest, NamedParBlock)
   EXPECT_EQ( net_decl, stmt->declhead(0) );
   EXPECT_THROW( stmt->declhead(1),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{net_decl},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{net_decl},
 	     stmt->declhead_list() );
   EXPECT_EQ( 2, stmt->stmt_num() );
   EXPECT_EQ( stmt1, stmt->stmt(0) );
   EXPECT_EQ( stmt2, stmt->stmt(1) );
   EXPECT_THROW( stmt->stmt(2),
 		std::out_of_range );
-  auto exp_list = std::vector<const PtStmt*>{stmt1, stmt2};
+  auto exp_list = std::vector<const AstStmt*>{stmt1, stmt2};
   EXPECT_EQ( exp_list, stmt->stmt_list() );
 }
 
@@ -688,7 +689,7 @@ TEST_F(ParserTest, SeqBlock)
   auto stmt1 = parser.new_NullStmt(fr1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto stmt2 = parser.new_NullStmt(fr2);
-  auto stmt_list = parser.new_list<const PtStmt>();
+  auto stmt_list = parser.new_stmt_list();
   stmt_list->push_back(stmt1);
   stmt_list->push_back(stmt2);
   auto stmt = parser.new_SeqBlock(fr, stmt_list);
@@ -698,15 +699,15 @@ TEST_F(ParserTest, SeqBlock)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( "", stmt->fullname() );
-  EXPECT_EQ( PtStmtType::SeqBlock, stmt->type() );
+  EXPECT_EQ( AstStmt::SeqBlock, stmt->type() );
   EXPECT_STREQ( "sequential block", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( nullptr, stmt->body() );
@@ -718,21 +719,21 @@ TEST_F(ParserTest, SeqBlock)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
   EXPECT_EQ( 0, stmt->declhead_num() );
   EXPECT_THROW( stmt->declhead(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	     stmt->declhead_list() );
   EXPECT_EQ( 2, stmt->stmt_num() );
   EXPECT_EQ( stmt1, stmt->stmt(0) );
   EXPECT_EQ( stmt2, stmt->stmt(1) );
   EXPECT_THROW( stmt->stmt(2),
 		std::out_of_range );
-  auto exp_list = std::vector<const PtStmt*>{stmt1, stmt2};
+  auto exp_list = std::vector<const AstStmt*>{stmt1, stmt2};
   EXPECT_EQ( exp_list, stmt->stmt_list() );
 }
 
@@ -750,7 +751,7 @@ TEST_F(ParserTest, NamedSeqBlock)
   auto stmt1 = parser.new_NullStmt(fr1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto stmt2 = parser.new_NullStmt(fr2);
-  auto stmt_list = parser.new_list<const PtStmt>();
+  auto stmt_list = parser.new_stmt_list();
   stmt_list->push_back(stmt1);
   stmt_list->push_back(stmt2);
   parser.end_block();
@@ -762,15 +763,15 @@ TEST_F(ParserTest, NamedSeqBlock)
   EXPECT_EQ( 0, stmt->namebranch_num() );
   EXPECT_THROW( stmt->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtNameBranch*>{},
+  EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
   EXPECT_EQ( name, stmt->fullname() );
-  EXPECT_EQ( PtStmtType::NamedSeqBlock, stmt->type() );
+  EXPECT_EQ( AstStmt::NamedSeqBlock, stmt->type() );
   EXPECT_STREQ( "sequential block", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
   EXPECT_THROW( stmt->arg(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtExpr*>{},
+  EXPECT_EQ( std::vector<const AstExpr*>{},
 	     stmt->arg_list() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( nullptr, stmt->body() );
@@ -782,7 +783,7 @@ TEST_F(ParserTest, NamedSeqBlock)
   EXPECT_EQ( 0, stmt->caseitem_num() );
   EXPECT_THROW( stmt->caseitem(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtCaseItem*>{},
+  EXPECT_EQ( std::vector<const AstCaseItem*>{},
 	     stmt->caseitem_list() );
   EXPECT_EQ( nullptr, stmt->init_stmt() );
   EXPECT_EQ( nullptr, stmt->next_stmt() );
@@ -790,14 +791,14 @@ TEST_F(ParserTest, NamedSeqBlock)
   EXPECT_EQ( net_decl, stmt->declhead(0) );
   EXPECT_THROW( stmt->declhead(1),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclHead*>{net_decl},
+  EXPECT_EQ( std::vector<const AstDeclHead*>{net_decl},
 	     stmt->declhead_list() );
   EXPECT_EQ( 2, stmt->stmt_num() );
   EXPECT_EQ( stmt1, stmt->stmt(0) );
   EXPECT_EQ( stmt2, stmt->stmt(1) );
   EXPECT_THROW( stmt->stmt(2),
 		std::out_of_range );
-  auto exp_list = std::vector<const PtStmt*>{stmt1, stmt2};
+  auto exp_list = std::vector<const AstStmt*>{stmt1, stmt2};
   EXPECT_EQ( exp_list, stmt->stmt_list() );
 }
 

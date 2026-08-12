@@ -6,12 +6,10 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/VlMgr.h"
+#include "ym/vl/VlMgr.h"
 
 #include "parser/Parser.h"
-#include "parser/PtMgr.h"
-#include "parser/PtiFactory.h"
-
+#include "parser/AstMgr.h"
 #include "elaborator/Elaborator.h"
 #include "elaborator/ElbMgr.h"
 #include "elaborator/ElbFactory.h"
@@ -22,21 +20,21 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 VlMgr::VlMgr() :
-  mPtMgr{new PtMgr},
+  mAstMgr{new AstMgr},
   mElbMgr{new ElbMgr()}
 {
 }
 
 // @brief デストラクタ
 VlMgr::~VlMgr()
-{ // PtMgr と ElbMgr の定義が必要なので
+{ // AstMgr と ElbMgr の定義が必要なので
 } // ヘッダファイル中でインラインにはできない．
 
 // @brief 内容をクリアする．
 void
 VlMgr::clear()
 {
-  mPtMgr->clear();
+  mAstMgr->clear();
   mElbMgr->clear();
 }
 
@@ -48,33 +46,33 @@ VlMgr::read_file(
   const std::vector<VlLineWatcher*> watcher_list
 )
 {
-  Parser parser(*mPtMgr);
+  Parser parser(*mAstMgr);
 
   return parser.read_file(filename, searchpath, watcher_list);
 }
 
 // @brief 登録されているモジュールのリストを返す．
-const std::vector<const PtModule*>&
-VlMgr::pt_module_list() const
+const std::vector<const AstModule*>&
+VlMgr::ast_module_list() const
 {
-  return mPtMgr->pt_module_list();
+  return mAstMgr->module_list();
 }
 
 // @brief 登録されている UDP のリストを返す．
 // @return 登録されている UDP のリスト
-const std::vector<const PtUdp*>&
-VlMgr::pt_udp_list() const
+const std::vector<const AstUdp*>&
+VlMgr::ast_udp_list() const
 {
-  return mPtMgr->pt_udp_list();
+  return mAstMgr->udp_list();
 }
 
 // @brief attribute instance のリストを表す構文木要素を返す．
-std::vector<const PtAttrInst*>
-VlMgr::pt_attr_list(
-  const PtBase* pt_obj
+std::vector<const AstAttrInst*>
+VlMgr::ast_attr_list(
+  const AstBase* pt_obj
 ) const
 {
-  return mPtMgr->find_attr_list(pt_obj);
+  return mAstMgr->find_attr_list(pt_obj);
 }
 
 // @brief エラボレーションを行う．
@@ -85,7 +83,7 @@ VlMgr::elaborate(
 {
   Elaborator elab(*mElbMgr, cell_library);
 
-  return elab(*mPtMgr);
+  return elab(*mAstMgr);
 }
 
 // @brief UDP 定義のリストを返す．

@@ -8,7 +8,7 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiStmtBlockScope.h"
-#include "ym/pt/PtStmt.h"
+#include "ym/vl/AstStmt.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -21,10 +21,10 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlScope*
 EiFactory::new_StmtBlockScope(
   const VlScope* parent,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto scope = new EiStmtBlockScope(parent, pt_stmt);
+  auto scope = new EiStmtBlockScope(parent, ast_stmt);
   return scope;
 }
 
@@ -35,9 +35,9 @@ EiFactory::new_StmtBlockScope(
 // @brief コンストラクタ
 EiStmtBlockScope::EiStmtBlockScope(
   const VlScope* parent,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 ) : EiScope{parent},
-    mPtStmt{pt_stmt}
+    mAstStmt{ast_stmt}
 {
 }
 
@@ -50,14 +50,14 @@ EiStmtBlockScope::~EiStmtBlockScope()
 FileRegion
 EiStmtBlockScope::file_region() const
 {
-  return mPtStmt->file_region();
+  return mAstStmt->file_region();
 }
 
 // @brief 名前の取得
 std::string
 EiStmtBlockScope::name() const
 {
-  return mPtStmt->name();
+  return mAstStmt->name();
 }
 
 END_NAMESPACE_YM_VERILOG

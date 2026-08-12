@@ -9,7 +9,7 @@
 #include "ei/EiFactory.h"
 #include "ei/EiProcess.h"
 
-#include "ym/pt/PtItem.h"
+#include "ym/vl/AstItem.h"
 
 #include "ym/vl/VlStmt.h"
 
@@ -24,10 +24,10 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbProcess*
 EiFactory::new_Process(
   const VlScope* parent,
-  const PtItem* pt_item
+  const AstItem* ast_item
 )
 {
-  auto process = new EiProcess{parent, pt_item};
+  auto process = new EiProcess{parent, ast_item};
   return process;
 }
 
@@ -39,9 +39,9 @@ EiFactory::new_Process(
 // @brief コンストラクタ
 EiProcess::EiProcess(
   const VlScope* parent,
-  const PtItem* pt_item
+  const AstItem* ast_item
 ) : mParent{parent},
-    mPtItem{pt_item}
+    mAstItem{ast_item}
 {
 }
 
@@ -54,9 +54,9 @@ EiProcess::~EiProcess()
 VpiObjType
 EiProcess::type() const
 {
-  switch ( mPtItem->type() ) {
-  case PtItemType::Initial: return VpiObjType::Initial;
-  case PtItemType::Always:  return VpiObjType::Always;
+  switch ( mAstItem->type() ) {
+  case AstItem::Initial: return VpiObjType::Initial;
+  case AstItem::Always:  return VpiObjType::Always;
   default: break;
   }
   ASSERT_NOT_REACHED;
@@ -67,7 +67,7 @@ EiProcess::type() const
 FileRegion
 EiProcess::file_region() const
 {
-  return mPtItem->file_region();
+  return mAstItem->file_region();
 }
 
 // @brief 親のスコープを返す．

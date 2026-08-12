@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ElbProxy.h"
 
 
@@ -41,7 +41,7 @@ public:
   /// @brief UDP定義を生成する．
   void
   instantiate_udp(
-    const PtUdp* pt_udp ///< [in] パース木の UDP 定義
+    const AstUdp* ast_udp ///< [in] パース木の UDP 定義
   );
 
 };

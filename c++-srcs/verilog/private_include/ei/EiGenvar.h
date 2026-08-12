@@ -5,11 +5,11 @@
 /// @brief EiGenvar のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "elaborator/ElbGenvar.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,7 +26,7 @@ public:
   /// @brief コンストラクタ
   EiGenvar(
     const VlScope* parent,     ///< [in] 親のスコープ
-    const PtDeclItem* pt_item, ///< [in] パース木の定義要素
+    const AstDeclItem* ast_item, ///< [in] パース木の定義要素
     int val                    ///< [in] 初期値
   );
 
@@ -90,8 +90,8 @@ public:
   ) override;
 
   /// @brief 元となったパース木の定義要素を返す．
-  const PtDeclItem*
-  pt_item() const override;
+  const AstDeclItem*
+  ast_item() const override;
 
 
 private:
@@ -103,7 +103,7 @@ private:
   const VlScope* mParent;
 
   // パース木の定義要素
-  const PtDeclItem* mPtItem;
+  const AstDeclItem* mAstItem;
 
   // 使用中の時に true にする flag
   bool mInUse;

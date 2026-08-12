@@ -46,7 +46,7 @@ public:
 
   /// @brief コンストラクタ
   EiBinaryOp(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* opr1,         ///< [in] オペランド1
     ElbExpr* opr2          ///< [in] オペランド2
   );
@@ -101,7 +101,7 @@ public:
 
   /// @brief コンストラクタ
   EiCompareOp(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* opr1,         ///< [in] オペランド1
     ElbExpr* opr2          ///< [in] オペランド2
   );
@@ -154,7 +154,7 @@ public:
 
   /// @brief コンストラクタ
   EiBinaryLogOp(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* opr1,         ///< [in] オペランド1
     ElbExpr* opr2          ///< [in] オペランド2
   );
@@ -198,7 +198,7 @@ public:
 
   /// @brief コンストラクタ
   EiBinaryBitOp(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* opr1,	   ///< [in] オペランド1
     ElbExpr* opr2	   ///< [in] オペランド2
   );
@@ -251,7 +251,7 @@ public:
 
   /// @brief コンストラクタ
   EiBinaryArithOp(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* opr1,	   ///< [in] オペランド1
     ElbExpr* opr2	   ///< [in] オペランド2
   );
@@ -304,7 +304,7 @@ public:
 
   /// @brief コンストラクタ
   EiPowerOp(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* opr1,	   ///< [in] オペランド1
     ElbExpr* opr2	   ///< [in] オペランド2
   );
@@ -357,7 +357,7 @@ public:
 
   /// @brief コンストラクタ
   EiShiftOp(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     ElbExpr* opr1,	   ///< [in] オペランド1
     ElbExpr* opr2	   ///< [in] オペランド2
   );

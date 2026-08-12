@@ -1,11 +1,11 @@
-﻿#ifndef YM_VLSCALARVAL_H
-#define YM_VLSCALARVAL_H
+﻿#ifndef YM_VL_VLSCALARVAL_H
+#define YM_VL_VLSCALARVAL_H
 
-/// @file ym/VlScalarVal.h
+/// @file ym/vl/VlScalarVal.h
 /// @brief VlScalarVal のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/verilog.h"
@@ -14,7 +14,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class VlScalarVal VlScalarVal.h "ym/VlScalarVal.h"
+/// @class VlScalarVal VlScalarVal.h "ym/vl/VlScalarVal.h"
 /// @brief 1ビットの値を表すクラス
 ///
 /// 具体的には
@@ -54,7 +54,7 @@ public:
   /// val が 0 の時のみ 0 に，それ以外は 1 にする．
   explicit
   VlScalarVal(
-    unsigned int val ///< [in] 値
+    SizeType val ///< [in] 値
   )
   {
     if ( val == 0U ) {
@@ -400,4 +400,4 @@ operator<<(
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // YM_VLSCALARVAL_H
+#endif // YM_VL_VLSCALARVAL_H

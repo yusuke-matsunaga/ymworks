@@ -7,12 +7,9 @@
 /// All rights reserved.
 
 #include "ei/EiPort.h"
-
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbExpr.h"
-
-#include "ym/pt/PtPort.h"
-
+#include "ym/vl/AstPort.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -30,14 +27,14 @@ EiPort::EiPort()
 void
 EiPort::init(
   const VlModule* module,
-  const PtPort* pt_port,
+  const AstPort* ast_port,
   SizeType index,
   ElbExpr* low_conn,
   VpiDir dir
 )
 {
   mModule = module;
-  mPtPort = pt_port;
+  mAstPort = ast_port;
   mIndex = index;
   mHighConn = nullptr;
   mLowConn = low_conn;
@@ -67,7 +64,7 @@ EiPort::type() const
 FileRegion
 EiPort::file_region() const
 {
-  return mPtPort->file_region();
+  return mAstPort->file_region();
 }
 
 // @brief 入出力の区別を得る．
@@ -95,14 +92,14 @@ EiPort::is_conn_by_name() const
 bool
 EiPort::is_explicit_name() const
 {
-  return mPtPort->ext_name() != nullptr;
+  return mAstPort->ext_name() != nullptr;
 }
 
 // @brief 名前を返す．
 std::string
 EiPort::name() const
 {
-  return mPtPort->ext_name();
+  return mAstPort->ext_name();
 }
 
 // @brief 親のモジュールを取出す

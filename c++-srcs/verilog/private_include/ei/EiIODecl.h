@@ -26,7 +26,7 @@ public:
 
   /// @brief コンストラクタ
   EiIOHead(
-    const PtIOHead* pt_header ///< [in] パース木のIO宣言ヘッダ
+    const AstIOHead* ast_header ///< [in] パース木のIO宣言ヘッダ
   );
 
   /// @brief デストラクタ
@@ -61,7 +61,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の IO 宣言ヘッダ
-  const PtIOHead* mPtHead;
+  const AstIOHead* mAstHead;
 
 };
 
@@ -78,7 +78,7 @@ public:
   /// @brief コンストラクタ
   EiModIOHead(
     const VlModule* module,   ///< [in] 親のモジュール
-    const PtIOHead* pt_header ///< [in] パース木のIO宣言ヘッダ
+    const AstIOHead* ast_header ///< [in] パース木のIO宣言ヘッダ
   );
 
   /// @brief デストラクタ
@@ -118,7 +118,7 @@ public:
   /// @brief コンストラクタ
   EiTaskIOHead(
     const VlTaskFunc* task,   ///< [in] 親のタスク
-    const PtIOHead* pt_header ///< [in]	パース木のIO宣言ヘッダ
+    const AstIOHead* ast_header ///< [in]	パース木のIO宣言ヘッダ
   );
 
   /// @brief デストラクタ
@@ -158,7 +158,7 @@ public:
   /// @brief コンストラクタ
   EiFunctionIOHead(
     const VlTaskFunc* func,   ///< [in] 親の関数
-    const PtIOHead* pt_header ///< [in] パース木のIO宣言ヘッダ
+    const AstIOHead* ast_header ///< [in] パース木のIO宣言ヘッダ
   );
 
   /// @brief デストラクタ
@@ -198,7 +198,7 @@ public:
   /// @brief コンストラクタ
   EiIODecl(
     ElbIOHead* head,         ///< [in] ヘッダ
-    const PtIOItem* pt_item, ///< [in] パース木のIO宣言要素
+    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
     const VlDecl* decl       ///< [in] 対応する宣言要素
   );
 
@@ -293,7 +293,7 @@ private:
   ElbIOHead* mHead;
 
   // パース木の IO 宣言
-  const PtIOItem* mPtItem;
+  const AstIOItem* mAstItem;
 
   // 対応する宣言要素
   const VlDecl* mDecl;

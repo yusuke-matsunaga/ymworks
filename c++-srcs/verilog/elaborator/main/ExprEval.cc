@@ -12,8 +12,8 @@
 #include "ElbError.h"
 #include "elaborator/ElbGenvar.h"
 #include "elaborator/ElbParameter.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/AstItem.h"
+#include "ym/vl/AstExpr.h"
 #include "ym/vl/VlStmt.h"
 #include "ym/vl/VlTaskFunc.h"
 #include "ym/vl/VlIODecl.h"
@@ -39,12 +39,12 @@ ExprEval::~ExprEval()
 int
 ExprEval::evaluate_int(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  auto val = evaluate_expr(parent, pt_expr);
+  auto val = evaluate_expr(parent, ast_expr);
   if ( !val.is_int_compat() ) {
-    ErrorGen::int_required(__FILE__, __LINE__, pt_expr->file_region());
+    ErrorGen::int_required(__FILE__, __LINE__, ast_expr->file_region());
   }
 
   return val.int_value();
@@ -54,14 +54,14 @@ ExprEval::evaluate_int(
 int
 ExprEval::evaluate_int_if_const(
   const VlScope* parent,
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   bool& is_const
 )
 {
   try {
-    auto val = evaluate_expr(parent, pt_expr);
+    auto val = evaluate_expr(parent, ast_expr);
     if ( !val.is_int_compat() ) {
-      ErrorGen::int_required(__FILE__, __LINE__, pt_expr->file_region());
+      ErrorGen::int_required(__FILE__, __LINE__, ast_expr->file_region());
     }
     is_const = true;
     return val.int_value();
@@ -79,10 +79,10 @@ ExprEval::evaluate_int_if_const(
 VlScalarVal
 ExprEval::evaluate_scalar(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  auto val = evaluate_expr(parent, pt_expr);
+  auto val = evaluate_expr(parent, ast_expr);
   // この変換は失敗しない．
   return val.scalar_value();
 }
@@ -91,10 +91,10 @@ ExprEval::evaluate_scalar(
 bool
 ExprEval::evaluate_bool(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  auto val = evaluate_expr(parent, pt_expr);
+  auto val = evaluate_expr(parent, ast_expr);
   // この変換は失敗しない．
   return val.logic_value().to_bool();
 }
@@ -103,12 +103,12 @@ ExprEval::evaluate_bool(
 BitVector
 ExprEval::evaluate_bitvector(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  auto val = evaluate_expr(parent, pt_expr);
+  auto val = evaluate_expr(parent, ast_expr);
   if ( !val.is_bitvector_compat() ) {
-    ErrorGen::bv_required(__FILE__, __LINE__, pt_expr->file_region());
+    ErrorGen::bv_required(__FILE__, __LINE__, ast_expr->file_region());
   }
 
   return val.bitvector_value();
@@ -118,11 +118,11 @@ ExprEval::evaluate_bitvector(
 RangeVal
 ExprEval::evaluate_range(
   const VlScope* parent,
-  const PtRange* pt_range
+  const AstRange* ast_range
 )
 {
-  int left_val = evaluate_int(parent, pt_range->left());
-  int right_val = evaluate_int(parent, pt_range->right());
+  int left_val = evaluate_int(parent, ast_range->left());
+  int right_val = evaluate_int(parent, ast_range->right());
   return RangeVal{left_val, right_val};
 }
 
@@ -130,14 +130,14 @@ ExprEval::evaluate_range(
 RangeVal
 ExprEval::evaluate_range(
   const VlScope* parent,
-  const PtPart* pt_part
+  const AstPart* ast_part
 )
 {
-  if ( pt_part->mode() != VpiRangeMode::Const ) {
-    throw std::logic_error{"pt_part->mode() != VpiRangeMode::Const"};
+  if ( ast_part->mode() != VpiRangeMode::Const ) {
+    throw std::logic_error{"ast_part->mode() != VpiRangeMode::Const"};
   }
-  int left_val = evaluate_int(parent, pt_part->left());
-  int right_val = evaluate_int(parent, pt_part->right());
+  int left_val = evaluate_int(parent, ast_part->left());
+  int right_val = evaluate_int(parent, ast_part->right());
   return RangeVal{left_val, right_val};
 }
 
@@ -145,30 +145,30 @@ ExprEval::evaluate_range(
 VlValue
 ExprEval::evaluate_expr(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
   // '(' expression ')' の時の対応
-  while ( pt_expr->type() == PtExprType::Opr &&
-	  pt_expr->op_type() == VpiOpType::Null ) {
-    pt_expr = pt_expr->operand0();
+  while ( ast_expr->type() == AstExpr::Opr &&
+	  ast_expr->op_type() == VpiOpType::Null ) {
+    ast_expr = ast_expr->operand0();
   }
 
-  switch ( pt_expr->type() ) {
-  case PtExprType::Opr:
-    return evaluate_opr(parent, pt_expr);
+  switch ( ast_expr->type() ) {
+  case AstExpr::Opr:
+    return evaluate_opr(parent, ast_expr);
 
-  case PtExprType::Const:
-    return evaluate_const(parent, pt_expr);
+  case AstExpr::Const:
+    return evaluate_const(parent, ast_expr);
 
-  case PtExprType::FuncCall:
-    return evaluate_funccall(parent, pt_expr);
+  case AstExpr::FuncCall:
+    return evaluate_funccall(parent, ast_expr);
 
-  case PtExprType::SysFuncCall:
-    ErrorGen::illegal_sysfunccall_in_ce(__FILE__, __LINE__, pt_expr);
+  case AstExpr::SysFuncCall:
+    ErrorGen::illegal_sysfunccall_in_ce(__FILE__, __LINE__, ast_expr);
 
-  case PtExprType::Primary:
-    return evaluate_primary(parent, pt_expr);
+  case AstExpr::Primary:
+    return evaluate_primary(parent, ast_expr);
 
   default:
     ASSERT_NOT_REACHED;
@@ -181,16 +181,16 @@ ExprEval::evaluate_expr(
 VlValue
 ExprEval::evaluate_opr(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  auto op_type = pt_expr->op_type();
-  auto op_size = pt_expr->operand_num();
+  auto op_type = ast_expr->op_type();
+  auto op_size = ast_expr->operand_num();
 
   // オペランドの値の評価を行う．
   std::vector<VlValue> val(op_size);
   for ( SizeType i = 0; i < op_size; ++ i ) {
-    val[i] = evaluate_expr(parent, pt_expr->operand(i));
+    val[i] = evaluate_expr(parent, ast_expr->operand(i));
   }
 
   // 結果の型のチェックを行う．
@@ -198,7 +198,7 @@ ExprEval::evaluate_opr(
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
     // この演算は使えない．
-    ErrorGen::illegal_edge_descriptor(__FILE__, __LINE__, pt_expr);
+    ErrorGen::illegal_edge_descriptor(__FILE__, __LINE__, ast_expr);
     break;
 
   case VpiOpType::BitNeg:
@@ -222,7 +222,7 @@ ExprEval::evaluate_opr(
     // この演算はビットベクタ型に変換できなければならない．
     for ( SizeType i = 0; i < op_size; ++ i ) {
       if ( !val[i].is_bitvector_compat() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr->operand(i));
+	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr->operand(i));
       }
     }
     break;
@@ -385,42 +385,42 @@ ExprEval::evaluate_opr(
 VlValue
 ExprEval::evaluate_primary(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
   // 識別子の階層
-  if ( pt_expr->namebranch_num() > 0 ) {
+  if ( ast_expr->namebranch_num() > 0 ) {
     // 階層つき識別子はだめ
-    ErrorGen::hname_in_ce(__FILE__, __LINE__, pt_expr);
+    ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
   }
 
-  auto isize = pt_expr->index_num();
+  auto isize = ast_expr->index_num();
   auto has_bit_select = (isize == 1);
-  auto pt_part = pt_expr->part();
-  auto has_range_select = (pt_part != nullptr);
+  auto ast_part = ast_expr->part();
+  auto has_range_select = (ast_part != nullptr);
 
   if (  isize > 1 || (isize == 1 && has_range_select) ) {
     // 配列型ではない．
-    ErrorGen::dimension_mismatch(__FILE__, __LINE__, pt_expr);
+    ErrorGen::dimension_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
   int index1 = 0;
   int index2 = 0;
   if ( has_bit_select ) {
-    index1 = evaluate_int(parent, pt_expr->index(0));
+    index1 = evaluate_int(parent, ast_expr->index(0));
   }
   if ( has_range_select ) {
-    auto pt_left = pt_part->left();
-    index1 = evaluate_int(parent, pt_left);
-    auto pt_right = pt_part->right();
-    index2 = evaluate_int(parent, pt_right);
+    auto ast_left = ast_part->left();
+    index1 = evaluate_int(parent, ast_left);
+    auto ast_right = ast_part->right();
+    index2 = evaluate_int(parent, ast_right);
   }
 
   // モジュール内の識別子を探索する．
-  auto handle = mgr().find_obj_up(parent, pt_expr, parent->parent_module());
+  auto handle = mgr().find_obj_up(parent, ast_expr, parent->parent_module());
   if ( !handle ) {
     // 見つからなかった．
-    ErrorGen::not_found(__FILE__, __LINE__, pt_expr);
+    ErrorGen::not_found(__FILE__, __LINE__, ast_expr);
   }
 
   // そのオブジェクトが genvar の場合
@@ -435,7 +435,7 @@ ExprEval::evaluate_primary(
       // 範囲選択
       auto bv = BitVector(genvar->value());
       if ( index1 < index2 ) {
-	ErrorGen::range_order(__FILE__, __LINE__, pt_expr);
+	ErrorGen::range_order(__FILE__, __LINE__, ast_expr);
       }
       return VlValue(bv.part_select_op(index1, index2));
     }
@@ -448,15 +448,15 @@ ExprEval::evaluate_primary(
   // しかしこの場合には parameter でなければならない．
   auto param = handle->parameter();
   if ( !param ) {
-    ErrorGen::not_a_parameter(__FILE__, __LINE__, pt_expr);
+    ErrorGen::not_a_parameter(__FILE__, __LINE__, ast_expr);
     return VlValue();
   }
 
-  auto pt_init_expr = param->init_expr();
-  auto val = evaluate_expr(parent, pt_init_expr);
+  auto ast_init_expr = param->init_expr();
+  auto val = evaluate_expr(parent, ast_init_expr);
   if ( param->value_type().is_real_type() ) {
     if ( has_bit_select || has_range_select ) {
-      ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr);
+      ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr);
       return VlValue();
     }
   }
@@ -464,7 +464,7 @@ ExprEval::evaluate_primary(
     if ( has_bit_select ) {
       // ビット選択
       if ( !val.is_bitvector_compat() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr);
+	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr);
       }
       SizeType offset = 0;
       if ( !param->calc_bit_offset(index1, offset) ) {
@@ -476,14 +476,14 @@ ExprEval::evaluate_primary(
     }
     else if ( has_range_select ) {
       if ( !val.is_bitvector_compat() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr);
+	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr);
       }
-      switch ( pt_part->mode() ) {
+      switch ( ast_part->mode() ) {
       case VpiRangeMode::Const:
 	{
 	  bool big = (index1 >= index2);
 	  if ( big ^ param->is_big_endian() ) {
-	    ErrorGen::range_order(__FILE__, __LINE__, pt_expr);
+	    ErrorGen::range_order(__FILE__, __LINE__, ast_expr);
 	  }
 	}
 	break;
@@ -542,23 +542,23 @@ ExprEval::evaluate_primary(
 VlValue
 ExprEval::evaluate_const(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
   // ここのロジックは EiFactory::new_Constant() と同様
-  auto size = pt_expr->const_size();
+  auto size = ast_expr->const_size();
   auto is_signed = false;
   SizeType base = 0;
-  switch ( pt_expr->const_type() ) {
+  switch ( ast_expr->const_type() ) {
   case VpiConstType::Int:
-    if ( pt_expr->const_str() == nullptr ) {
-      auto val = pt_expr->const_int();
+    if ( ast_expr->const_str() == nullptr ) {
+      auto val = ast_expr->const_bitvect();
       return VlValue(val);
     }
     break;
 
   case VpiConstType::Real:
-    return VlValue(pt_expr->const_real());
+    return VlValue(ast_expr->const_real());
 
   case VpiConstType::SignedBinary:
     is_signed = true;
@@ -589,7 +589,7 @@ ExprEval::evaluate_const(
     break;
 
   case VpiConstType::String:
-    return VlValue(BitVector(pt_expr->const_str()));
+    return VlValue(BitVector(ast_expr->const_str()));
 
   default:
     throw std::logic_error{"Should not be reached"};
@@ -597,77 +597,77 @@ ExprEval::evaluate_const(
   }
 
   // ここに来たということはビットベクタ型
-  return VlValue(BitVector(size, is_signed, base, pt_expr->const_str()));
+  return VlValue(BitVector(size, is_signed, base, ast_expr->const_str()));
 }
 
-// @brief PtFuncCall から式の値を評価する．
+// @brief AstFuncCall から式の値を評価する．
 VlValue
 ExprEval::evaluate_funccall(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  if ( pt_expr->namebranch_num() > 0 ) {
+  if ( ast_expr->namebranch_num() > 0 ) {
     // 階層名は使えない．
-    ErrorGen::hname_in_ce(__FILE__, __LINE__, pt_expr);
+    ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
   }
 
   // 関数名
-  auto name = pt_expr->name();
+  auto name = ast_expr->name();
 
   // 関数本体を探し出す．
   // constant function はモジュール直下にしかあり得ない
   // <- generated scope 内の関数は constant function ではない．
   auto module = parent->parent_module();
-  auto pt_func = find_funcdef(module, name);
-  if ( !pt_func ) {
+  auto ast_func = find_funcdef(module, name);
+  if ( !ast_func ) {
     // 関数が見つからなかった．
-    ErrorGen::no_such_function(__FILE__, __LINE__, pt_expr);
+    ErrorGen::no_such_function(__FILE__, __LINE__, ast_expr);
   }
 
-  if ( pt_func->is_in_use() ) {
+  if ( ast_func->is_in_use() ) {
     // 再帰的な呼び出しも行えない．
-    ErrorGen::uses_itself(__FILE__, __LINE__, pt_expr);
+    ErrorGen::uses_itself(__FILE__, __LINE__, ast_expr);
   }
 
   // 定数関数を探し出す．
   auto child_func = find_constant_function(module, name);
   if ( child_func == nullptr ) {
-    pt_func->set_in_use();
+    ast_func->set_in_use();
     // なかったので作る．
-    child_func = instantiate_constant_function(parent, pt_func);
-    pt_func->clear_in_use();
+    child_func = instantiate_constant_function(parent, ast_func);
+    ast_func->clear_in_use();
   }
   if ( !child_func ) {
     // instantiate_constant_function が失敗した．
     // たぶん constant function ではなかった．
-    ErrorGen::not_a_constant_function(__FILE__, __LINE__, pt_expr);
+    ErrorGen::not_a_constant_function(__FILE__, __LINE__, ast_expr);
   }
 
   // 引数の生成
- auto n = pt_expr->operand_num();
+ auto n = ast_expr->operand_num();
   if ( n != child_func->io_num() ) {
     // 引数の数が合わなかった．
-    ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, pt_expr);
+    ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
   std::vector<VlValue> arg_list(n);
   for ( SizeType i = 0; i < n; ++ i ) {
-    auto pt_expr1 = pt_expr->operand(i);
-    auto val1 = evaluate_expr(parent, pt_expr1);
+    auto ast_expr1 = ast_expr->operand(i);
+    auto val1 = evaluate_expr(parent, ast_expr1);
     auto io_decl = child_func->io(i);
     auto decl = io_decl->decl();
     auto decl_type = decl->value_type();
     if ( decl_type.is_real_type() ) {
       if ( !val1.is_real_compat() ) {
 	// 型が異なる．
-	ErrorGen::illegal_argument_type(__FILE__, __LINE__, pt_expr1);
+	ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr1);
       }
     }
     else if ( decl_type.is_bitvector_type() ) {
       if ( !val1.is_bitvector_compat() ) {
 	// 型が異なる．
-	ErrorGen::illegal_argument_type(__FILE__, __LINE__, pt_expr1);
+	ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr1);
       }
     }
     arg_list[i] = val1;

@@ -6,8 +6,8 @@
 /// All rights reserved.
 
 #include "parser/Parser.h"
-#include "parser/PtiExpr.h"
-
+#include "parser/PtPort.h"
+#include "parser/PtExpr.h"
 #include "ym/MsgMgr.h"
 
 
@@ -21,8 +21,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 void
 Parser::new_Port()
 {
-  auto port = mFactory->new_Port(FileRegion());
-  add_port(port);
+  auto port = mFactory.new_Port(FileRegion());
+  mPortList.push_back(port);
 }
 
 // @brief ポートの生成 (内側の式のみ指定するタイプ)
@@ -40,13 +40,14 @@ Parser::new_Port1(
       name = portref->name();
     }
     mPortRefList.clear();
-    auto port = mFactory->new_Port(file_region, portref, name);
-    add_port(port);
+    auto port = mFactory.new_Port(file_region, portref, name);
+    mPortList.push_back(port);
   }
   else {
-    auto portref = mFactory->new_Concat(file_region, mPortRefList);
-    auto port = mFactory->new_Port(file_region, portref, mPortRefList, nullptr);
-    add_port(port);
+    auto port = mFactory.new_Port(file_region,
+				  PtExprArray(mAlloc, mPortRefList),
+				  nullptr);
+    mPortList.push_back(port);
   }
 }
 
@@ -57,8 +58,8 @@ Parser::new_Port2(
   const char* name
 )
 {
-  auto port = mFactory->new_Port(file_region, name);
-  add_port(port);
+  auto port = mFactory.new_Port(file_region, name);
+  mPortList.push_back(port);
 }
 
 // @brief ポートの生成 (外側の名前と内側の式を指定するタイプ)
@@ -69,25 +70,16 @@ Parser::new_Port3(
 )
 {
   if ( mPortRefList.size() == 1 ) {
-    auto port = mFactory->new_Port(file_region, mPortRefList.front(), name);
-    add_port(port);
+    auto port = mFactory.new_Port(file_region, mPortRefList.front(), name);
+    mPortList.push_back(port);
     mPortRefList.clear();
   }
   else {
-    auto portref = mFactory->new_Concat(file_region, mPortRefList);
-    auto port = mFactory->new_Port(file_region, portref, mPortRefList, name);
-    add_port(port);
+    auto port = mFactory.new_Port(file_region,
+				  PtExprArray(mAlloc, mPortRefList),
+				  name);
+    mPortList.push_back(port);
   }
-}
-
-// @brief ポートリストにポートを追加する．
-inline
-void
-Parser::add_port(
-  PtiPort* port
-)
-{
-  mPortList.push_back(port);
 }
 
 
@@ -98,7 +90,7 @@ Parser::add_port(
 // @brief 入出力宣言中の重複チェックを行う．
 bool
 Parser::check_PortArray(
-  const std::vector<const PtIOHead*>& iohead_array
+  const std::vector<PtIOHead*>& iohead_array
 )
 {
   std::unordered_set<std::string> portref_dic;
@@ -122,9 +114,9 @@ Parser::check_PortArray(
 }
 
 // @brief 入出力宣言からポートを作る．
-std::vector<const PtPort*>
+std::vector<PtPort*>
 Parser::new_PortArray(
-  const std::vector<const PtIOHead*>& iohead_array
+  const std::vector<PtIOHead*>& iohead_array
 )
 {
   SizeType num = 0;
@@ -133,17 +125,16 @@ Parser::new_PortArray(
   }
 
   // ポートを生成し vec に格納する．
-  SizeType i = 0;
-  std::vector<const PtPort*> vec(num);
+  std::vector<PtPort*> vec;
+  vec.reserve(num);
   for ( auto head: iohead_array ) {
     for ( auto elem: head->item_list() ) {
       auto name = elem->name();
-      auto portref = mFactory->new_Primary(elem->file_region(), name);
-      auto port = mFactory->new_Port(elem->file_region(), portref, name);
+      auto portref = mFactory.new_Primary(elem->file_region(), name);
+      auto port = mFactory.new_Port(elem->file_region(), portref, name);
       auto dir = head->direction();
-      port->_set_portref_dir(0, dir);
-      vec[i] = port;
-      ++ i;
+      port->set_portref_dir(0, dir);
+      vec.push_back(port);
     }
   }
   return vec;
@@ -161,8 +152,8 @@ Parser::new_PortRef(
   const char* name
 )
 {
-  auto primary = mFactory->new_Primary(fr, name);
-  add_portref(primary);
+  auto primary = mFactory.new_Primary(fr, name);
+  mPortRefList.push_back(primary);
 }
 
 // @brief ビット指定つきポート参照式の生成
@@ -170,11 +161,12 @@ void
 Parser::new_PortRef(
   const FileRegion& fr,
   const char* name,
-  const PtExpr* index
+  const AstExpr* index
 )
 {
-  auto primary = mFactory->new_Primary(fr, name, std::vector<const PtExpr*>{index});
-  add_portref(primary);
+  auto primary = mFactory.new_Primary(fr, name,
+				      PtExprArray(mAlloc, index));
+  mPortRefList.push_back(primary);
 }
 
 // @brief 範囲指定付きポート参照式の生成
@@ -182,11 +174,11 @@ void
 Parser::new_PortRef(
   const FileRegion& fr,
   const char* name,
-  const PtPart* part
+  const AstPart* part
 )
 {
-  auto primary = mFactory->new_Primary(fr, name, part);
-  add_portref(primary);
+  auto primary = mFactory.new_Primary(fr, name, part);
+  mPortRefList.push_back(primary);
 }
 
 // @brief ポート参照リストを初期化する．
@@ -194,16 +186,6 @@ void
 Parser::init_portref_list()
 {
   mPortRefList.clear();
-}
-
-// @brief ポート参照リストに要素を追加する．
-inline
-void
-Parser::add_portref(
-  const PtExpr* portref
-)
-{
-  mPortRefList.push_back(portref);
 }
 
 END_NAMESPACE_YM_VERILOG

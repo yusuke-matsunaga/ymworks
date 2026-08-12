@@ -8,9 +8,11 @@
 
 #include <gtest/gtest.h>
 #include "ParserTest.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtMisc.h"
+#include "parser/PtDecl.h"
+#include "parser/PtExpr.h"
+#include "parser/PtItem.h"
+#include "parser/PtMisc.h"
+#include "parser/PtStmt.h"
 #include "parser/Parser.h"
 
 
@@ -29,7 +31,7 @@ TEST_F(ParserTest, Task)
     ASSERT_TRUE( item != nullptr );
     EXPECT_EQ( fr, item->file_region() );
     EXPECT_STREQ( name, item->name() );
-    EXPECT_EQ( PtItemType::Task, item->type() );
+    EXPECT_EQ( AstItem::Task, item->type() );
     EXPECT_THROW( item->prim_type(),
 		  std::logic_error );
     EXPECT_EQ( nullptr, item->strength() );
@@ -37,39 +39,39 @@ TEST_F(ParserTest, Task)
     EXPECT_EQ( 0, item->paramassign_num() );
     EXPECT_THROW( item->paramassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtConnection*>{},
+    EXPECT_EQ( std::vector<const AstConnection*>{},
 	       item->paramassign_list() );
     EXPECT_EQ( 0, item->defparam_num() );
     EXPECT_THROW( item->defparam(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDefParam*>{},
+    EXPECT_EQ( std::vector<const AstDefParam*>{},
 	       item->defparam_list() );
     EXPECT_EQ( 0, item->contassign_num() );
     EXPECT_THROW( item->contassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtContAssign*>{},
+    EXPECT_EQ( std::vector<const AstContAssign*>{},
 	       item->contassign_list() );
     EXPECT_EQ( 0, item->inst_num() );
     EXPECT_THROW( item->inst(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtInst*>{},
+    EXPECT_EQ( std::vector<const AstInst*>{},
 	       item->inst_list() );
     EXPECT_EQ( automatic, item->automatic() );
     EXPECT_EQ( 0, item->ioitem_num() );
     EXPECT_EQ( 0, item->iohead_num() );
     EXPECT_THROW( item->iohead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtIOHead*>{},
+    EXPECT_EQ( std::vector<const AstIOHead*>{},
 	       item->iohead_list() );
     EXPECT_EQ( 0, item->declhead_num() );
     EXPECT_THROW( item->declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->declhead_list() );
     EXPECT_EQ( 0, item->item_num() );
     EXPECT_THROW( item->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->item_list() );
     EXPECT_EQ( body, item->body() );
     EXPECT_FALSE( item->is_signed() );
@@ -82,34 +84,34 @@ TEST_F(ParserTest, Task)
     EXPECT_EQ( 0, item->terminal_num() );
     EXPECT_THROW( item->terminal(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtExpr*>{},
+    EXPECT_EQ( std::vector<const AstExpr*>{},
 	       item->terminal_list() );
     EXPECT_EQ( nullptr, item->path_decl() );
     EXPECT_EQ( nullptr, item->expr() );
     EXPECT_EQ( 0, item->then_declhead_num() );
     EXPECT_THROW( item->then_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->then_declhead_list() );
     EXPECT_EQ( 0, item->then_item_num() );
     EXPECT_THROW( item->then_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->then_item_list() );
     EXPECT_EQ( 0, item->else_declhead_num() );
     EXPECT_THROW( item->else_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->else_declhead_list() );
     EXPECT_EQ( 0, item->else_item_num() );
     EXPECT_THROW( item->else_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->else_item_list() );
     EXPECT_EQ( 0, item->caseitem_num() );
     EXPECT_THROW( item->caseitem(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtGenCaseItem*>{},
+    EXPECT_EQ( std::vector<const AstGenCaseItem*>{},
 	       item->caseitem_list() );
     EXPECT_EQ( nullptr, item->loop_var() );
     EXPECT_EQ( nullptr, item->init_expr() );
@@ -131,7 +133,7 @@ TEST_F(ParserTest, Function)
       ASSERT_TRUE( item != nullptr );
       EXPECT_EQ( fr, item->file_region() );
       EXPECT_STREQ( name, item->name() );
-      EXPECT_EQ( PtItemType::Func, item->type() );
+      EXPECT_EQ( AstItem::Func, item->type() );
       EXPECT_THROW( item->prim_type(),
 		    std::logic_error );
       EXPECT_EQ( nullptr, item->strength() );
@@ -139,39 +141,39 @@ TEST_F(ParserTest, Function)
       EXPECT_EQ( 0, item->paramassign_num() );
       EXPECT_THROW( item->paramassign(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtConnection*>{},
+      EXPECT_EQ( std::vector<const AstConnection*>{},
 		 item->paramassign_list() );
       EXPECT_EQ( 0, item->defparam_num() );
       EXPECT_THROW( item->defparam(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDefParam*>{},
+      EXPECT_EQ( std::vector<const AstDefParam*>{},
 		 item->defparam_list() );
       EXPECT_EQ( 0, item->contassign_num() );
       EXPECT_THROW( item->contassign(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtContAssign*>{},
+      EXPECT_EQ( std::vector<const AstContAssign*>{},
 		 item->contassign_list() );
       EXPECT_EQ( 0, item->inst_num() );
       EXPECT_THROW( item->inst(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtInst*>{},
+      EXPECT_EQ( std::vector<const AstInst*>{},
 		 item->inst_list() );
       EXPECT_EQ( automatic, item->automatic() );
       EXPECT_EQ( 0, item->ioitem_num() );
       EXPECT_EQ( 0, item->iohead_num() );
       EXPECT_THROW( item->iohead(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtIOHead*>{},
+      EXPECT_EQ( std::vector<const AstIOHead*>{},
 		 item->iohead_list() );
       EXPECT_EQ( 0, item->declhead_num() );
       EXPECT_THROW( item->declhead(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclHead*>{},
+      EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		 item->declhead_list() );
       EXPECT_EQ( 0, item->item_num() );
       EXPECT_THROW( item->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtItem*>{},
+      EXPECT_EQ( std::vector<const AstItem*>{},
 		 item->item_list() );
       EXPECT_EQ( body, item->body() );
       EXPECT_EQ( sign, item->is_signed() );
@@ -184,34 +186,34 @@ TEST_F(ParserTest, Function)
       EXPECT_EQ( 0, item->terminal_num() );
       EXPECT_THROW( item->terminal(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtExpr*>{},
+      EXPECT_EQ( std::vector<const AstExpr*>{},
 		 item->terminal_list() );
       EXPECT_EQ( nullptr, item->path_decl() );
       EXPECT_EQ( nullptr, item->expr() );
       EXPECT_EQ( 0, item->then_declhead_num() );
       EXPECT_THROW( item->then_declhead(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclHead*>{},
+      EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		 item->then_declhead_list() );
       EXPECT_EQ( 0, item->then_item_num() );
       EXPECT_THROW( item->then_item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtItem*>{},
+      EXPECT_EQ( std::vector<const AstItem*>{},
 		 item->then_item_list() );
       EXPECT_EQ( 0, item->else_declhead_num() );
       EXPECT_THROW( item->else_declhead(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclHead*>{},
+      EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		 item->else_declhead_list() );
       EXPECT_EQ( 0, item->else_item_num() );
       EXPECT_THROW( item->else_item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtItem*>{},
+      EXPECT_EQ( std::vector<const AstItem*>{},
 		 item->else_item_list() );
       EXPECT_EQ( 0, item->caseitem_num() );
       EXPECT_THROW( item->caseitem(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtGenCaseItem*>{},
+      EXPECT_EQ( std::vector<const AstGenCaseItem*>{},
 		 item->caseitem_list() );
       EXPECT_EQ( nullptr, item->loop_var() );
       EXPECT_EQ( nullptr, item->init_expr() );
@@ -227,9 +229,7 @@ TEST_F(ParserTest, SizedFunc)
   auto fr3 = make_file_region(1, 20, 1, 29);
   auto fr4 = make_file_region(2, 10, 2, 19);
   auto name = "func1";
-  auto left = parser.new_IntConst(fr2, 31U);
-  auto right = parser.new_IntConst(fr3, 0U);
-  auto range = parser.new_Range(FileRegion(fr2, fr3), left, right);
+  auto range = new_range(fr2, 31, fr3, 0);
   auto body = parser.new_NullStmt(fr4);
   auto fr = FileRegion(fr1, fr4);
   for ( auto automatic: { true, false } ) {
@@ -239,7 +239,7 @@ TEST_F(ParserTest, SizedFunc)
       ASSERT_TRUE( item != nullptr );
       EXPECT_EQ( fr, item->file_region() );
       EXPECT_STREQ( name, item->name() );
-      EXPECT_EQ( PtItemType::Func, item->type() );
+      EXPECT_EQ( AstItem::Func, item->type() );
       EXPECT_THROW( item->prim_type(),
 		    std::logic_error );
       EXPECT_EQ( nullptr, item->strength() );
@@ -247,39 +247,39 @@ TEST_F(ParserTest, SizedFunc)
       EXPECT_EQ( 0, item->paramassign_num() );
       EXPECT_THROW( item->paramassign(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtConnection*>{},
+      EXPECT_EQ( std::vector<const AstConnection*>{},
 		 item->paramassign_list() );
       EXPECT_EQ( 0, item->defparam_num() );
       EXPECT_THROW( item->defparam(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDefParam*>{},
+      EXPECT_EQ( std::vector<const AstDefParam*>{},
 		 item->defparam_list() );
       EXPECT_EQ( 0, item->contassign_num() );
       EXPECT_THROW( item->contassign(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtContAssign*>{},
+      EXPECT_EQ( std::vector<const AstContAssign*>{},
 		 item->contassign_list() );
       EXPECT_EQ( 0, item->inst_num() );
       EXPECT_THROW( item->inst(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtInst*>{},
+      EXPECT_EQ( std::vector<const AstInst*>{},
 		 item->inst_list() );
       EXPECT_EQ( automatic, item->automatic() );
       EXPECT_EQ( 0, item->ioitem_num() );
       EXPECT_EQ( 0, item->iohead_num() );
       EXPECT_THROW( item->iohead(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtIOHead*>{},
+      EXPECT_EQ( std::vector<const AstIOHead*>{},
 		 item->iohead_list() );
       EXPECT_EQ( 0, item->declhead_num() );
       EXPECT_THROW( item->declhead(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclHead*>{},
+      EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		 item->declhead_list() );
       EXPECT_EQ( 0, item->item_num() );
       EXPECT_THROW( item->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtItem*>{},
+      EXPECT_EQ( std::vector<const AstItem*>{},
 		 item->item_list() );
       EXPECT_EQ( body, item->body() );
       EXPECT_EQ( sign, item->is_signed() );
@@ -292,34 +292,34 @@ TEST_F(ParserTest, SizedFunc)
       EXPECT_EQ( 0, item->terminal_num() );
       EXPECT_THROW( item->terminal(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtExpr*>{},
+      EXPECT_EQ( std::vector<const AstExpr*>{},
 		 item->terminal_list() );
       EXPECT_EQ( nullptr, item->path_decl() );
       EXPECT_EQ( nullptr, item->expr() );
       EXPECT_EQ( 0, item->then_declhead_num() );
       EXPECT_THROW( item->then_declhead(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclHead*>{},
+      EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		 item->then_declhead_list() );
       EXPECT_EQ( 0, item->then_item_num() );
       EXPECT_THROW( item->then_item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtItem*>{},
+      EXPECT_EQ( std::vector<const AstItem*>{},
 		 item->then_item_list() );
       EXPECT_EQ( 0, item->else_declhead_num() );
       EXPECT_THROW( item->else_declhead(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclHead*>{},
+      EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		 item->else_declhead_list() );
       EXPECT_EQ( 0, item->else_item_num() );
       EXPECT_THROW( item->else_item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtItem*>{},
+      EXPECT_EQ( std::vector<const AstItem*>{},
 		 item->else_item_list() );
       EXPECT_EQ( 0, item->caseitem_num() );
       EXPECT_THROW( item->caseitem(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtGenCaseItem*>{},
+      EXPECT_EQ( std::vector<const AstGenCaseItem*>{},
 		 item->caseitem_list() );
       EXPECT_EQ( nullptr, item->loop_var() );
       EXPECT_EQ( nullptr, item->init_expr() );
@@ -344,7 +344,7 @@ TEST_F(ParserTest, TypedFunc)
 	ASSERT_TRUE( item != nullptr );
 	EXPECT_EQ( fr, item->file_region() );
 	EXPECT_STREQ( name, item->name() );
-	EXPECT_EQ( PtItemType::Func, item->type() );
+	EXPECT_EQ( AstItem::Func, item->type() );
 	EXPECT_THROW( item->prim_type(),
 		      std::logic_error );
 	EXPECT_EQ( nullptr, item->strength() );
@@ -352,39 +352,39 @@ TEST_F(ParserTest, TypedFunc)
 	EXPECT_EQ( 0, item->paramassign_num() );
 	EXPECT_THROW( item->paramassign(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtConnection*>{},
+	EXPECT_EQ( std::vector<const AstConnection*>{},
 		   item->paramassign_list() );
 	EXPECT_EQ( 0, item->defparam_num() );
 	EXPECT_THROW( item->defparam(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtDefParam*>{},
+	EXPECT_EQ( std::vector<const AstDefParam*>{},
 		   item->defparam_list() );
 	EXPECT_EQ( 0, item->contassign_num() );
 	EXPECT_THROW( item->contassign(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtContAssign*>{},
+	EXPECT_EQ( std::vector<const AstContAssign*>{},
 		   item->contassign_list() );
 	EXPECT_EQ( 0, item->inst_num() );
 	EXPECT_THROW( item->inst(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtInst*>{},
+	EXPECT_EQ( std::vector<const AstInst*>{},
 		   item->inst_list() );
 	EXPECT_EQ( automatic, item->automatic() );
 	EXPECT_EQ( 0, item->ioitem_num() );
 	EXPECT_EQ( 0, item->iohead_num() );
 	EXPECT_THROW( item->iohead(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtIOHead*>{},
+	EXPECT_EQ( std::vector<const AstIOHead*>{},
 		   item->iohead_list() );
 	EXPECT_EQ( 0, item->declhead_num() );
 	EXPECT_THROW( item->declhead(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtDeclHead*>{},
+	EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		   item->declhead_list() );
 	EXPECT_EQ( 0, item->item_num() );
 	EXPECT_THROW( item->item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtItem*>{},
+	EXPECT_EQ( std::vector<const AstItem*>{},
 		   item->item_list() );
 	EXPECT_EQ( body, item->body() );
 	EXPECT_EQ( sign, item->is_signed() );
@@ -397,34 +397,34 @@ TEST_F(ParserTest, TypedFunc)
 	EXPECT_EQ( 0, item->terminal_num() );
 	EXPECT_THROW( item->terminal(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtExpr*>{},
+	EXPECT_EQ( std::vector<const AstExpr*>{},
 		   item->terminal_list() );
 	EXPECT_EQ( nullptr, item->path_decl() );
 	EXPECT_EQ( nullptr, item->expr() );
 	EXPECT_EQ( 0, item->then_declhead_num() );
 	EXPECT_THROW( item->then_declhead(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtDeclHead*>{},
+	EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		   item->then_declhead_list() );
 	EXPECT_EQ( 0, item->then_item_num() );
 	EXPECT_THROW( item->then_item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtItem*>{},
+	EXPECT_EQ( std::vector<const AstItem*>{},
 		   item->then_item_list() );
 	EXPECT_EQ( 0, item->else_declhead_num() );
 	EXPECT_THROW( item->else_declhead(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtDeclHead*>{},
+	EXPECT_EQ( std::vector<const AstDeclHead*>{},
 		   item->else_declhead_list() );
 	EXPECT_EQ( 0, item->else_item_num() );
 	EXPECT_THROW( item->else_item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtItem*>{},
+	EXPECT_EQ( std::vector<const AstItem*>{},
 		   item->else_item_list() );
 	EXPECT_EQ( 0, item->caseitem_num() );
 	EXPECT_THROW( item->caseitem(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtGenCaseItem*>{},
+	EXPECT_EQ( std::vector<const AstGenCaseItem*>{},
 		   item->caseitem_list() );
 	EXPECT_EQ( nullptr, item->loop_var() );
 	EXPECT_EQ( nullptr, item->init_expr() );
@@ -452,46 +452,46 @@ TEST_F(ParserTest, GateH)
     ASSERT_TRUE( item != nullptr );
     EXPECT_EQ( fr, item->file_region() );
     EXPECT_EQ( nullptr, item->name() );
-    EXPECT_EQ( PtItemType::GateInst, item->type() );
+    EXPECT_EQ( AstItem::GateInst, item->type() );
     EXPECT_EQ( type, item->prim_type() );
     EXPECT_EQ( nullptr, item->strength() );
     EXPECT_EQ( nullptr, item->delay() );
     EXPECT_EQ( 0, item->paramassign_num() );
     EXPECT_THROW( item->paramassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtConnection*>{},
+    EXPECT_EQ( std::vector<const AstConnection*>{},
 	       item->paramassign_list() );
     EXPECT_EQ( 0, item->defparam_num() );
     EXPECT_THROW( item->defparam(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDefParam*>{},
+    EXPECT_EQ( std::vector<const AstDefParam*>{},
 	       item->defparam_list() );
     EXPECT_EQ( 0, item->contassign_num() );
     EXPECT_THROW( item->contassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtContAssign*>{},
+    EXPECT_EQ( std::vector<const AstContAssign*>{},
 	       item->contassign_list() );
     EXPECT_EQ( 0, item->inst_num() );
     EXPECT_THROW( item->inst(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtInst*>{},
+    EXPECT_EQ( std::vector<const AstInst*>{},
 	       item->inst_list() );
     EXPECT_FALSE( item->automatic() );
     EXPECT_EQ( 0, item->ioitem_num() );
     EXPECT_EQ( 0, item->iohead_num() );
     EXPECT_THROW( item->iohead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtIOHead*>{},
+    EXPECT_EQ( std::vector<const AstIOHead*>{},
 	       item->iohead_list() );
     EXPECT_EQ( 0, item->declhead_num() );
     EXPECT_THROW( item->declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->declhead_list() );
     EXPECT_EQ( 0, item->item_num() );
     EXPECT_THROW( item->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->item_list() );
     EXPECT_EQ( nullptr, item->body() );
     EXPECT_FALSE( item->is_signed() );
@@ -504,34 +504,34 @@ TEST_F(ParserTest, GateH)
     EXPECT_EQ( 0, item->terminal_num() );
     EXPECT_THROW( item->terminal(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtExpr*>{},
+    EXPECT_EQ( std::vector<const AstExpr*>{},
 	       item->terminal_list() );
     EXPECT_EQ( nullptr, item->path_decl() );
     EXPECT_EQ( nullptr, item->expr() );
     EXPECT_EQ( 0, item->then_declhead_num() );
     EXPECT_THROW( item->then_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->then_declhead_list() );
     EXPECT_EQ( 0, item->then_item_num() );
     EXPECT_THROW( item->then_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->then_item_list() );
     EXPECT_EQ( 0, item->else_declhead_num() );
     EXPECT_THROW( item->else_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->else_declhead_list() );
     EXPECT_EQ( 0, item->else_item_num() );
     EXPECT_THROW( item->else_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->else_item_list() );
     EXPECT_EQ( 0, item->caseitem_num() );
     EXPECT_THROW( item->caseitem(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtGenCaseItem*>{},
+    EXPECT_EQ( std::vector<const AstGenCaseItem*>{},
 	       item->caseitem_list() );
     EXPECT_EQ( nullptr, item->loop_var() );
     EXPECT_EQ( nullptr, item->init_expr() );
@@ -561,46 +561,46 @@ TEST_F(ParserTest, GateHS)
     ASSERT_TRUE( item != nullptr );
     EXPECT_EQ( fr, item->file_region() );
     EXPECT_EQ( nullptr, item->name() );
-    EXPECT_EQ( PtItemType::GateInst, item->type() );
+    EXPECT_EQ( AstItem::GateInst, item->type() );
     EXPECT_EQ( type, item->prim_type() );
     EXPECT_EQ( str, item->strength() );
     EXPECT_EQ( nullptr, item->delay() );
     EXPECT_EQ( 0, item->paramassign_num() );
     EXPECT_THROW( item->paramassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtConnection*>{},
+    EXPECT_EQ( std::vector<const AstConnection*>{},
 	       item->paramassign_list() );
     EXPECT_EQ( 0, item->defparam_num() );
     EXPECT_THROW( item->defparam(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDefParam*>{},
+    EXPECT_EQ( std::vector<const AstDefParam*>{},
 	       item->defparam_list() );
     EXPECT_EQ( 0, item->contassign_num() );
     EXPECT_THROW( item->contassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtContAssign*>{},
+    EXPECT_EQ( std::vector<const AstContAssign*>{},
 	       item->contassign_list() );
     EXPECT_EQ( 0, item->inst_num() );
     EXPECT_THROW( item->inst(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtInst*>{},
+    EXPECT_EQ( std::vector<const AstInst*>{},
 	       item->inst_list() );
     EXPECT_FALSE( item->automatic() );
     EXPECT_EQ( 0, item->ioitem_num() );
     EXPECT_EQ( 0, item->iohead_num() );
     EXPECT_THROW( item->iohead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtIOHead*>{},
+    EXPECT_EQ( std::vector<const AstIOHead*>{},
 	       item->iohead_list() );
     EXPECT_EQ( 0, item->declhead_num() );
     EXPECT_THROW( item->declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->declhead_list() );
     EXPECT_EQ( 0, item->item_num() );
     EXPECT_THROW( item->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->item_list() );
     EXPECT_EQ( nullptr, item->body() );
     EXPECT_FALSE( item->is_signed() );
@@ -613,34 +613,34 @@ TEST_F(ParserTest, GateHS)
     EXPECT_EQ( 0, item->terminal_num() );
     EXPECT_THROW( item->terminal(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtExpr*>{},
+    EXPECT_EQ( std::vector<const AstExpr*>{},
 	       item->terminal_list() );
     EXPECT_EQ( nullptr, item->path_decl() );
     EXPECT_EQ( nullptr, item->expr() );
     EXPECT_EQ( 0, item->then_declhead_num() );
     EXPECT_THROW( item->then_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->then_declhead_list() );
     EXPECT_EQ( 0, item->then_item_num() );
     EXPECT_THROW( item->then_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->then_item_list() );
     EXPECT_EQ( 0, item->else_declhead_num() );
     EXPECT_THROW( item->else_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->else_declhead_list() );
     EXPECT_EQ( 0, item->else_item_num() );
     EXPECT_THROW( item->else_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->else_item_list() );
     EXPECT_EQ( 0, item->caseitem_num() );
     EXPECT_THROW( item->caseitem(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtGenCaseItem*>{},
+    EXPECT_EQ( std::vector<const AstGenCaseItem*>{},
 	       item->caseitem_list() );
     EXPECT_EQ( nullptr, item->loop_var() );
     EXPECT_EQ( nullptr, item->init_expr() );
@@ -669,46 +669,46 @@ TEST_F(ParserTest, GateHD)
     ASSERT_TRUE( item != nullptr );
     EXPECT_EQ( fr, item->file_region() );
     EXPECT_EQ( nullptr, item->name() );
-    EXPECT_EQ( PtItemType::GateInst, item->type() );
+    EXPECT_EQ( AstItem::GateInst, item->type() );
     EXPECT_EQ( type, item->prim_type() );
     EXPECT_EQ( nullptr, item->strength() );
     EXPECT_EQ( delay, item->delay() );
     EXPECT_EQ( 0, item->paramassign_num() );
     EXPECT_THROW( item->paramassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtConnection*>{},
+    EXPECT_EQ( std::vector<const AstConnection*>{},
 	       item->paramassign_list() );
     EXPECT_EQ( 0, item->defparam_num() );
     EXPECT_THROW( item->defparam(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDefParam*>{},
+    EXPECT_EQ( std::vector<const AstDefParam*>{},
 	       item->defparam_list() );
     EXPECT_EQ( 0, item->contassign_num() );
     EXPECT_THROW( item->contassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtContAssign*>{},
+    EXPECT_EQ( std::vector<const AstContAssign*>{},
 	       item->contassign_list() );
     EXPECT_EQ( 0, item->inst_num() );
     EXPECT_THROW( item->inst(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtInst*>{},
+    EXPECT_EQ( std::vector<const AstInst*>{},
 	       item->inst_list() );
     EXPECT_FALSE( item->automatic() );
     EXPECT_EQ( 0, item->ioitem_num() );
     EXPECT_EQ( 0, item->iohead_num() );
     EXPECT_THROW( item->iohead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtIOHead*>{},
+    EXPECT_EQ( std::vector<const AstIOHead*>{},
 	       item->iohead_list() );
     EXPECT_EQ( 0, item->declhead_num() );
     EXPECT_THROW( item->declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->declhead_list() );
     EXPECT_EQ( 0, item->item_num() );
     EXPECT_THROW( item->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->item_list() );
     EXPECT_EQ( nullptr, item->body() );
     EXPECT_FALSE( item->is_signed() );
@@ -721,34 +721,34 @@ TEST_F(ParserTest, GateHD)
     EXPECT_EQ( 0, item->terminal_num() );
     EXPECT_THROW( item->terminal(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtExpr*>{},
+    EXPECT_EQ( std::vector<const AstExpr*>{},
 	       item->terminal_list() );
     EXPECT_EQ( nullptr, item->path_decl() );
     EXPECT_EQ( nullptr, item->expr() );
     EXPECT_EQ( 0, item->then_declhead_num() );
     EXPECT_THROW( item->then_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->then_declhead_list() );
     EXPECT_EQ( 0, item->then_item_num() );
     EXPECT_THROW( item->then_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->then_item_list() );
     EXPECT_EQ( 0, item->else_declhead_num() );
     EXPECT_THROW( item->else_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->else_declhead_list() );
     EXPECT_EQ( 0, item->else_item_num() );
     EXPECT_THROW( item->else_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->else_item_list() );
     EXPECT_EQ( 0, item->caseitem_num() );
     EXPECT_THROW( item->caseitem(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtGenCaseItem*>{},
+    EXPECT_EQ( std::vector<const AstGenCaseItem*>{},
 	       item->caseitem_list() );
     EXPECT_EQ( nullptr, item->loop_var() );
     EXPECT_EQ( nullptr, item->init_expr() );
@@ -781,46 +781,46 @@ TEST_F(ParserTest, GateHSD)
     ASSERT_TRUE( item != nullptr );
     EXPECT_EQ( fr, item->file_region() );
     EXPECT_EQ( nullptr, item->name() );
-    EXPECT_EQ( PtItemType::GateInst, item->type() );
+    EXPECT_EQ( AstItem::GateInst, item->type() );
     EXPECT_EQ( type, item->prim_type() );
     EXPECT_EQ( str, item->strength() );
     EXPECT_EQ( delay, item->delay() );
     EXPECT_EQ( 0, item->paramassign_num() );
     EXPECT_THROW( item->paramassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtConnection*>{},
+    EXPECT_EQ( std::vector<const AstConnection*>{},
 	       item->paramassign_list() );
     EXPECT_EQ( 0, item->defparam_num() );
     EXPECT_THROW( item->defparam(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDefParam*>{},
+    EXPECT_EQ( std::vector<const AstDefParam*>{},
 	       item->defparam_list() );
     EXPECT_EQ( 0, item->contassign_num() );
     EXPECT_THROW( item->contassign(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtContAssign*>{},
+    EXPECT_EQ( std::vector<const AstContAssign*>{},
 	       item->contassign_list() );
     EXPECT_EQ( 0, item->inst_num() );
     EXPECT_THROW( item->inst(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtInst*>{},
+    EXPECT_EQ( std::vector<const AstInst*>{},
 	       item->inst_list() );
     EXPECT_FALSE( item->automatic() );
     EXPECT_EQ( 0, item->ioitem_num() );
     EXPECT_EQ( 0, item->iohead_num() );
     EXPECT_THROW( item->iohead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtIOHead*>{},
+    EXPECT_EQ( std::vector<const AstIOHead*>{},
 	       item->iohead_list() );
     EXPECT_EQ( 0, item->declhead_num() );
     EXPECT_THROW( item->declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->declhead_list() );
     EXPECT_EQ( 0, item->item_num() );
     EXPECT_THROW( item->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->item_list() );
     EXPECT_EQ( nullptr, item->body() );
     EXPECT_FALSE( item->is_signed() );
@@ -833,34 +833,34 @@ TEST_F(ParserTest, GateHSD)
     EXPECT_EQ( 0, item->terminal_num() );
     EXPECT_THROW( item->terminal(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtExpr*>{},
+    EXPECT_EQ( std::vector<const AstExpr*>{},
 	       item->terminal_list() );
     EXPECT_EQ( nullptr, item->path_decl() );
     EXPECT_EQ( nullptr, item->expr() );
     EXPECT_EQ( 0, item->then_declhead_num() );
     EXPECT_THROW( item->then_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->then_declhead_list() );
     EXPECT_EQ( 0, item->then_item_num() );
     EXPECT_THROW( item->then_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->then_item_list() );
     EXPECT_EQ( 0, item->else_declhead_num() );
     EXPECT_THROW( item->else_declhead(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclHead*>{},
+    EXPECT_EQ( std::vector<const AstDeclHead*>{},
 	       item->else_declhead_list() );
     EXPECT_EQ( 0, item->else_item_num() );
     EXPECT_THROW( item->else_item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtItem*>{},
+    EXPECT_EQ( std::vector<const AstItem*>{},
 	       item->else_item_list() );
     EXPECT_EQ( 0, item->caseitem_num() );
     EXPECT_THROW( item->caseitem(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtGenCaseItem*>{},
+    EXPECT_EQ( std::vector<const AstGenCaseItem*>{},
 	       item->caseitem_list() );
     EXPECT_EQ( nullptr, item->loop_var() );
     EXPECT_EQ( nullptr, item->init_expr() );

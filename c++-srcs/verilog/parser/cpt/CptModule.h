@@ -5,15 +5,12 @@
 /// @brief CptModule のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/pt/PtModule.h"
-#include "ym/pt/PtP.h"
+#include "parser/PtModule.h"
 #include "ym/FileRegion.h"
-
-#include "parser/PtiArray.h"
-#include "parser/PtiDecl.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -45,11 +42,11 @@ public:
     const std::string& config,
     const std::string& library,
     const std::string& cell,
-    PtiDeclHeadArray&& paramport_array,
-    PtiPortArray&& port_array,
-    PtiIOHeadArray&& iohead_array,
-    PtiDeclHeadArray&& declhead_array,
-    PtiItemArray&& item_array
+    PtDeclHeadArray&& paramport_array,
+    PtPortArray&& port_array,
+    PtIOHeadArray&& iohead_array,
+    PtDeclHeadArray&& declhead_array,
+    PtItemArray&& item_array
   );
 
   /// @brief デストラクタ
@@ -130,7 +127,7 @@ public:
   paramport_num() const override;
 
   /// @brief パラメータポート宣言の取得
-  const PtDeclHead*
+  const AstDeclHead*
   paramport(
     SizeType pos ///< [in] 位置 ( 0 <= pos < paramport_num() )
   ) const override;
@@ -140,7 +137,7 @@ public:
   port_num() const override;
 
   /// @brief ポートを取り出す．
-  const PtPort*
+  const AstPort*
   port(
     SizeType pos ///< [in] 位置 ( 0 <= pos < port_num() )
   ) const override;
@@ -150,7 +147,7 @@ public:
   iohead_num() const override;
 
   /// @brief 入出力宣言の取得
-  const PtIOHead*
+  const AstIOHead*
   iohead(
     SizeType pos ///< [in] 位置 ( 0 <= pos < iohead_num() )
   ) const override;
@@ -164,7 +161,7 @@ public:
   declhead_num() const override;
 
   /// @brief 宣言ヘッダの取得
-  const PtDeclHead*
+  const AstDeclHead*
   declhead(
     SizeType pos ///< [in] 位置 ( 0 <= pos < declhead_num() )
   ) const override;
@@ -174,7 +171,7 @@ public:
   item_num() const override;
 
   /// @brief item の取得
-  const PtItem*
+  const AstItem*
   item(
     SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
   ) const override;
@@ -241,246 +238,22 @@ private:
   std::string mCell;
 
   // パラメータポート宣言のリスト
-  PtiDeclHeadArray mParamPortArray;
+  PtDeclHeadArray mParamPortArray;
 
   // ポートの配列
-  PtiPortArray mPortArray;
+  PtPortArray mPortArray;
 
   // 入出力宣言リスト
-  PtiIOHeadArray mIOHeadArray;
+  PtIOHeadArray mIOHeadArray;
 
   // 入出力宣言の要素数
   int mIODeclNum;
 
   // 宣言リスト
-  PtiDeclHeadArray mDeclHeadArray;
+  PtDeclHeadArray mDeclHeadArray;
 
   // 要素のリスト
-  PtiItemArray mItemArray;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @brief port を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPort :
-  public PtiPort
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPort(
-    const FileRegion& file_region,
-    const char* ext_name
-  );
-
-  /// @brief デストラクタ
-  ~CptPort();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPort の継承クラスが実装しなければならない仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief ファイル位置の取得
-  /// @return ファイル位置
-  FileRegion
-  file_region() const override;
-
-  /// @brief 外向の名前の取得
-  /// @return 外向の名前(本当のポート名)
-  /// @return 無い場合は nullptr を返す
-  const char*
-  ext_name() const override;
-
-  /// @brief 内側のポート結線を表す式の取得
-  const PtExpr*
-  portref() const override;
-
-  /// @brief 内部のポート結線リストのサイズの取得
-  SizeType
-  portref_size() const override;
-
-  /// @brief 内部のポート結線リストの取得
-  const PtExpr*
-  portref_elem(
-    int pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-  ) const override;
-
-  /// @brief 内部ポート結線の方向の取得
-  VpiDir
-  portref_dir(
-    int pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-  ) const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 設定用の関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief portref の方向を設定する．
-  void
-  _set_portref_dir(
-    int pos,   ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-    VpiDir dir ///< [in] 方向
-  ) override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-  // 外部向きの名前
-  const char* mExtName;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @brief port を表すクラス (portref リスト付き)
-//////////////////////////////////////////////////////////////////////
-class CptPort1 :
-  public CptPort
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPort1(
-    const FileRegion& file_region,
-    const PtExpr* portref,
-    const char* ext_name
-  );
-
-  /// @brief デストラクタ
-  ~CptPort1();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPort の継承クラスが実装しなければならない仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 内側のポート結線を表す式の取得
-  const PtExpr*
-  portref() const override;
-
-  /// @brief 内部のポート結線リストのサイズの取得
-  SizeType
-  portref_size() const override;
-
-  /// @brief 内部のポート結線リストの取得
-  const PtExpr*
-  portref_elem(
-    int pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-  ) const override;
-
-  ///@brief 内部ポート結線の方向の取得
-  VpiDir
-  portref_dir(
-    int pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-  ) const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 設定用の関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief portref の方向を設定する．
-  void
-  _set_portref_dir(
-    int pos,   ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-    VpiDir dir ///< [in] 方向
-  ) override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 内部向きの接続を表す式
-  const PtExpr* mPortRef;
-
-  // 方向
-  VpiDir mDir;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @brief port を表すクラス (portref リスト付き)
-//////////////////////////////////////////////////////////////////////
-class CptPort2 :
-  public CptPort1
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPort2(
-    const FileRegion& file_region,
-    const PtExpr* portref,
-    PtiExprArray&& portref_array,
-    const char* ext_name,
-    void* q
-  );
-
-  /// @brief デストラクタ
-  ~CptPort2();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPort の継承クラスが実装しなければならない仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 内部のポート結線リストのサイズの取得
-  SizeType
-  portref_size() const override;
-
-  /// @brief 内部のポート結線リストの取得
-  const PtExpr*
-  portref_elem(
-    int pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-  ) const override;
-
-  ///@brief 内部ポート結線の方向の取得
-  VpiDir
-  portref_dir(
-    int pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-  ) const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 設定用の関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief portref の方向を設定する．
-  void
-  _set_portref_dir(
-    int pos,   ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-    VpiDir dir ///< [in] 方向
-  ) override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ポート参照式の配列
-  PtiExprArray mPortRefArray;
-
-  // 方向の配列
-  VpiDir* mDirArray;
+  PtItemArray mItemArray;
 
 };
 

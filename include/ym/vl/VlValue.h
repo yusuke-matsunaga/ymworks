@@ -1,16 +1,16 @@
-﻿#ifndef YM_VLVALUE_H
-#define YM_VLVALUE_H
+﻿#ifndef YM_VL_VLVALUE_H
+#define YM_VL_VLVALUE_H
 
-/// @file ym/VlValue.h
+/// @file ym/vl/VlValue.h
 /// @brief VlValue のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/BitVector.h"
-#include "ym/VlTime.h"
+#include "ym/vl/BitVector.h"
+#include "ym/vl/VlTime.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -18,7 +18,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 class VlValueRep;
 
 //////////////////////////////////////////////////////////////////////
-/// @class VlValue VlValue.h "ym/VlValue.h"
+/// @class VlValue VlValue.h "ym/vl/VlValue.h"
 /// @brief 値を表すクラス
 ///
 /// - 型に応じた VlValueRep の派生クラスが実際の値を保持する．
@@ -868,4 +868,4 @@ multi_concat(
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // YM_VLVALUE_H
+#endif // YM_VL_VLVALUE_H

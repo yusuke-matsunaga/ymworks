@@ -12,9 +12,9 @@
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbExpr.h"
 
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtExpr.h"
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstItem.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,40 +27,40 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlParamAssign*
 EiFactory::new_ParamAssign(
   const VlModule* module,
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   ElbParameter* param,
-  const PtExpr* rhs_expr,
+  const AstExpr* rhs_expr,
   const VlValue& rhs_value
 )
 {
-  return new EiParamAssign(module, pt_obj, param, rhs_expr, rhs_value);
+  return new EiParamAssign(module, ast_obj, param, rhs_expr, rhs_value);
 }
 
 // @brief 名前によるパラメータ割り当て文を生成する．
 const VlParamAssign*
 EiFactory::new_NamedParamAssign(
   const VlModule* module,
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   ElbParameter* param,
-  const PtExpr* rhs_expr,
+  const AstExpr* rhs_expr,
   const VlValue& rhs_value
 )
 {
-  return new EiParamAssign2(module, pt_obj, param, rhs_expr, rhs_value);
+  return new EiParamAssign2(module, ast_obj, param, rhs_expr, rhs_value);
 }
 
 // @brief defparam 文を生成する．
 const VlDefParam*
 EiFactory::new_DefParam(
   const VlModule* module,
-  const PtItem* pt_header,
-  const PtDefParam* pt_defparam,
+  const AstItem* ast_header,
+  const AstDefParam* ast_defparam,
   ElbParameter* param,
-  const PtExpr* rhs_expr,
+  const AstExpr* rhs_expr,
   const VlValue& rhs_value
 )
 {
-  return new EiDefParam(module, pt_header, pt_defparam,
+  return new EiDefParam(module, ast_header, ast_defparam,
 			param, rhs_expr, rhs_value);
 }
 
@@ -72,12 +72,12 @@ EiFactory::new_DefParam(
 // @brief コンストラクタ
 EiParamAssign::EiParamAssign(
   const VlModule* parent,
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   ElbParameter* param,
-  const PtExpr* rhs_expr,
+  const AstExpr* rhs_expr,
   const VlValue& rhs_value
 ) : mModule{parent},
-    mPtObj{pt_obj},
+    mAstObj{ast_obj},
     mLhs{param},
     mRhsExpr{rhs_expr},
     mRhsValue{rhs_value}
@@ -100,7 +100,7 @@ EiParamAssign::type() const
 FileRegion
 EiParamAssign::file_region() const
 {
-  return mPtObj->file_region();
+  return mAstObj->file_region();
 }
 
 // @brief 親のモジュールを返す．
@@ -146,11 +146,11 @@ EiParamAssign::is_conn_by_name() const
 // @brief コンストラクタ
 EiParamAssign2::EiParamAssign2(
   const VlModule* parent,
-  const PtBase* pt_obj,
+  const AstBase* ast_obj,
   ElbParameter* param,
-  const PtExpr* rhs_expr,
+  const AstExpr* rhs_expr,
   const VlValue& rhs_value
-) : EiParamAssign(parent, pt_obj, param, rhs_expr, rhs_value)
+) : EiParamAssign(parent, ast_obj, param, rhs_expr, rhs_value)
 {
 }
 
@@ -174,14 +174,14 @@ EiParamAssign2::is_conn_by_name() const
 // @brief コンストラクタ
 EiDefParam::EiDefParam(
   const VlModule* parent,
-  const PtItem* pt_header,
-  const PtDefParam* pt_defparam,
+  const AstItem* ast_header,
+  const AstDefParam* ast_defparam,
   ElbParameter* param,
-  const PtExpr* rhs_expr,
+  const AstExpr* rhs_expr,
   const VlValue& rhs_value
 ) : mModule{parent},
-    mPtHead{pt_header},
-    mPtDefParam{pt_defparam},
+    mAstHead{ast_header},
+    mAstDefParam{ast_defparam},
     mLhs{param},
     mRhsExpr{rhs_expr},
     mRhsValue{rhs_value}
@@ -204,7 +204,7 @@ EiDefParam::type() const
 FileRegion
 EiDefParam::file_region() const
 {
-  return mPtDefParam->file_region();
+  return mAstDefParam->file_region();
 }
 
 // @brief 親のモジュールを返す．

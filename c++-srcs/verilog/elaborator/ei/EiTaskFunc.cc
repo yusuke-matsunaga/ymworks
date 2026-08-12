@@ -10,16 +10,13 @@
 #include "ei/EiTaskFunc.h"
 #include "ei/EiIODecl.h"
 #include "ei/EiDeclHead.h"
-
 #include "elaborator/ElbDecl.h"
-
-#include "ym/VlTime.h"
+#include "ym/vl/VlTime.h"
 #include "ym/vl/VlStmt.h"
-
-#include "ym/BitVector.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtExpr.h"
-#include "ym/pt/PtItem.h"
+#include "ym/vl/BitVector.h"
+#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/AstItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -32,45 +29,45 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbTaskFunc*
 EiFactory::new_Function(
   const VlScope* parent,
-  const PtItem* pt_item,
-  const PtRange* pt_range,
+  const AstItem* ast_item,
+  const AstRange* ast_range,
   const RangeVal& range,
   bool const_func
 )
 {
-  if ( pt_range == nullptr ) {
-    throw std::logic_error{"pt_range == nullptr"};
+  if ( ast_range == nullptr ) {
+    throw std::logic_error{"ast_range == nullptr"};
   }
 
   // IO数を数え配列を初期化する．
-  auto io_num = pt_item->ioitem_num();
-  return new EiFunctionV(parent, pt_item, io_num,
-			 pt_range, range, const_func);
+  auto io_num = ast_item->ioitem_num();
+  return new EiFunctionV(parent, ast_item, io_num,
+			 ast_range, range, const_func);
 }
 
 // @brief function を生成する．
 ElbTaskFunc*
 EiFactory::new_Function(
   const VlScope* parent,
-  const PtItem* pt_item,
+  const AstItem* ast_item,
   bool const_func
 )
 {
   // IO数を数え配列を初期化する．
-  auto io_num = pt_item->ioitem_num();
-  return new EiFunction(parent, pt_item, io_num, const_func);
+  auto io_num = ast_item->ioitem_num();
+  return new EiFunction(parent, ast_item, io_num, const_func);
 }
 
 // @brief task を生成する．
 ElbTaskFunc*
 EiFactory::new_Task(
   const VlScope* parent,
-  const PtItem* pt_item
+  const AstItem* ast_item
 )
 {
   // IO数を数え配列を初期化する．
-  auto io_num = pt_item->ioitem_num();
-  return new EiTask(parent, pt_item, io_num);
+  auto io_num = ast_item->ioitem_num();
+  return new EiTask(parent, ast_item, io_num);
 }
 
 
@@ -81,10 +78,10 @@ EiFactory::new_Task(
 // @brief コンストラクタ
 EiTaskFunc::EiTaskFunc(
   const VlScope* parent,
-  const PtItem* pt_item,
+  const AstItem* ast_item,
   SizeType io_num
 ) : mParent{parent},
-    mPtItem{pt_item}
+    mAstItem{ast_item}
 {
   mIODeclList.reserve(io_num);
 }
@@ -98,7 +95,7 @@ EiTaskFunc::~EiTaskFunc()
 FileRegion
 EiTaskFunc::file_region() const
 {
-  return mPtItem->file_region();
+  return mAstItem->file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -112,14 +109,14 @@ EiTaskFunc::parent_scope() const
 std::string
 EiTaskFunc::name() const
 {
-  return mPtItem->name();
+  return mAstItem->name();
 }
 
 // @brief automatic 宣言されていたら true を返す．
 bool
 EiTaskFunc::automatic() const
 {
-  return mPtItem->automatic();
+  return mAstItem->automatic();
 }
 
 // @brief 入出力数を得る．
@@ -161,11 +158,11 @@ EiTaskFunc::stmt() const
 void
 EiTaskFunc::add_iodecl(
   ElbIOHead* head,
-  const PtIOItem* pt_item,
+  const AstIOItem* ast_item,
   const VlDecl* decl
 )
 {
-  mIODeclList.push_back({head, pt_item, decl});
+  mIODeclList.push_back({head, ast_item, decl});
 }
 
 // @brief 本体のステートメントをセットする．
@@ -185,9 +182,9 @@ EiTaskFunc::set_stmt(
 // @brief コンストラクタ
 EiTask::EiTask(
   const VlScope* parent,
-  const PtItem* pt_item,
+  const AstItem* ast_item,
   SizeType io_num
-) : EiTaskFunc(parent, pt_item, io_num)
+) : EiTaskFunc(parent, ast_item, io_num)
 {
 }
 
@@ -293,10 +290,10 @@ EiTask::ovar() const
 // @brief コンストラクタ
 EiFunction::EiFunction(
   const VlScope* parent,
-  const PtItem* pt_item,
+  const AstItem* ast_item,
   SizeType io_num,
   bool const_func
-) : EiTaskFunc(parent, pt_item, io_num),
+) : EiTaskFunc(parent, ast_item, io_num),
     mConstFunc{const_func}
 {
 }
@@ -317,7 +314,7 @@ EiFunction::type() const
 VpiFuncType
 EiFunction::func_type() const
 {
-  switch ( pt_item()->data_type() ) {
+  switch ( ast_item()->data_type() ) {
   case VpiVarType::None:
     return VpiFuncType::Sized;
 
@@ -344,7 +341,7 @@ EiFunction::func_type() const
 bool
 EiFunction::is_signed() const
 {
-  return pt_item()->is_signed();
+  return ast_item()->is_signed();
 }
 
 // @brief 範囲指定を持つとき true を返す．
@@ -386,7 +383,7 @@ EiFunction::right_range_string() const
 SizeType
 EiFunction::bit_size() const
 {
-  switch ( pt_item()->data_type() ) {
+  switch ( ast_item()->data_type() ) {
   case VpiVarType::None:
     return 1;
 
@@ -440,13 +437,13 @@ EiFunction::ovar() const
 // @brief コンストラクタ
 EiFunctionV::EiFunctionV(
   const VlScope* parent,
-  const PtItem* pt_item,
+  const AstItem* ast_item,
   SizeType io_num,
-  const PtRange* pt_range,
+  const AstRange* ast_range,
   const RangeVal& range,
   bool const_func
-) : EiFunction(parent, pt_item, io_num, const_func),
-    mRange(pt_range, range)
+) : EiFunction(parent, ast_item, io_num, const_func),
+    mRange(ast_range, range)
 {
 }
 

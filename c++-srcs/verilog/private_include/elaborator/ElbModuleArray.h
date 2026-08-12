@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "ym/vl/VlModule.h"
-#include "ym/pt/PtP.h"
 #include "ElbFwd.h"
 
 

@@ -2,12 +2,13 @@
 /// @brief Parser の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "parser/Parser.h"
-#include "parser/PtiFactory.h"
-
+#include "parser/PtFactory.h"
+#include "parser/PtItem.h"
+#include "parser/PtExpr.h"
 #include "ym/MsgMgr.h"
 
 
@@ -34,13 +35,14 @@ Parser::end_generate()
 }
 
 // @brief generate 文の生成
-const PtItem*
+PtItem*
 Parser::new_Generate(
   const FileRegion& fr
 )
 {
-  auto item = mFactory->new_Generate(fr, mCurDeclArray, mCurItemArray);
-  return item;
+  return mFactory.new_Generate(fr,
+			       PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+			       PtItemArray(mAlloc, mCurItemArray, true));
 }
 
 // @brief generate block 文の生成
@@ -49,7 +51,9 @@ Parser::new_GenBlock(
   const FileRegion& fr
 )
 {
-  auto item = mFactory->new_GenBlock(fr, mCurDeclArray, mCurItemArray);
+  auto item = mFactory.new_GenBlock(fr,
+				    PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				    PtItemArray(mAlloc, mCurItemArray, true));
   add_item(item);
 }
 
@@ -60,7 +64,9 @@ Parser::new_GenBlock(
   const char* name
 )
 {
-  auto item = mFactory->new_GenBlock(fr, name, mCurDeclArray, mCurItemArray);
+  auto item = mFactory.new_GenBlock(fr, name,
+				    PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				    PtItemArray(mAlloc, mCurItemArray, true));
   add_item(item);
 }
 
@@ -100,14 +106,14 @@ Parser::end_genelse()
 void
 Parser::new_GenIf(
   const FileRegion& fr,
-  const PtExpr* cond
+  const AstExpr* cond
 )
 {
-  auto item = mFactory->new_GenIf(fr, cond,
-				  mGenThenDeclArray,
-				  mGenThenItemArray,
-				  std::vector<const PtDeclHead*>{},
-				  std::vector<const PtItem*>{});
+  auto item = mFactory.new_GenIf(fr, cond,
+				 PtDeclHeadArray(mAlloc, mGenThenDeclArray, true),
+				 PtItemArray(mAlloc, mGenThenItemArray, true),
+				 {},
+				 {});
   add_item(item);
 }
 
@@ -115,14 +121,14 @@ Parser::new_GenIf(
 void
 Parser::new_GenIfElse(
   const FileRegion& fr,
-  const PtExpr* cond
+  const AstExpr* cond
 )
 {
-  auto item = mFactory->new_GenIf(fr, cond,
-				  mGenThenDeclArray,
-				  mGenThenItemArray,
-				  mGenElseDeclArray,
-				  mGenElseItemArray);
+  auto item = mFactory.new_GenIf(fr, cond,
+				 PtDeclHeadArray(mAlloc, mGenThenDeclArray, true),
+				 PtItemArray(mAlloc, mGenThenItemArray, true),
+				 PtDeclHeadArray(mAlloc, mGenElseDeclArray, true),
+				 PtItemArray(mAlloc, mGenElseItemArray, true));
   add_item(item);
 }
 
@@ -130,24 +136,25 @@ Parser::new_GenIfElse(
 void
 Parser::new_GenCase(
   const FileRegion& fr,
-  const PtExpr* expr,
-  PtrList<const PtGenCaseItem>* item_list
+  const AstExpr* expr,
+  PtGenCaseItemList* item_list
 )
 {
-  auto item = mFactory->new_GenCase(fr, expr, item_list->to_vector());
+  auto item = mFactory.new_GenCase(fr, expr,
+				   item_list->to_array(mAlloc));
   add_item(item);
 }
 
 // @brief generate case の要素の生成
-const PtGenCaseItem*
+PtGenCaseItem*
 Parser::new_GenCaseItem(
   const FileRegion& fr,
-  PtrList<const PtExpr>* label_list
+  PtExprList* label_list
 )
 {
-  auto item = mFactory->new_GenCaseItem(fr, label_list->to_vector(),
-					mCurDeclArray, mCurItemArray);
-  return item;
+  return mFactory.new_GenCaseItem(fr, label_list->to_array(mAlloc),
+				  PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				  PtItemArray(mAlloc, mCurItemArray, true));
 }
 
 // @brief generate for 文の生成
@@ -155,10 +162,10 @@ void
 Parser::new_GenFor(
   const FileRegion& fr,
   const char* loop_var,
-  const PtExpr* init_expr,
-  const PtExpr* cond,
+  const AstExpr* init_expr,
+  const AstExpr* cond,
   const char* next_var,
-  const PtExpr* next_expr,
+  const AstExpr* next_expr,
   const char* block_name
 )
 {
@@ -176,9 +183,10 @@ Parser::new_GenFor(
 		    buf.str());
     return;
   }
-  auto item = mFactory->new_GenFor(fr, loop_var,
-				   init_expr, cond, next_expr, block_name,
-				   mCurDeclArray, mCurItemArray);
+  auto item = mFactory.new_GenFor(fr, loop_var,
+				  init_expr, cond, next_expr, block_name,
+				  PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				  PtItemArray(mAlloc, mCurItemArray, true));
   add_item(item);
 }
 

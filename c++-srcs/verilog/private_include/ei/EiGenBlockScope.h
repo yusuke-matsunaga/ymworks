@@ -25,7 +25,7 @@ public:
   /// @brief コンストラクタ
   EiGenBlockScope(
     const VlScope* parent, ///< [in] 親のスコープ環境
-    const PtItem* pt_item  ///< [in] 対応するパース木の要素
+    const AstItem* ast_item  ///< [in] 対応するパース木の要素
   );
 
   /// @brief デストラクタ
@@ -58,7 +58,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 対応するパース木の要素
-  const PtItem* mPtItem;
+  const AstItem* mAstItem;
 
 };
 
@@ -75,7 +75,7 @@ public:
   /// @brief コンストラクタ
   EiGfBlockScope(
     const VlScope* parent, ///< [in] 親のスコープ環境
-    const PtItem* pt_item, ///< [in] 対応するパース木の要素
+    const AstItem* ast_item, ///< [in] 対応するパース木の要素
     int index              ///< [in] インデックス
   );
 

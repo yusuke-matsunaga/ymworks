@@ -6,10 +6,8 @@
 /// Copyright (C) 2005-2009, 2014 Yusuke Matsunaga
 /// All rights reserved.
 
-
 #include "VlDumperImpl.h"
-
-#include "ym/VlMgr.h"
+#include "ym/vl/VlMgr.h"
 #include "ym/vl/VlRange.h"
 #include "ym/vl/VlDelay.h"
 #include "ym/vl/VlScope.h"

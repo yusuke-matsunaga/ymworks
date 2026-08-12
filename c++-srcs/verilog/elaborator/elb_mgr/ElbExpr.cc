@@ -7,9 +7,8 @@
 /// All rights reserved.
 
 #include "elaborator/ElbExpr.h"
-
-#include "ym/BitVector.h"
-#include "ym/VlTime.h"
+#include "ym/vl/BitVector.h"
+#include "ym/vl/VlTime.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

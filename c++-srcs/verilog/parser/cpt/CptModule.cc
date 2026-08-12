@@ -8,9 +8,7 @@
 
 #include "CptModule.h"
 #include "alloc/Alloc.h"
-#include "parser/CptFactory.h"
-#include "parser/PtiDecl.h"
-#include "ym/pt/PtItem.h"
+#include "parser/PtFactory.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -38,11 +36,11 @@ CptModule::CptModule(
   const std::string& config,
   const std::string& library,
   const std::string& cell,
-  PtiDeclHeadArray&& paramport_array,
-  PtiPortArray&& port_array,
-  PtiIOHeadArray&& iohead_array,
-  PtiDeclHeadArray&& declhead_array,
-  PtiItemArray&& item_array
+  PtDeclHeadArray&& paramport_array,
+  PtPortArray&& port_array,
+  PtIOHeadArray&& iohead_array,
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 ) : mFileRegion{file_region},
     mName{name},
     mDefDecayTime{decay},
@@ -103,7 +101,7 @@ CptModule::paramport_num() const
 }
 
 // @brief パラメータポート宣言の取得
-const PtDeclHead*
+const AstDeclHead*
 CptModule::paramport(
   SizeType pos
 ) const
@@ -119,7 +117,7 @@ CptModule::port_num() const
 }
 
 // @brief ポートを取り出す．
-const PtPort*
+const AstPort*
 CptModule::port(
   SizeType pos
 ) const
@@ -135,7 +133,7 @@ CptModule::iohead_num() const
 }
 
 // @brief 入出力宣言の取得
-const PtIOHead*
+const AstIOHead*
 CptModule::iohead(
   SizeType pos
 ) const
@@ -158,7 +156,7 @@ CptModule::declhead_num() const
 }
 
 // @brief 宣言ヘッダの取得
-const PtDeclHead*
+const AstDeclHead*
 CptModule::declhead(
   SizeType pos
 ) const
@@ -174,7 +172,7 @@ CptModule::item_num() const
 }
 
 // @brief item の取得
-const PtItem*
+const AstItem*
 CptModule::item(
   SizeType pos
 ) const
@@ -331,213 +329,12 @@ CptModule::cell() const
 
 
 //////////////////////////////////////////////////////////////////////
-// port を表すクラス
-//////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptPort::CptPort(
-  const FileRegion& file_region,
-  const char* ext_name
-) : mFileRegion{file_region},
-    mExtName{ext_name}
-{
-}
-
-// デストラクタ
-CptPort::~CptPort()
-{
-}
-
-// ファイル位置を返す．
-FileRegion
-CptPort::file_region() const
-{
-  return mFileRegion;
-}
-
-// 外向の名前(本当のポート名)を取出す
-const char*
-CptPort::ext_name() const
-{
-  return mExtName;
-}
-
-// @brief 内側のポート結線を表す式の取得
-const PtExpr*
-CptPort::portref() const
-{
-  return nullptr;
-}
-
-// @brief 内部のポート結線リストのサイズの取得
-SizeType
-CptPort::portref_size() const
-{
-  return 0;
-}
-
-// @brief 内部のポート結線リストの取得
-const PtExpr*
-CptPort::portref_elem(
-  int pos
-) const
-{
-  ASSERT_NOT_REACHED;
-  return nullptr;
-}
-
-//@brief 内部ポート結線の方向の取得
-VpiDir
-CptPort::portref_dir(
-  int pos
-) const
-{
-  ASSERT_NOT_REACHED;
-  return VpiDir::NoDirection;
-}
-
-// @brief portref の方向を設定する．
-void
-CptPort::_set_portref_dir(
-  int pos,
-  VpiDir dir
-)
-{
-  ASSERT_NOT_REACHED;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// port を表すクラス
-//////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptPort1::CptPort1(
-  const FileRegion& file_region,
-  const PtExpr* portref,
-  const char* ext_name
-) : CptPort{file_region, ext_name},
-    mPortRef{portref}
-{
-}
-
-// デストラクタ
-CptPort1::~CptPort1()
-{
-}
-
-// @brief 内側のポート結線を表す式の取得
-const PtExpr*
-CptPort1::portref() const
-{
-  return mPortRef;
-}
-
-// @brief 内部のポート結線リストのサイズの取得
-SizeType
-CptPort1::portref_size() const
-{
-  return 1;
-}
-
-// @brief 内部のポート結線リストの取得
-const PtExpr*
-CptPort1::portref_elem(
-  int pos
-) const
-{
-  ASSERT_COND( pos == 0 );
-  return mPortRef;
-}
-
-// @brief 内部ポート結線の方向の取得
-VpiDir
-CptPort1::portref_dir(
-  int pos
-) const
-{
-  return mDir;
-}
-
-// @brief portref の方向を設定する．
-void
-CptPort1::_set_portref_dir(
-  int pos,
-  VpiDir dir
-)
-{
-  ASSERT_COND( pos == 0 );
-  mDir = dir;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// port を表すクラス
-//////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptPort2::CptPort2(
-  const FileRegion& file_region,
-  const PtExpr* portref,
-  PtiExprArray&& portref_array,
-  const char* ext_name,
-  void* q
-) : CptPort1{file_region, portref, ext_name},
-    mPortRefArray{std::move(portref_array)},
-    mDirArray{new (q) VpiDir[mPortRefArray.size()]}
-{
-}
-
-// デストラクタ
-CptPort2::~CptPort2()
-{
-}
-
-// @brief 内部のポート結線リストのサイズの取得
-SizeType
-CptPort2::portref_size() const
-{
-  return mPortRefArray.size();
-}
-
-// @brief 内部のポート結線リストの取得
-const PtExpr*
-CptPort2::portref_elem(
-  int pos
-) const
-{
-  return mPortRefArray[pos];
-}
-
-// @brief 内部ポート結線の方向の取得
-VpiDir
-CptPort2::portref_dir(
-  int pos
-) const
-{
-  ASSERT_COND( 0 <= pos && pos < portref_size() );
-  return mDirArray[pos];
-}
-
-// @brief portref の方向を設定する．
-void
-CptPort2::_set_portref_dir(
-  int pos,
-  VpiDir dir
-)
-{
-  ASSERT_COND( 0 <= pos && pos < portref_size() );
-  mDirArray[pos] = dir;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// モジュール関係
+// クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
 // モジュールの生成
-const PtModule*
-CptFactory::new_Module(
+PtModule*
+PtFactory::new_Module(
   const FileRegion& file_region,
   const char* name,
   bool macro,
@@ -555,79 +352,27 @@ CptFactory::new_Module(
   const std::string& config,
   const std::string& library,
   const std::string& cell,
-  const std::vector<const PtDeclHead*>& paramport_array,
-  const std::vector<const PtPort*>& port_array,
-  const std::vector<const PtIOHead*>& iohead_array,
-  const std::vector<const PtDeclHead*>& declhead_array,
-  const std::vector<const PtItem*>& item_array
+  PtDeclHeadArray&& paramport_array,
+  PtPortArray&& port_array,
+  PtIOHeadArray&& iohead_array,
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 )
 {
-  ++ mNumModule;
   void* p = mAlloc.get_memory(sizeof(CptModule));
-  auto obj = new (p) CptModule{file_region, name,
-			       macro, is_cell, is_protected,
-			       time_unit, time_precision,
-			       net_type, unconn,
-			       delay, decay,
-			       explicit_name,
-			       portfaults, suppress_faults,
-			       config, library, cell,
-			       PtiArray<const PtDeclHead>{mAlloc, paramport_array},
-			       PtiArray<const PtPort>{mAlloc, port_array},
-			       PtiArray<const PtIOHead>{mAlloc, iohead_array},
-			       PtiArray<const PtDeclHead>{mAlloc, declhead_array},
-			       PtiArray<const PtItem>{mAlloc, item_array}};
-  return obj;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// ポート関係
-//////////////////////////////////////////////////////////////////////
-
-// @brief ポートの生成
-PtiPort*
-CptFactory::new_Port(
-  const FileRegion& file_region,
-  const char* ext_name
-)
-{
-  ++ mNumPort;
-  void* p = mAlloc.get_memory(sizeof(CptPort));
-  auto obj = new (p) CptPort{file_region, ext_name};
-  return obj;
-}
-
-// ポートの生成
-PtiPort*
-CptFactory::new_Port(
-  const FileRegion& file_region,
-  const PtExpr* portref,
-  const char* ext_name
-)
-{
-  ++ mNumPort;
-  void* p = mAlloc.get_memory(sizeof(CptPort1));
-  auto obj = new (p) CptPort1{file_region, portref, ext_name};
-  return obj;
-}
-
-// ポートの生成
-PtiPort*
-CptFactory::new_Port(
-  const FileRegion& file_region,
-  const PtExpr* portref,
-  const std::vector<const PtExpr*>& portref_array,
-  const char* ext_name
-)
-{
-  ++ mNumPort;
-  void* p = mAlloc.get_memory(sizeof(CptPort2));
-  void* q = mAlloc.get_memory(sizeof(VpiDir) * portref_array.size());
-  auto obj = new (p) CptPort2{file_region, portref,
-			      PtiArray<const PtExpr>{mAlloc, portref_array},
-			      ext_name, q};
-  return obj;
+  return new (p) CptModule(file_region, name,
+			   macro, is_cell, is_protected,
+			   time_unit, time_precision,
+			   net_type, unconn,
+			   delay, decay,
+			   explicit_name,
+			   portfaults, suppress_faults,
+			   config, library, cell,
+			   std::move(paramport_array),
+			   std::move(port_array),
+			   std::move(iohead_array),
+			   std::move(declhead_array),
+			   std::move(item_array));
 }
 
 END_NAMESPACE_YM_VERILOG

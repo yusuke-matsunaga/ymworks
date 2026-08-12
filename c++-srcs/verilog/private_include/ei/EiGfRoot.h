@@ -11,7 +11,7 @@
 #include "ym/vl/VlNamedObj.h"
 #include "elaborator/ElbGfRoot.h"
 
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,8 +29,8 @@ public:
 
   /// @brief コンストラクタ
   EiGfRoot(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item  ///< [in] 対応するパース木の要素
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstItem* ast_item ///< [in] 対応するパース木の要素
   );
 
   /// @brief デストラクタ
@@ -93,7 +93,7 @@ private:
   const VlScope* mParent;
 
   // 対応するパース木の要素
-  const PtItem* mPtItem;
+  const AstItem* mAstItem;
 
   // 子供のスコープのハッシュ表
   std::unordered_map<SizeType, const VlScope*> mTable;

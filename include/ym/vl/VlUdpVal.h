@@ -1,11 +1,11 @@
-﻿#ifndef YM_VLUDPVAL_H
-#define YM_VLUDPVAL_H
+﻿#ifndef YM_VL_VLUDPVAL_H
+#define YM_VL_VLUDPVAL_H
 
-/// @file ym/VlUdpVal.h
+/// @file ym/vl/VlUdpVal.h
 /// @brief VlUdpVal のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/verilog.h"
@@ -14,7 +14,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class VlUdpVal VlUdpVal.h "ym/VlUdpVal.h"
+/// @class VlUdpVal VlUdpVal.h "ym/vl/VlUdpVal.h"
 /// @brief UDP のテーブルで使われる値を表すクラス
 /// 基本的には
 /// - 0
@@ -165,4 +165,4 @@ operator<<(
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // YM_VLUDPVAL_H
+#endif // YM_VL_VLUDPVAL_H

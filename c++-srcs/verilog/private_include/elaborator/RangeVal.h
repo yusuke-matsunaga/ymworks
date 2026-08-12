@@ -9,8 +9,8 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -155,10 +155,10 @@ public:
 
   /// @brief コンストラクタ
   RangeInfo(
-    const PtRange* pt_range, ///< [in] パース木の範囲定義
-    const RangeVal& range    ///< [in] 範囲の値
+    const AstRange* ast_range, ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   ) : RangeVal{range},
-      mPtRange{pt_range}
+      mAstRange{ast_range}
   {
   }
 
@@ -175,14 +175,14 @@ public:
   std::string
   left_string() const
   {
-    return mPtRange->left()->decompile();
+    return mAstRange->left()->decompile();
   }
 
   /// @brief 範囲のLSBを表す文字列の取得
   std::string
   right_string() const
   {
-    return mPtRange->right()->decompile();
+    return mAstRange->right()->decompile();
   }
 
 
@@ -192,7 +192,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の範囲定義
-  const PtRange* mPtRange;
+  const AstRange* mAstRange;
 
 };
 

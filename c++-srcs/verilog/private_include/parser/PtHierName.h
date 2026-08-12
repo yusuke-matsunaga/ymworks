@@ -1,0 +1,103 @@
+﻿#ifndef PARSER_PTHIERNAME_H
+#define PARSER_PTHIERNAME_H
+
+/// @file parser/PtHierName.h
+/// @brief PtHierName のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2026 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "parser/PtList.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class PtHierName PtHierName.h "parser/PtHierName.h"
+/// @ingroup VlParser
+/// @brief 階層つき名を表すクラス
+///
+/// 中身は階層部分を表す PtNameBranch のリストと末尾の名前を表す
+/// 文字列から成る．
+///
+/// コンストラクタでは最下層の名前の設定のみを行う．
+/// 階層の追加は add(const char*), add(int index, const char*)
+/// で行う．これは内部で PtNameBranch を生成していることに因る．
+//////////////////////////////////////////////////////////////////////
+class PtHierName
+{
+public:
+
+  /// @brief コンストラクタ
+  PtHierName(
+    const AstNameBranch* nb, ///< [in] 階層ブランチ
+    const char* name         ///< [in] 名前
+  ) : mNbList{new PtNameBranchList},
+      mTailName{name}
+  {
+    mNbList->push_back(nb);
+  }
+
+  /// @brief デストラクタ
+  ~PtHierName()
+  {
+    delete mNbList;
+  }
+
+
+public:
+
+  /// @brief 階層を追加する．
+  void
+  add(
+    const AstNameBranch* nb, ///< [in] 追加する階層ブランチ
+    const char* tail_name    ///< [in] 追加する最下層の名前
+  )
+  {
+    mNbList->push_back(nb);
+    mTailName = tail_name;
+  }
+
+
+public:
+
+  /// @brief 階層ブランチを PtNameBranchArray の形で取り出す．
+  ///
+  /// この関数を呼ぶと mNbList は破壊される．
+  PtNameBranchArray
+  name_branch_to_array(
+    Alloc& alloc
+  )
+  {
+    auto ans = mNbList->to_array(alloc);
+    delete mNbList;
+    mNbList = nullptr;
+    return ans;
+  }
+
+  /// @brief 最下層の名前を取り出す．
+  /// @return 最下層の名前
+  const char*
+  tail_name() const
+  {
+    return mTailName;
+  }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 階層ブランチのリスト
+  PtNameBranchList* mNbList;
+
+  // 最下層の名前
+  const char* mTailName;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // PARSER_PTHIERNAME_H

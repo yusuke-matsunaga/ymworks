@@ -19,14 +19,14 @@
 #include "DefParamStub.h"
 #include "ElbStub.h"
 
-#include "ym/pt/PtModule.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstModule.h"
+#include "ym/vl/AstItem.h"
+#include "ym/vl/AstMisc.h"
 #include "ym/vl/VlTaskFunc.h"
 
 #include "ym/ClibCellLibrary.h"
 
-#include "parser/PtMgr.h"
+#include "parser/AstMgr.h"
 
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbModuleArray.h"
@@ -60,7 +60,7 @@ BEGIN_NONAMESPACE
 inline
 std::string
 gen_funckey(
-  const PtModule* module,
+  const AstModule* module,
   const std::string& name
 )
 {
@@ -113,38 +113,38 @@ Elaborator::~Elaborator()
 // @brief エラボレーションを行う．
 int
 Elaborator::operator()(
-  const PtMgr& pt_mgr
+  const AstMgr& ast_mgr
 )
 {
   if ( mDone ) {
     throw std::logic_error{"mDone"};
   }
 
-  auto& pt_udp_list = pt_mgr.pt_udp_list();
-  auto& pt_module_list = pt_mgr.pt_module_list();
+  auto& ast_udp_list = ast_mgr.udp_list();
+  auto& ast_module_list = ast_mgr.module_list();
 
   // attribute instance の生成
-  for ( const auto& attr_info: pt_mgr.all_attr_list() ) {
+  for ( const auto& attr_info: ast_mgr.all_attr_list() ) {
     mAttrGen->instantiate_attribute(attr_info);
   }
 
   // UDP の生成
-  for ( auto pt_udp: pt_udp_list ) {
-    mUdpGen->instantiate_udp(pt_udp);
+  for ( auto ast_udp: ast_udp_list ) {
+    mUdpGen->instantiate_udp(ast_udp);
   }
 
   // モジュールテンプレートの辞書を作る．
   // と同時に UDP 名とモジュール名の重複チェックを行う．
   // と同時に関数定義の辞書を作る．
   int nerr = 0;
-  for ( auto pt_module: pt_module_list ) {
-    auto name = pt_module->name();
+  for ( auto ast_module: ast_module_list ) {
+    auto name = ast_module->name();
     if ( mMgr.find_udp(name) != nullptr ) {
       std::ostringstream buf;
       buf << "\"" << name
 	  << "\" is duplicately defined as module and as UDP.";
       MsgMgr::put_msg(__FILE__, __LINE__,
-		      pt_module->file_region(),
+		      ast_module->file_region(),
 		      MsgType::Error,
 		      "ELAB",
 		      buf.str());
@@ -154,7 +154,7 @@ Elaborator::operator()(
       std::ostringstream buf;
       buf << "module \"" << name<< "\" is redefined.";
       MsgMgr::put_msg(__FILE__, __LINE__,
-		      pt_module->file_region(),
+		      ast_module->file_region(),
 		      MsgType::Error,
 		      "ELAB",
 		      buf.str());
@@ -162,12 +162,12 @@ Elaborator::operator()(
     }
     else {
       // モジュール名をキーにして登録する．
-      mModuleDict.emplace(name, pt_module);
+      mModuleDict.emplace(name, ast_module);
     }
     // 関数の辞書を作る．
-    for ( auto item: pt_module->item_list() ) {
-      if ( item->type() == PtItemType::Func ) {
-	auto key = gen_funckey(pt_module, item->name());
+    for ( auto item: ast_module->item_list() ) {
+      if ( item->type() == AstItem::Func ) {
+	auto key = gen_funckey(ast_module, item->name());
 	mFuncDict.emplace(key, item);
       }
     }
@@ -182,10 +182,10 @@ Elaborator::operator()(
   auto toplevel = mMgr.new_Toplevel();
 
   // トップモジュールの生成
-  for ( auto pt_module: pt_module_list ) {
-    if ( !pt_mgr.check_def_name(pt_module->name()) ) {
+  for ( auto ast_module: ast_module_list ) {
+    if ( !ast_mgr.check_def_name(ast_module->name()) ) {
       // 他のモジュールから参照されていないモジュールをトップモジュールとみなす．
-      mModuleGen->phase1_topmodule(toplevel, pt_module);
+      mModuleGen->phase1_topmodule(toplevel, ast_module);
     }
   }
 
@@ -243,11 +243,11 @@ Elaborator::operator()(
 
   // 適用できなかった defparam 文のチェック
   for ( auto stub: mDefParamStubList ) {
-    auto pt_defparam = stub.mPtDefparam;
+    auto ast_defparam = stub.mAstDefparam;
     std::ostringstream buf;
-    buf << pt_defparam->fullname() << " : not found.";
+    buf << ast_defparam->fullname() << " : not found.";
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    pt_defparam->file_region(),
+		    ast_defparam->file_region(),
 		    MsgType::Error,
 		    "ELAB",
 		    buf.str());
@@ -280,11 +280,11 @@ Elaborator::operator()(
 void
 Elaborator::add_defparamstub(
   const VlModule* module,
-  const PtItem* pt_header
+  const AstItem* ast_header
 )
 {
-  for ( auto pt_defparam: pt_header->defparam_list() ) {
-    mDefParamStubList.push_back(DefParamStub{module, pt_header, pt_defparam});
+  for ( auto ast_defparam: ast_header->defparam_list() ) {
+    mDefParamStubList.push_back(DefParamStub{module, ast_header, ast_defparam});
   }
 }
 
@@ -316,7 +316,7 @@ Elaborator::add_phase3stub(
 }
 
 // @brief 名前からモジュール定義を取り出す．
-const PtModule*
+const AstModule*
 Elaborator::find_moduledef(
   const std::string& name
 ) const
@@ -328,18 +328,18 @@ Elaborator::find_moduledef(
 }
 
 // @brief 関数定義を探す．
-const PtItem*
+const AstItem*
 Elaborator::find_funcdef(
   const VlModule* module,
   const std::string& name
 ) const
 {
-  auto pt_module = find_moduledef(module->def_name());
-  if ( pt_module == nullptr ) {
+  auto ast_module = find_moduledef(module->def_name());
+  if ( ast_module == nullptr ) {
     return nullptr;
   }
 
-  auto key = gen_funckey(pt_module, name);
+  auto key = gen_funckey(ast_module, name);
   if ( mFuncDict.count(key) > 0 ) {
     return mFuncDict.at(key);
   }

@@ -8,7 +8,6 @@
 
 #include "scanner/RawLex.h"
 #include "LexPluginDict.h"
-
 #include "LexPlugin.h"
 #include "LexState.h"
 #include "LexCondState.h"
@@ -21,9 +20,7 @@
 #include "TokenInfo.h"
 #include "common.h"
 #include "print_token.h"
-
-#include "ym/VlLineWatcher.h"
-
+#include "ym/vl/VlLineWatcher.h"
 #include "ym/MsgMgr.h"
 
 

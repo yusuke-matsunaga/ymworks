@@ -5,13 +5,13 @@
 /// @brief CptDecl のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/pt/PtDecl.h"
+#include "parser/PtDecl.h"
 #include "ym/FileRegion.h"
-#include "parser/PtiArray.h"
-#include "parser/PtiDecl.h"
+#include "ym/vl/Ast.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -20,17 +20,19 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// 宣言要素のヘッダの基底クラス
 //////////////////////////////////////////////////////////////////////
 class CptDeclHead :
-  public PtiDeclHead
+  public PtDeclHead
 {
 protected:
 
   /// @brief コンストラクタ
   CptDeclHead(
     const FileRegion& file_region ///< [in] ファイル位置の情報
-  );
+  ) : mFileRegion{file_region}
+  {
+  }
 
   /// デストラクタ
-  ~CptDeclHead();
+  ~CptDeclHead() {}
 
 
 public:
@@ -52,7 +54,7 @@ public:
   /// @brief 範囲Bの取得
   /// @retval 範囲 範囲を持つとき
   /// @retval nullptr 範囲を持たないとき
-  const PtRange*
+  const AstRange*
   range() const override;
 
   /// @brief データ型の取得
@@ -77,13 +79,13 @@ public:
   /// @brief strength の取得
   /// @retval strength
   /// @retval nullptr strength の指定なし
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
   /// @brief delay の取得
   /// @retval delay
   /// @retval nullptr delay の指定なし
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
   /// @brief 要素数の取得
@@ -91,7 +93,7 @@ public:
   item_num() const override;
 
   /// @brief 要素の取得
-  const PtDeclItem*
+  const AstDeclItem*
   item(
     SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
   ) const override;
@@ -99,13 +101,13 @@ public:
 
 private:
   //////////////////////////////////////////////////////////////////////
-  // PtiDeclHead の継承クラスが実装する仮想関数
+  // PtDeclHead の継承クラスが実装する仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 要素リストの設定
   void
   set_elem(
-    PtiDeclItemArray&& elem_array ///< [in] 要素の配列
+    PtDeclItemArray&& elem_array ///< [in] 要素の配列
   ) override;
 
 
@@ -118,7 +120,7 @@ private:
   FileRegion mFileRegion;
 
   // 要素の配列
-  PtiDeclItemArray mItemArray;
+  PtDeclItemArray mItemArray;
 
 };
 
@@ -134,10 +136,12 @@ public:
   /// @brief コンストラクタ
   CptParamH(
     const FileRegion& file_region ///< [in] ファイル位置の情報
-  );
+  ) : CptDeclHead(file_region)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptParamH();
+  ~CptParamH() {}
 
 
 public:
@@ -147,7 +151,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -164,10 +168,12 @@ public:
   /// @brief コンストラクタ
   CptLocalParamH(
     const FileRegion& file_region ///< [in] ファイル位置の情報
-  );
+  ) : CptDeclHead(file_region)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptLocalParamH();
+  ~CptLocalParamH() {}
 
 
 public:
@@ -177,7 +183,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -194,11 +200,14 @@ public:
   /// @brief コンストラクタ
   CptParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtRange* range           ///< [in] 範囲
-  );
+    const AstRange* range           ///< [in] 範囲
+  ) : CptParamH(file_region),
+      mRange{range}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptParamHV();
+  ~CptParamHV() {}
 
 
 public:
@@ -214,7 +223,7 @@ public:
 
   /// @brief 範囲Bの取得
   /// @return 範囲
-  const PtRange*
+  const AstRange*
   range() const override;
 
 
@@ -224,7 +233,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const PtRange* mRange;
+  const AstRange* mRange;
 
 };
 
@@ -240,11 +249,13 @@ public:
   /// @brief コンストラクタ
   CptParamHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtRange* range           ///< [in] 範囲
-  );
+    const AstRange* range           ///< [in] 範囲
+  ) : CptParamHV(file_region, range)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptParamHSV();
+  ~CptParamHSV() {}
 
 
 public:
@@ -272,11 +283,13 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtRange* range	   ///< [in] 範囲
-  );
+    const AstRange* range	   ///< [in] 範囲
+  ) : CptParamHV(file_region, range)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptLocalParamHV();
+  ~CptLocalParamHV() {}
 
 
 public:
@@ -286,7 +299,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -303,11 +316,13 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtRange* range	   ///< [in] 範囲
-  );
+    const AstRange* range	   ///< [in] 範囲
+  ) : CptParamHSV(file_region, range)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptLocalParamHSV();
+  ~CptLocalParamHSV() {}
 
 
 public:
@@ -317,7 +332,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -335,10 +350,13 @@ public:
   CptParamHT(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiVarType var_type            ///< [in] データ型
-  );
+  ) : CptDeclHead(file_region),
+      mVarType{var_type}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptParamHT();
+  ~CptParamHT() {}
 
 
 public:
@@ -348,7 +366,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
   /// @brief 符号の取得
@@ -387,10 +405,12 @@ public:
   CptLocalParamHT(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiVarType var_type            ///< [in] データ型
-  );
+  ) : CptParamHT(file_region, var_type)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptLocalParamHT();
+  ~CptLocalParamHT() {}
 
 
 public:
@@ -400,7 +420,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -417,10 +437,12 @@ public:
   /// @brief コンストラクタ
   CptRegH(
     const FileRegion& file_region ///< [in] ファイル位置の情報
-  );
+  ) : CptDeclHead(file_region)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptRegH();
+  ~CptRegH() {}
 
 
 public:
@@ -430,7 +452,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -447,10 +469,12 @@ public:
   /// @brief コンストラクタ
   CptRegHS(
     const FileRegion& file_region ///< [in] ファイル位置の情報
-  );
+  ) : CptRegH(file_region)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptRegHS();
+  ~CptRegHS() {}
 
 
 public:
@@ -477,11 +501,14 @@ public:
   /// @brief コンストラクタ
   CptRegHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtRange* range	   ///< [in] 範囲
-  );
+    const AstRange* range	   ///< [in] 範囲
+  ) : CptRegH(file_region),
+      mRange{range}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptRegHV();
+  ~CptRegHV() {}
 
 
 public:
@@ -494,9 +521,9 @@ public:
   bool
   is_signed() const override;
 
-  /// @brief 範囲Bの取得
+  /// @brief 範囲の取得
   /// @return 範囲
-  const PtRange*
+  const AstRange*
   range() const override;
 
 
@@ -506,7 +533,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const PtRange* mRange;
+  const AstRange* mRange;
 
 };
 
@@ -522,11 +549,13 @@ public:
   /// @brief コンストラクタ
   CptRegHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtRange* range           ///< [in] パース木の範囲定義
-  );
+    const AstRange* range           ///< [in] パース木の範囲定義
+  ) : CptRegHV(file_region, range)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptRegHSV();
+  ~CptRegHSV() {}
 
 
 public:
@@ -554,10 +583,13 @@ public:
   CptVarH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiVarType var_type            ///< [in] データ型
-  );
+  ) : CptDeclHead(file_region),
+      mVarType{var_type}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptVarH();
+  ~CptVarH() {}
 
 
 public:
@@ -567,7 +599,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
   /// @brief 符号の取得
@@ -589,8 +621,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // データ型
-  VpiVarType
-  mVarType;
+  VpiVarType mVarType;
 
 };
 
@@ -606,10 +637,12 @@ public:
   /// @brief コンストラクタ
   CptGenvarH(
     const FileRegion& file_region ///< [in] ファイル位置の情報
-  );
+  ) : CptDeclHead(file_region)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptGenvarH();
+  ~CptGenvarH() {}
 
 
 public:
@@ -619,7 +652,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -638,10 +671,14 @@ public:
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiNetType net_type,           ///< [in] net の型
     bool sign                      ///< [in] 符号付きのとき true となるフラグ
-  );
+  ) : CptDeclHead(file_region)
+  {
+    mFlags = (static_cast<std::uint32_t>(net_type) << 1) |
+      static_cast<std::uint32_t>(sign);
+  }
 
   /// @brief デストラクタ
-  ~CptNetH();
+  ~CptNetH() {}
 
 
 public:
@@ -651,7 +688,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
   /// @brief net type を返す．(vpiWire など)
@@ -688,11 +725,14 @@ public:
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiNetType net_type,	   ///< [in] net の型
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtStrength* strength     ///< [in] 信号強度
-  );
+    const AstStrength* strength    ///< [in] 信号強度
+  ) : CptNetH(file_region, net_type, sign),
+      mStrength{strength}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNetHS();
+  ~CptNetHS() {}
 
 
 public:
@@ -702,7 +742,7 @@ public:
 
   /// @brief strength を返す．
   /// @return strength
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
 
@@ -712,7 +752,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// strength
-  const PtStrength* mStrength;
+  const AstStrength* mStrength;
 
 };
 
@@ -730,11 +770,14 @@ public:
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiNetType net_type,	   ///< [in] net の型
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtDelay* delay           ///< [in] 遅延
-  );
+    const AstDelay* delay          ///< [in] 遅延
+  ) : CptNetH(file_region, net_type, sign),
+      mDelay{delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNetHD();
+  ~CptNetHD() {}
 
 
 public:
@@ -744,7 +787,7 @@ public:
 
   /// @brief delay を返す．
   /// @return delay
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
 
@@ -754,7 +797,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // delay
-  const PtDelay* mDelay;
+  const AstDelay* mDelay;
 
 };
 
@@ -772,12 +815,16 @@ public:
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiNetType net_type,	   ///< [in] net の型
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtStrength* strength,    ///< [in] 信号強度
-    const PtDelay* delay           ///< [in] 遅延
-  );
+    const AstStrength* strength,   ///< [in] 信号強度
+    const AstDelay* delay          ///< [in] 遅延
+  ) : CptNetH(file_region, net_type, sign),
+      mStrength{strength},
+      mDelay{delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNetHSD();
+  ~CptNetHSD() {}
 
 
 public:
@@ -787,12 +834,12 @@ public:
 
   /// @brief strength を返す．
   /// @return strength
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
   /// @brief delay を返す．
   /// @return delay
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
 
@@ -802,10 +849,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const PtStrength* mStrength;
+  const AstStrength* mStrength;
 
   // delay
-  const PtDelay* mDelay;
+  const AstDelay* mDelay;
 
 };
 
@@ -824,11 +871,15 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,                     ///< [in] 符号付きのとき true となるフラグ
-    const PtRange* range           ///< [in] パース木の範囲定義
-  );
+    const AstRange* range          ///< [in] パース木の範囲定義
+  ) : CptNetH(file_region, net_type, sign),
+      mRange{range}
+  {
+    mFlags |= (static_cast<std::uint32_t>(vstype) << 5);
+  }
 
   /// @brief デストラクタ
-  ~CptNetHV();
+  ~CptNetHV() {}
 
 
 public:
@@ -845,7 +896,7 @@ public:
 
   /// @brief 範囲を取り出す．
   /// @return 範囲
-  const PtRange*
+  const AstRange*
   range() const override;
 
 
@@ -855,7 +906,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const PtRange* mRange;
+  const AstRange* mRange;
 
 };
 
@@ -874,12 +925,15 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtRange* range,          ///< [in] パース木の範囲定義
-    const PtStrength* strength     ///< [in] 信号強度
-  );
+    const AstRange* range,         ///< [in] パース木の範囲定義
+    const AstStrength* strength    ///< [in] 信号強度
+  ) : CptNetHV(file_region, net_type, vstype, sign, range),
+      mStrength{strength}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNetHVS();
+  ~CptNetHVS() {}
 
 
 public:
@@ -889,7 +943,7 @@ public:
 
   /// @brief strength を返す．
   /// @return strength
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
 
@@ -899,7 +953,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const PtStrength* mStrength;
+  const AstStrength* mStrength;
 
 };
 
@@ -918,12 +972,16 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtRange* range,          ///< [in] パース木の範囲定義
-    const PtDelay* delay           ///< [in] 遅延
-  );
+    const AstRange* range,         ///< [in] パース木の範囲定義
+    const AstDelay* delay          ///< [in] 遅延
+  ) : CptNetHV(file_region, net_type,
+	       vstype, sign, range),
+      mDelay{delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNetHVD();
+  ~CptNetHVD() {}
 
 
 public:
@@ -933,7 +991,7 @@ public:
 
   /// @brief delay を返す．
   /// @return delay
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
 
@@ -943,7 +1001,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // delay
-  const PtDelay* mDelay;
+  const AstDelay* mDelay;
 
 };
 
@@ -962,13 +1020,18 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const PtRange* range,          ///< [in] パース木の範囲定義
-    const PtStrength* strength,    ///< [in] 信号強度
-    const PtDelay* delay           ///< [in] 遅延
-  );
+    const AstRange* range,         ///< [in] パース木の範囲定義
+    const AstStrength* strength,   ///< [in] 信号強度
+    const AstDelay* delay          ///< [in] 遅延
+  ) : CptNetHV(file_region, net_type,
+	       vstype, sign, range),
+      mStrength{strength},
+      mDelay{delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNetHVSD();
+  ~CptNetHVSD() {}
 
 
 public:
@@ -978,12 +1041,12 @@ public:
 
   /// @brief strength を返す．
   /// @return strength
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
   /// @brief delay を返す．
   /// @return delay
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
 
@@ -993,10 +1056,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const PtStrength* mStrength;
+  const AstStrength* mStrength;
 
   // delay
-  const PtDelay* mDelay;
+  const AstDelay* mDelay;
 
 };
 
@@ -1012,10 +1075,12 @@ public:
   /// @brief コンストラクタ
   CptEventH(
     const FileRegion& file_region ///< [in] ファイル位置の情報
-  );
+  ) : CptDeclHead(file_region)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptEventH();
+  ~CptEventH() {}
 
 
 public:
@@ -1025,7 +1090,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -1042,10 +1107,12 @@ public:
   /// @brief コンストラクタ
   CptSpecParamH(
     const FileRegion& file_region ///< [in] ファイル位置の情報
-  );
+  ) : CptDeclHead(file_region)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptSpecParamH();
+  ~CptSpecParamH() {}
 
 
 public:
@@ -1055,7 +1122,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  PtDeclType
+  Type
   type() const override;
 
 };
@@ -1072,11 +1139,14 @@ public:
   /// @brief コンストラクタ
   CptSpecParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const PtRange* range           ///< [in] パース木の範囲定義
-  );
+    const AstRange* range          ///< [in] パース木の範囲定義
+  ) : CptSpecParamH(file_region),
+      mRange{range}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptSpecParamHV();
+  ~CptSpecParamHV() {}
 
 
 public:
@@ -1086,7 +1156,7 @@ public:
 
   /// @brief 範囲を返す．
   /// @return 範囲
-  const PtRange*
+  const AstRange*
   range() const override;
 
 
@@ -1096,7 +1166,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const PtRange* mRange;
+  const AstRange* mRange;
 
 };
 
@@ -1112,10 +1182,12 @@ public:
   /// @brief コンストラクタ
   CptDeclItemBase(
     const char* name ///< [in] 名前
-  );
+  ) : mName{name}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptDeclItemBase();
+  ~CptDeclItemBase() {}
 
 
 public:
@@ -1133,14 +1205,14 @@ public:
   range_num() const override;
 
   /// @brief 範囲の取得
-  const PtRange*
+  const AstRange*
   range(
     SizeType pos ///< [in] 位置 ( 0 <= pos < range_num() )
   ) const override;
 
   /// @brief 初期値を取り出す．
   /// @return ここでは常に nullptr を返す．
-  const PtExpr*
+  const AstExpr*
   init_value() const override;
 
 
@@ -1167,10 +1239,13 @@ public:
   CptDeclItem(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name               ///< [in] 名前
-  );
+  ) : CptDeclItemBase(name),
+      mLoc{file_region}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptDeclItem();
+  ~CptDeclItem() {}
 
 
 public:
@@ -1207,11 +1282,15 @@ public:
   CptDeclItemR(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name,              ///< [in] 名前
-    PtiRangeArray&& range_array    ///< [in] 範囲のリスト
-  );
+    PtRangeArray&& range_array     ///< [in] 範囲のリスト
+  ) : CptDeclItemBase(name),
+      mFileRegion{file_region},
+      mRangeArray{std::move(range_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptDeclItemR();
+  ~CptDeclItemR() {}
 
 
 public:
@@ -1229,7 +1308,7 @@ public:
   range_num() const override;
 
   /// @brief 範囲の取得
-  const PtRange*
+  const AstRange*
   range(
     SizeType pos ///< [in] 位置 ( 0 <= pos < range_num() )
   ) const override;
@@ -1244,7 +1323,7 @@ private:
   FileRegion mFileRegion;
 
   // 範囲の配列
-  PtiRangeArray mRangeArray;
+  PtRangeArray mRangeArray;
 
 };
 
@@ -1261,11 +1340,17 @@ public:
   CptDeclItemI(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name,              ///< [in] 名前
-    const PtExpr* init_value       ///< [in] 初期値
-  );
+    const AstExpr* init_value      ///< [in] 初期値
+  ) : CptDeclItem(file_region, name),
+      mInitValue{init_value}
+  {
+    if ( init_value == nullptr ) {
+      throw std::logic_error{"init_value == nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptDeclItemI();
+  ~CptDeclItemI() {}
 
 
 public:
@@ -1281,7 +1366,7 @@ public:
   /// @brief 初期値を取り出す．
   /// @retval 初期値
   /// @retval nullptr 設定がない場合
-  const PtExpr*
+  const AstExpr*
   init_value() const override;
 
 
@@ -1291,7 +1376,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 初期値
-  const PtExpr* mInitValue;
+  const AstExpr* mInitValue;
 
 };
 
@@ -1308,12 +1393,16 @@ public:
   /// @brief コンストラクタ
   CptRange(
     const FileRegion& fr, ///< [in] ファイル上の位置
-    const PtExpr* msb,    ///< [in] 範囲の MSB
-    const PtExpr* lsb     ///< [in] 範囲の LSB
-  );
+    const AstExpr* msb,   ///< [in] 範囲の MSB
+    const AstExpr* lsb    ///< [in] 範囲の LSB
+  ) : mFileRegion{fr},
+      mMsb{msb},
+      mLsb{lsb}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptRange();
+  ~CptRange() {}
 
 
 public:
@@ -1326,11 +1415,11 @@ public:
   file_region() const override;
 
   /// @brief 範囲の MSB を取り出す．
-  const PtExpr*
+  const AstExpr*
   left() const override;
 
   /// @brief 範囲の LSB を取り出す．
-  const PtExpr*
+  const AstExpr*
   right() const override;
 
 
@@ -1343,10 +1432,10 @@ private:
   FileRegion mFileRegion;
 
   // MSB
-  const PtExpr* mMsb;
+  const AstExpr* mMsb;
 
   // LSB
-  const PtExpr* mLsb;
+  const AstExpr* mLsb;
 
 };
 

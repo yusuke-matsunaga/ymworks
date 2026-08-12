@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiStmt.h"
-#include "ym/pt/PtStmt.h"
+#include "ym/vl/AstStmt.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -208,10 +208,10 @@ EiStmt::target_scope() const
 EiStmtBase::EiStmtBase(
   const VlScope* parent,
   const VlProcess* process,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 ) : EiStmt{process},
     mParent{parent},
-    mPtStmt{pt_stmt}
+    mAstStmt{ast_stmt}
 {
 }
 
@@ -226,7 +226,7 @@ EiStmtBase::parent_scope() const
 FileRegion
 EiStmtBase::file_region() const
 {
-  return mPtStmt->file_region();
+  return mAstStmt->file_region();
 }
 
 END_NAMESPACE_YM_VERILOG

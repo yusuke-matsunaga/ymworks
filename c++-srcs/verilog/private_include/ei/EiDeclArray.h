@@ -8,11 +8,9 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-
 #include "ym/vl/VlDeclArray.h"
 #include "ei/EiRange.h"
-
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,7 +27,7 @@ public:
   /// @brief コンストラクタ
   EiDeclArray(
     ElbDeclHead* head,                      ///< [in] ヘッダ
-    const PtNamedBase* pt_item,             ///< [in] パース木の宣言要素
+    const AstNamedBase* ast_item,             ///< [in] パース木の宣言要素
     const std::vector<EiRange>& range_array ///< [in] 範囲の配列
   );
 
@@ -214,7 +212,7 @@ private:
   ElbDeclHead* mHead;
 
   // パース木の宣言要素
-  const PtNamedBase* mPtItem;
+  const AstNamedBase* mAstItem;
 
   // dimension の配列
   EiRangeArray mRangeList;

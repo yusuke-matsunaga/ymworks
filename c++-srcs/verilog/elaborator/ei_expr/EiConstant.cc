@@ -8,9 +8,8 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiConstant.h"
-
-#include "ym/VlValue.h"
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/VlValue.h"
+#include "ym/vl/AstExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,18 +21,18 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 定数式を生成する．
 ElbExpr*
 EiFactory::new_Constant(
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  auto const_type = pt_expr->const_type();
-  auto size = pt_expr->const_size();
+  auto const_type = ast_expr->const_type();
+  auto size = ast_expr->const_size();
   auto is_signed = false;
   int base = 0;
   switch ( const_type ) {
   case VpiConstType::Int:
-    if ( pt_expr->const_str() == nullptr ) {
-      auto val = pt_expr->const_int();
-      return new EiIntConst(pt_expr, val);
+    if ( ast_expr->const_str() == nullptr ) {
+      auto val = ast_expr->const_bitvect();
+      return new EiBitVectorConst(ast_expr, VpiConstType::Int, val);
     }
     break;
 
@@ -62,28 +61,28 @@ EiFactory::new_Constant(
     break;
 
   case VpiConstType::Real:
-    return new EiRealConst(pt_expr, pt_expr->const_real());
+    return new EiRealConst(ast_expr, ast_expr->const_real());
 
   case VpiConstType::String:
-    return new EiStringConst(pt_expr, pt_expr->const_str());
+    return new EiStringConst(ast_expr, ast_expr->const_str());
 
   default:
     throw std::logic_error{"Should not be reached"};
   }
 
   // ここに来たということはビットベクタ型
-  return new EiBitVectorConst(pt_expr, const_type,
-			      BitVector(size, is_signed, base, pt_expr->const_str()));
+  return new EiBitVectorConst(ast_expr, const_type,
+			      BitVector(size, is_signed, base, ast_expr->const_str()));
 }
 
 // @brief genvar 起因の定数式を生成する．
 ElbExpr*
 EiFactory::new_GenvarConstant(
-  const PtExpr* pt_primary,
+  const AstExpr* ast_primary,
   int val
 )
 {
-  return new EiIntConst(pt_primary, val);
+  return new EiIntConst(ast_primary, val);
 }
 
 
@@ -93,8 +92,8 @@ EiFactory::new_GenvarConstant(
 
 // @brief コンストラクタ
 EiConstant::EiConstant(
-  const PtExpr* pt_expr
-) : EiExprBase(pt_expr)
+  const AstExpr* ast_expr
+) : EiExprBase(ast_expr)
 {
 }
 
@@ -134,9 +133,9 @@ EiConstant::_set_reqsize(
 
 // @brief コンストラクタ
 EiIntConst::EiIntConst(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   std::int32_t value
-) : EiConstant(pt_expr),
+) : EiConstant(ast_expr),
     mValue{value}
 {
 }
@@ -174,10 +173,10 @@ EiIntConst::constant_value() const
 
 // @brief コンストラクタ
 EiBitVectorConst::EiBitVectorConst(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   VpiConstType const_type,
   const BitVector& value
-) : EiConstant(pt_expr),
+) : EiConstant(ast_expr),
     mConstType{const_type},
     mValue{value}
 {
@@ -218,9 +217,9 @@ EiBitVectorConst::constant_value() const
 
 // @brief コンストラクタ
 EiRealConst::EiRealConst(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   double value
-) : EiConstant(pt_expr),
+) : EiConstant(ast_expr),
     mValue{value}
 {
 }
@@ -258,9 +257,9 @@ EiRealConst::constant_value() const
 
 // @brief コンストラクタ
 EiStringConst::EiStringConst(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const std::string& value
-) : EiConstant(pt_expr),
+) : EiConstant(ast_expr),
     mValue{value}
 {
 }

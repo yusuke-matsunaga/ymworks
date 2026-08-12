@@ -8,15 +8,15 @@
 
 #include "parser/Parser.h"
 #include "scanner/Lex.h"
-#include "parser/PtiFactory.h"
-#include "parser/PtiArray.h"
-#include "parser/PtMgr.h"
-#include "parser/PuHierName.h"
-
-#include "ym/pt/PtModule.h"
-#include "ym/pt/PtUdp.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtStmt.h"
+#include "parser/PtFactory.h"
+#include "parser/PtArray.h"
+#include "parser/AstMgr.h"
+#include "parser/PtHierName.h"
+#include "parser/PtModule.h"
+#include "parser/PtUdp.h"
+#include "parser/PtItem.h"
+#include "parser/PtStmt.h"
+#include "parser/PtMisc.h"
 #include "ym/MsgMgr.h"
 
 
@@ -37,10 +37,10 @@ const int check_memory_leak = 0;
 
 // @brief コンストラクタ
 Parser::Parser(
-  PtMgr& ptmgr
-) : mAlloc{ptmgr.alloc()},
-    mPtMgr{ptmgr},
-    mFactory{PtiFactory::make_obj("cpt", mAlloc)},
+  AstMgr& astmgr
+) : mAlloc{astmgr.alloc()},
+    mAstMgr{astmgr},
+    mFactory(mAlloc),
     mLex{new Lex}
 {
 }
@@ -100,7 +100,7 @@ Parser::yylex(
   case UNUMBER:
   case UNUM_BIG:
     // 文字列領域は PtMgr が管理する．
-    lval.strtype = mPtMgr.save_string(lex().cur_string());
+    lval.strtype = mAstMgr.save_string(lex().cur_string());
     break;
 
   case UNUM_INT:
@@ -124,37 +124,37 @@ Parser::reg_defname(
   const char* name
 )
 {
-  mPtMgr.reg_defname(name);
+  mAstMgr.reg_defname(name);
 }
 
 // @brief attribute instance を登録する．
 void
 Parser::reg_attrinst(
-  const PtBase* ptobj,
-  PtrList<const PtAttrInst>* attr_list,
+  const AstBase* obj,
+  PtAttrInstList* attr_list,
   bool def
 )
 {
-  mPtMgr.reg_attrinst(ptobj, attr_list, def);
+  mAstMgr.reg_attrinst(obj, attr_list, def);
 }
 
 // 関数内で使えるステートメントかどうかのチェック
 bool
 Parser::check_function_statement(
-  const PtStmt* stmt
+  const AstStmt* stmt
 )
 {
   switch ( stmt->type() ) {
-  case PtStmtType::Disable:
-  case PtStmtType::SysEnable:
-  case PtStmtType::Null:
+  case AstStmt::Disable:
+  case AstStmt::SysEnable:
+  case AstStmt::Null:
     return true;
 
-  case PtStmtType::Assign:
+  case AstStmt::Assign:
     if ( stmt->control() == nullptr) return true;
     break;
 
-  case PtStmtType::If:
+  case AstStmt::If:
     if ( stmt->body() ) {
       if ( !check_function_statement(stmt->body()) ) {
 	return false;
@@ -167,9 +167,9 @@ Parser::check_function_statement(
     }
     return true;
 
-  case PtStmtType::Case:
-  case PtStmtType::CaseX:
-  case PtStmtType::CaseZ:
+  case AstStmt::Case:
+  case AstStmt::CaseX:
+  case AstStmt::CaseZ:
     for ( auto item: stmt->caseitem_list() ) {
       if ( !check_function_statement(item->body()) ) {
 	return false;
@@ -177,10 +177,10 @@ Parser::check_function_statement(
     }
     return true;
 
-  case PtStmtType::Forever:
-  case PtStmtType::Repeat:
-  case PtStmtType::While:
-  case PtStmtType::For:
+  case AstStmt::Forever:
+  case AstStmt::Repeat:
+  case AstStmt::While:
+  case AstStmt::For:
     if ( stmt->init_stmt() ) {
       if ( !check_function_statement(stmt->init_stmt()) ) {
 	return false;
@@ -193,8 +193,8 @@ Parser::check_function_statement(
     }
     return check_function_statement(stmt->body());
 
-  case PtStmtType::SeqBlock:
-  case PtStmtType::NamedSeqBlock:
+  case AstStmt::SeqBlock:
+  case AstStmt::NamedSeqBlock:
     for ( auto stmt1: stmt->stmt_list() ) {
       if ( !check_function_statement(stmt1) ) {
 	return false;
@@ -219,7 +219,7 @@ Parser::check_function_statement(
 // default ラベルが2つ以上含まれていないかどうかのチェック
 bool
 Parser::check_default_label(
-  const PtrList<const PtCaseItem>* ci_list
+  const PtCaseItemList* ci_list
 )
 {
   SizeType n = 0;
@@ -240,69 +240,66 @@ Parser::check_default_label(
 }
 
 // @brief 階層名の生成
-PuHierName*
+PtHierName*
 Parser::new_HierName(
   const char* head_name,
   const char* name
 )
 {
-  auto nb = mFactory->new_NameBranch(head_name);
-  auto hname = new_HierName(nb, name);
-  return hname;
+  auto nb = mFactory.new_NameBranch(head_name);
+  return new_HierName(nb, name);
 }
 
 // @brief 階層名の生成
-PuHierName*
+PtHierName*
 Parser::new_HierName(
   const char* head_name,
   int index,
   const char* name
 )
 {
-  auto nb = mFactory->new_NameBranch(head_name, index);
-  auto hname = new_HierName(nb, name);
-  return hname;
+  auto nb = mFactory.new_NameBranch(head_name, index);
+  return new_HierName(nb, name);
 }
 
 // @brief 階層名の生成
-PuHierName*
+PtHierName*
 Parser::new_HierName(
-  const PtNameBranch* nb,
+  const AstNameBranch* nb,
   const char* name
 )
 {
-  auto hname = mFactory->new_HierName(nb, name);
-  return hname;
+  return mFactory.new_HierName(nb, name);
 }
 
 // @brief 階層名の追加
 void
 Parser::add_HierName(
-  PuHierName* hname,
+  PtHierName* hname,
   const char* name
 )
 {
-  auto nb = mFactory->new_NameBranch(hname->tail_name());
+  auto nb = mFactory.new_NameBranch(hname->tail_name());
   hname->add(nb, name);
 }
 
 // @brief 階層名の追加
 void
 Parser::add_HierName(
-  PuHierName* hname,
+  PtHierName* hname,
   int index,
   const char* name
 )
 {
-  auto nb = mFactory->new_NameBranch(hname->tail_name(), index);
+  auto nb = mFactory.new_NameBranch(hname->tail_name(), index);
   hname->add(nb, name);
 }
 
 // @brief parameter port 宣言ヘッダを追加する．
 void
 Parser::add_paramport_head(
-  PtiDeclHead* head,
-  PtrList<const PtAttrInst>* attr_list
+  PtDeclHead* head,
+  PtAttrInstList* attr_list
 )
 {
   if ( head ) {
@@ -318,7 +315,7 @@ Parser::flush_paramport()
   if ( !mDeclItemList.empty() ) {
     ASSERT_COND( !mParamPortHeadList.empty() );
     auto last = mParamPortHeadList.back();
-    last->set_elem(PtiDeclItemArray(mAlloc, mDeclItemList));
+    last->set_elem(PtDeclItemArray(mAlloc, mDeclItemList));
     mDeclItemList.clear();
   }
 }
@@ -326,8 +323,8 @@ Parser::flush_paramport()
 // @brief IOポート宣言リストにIO宣言ヘッダを追加する．
 void
 Parser::add_ioport_head(
-  PtiIOHead* head,
-  PtrList<const PtAttrInst>* attr_list
+  PtIOHead* head,
+  PtAttrInstList* attr_list
 )
 {
   if ( head ) {
@@ -343,7 +340,7 @@ Parser::flush_io()
   if ( !mIOItemList.empty() ) {
     ASSERT_COND( !mCurIOHeadList->empty() );
     auto last = mCurIOHeadList->back();
-    last->set_elem(PtiIOItemArray(mAlloc, mIOItemList));
+    last->set_elem(PtIOItemArray(mAlloc, mIOItemList));
     mIOItemList.clear();
   }
 }
@@ -351,54 +348,36 @@ Parser::flush_io()
 // @brief IO宣言リストにIO宣言ヘッダを追加する．
 void
 Parser::add_io_head(
-  PtiIOHead* head,
-  PtrList<const PtAttrInst>* attr_list
+  PtIOHead* head,
+  PtAttrInstList* attr_list
 )
 {
   add_ioport_head(head, attr_list);
   flush_io();
 }
 
-// @brief IO宣言リストにIO宣言要素を追加する．
-void
-Parser::add_io_item(
-  const PtIOItem* item
-)
-{
-  mIOItemList.push_back(item);
-}
-
 // @brief 宣言リストに宣言ヘッダを追加する．
 void
 Parser::add_decl_head(
-  PtiDeclHead* head,
-  PtrList<const PtAttrInst>* attr_list
+  PtDeclHead* head,
+  PtAttrInstList* attr_list
 )
 {
   if ( head ) {
     reg_attrinst(head, attr_list);
     cur_declhead_list().push_back(head);
     if ( !mDeclItemList.empty() ) {
-      head->set_elem(PtiDeclItemArray(mAlloc, mDeclItemList));
+      head->set_elem(PtDeclItemArray(mAlloc, mDeclItemList));
     }
   }
   mDeclItemList.clear();
 }
 
-// @brief 宣言リストに宣言要素を追加する．
-void
-Parser::add_decl_item(
-  const PtDeclItem* item
-)
-{
-  mDeclItemList.push_back(item);
-}
-
 // @brief item リストに要素を追加する．
 void
 Parser::add_item(
-  const PtItem* item,
-  PtrList<const PtAttrInst>* attr_list
+  PtItem* item,
+  PtAttrInstList* attr_list
 )
 {
   if ( item ) {
@@ -419,6 +398,62 @@ void
 Parser::end_block()
 {
   mCurDeclArray = pop_declhead_list();
+}
+
+// @brief AttrInst のリストを作る．
+PtAttrInstList*
+Parser::new_attrinst_list()
+{
+  return new PtAttrInstList;
+}
+
+// @brief AttrSpec のリストを作る．
+PtAttrSpecList*
+Parser::new_attrspec_list()
+{
+  return new PtAttrSpecList;
+}
+
+// @brief CaseItem のリストを作る．
+PtCaseItemList*
+Parser::new_caseitem_list()
+{
+  return new PtCaseItemList;
+}
+
+// @brief Connection のリストを作る．
+PtConnectionList*
+Parser::new_connection_list()
+{
+  return new PtConnectionList;
+}
+
+// @brief Expr のリストを作る．
+PtExprList*
+Parser::new_expr_list()
+{
+  return new PtExprList;
+}
+
+// @brief GenCaseItem のリストを作る．
+PtGenCaseItemList*
+Parser::new_gencaseitem_list()
+{
+  return new PtGenCaseItemList;
+}
+
+// @brief Range のリストを作る．
+PtRangeList*
+Parser::new_range_list()
+{
+  return new PtRangeList;
+}
+
+// @brief Stmt のリストを作る．
+PtStmtList*
+Parser::new_stmt_list()
+{
+  return new PtStmtList;
 }
 
 END_NAMESPACE_YM_VERILOG

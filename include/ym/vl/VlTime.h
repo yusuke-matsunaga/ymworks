@@ -1,21 +1,21 @@
-﻿#ifndef YM_VLTIME_H
-#define YM_VLTIME_H
+﻿#ifndef YM_VL_VLTIME_H
+#define YM_VL_VLTIME_H
 
-/// @file ym/VlTime.h
+/// @file ym/vl/VlTime.h
 /// @brief VlTime のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2005-2011, 2014, 2021 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/VlScalarVal.h"
+#include "ym/vl/VlScalarVal.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class VlTime VlTime.h "ym/VlTime.h"
+/// @class VlTime VlTime.h "ym/vl/VlTime.h"
 /// @brief シミュレーション時刻を表すクラス
 //////////////////////////////////////////////////////////////////////
 class VlTime
@@ -40,8 +40,8 @@ public:
   /// @brief 符号なし整数からの変換コンストラクタ
   explicit
   VlTime(
-    unsigned int val ///< [in] 値
-  ) : mValue(val)
+    SizeType val ///< [in] 値
+  ) : mValue{val}
   {
   }
 
@@ -296,4 +296,4 @@ struct hash<YM_NAMESPACE::nsVerilog::VlTime>
 
 END_NAMESPACE_STD
 
-#endif // YM_VLTIME_H
+#endif // YM_VL_VLTIME_H

@@ -7,8 +7,7 @@
 /// All rights reserved.
 
 #include "VlDumperImpl.h"
-
-#include "ym/VlMgr.h"
+#include "ym/vl/VlMgr.h"
 #include "ym/vl/VlDecl.h"
 #include "ym/vl/VlProcess.h"
 #include "ym/vl/VlStmt.h"

@@ -8,7 +8,7 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiGenBlockScope.h"
-#include "ym/pt/PtItem.h"
+#include "ym/vl/AstItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -21,21 +21,21 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlScope*
 EiFactory::new_GenBlock(
   const VlScope* parent,
-  const PtItem* pt_item
+  const AstItem* ast_item
 )
 {
-  return new EiGenBlockScope(parent, pt_item);
+  return new EiGenBlockScope(parent, ast_item);
 }
 
 // @brief generate for block を生成する．
 const VlScope*
 EiFactory::new_GfBlock(
   const VlScope* parent,
-  const PtItem* pt_item,
+  const AstItem* ast_item,
   int gvi
 )
 {
-  return new EiGfBlockScope(parent, pt_item, gvi);
+  return new EiGfBlockScope(parent, ast_item, gvi);
 }
 
 
@@ -46,9 +46,9 @@ EiFactory::new_GfBlock(
 // @brief コンストラクタ
 EiGenBlockScope::EiGenBlockScope(
   const VlScope* parent,
-  const PtItem* pt_item
+  const AstItem* ast_item
 ) : EiScope(parent),
-    mPtItem{pt_item}
+    mAstItem{ast_item}
 {
 }
 
@@ -61,14 +61,14 @@ EiGenBlockScope::~EiGenBlockScope()
 FileRegion
 EiGenBlockScope::file_region() const
 {
-  return mPtItem->file_region();
+  return mAstItem->file_region();
 }
 
 // @brief 名前の取得
 std::string
 EiGenBlockScope::name() const
 {
-  return mPtItem->name();
+  return mAstItem->name();
 }
 
 
@@ -79,9 +79,9 @@ EiGenBlockScope::name() const
 // @brief コンストラクタ
 EiGfBlockScope::EiGfBlockScope(
   const VlScope* parent,
-  const PtItem* pt_item,
+  const AstItem* ast_item,
   int index
-) : EiGenBlockScope(parent, pt_item),
+) : EiGenBlockScope(parent, ast_item),
     mIndex{index}
 {
 }

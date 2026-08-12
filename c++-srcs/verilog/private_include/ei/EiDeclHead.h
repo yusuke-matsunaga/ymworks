@@ -54,22 +54,22 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiDeclHeadPt.h EiDeclHead.h "EiDeclHead.h"
-/// @brief PtDeclH を用いた宣言要素のヘッダを表すクラス
+/// @class EiDeclHeadAst.h EiDeclHead.h "EiDeclHead.h"
+/// @brief AstDeclH を用いた宣言要素のヘッダを表すクラス
 //////////////////////////////////////////////////////////////////////
-class EiDeclHeadPt :
+class EiDeclHeadAst :
   public EiDeclHead
 {
 public:
 
   /// @brief コンストラクタ
-  EiDeclHeadPt(
+  EiDeclHeadAst(
     const VlScope* parent,    ///< [in] 親のスコープ
-    const PtDeclHead* pt_head ///< [in] パース木の宣言ヘッダ
+    const AstDeclHead* ast_head ///< [in] パース木の宣言ヘッダ
   );
 
   /// @brief デストラクタ
-  ~EiDeclHeadPt();
+  ~EiDeclHeadAst();
 
 
 public:
@@ -172,28 +172,28 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の宣言ヘッダ
-  const PtDeclHead* mPtHead;
+  const AstDeclHead* mAstHead;
 
 };
 
 
 //////////////////////////////////////////////////////////////////////
-/// @clacc EiDeclHeadPtD EiDeclHead.h "EiDeclHead.h"
-/// @brief delay 付きの EiDeclHeadPt
+/// @clacc EiDeclHeadAstD EiDeclHead.h "EiDeclHead.h"
+/// @brief delay 付きの EiDeclHeadAst
 //////////////////////////////////////////////////////////////////////
-class EiDeclHeadPtD :
-  public EiDeclHeadPt
+class EiDeclHeadAstD :
+  public EiDeclHeadAst
 {
 public:
 
   /// @brief コンストラクタ
-  EiDeclHeadPtD(
+  EiDeclHeadAstD(
     const VlScope* parent,    ///< [in] 親のスコープ
-    const PtDeclHead* pt_head ///< [in] パース木の宣言ヘッダ
+    const AstDeclHead* ast_head ///< [in] パース木の宣言ヘッダ
   );
 
   /// @brief デストラクタ
-  ~EiDeclHeadPtD();
+  ~EiDeclHeadAstD();
 
 
 public:
@@ -232,24 +232,24 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @clacc EiDeclHeadPtV EiDeclHead.h "EiDeclHead.h"
-/// @brief 範囲付きの EiDeclHeadPt
+/// @clacc EiDeclHeadAstV EiDeclHead.h "EiDeclHead.h"
+/// @brief 範囲付きの EiDeclHeadAst
 //////////////////////////////////////////////////////////////////////
-class EiDeclHeadPtV :
-  public EiDeclHeadPt
+class EiDeclHeadAstV :
+  public EiDeclHeadAst
 {
 public:
 
   /// @brief コンストラクタ
-  EiDeclHeadPtV(
+  EiDeclHeadAstV(
     const VlScope* parent,     ///< [in] ヘッダ
-    const PtDeclHead* pt_head, ///< [in] パース木の宣言ヘッダ
-    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const AstDeclHead* ast_head, ///< [in] パース木の宣言ヘッダ
+    const AstRange* ast_range,   ///< [in] パース木の範囲定義
     const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
-  ~EiDeclHeadPtV();
+  ~EiDeclHeadAstV();
 
 
 public:
@@ -311,24 +311,24 @@ protected:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @clacc EiDeclHeadPtVD EiDeclHead.h "EiDeclHead.h"
-/// @brief 範囲付き，delay 付きの EiDeclHeadPt
+/// @clacc EiDeclHeadAstVD EiDeclHead.h "EiDeclHead.h"
+/// @brief 範囲付き，delay 付きの EiDeclHeadAst
 //////////////////////////////////////////////////////////////////////
-class EiDeclHeadPtVD :
-  public EiDeclHeadPtV
+class EiDeclHeadAstVD :
+  public EiDeclHeadAstV
 {
 public:
 
   /// @brief コンストラクタ
-  EiDeclHeadPtVD(
+  EiDeclHeadAstVD(
     const VlScope* parent,     ///< [in] ヘッダ
-    const PtDeclHead* pt_head, ///< [in] パース木の宣言ヘッダ
-    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const AstDeclHead* ast_head, ///< [in] パース木の宣言ヘッダ
+    const AstRange* ast_range,   ///< [in] パース木の範囲定義
     const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
-  ~EiDeclHeadPtVD();
+  ~EiDeclHeadAstVD();
 
 
 public:
@@ -367,23 +367,23 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiDeclHeadPt2.h EiDeclHead.h "EiDeclHead.h"
-/// @brief PtIOH を用いた宣言要素のヘッダを表すクラス
+/// @class EiDeclHeadAst2.h EiDeclHead.h "EiDeclHead.h"
+/// @brief AstIOH を用いた宣言要素のヘッダを表すクラス
 //////////////////////////////////////////////////////////////////////
-class EiDeclHeadPt2 :
+class EiDeclHeadAst2 :
   public EiDeclHead
 {
 public:
 
   /// @brief コンストラクタ
-  EiDeclHeadPt2(
+  EiDeclHeadAst2(
     const VlScope* parent,   ///< [in] 親のスコープ
-    const PtIOHead* pt_head, ///< [in] パース木のIO宣言ヘッダ
+    const AstIOHead* ast_head, ///< [in] パース木のIO宣言ヘッダ
     VpiAuxType aux_type      ///< [in] 補助的なデータ型
   );
 
   /// @brief デストラクタ
-  ~EiDeclHeadPt2();
+  ~EiDeclHeadAst2();
 
 
 public:
@@ -462,7 +462,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木のIO宣言ヘッダ
-  const PtIOHead* mPtHead;
+  const AstIOHead* mAstHead;
 
   // 補助的なデータ型
   VpiAuxType mAuxType;
@@ -471,25 +471,25 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @clacc EiDeclHeadPt2V EiDeclHead.h "EiDeclHead.h"
-/// @brief 範囲付きの EiDeclHeadPt2
+/// @clacc EiDeclHeadAst2V EiDeclHead.h "EiDeclHead.h"
+/// @brief 範囲付きの EiDeclHeadAst2
 //////////////////////////////////////////////////////////////////////
-class EiDeclHeadPt2V :
-  public EiDeclHeadPt2
+class EiDeclHeadAst2V :
+  public EiDeclHeadAst2
 {
 public:
 
   /// @brief コンストラクタ
-  EiDeclHeadPt2V(
+  EiDeclHeadAst2V(
     const VlScope* parent,   ///< [in] ヘッダ
-    const PtIOHead* pt_head, ///< [in] パース木のIO宣言ヘッダ
+    const AstIOHead* ast_head, ///< [in] パース木のIO宣言ヘッダ
     VpiAuxType aux_type,     ///< [in] 補助的なデータ型
-    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const AstRange* ast_range, ///< [in] パース木の範囲定義
     const RangeVal& range    ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
-  ~EiDeclHeadPt2V();
+  ~EiDeclHeadAst2V();
 
 
 public:
@@ -551,22 +551,22 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiDeclHeadPt3.h EiDeclHead.h "EiDeclHead.h"
-/// @brief PtItem を用いた宣言要素のヘッダを表すクラス
+/// @class EiDeclHeadAst3.h EiDeclHead.h "EiDeclHead.h"
+/// @brief AstItem を用いた宣言要素のヘッダを表すクラス
 //////////////////////////////////////////////////////////////////////
-class EiDeclHeadPt3 :
+class EiDeclHeadAst3 :
   public EiDeclHead
 {
 public:
 
   /// @brief コンストラクタ
-  EiDeclHeadPt3(
+  EiDeclHeadAst3(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item  ///< [in] パース木の宣言要素
+    const AstItem* ast_item  ///< [in] パース木の宣言要素
   );
 
   /// @brief デストラクタ
-  ~EiDeclHeadPt3();
+  ~EiDeclHeadAst3();
 
 
 public:
@@ -647,30 +647,30 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の関数定義
-  const PtItem* mPtItem;
+  const AstItem* mAstItem;
 
 };
 
 
 //////////////////////////////////////////////////////////////////////
-/// @clacc EiDeclHeadPt3V EiDeclHead.h "EiDeclHead.h"
-/// @brief 範囲付きの EiDeclHeadPt3
+/// @clacc EiDeclHeadAst3V EiDeclHead.h "EiDeclHead.h"
+/// @brief 範囲付きの EiDeclHeadAst3
 //////////////////////////////////////////////////////////////////////
-class EiDeclHeadPt3V :
-  public EiDeclHeadPt3
+class EiDeclHeadAst3V :
+  public EiDeclHeadAst3
 {
 public:
 
   /// @brief コンストラクタ
-  EiDeclHeadPt3V(
+  EiDeclHeadAst3V(
     const VlScope* parent,   ///< [in] ヘッダ
-    const PtItem* pt_item,   ///< [in] パース木の宣言ヘッダ
-    const PtRange* pt_range, ///< [in] パース木の範囲定義
+    const AstItem* ast_item,   ///< [in] パース木の宣言ヘッダ
+    const AstRange* ast_range, ///< [in] パース木の範囲定義
     const RangeVal& range    ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
-  ~EiDeclHeadPt3V();
+  ~EiDeclHeadAst3V();
 
 
 public:

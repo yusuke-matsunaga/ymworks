@@ -25,7 +25,7 @@ public:
   /// @brief コンストラクタ
   EiProcess(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtItem* pt_item  ///< [in] パース木の要素定義
+    const AstItem* ast_item  ///< [in] パース木の要素定義
   );
 
   /// @brief デストラクタ
@@ -81,7 +81,7 @@ private:
   const VlScope* mParent;
 
   // パース木の要素定義
-  const PtItem* mPtItem;
+  const AstItem* mAstItem;
 
   // 本体のステートメント
   const VlStmt* mStmt;

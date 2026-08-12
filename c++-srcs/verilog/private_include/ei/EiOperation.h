@@ -24,7 +24,7 @@ protected:
 
   /// @brief コンストラクタ
   EiOperation(
-    const PtExpr* pt_expr ///< [in] パース木の定義要素
+    const AstExpr* ast_expr ///< [in] パース木の定義要素
   );
 
   /// @brief デストラクタ

@@ -24,7 +24,7 @@ public:
 
   /// @brief コンストラクタ
   EiLhs(
-    const PtExpr* pt_expr,                      ///< [in] パース木の定義要素
+    const AstExpr* ast_expr,                      ///< [in] パース木の定義要素
     const std::vector<ElbExpr*>& opr_array,     ///< [in] オペランドを格納する配列
     const std::vector<ElbExpr*>& lhs_elem_array ///< [in] 左辺の要素の配列
   );

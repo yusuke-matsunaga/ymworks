@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ElbProxy.h"
 
 
@@ -43,7 +43,7 @@ public:
   void
   phase1_decl(
     const VlScope* parent,  ///< [in] 親のスコープ
-    const std::vector<const PtDeclHead*>& pt_head_array, ///< [in] 宣言ヘッダの配列
+    const std::vector<const AstDeclHead*>& ast_head_array, ///< [in] 宣言ヘッダの配列
     bool force_to_local  ///< [in] true なら parameter を localparam にする．
   );
 
@@ -54,14 +54,14 @@ public:
   instantiate_iodecl(
     ElbModule* module,      ///< [in] 親のモジュール
     ElbTaskFunc* taskfunc,  ///< [in] 親のタスク/関数
-    const std::vector<const PtIOHead*>& pt_head_array ///< [in] IO宣言ヘッダの配列
+    const std::vector<const AstIOHead*>& ast_head_array ///< [in] IO宣言ヘッダの配列
   );
 
   /// @brief 宣言要素のリストをインスタンス化する．
   void
   instantiate_decl(
     const VlScope* parent,  ///< [in] 親のスコープ
-    const std::vector<const PtDeclHead*>& pt_head_array ///< [in] 宣言ヘッダの配列
+    const std::vector<const AstDeclHead*>& ast_head_array ///< [in] 宣言ヘッダの配列
   );
 
 
@@ -74,7 +74,7 @@ private:
   void
   instantiate_param_head(
     const VlScope* parent,     ///< [in] 親のスコープ
-    const PtDeclHead* pt_head, ///< [in] 宣言ヘッダ
+    const AstDeclHead* ast_head, ///< [in] 宣言ヘッダ
     bool is_local              ///< [in] local_param にする時 true
   );
 
@@ -82,56 +82,56 @@ private:
   void
   instantiate_net_head(
     const VlScope* parent,    ///< [in] 親のスコープ
-    const PtDeclHead* pt_head ///< [in] 宣言のヘッダ
+    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief net の遅延値を生成する．
   void
   link_net_delay(
     ElbDeclHead* net_head,  ///< [in] ネットのヘッダ
-    const PtDelay* pt_delay ///< [in] パース木の遅延式定義
+    const AstDelay* ast_delay ///< [in] パース木の遅延式定義
   );
 
   /// @brief net の初期値を生成する．
   void
   link_net_assign(
     ElbDecl* net,             ///< [in] ネット
-    const PtDeclItem* pt_item ///< [in] パース木のネット定義要素
+    const AstDeclItem* ast_item ///< [in] パース木のネット定義要素
   );
 
   /// @brief reg をインスタンス化する．
   void
   instantiate_reg_head(
     const VlScope* parent,    ///< [in] 親のスコープ
-    const PtDeclHead* pt_head ///< [in] 宣言のヘッダ
+    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief variable をインスタンス化する．
   void
   instantiate_var_head(
     const VlScope* parent,    ///< [in] 親のスコープ
-    const PtDeclHead* pt_head ///< [in] 宣言のヘッダ
+    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief named_event をインスタンス化する．
   void
   instantiate_event_head(
     const VlScope* parent,    ///< [in] 親のスコープ
-    const PtDeclHead* pt_head ///< [in] 宣言のヘッダ
+    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief genvar をインスタンス化する．
   void
   instantiate_genvar_head(
     const VlScope* parent,    ///< [in] 親のスコープ
-    const PtDeclHead* pt_head ///< [in] 宣言のヘッダ
+    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief 配列の次元リストを生成する．
   bool
   instantiate_dimension_list(
     const VlScope* parent,         ///< [in] 親のスコープ
-    const PtDeclItem* pt_item,     ///< [in] 要素定義
+    const AstDeclItem* ast_item,     ///< [in] 要素定義
     std::vector<ElbRangeSrc>& range_src ///< [in] 範囲の情報を設定する配列
   );
 

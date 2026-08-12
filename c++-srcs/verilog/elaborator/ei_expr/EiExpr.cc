@@ -8,11 +8,10 @@
 
 #include "ei/EiExpr.h"
 #include "ei/EiOperation.h"
-
-#include "ym/BitVector.h"
-#include "ym/VlTime.h"
-#include "ym/VlValue.h"
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/BitVector.h"
+#include "ym/vl/VlTime.h"
+#include "ym/vl/VlValue.h"
+#include "ym/vl/AstExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -35,7 +34,7 @@ EiExpr::~EiExpr()
 FileRegion
 EiExpr::file_region() const
 {
-  return pt_obj()->file_region();
+  return ast_obj()->file_region();
 }
 
 // @brief 定数の時 true を返す．
@@ -341,8 +340,8 @@ EiExpr::lhs_elem_list() const
 
 // @brief コンストラクタ
 EiExprBase::EiExprBase(
-  const PtExpr* pt_expr
-) : mPtExpr{pt_expr}
+  const AstExpr* ast_expr
+) : mAstExpr{ast_expr}
 {
 }
 
@@ -355,14 +354,14 @@ EiExprBase::~EiExprBase()
 std::string
 EiExprBase::decompile() const
 {
-  return pt_expr()->decompile();
+  return ast_expr()->decompile();
 }
 
 /// @brief パース木の定義要素を返す．
-const PtBase*
-EiExprBase::pt_obj() const
+const AstBase*
+EiExprBase::ast_obj() const
 {
-  return pt_expr();
+  return ast_expr();
 }
 
 
@@ -372,8 +371,8 @@ EiExprBase::pt_obj() const
 
 // @brief コンストラクタ
 EiOperation::EiOperation(
-  const PtExpr* pt_expr
-) : EiExprBase{pt_expr}
+  const AstExpr* ast_expr
+) : EiExprBase{ast_expr}
 {
 }
 
@@ -400,7 +399,7 @@ EiOperation::is_operation() const
 VpiOpType
 EiOperation::op_type() const
 {
-  return pt_expr()->op_type();
+  return ast_expr()->op_type();
 }
 
 END_NAMESPACE_YM_VERILOG

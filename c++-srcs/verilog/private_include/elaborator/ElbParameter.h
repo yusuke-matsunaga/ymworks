@@ -10,7 +10,7 @@
 
 #include "elaborator/ElbHead.h"
 #include "elaborator/ElbDecl.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -147,7 +147,7 @@ public:
 
   /// @brief 値の取得
   virtual
-  const PtExpr*
+  const AstExpr*
   init_expr() const = 0;
 
   /// @brief 値の取得
@@ -159,7 +159,7 @@ public:
   virtual
   void
   set_init_expr(
-    const PtExpr* expr,  ///< [in] 値を表す式
+    const AstExpr* expr, ///< [in] 値を表す式
     const VlValue& value ///< [in] 値
   ) = 0;
 

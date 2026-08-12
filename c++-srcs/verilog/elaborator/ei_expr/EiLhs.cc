@@ -19,12 +19,12 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 連結演算子の左辺式を生成する．
 ElbExpr*
 EiFactory::new_Lhs(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const std::vector<ElbExpr*>& opr_array,
   const std::vector<ElbExpr*>& lhs_elem_array
 )
 {
-  return new EiLhs(pt_expr, opr_array, lhs_elem_array);
+  return new EiLhs(ast_expr, opr_array, lhs_elem_array);
 }
 
 
@@ -34,10 +34,10 @@ EiFactory::new_Lhs(
 
 // @brief コンストラクタ
 EiLhs::EiLhs(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const std::vector<ElbExpr*>& opr_array,
   const std::vector<ElbExpr*>& lhs_elem_array
-) : EiConcatOp(pt_expr, opr_array),
+) : EiConcatOp(ast_expr, opr_array),
     mArray{lhs_elem_array}
 {
 }

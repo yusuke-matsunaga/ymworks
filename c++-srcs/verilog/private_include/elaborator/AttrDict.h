@@ -14,11 +14,11 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-class PtAttrInst;
+class AstAttrInst;
 
 //////////////////////////////////////////////////////////////////////
 /// @class AttrDict AttrDict.h "AttrDict.h"
-/// @brief PtAttrInst をキーとして ElbAttrList を格納するハッシュ表
+/// @brief AstAttrInst をキーとして ElbAttrList を格納するハッシュ表
 //////////////////////////////////////////////////////////////////////
 class AttrDict
 {
@@ -39,21 +39,21 @@ public:
   /// @brief 登録する．
   void
   add(
-    const PtAttrInst* pt_attr,                       ///< [in] パース木の属性定義
+    const AstAttrInst* ast_attr,                       ///< [in] パース木の属性定義
     const std::vector<const VlAttribute*>& attr_list ///< [in] 登録する属性のリスト
   )
   {
-    mHash.emplace(pt_attr, attr_list);
+    mHash.emplace(ast_attr, attr_list);
   }
 
   /// @brief 属性リストを取り出す．
   std::vector<const VlAttribute*>
   find(
-    const PtAttrInst* pt_attr ///< [in] パース木の属性定義
+    const AstAttrInst* ast_attr ///< [in] パース木の属性定義
   ) const
   {
-    if ( mHash.count(pt_attr) > 0 ) {
-      return mHash.at(pt_attr);
+    if ( mHash.count(ast_attr) > 0 ) {
+      return mHash.at(ast_attr);
     }
     return {};
   }
@@ -72,7 +72,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ハッシュ表
-  std::unordered_map<const PtAttrInst*, std::vector<const VlAttribute*>> mHash;
+  std::unordered_map<const AstAttrInst*, std::vector<const VlAttribute*>> mHash;
 
 };
 

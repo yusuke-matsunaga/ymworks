@@ -8,8 +8,7 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiTernaryOp.h"
-
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -21,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 3項演算子を生成する．
 ElbExpr*
 EiFactory::new_TernaryOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   VpiOpType op_type,
   ElbExpr* opr0,
   ElbExpr* opr1,
@@ -30,10 +29,10 @@ EiFactory::new_TernaryOp(
 {
   switch ( op_type ) {
   case VpiOpType::Condition:
-    return new EiConditionOp(pt_expr, opr0, opr1, opr2);
+    return new EiConditionOp(ast_expr, opr0, opr1, opr2);
 
   case VpiOpType::MinTypMax:
-    return new EiMinTypMaxOp(pt_expr, opr0, opr1, opr2);
+    return new EiMinTypMaxOp(ast_expr, opr0, opr1, opr2);
 
   default:
     break;
@@ -48,11 +47,11 @@ EiFactory::new_TernaryOp(
 
 // @brief コンストラクタ
 EiTernaryOp::EiTernaryOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3
-) : EiOperation(pt_expr),
+) : EiOperation(ast_expr),
     mOpr{opr1, opr2, opr3}
 {
 }
@@ -98,11 +97,11 @@ EiTernaryOp::operand(
 
 // @brief コンストラクタ
 EiConditionOp::EiConditionOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3
-) : EiTernaryOp(pt_expr, opr1, opr2, opr3)
+) : EiTernaryOp(ast_expr, opr1, opr2, opr3)
 {
   // 三項演算子の場合は第1オペランドが self determined で
   // 結果は第2オペランドと第3オペランドから決まる．
@@ -148,11 +147,11 @@ EiConditionOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiMinTypMaxOp::EiMinTypMaxOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3
-) : EiTernaryOp(pt_expr, opr1, opr2, opr3)
+) : EiTernaryOp(ast_expr, opr1, opr2, opr3)
 {
   // とりあえず真ん中の式を使う．
   mType = opr2->value_type();

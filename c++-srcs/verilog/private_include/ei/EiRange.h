@@ -10,7 +10,7 @@
 
 #include "elaborator/ElbRange.h"
 #include "elaborator/RangeVal.h"
-#include "ym/pt/PtDecl.h"
+#include "ym/vl/AstDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -133,13 +133,13 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の範囲定義
-  const PtRange* mPtRange;
+  const AstRange* mAstRange;
 
   // 範囲の MSB
-  const PtExpr* mLeftRange;
+  const AstExpr* mLeftRange;
 
   // 範囲の LSB
-  const PtExpr* mRightRange;
+  const AstExpr* mRightRange;
 
   // 範囲の値
   RangeVal mVal;

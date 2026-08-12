@@ -9,8 +9,7 @@
 /// All rights reserved.
 
 #include "EiExpr.h"
-
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,7 +25,7 @@ protected:
 
   /// @brief コンストラクタ
   EiConstant(
-    const PtExpr* pt_expr ///< [in] パース木の定義要素
+    const AstExpr* ast_expr ///< [in] パース木の定義要素
   );
 
   /// @brief デストラクタ
@@ -78,7 +77,7 @@ public:
 
   /// @brief コンストラクタ
   EiIntConst(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     std::int32_t value     ///< [in] 値
   );
 
@@ -126,7 +125,7 @@ public:
 
   /// @brief コンストラクタ
   EiBitVectorConst(
-    const PtExpr* pt_expr,   ///< [in] パース木の定義要素
+    const AstExpr* ast_expr,   ///< [in] パース木の定義要素
     VpiConstType const_type, ///< [in] 定数型
     const BitVector& value   ///< [in] 値
   );
@@ -178,7 +177,7 @@ public:
 
   /// @brief コンストラクタ
   EiRealConst(
-    const PtExpr* pt_expr, ///< [in] パース木の定義要素
+    const AstExpr* ast_expr, ///< [in] パース木の定義要素
     double value           ///< [in] 値
   );
 
@@ -226,7 +225,7 @@ public:
 
   /// @brief コンストラクタ
   EiStringConst(
-    const PtExpr* pt_expr,   ///< [in] パース木の定義要素
+    const AstExpr* ast_expr,   ///< [in] パース木の定義要素
     const std::string& value ///< [in] 値
   );
 

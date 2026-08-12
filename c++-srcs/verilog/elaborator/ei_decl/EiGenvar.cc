@@ -9,7 +9,7 @@
 #include "ei/EiFactory.h"
 #include "ei/EiGenvar.h"
 
-#include "ym/pt/PtDecl.h"
+#include "ym/vl/AstDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,11 +22,11 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbGenvar*
 EiFactory::new_Genvar(
   const VlScope* parent,
-  const PtDeclItem* pt_item,
+  const AstDeclItem* ast_item,
   int val
 )
 {
-  return new EiGenvar(parent, pt_item, val);
+  return new EiGenvar(parent, ast_item, val);
 }
 
 
@@ -37,10 +37,10 @@ EiFactory::new_Genvar(
 // コンストラクタ
 EiGenvar::EiGenvar(
   const VlScope* parent,
-  const PtDeclItem* pt_item,
+  const AstDeclItem* ast_item,
   int val
 ) : mParent{parent},
-    mPtItem{pt_item},
+    mAstItem{ast_item},
     mInUse{false},
     mValue{val}
 {
@@ -62,7 +62,7 @@ EiGenvar::type() const
 FileRegion
 EiGenvar::file_region() const
 {
-  return mPtItem->file_region();
+  return mAstItem->file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -76,7 +76,7 @@ EiGenvar::parent_scope() const
 std::string
 EiGenvar::name() const
 {
-  return mPtItem->name();
+  return mAstItem->name();
 }
 
 // 使用中の時 true を返す．
@@ -117,10 +117,10 @@ EiGenvar::set_value(
 }
 
 // @brief 元となったパース木の定義要素を返す．
-const PtDeclItem*
-EiGenvar::pt_item() const
+const AstDeclItem*
+EiGenvar::ast_item() const
 {
-  return mPtItem;
+  return mAstItem;
 }
 
 END_NAMESPACE_YM_VERILOG

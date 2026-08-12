@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/VlExpr.h"
-#include "ym/VlValueType.h"
+#include "ym/vl/VlValueType.h"
 #include "ElbFwd.h"
 
 

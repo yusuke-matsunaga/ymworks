@@ -8,9 +8,10 @@
 
 #include <gtest/gtest.h>
 #include "ParserTest.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtMisc.h"
+#include "parser/PtDecl.h"
+#include "parser/PtExpr.h"
+#include "parser/PtItem.h"
+#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -36,7 +37,7 @@ TEST_F(ParserTest, IOHead)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtIOItem*>{},
+      EXPECT_EQ( std::vector<const AstIOItem*>{},
 		 head->item_list() );
     }
   }
@@ -45,11 +46,8 @@ TEST_F(ParserTest, IOHead)
 TEST_F(ParserTest, IOHead2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
       auto fr = make_file_region(1, 2, 3, 4);
@@ -65,7 +63,7 @@ TEST_F(ParserTest, IOHead2)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtIOItem*>{},
+      EXPECT_EQ( std::vector<const AstIOItem*>{},
 		 head->item_list() );
     }
   }
@@ -88,7 +86,7 @@ TEST_F(ParserTest, RegIOHead)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtIOItem*>{},
+      EXPECT_EQ( std::vector<const AstIOItem*>{},
 		 head->item_list() );
     }
   }
@@ -97,11 +95,8 @@ TEST_F(ParserTest, RegIOHead)
 TEST_F(ParserTest, RegIOHead2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
       auto fr = make_file_region(1, 2, 3, 4);
@@ -117,7 +112,7 @@ TEST_F(ParserTest, RegIOHead2)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtIOItem*>{},
+      EXPECT_EQ( std::vector<const AstIOItem*>{},
 		 head->item_list() );
     }
   }
@@ -144,7 +139,7 @@ TEST_F(ParserTest, NetIOHead)
 	EXPECT_EQ( 0, head->item_num() );
 	EXPECT_THROW( head->item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtIOItem*>{},
+	EXPECT_EQ( std::vector<const AstIOItem*>{},
 		   head->item_list() );
       }
     }
@@ -154,11 +149,8 @@ TEST_F(ParserTest, NetIOHead)
 TEST_F(ParserTest, NetIOHead2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		      VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
@@ -178,7 +170,7 @@ TEST_F(ParserTest, NetIOHead2)
 	EXPECT_EQ( 0, head->item_num() );
 	EXPECT_THROW( head->item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtIOItem*>{},
+	EXPECT_EQ( std::vector<const AstIOItem*>{},
 		   head->item_list() );
       }
     }
@@ -203,7 +195,7 @@ TEST_F(ParserTest, VarIOHead)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtIOItem*>{},
+      EXPECT_EQ( std::vector<const AstIOItem*>{},
 		 head->item_list() );
     }
   }
@@ -231,7 +223,7 @@ TEST_F(ParserTest, IOItem)
   EXPECT_EQ( nullptr, item->init_value() );
   EXPECT_THROW( head->item(1),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtIOItem*>{item},
+  EXPECT_EQ( std::vector<const AstIOItem*>{item},
 	     head->item_list() );
 }
 
@@ -269,7 +261,7 @@ TEST_F(ParserTest, ParamH)
   auto head = parser.new_ParamH(fr);
   ASSERT_TRUE( head != nullptr );
   EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( PtDeclType::Param, head->type() );
+  EXPECT_EQ( AstDeclHead::Param, head->type() );
   EXPECT_EQ( false, head->is_signed() );
   EXPECT_EQ( nullptr, head->range() );
   EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -280,24 +272,21 @@ TEST_F(ParserTest, ParamH)
   EXPECT_EQ( 0, head->item_num() );
   EXPECT_THROW( head->item(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	     head->item_list() );
 }
 
 TEST_F(ParserTest, ParamH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   for ( auto sign: { true, false } ) {
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_ParamH(fr, sign, range);
     ASSERT_TRUE( head != nullptr );
     EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( PtDeclType::Param, head->type() );
+    EXPECT_EQ( AstDeclHead::Param, head->type() );
     EXPECT_EQ( sign, head->is_signed() );
     EXPECT_EQ( range, head->range() );
     EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -308,7 +297,7 @@ TEST_F(ParserTest, ParamH2)
     EXPECT_EQ( 0, head->item_num() );
     EXPECT_THROW( head->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclItem*>{},
+    EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	       head->item_list() );
   }
 }
@@ -321,7 +310,7 @@ TEST_F(ParserTest, ParamH3)
     auto head = parser.new_ParamH(fr, var);
     ASSERT_TRUE( head != nullptr );
     EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( PtDeclType::Param, head->type() );
+    EXPECT_EQ( AstDeclHead::Param, head->type() );
     auto sign = (var == VpiVarType::Time) ? false : true;
     EXPECT_EQ( sign, head->is_signed() );
     EXPECT_EQ( nullptr, head->range() );
@@ -333,7 +322,7 @@ TEST_F(ParserTest, ParamH3)
     EXPECT_EQ( 0, head->item_num() );
     EXPECT_THROW( head->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclItem*>{},
+    EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	       head->item_list() );
   }
 }
@@ -344,7 +333,7 @@ TEST_F(ParserTest, LocalParamH)
   auto head = parser.new_LocalParamH(fr);
   ASSERT_TRUE( head != nullptr );
   EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( PtDeclType::LocalParam, head->type() );
+  EXPECT_EQ( AstDeclHead::LocalParam, head->type() );
   EXPECT_EQ( false, head->is_signed() );
   EXPECT_EQ( nullptr, head->range() );
   EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -355,24 +344,21 @@ TEST_F(ParserTest, LocalParamH)
   EXPECT_EQ( 0, head->item_num() );
   EXPECT_THROW( head->item(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	     head->item_list() );
 }
 
 TEST_F(ParserTest, LocalParamH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   for ( auto sign: { true, false } ) {
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_LocalParamH(fr, sign, range);
     ASSERT_TRUE( head != nullptr );
     EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( PtDeclType::LocalParam, head->type() );
+    EXPECT_EQ( AstDeclHead::LocalParam, head->type() );
     EXPECT_EQ( sign, head->is_signed() );
     EXPECT_EQ( range, head->range() );
     EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -383,7 +369,7 @@ TEST_F(ParserTest, LocalParamH2)
     EXPECT_EQ( 0, head->item_num() );
     EXPECT_THROW( head->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclItem*>{},
+    EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	       head->item_list() );
   }
 }
@@ -396,7 +382,7 @@ TEST_F(ParserTest, LocalParamH3)
     auto head = parser.new_LocalParamH(fr, var);
     ASSERT_TRUE( head != nullptr );
     EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( PtDeclType::LocalParam, head->type() );
+    EXPECT_EQ( AstDeclHead::LocalParam, head->type() );
     auto sign = (var == VpiVarType::Time) ? false : true;
     EXPECT_EQ( sign, head->is_signed() );
     EXPECT_EQ( nullptr, head->range() );
@@ -408,7 +394,7 @@ TEST_F(ParserTest, LocalParamH3)
     EXPECT_EQ( 0, head->item_num() );
     EXPECT_THROW( head->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclItem*>{},
+    EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	       head->item_list() );
   }
 }
@@ -419,7 +405,7 @@ TEST_F(ParserTest, SpecParamH)
   auto head = parser.new_SpecParamH(fr);
   ASSERT_TRUE( head != nullptr );
   EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( PtDeclType::SpecParam, head->type() );
+  EXPECT_EQ( AstDeclHead::SpecParam, head->type() );
   EXPECT_EQ( false, head->is_signed() );
   EXPECT_EQ( nullptr, head->range() );
   EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -430,24 +416,20 @@ TEST_F(ParserTest, SpecParamH)
   EXPECT_EQ( 0, head->item_num() );
   EXPECT_THROW( head->item(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	     head->item_list() );
 }
 
 TEST_F(ParserTest, SpecParamH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
-
+  auto range = new_range(fr1, 31, fr2, 0);
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.new_SpecParamH(fr, range);
   ASSERT_TRUE( head != nullptr );
   EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( PtDeclType::SpecParam, head->type() );
+  EXPECT_EQ( AstDeclHead::SpecParam, head->type() );
   EXPECT_EQ( false, head->is_signed() );
   EXPECT_EQ( range, head->range() );
   EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -458,7 +440,7 @@ TEST_F(ParserTest, SpecParamH2)
   EXPECT_EQ( 0, head->item_num() );
   EXPECT_THROW( head->item(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	     head->item_list() );
 }
 
@@ -468,7 +450,7 @@ TEST_F(ParserTest, EventH)
   auto head = parser.new_EventH(fr);
   ASSERT_TRUE( head != nullptr );
   EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( PtDeclType::Event, head->type() );
+  EXPECT_EQ( AstDeclHead::Event, head->type() );
   EXPECT_EQ( false, head->is_signed() );
   EXPECT_EQ( nullptr, head->range() );
   EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -479,7 +461,7 @@ TEST_F(ParserTest, EventH)
   EXPECT_EQ( 0, head->item_num() );
   EXPECT_THROW( head->item(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	     head->item_list() );
 }
 
@@ -489,7 +471,7 @@ TEST_F(ParserTest, GenvarH)
   auto head = parser.new_GenvarH(fr);
   ASSERT_TRUE( head != nullptr );
   EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( PtDeclType::Genvar, head->type() );
+  EXPECT_EQ( AstDeclHead::Genvar, head->type() );
   EXPECT_EQ( false, head->is_signed() );
   EXPECT_EQ( nullptr, head->range() );
   EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -500,7 +482,7 @@ TEST_F(ParserTest, GenvarH)
   EXPECT_EQ( 0, head->item_num() );
   EXPECT_THROW( head->item(0),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	     head->item_list() );
 }
 
@@ -512,7 +494,7 @@ TEST_F(ParserTest, VarH)
     auto head = parser.new_VarH(fr, var);
     ASSERT_TRUE( head != nullptr );
     EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( PtDeclType::Var, head->type() );
+    EXPECT_EQ( AstDeclHead::Var, head->type() );
     auto sign = (var == VpiVarType::Time) ? false : true;
     EXPECT_EQ( sign, head->is_signed() );
     EXPECT_EQ( nullptr, head->range() );
@@ -524,7 +506,7 @@ TEST_F(ParserTest, VarH)
     EXPECT_EQ( 0, head->item_num() );
     EXPECT_THROW( head->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclItem*>{},
+    EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	       head->item_list() );
   }
 }
@@ -536,7 +518,7 @@ TEST_F(ParserTest, RegH)
     auto head = parser.new_RegH(fr, sign);
     ASSERT_TRUE( head != nullptr );
     EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( PtDeclType::Reg, head->type() );
+    EXPECT_EQ( AstDeclHead::Reg, head->type() );
     EXPECT_EQ( sign, head->is_signed() );
     EXPECT_EQ( nullptr, head->range() );
     EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -547,7 +529,7 @@ TEST_F(ParserTest, RegH)
     EXPECT_EQ( 0, head->item_num() );
     EXPECT_THROW( head->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclItem*>{},
+    EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	       head->item_list() );
   }
 }
@@ -555,17 +537,14 @@ TEST_F(ParserTest, RegH)
 TEST_F(ParserTest, RegH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   for ( bool sign: { true, false } ) {
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_RegH(fr, sign, range);
     ASSERT_TRUE( head != nullptr );
     EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( PtDeclType::Reg, head->type() );
+    EXPECT_EQ( AstDeclHead::Reg, head->type() );
     EXPECT_EQ( sign, head->is_signed() );
     EXPECT_EQ( range, head->range() );
     EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -576,7 +555,7 @@ TEST_F(ParserTest, RegH2)
     EXPECT_EQ( 0, head->item_num() );
     EXPECT_THROW( head->item(0),
 		  std::out_of_range );
-    EXPECT_EQ( std::vector<const PtDeclItem*>{},
+    EXPECT_EQ( std::vector<const AstDeclItem*>{},
 	       head->item_list() );
   }
 }
@@ -592,7 +571,7 @@ TEST_F(ParserTest, NetH)
       auto head = parser.new_NetH(fr, net, sign);
       ASSERT_TRUE( head != nullptr );
       EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( PtDeclType::Net, head->type() );
+      EXPECT_EQ( AstDeclHead::Net, head->type() );
       EXPECT_EQ( sign, head->is_signed() );
       EXPECT_EQ( nullptr, head->range() );
       EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -603,7 +582,7 @@ TEST_F(ParserTest, NetH)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclItem*>{},
+      EXPECT_EQ( std::vector<const AstDeclItem*>{},
 		 head->item_list() );
     }
   }
@@ -624,7 +603,7 @@ TEST_F(ParserTest, NetHS)
       auto head = parser.new_NetH(fr, net, sign, str);
       ASSERT_TRUE( head != nullptr );
       EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( PtDeclType::Net, head->type() );
+      EXPECT_EQ( AstDeclHead::Net, head->type() );
       EXPECT_EQ( sign, head->is_signed() );
       EXPECT_EQ( nullptr, head->range() );
       EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -635,7 +614,7 @@ TEST_F(ParserTest, NetHS)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclItem*>{},
+      EXPECT_EQ( std::vector<const AstDeclItem*>{},
 		 head->item_list() );
     }
   }
@@ -656,7 +635,7 @@ TEST_F(ParserTest, NetHD)
       auto head = parser.new_NetH(fr, net, sign, delay);
       ASSERT_TRUE( head != nullptr );
       EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( PtDeclType::Net, head->type() );
+      EXPECT_EQ( AstDeclHead::Net, head->type() );
       EXPECT_EQ( sign, head->is_signed() );
       EXPECT_EQ( nullptr, head->range() );
       EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -667,7 +646,7 @@ TEST_F(ParserTest, NetHD)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclItem*>{},
+      EXPECT_EQ( std::vector<const AstDeclItem*>{},
 		 head->item_list() );
     }
   }
@@ -692,7 +671,7 @@ TEST_F(ParserTest, NetHSD)
       auto head = parser.new_NetH(fr, net, sign, str, delay);
       ASSERT_TRUE( head != nullptr );
       EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( PtDeclType::Net, head->type() );
+      EXPECT_EQ( AstDeclHead::Net, head->type() );
       EXPECT_EQ( sign, head->is_signed() );
       EXPECT_EQ( nullptr, head->range() );
       EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -703,7 +682,7 @@ TEST_F(ParserTest, NetHSD)
       EXPECT_EQ( 0, head->item_num() );
       EXPECT_THROW( head->item(0),
 		    std::out_of_range );
-      EXPECT_EQ( std::vector<const PtDeclItem*>{},
+      EXPECT_EQ( std::vector<const AstDeclItem*>{},
 		 head->item_list() );
     }
   }
@@ -712,11 +691,8 @@ TEST_F(ParserTest, NetHSD)
 TEST_F(ParserTest, NetH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
@@ -727,7 +703,7 @@ TEST_F(ParserTest, NetH2)
 	auto head = parser.new_NetH(fr, net, vs, sign, range);
 	ASSERT_TRUE( head != nullptr );
 	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( PtDeclType::Net, head->type() );
+	EXPECT_EQ( AstDeclHead::Net, head->type() );
 	EXPECT_EQ( sign, head->is_signed() );
 	EXPECT_EQ( range, head->range() );
 	EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -738,7 +714,7 @@ TEST_F(ParserTest, NetH2)
 	EXPECT_EQ( 0, head->item_num() );
 	EXPECT_THROW( head->item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtDeclItem*>{},
+	EXPECT_EQ( std::vector<const AstDeclItem*>{},
 		   head->item_list() );
       }
     }
@@ -748,11 +724,8 @@ TEST_F(ParserTest, NetH2)
 TEST_F(ParserTest, NetHS2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   auto fr4 = make_file_region(4, 4, 4, 4);
   auto str = parser.new_Strength(fr4,
 				 VpiStrength::SupplyDrive,
@@ -767,7 +740,7 @@ TEST_F(ParserTest, NetHS2)
 	auto head = parser.new_NetH(fr, net, vs, sign, range, str);
 	ASSERT_TRUE( head != nullptr );
 	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( PtDeclType::Net, head->type() );
+	EXPECT_EQ( AstDeclHead::Net, head->type() );
 	EXPECT_EQ( sign, head->is_signed() );
 	EXPECT_EQ( range, head->range() );
 	EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -778,7 +751,7 @@ TEST_F(ParserTest, NetHS2)
 	EXPECT_EQ( 0, head->item_num() );
 	EXPECT_THROW( head->item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtDeclItem*>{},
+	EXPECT_EQ( std::vector<const AstDeclItem*>{},
 		   head->item_list() );
       }
     }
@@ -788,11 +761,8 @@ TEST_F(ParserTest, NetHS2)
 TEST_F(ParserTest, NetHD2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   auto fr4 = make_file_region(4, 4, 4, 4);
   auto val = parser.new_IntConst(fr4, 1U);
   auto fr5 = make_file_region(5, 5, 5, 5);
@@ -807,7 +777,7 @@ TEST_F(ParserTest, NetHD2)
 	auto head = parser.new_NetH(fr, net, vs, sign, range, delay);
 	ASSERT_TRUE( head != nullptr );
 	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( PtDeclType::Net, head->type() );
+	EXPECT_EQ( AstDeclHead::Net, head->type() );
 	EXPECT_EQ( sign, head->is_signed() );
 	EXPECT_EQ( range, head->range() );
 	EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -818,7 +788,7 @@ TEST_F(ParserTest, NetHD2)
 	EXPECT_EQ( 0, head->item_num() );
 	EXPECT_THROW( head->item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtDeclItem*>{},
+	EXPECT_EQ( std::vector<const AstDeclItem*>{},
 		   head->item_list() );
       }
     }
@@ -828,11 +798,8 @@ TEST_F(ParserTest, NetHD2)
 TEST_F(ParserTest, NetHSD2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 31U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
+  auto range = new_range(fr1, 31, fr2, 0);
   auto fr4 = make_file_region(4, 4, 4, 4);
   auto str = parser.new_Strength(fr4,
 				 VpiStrength::SupplyDrive,
@@ -851,7 +818,7 @@ TEST_F(ParserTest, NetHSD2)
 	auto head = parser.new_NetH(fr, net, vs, sign, range, str, delay);
 	ASSERT_TRUE( head != nullptr );
 	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( PtDeclType::Net, head->type() );
+	EXPECT_EQ( AstDeclHead::Net, head->type() );
 	EXPECT_EQ( sign, head->is_signed() );
 	EXPECT_EQ( range, head->range() );
 	EXPECT_EQ( VpiVarType::None, head->data_type() );
@@ -862,7 +829,7 @@ TEST_F(ParserTest, NetHSD2)
 	EXPECT_EQ( 0, head->item_num() );
 	EXPECT_THROW( head->item(0),
 		      std::out_of_range );
-	EXPECT_EQ( std::vector<const PtDeclItem*>{},
+	EXPECT_EQ( std::vector<const AstDeclItem*>{},
 		   head->item_list() );
       }
     }
@@ -892,7 +859,7 @@ TEST_F(ParserTest, DeclItem)
   EXPECT_EQ( 0, item->range_num() );
   EXPECT_THROW( head->item(1),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{item},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{item},
 	     head->item_list() );
   EXPECT_THROW( item->range(0),
 		std::out_of_range );
@@ -924,7 +891,7 @@ TEST_F(ParserTest, DeclItem2)
   EXPECT_EQ( 0, item->range_num() );
   EXPECT_THROW( head->item(1),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{item},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{item},
 	     head->item_list() );
   EXPECT_THROW( item->range(0),
 		std::out_of_range );
@@ -936,12 +903,9 @@ TEST_F(ParserTest, DeclItem3)
 
   auto name = "port1";
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 16U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto range = parser.new_Range(fr3, left, right);
-  auto range_list = parser.new_list<const PtRange>();
+  auto range = new_range(fr1, 31, fr2, 0);
+  auto range_list = parser.new_range_list();
   range_list->push_back(range);
   auto fr = make_file_region(1, 2, 3, 4);
   parser.new_DeclItem(fr, name, range_list);
@@ -962,20 +926,21 @@ TEST_F(ParserTest, DeclItem3)
   EXPECT_EQ( range, item->range(0) );
   EXPECT_THROW( head->item(1),
 		std::out_of_range );
-  EXPECT_EQ( std::vector<const PtDeclItem*>{item},
+  EXPECT_EQ( std::vector<const AstDeclItem*>{item},
 	     head->item_list() );
 }
 
 TEST_F(ParserTest, Range)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto left = parser.new_IntConst(fr1, 16U);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto right = parser.new_IntConst(fr2, 0U);
-  auto fr = make_file_region(1, 2, 3, 4);
-  auto range = parser.new_Range(fr, left, right);
+  auto left_fr = make_file_region(1, 1, 1, 1);
+  SizeType left_val = 31U;
+  auto right_fr = make_file_region(2, 2, 2, 2);
+  SizeType right_val = 0U;
+  auto left = parser.new_IntConst(left_fr, left_val);
+  auto right = parser.new_IntConst(right_fr, right_val);
+  auto range = parser.new_Range(FileRegion(left_fr, right_fr), left, right);
   ASSERT_TRUE( range != nullptr );
-  EXPECT_EQ( fr, range->file_region() );
+  EXPECT_EQ( FileRegion(left_fr, right_fr), range->file_region() );
   EXPECT_EQ( left, range->left() );
   EXPECT_EQ( right, range->right() );
 }

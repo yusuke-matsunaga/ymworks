@@ -9,7 +9,7 @@
 #include "ei/EiFactory.h"
 #include "ei/EiRange.h"
 
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/AstExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -34,7 +34,7 @@ EiRange::set(
   const ElbRangeSrc& src
 )
 {
-  mPtRange = src.pt_range();
+  mAstRange = src.ast_range();
   mLeftRange = src.left_range();
   mRightRange = src.right_range();
   mVal.left = src.left_range_val();
@@ -52,7 +52,7 @@ EiRange::type() const
 FileRegion
 EiRange::file_region() const
 {
-  return mPtRange->file_region();
+  return mAstRange->file_region();
 }
 
 // @brief 要素数(ビット幅)を返す．

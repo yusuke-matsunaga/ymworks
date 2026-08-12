@@ -10,7 +10,7 @@
 #include "ElbEnv.h"
 #include "elaborator/ElbExpr.h"
 
-#include "ym/pt/PtStmt.h"
+#include "ym/vl/AstStmt.h"
 
 #include "ym/MsgMgr.h"
 
@@ -27,29 +27,29 @@ StmtGen::instantiate_assign(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   bool block
 )
 {
   ElbVarLhsEnv env1{env};
-  auto pt_lhs = pt_stmt->lhs();
-  auto lhs = instantiate_lhs(parent, env1, pt_lhs);
+  auto ast_lhs = ast_stmt->lhs();
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
   }
 
-  auto pt_rhs = pt_stmt->rhs();
-  auto rhs = instantiate_rhs(parent, env, pt_rhs, lhs);
+  auto ast_rhs = ast_stmt->rhs();
+  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
   if ( !rhs ) {
     return nullptr;
   }
 
-  auto pt_control = pt_stmt->control();
-  if ( pt_control && env.inside_function() ) {
+  auto ast_control = ast_stmt->control();
+  if ( ast_control && env.inside_function() ) {
     // function 内のインスタンス化なのでコントロールは付いていないはず
     std::ostringstream buf;
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    pt_stmt->file_region(),
+		    ast_stmt->file_region(),
 		    MsgType::Error,
 		    "ELAB",
 		    "assignment in a constant function cannot have"
@@ -57,11 +57,9 @@ StmtGen::instantiate_assign(
     return nullptr;
   }
 
-  auto control = instantiate_control(parent, env, pt_control);
-  auto stmt = mgr().new_Assignment(parent, process, pt_stmt,
-				   lhs, rhs, block, control);
-
-  return stmt;
+  auto control = instantiate_control(parent, env, ast_control);
+  return mgr().new_Assignment(parent, process, ast_stmt,
+			      lhs, rhs, block, control);
 }
 
 // @brief procedural continuous assign 文のインスタンス化を行う．
@@ -70,25 +68,23 @@ StmtGen::instantiate_pca(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
   ElbPcaLhsEnv env1{env};
-  auto pt_lhs = pt_stmt->lhs();
-  auto lhs = instantiate_lhs(parent, env1, pt_lhs);
+  auto ast_lhs = ast_stmt->lhs();
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
   }
 
-  auto pt_rhs = pt_stmt->rhs();
-  auto rhs = instantiate_rhs(parent, env, pt_rhs, lhs);
+  auto ast_rhs = ast_stmt->rhs();
+  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
   if ( !rhs ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_AssignStmt(parent, process, pt_stmt, lhs, rhs);
-
-  return stmt;
+  return mgr().new_AssignStmt(parent, process, ast_stmt, lhs, rhs);
 }
 
 // @brief deassign 文のインスタンス化を行う．
@@ -97,19 +93,17 @@ StmtGen::instantiate_deassign(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
   ElbPcaLhsEnv env1{env};
-  auto pt_lhs = pt_stmt->lhs();
-  auto lhs = instantiate_lhs(parent, env1, pt_lhs);
+  auto ast_lhs = ast_stmt->lhs();
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_DeassignStmt(parent, process, pt_stmt, lhs);
-
-  return stmt;
+  return mgr().new_DeassignStmt(parent, process, ast_stmt, lhs);
 }
 
 // @brief force 文のインスタンス化を行う．
@@ -118,23 +112,23 @@ StmtGen::instantiate_force(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
   ElbForceLhsEnv env1{env};
-  auto pt_lhs = pt_stmt->lhs();
-  auto lhs = instantiate_lhs(parent, env1, pt_lhs);
+  auto ast_lhs = ast_stmt->lhs();
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
   }
 
-  auto pt_rhs = pt_stmt->rhs();
-  auto rhs = instantiate_rhs(parent, env, pt_rhs, lhs);
+  auto ast_rhs = ast_stmt->rhs();
+  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
   if ( !rhs ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_ForceStmt(parent, process, pt_stmt, lhs, rhs);
+  auto stmt = mgr().new_ForceStmt(parent, process, ast_stmt, lhs, rhs);
 
   return stmt;
 }
@@ -145,19 +139,17 @@ StmtGen::instantiate_release(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
   ElbForceLhsEnv env1{env};
-  auto pt_lhs = pt_stmt->lhs();
-  auto lhs = instantiate_lhs(parent, env1, pt_lhs);
+  auto ast_lhs = ast_stmt->lhs();
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_ReleaseStmt(parent, process, pt_stmt, lhs);
-
-  return stmt;
+  return mgr().new_ReleaseStmt(parent, process, ast_stmt, lhs);
 }
 
 END_NAMESPACE_YM_VERILOG

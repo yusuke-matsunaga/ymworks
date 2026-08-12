@@ -11,9 +11,9 @@
 
 #include "elaborator/ElbExpr.h"
 
-#include "ym/pt/PtUdp.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/AstUdp.h"
+#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,13 +25,13 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief UDP定義を生成する．
 ElbUdpDefn*
 EiFactory::new_UdpDefn(
-  const PtUdp* pt_udp,
+  const AstUdp* ast_udp,
   bool is_protected
 )
 {
-  auto port_num = pt_udp->port_num();
-  auto table_size = pt_udp->table_num();
-  return new EiUdpDefn(pt_udp, is_protected,
+  auto port_num = ast_udp->port_num();
+  auto table_size = ast_udp->table_num();
+  return new EiUdpDefn(ast_udp, is_protected,
 		       port_num, table_size);
 }
 
@@ -40,13 +40,13 @@ EiFactory::new_UdpDefn(
 // クラス EiUdpDefn
 //////////////////////////////////////////////////////////////////////
 
-// @param[in] pt_udp パース木の UDP 定義
+// @param[in] ast_udp パース木の UDP 定義
 EiUdpDefn::EiUdpDefn(
-  const PtUdp* pt_udp,
+  const AstUdp* ast_udp,
   bool is_protected,
   SizeType io_num,
   SizeType table_num
-) : mPtUdp{pt_udp},
+) : mAstUdp{ast_udp},
     mProtected{is_protected},
     mIODeclList(io_num),
     mInitExpr{nullptr},
@@ -71,21 +71,21 @@ EiUdpDefn::type() const
 FileRegion
 EiUdpDefn::file_region() const
 {
-  return mPtUdp->file_region();
+  return mAstUdp->file_region();
 }
 
 // @brief 定義された名前を返す．
 std::string
 EiUdpDefn::def_name() const
 {
-  return mPtUdp->name();
+  return mAstUdp->name();
 }
 
 // @brief primitive type を返す．
 VpiPrimType
 EiUdpDefn::prim_type() const
 {
-  return mPtUdp->prim_type();
+  return mAstUdp->prim_type();
 }
 
 // @brief ポート数を返す．
@@ -161,20 +161,20 @@ EiUdpDefn::table_entry(
 void
 EiUdpDefn::set_io(
   SizeType pos,
-  const PtIOHead* pt_header,
-  const PtIOItem* pt_item
+  const AstIOHead* ast_header,
+  const AstIOItem* ast_item
 )
 {
   if ( pos >= table_size() ) {
     throw std::out_of_range{"pos is out of range"};
   }
-  mIODeclList[pos].set(pt_header, pt_item);
+  mIODeclList[pos].set(ast_header, ast_item);
 }
 
 // @brief 初期値を設定する．
 void
 EiUdpDefn::set_initial(
-  const PtExpr* init_expr,
+  const AstExpr* init_expr,
   const VlScalarVal& init_val
 )
 {
@@ -186,11 +186,11 @@ EiUdpDefn::set_initial(
 void
 EiUdpDefn::set_tableentry(
   SizeType pos,
-  const PtUdpEntry* pt_udp_entry,
+  const AstUdpEntry* ast_udp_entry,
   const std::vector<VlUdpVal>& vals
 )
 {
-  mTableEntryList[pos].set(pt_udp_entry, vals);
+  mTableEntryList[pos].set(ast_udp_entry, vals);
 }
 
 
@@ -219,24 +219,24 @@ EiUdpIO::type() const
 FileRegion
 EiUdpIO::file_region() const
 {
-  return mPtItem->file_region();
+  return mAstItem->file_region();
 }
 
 // @brief 名前を返す．
 std::string
 EiUdpIO::name() const
 {
-  return mPtItem->name();
+  return mAstItem->name();
 }
 
 // @brief 方向を返す．
 VpiDir
 EiUdpIO::direction() const
 {
-  if ( mPtHeader->direction() == VpiDir::Inout ) {
-    throw std::logic_error{"mPtHeader->direction() == VpiDir::Inout"};
+  if ( mAstHeader->direction() == VpiDir::Inout ) {
+    throw std::logic_error{"mAstHeader->direction() == VpiDir::Inout"};
   }
-  return mPtHeader->direction();
+  return mAstHeader->direction();
 }
 
 // @brief 符号の属性の取得
@@ -335,12 +335,12 @@ EiUdpIO::set_udp(
 // @brief 内容を設定する．
 void
 EiUdpIO::set(
-  const PtIOHead* pt_header,
-  const PtIOItem* pt_item
+  const AstIOHead* ast_header,
+  const AstIOItem* ast_item
 )
 {
-  mPtHeader = pt_header;
-  mPtItem = pt_item;
+  mAstHeader = ast_header;
+  mAstItem = ast_item;
 }
 
 
@@ -369,7 +369,7 @@ EiTableEntry::type() const
 FileRegion
 EiTableEntry::file_region() const
 {
-  return mPtUdpEntry->file_region();
+  return mAstUdpEntry->file_region();
 }
 
 // @brief 一行の要素数を返す．
@@ -431,11 +431,11 @@ EiTableEntry::init(
 // @brief 設定する．
 void
 EiTableEntry::set(
-  const PtUdpEntry* pt_entry,
+  const AstUdpEntry* ast_entry,
   const std::vector<VlUdpVal>& vals
 )
 {
-  mPtUdpEntry = pt_entry;
+  mAstUdpEntry = ast_entry;
   mValArray = vals;
 }
 

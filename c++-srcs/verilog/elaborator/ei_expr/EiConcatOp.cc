@@ -8,9 +8,8 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiConcatOp.h"
-
-#include "ym/pt/PtExpr.h"
-#include "ym/BitVector.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,23 +21,23 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 連結演算子を生成する．
 ElbExpr*
 EiFactory::new_ConcatOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const std::vector<ElbExpr*>& opr_list
 )
 {
-  return new EiConcatOp(pt_expr, opr_list);
+  return new EiConcatOp(ast_expr, opr_list);
 }
 
 // @brief 反復連結演算子を生成する．
 ElbExpr*
 EiFactory::new_MultiConcatOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   SizeType rep_num,
   ElbExpr* rep_expr,
   const std::vector<ElbExpr*>& opr_list
 )
 {
-  return new EiMultiConcatOp(pt_expr, rep_num, rep_expr, opr_list);
+  return new EiMultiConcatOp(ast_expr, rep_num, rep_expr, opr_list);
 }
 
 
@@ -48,9 +47,9 @@ EiFactory::new_MultiConcatOp(
 
 // @brief コンストラクタ
 EiConcatOp::EiConcatOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const std::vector<ElbExpr*>& opr_list
-) : EiOperation(pt_expr),
+) : EiOperation(ast_expr),
     mOprList{opr_list}
 {
   mSize = 0;
@@ -142,11 +141,11 @@ EiConcatOp::bit_size() const
 
 // @brief コンストラクタ
 EiMultiConcatOp::EiMultiConcatOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   SizeType rep_num,
   ElbExpr* rep_expr,
   const std::vector<ElbExpr*>& opr_list
-) : EiConcatOp(pt_expr, opr_list),
+) : EiConcatOp(ast_expr, opr_list),
     mRepNum{rep_num},
     mRepExpr{rep_expr}
 {

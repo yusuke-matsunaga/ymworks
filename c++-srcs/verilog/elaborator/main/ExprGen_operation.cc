@@ -9,26 +9,24 @@
 #include "ExprGen.h"
 #include "ElbEnv.h"
 #include "ErrorGen.h"
-
-#include "ym/BitVector.h"
-#include "ym/pt/PtExpr.h"
-#include "ym/pt/PtMisc.h"
-
+#include "ym/vl/BitVector.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/AstMisc.h"
 #include "elaborator/ElbExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-// @brief PtOpr から ElbExpr を生成する．
+// @brief AstOpr から ElbExpr を生成する．
 ElbExpr*
 ExprGen::instantiate_opr(
   const VlScope* parent,
   const ElbEnv& env,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  auto op_type = pt_expr->op_type();
-  SizeType opr_size{pt_expr->operand_num()};
+  auto op_type = ast_expr->op_type();
+  SizeType opr_size{ast_expr->operand_num()};
 
   ElbExpr* opr0{nullptr};
   ElbExpr* opr1{nullptr};
@@ -38,7 +36,7 @@ ExprGen::instantiate_opr(
   switch ( op_type ) {
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
-    ErrorGen::illegal_edge_descriptor(__FILE__, __LINE__, pt_expr);
+    ErrorGen::illegal_edge_descriptor(__FILE__, __LINE__, ast_expr);
     break;
 
   case VpiOpType::BitNeg:
@@ -53,11 +51,11 @@ ExprGen::instantiate_opr(
   case VpiOpType::Plus:
   case VpiOpType::Minus:
   case VpiOpType::Not:
-    opr0 = instantiate_expr(parent, env, pt_expr->operand0());
+    opr0 = instantiate_expr(parent, env, ast_expr->operand0());
     if ( real_check && opr0->value_type().is_real_type() ) {
-      ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr->operand0());
+      ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr->operand0());
     }
-    return mgr().new_UnaryOp(pt_expr, op_type, opr0);
+    return mgr().new_UnaryOp(ast_expr, op_type, opr0);
 
   case VpiOpType::BitAnd:
   case VpiOpType::BitOr:
@@ -85,61 +83,61 @@ ExprGen::instantiate_opr(
   case VpiOpType::Gt:
   case VpiOpType::Le:
   case VpiOpType::Lt:
-    opr0 = instantiate_expr(parent, env, pt_expr->operand0());
-    opr1 = instantiate_expr(parent, env, pt_expr->operand1());
+    opr0 = instantiate_expr(parent, env, ast_expr->operand0());
+    opr1 = instantiate_expr(parent, env, ast_expr->operand1());
     if ( real_check ) {
       if ( opr0->value_type().is_real_type() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr->operand0());
+	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr->operand0());
       }
       if ( opr1->value_type().is_real_type() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr->operand1());
+	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr->operand1());
       }
     }
-    expr = mgr().new_BinaryOp(pt_expr, op_type, opr0, opr1);
+    expr = mgr().new_BinaryOp(ast_expr, op_type, opr0, opr1);
     break;
 
   case VpiOpType::Condition:
   case VpiOpType::MinTypMax:
-    opr0 = instantiate_expr(parent, env, pt_expr->operand0());
-    opr1 = instantiate_expr(parent, env, pt_expr->operand1());
-    opr2 = instantiate_expr(parent, env, pt_expr->operand2());
-    expr = mgr().new_TernaryOp(pt_expr, op_type, opr0, opr1, opr2);
+    opr0 = instantiate_expr(parent, env, ast_expr->operand0());
+    opr1 = instantiate_expr(parent, env, ast_expr->operand1());
+    opr2 = instantiate_expr(parent, env, ast_expr->operand2());
+    expr = mgr().new_TernaryOp(ast_expr, op_type, opr0, opr1, opr2);
     break;
 
   case VpiOpType::Concat:
     {
       std::vector<ElbExpr*> opr_list(opr_size);
       for ( SizeType i = 0; i < opr_size; ++ i ) {
-	auto pt_expr1 = pt_expr->operand(i);
-	auto expr1 = instantiate_expr(parent, env, pt_expr1);
+	auto ast_expr1 = ast_expr->operand(i);
+	auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	auto type1 = expr1->value_type();
 	if ( type1.is_real_type() ) {
-	  ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr1);
+	  ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr1);
 	}
 	opr_list[i] = expr1;
       }
 
-      expr = mgr().new_ConcatOp(pt_expr, opr_list);
+      expr = mgr().new_ConcatOp(ast_expr, opr_list);
     }
     break;
 
   case VpiOpType::MultiConcat:
     {
-      auto pt_expr0{pt_expr->operand(0)};
+      auto ast_expr0{ast_expr->operand(0)};
 
-      int rep_num{evaluate_int(parent, pt_expr0)};
-      auto rep_expr = instantiate_expr(parent, env, pt_expr0);
+      int rep_num{evaluate_int(parent, ast_expr0)};
+      auto rep_expr = instantiate_expr(parent, env, ast_expr0);
       std::vector<ElbExpr*> opr_list(opr_size - 1);
       for ( SizeType i = 1; i < opr_size; ++ i ) {
-	auto pt_expr1 = pt_expr->operand(i);
-	auto expr1 = instantiate_expr(parent, env, pt_expr1);
+	auto ast_expr1 = ast_expr->operand(i);
+	auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	auto type1 = expr1->value_type();
 	if ( type1.is_real_type() ) {
-	  ErrorGen::illegal_real_type(__FILE__, __LINE__, pt_expr1);
+	  ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr1);
 	}
 	opr_list[i - 1] = expr1;
       }
-      expr = mgr().new_MultiConcatOp(pt_expr, rep_num, rep_expr, opr_list);
+      expr = mgr().new_MultiConcatOp(ast_expr, rep_num, rep_expr, opr_list);
     }
     break;
 
@@ -148,7 +146,7 @@ ExprGen::instantiate_opr(
   }
 
   // attribute instance の生成
-  auto attr_list = attribute_list(pt_expr);
+  auto attr_list = attribute_list(ast_expr);
   mgr().reg_attr(expr, attr_list);
 
   return expr;

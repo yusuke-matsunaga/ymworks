@@ -15,7 +15,7 @@
 // IEEE Std 1364-2001 26.6.37 Assign statement, deassign, force, release
 
 #include "ym/vl/VlStmt.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -327,7 +327,7 @@ protected:
   EiStmtBase(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in]	親のプロセス (or nullptr)
-    const PtStmt* pt_stmt     ///< [in]	パース木のステートメント定義
+    const AstStmt* ast_stmt   ///< [in] パース木のステートメント定義
   );
 
   /// デストラクタ
@@ -354,10 +354,10 @@ protected:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief パース木の定義要素を得る．
-  const PtStmt*
-  pt_stmt() const
+  const AstStmt*
+  ast_stmt() const
   {
-    return mPtStmt;
+    return mAstStmt;
   }
 
 
@@ -370,7 +370,7 @@ private:
   const VlScope* mParent;
 
   // パース木のステートメント定義
-  const PtStmt* mPtStmt;
+  const AstStmt* mAstStmt;
 
 };
 

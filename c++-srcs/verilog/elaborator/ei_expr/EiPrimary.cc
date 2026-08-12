@@ -8,14 +8,12 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiPrimary.h"
-
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbPrimitive.h"
-
-#include "ym/VlValue.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/VlValue.h"
+#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,83 +25,83 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief プライマリ式を生成する．
 ElbExpr*
 EiFactory::new_Primary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlDecl* obj
 )
 {
-  return new EiPrimary(pt_expr, obj);
+  return new EiPrimary(ast_expr, obj);
 }
 
 // @brief プライマリ式を生成する．
 ElbExpr*
 EiFactory::new_Primary(
-  const PtDeclItem* pt_item,
+  const AstDeclItem* ast_item,
   const VlDecl* obj
 )
 {
-  return new EiDeclPrimary(pt_item, obj);
+  return new EiDeclPrimary(ast_item, obj);
 }
 
 // @brief プライマリ式を生成する．
 ElbExpr*
 EiFactory::new_Primary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbParameter* obj
 )
 {
-  return new EiParamPrimary(pt_expr, obj);
+  return new EiParamPrimary(ast_expr, obj);
 }
 
 // @brief プライマリ式を生成する(配列要素版)．
 ElbExpr*
 EiFactory::new_Primary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlDeclArray* obj,
   const std::vector<ElbExpr*>& index_list
 )
 {
-  return new EiArrayElemPrimary(pt_expr, obj, index_list);
+  return new EiArrayElemPrimary(ast_expr, obj, index_list);
 }
 
 // @brief プライマリ式を生成する(固定インデックスの配列要素版)．
 ElbExpr*
 EiFactory::new_Primary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlDeclArray* obj,
   SizeType offset
 )
 {
-  return new EiConstArrayElemPrimary(pt_expr, obj, offset);
+  return new EiConstArrayElemPrimary(ast_expr, obj, offset);
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 EiFactory::new_ArgHandle(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlScope* arg
 )
 {
-  return new EiScopePrimary(pt_expr, arg);
+  return new EiScopePrimary(ast_expr, arg);
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 EiFactory::new_ArgHandle(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlPrimitive* arg
 )
 {
-  return new EiPrimitivePrimary(pt_expr, arg);
+  return new EiPrimitivePrimary(ast_expr, arg);
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 EiFactory::new_ArgHandle(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlDeclArray* arg
 )
 {
-  return new EiDeclArrayPrimary(pt_expr, arg);
+  return new EiDeclArrayPrimary(ast_expr, arg);
 }
 
 
@@ -113,8 +111,8 @@ EiFactory::new_ArgHandle(
 
 // @brief コンストラクタ
 EiPrimaryBase::EiPrimaryBase(
-  const PtExpr* pt_expr
-) : EiExprBase(pt_expr)
+  const AstExpr* ast_expr
+) : EiExprBase(ast_expr)
 {
 }
 
@@ -146,9 +144,9 @@ EiPrimaryBase::_set_reqsize(
 
 // @brief コンストラクタ
 EiPrimary::EiPrimary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlDecl* obj
-) : EiPrimaryBase(pt_expr),
+) : EiPrimaryBase(ast_expr),
     mObj{obj}
 {
 }
@@ -226,9 +224,9 @@ EiPrimary::lhs_elem_list() const
 
 // @brief コンストラクタ
 EiDeclPrimary::EiDeclPrimary(
-  const PtDeclItem* pt_item,
+  const AstDeclItem* ast_item,
   const VlDecl* obj
-) : mPtObj{pt_item},
+) : mAstObj{ast_item},
     mObj{obj}
 {
 }
@@ -284,7 +282,7 @@ EiDeclPrimary::decl_obj() const
 std::string
 EiDeclPrimary::decompile() const
 {
-  return mPtObj->name();
+  return mAstObj->name();
 }
 
 // @brief 左辺式の要素数の取得
@@ -323,10 +321,10 @@ EiDeclPrimary::_set_reqsize(
 }
 
 // @brief パース木の定義要素を返す．
-const PtBase*
-EiDeclPrimary::pt_obj() const
+const AstBase*
+EiDeclPrimary::ast_obj() const
 {
-  return mPtObj;
+  return mAstObj;
 }
 
 
@@ -336,9 +334,9 @@ EiDeclPrimary::pt_obj() const
 
 // @brief コンストラクタ
 EiDeclArrayPrimary::EiDeclArrayPrimary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlDeclArray* obj
-) : mPtObj{pt_expr},
+) : mAstObj{ast_expr},
     mObj{obj}
 {
 }
@@ -395,7 +393,7 @@ EiDeclArrayPrimary::decl_obj() const
 std::string
 EiDeclArrayPrimary::decompile() const
 {
-  return mPtObj->name();
+  return mAstObj->name();
 }
 
 // @brief 左辺式の要素数の取得
@@ -434,10 +432,10 @@ EiDeclArrayPrimary::_set_reqsize(
 }
 
 // @brief パース木の定義要素を返す．
-const PtBase*
-EiDeclArrayPrimary::pt_obj() const
+const AstBase*
+EiDeclArrayPrimary::ast_obj() const
 {
-  return mPtObj;
+  return mAstObj;
 }
 
 
@@ -447,9 +445,9 @@ EiDeclArrayPrimary::pt_obj() const
 
 // @brief コンストラクタ
 EiParamPrimary::EiParamPrimary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbParameter* obj
-) : EiPrimaryBase(pt_expr),
+) : EiPrimaryBase(ast_expr),
     mObj{obj}
 {
 }
@@ -508,10 +506,10 @@ EiParamPrimary::decl_obj() const
 
 // @brief コンストラクタ
 EiArrayElemPrimary::EiArrayElemPrimary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlDeclArray* obj,
   const std::vector<ElbExpr*>& index_list
-) : EiPrimaryBase(pt_expr),
+) : EiPrimaryBase(ast_expr),
     mObj{obj},
     mIndexList{index_list}
 {
@@ -607,10 +605,10 @@ EiArrayElemPrimary::lhs_elem_list() const
 
 // @brief コンストラクタ
 EiConstArrayElemPrimary::EiConstArrayElemPrimary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlDeclArray* obj,
   SizeType offset
-) : EiPrimaryBase(pt_expr),
+) : EiPrimaryBase(ast_expr),
     mObj{obj},
     mOffset{offset}
 {
@@ -720,9 +718,9 @@ EiConstArrayElemPrimary::lhs_elem_list() const
 
 // @brief コンストラクタ
 EiScopePrimary::EiScopePrimary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlScope* obj
-) : EiPrimaryBase{pt_expr},
+) : EiPrimaryBase{ast_expr},
     mObj{obj}
 {
 }
@@ -767,9 +765,9 @@ EiScopePrimary::scope_obj() const
 
 // @brief コンストラクタ
 EiPrimitivePrimary::EiPrimitivePrimary(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   const VlPrimitive* obj
-) : EiPrimaryBase(pt_expr),
+) : EiPrimaryBase(ast_expr),
     mObj{obj}
 {
 }

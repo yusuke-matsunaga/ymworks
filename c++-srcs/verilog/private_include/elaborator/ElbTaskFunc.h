@@ -31,7 +31,7 @@ public:
   void
   add_iodecl(
     ElbIOHead* head,         ///< [in] ヘッダ
-    const PtIOItem* pt_item, ///< [in] パース木のIO宣言要素
+    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
     const VlDecl* decl       ///< [in] 対応する宣言要素
   ) = 0;
 

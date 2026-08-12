@@ -13,10 +13,10 @@
 #include "ei/EiDeclHead.h"
 #include "ei/EiExpr.h"
 
-#include "ym/pt/PtModule.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtExpr.h"
-#include "ym/pt/PtItem.h"
+#include "ym/vl/AstModule.h"
+#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/AstItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,27 +29,27 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbModule*
 EiFactory::new_Module(
   const VlScope* parent,
-  const PtModule* pt_module,
-  const PtItem* pt_head,
-  const PtInst* pt_inst
+  const AstModule* ast_module,
+  const AstItem* ast_head,
+  const AstInst* ast_inst
 )
 {
-  return new EiModule2(parent, pt_module, pt_head, pt_inst);
+  return new EiModule2(parent, ast_module, ast_head, ast_inst);
 }
 
 // @brief module array を生成する．
 ElbModuleArray*
 EiFactory::new_ModuleArray(
   const VlScope* parent,
-  const PtModule* pt_module,
-  const PtItem* pt_head,
-  const PtInst* pt_inst,
-  const PtRange* pt_range,
+  const AstModule* ast_module,
+  const AstItem* ast_head,
+  const AstInst* ast_inst,
+  const AstRange* ast_range,
   const RangeVal& range
 )
 {
-  return new EiModuleArray(parent, pt_module, pt_head,
-			   pt_inst, pt_range, range);
+  return new EiModuleArray(parent, ast_module, ast_head,
+			   ast_inst, ast_range, range);
 }
 
 
@@ -60,13 +60,13 @@ EiFactory::new_ModuleArray(
 // @brief コンストラクタ
 EiModuleHead::EiModuleHead(
   const VlScope* parent,
-  const PtModule* pt_module,
-  const PtItem* pt_head,
-  const PtInst* pt_inst
+  const AstModule* ast_module,
+  const AstItem* ast_head,
+  const AstInst* ast_inst
 ) : mParent{parent},
-    mPtModule{pt_module},
-    mPtHead{pt_head},
-    mPtInst{pt_inst}
+    mAstModule{ast_module},
+    mAstHead{ast_head},
+    mAstInst{ast_inst}
 {
 }
 
@@ -86,11 +86,11 @@ EiModuleHead::parent() const
 FileRegion
 EiModuleHead::file_region() const
 {
-  if ( mPtInst ) {
-    return mPtInst->file_region();
+  if ( mAstInst ) {
+    return mAstInst->file_region();
   }
   else {
-    return mPtModule->file_region();
+    return mAstModule->file_region();
   }
 }
 
@@ -98,11 +98,11 @@ EiModuleHead::file_region() const
 std::string
 EiModuleHead::name() const
 {
-  if ( mPtInst ) {
-    return mPtInst->name();
+  if ( mAstInst ) {
+    return mAstInst->name();
   }
   else {
-    return mPtModule->name();
+    return mAstModule->name();
   }
 }
 
@@ -110,112 +110,112 @@ EiModuleHead::name() const
 FileRegion
 EiModuleHead::def_file_region() const
 {
-  return mPtModule->file_region();
+  return mAstModule->file_region();
 }
 
 // @brief definition name を返す．
 std::string
 EiModuleHead::def_name() const
 {
-  return mPtModule->name();
+  return mAstModule->name();
 }
 
 // @brief ポート数を返す．
 SizeType
 EiModuleHead::port_num() const
 {
-  return mPtModule->port_num();
+  return mAstModule->port_num();
 }
 
 // @brief 入出力宣言数を返す．
 SizeType
 EiModuleHead::io_num() const
 {
-  return mPtModule->iodecl_num();
+  return mAstModule->iodecl_num();
 }
 
 // @brief cell instance のチェック
 bool
 EiModuleHead::is_cell_instance() const
 {
-  return mPtModule->is_cell();
+  return mAstModule->is_cell();
 }
 
 // @brief protect のチェック
 bool
 EiModuleHead::is_protected() const
 {
-  return mPtModule->is_protected();
+  return mAstModule->is_protected();
 }
 
 // @brief top module の時 true を返す．
 bool
 EiModuleHead::is_top_module() const
 {
-  return mPtInst == nullptr;
+  return mAstInst == nullptr;
 }
 
 // @brief time unit を返す．
 int
 EiModuleHead::time_unit() const
 {
-  return mPtModule->time_unit();
+  return mAstModule->time_unit();
 }
 
 // @brief time precision を返す．
 int
 EiModuleHead::time_precision() const
 {
-  return mPtModule->time_precision();
+  return mAstModule->time_precision();
 }
 
 // @brief default net type を返す．
 VpiNetType
 EiModuleHead::def_net_type() const
 {
-  return mPtModule->nettype();
+  return mAstModule->nettype();
 }
 
 // @brief unconnected drive を返す．
 VpiUnconnDrive
 EiModuleHead::unconn_drive() const
 {
-  return mPtModule->unconn_drive();
+  return mAstModule->unconn_drive();
 }
 
 // @brief default delay mode を返す．
 VpiDefDelayMode
 EiModuleHead::def_delay_mode() const
 {
-  return mPtModule->delay_mode();
+  return mAstModule->delay_mode();
 }
 
 // @brief default decay time を返す．
 int
 EiModuleHead::def_decay_time() const
 {
-  return mPtModule->decay_time();
+  return mAstModule->decay_time();
 }
 
 // @brief config 情報を返す．
 std::string
 EiModuleHead::config() const
 {
-  return mPtModule->config();
+  return mAstModule->config();
 }
 
 // @brief library 情報を返す．
 std::string
 EiModuleHead::library() const
 {
-  return mPtModule->library();
+  return mAstModule->library();
 }
 
 // @brief cell 情報を返す．
 std::string
 EiModuleHead::cell() const
 {
-  return mPtModule->cell();
+  return mAstModule->cell();
 }
 
 
@@ -441,11 +441,11 @@ EiModule::find_io(
 void
 EiModule::add_iodecl(
   ElbIOHead* head,
-  const PtIOItem* pt_item,
+  const AstIOItem* ast_item,
   const VlDecl* decl
 )
 {
-  mIODeclList.push_back({head, pt_item, decl});
+  mIODeclList.push_back({head, ast_item, decl});
   auto io_decl = &mIODeclList.back();
   mIODict.emplace(decl, io_decl);
 }
@@ -454,7 +454,7 @@ EiModule::add_iodecl(
 void
 EiModule::init_port(
   SizeType index,
-  const PtPort* pt_port,
+  const AstPort* ast_port,
   ElbExpr* low_conn,
   VpiDir dir
 )
@@ -462,7 +462,7 @@ EiModule::init_port(
   if ( index >= port_num() ) {
     throw std::out_of_range{"index is out of range"};
   }
-  mPortList[index].init(this, pt_port, index, low_conn, dir);
+  mPortList[index].init(this, ast_port, index, low_conn, dir);
 }
 
 // @brief ポートの high_conn を接続する．
@@ -563,13 +563,13 @@ EiModule1::head()
 // コンストラクタ
 EiModule2::EiModule2(
   const VlScope* parent,
-  const PtModule* pt_module,
-  const PtItem* pt_head,
-  const PtInst* pt_inst
-) : mHead{parent, pt_module, pt_head, pt_inst}
+  const AstModule* ast_module,
+  const AstItem* ast_head,
+  const AstInst* ast_inst
+) : mHead{parent, ast_module, ast_head, ast_inst}
 {
-  auto port_num = pt_module->port_num();
-  auto io_num = pt_module->iodecl_num();
+  auto port_num = ast_module->port_num();
+  auto io_num = ast_module->iodecl_num();
   init(port_num, io_num);
 }
 
@@ -628,17 +628,17 @@ EiModule2::head()
 // @brief コンストラクタ
 EiModuleArray::EiModuleArray(
   const VlScope* parent,
-  const PtModule* pt_module,
-  const PtItem* pt_head,
-  const PtInst* pt_inst,
-  const PtRange* pt_range,
+  const AstModule* ast_module,
+  const AstItem* ast_head,
+  const AstInst* ast_inst,
+  const AstRange* ast_range,
   const RangeVal& range
-) : mHead(parent, pt_module, pt_head, pt_inst),
-    mRange(pt_range, range),
+) : mHead(parent, ast_module, ast_head, ast_inst),
+    mRange(ast_range, range),
     mArray(mRange.calc_size())
 {
-  auto port_num = pt_module->port_num();
-  auto io_num = pt_module->iodecl_num();
+  auto port_num = ast_module->port_num();
+  auto io_num = ast_module->iodecl_num();
   auto n = mArray.size();
   for ( SizeType i = 0; i < n; ++ i ) {
     int index = range.index(i);

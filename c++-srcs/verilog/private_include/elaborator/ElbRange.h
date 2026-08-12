@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/VlRange.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ElbFwd.h"
 
 
@@ -27,12 +27,12 @@ public:
 
   /// @brief コンストラクタ
   ElbRangeSrc(
-    const PtRange* pt_range,
-    const PtExpr* left,
-    const PtExpr* right,
+    const AstRange* ast_range,
+    const AstExpr* left,
+    const AstExpr* right,
     int left_val,
     int right_val
-  ) : mPtRange{pt_range},
+  ) : mAstRange{ast_range},
       mLeftRange{left},
       mRightRange{right},
       mLeftVal{left_val},
@@ -47,15 +47,15 @@ public:
 public:
 
   /// @brief パース木の範囲定義を返す．
-  const PtRange*
-  pt_range() const { return mPtRange; }
+  const AstRange*
+  ast_range() const { return mAstRange; }
 
   /// @brief 範囲の MSB の式を返す．
-  const PtExpr*
+  const AstExpr*
   left_range() const { return mLeftRange; }
 
   /// @brief 範囲の LSB の式を返す．
-  const PtExpr*
+  const AstExpr*
   right_range() const { return mRightRange; }
 
   /// @brief 範囲の MSB の値を返す．
@@ -73,13 +73,13 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の範囲定義
-  const PtRange* mPtRange;
+  const AstRange* mAstRange;
 
   // 範囲の MSB の式
-  const PtExpr* mLeftRange;
+  const AstExpr* mLeftRange;
 
   // 範囲の LSB の式
-  const PtExpr* mRightRange;
+  const AstExpr* mRightRange;
 
   // 範囲の MSB
   int mLeftVal;

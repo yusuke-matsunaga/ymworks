@@ -9,8 +9,8 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/VlValue.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/VlValue.h"
+#include "ym/vl/Ast.h"
 #include "ElbProxy.h"
 #include "elaborator/RangeVal.h"
 
@@ -19,7 +19,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
 /// @class ExprEval ExprEval.h "ExprEval.h"
-/// @brief 定数式を表す PtExpr の評価を行うクラス
+/// @brief 定数式を表す AstExpr の評価を行うクラス
 //////////////////////////////////////////////////////////////////////
 class ExprEval :
   public ElbProxy
@@ -48,7 +48,7 @@ public:
   VlValue
   evaluate_expr(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価し int 値を返す．
@@ -59,7 +59,7 @@ public:
   int
   evaluate_int(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式ならばを評価し int 値を返す．
@@ -69,7 +69,7 @@ public:
   int
   evaluate_int_if_const(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr, ///< [in] 式を表すパース木
+    const AstExpr* ast_expr, ///< [in] 式を表すパース木
     bool& is_const         ///< [out] 定数式の時に true を返す．
   );
 
@@ -81,7 +81,7 @@ public:
   VlScalarVal
   evaluate_scalar(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価し bool 値を返す．
@@ -92,7 +92,7 @@ public:
   bool
   evaluate_bool(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価しビットベクタ値を返す．
@@ -103,7 +103,7 @@ public:
   BitVector
   evaluate_bitvector(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
   /// @brief 範囲を表す式を評価する．
@@ -114,7 +114,7 @@ public:
   RangeVal
   evaluate_range(
     const VlScope* parent,  ///< [in] 親のスコープ
-    const PtRange* pt_range ///< [in] 範囲を表すパース木
+    const AstRange* ast_range ///< [in] 範囲を表すパース木
   );
 
   /// @brief 範囲を表す式を評価する．
@@ -126,7 +126,7 @@ public:
   RangeVal
   evaluate_range(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtPart* pt_part  ///< [in] 範囲指定を表すパース木
+    const AstPart* ast_part  ///< [in] 範囲指定を表すパース木
   );
 
 
@@ -139,28 +139,28 @@ private:
   VlValue
   evaluate_opr(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
   /// @brief 定数に対して式の値を評価する．
   VlValue
   evaluate_const(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
   /// @brief 関数呼び出しに対して式の値を評価する．
   VlValue
   evaluate_funccall(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
   /// @brief プライマリに対して式の値を評価する．
   VlValue
   evaluate_primary(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtExpr* pt_expr  ///< [in] 式を表すパース木
+    const AstExpr* ast_expr  ///< [in] 式を表すパース木
   );
 
 };

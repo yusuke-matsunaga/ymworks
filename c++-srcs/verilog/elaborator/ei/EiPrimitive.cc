@@ -13,9 +13,9 @@
 #include "ym/vl/VlDelay.h"
 #include "ym/vl/VlExpr.h"
 
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtExpr.h"
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstItem.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/AstMisc.h"
 
 #include "ym/ClibCell.h"
 #include "ym/ClibPin.h"
@@ -33,15 +33,15 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbPrimHead*
 EiFactory::new_PrimHead(
   const VlScope* parent,
-  const PtItem* pt_header,
+  const AstItem* ast_header,
   bool has_delay
 )
 {
   if ( has_delay ) {
-    return new EiPrimHeadD(parent, pt_header);
+    return new EiPrimHeadD(parent, ast_header);
   }
   else {
-    return new EiPrimHead(parent, pt_header);
+    return new EiPrimHead(parent, ast_header);
   }
 }
 
@@ -49,16 +49,16 @@ EiFactory::new_PrimHead(
 ElbPrimHead*
 EiFactory::new_UdpHead(
   const VlScope* parent,
-  const PtItem* pt_header,
+  const AstItem* ast_header,
   const VlUdpDefn* udp,
   bool has_delay
 )
 {
   if ( has_delay ) {
-    return new EiPrimHeadUD(parent, pt_header, udp);
+    return new EiPrimHeadUD(parent, ast_header, udp);
   }
   else {
-    return new EiPrimHeadU(parent, pt_header, udp);
+    return new EiPrimHeadU(parent, ast_header, udp);
   }
 }
 
@@ -66,33 +66,33 @@ EiFactory::new_UdpHead(
 ElbPrimHead*
 EiFactory::new_CellHead(
   const VlScope* parent,
-  const PtItem* pt_header,
+  const AstItem* ast_header,
   const ClibCell& cell
 )
 {
-  return new EiPrimHeadC(parent, pt_header, cell);
+  return new EiPrimHeadC(parent, ast_header, cell);
 }
 
 // @brief プリミティブインスタンスを生成する．
 ElbPrimitive*
 EiFactory::new_Primitive(
   ElbPrimHead* head,
-  const PtInst* pt_inst
+  const AstInst* ast_inst
 )
 {
-  return new EiPrimitive2(head, pt_inst);
+  return new EiPrimitive2(head, ast_inst);
 }
 
 // @brief プリミティブ配列インスタンスを生成する．
 ElbPrimArray*
 EiFactory::new_PrimitiveArray(
   ElbPrimHead* head,
-  const PtInst* pt_inst,
-  const PtRange* pt_range,
+  const AstInst* ast_inst,
+  const AstRange* ast_range,
   const RangeVal& range
 )
 {
-  return new EiPrimArray(head, pt_inst, pt_range, range);
+  return new EiPrimArray(head, ast_inst, ast_range, range);
 }
 
 // @brief セルプリミティブインスタンスを生成する．
@@ -100,10 +100,10 @@ ElbPrimitive*
 EiFactory::new_CellPrimitive(
   ElbPrimHead* head,
   const ClibCell& cell,
-  const PtInst* pt_inst
+  const AstInst* ast_inst
 )
 {
-  return new EiPrimitive2(head, cell, pt_inst);
+  return new EiPrimitive2(head, cell, ast_inst);
 }
 
 // @brief セルプリミティブ配列インスタンスを生成する．
@@ -111,12 +111,12 @@ ElbPrimArray*
 EiFactory::new_CellPrimitiveArray(
   ElbPrimHead* head,
   const ClibCell& cell,
-  const PtInst* pt_inst,
-  const PtRange* pt_range,
+  const AstInst* ast_inst,
+  const AstRange* ast_range,
   const RangeVal& range
 )
 {
-  return new EiPrimArray(head, cell, pt_inst, pt_range, range);
+  return new EiPrimArray(head, cell, ast_inst, ast_range, range);
 }
 
 
@@ -127,9 +127,9 @@ EiFactory::new_CellPrimitiveArray(
 // @brief コンストラクタ
 EiPrimHead::EiPrimHead(
   const VlScope* parent,
-  const PtItem* pt_header
+  const AstItem* ast_header
 ) : mParent{parent},
-    mPtHead{pt_header}
+    mAstHead{ast_header}
 {
 }
 
@@ -149,7 +149,7 @@ EiPrimHead::parent_scope() const
 VpiPrimType
 EiPrimHead::prim_type() const
 {
-  return mPtHead->prim_type();
+  return mAstHead->prim_type();
 }
 
 // @brief プリミティブの定義名を返す．
@@ -212,8 +212,8 @@ EiPrimHead::cell() const
 VpiStrength
 EiPrimHead::drive0() const
 {
-  if ( mPtHead->strength() ) {
-    return mPtHead->strength()->drive0();
+  if ( mAstHead->strength() ) {
+    return mAstHead->strength()->drive0();
   }
   return VpiStrength::NoStrength;
 }
@@ -222,8 +222,8 @@ EiPrimHead::drive0() const
 VpiStrength
 EiPrimHead::drive1() const
 {
-  if ( mPtHead->strength() ) {
-    return mPtHead->strength()->drive1();
+  if ( mAstHead->strength() ) {
+    return mAstHead->strength()->drive1();
   }
   return VpiStrength::NoStrength;
 }
@@ -251,8 +251,8 @@ EiPrimHead::set_delay(
 // @brief コンストラクタ
 EiPrimHeadD::EiPrimHeadD(
   const VlScope* parent,
-  const PtItem* pt_header
-) : EiPrimHead(parent, pt_header)
+  const AstItem* ast_header
+) : EiPrimHead(parent, ast_header)
 {
 }
 
@@ -285,9 +285,9 @@ EiPrimHeadD::set_delay(
 // @brief コンストラクタ
 EiPrimHeadU::EiPrimHeadU(
   const VlScope* parent,
-  const PtItem* pt_header,
+  const AstItem* ast_header,
   const VlUdpDefn* udp
-) : EiPrimHead(parent, pt_header),
+) : EiPrimHead(parent, ast_header),
     mUdp{udp}
 {
 }
@@ -326,9 +326,9 @@ EiPrimHeadU::udp_defn() const
 // @brief コンストラクタ
 EiPrimHeadUD::EiPrimHeadUD(
   const VlScope* parent,
-  const PtItem* pt_header,
+  const AstItem* ast_header,
   const VlUdpDefn* udp
-) : EiPrimHeadU(parent, pt_header, udp)
+) : EiPrimHeadU(parent, ast_header, udp)
 {
 }
 
@@ -361,9 +361,9 @@ EiPrimHeadUD::set_delay(
 // @brief コンストラクタ
 EiPrimHeadC::EiPrimHeadC(
   const VlScope* parent,
-  const PtItem* pt_header,
+  const AstItem* ast_header,
   const ClibCell& cell
-) : EiPrimHead(parent, pt_header),
+) : EiPrimHead(parent, ast_header),
     mCell{cell}
 {
 }
@@ -402,16 +402,16 @@ EiPrimHeadC::cell() const
 // @brief コンストラクタ
 EiPrimArray::EiPrimArray(
   ElbPrimHead* head,
-  const PtInst* pt_inst,
-  const PtRange* pt_range,
+  const AstInst* ast_inst,
+  const AstRange* ast_range,
   const RangeVal& range
 ) : mHead{head},
-    mPtInst{pt_inst},
-    mRange(pt_range, range),
+    mAstInst{ast_inst},
+    mRange(ast_range, range),
     mArray(mRange.calc_size())
 {
   SizeType n = mRange.calc_size();
-  SizeType port_num = pt_inst->port_num();
+  SizeType port_num = ast_inst->port_num();
   for ( SizeType i = 0; i < n; ++ i ) {
     SizeType index = mRange.index(i);
     mArray[i].init(this, index, port_num);
@@ -422,16 +422,16 @@ EiPrimArray::EiPrimArray(
 EiPrimArray::EiPrimArray(
   ElbPrimHead* head,
   const ClibCell& cell,
-  const PtInst* pt_inst,
-  const PtRange* pt_range,
+  const AstInst* ast_inst,
+  const AstRange* ast_range,
   const RangeVal& range
 ) : mHead{head},
-    mPtInst{pt_inst},
-    mRange(pt_range, range),
+    mAstInst{ast_inst},
+    mRange(ast_range, range),
     mArray(mRange.calc_size())
 {
   SizeType n = mRange.calc_size();
-  SizeType port_num = pt_inst->port_num();
+  SizeType port_num = ast_inst->port_num();
   for ( SizeType i = 0; i < n; ++ i ) {
     SizeType index = mRange.index(i);
     mArray[i].init(this, index, port_num);
@@ -459,7 +459,7 @@ EiPrimArray::type() const
 FileRegion
 EiPrimArray::file_region() const
 {
-  return mPtInst->file_region();
+  return mAstInst->file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -473,7 +473,7 @@ EiPrimArray::parent_scope() const
 std::string
 EiPrimArray::name() const
 {
-  return mPtInst->name();
+  return mAstInst->name();
 }
 
 // @brief primitive type を返す．
@@ -614,10 +614,10 @@ EiPrimArray::head() const
 }
 
 // @brief パース木のインスタンス定義を得る．
-const PtInst*
-EiPrimArray::pt_inst() const
+const AstInst*
+EiPrimArray::ast_inst() const
 {
-  return mPtInst;
+  return mAstInst;
 }
 
 
@@ -651,7 +651,7 @@ EiPrimitive::type() const
 FileRegion
 EiPrimitive::file_region() const
 {
-  return pt_inst()->file_region();
+  return ast_inst()->file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -714,7 +714,7 @@ EiPrimitive::delay() const
 SizeType
 EiPrimitive::port_num() const
 {
-  return pt_inst()->port_num();
+  return ast_inst()->port_num();
 }
 
 // @brief ポート端子を得る．
@@ -866,10 +866,10 @@ EiPrimitive1::head() const
 }
 
 // @brief パース木のインスタンス定義を得る．
-const PtInst*
-EiPrimitive1::pt_inst() const
+const AstInst*
+EiPrimitive1::ast_inst() const
 {
-  return mPrimArray->pt_inst();
+  return mPrimArray->ast_inst();
 }
 
 
@@ -880,22 +880,22 @@ EiPrimitive1::pt_inst() const
 // @brief コンストラクタ
 EiPrimitive2::EiPrimitive2(
   ElbPrimHead* head,
-  const PtInst* pt_inst
+  const AstInst* ast_inst
 ) : mHead{head},
-    mPtInst{pt_inst}
+    mAstInst{ast_inst}
 {
-  init_port(pt_inst->port_num());
+  init_port(ast_inst->port_num());
 }
 
 // @brief コンストラクタ
 EiPrimitive2::EiPrimitive2(
   ElbPrimHead* head,
   const ClibCell& cell,
-  const PtInst* pt_inst
+  const AstInst* ast_inst
 ) : mHead{head},
-    mPtInst{pt_inst}
+    mAstInst{ast_inst}
 {
-  init_port(pt_inst->port_num(), cell);
+  init_port(ast_inst->port_num(), cell);
 }
 
 // @brief デストラクタ
@@ -907,7 +907,7 @@ EiPrimitive2::~EiPrimitive2()
 std::string
 EiPrimitive2::name() const
 {
-  return mPtInst->name();
+  return mAstInst->name();
 }
 
 // @brief ヘッダを得る．
@@ -918,10 +918,10 @@ EiPrimitive2::head() const
 }
 
 // @brief パース木のインスタンス定義を得る．
-const PtInst*
-EiPrimitive2::pt_inst() const
+const AstInst*
+EiPrimitive2::ast_inst() const
 {
-  return mPtInst;
+  return mAstInst;
 }
 
 

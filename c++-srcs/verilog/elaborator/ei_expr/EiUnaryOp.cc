@@ -8,8 +8,7 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiUnaryOp.h"
-
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -21,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 単項演算子を生成する．
 ElbExpr*
 EiFactory::new_UnaryOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   VpiOpType op_type,
   ElbExpr* opr1
 )
@@ -29,15 +28,15 @@ EiFactory::new_UnaryOp(
   switch ( op_type ) {
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
-    return new EiEventEdgeOp(pt_expr, opr1);
+    return new EiEventEdgeOp(ast_expr, opr1);
 
   case VpiOpType::BitNeg:
-    return new EiBitNegOp(pt_expr, opr1);
+    return new EiBitNegOp(ast_expr, opr1);
     break;
 
   case VpiOpType::Plus:
   case VpiOpType::Minus:
-    return new EiUnaryArithOp(pt_expr, opr1);
+    return new EiUnaryArithOp(ast_expr, opr1);
 
   case VpiOpType::UnaryAnd:
   case VpiOpType::UnaryNand:
@@ -45,10 +44,10 @@ EiFactory::new_UnaryOp(
   case VpiOpType::UnaryNor:
   case VpiOpType::UnaryXor:
   case VpiOpType::UnaryXNor:
-    return new EiReductionOp(pt_expr, opr1);
+    return new EiReductionOp(ast_expr, opr1);
 
   case VpiOpType::Not:
-    return new EiNotOp(pt_expr, opr1);
+    return new EiNotOp(ast_expr, opr1);
 
   default:
     break;
@@ -64,9 +63,9 @@ EiFactory::new_UnaryOp(
 
 // @brief コンストラクタ
 EiUnaryOp::EiUnaryOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1
-) : EiOperation(pt_expr),
+) : EiOperation(ast_expr),
     mOpr1{opr1}
 {
 }
@@ -113,9 +112,9 @@ EiUnaryOp::operand_list() const
 
 // @brief コンストラクタ
 EiNotOp::EiNotOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1
-) : EiUnaryOp(pt_expr, opr1)
+) : EiUnaryOp(ast_expr, opr1)
 {
   // オペランドのサイズは self determined
   opr1->set_selfsize();
@@ -150,9 +149,9 @@ EiNotOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiBitNegOp::EiBitNegOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1
-) : EiUnaryOp(pt_expr, opr1),
+) : EiUnaryOp(ast_expr, opr1),
     mType{opr1->value_type()}
 {
   if ( mType.is_real_type() ) {
@@ -189,9 +188,9 @@ EiBitNegOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiReductionOp::EiReductionOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1
-) : EiUnaryOp(pt_expr, opr1)
+) : EiUnaryOp(ast_expr, opr1)
 {
   // オペランドのサイズは self determined
   opr1->set_selfsize();
@@ -230,9 +229,9 @@ EiReductionOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiUnaryArithOp::EiUnaryArithOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1
-) : EiUnaryOp(pt_expr, opr1)
+) : EiUnaryOp(ast_expr, opr1)
 {
 }
 
@@ -265,9 +264,9 @@ EiUnaryArithOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiEventEdgeOp::EiEventEdgeOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1
-) : EiUnaryOp(pt_expr, opr1)
+) : EiUnaryOp(ast_expr, opr1)
 {
 }
 

@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/VlPort.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "elaborator/ElbFwd.h"
 
 
@@ -96,7 +96,7 @@ public:
   void
   init(
     const VlModule* parent, ///< [in] 親のモジュール
-    const PtPort* pt_port,  ///< [in] パース木のポート定義
+    const AstPort* ast_port,  ///< [in] パース木のポート定義
     SizeType index,         ///< [in] ポート番号
     ElbExpr* low_conn,      ///< [in] 下位の接続
     VpiDir dir              ///< [in] 向き
@@ -119,7 +119,7 @@ private:
   const VlModule* mModule;
 
   // パース木のポート定義
-  const PtPort* mPtPort;
+  const AstPort* mAstPort;
 
   // ポート番号
   SizeType mIndex;

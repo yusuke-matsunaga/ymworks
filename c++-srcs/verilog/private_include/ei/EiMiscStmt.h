@@ -31,7 +31,7 @@ public:
   EiEventStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in]	親のプロセス (or nullptr)
-    const PtStmt* pt_stmt,    ///< [in]	パース木のステートメント定義
+    const AstStmt* ast_stmt,    ///< [in]	パース木のステートメント定義
     ElbExpr* named_event      ///< [in]	対象のイベント
   );
 
@@ -83,7 +83,7 @@ public:
   EiNullStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in]	親のプロセス (or nullptr)
-    const PtStmt* pt_stmt     ///< [in]	パース木のステートメント定義
+    const AstStmt* ast_stmt     ///< [in]	パース木のステートメント定義
   );
 
   /// @brief デストラクタ
@@ -115,7 +115,7 @@ public:
   EiTcBase(
     const VlScope* parent,                 ///< [in] 親のスコープ
     const VlProcess* process,              ///< [in] 親のプロセス (or nullptr)
-    const PtStmt* pt_stmt,                 ///< [in] パース木のステートメント定義
+    const AstStmt* ast_stmt,                 ///< [in] パース木のステートメント定義
     const std::vector<ElbExpr*>& arg_array ///< [in] 引数を納める配列
   );
 
@@ -180,7 +180,7 @@ public:
   EiTaskCall(
     const VlScope* parent,                 ///< [in] 親のスコープ
     const VlProcess* process,              ///< [in] 親のプロセス (or nullptr)
-    const PtStmt* pt_stmt,                 ///< [in] パース木のステートメント定義
+    const AstStmt* ast_stmt,                 ///< [in] パース木のステートメント定義
     const VlTaskFunc* task,                ///< [in] 対象のタスク
     const std::vector<ElbExpr*>& arg_array ///< [in] 引数を納める配列
   );
@@ -233,7 +233,7 @@ public:
   EiSysTaskCall(
     const VlScope* parent,                 ///< [in] 親のスコープ
     const VlProcess* process,              ///< [in] 親のプロセス (or nullptr)
-    const PtStmt* pt_stmt,                 ///< [in] パース木のステートメント定義
+    const AstStmt* ast_stmt,                 ///< [in] パース木のステートメント定義
     const VlUserSystf* user_systf,         ///< [in] システムタスク
     const std::vector<ElbExpr*>& arg_array ///< [in] 引数を納める配列
   );
@@ -287,7 +287,7 @@ public:
   EiDisableStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in]	親のプロセス (or nullptr)
-    const PtStmt* pt_stmt,    ///< [in]	パース木のステートメント定義
+    const AstStmt* ast_stmt,    ///< [in]	パース木のステートメント定義
     const VlScope* target     ///< [in] 対象のスコープ
   );
 
@@ -345,7 +345,7 @@ public:
   EiCtrlStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in]	親のプロセス (or nullptr)
-    const PtStmt* pt_stmt,    ///< [in]	パース木のステートメント定義
+    const AstStmt* ast_stmt,    ///< [in]	パース木のステートメント定義
     const VlControl* control, ///< [in]	コントロール
     const VlStmt* stmt        ///< [in] 本体のステートメント
   );

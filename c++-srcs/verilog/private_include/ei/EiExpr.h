@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "elaborator/ElbExpr.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -225,15 +225,15 @@ private:
 
   /// @brief パース木の定義要素を返す．
   virtual
-  const PtBase*
-  pt_obj() const = 0;
+  const AstBase*
+  ast_obj() const = 0;
 
 };
 
 
 //////////////////////////////////////////////////////////////////////
 /// @class EiExprBase EiExpr.h "EiExpr.h"
-/// @brief PtExpr を持つ EiExpr の派生クラス
+/// @brief AstExpr を持つ EiExpr の派生クラス
 //////////////////////////////////////////////////////////////////////
 class EiExprBase :
   public EiExpr
@@ -242,7 +242,7 @@ protected:
 
   /// @brief コンストラクタ
   EiExprBase(
-    const PtExpr* pt_expr ///< [in] パース木の定義要素
+    const AstExpr* ast_expr ///< [in] パース木の定義要素
   );
 
   /// @brief デストラクタ
@@ -265,8 +265,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief パース木の定義要素を返す．
-  const PtBase*
-  pt_obj() const override;
+  const AstBase*
+  ast_obj() const override;
 
 
 protected:
@@ -274,9 +274,9 @@ protected:
   // 派生クラスから使われる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief PtExpr を得る．
-  const PtExpr*
-  pt_expr() const { return mPtExpr; }
+  /// @brief AstExpr を得る．
+  const AstExpr*
+  ast_expr() const { return mAstExpr; }
 
 
 private:
@@ -285,7 +285,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const PtExpr* mPtExpr;
+  const AstExpr* mAstExpr;
 
 };
 

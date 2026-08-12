@@ -1,0 +1,47 @@
+#ifndef PTUDP_H
+#define PTUDP_H
+
+/// @file PtUdp.h
+/// @brief PtUdp のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2026 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "ym/vl/AstUdp.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class PtUdp PtUdp.h "parser/PtUdp.h"
+/// @brief AstUdp の実装クラス
+//////////////////////////////////////////////////////////////////////
+class PtUdp :
+  public AstUdp
+{
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class PtUdpEntry PtUdp.h "parser/PtUdp.h"
+/// @brief AstUdpEntry の実装クラス
+//////////////////////////////////////////////////////////////////////
+class PtUdpEntry :
+  public AstUdpEntry
+{
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class PtUdpValue PtUdp.h "parser/PtUdp.h"
+/// @brief AstUdpValue の実装クラス
+//////////////////////////////////////////////////////////////////////
+class PtUdpValue :
+  public AstUdpValue
+{
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // PTUDP_H

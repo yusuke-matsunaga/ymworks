@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ElbProxy.h"
 
 
@@ -43,14 +43,14 @@ public:
   void
   phase1_topmodule(
     const VlScope* toplevel,  ///< [in] トップレベルのスコープ
-    const PtModule* pt_module ///< [in] モジュール定義
+    const AstModule* ast_module ///< [in] モジュール定義
   );
 
   /// @brief module の中身のうちスコープに関係するインスタンス化を行う．
   void
   phase1_module_item(
     ElbModule* module,                        ///< [in] モジュール
-    const PtModule* pt_module,                ///< [in] モジュール定義
+    const AstModule* ast_module,                ///< [in] モジュール定義
     const std::vector<ElbParamCon>& param_con_list ///< [in] パラメータ割り当ての情報
   );
 
@@ -64,33 +64,34 @@ private:
   void
   add_phase2stub(
     ElbModule* module,        ///< [in] モジュール
-    const PtModule* pt_module ///< [in] モジュール定義
+    const AstModule* ast_module ///< [in] モジュール定義
   )
   {
     auto stub = make_stub(this, &ModuleGen::phase2_module_item,
-			  module, pt_module);
+			  module, ast_module);
     ElbProxy::add_phase2stub(stub);
   }
 
   /// @brief module の中身のインスタンス化を行う．
   void
   phase2_module_item(
-    ElbModule* module,        ///< [in] モジュール
-    const PtModule* pt_module ///< [in] モジュール定義
+    ElbModule* module,          ///< [in] モジュール
+    const AstModule* ast_module ///< [in] モジュール定義
   );
 
   /// @brief port の生成を行う．
   void
   instantiate_port(
-    ElbModule* module,        ///< [in] 親のモジュール
-    const PtModule* pt_module ///< [in] モジュール定義
+    ElbModule* module,      ///< [in] 親のモジュール
+    SizeType index,         ///< [in] インデックス
+    const AstPort* ast_port ///< [in] モジュール定義
   );
 
-  /// @brief PtPortRef から expression を生成する．
+  /// @brief AstPortRef から expression を生成する．
   ElbExpr*
   instantiate_portref(
     ElbModule* module,       ///< [in] 親のモジュール
-    const PtExpr* pt_portref ///< [in] パース木の portref 定義
+    const AstExpr* ast_portref ///< [in] パース木の portref 定義
   );
 
 
@@ -108,7 +109,7 @@ private:
   /// @brief パラメータポートに現れるパラメータが存在しない．
   void
   error_no_param(
-    const PtConnection* pt_con, ///< [in] パラメータポート割り当てのパース木
+    const AstConnection* ast_con, ///< [in] パラメータポート割り当てのパース木
     const char* name            ///< [in] パラメータ名
   );
 

@@ -8,11 +8,9 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiBitSelect.h"
-
 #include "elaborator/ElbDecl.h"
-
-#include "ym/BitVector.h"
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/BitVector.h"
+#include "ym/vl/AstExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -24,35 +22,35 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 固定ビット選択式を生成する．
 ElbExpr*
 EiFactory::new_BitSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* base_expr,
-  const PtExpr* index_expr,
+  const AstExpr* index_expr,
   int index_val
 )
 {
-  return new EiConstBitSelect(pt_expr, base_expr, index_expr, index_val);
+  return new EiConstBitSelect(ast_expr, base_expr, index_expr, index_val);
 }
 
 // @brief 固定ビット選択式を生成する．
 ElbExpr*
 EiFactory::new_BitSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* base_expr,
   int index_val
 )
 {
-  return new EiConstBitSelect(pt_expr, base_expr, nullptr, index_val);
+  return new EiConstBitSelect(ast_expr, base_expr, nullptr, index_val);
 }
 
 // @brief 可変ビット選択式を生成する．
 ElbExpr*
 EiFactory::new_BitSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* base_expr,
   ElbExpr* index_expr
 )
 {
-  return new EiVarBitSelect(pt_expr, base_expr, index_expr);
+  return new EiVarBitSelect(ast_expr, base_expr, index_expr);
 }
 
 
@@ -62,9 +60,9 @@ EiFactory::new_BitSelect(
 
 // @brief コンストラクタ
 EiBitSelect::EiBitSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* base_expr
-) : EiExprBase(pt_expr),
+) : EiExprBase(ast_expr),
     mBaseExpr{base_expr}
 {
 }
@@ -194,11 +192,11 @@ EiBitSelect::_set_reqsize(
 
 // @brief コンストラクタ
 EiConstBitSelect::EiConstBitSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* base_expr,
-  const PtExpr* index_expr,
+  const AstExpr* index_expr,
   int index_val
-) : EiBitSelect(pt_expr, base_expr),
+) : EiBitSelect(ast_expr, base_expr),
     mIndexExpr{index_expr},
     mIndexVal{index_val}
 {
@@ -237,10 +235,10 @@ EiConstBitSelect::index_val() const
 
 // @brief コンストラクタ
 EiVarBitSelect::EiVarBitSelect(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* base_expr,
   ElbExpr* index_expr
-) : EiBitSelect(pt_expr, base_expr),
+) : EiBitSelect(ast_expr, base_expr),
     mIndexExpr{index_expr}
 {
 }

@@ -8,8 +8,8 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/VlValue.h"
-#include "ym/BitVector.h"
+#include "ym/vl/VlValue.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -75,7 +75,7 @@ public:
   bool
   is_int_compat() const = 0;
 
-  /// @brief unsigned int 型に変換可能な時に true を返す．
+  /// @brief SizeType 型に変換可能な時に true を返す．
   virtual
   bool
   is_uint_compat() const = 0;
@@ -116,10 +116,10 @@ public:
   int
   int_value() const = 0;
 
-  /// @brief unsigned int 型の値を返す．
+  /// @brief SizeType 型の値を返す．
   /// @note 値が整数型に変換できない時の値は不定
   virtual
-  unsigned int
+  SizeType
   uint_value() const = 0;
 
   /// @brief スカラー型の値を返す．
@@ -187,7 +187,7 @@ private:
   bool
   is_int_compat() const override;
 
-  /// @brief unsigned int 型に変換可能な時に true を返す．
+  /// @brief SizeType 型に変換可能な時に true を返す．
   bool
   is_uint_compat() const override;
 
@@ -220,9 +220,9 @@ private:
   int
   int_value() const override;
 
-  /// @brief unsigned int 型の値を返す．
+  /// @brief SizeType 型の値を返す．
   /// @note 値が整数型に変換できない時の値は不定
-  unsigned int
+  SizeType
   uint_value() const override;
 
   /// @brief スカラー型の値を返す．
@@ -286,7 +286,7 @@ private:
   bool
   is_int_compat() const override;
 
-  /// @brief unsigned int 型に変換可能な時に true を返す．
+  /// @brief SizeType 型に変換可能な時に true を返す．
   bool
   is_uint_compat() const override;
 
@@ -319,9 +319,9 @@ private:
   int
   int_value() const override;
 
-  /// @brief unsigned int 型の値を返す．
+  /// @brief SizeType 型の値を返す．
   /// @note 値が整数型に変換できない時の値は不定
-  unsigned int
+  SizeType
   uint_value() const override;
 
   /// @brief スカラー型の値を返す．
@@ -374,7 +374,7 @@ public:
 
   /// @brief コンストラクタ
   VlValueUint(
-    unsigned int val ///< [in] 値
+    SizeType val ///< [in] 値
   );
 
   /// @brief デストラクタ
@@ -394,7 +394,7 @@ private:
   bool
   is_int_compat() const override;
 
-  /// @brief unsigned int 型に変換可能な時に true を返す．
+  /// @brief SizeType 型に変換可能な時に true を返す．
   bool
   is_uint_compat() const override;
 
@@ -427,9 +427,9 @@ private:
   int
   int_value() const override;
 
-  /// @brief unsigned int 型の値を返す．
+  /// @brief SizeType 型の値を返す．
   /// @note 値が整数型に変換できない時の値は不定
-  unsigned int
+  SizeType
   uint_value() const override;
 
   /// @brief スカラー型の値を返す．
@@ -466,7 +466,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 値
-  std::uint32_t mVal;
+  SizeType mVal;
 
 };
 
@@ -502,7 +502,7 @@ private:
   bool
   is_int_compat() const override;
 
-  /// @brief unsigned int 型に変換可能な時に true を返す．
+  /// @brief SizeType 型に変換可能な時に true を返す．
   bool
   is_uint_compat() const override;
 
@@ -535,9 +535,9 @@ private:
   int
   int_value() const override;
 
-  /// @brief unsigned int 型の値を返す．
+  /// @brief SizeType 型の値を返す．
   /// @note 値が整数型に変換できない時の値は不定
-  unsigned int
+  SizeType
   uint_value() const override;
 
   /// @brief スカラー型の値を返す．
@@ -610,7 +610,7 @@ private:
   bool
   is_int_compat() const override;
 
-  /// @brief unsigned int 型に変換可能な時に true を返す．
+  /// @brief SizeType 型に変換可能な時に true を返す．
   bool
   is_uint_compat() const override;
 
@@ -643,9 +643,9 @@ private:
   int
   int_value() const override;
 
-  /// @brief unsigned int 型の値を返す．
+  /// @brief SizeType 型の値を返す．
   /// @note 値が整数型に変換できない時の値は不定
-  unsigned int
+  SizeType
   uint_value() const override;
 
   /// @brief スカラー型の値を返す．
@@ -718,7 +718,7 @@ private:
   bool
   is_int_compat() const override;
 
-  /// @brief unsigned int 型に変換可能な時に true を返す．
+  /// @brief SizeType 型に変換可能な時に true を返す．
   bool
   is_uint_compat() const override;
 
@@ -751,9 +751,9 @@ private:
   int
   int_value() const override;
 
-  /// @brief unsigned int 型の値を返す．
+  /// @brief SizeType 型の値を返す．
   /// @note 値が整数型に変換できない時の値は不定
-  unsigned int
+  SizeType
   uint_value() const override;
 
   /// @brief スカラー型の値を返す．
@@ -826,7 +826,7 @@ private:
   bool
   is_int_compat() const override;
 
-  /// @brief unsigned int 型に変換可能な時に true を返す．
+  /// @brief SizeType 型に変換可能な時に true を返す．
   bool
   is_uint_compat() const override;
 
@@ -859,9 +859,9 @@ private:
   int
   int_value() const override;
 
-  /// @brief unsigned int 型の値を返す．
+  /// @brief SizeType 型の値を返す．
   /// @note 値が整数型に変換できない時の値は不定
-  unsigned int
+  SizeType
   uint_value() const override;
 
   /// @brief スカラー型の値を返す．

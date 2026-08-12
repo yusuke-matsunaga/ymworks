@@ -1,7 +1,7 @@
-﻿#ifndef YM_VLLINEWATCHER_H
-#define YM_VLLINEWATCHER_H
+﻿#ifndef YM_VL_VLLINEWATCHER_H
+#define YM_VL_VLLINEWATCHER_H
 
-/// @file ym/VlLineWatcher.h
+/// @file ym/vl/VlLineWatcher.h
 /// @brief VlLineWatcher のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
@@ -15,7 +15,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class VlLineWatcher VlLineWatcher.h <ym/VlLineWatcher.h>
+/// @class VlLineWatcher VlLineWatcher.h "ym/vl/VlLineWatcher.h"
 /// @ingroup VlParser
 /// @brief Verilog-HDL 用の Lex 中で行番号を監視するクラス
 ///
@@ -37,4 +37,4 @@ class VlLineWatcher :
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // YM_VLLINEWATCHER_H
+#endif // YM_VL_VLLINEWATCHER_H

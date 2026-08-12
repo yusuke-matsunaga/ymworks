@@ -10,9 +10,9 @@
 #include "ElbEnv.h"
 #include "ErrorGen.h"
 
-#include "ym/pt/PtModule.h"
-#include "ym/pt/PtExpr.h"
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstModule.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/AstMisc.h"
 
 #include "ym/vl/VlModule.h"
 #include "ym/vl/VlDeclArray.h"
@@ -27,61 +27,61 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-// @brief PtPrimary から ElbExpr を生成する．
+// @brief AstPrimary から ElbExpr を生成する．
 ElbExpr*
 ExprGen::instantiate_primary(
   const VlScope* parent,
   const ElbEnv& env,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
   // 識別子の階層
-  auto has_hname = (pt_expr->namebranch_num() > 0);
+  auto has_hname = (ast_expr->namebranch_num() > 0);
   if ( has_hname ) {
     if ( env.is_constant() ) {
       // 階層つき識別子はだめ
-      ErrorGen::hname_in_ce(__FILE__, __LINE__, pt_expr);
+      ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
     }
     if ( env.inside_constant_function() ) {
       // 階層つき識別子はだめ
-      ErrorGen::hname_in_cf(__FILE__, __LINE__, pt_expr);
+      ErrorGen::hname_in_cf(__FILE__, __LINE__, ast_expr);
     }
   }
 
   // 識別子の名前
-  auto name = pt_expr->name();
+  auto name = ast_expr->name();
 
   // 識別子の添字の次元
-  auto isize = pt_expr->index_num();
+  auto isize = ast_expr->index_num();
 
   // 名前に対応したオブジェクトのハンドル
   auto handle = (ObjHandle*){nullptr};
   if ( env.is_constant() ) {
-    handle = find_const_handle(parent, pt_expr);
+    handle = find_const_handle(parent, ast_expr);
   }
   else if ( env.inside_constant_function() ) {
     // まず関数内の識別子を探索する．
-    handle = mgr().find_obj_up(parent, pt_expr, env.constant_function());
+    handle = mgr().find_obj_up(parent, ast_expr, env.constant_function());
     if ( handle == nullptr && !env.is_lhs() ) {
       // 右辺ならモジュール内の定数識別子を探索する．
-      handle = find_const_handle(parent, pt_expr);
+      handle = find_const_handle(parent, ast_expr);
     }
   }
   else {
     // 通常のスコープで探索する．
     // たぶんモジュール内でいいはず．
-    handle = mgr().find_obj_up(parent, pt_expr,  parent->parent_module());
+    handle = mgr().find_obj_up(parent, ast_expr,  parent->parent_module());
     if ( handle == nullptr ) {
       // 見つからなくてもデフォルトネットタイプが kVpiNone でないかぎり
       // 暗黙の1ビットネット宣言を行う．
       // ただし識別子に添字がついていたらだめ
       auto parent_module = parent->parent_module();
       auto def_nettype = parent_module->def_net_type();
-      if ( pt_expr->is_simple() &&
+      if ( ast_expr->is_simple() &&
 	   !has_hname &&
 	   isize == 0 &&
 	   def_nettype != VpiNetType::None ) {
-	auto decl = mgr().new_ImpNet(parent, pt_expr, def_nettype);
+	auto decl = mgr().new_ImpNet(parent, ast_expr, def_nettype);
 
 	handle = mgr().find_obj(parent, name);
 	// 今作ったはずなので絶対見つかるはず．
@@ -91,7 +91,7 @@ ExprGen::instantiate_primary(
       }
     }
     if ( handle == nullptr ) {
-      ErrorGen::not_found(__FILE__, __LINE__, pt_expr);
+      ErrorGen::not_found(__FILE__, __LINE__, ast_expr);
     }
   }
 
@@ -101,54 +101,54 @@ ExprGen::instantiate_primary(
     if ( isize == 0 ) {
       auto scope = handle->scope();
       if ( scope ) {
-	return mgr().new_ArgHandle(pt_expr, scope);
+	return mgr().new_ArgHandle(ast_expr, scope);
       }
 
       auto primitive = handle->primitive();
       if ( primitive ) {
-	return mgr().new_ArgHandle(pt_expr, primitive);
+	return mgr().new_ArgHandle(ast_expr, primitive);
       }
 
       auto decl = handle->decl();
       if ( decl ) {
-	return mgr().new_Primary(pt_expr, decl);
+	return mgr().new_Primary(ast_expr, decl);
       }
 
       auto declarray = handle->declarray();
       if ( declarray ) {
-	return mgr().new_ArgHandle(pt_expr, declarray);
+	return mgr().new_ArgHandle(ast_expr, declarray);
       }
     }
     else if ( isize == 1 ) {
-      auto pt_expr1 = pt_expr->index(0);
-      auto index = evaluate_int(parent, pt_expr1);
+      auto ast_expr1 = ast_expr->index(0);
+      auto index = evaluate_int(parent, ast_expr1);
       auto scope = handle->array_elem(index);
       if ( scope ) {
-	return mgr().new_ArgHandle(pt_expr, scope);
+	return mgr().new_ArgHandle(ast_expr, scope);
       }
 
       auto prim_array = handle->prim_array();
       if ( prim_array ) {
 	auto primitive = prim_array->elem_by_index(index);
 	if ( primitive ) {
-	  return mgr().new_ArgHandle(pt_expr, primitive);
+	  return mgr().new_ArgHandle(ast_expr, primitive);
 	}
       }
     }
-    ErrorGen::illegal_object(__FILE__, __LINE__, pt_expr);
+    ErrorGen::illegal_object(__FILE__, __LINE__, ast_expr);
   }
 
   if ( !env.is_lhs() ) {
     // 対象のオブジェクトが genvar の場合
     auto genvar = handle->genvar();
     if ( genvar ) {
-      return instantiate_genvar(parent, pt_expr, genvar->value());
+      return instantiate_genvar(parent, ast_expr, genvar->value());
     }
   }
 
   // 添字には constant/constant function 以外の情報は引き継がない
   ElbEnv index_env;
-  if ( pt_expr->is_const_index() ) {
+  if ( ast_expr->is_const_index() ) {
     index_env = ElbConstantEnv();
   }
   else if ( env.inside_constant_function() ) {
@@ -160,7 +160,7 @@ ExprGen::instantiate_primary(
   bool has_range_select;
   bool has_bit_select;
   auto primary = instantiate_primary_sub(handle, parent,
-					 index_env, pt_expr,
+					 index_env, ast_expr,
 					 is_array,
 					 has_range_select,
 					 has_bit_select);
@@ -173,14 +173,14 @@ ExprGen::instantiate_primary(
 
   // 式をチェックする．
   // 不適切な場合は例外が送出される．
-  check_decl(env, pt_expr, decl_type, is_array,
+  check_decl(env, ast_expr, decl_type, is_array,
 	     has_range_select | has_bit_select);
 
   if ( has_bit_select ) {
     // ビット指定付きの場合
-    auto pt_expr1 = pt_expr->index(isize - 1);
+    auto ast_expr1 = ast_expr->index(isize - 1);
     bool is_const;
-    int index_val = evaluate_int_if_const(parent, pt_expr1, is_const);
+    int index_val = evaluate_int_if_const(parent, ast_expr1, is_const);
     if ( is_const ) {
       // 固定インデックスだった．
       SizeType offset;
@@ -189,32 +189,32 @@ ExprGen::instantiate_primary(
 	// インデックスが範囲外
 	// ただ値が X になるだけでエラーにはならないそうだ．
 	put_warning(__FILE__, __LINE__,
-		    pt_expr1->file_region(),
+		    ast_expr1->file_region(),
 		    "ELAB",
 		    "Bit-Select index is out of range.");
       }
-      return mgr().new_BitSelect(pt_expr, primary, pt_expr1, index_val);
+      return mgr().new_BitSelect(ast_expr, primary, ast_expr1, index_val);
     }
     else {
       // 可変インデックスだった．
-      auto index = instantiate_expr(parent, index_env, pt_expr1);
-      return mgr().new_BitSelect(pt_expr, primary, index);
+      auto index = instantiate_expr(parent, index_env, ast_expr1);
+      return mgr().new_BitSelect(ast_expr, primary, index);
     }
   }
   if ( has_range_select ) {
     // 範囲指定付きの場合
-    auto pt_part = pt_expr->part();
-    switch ( pt_part->mode() ) {
+    auto ast_part = ast_expr->part();
+    switch ( ast_part->mode() ) {
     case VpiRangeMode::Const:
     {
-      auto pt_left = pt_part->left();
-      auto index1_val = evaluate_int(parent, pt_left);
-      auto pt_right = pt_part->right();
-      auto index2_val = evaluate_int(parent, pt_right);
+      auto ast_left = ast_part->left();
+      auto index1_val = evaluate_int(parent, ast_left);
+      auto ast_right = ast_part->right();
+      auto index2_val = evaluate_int(parent, ast_right);
       auto big = (index1_val >= index2_val);
       if ( big ^ decl_base->is_big_endian() ) {
 	// 範囲の順番が逆
-	ErrorGen::range_order(__FILE__, __LINE__, pt_expr);
+	ErrorGen::range_order(__FILE__, __LINE__, ast_expr);
       }
 
       SizeType offset;
@@ -223,7 +223,7 @@ ExprGen::instantiate_primary(
 	// 左のインデックスが範囲外
 	// ただ値が X になるだけでエラーにはならないそうだ．
 	put_warning(__FILE__, __LINE__,
-		    pt_left->file_region(),
+		    ast_left->file_region(),
 		    "ELAB",
 		    "Left index is out of range.");
       }
@@ -233,23 +233,23 @@ ExprGen::instantiate_primary(
 	// 右のインデックスが範囲外
 	// ただ値が X になるだけでエラーにはならないそうだ．
 	put_warning(__FILE__, __LINE__,
-		    pt_right->file_region(),
+		    ast_right->file_region(),
 		    "ELAB",
 		    "Right index is out of range.");
       }
 
-      return mgr().new_PartSelect(pt_expr, primary,
-				  pt_left, pt_right,
+      return mgr().new_PartSelect(ast_expr, primary,
+				  ast_left, ast_right,
 				  index1_val, index2_val);
     }
 
     case VpiRangeMode::Plus:
     {
-      auto pt_range = pt_part->right();
-      auto range_val = evaluate_int(parent, pt_range);
-      auto pt_base = pt_part->left();
+      auto ast_range = ast_part->right();
+      auto range_val = evaluate_int(parent, ast_range);
+      auto ast_base = ast_part->left();
       bool is_const;
-      auto base_val = evaluate_int_if_const(parent, pt_base, is_const);
+      auto base_val = evaluate_int_if_const(parent, ast_base, is_const);
       if ( is_const ) {
 	// 固定インデックスだった．
 	int index1_val;
@@ -270,29 +270,29 @@ ExprGen::instantiate_primary(
 	  // 左か右のインデックスが範囲外
 	  // ただ値が X になるだけでエラーにはならないそうだ．
 	  put_warning(__FILE__, __LINE__,
-		      pt_expr->file_region(),
+		      ast_expr->file_region(),
 		      "ELAB",
 		      "Index is out of range.");
 	}
-	return mgr().new_PartSelect(pt_expr, primary,
-				    pt_base, pt_range,
+	return mgr().new_PartSelect(ast_expr, primary,
+				    ast_base, ast_range,
 				    index1_val, index2_val);
       }
       else {
 	// 可変インデックスだった．
-	auto base = instantiate_expr(parent, index_env, pt_base);
-	return mgr().new_PlusPartSelect(pt_expr, primary,
-					base, pt_range, range_val);
+	auto base = instantiate_expr(parent, index_env, ast_base);
+	return mgr().new_PlusPartSelect(ast_expr, primary,
+					base, ast_range, range_val);
       }
     }
 
     case VpiRangeMode::Minus:
     {
-      auto pt_range = pt_part->right();
-      auto range_val = evaluate_int(parent, pt_range);
-      auto pt_base = pt_part->left();
+      auto ast_range = ast_part->right();
+      auto range_val = evaluate_int(parent, ast_range);
+      auto ast_base = ast_part->left();
       bool is_const;
-      auto base_val = evaluate_int_if_const(parent, pt_base, is_const);
+      auto base_val = evaluate_int_if_const(parent, ast_base, is_const);
       if ( is_const ) {
 	// 固定インデックスだった．
 	int index1_val;
@@ -313,19 +313,19 @@ ExprGen::instantiate_primary(
 	  // 左か右のインデックスが範囲外
 	  // ただ値が X になるだけでエラーにはならないそうだ．
 	  put_warning(__FILE__, __LINE__,
-		      pt_expr->file_region(),
+		      ast_expr->file_region(),
 		      "ELAB",
 		      "Index is out of range.");
 	}
-	return mgr().new_PartSelect(pt_expr, primary,
-				    pt_base, pt_range,
+	return mgr().new_PartSelect(ast_expr, primary,
+				    ast_base, ast_range,
 				    index1_val, index2_val);
       }
       else {
 	// 可変インデックスだった．
-	auto base = instantiate_expr(parent, index_env, pt_base);
-	return mgr().new_MinusPartSelect(pt_expr, primary,
-					 base, pt_range, range_val);
+	auto base = instantiate_expr(parent, index_env, ast_base);
+	return mgr().new_MinusPartSelect(ast_expr, primary,
+					 base, ast_range, range_val);
       }
     }
 
@@ -336,37 +336,37 @@ ExprGen::instantiate_primary(
   return primary;
 }
 
-// @brief PtExpr(primary) から named_event を生成する．
+// @brief AstExpr(primary) から named_event を生成する．
 ElbExpr*
 ExprGen::instantiate_namedevent(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  if ( pt_expr->type() != PtExprType::Primary ) {
-    throw std::logic_error{"pt_expr->type() != PtExprType::Primary"};
+  if ( ast_expr->type() != AstExpr::Primary ) {
+    throw std::logic_error{"ast_expr->type() != AstExpr::Primary"};
   }
-  if ( pt_expr->part() != nullptr ) {
-    throw std::logic_error{"pt_expr->part() != nullptr"};
+  if ( ast_expr->part() != nullptr ) {
+    throw std::logic_error{"ast_expr->part() != nullptr"};
   }
 
   // 名前に対応したオブジェクトのハンドルを求める．
-  auto handle = mgr().find_obj_up(parent, pt_expr, nullptr);
+  auto handle = mgr().find_obj_up(parent, ast_expr, nullptr);
   if ( handle == nullptr ) {
     // 見つからなかった．
-    ErrorGen::not_found(__FILE__, __LINE__, pt_expr);
+    ErrorGen::not_found(__FILE__, __LINE__, ast_expr);
   }
 
   // 配列要素などの処理を行う．
   ElbEnv env0;
-  if ( pt_expr->is_const_index() ) {
+  if ( ast_expr->is_const_index() ) {
     env0 = ElbConstantEnv();
   }
 
   bool is_array;
   bool has_range_select;
   bool has_bit_select;
-  auto primary = instantiate_primary_sub(handle, parent, env0, pt_expr,
+  auto primary = instantiate_primary_sub(handle, parent, env0, ast_expr,
 					 is_array,
 					 has_range_select,
 					 has_bit_select);
@@ -378,11 +378,11 @@ ExprGen::instantiate_namedevent(
   auto decl_type = decl_base->type();
   if ( decl_type != VpiObjType::NamedEvent ) {
     // 型が違う
-    ErrorGen::not_a_namedevent(__FILE__, __LINE__, pt_expr);
+    ErrorGen::not_a_namedevent(__FILE__, __LINE__, ast_expr);
   }
   if ( has_range_select || has_bit_select ) {
     // 部分選択，ビット選択は使えない．
-    ErrorGen::select_for_namedevent(__FILE__, __LINE__, pt_expr);
+    ErrorGen::select_for_namedevent(__FILE__, __LINE__, ast_expr);
   }
 
   return primary;
@@ -392,19 +392,19 @@ ExprGen::instantiate_namedevent(
 ObjHandle*
 ExprGen::find_const_handle(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
   // モジュール内の識別子を探索する．
-  auto handle = mgr().find_obj_up(parent, pt_expr, parent->parent_module());
+  auto handle = mgr().find_obj_up(parent, ast_expr, parent->parent_module());
   if ( handle == nullptr ) {
     // 見つからなかった．
-    ErrorGen::not_found(__FILE__, __LINE__, pt_expr);
+    ErrorGen::not_found(__FILE__, __LINE__, ast_expr);
   }
 
   // handle が持つオブジェクトは genvar か parameter でなければならない．
   if ( handle->genvar() == nullptr && handle->parameter() == nullptr ) {
-    ErrorGen::not_a_parameter(__FILE__, __LINE__, pt_expr);
+    ErrorGen::not_a_parameter(__FILE__, __LINE__, ast_expr);
   }
 
   return handle;
@@ -414,33 +414,33 @@ ExprGen::find_const_handle(
 ElbExpr*
 ExprGen::instantiate_genvar(
   const VlScope* parent,
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   int val
 )
 {
-  auto has_range_select = (pt_expr->part() != nullptr);
-  auto isize = pt_expr->index_num();
+  auto has_range_select = (ast_expr->part() != nullptr);
+  auto isize = ast_expr->index_num();
   if (  isize > 1 || (isize == 1 && has_range_select) ) {
     // 配列型ではない．
-    ErrorGen::dimension_mismatch(__FILE__, __LINE__, pt_expr);
+    ErrorGen::dimension_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
   auto has_bit_select = (isize == 1);
   if ( has_bit_select ) {
-    auto index1 = evaluate_int(parent, pt_expr->index(0));
+    auto index1 = evaluate_int(parent, ast_expr->index(0));
     val >>= index1;
     val &= 1;
   }
   else if ( has_range_select ) {
-    auto pt_part = pt_expr->part();
-    auto index1 = evaluate_int(parent, pt_part->left());
-    auto index2 = evaluate_int(parent, pt_part->right());
+    auto ast_part = ast_expr->part();
+    auto index1 = evaluate_int(parent, ast_part->left());
+    auto index2 = evaluate_int(parent, ast_part->right());
     val >>= index2;
     val &= ((1 << (index1 - index2 + 1)) - 1);
   }
 
   // genvar の値に対応した定数式を生成
-  return mgr().new_GenvarConstant(pt_expr, val);
+  return mgr().new_GenvarConstant(ast_expr, val);
 }
 
 // @brief 宣言要素のインスタンス化を行う．
@@ -449,7 +449,7 @@ ExprGen::instantiate_primary_sub(
   ObjHandle* handle,
   const VlScope* parent,
   const ElbEnv& env,
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   bool& is_array,
   bool& has_range_select,
   bool& has_bit_select
@@ -458,10 +458,10 @@ ExprGen::instantiate_primary_sub(
   // 配列の次元
   SizeType dsize = 0;
   // プライマリ式の次元 (ビット指定を含んでいる可能性あり)
-  auto isize = pt_expr->index_num();
+  auto isize = ast_expr->index_num();
 
   // 範囲指定があるとき true となるフラグ
-  has_range_select = (pt_expr->part() != nullptr);
+  has_range_select = (ast_expr->part() != nullptr);
 
   // 答え
   auto primary = (ElbExpr*){nullptr};
@@ -469,7 +469,7 @@ ExprGen::instantiate_primary_sub(
   if ( handle->type() == VpiObjType::Parameter ) {
     // パラメータの場合
     auto param = handle->parameter();
-    primary = mgr().new_Primary(pt_expr, param);
+    primary = mgr().new_Primary(ast_expr, param);
     is_array = false;
     value_type = param->value_type();
   }
@@ -478,7 +478,7 @@ ExprGen::instantiate_primary_sub(
     auto decl = handle->decl();
     auto declarray = handle->declarray();
     if ( decl != nullptr ) {
-      primary = mgr().new_Primary(pt_expr, decl);
+      primary = mgr().new_Primary(ast_expr, decl);
       is_array = false;
       value_type = decl->value_type();
     }
@@ -487,7 +487,7 @@ ExprGen::instantiate_primary_sub(
       dsize = declarray->dimension();
       if ( isize != dsize && (isize != dsize + 1 || has_range_select) ) {
 	// 次元が合わない．
-	ErrorGen::dimension_mismatch(__FILE__, __LINE__, pt_expr);
+	ErrorGen::dimension_mismatch(__FILE__, __LINE__, ast_expr);
       }
 
       is_array = true;
@@ -499,9 +499,9 @@ ExprGen::instantiate_primary_sub(
       auto const_index = true;
       for ( SizeType i = 0; i < dsize; ++ i ) {
 	auto j = dsize - i - 1;
-	auto pt_expr1 = pt_expr->index(j);
+	auto ast_expr1 = ast_expr->index(j);
 	bool is_const;
-	auto index_val = evaluate_int_if_const(parent, pt_expr1, is_const);
+	auto index_val = evaluate_int_if_const(parent, ast_expr1, is_const);
 	if ( is_const ) {
 	  offset += index_val * mlt;
 	  mlt *= declarray->range(j)->size();
@@ -511,25 +511,25 @@ ExprGen::instantiate_primary_sub(
 	}
       }
       if ( const_index ) {
-	primary = mgr().new_Primary(pt_expr, declarray, offset);
+	primary = mgr().new_Primary(ast_expr, declarray, offset);
       }
       else {
 	// 添字の式を生成する．
 	std::vector<ElbExpr*> index_list;
 	index_list.reserve(dsize);
 	for ( SizeType i = 0; i < dsize; ++ i ) {
-	  auto pt_expr1 = pt_expr->index(i);
-	  auto expr1 = instantiate_expr(parent, env, pt_expr1);
+	  auto ast_expr1 = ast_expr->index(i);
+	  auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	  index_list.push_back(expr1);
 	}
 
-	primary = mgr().new_Primary(pt_expr, declarray, index_list);
+	primary = mgr().new_Primary(ast_expr, declarray, index_list);
       }
     }
   }
   if ( primary == nullptr ) {
     // 適切な型ではなかった．
-    ErrorGen::illegal_object(__FILE__, __LINE__, pt_expr);
+    ErrorGen::illegal_object(__FILE__, __LINE__, ast_expr);
   }
 
   // ビット指定があるとき true となるフラグ
@@ -544,12 +544,12 @@ ExprGen::instantiate_primary_sub(
 
   if ( isize != dsize ) {
     // 次元が会わない．
-    ErrorGen::dimension_mismatch(__FILE__, __LINE__, pt_expr);
+    ErrorGen::dimension_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
   if ( has_range_select || has_bit_select ) {
     if ( value_type.is_real_type() ) {
-      ErrorGen::select_for_real(__FILE__, __LINE__, pt_expr);
+      ErrorGen::select_for_real(__FILE__, __LINE__, ast_expr);
     }
   }
 
@@ -560,7 +560,7 @@ ExprGen::instantiate_primary_sub(
 void
 ExprGen::check_decl(
   const ElbEnv& env,
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   VpiObjType decl_type,
   bool is_array,
   bool has_select
@@ -570,29 +570,29 @@ ExprGen::check_decl(
     // procedural continuous assignment 文の左辺式
     if ( is_array ) {
       // 配列要素はダメ
-      ErrorGen::array_in_pca(__FILE__, __LINE__, pt_expr);
+      ErrorGen::array_in_pca(__FILE__, __LINE__, ast_expr);
     }
     if ( has_select ) {
       // 部分指定はダメ
-      ErrorGen::select_in_pca(__FILE__, __LINE__, pt_expr);
+      ErrorGen::select_in_pca(__FILE__, __LINE__, ast_expr);
     }
     if ( decl_type != VpiObjType::Reg &&
 	 decl_type != VpiObjType::IntegerVar &&
 	 decl_type != VpiObjType::RealVar &&
 	 decl_type != VpiObjType::TimeVar) {
       // reg/変数以外はダメ
-      ErrorGen::illegal_object(__FILE__, __LINE__, pt_expr);
+      ErrorGen::illegal_object(__FILE__, __LINE__, ast_expr);
     }
   }
   else if ( env.is_force_lhs() ) {
     // force 文の左辺式
     if ( is_array ) {
       // 配列要素はダメ
-      ErrorGen::array_in_force(__FILE__, __LINE__, pt_expr);
+      ErrorGen::array_in_force(__FILE__, __LINE__, ast_expr);
     }
     if ( has_select ) {
       // 部分指定はダメ
-      ErrorGen::select_in_force(__FILE__, __LINE__, pt_expr);
+      ErrorGen::select_in_force(__FILE__, __LINE__, ast_expr);
     }
     if ( decl_type != VpiObjType::Net &&
 	 decl_type != VpiObjType::Reg &&
@@ -600,14 +600,14 @@ ExprGen::check_decl(
 	 decl_type != VpiObjType::RealVar &&
 	 decl_type != VpiObjType::TimeVar) {
       // net/reg/変数以外はダメ
-      ErrorGen::illegal_object(__FILE__, __LINE__, pt_expr);
+      ErrorGen::illegal_object(__FILE__, __LINE__, ast_expr);
     }
   }
   else if ( env.is_net_lhs() ) {
     if ( decl_type != VpiObjType::Net &&
 	 (decl_type != VpiObjType::NetArray || !is_array) ) {
       // net 以外はダメ
-      ErrorGen::illegal_object(__FILE__, __LINE__, pt_expr);
+      ErrorGen::illegal_object(__FILE__, __LINE__, ast_expr);
     }
   }
   else if ( env.is_var_lhs() ) {
@@ -618,7 +618,7 @@ ExprGen::check_decl(
 	 decl_type != VpiObjType::TimeVar &&
 	 decl_type != VpiObjType::VarSelect ) {
       // reg/変数以外はダメ
-      ErrorGen::illegal_object(__FILE__, __LINE__, pt_expr);
+      ErrorGen::illegal_object(__FILE__, __LINE__, ast_expr);
     }
   }
   else {
@@ -628,18 +628,18 @@ ExprGen::check_decl(
       if ( decl_type != VpiObjType::Parameter &&
 	   decl_type != VpiObjType::SpecParam ) {
 	// 定数(parameter)でないのでダメ
-	ErrorGen::illegal_object(__FILE__, __LINE__, pt_expr);
+	ErrorGen::illegal_object(__FILE__, __LINE__, ast_expr);
       }
     }
 
     // あとは個別の型ごとにチェックする．
     if ( decl_type == VpiObjType::RealVar && has_select ) {
       // real の部分選択は無効
-      ErrorGen::select_for_real(__FILE__, __LINE__, pt_expr);
+      ErrorGen::select_for_real(__FILE__, __LINE__, ast_expr);
     }
     if ( decl_type == VpiObjType::NamedEvent && !env.is_event_expr() ) {
       // イベント式以外では名前つきイベントは使えない．
-      ErrorGen::illegal_object(__FILE__, __LINE__, pt_expr);
+      ErrorGen::illegal_object(__FILE__, __LINE__, ast_expr);
     }
   }
 }

@@ -11,8 +11,8 @@
 
 #include "elaborator/ElbExpr.h"
 
-#include "ym/pt/PtStmt.h"
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/AstStmt.h"
+#include "ym/vl/AstExpr.h"
 
 #include "ym/MsgMgr.h"
 
@@ -29,26 +29,25 @@ StmtGen::instantiate_if(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto pt_cond = pt_stmt->expr();
-  auto cond = instantiate_expr(parent, env, pt_cond);
+  auto ast_cond = ast_stmt->expr();
+  auto cond = instantiate_expr(parent, env, ast_cond);
 
-  auto pt_then = pt_stmt->body();
-  auto then_stmt = instantiate_stmt(parent, process, env, pt_then);
+  auto ast_then = ast_stmt->body();
+  auto then_stmt = instantiate_stmt(parent, process, env, ast_then);
 
-  auto pt_else = pt_stmt->else_body();
-  auto else_stmt = instantiate_stmt(parent, process, env, pt_else);
+  auto ast_else = ast_stmt->else_body();
+  auto else_stmt = instantiate_stmt(parent, process, env, ast_else);
 
-  if ( !cond || !then_stmt || ( pt_else && !else_stmt ) ) {
+  if ( !cond || !then_stmt || ( ast_else && !else_stmt ) ) {
     // たぶんエラー
     return nullptr;
   }
 
-  auto stmt = mgr().new_IfStmt(parent, process, pt_stmt,
-			       cond, then_stmt, else_stmt);
-  return stmt;
+  return mgr().new_IfStmt(parent, process, ast_stmt,
+			  cond, then_stmt, else_stmt);
 }
 
 // @brief case 文の実体化を行う．
@@ -57,12 +56,12 @@ StmtGen::instantiate_case(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
   // 条件式の生成
-  auto pt_cond = pt_stmt->expr();
-  auto cond = instantiate_expr(parent, env, pt_cond);
+  auto ast_cond = ast_stmt->expr();
+  auto cond = instantiate_expr(parent, env, ast_cond);
   if ( !cond ) {
     // たぶんエラー
     return nullptr;
@@ -72,50 +71,50 @@ StmtGen::instantiate_case(
   // あとでサイズ調整をするために用いる．
   std::vector<ElbExpr*> expr_list;
   SizeType ne{0};
-  for ( auto pt_item: pt_stmt->caseitem_list() ) {
-    ne += pt_item->label_num();
+  for ( auto ast_item: ast_stmt->caseitem_list() ) {
+    ne += ast_item->label_num();
   }
   expr_list.reserve(ne);
 
   // default caseitem を末尾にするために順序づけを行う．
   // Parser::check_default_label() で default が高々1個しかないことは確認済み．
-  std::vector<const PtCaseItem*> pt_caseitem_list;
+  std::vector<const AstCaseItem*> ast_caseitem_list;
   {
-    SizeType nc = pt_stmt->caseitem_num();
-    pt_caseitem_list.reserve(nc);
-    const PtCaseItem* default_caseitem{nullptr};
-    for ( auto pt_item: pt_stmt->caseitem_list() ) {
-      if ( pt_item->label_num() > 0 ) {
-	pt_caseitem_list.push_back(pt_item);
+    SizeType nc = ast_stmt->caseitem_num();
+    ast_caseitem_list.reserve(nc);
+    const AstCaseItem* default_caseitem{nullptr};
+    for ( auto ast_item: ast_stmt->caseitem_list() ) {
+      if ( ast_item->label_num() > 0 ) {
+	ast_caseitem_list.push_back(ast_item);
       }
       else {
-	default_caseitem = pt_item;
+	default_caseitem = ast_item;
       }
     }
     if ( default_caseitem ) {
       // default caseitem を末尾に置く．
-      pt_caseitem_list.push_back(default_caseitem);
+      ast_caseitem_list.push_back(default_caseitem);
     }
   }
 
   // case-item の生成
   std::vector<const VlCaseItem*> caseitem_list;
-  caseitem_list.reserve(pt_caseitem_list.size());
-  for ( auto pt_item: pt_caseitem_list ) {
-    auto pt_body = pt_item->body();
-    auto body = instantiate_stmt(parent, process, env, pt_body);
-    if ( pt_body && !body ) {
+  caseitem_list.reserve(ast_caseitem_list.size());
+  for ( auto ast_item: ast_caseitem_list ) {
+    auto ast_body = ast_item->body();
+    auto body = instantiate_stmt(parent, process, env, ast_body);
+    if ( ast_body && !body ) {
       // たぶんエラー
       return nullptr;
     }
-    // pt_body が空の場合はあり．
+    // ast_body が空の場合はあり．
 
     // ラベルの生成と設定
-    SizeType n = pt_item->label_num();
+    SizeType n = ast_item->label_num();
     std::vector<ElbExpr*> label_list;
     label_list.reserve(n);
-    for ( auto pt_expr: pt_item->label_list() ) {
-      auto expr = instantiate_expr(parent, env, pt_expr);
+    for ( auto ast_expr: ast_item->label_list() ) {
+      auto expr = instantiate_expr(parent, env, ast_expr);
       if ( !expr ) {
 	// たぶんエラー
 	return nullptr;
@@ -125,7 +124,7 @@ StmtGen::instantiate_case(
     }
 
     // caseitem の生成
-    auto caseitem = mgr().new_CaseItem(pt_item, label_list, body);
+    auto caseitem = mgr().new_CaseItem(ast_item, label_list, body);
     caseitem_list.push_back(caseitem);
   }
 
@@ -178,9 +177,8 @@ StmtGen::instantiate_case(
   }
 
   // case statement の生成
-  auto stmt = mgr().new_CaseStmt(parent, process, pt_stmt,
-				 cond, caseitem_list);
-  return stmt;
+  return mgr().new_CaseStmt(parent, process, ast_stmt,
+			    cond, caseitem_list);
 }
 
 // @brief wait 文の実体化を行う．
@@ -189,21 +187,20 @@ StmtGen::instantiate_wait(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto pt_cond = pt_stmt->expr();
-  auto cond = instantiate_expr(parent, env, pt_cond);
+  auto ast_cond = ast_stmt->expr();
+  auto cond = instantiate_expr(parent, env, ast_cond);
 
-  auto pt_body = pt_stmt->body();
-  auto body = instantiate_stmt(parent, process, env, pt_body);
+  auto ast_body = ast_stmt->body();
+  auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !cond || !body ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_WaitStmt(parent, process, pt_stmt, cond, body);
-  return stmt;
+  return mgr().new_WaitStmt(parent, process, ast_stmt, cond, body);
 }
 
 // @brief forever 文のインスタンス化を行う．
@@ -212,18 +209,17 @@ StmtGen::instantiate_forever(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto pt_body = pt_stmt->body();
-  auto body = instantiate_stmt(parent, process, env, pt_body);
+  auto ast_body = ast_stmt->body();
+  auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !body ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_ForeverStmt(parent, process, pt_stmt, body);
-  return stmt;
+  return mgr().new_ForeverStmt(parent, process, ast_stmt, body);
 }
 
 // @brief repeat 文のインスタンス化を行う．
@@ -232,21 +228,20 @@ StmtGen::instantiate_repeat(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto pt_expr = pt_stmt->expr();
-  auto expr = instantiate_expr(parent, env, pt_expr);
+  auto ast_expr = ast_stmt->expr();
+  auto expr = instantiate_expr(parent, env, ast_expr);
 
-  auto pt_body = pt_stmt->body();
-  auto body = instantiate_stmt(parent, process, env, pt_body);
+  auto ast_body = ast_stmt->body();
+  auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !expr || !body ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_RepeatStmt(parent, process, pt_stmt, expr, body);
-  return stmt;
+  return mgr().new_RepeatStmt(parent, process, ast_stmt, expr, body);
 }
 
 // @brief while 文のインスタンス化を行う．
@@ -255,21 +250,20 @@ StmtGen::instantiate_while(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto pt_cond = pt_stmt->expr();
-  auto cond = instantiate_expr(parent, env, pt_cond);
+  auto ast_cond = ast_stmt->expr();
+  auto cond = instantiate_expr(parent, env, ast_cond);
 
-  auto pt_body = pt_stmt->body();
-  auto body = instantiate_stmt(parent, process, env, pt_body);
+  auto ast_body = ast_stmt->body();
+  auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !cond || !body ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_WhileStmt(parent, process, pt_stmt, cond, body);
-  return stmt;
+  return mgr().new_WhileStmt(parent, process, ast_stmt, cond, body);
 }
 
 // @brief for 文のインスタンス化を行う．
@@ -278,26 +272,26 @@ StmtGen::instantiate_for(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  auto pt_cond = pt_stmt->expr();
-  auto cond = instantiate_expr(parent, env, pt_stmt->expr());
+  auto ast_cond = ast_stmt->expr();
+  auto cond = instantiate_expr(parent, env, ast_stmt->expr());
 
-  auto pt_init = pt_stmt->init_stmt();
-  auto init = instantiate_stmt(parent, process, env, pt_init);
+  auto ast_init = ast_stmt->init_stmt();
+  auto init = instantiate_stmt(parent, process, env, ast_init);
 
-  auto pt_next = pt_stmt->next_stmt();
-  auto next = instantiate_stmt(parent, process, env, pt_next);
+  auto ast_next = ast_stmt->next_stmt();
+  auto next = instantiate_stmt(parent, process, env, ast_next);
 
-  auto pt_body = pt_stmt->body();
-  auto body = instantiate_stmt(parent, process, env, pt_body);
+  auto ast_body = ast_stmt->body();
+  auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !cond || !init || !next || !body ) {
     return nullptr;
   }
 
-  auto stmt = mgr().new_ForStmt(parent, process, pt_stmt, cond, init, next, body);
+  auto stmt = mgr().new_ForStmt(parent, process, ast_stmt, cond, init, next, body);
   return stmt;
 }
 

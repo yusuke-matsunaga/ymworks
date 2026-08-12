@@ -8,7 +8,6 @@
 
 #include "parser/PtiFactory.h"
 #include "parser/CptFactory.h"
-#include "parser/SptFactory.h"
 #include "parser/PuHierName.h"
 #include "alloc/Alloc.h"
 
@@ -22,9 +21,6 @@ PtiFactory::make_obj(
   Alloc& alloc
 )
 {
-  if ( type == "spt" ) {
-    return new SptFactory(alloc);
-  }
   return new CptFactory(alloc);
 }
 

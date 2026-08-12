@@ -8,8 +8,7 @@
 /// Copyright (C) 2005-2009, 2014 Yusuke Matsunaga
 /// All rights reserved.
 
-
-#include "ym/VlLineWatcher.h"
+#include "ym/vl/VlLineWatcher.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

@@ -2,39 +2,38 @@
 /// @brief Parser の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "parser/Parser.h"
-#include "parser/PtiFactory.h"
-#include "ym/pt/PtMisc.h"
+#include "parser/PtFactory.h"
+#include "parser/PtExpr.h"
+#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief ディレイコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_DelayControl(
   const FileRegion& fr,
-  const PtExpr* value
+  const AstExpr* value
 )
 {
-  auto control = mFactory->new_DelayControl(fr, value);
-  return control;
+  return mFactory.new_DelayControl(fr, value);
 }
 
 // @brief イベントコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_EventControl(
   const FileRegion& fr
 )
 {
-  auto control = mFactory->new_EventControl(fr, {});
-  return control;
+  return mFactory.new_EventControl(fr, {});
 }
 
 // @brief イベントコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_EventControl(
   const FileRegion& fr,
   const char* event_name,
@@ -42,202 +41,193 @@ Parser::new_EventControl(
 )
 {
   auto expr = new_Primary(name_loc, event_name);
-  auto control = mFactory->new_EventControl(fr, {expr});
-  return control;
+  return mFactory.new_EventControl(fr,
+				   PtExprArray(mAlloc, expr));
 }
 
 // @brief イベントコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_EventControl(
   const FileRegion& fr,
-  PuHierName* event_name,
+  PtHierName* event_name,
   const FileRegion& name_loc
 )
 {
   auto expr = new_Primary(name_loc, event_name);
-  auto control = mFactory->new_EventControl(fr, {expr});
-  return control;
+  return mFactory.new_EventControl(fr,
+				   PtExprArray(mAlloc, expr));
 }
 
 // @brief イベントコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_EventControl(
   const FileRegion& fr,
-  PtrList<const PtExpr>* event_list
+  PtExprList* event_list
 )
 {
-  auto control = mFactory->new_EventControl(fr, event_list->to_vector());
-  return control;
+  return mFactory.new_EventControl(fr,
+				   event_list->to_array(mAlloc));
 }
 
 // @brief リピートコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_RepeatControl(
   const FileRegion& fr,
-  const PtExpr* expr
+  const AstExpr* expr
 )
 {
-  auto control = mFactory->new_RepeatControl(fr, expr, {});
-  return control;
+  return mFactory.new_RepeatControl(fr, expr, {});
 }
 
 // @brief リピートコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_RepeatControl(
   const FileRegion& fr,
-  const PtExpr* rep,
+  const AstExpr* rep,
   const char* event_name,
   const FileRegion& name_loc
 )
 {
   auto expr = new_Primary(name_loc, event_name);
-  auto control = mFactory->new_RepeatControl(fr, rep, {expr});
-  return control;
+  return mFactory.new_RepeatControl(fr, rep,
+				    PtExprArray(mAlloc, expr));
 }
 
 // @brief リピートコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_RepeatControl(
   const FileRegion& fr,
-  const PtExpr* rep,
-  PuHierName* event_name,
+  const AstExpr* rep,
+  PtHierName* event_name,
   const FileRegion& name_loc
 )
 {
   auto expr = new_Primary(name_loc, event_name);
-  auto control = mFactory->new_RepeatControl(fr, rep, {expr});
-  return control;
+  return mFactory.new_RepeatControl(fr, rep,
+				    PtExprArray(mAlloc, expr));
 }
 
 // @brief リピートコントロールの生成
-const PtControl*
+PtControl*
 Parser::new_RepeatControl(
   const FileRegion& fr,
-  const PtExpr* rep,
-  PtrList<const PtExpr>* event_list
+  const AstExpr* rep,
+  PtExprList* event_list
 )
 {
-  auto control = mFactory->new_RepeatControl(fr, rep, event_list->to_vector());
-  return control;
+  return mFactory.new_RepeatControl(fr, rep,
+				    event_list->to_array(mAlloc));
 }
 
 // @brief 順序つき結合子の生成
-const PtConnection*
+PtConnection*
 Parser::new_OrderedCon(
-  const PtExpr* expr
+  const AstExpr* expr
 )
 {
-  auto con = mFactory->new_OrderedCon(expr);
-  return con;
+  return mFactory.new_OrderedCon(expr);
 }
 
 // @brief 順序つき結合子の生成
-const PtConnection*
+PtConnection*
 Parser::new_OrderedCon(
   const FileRegion& fr,
-  const PtExpr* expr,
-  PtrList<const PtAttrInst>* ai_list
+  const AstExpr* expr,
+  PtAttrInstList* ai_list
 )
 {
-  auto con = mFactory->new_OrderedCon(fr, expr);
+  auto con = mFactory.new_OrderedCon(fr, expr);
   reg_attrinst(con, ai_list);
   return con;
 }
 
 // @brief 名前付き結合子の生成
-const PtConnection*
+PtConnection*
 Parser::new_NamedCon(
   const FileRegion& fr,
   const char* name,
-  const PtExpr* expr,
-  PtrList<const PtAttrInst>* ai_list
+  const AstExpr* expr,
+  PtAttrInstList* ai_list
 )
 {
-  auto con = mFactory->new_NamedCon(fr, name, expr);
+  auto con = mFactory.new_NamedCon(fr, name, expr);
   reg_attrinst(con, ai_list);
   return con;
 }
 
 // @brief strength の生成
-const PtStrength*
+PtStrength*
 Parser::new_Strength(
   const FileRegion& fr,
   VpiStrength value0,
   VpiStrength value1
 )
 {
-  auto str = mFactory->new_Strength(fr, value0, value1);
-  return str;
+  return mFactory.new_Strength(fr, value0, value1);
 }
 
 // @brief charge strength の生成
-const PtStrength*
+PtStrength*
 Parser::new_Strength(
   const FileRegion& fr,
   VpiStrength value
 )
 {
-  auto str = mFactory->new_Strength(fr, value);
-  return str;
+  return mFactory.new_Strength(fr, value);
 }
 
 // @brief 遅延値の生成 (1つの値)
-const PtDelay*
+PtDelay*
 Parser::new_Delay(
   const FileRegion& fr,
-  const PtExpr* value1
+  const AstExpr* value1
 )
 {
-  auto delay = mFactory->new_Delay(fr, value1);
-  return delay;
+  return mFactory.new_Delay(fr, value1);
 }
 
 // @brief 遅延値の生成 (2つの値)
-const PtDelay*
+PtDelay*
 Parser::new_Delay(
   const FileRegion& fr,
-  const PtExpr* value1,
-  const PtExpr* value2
+  const AstExpr* value1,
+  const AstExpr* value2
 )
 {
-  auto delay = mFactory->new_Delay(fr, value1, value2);
-  return delay;
+  return mFactory.new_Delay(fr, value1, value2);
 }
 
 // @brief 遅延値の生成 (3つの値)
-const PtDelay*
+PtDelay*
 Parser::new_Delay(
   const FileRegion& fr,
-  const PtExpr* value1,
-  const PtExpr* value2,
-  const PtExpr* value3
+  const AstExpr* value1,
+  const AstExpr* value2,
+  const AstExpr* value3
 )
 {
-  auto delay = mFactory->new_Delay(fr, value1, value2, value3);
-  return delay;
+  return mFactory.new_Delay(fr, value1, value2, value3);
 }
 
 // @brief attribute instance の生成
-const PtAttrInst*
+PtAttrInst*
 Parser::new_AttrInst(
   const FileRegion& fr,
-  PtrList<const PtAttrSpec>* as_list
+  PtAttrSpecList* as_list
 )
 {
-  auto ai = mFactory->new_AttrInst(fr, as_list->to_vector());
-  return ai;
+  return mFactory.new_AttrInst(fr, as_list->to_array(mAlloc));
 }
 
 // @brief attribute spec の生成
-const PtAttrSpec*
+PtAttrSpec*
 Parser::new_AttrSpec(
   const FileRegion& fr,
   const char* name,
-  const PtExpr* expr
+  const AstExpr* expr
 )
 {
-  auto as = mFactory->new_AttrSpec(fr, name, expr);
-  return as;
+  return mFactory.new_AttrSpec(fr, name, expr);
 }
 
 END_NAMESPACE_YM_VERILOG

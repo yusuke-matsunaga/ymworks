@@ -13,7 +13,7 @@
 // IEEE Std 1364-2001 26.6.31 Repeat control
 
 #include "ym/vl/VlControl.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,7 +29,7 @@ protected:
 
   /// @brief コンストラクタ
   EiControl(
-    const PtControl* pt_control ///< [in] パース木の定義要素
+    const AstControl* ast_control ///< [in] パース木の定義要素
   );
 
   /// デストラクタ
@@ -80,7 +80,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const PtControl* mPtControl;
+  const AstControl* mAstControl;
 
 };
 
@@ -99,8 +99,8 @@ public:
 
   /// @brief コンストラクタ
   EiDelayControl(
-    const PtControl* pt_control, ///< [in] パース木の定義要素
-    ElbExpr* delay               ///< [in] 遅延式
+    const AstControl* ast_control, ///< [in] パース木の定義要素
+    ElbExpr* delay                 ///< [in] 遅延式
   );
 
   /// デストラクタ
@@ -152,7 +152,7 @@ public:
 
   /// @brief コンストラクタ
   EiEventControl(
-    const PtControl* pt_control,            ///< [in] パース木の定義要素
+    const AstControl* ast_control,          ///< [in] パース木の定義要素
     const std::vector<ElbExpr*>& event_list ///< [in] イベントリスト
   );
 
@@ -213,7 +213,7 @@ public:
 
   /// @brief コンストラクタ
   EiRepeatControl(
-    const PtControl* pt_control,            ///< [in] パース木の定義要素
+    const AstControl* ast_control,          ///< [in] パース木の定義要素
     ElbExpr* rep,                           ///< [in] 繰り返し式
     const std::vector<ElbExpr*>& event_list ///< [in] イベントリスト
   );

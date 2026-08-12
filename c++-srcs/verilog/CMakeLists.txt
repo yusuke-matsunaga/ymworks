@@ -47,6 +47,11 @@ add_subdirectory ( alloc )
 add_subdirectory ( common )
 add_subdirectory ( elaborator )
 add_subdirectory ( parser )
+add_subdirectory ( parser/main )
+add_subdirectory ( parser/scanner )
+#add_subdirectory ( parser/pt_mgr )
+add_subdirectory ( parser/ast )
+add_subdirectory ( parser/cpt )
 
 
 # ===================================================================
@@ -83,6 +88,11 @@ ym_add_object_library ( ym_verilog
   ${common_SOURCES}
   ${elaborator_SOURCES}
   ${parser_SOURCES}
+  ${parser_main_SOURCES}
+  ${parser_scanner_SOURCES}
+  ${parser_pt_mgr_SOURCES}
+  ${parser_ast_SOURCES}
+  ${parser_cpt_SOURCES}
   ${alloc_SOURCES}
   ${CMAKE_CURRENT_BINARY_DIR}/verilog_grammer.cc
   )

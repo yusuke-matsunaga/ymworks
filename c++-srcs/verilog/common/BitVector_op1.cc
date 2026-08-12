@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -124,21 +124,21 @@ BitVector::complement()
   bool carry = true;
   uword m = mask(size());
   for ( SizeType i = 0; i < n; ++ i ) {
-    mVal1.get()[i] = mVal0.get()[i];
+    mVal1[i] = mVal0[i];
     if ( carry ) {
-      if ( mVal1.get()[i] == ALL1 ) {
-	mVal1.get()[i] = ALL0;
+      if ( mVal1[i] == ALL1 ) {
+	mVal1[i] = ALL0;
 	carry = true;
       }
       else {
-	mVal1.get()[i] += 1;
+	mVal1[i] += 1;
 	carry = false;
       }
     }
-    mVal0.get()[i] = ~mVal1.get()[i];
+    mVal0[i] = ~mVal1[i];
     if ( i == n - 1) {
-      mVal0.get()[i] |= ~m;
-      mVal1.get()[i] &= m;
+      mVal0[i] |= ~m;
+      mVal1[i] &= m;
     }
   }
 
@@ -164,7 +164,8 @@ BitVector::operator+=(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
 
   if ( src.size() < ans_size ) {
@@ -180,12 +181,12 @@ BitVector::operator+=(
   auto n = block(size());
   uword carry = 0;
   for ( SizeType i = 0; i < n; ++ i ) {
-    uword old_val = mVal1.get()[i];
-    mVal1.get()[i] += src.mVal1.get()[i] + carry;
-    mVal0.get()[i] = ~mVal1.get()[i];
+    uword old_val = mVal1[i];
+    mVal1[i] += src.mVal1[i] + carry;
+    mVal0[i] = ~mVal1[i];
     // carry 条件ってなに？
     // ans のほうが見掛け上小さくなったとき
-    if ( mVal1.get()[i] < old_val ) {
+    if ( mVal1[i] < old_val ) {
       carry = 1;
     }
     else {
@@ -215,7 +216,8 @@ BitVector::operator-=(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
 
   if ( src.size() < ans_size ) {
@@ -231,12 +233,12 @@ BitVector::operator-=(
   auto n = block(size());
   uword carry = 1;
   for ( SizeType i = 0; i < n; ++ i ) {
-    uword old_val = mVal1.get()[i];
-    mVal1.get()[i] += ~src.mVal1.get()[i] + carry;
-    mVal0.get()[i] = ~mVal1.get()[i];
+    uword old_val = mVal1[i];
+    mVal1[i] += ~src.mVal1[i] + carry;
+    mVal0[i] = ~mVal1[i];
     // carry 条件ってなに？
     // ans のほうが見掛け上小さくなったとき
-    if ( mVal1.get()[i] < old_val ) {
+    if ( mVal1[i] < old_val ) {
       carry = 1;
     }
     else {
@@ -265,7 +267,8 @@ BitVector::operator*=(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return operator*=(BitVector(src, ans_size));
@@ -288,7 +291,7 @@ BitVector::operator*=(
     carry = 0;
     for ( SizeType j = 0; j <= i; ++ j ) {
       uword old_v = v;
-      auto tmp = mult32(tmp1.mVal1.get()[j], tmp2.mVal1.get()[i - j]);
+      auto tmp = mult32(tmp1.mVal1[j], tmp2.mVal1[i - j]);
       v += tmp.second;
       if ( v < old_v ) {
 	++ carry;
@@ -296,19 +299,19 @@ BitVector::operator*=(
     }
     for ( SizeType j = 0; j < i; ++ j ) {
       uword old_v = v;
-      auto tmp = mult32(tmp1.mVal1.get()[j], tmp2.mVal1.get()[i - j - 1]);
+      auto tmp = mult32(tmp1.mVal1[j], tmp2.mVal1[i - j - 1]);
       v += tmp.first;
       if ( v < old_v ) {
 	++ carry;
       }
     }
-    mVal1.get()[i] = v;
-    mVal0.get()[i] = ~v;
+    mVal1[i] = v;
+    mVal0[i] = ~v;
   }
   // 上位ビットをマスクしておく
   uword m = mask(ans_size);
-  mVal0.get()[n - 1] |= ~m;
-  mVal1.get()[n - 1] &= m;
+  mVal0[n - 1] |= ~m;
+  mVal1[n - 1] &= m;
 
   if ( invert ) {
     complement();
@@ -335,7 +338,8 @@ BitVector::operator/=(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return operator/=(BitVector(src, ans_size));
@@ -358,13 +362,13 @@ BitVector::operator/=(
   for ( SizeType i = ans_size; i -- > 0; ) {
     p <<= 1;
     if ( tmp1.value(i).is_one() ) {
-      p.mVal0.get()[0] &= ~1U;
-      p.mVal1.get()[0] |= 1U;
+      p.mVal0[0] &= ~1U;
+      p.mVal1[0] |= 1U;
     }
     if ( p >= tmp2 ) {
       p -= tmp2;
-      mVal0.get()[i] &= ~1U;
-      mVal1.get()[i] |= 1U;
+      mVal0[i] &= ~1U;
+      mVal1[i] |= 1U;
     }
   }
 
@@ -393,7 +397,8 @@ BitVector::operator%=(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return operator%=(BitVector(src, ans_size));
@@ -415,8 +420,8 @@ BitVector::operator%=(
   for ( SizeType i = ans_size; i -- > 0; ) {
     operator<<=(1);
     if ( tmp1.value(i).is_one() ) {
-      mVal0.get()[0] &= ~1U;
-      mVal1.get()[0] |= 1U;
+      mVal0[0] &= ~1U;
+      mVal1[0] |= 1U;
     }
     if ( *this >= tmp2 ) {
       operator-=(tmp2);
@@ -448,7 +453,8 @@ BitVector::power(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return power(BitVector(src, ans_size));
@@ -512,10 +518,10 @@ BitVector::lt_base(
 
   auto n = block(src1.size());
   for ( int i = n; i -- > 0; ) {
-    if ( src1.mVal1.get()[i] < src2.mVal1.get()[i] ) {
+    if ( src1.mVal1[i] < src2.mVal1[i] ) {
       return !invert;
     }
-    else if ( src1.mVal1.get()[i] > src2.mVal1.get()[i] ) {
+    else if ( src1.mVal1[i] > src2.mVal1[i] ) {
       return invert;
     }
   }
@@ -595,23 +601,42 @@ BitVector::eq_base(
   int mode
 )
 {
+  if ( src1.is_signed() != src2.is_signed() ) {
+    // 符号の有無が異なっている．
+    return false;
+  }
+
+  // サイズが異なる時は補正してから比較する．
+  if ( src1.size() < src2.size() ) {
+    return eq_base(BitVector(src1, src2.size()), src2, mode);
+  }
+  if ( src1.size() > src2.size() ) {
+    return eq_base(src1, BitVector(src2, src1.size()), mode);
+  }
+
+  auto n = block(src1.size());
   if ( mode == 1 ) {
     // 通常の等価比較
-    return src1.mVal0 == src2.mVal0;
+    for ( SizeType i = 0; i < n - 1; ++ i ) {
+      if ( src1.mVal0[i] != src2.mVal0[i] ) {
+	return false;
+      }
+    }
+    auto m = mask(src1.size());
+    return  (src1.mVal0[n - 1] & m) == (src2.mVal0[n - 1] & m);
   }
 
   if ( mode == 2 ) {
     // x を 0 または 1 と見なす等価比較
-    auto n = block(src1.size());
     for ( SizeType i = 0; i < n - 1; ++ i ) {
-      if ( ((src1.mVal0.get()[i] & src2.mVal0.get()[i]) | (src1.mVal1.get()[i] & src2.mVal1.get()[i]))
+      if ( ((src1.mVal0[i] & src2.mVal0[i]) | (src1.mVal1[i] & src2.mVal1[i]))
 	   != ALL1 ) {
 	return false;
       }
     }
     uword m = mask(src1.size());
-    if ( ((src1.mVal0.get()[n - 1] & src2.mVal0.get()[n - 1]) |
-	  (src1.mVal1.get()[n - 1] & src2.mVal1.get()[n - 1]) |
+    if ( ((src1.mVal0[n - 1] & src2.mVal0[n - 1]) |
+	  (src1.mVal1[n - 1] & src2.mVal1[n - 1]) |
 	  ~m) != ALL1 ) {
       return false;
     }
@@ -619,12 +644,11 @@ BitVector::eq_base(
   }
 
   // x と z を 0 または 1 と見なす等価比較
-  auto n = block(src1.size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    uword val01 = src1.mVal0.get()[i];
-    uword val11 = src1.mVal1.get()[i];
-    uword val02 = src2.mVal0.get()[i];
-    uword val12 = src2.mVal1.get()[i];
+    uword val01 = src1.mVal0[i];
+    uword val11 = src1.mVal1[i];
+    uword val02 = src2.mVal0[i];
+    uword val12 = src2.mVal1[i];
     if ( ((val01 & val02) | (val11 & val12)) != ALL1 &&
 	 ((val01 | val02) & (val11 | val12)) != ALL0 ) {
       return false;
@@ -632,10 +656,10 @@ BitVector::eq_base(
   }
 
   uword m = mask(src1.size());
-  uword val01 = src1.mVal0.get()[n - 1];
-  uword val11 = src1.mVal1.get()[n - 1];
-  uword val02 = src2.mVal0.get()[n - 1];
-  uword val12 = src2.mVal1.get()[n - 1];
+  uword val01 = src1.mVal0[n - 1];
+  uword val11 = src1.mVal1[n - 1];
+  uword val02 = src2.mVal0[n - 1];
+  uword val12 = src2.mVal1[n - 1];
   if ( ((val01 & val02) | (val11 & val12) | ~m ) != ALL1 &&
        ((val01 | val02) & (val11 | val12) &  m ) != ALL0 ) {
     return false;
@@ -644,10 +668,6 @@ BitVector::eq_base(
 }
 
 // @brief 等価比較演算子
-// @param[in] src1, src2 オペランド
-// @retval 1 src1 == src2 の時
-// @retval 0 src1 != src2 の時
-// @retval X 比較不能の時
 VlScalarVal
 eq(
   const BitVector& src1,
@@ -658,16 +678,7 @@ eq(
     return VlScalarVal::x();
   }
 
-  bool ans = false;
-  if ( src1.size() < src2.size() ) {
-    ans = BitVector::eq_base(BitVector(src1, src2.size()), src2, 1);
-  }
-  else if ( src1.size() > src2.size() ) {
-    ans = BitVector::eq_base(src1, BitVector(src2, src1.size()), 1);
-  }
-  else {
-    ans = BitVector::eq_base(src1, src2, 1);
-  }
+  auto ans = BitVector::eq_base(src1, src2, 1);
   if ( ans ) {
     return VlScalarVal::one();
   }
@@ -675,44 +686,26 @@ eq(
 }
 
 // @brief x が 0 および 1 と等価と見なせるとした場合の等価比較演算子
-// @param[in] src1, src2 オペランド
-// @return 等価と見なせるとき true を返す．
 bool
 eq_with_x(
   const BitVector& src1,
   const BitVector& src2
 )
 {
-  if ( src1.size() < src2.size() ) {
-    return BitVector::eq_base(BitVector(src1, src2.size()), src2, 2);
-  }
-  if ( src1.size() > src2.size() ) {
-    return BitVector::eq_base(src1, BitVector(src2, src1.size()), 2);
-  }
   return BitVector::eq_base(src1, src2, 2);
 }
 
 // @brief x および z が 0 および 1 と等価と見なせるとした場合の等価比較演算子
-// @param[in] src1, src2 オペランド
-// @return 等価と見なせるとき true を返す．
 bool
 eq_with_xz(
   const BitVector& src1,
   const BitVector& src2
 )
 {
-  if ( src1.size() < src2.size() ) {
-    return BitVector::eq_base(BitVector(src1, src2.size()), src2, 3);
-  }
-  if ( src1.size() > src2.size() ) {
-    return BitVector::eq_base(src1, BitVector(src2, src1.size()), 3);
-  }
   return BitVector::eq_base(src1, src2, 3);
 }
 
 // @brief 等価比較演算子 (bool)
-// @param[in] src1, src2 オペランド
-// @return 1 src1 == src2 を返す．
 bool
 operator==(
   const BitVector& src1,
@@ -720,14 +713,8 @@ operator==(
 )
 {
   if ( src1.has_xz() || src2.has_xz() ) {
+    // 比較不能の時は false
     return false;
-  }
-
-  if ( src1.size() < src2.size() ) {
-    return BitVector::eq_base(BitVector(src1, src2.size()), src2, 1);
-  }
-  if ( src1.size() > src2.size() ) {
-    return BitVector::eq_base(src1, BitVector(src2, src1.size()), 1);
   }
   return BitVector::eq_base(src1, src2, 1);
 }

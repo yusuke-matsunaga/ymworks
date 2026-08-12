@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -55,33 +55,30 @@ mask(
 
 END_NONAMESPACE
 
-// unsigned int からの変換コンストラクタ
-BitVector::BitVector(
-  unsigned int val
-)
+// 空の変換コンストラクタ
+BitVector::BitVector()
 {
   // サイズなし，符号なし，基数10
-  set(~val, val, kVpiSizeInteger, false, false, 10);
+  set_word(1, 1, 1, false, false, 10);
 }
 
-// @brief 符号なし整数からの代入演算子
-BitVector&
-BitVector::operator=(
-  unsigned int val
-)
-{
-  // サイズなし，符号なし，基数10
-  set(~val, val, kVpiSizeInteger, false, false, 10);
-  return *this;
-}
-
-// unsigned int からの変換コンストラクタ
+// SizeType からの変換コンストラクタ
 BitVector::BitVector(
   SizeType val
 )
 {
+  operator=(val);
+}
+
+// @brief SizeType からの代入演算子
+BitVector&
+BitVector::operator=(
+  SizeType val
+)
+{
   // サイズなし，符号なし，基数10
-  set(~val, val, kVpiSizeInteger, false, false, 10);
+  set_word(~val, val, kVpiSizeInteger, false, false, 10);
+  return *this;
 }
 
 // int からのキャスト用コンストラクタ
@@ -89,8 +86,7 @@ BitVector::BitVector(
   int val
 )
 {
-  // サイズなし，符号あり，基数10
-  set(~val, val, kVpiSizeInteger, false, true, 10);
+  operator=(val);
 }
 
 // @brief int からの代入演算子
@@ -100,7 +96,7 @@ BitVector::operator=(
 )
 {
   // サイズなし，符号あり，基数10
-  set(~val, val, kVpiSizeInteger, false, true, 10);
+  set_word(~val, val, kVpiSizeInteger, false, true, 10);
   return *this;
 }
 
@@ -109,10 +105,7 @@ BitVector::BitVector(
   bool value
 )
 {
-  uword val0 = value ? 1 : 0;
-  uword val1 = 1 - val0;
-  // サイズあり(1)，符号なし，基数2
-  set(val0, val1, 1, true, false, 2);
+  operator=(value);
 }
 
 // @brief bool からの代入演算子
@@ -121,10 +114,10 @@ BitVector::operator=(
   bool value
 )
 {
-  uword val0 = value ? 1 : 0;
-  uword val1 = 1 - val0;
+  uword val1 = value ? 1 : 0;
+  uword val0 = 1 - val1;
   // サイズあり(1)，符号なし，基数2
-  set(val0, val1, 1, true, false, 2);
+  set_word(val0, val1, 1, true, false, 2);
   return *this;
 }
 
@@ -133,13 +126,7 @@ BitVector::BitVector(
   VlTime time
 )
 {
-  // サイズあり, 符号無し, 基数10
-  resize(kVpiSizeTime);
-  set_type(true, false, 10);
-  mVal1.get()[0] = time.low();
-  mVal1.get()[1] = time.high();
-  mVal0.get()[0] = ~mVal1.get()[0];
-  mVal0.get()[1] = ~mVal1.get()[1];
+  operator=(time);
 }
 
 // @brief time 型からの代入演算子
@@ -151,10 +138,10 @@ BitVector::operator=(
   // サイズあり, 符号無し, 基数10
   resize(kVpiSizeTime);
   set_type(true, false, 10);
-  mVal1.get()[0] = time.low();
-  mVal1.get()[1] = time.high();
-  mVal0.get()[0] = ~mVal1.get()[0];
-  mVal0.get()[1] = ~mVal1.get()[1];
+  mVal1[0] = time.low();
+  mVal1[1] = time.high();
+  mVal0[0] = ~mVal1[0];
+  mVal0[1] = ~mVal1[1];
   return *this;
 }
 
@@ -190,13 +177,13 @@ BitVector::BitVector(
     ASSERT_NOT_REACHED;
   }
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    mVal0.get()[i] = val0;
-    mVal1.get()[i] = val1;
+    mVal0[i] = val0;
+    mVal1[i] = val1;
   }
   // 最後のブロックだけはマスクをかける．
   uword m = mask(size);
-  mVal0.get()[n - 1] = val0 | (~m);
-  mVal1.get()[n - 1] = val1 & m;
+  mVal0[n - 1] = val0 | (~m);
+  mVal1[n - 1] = val1 & m;
 }
 
 // brief C文字列からの変換用コンストラクタ
@@ -258,8 +245,8 @@ BitVector::operator=(
       tmp += (static_cast<uword>(c) << (k * 8));
       ++ k;
       if ( k == 4 ) {
-	mVal0.get()[j] = ~tmp;
-	mVal1.get()[j] =  tmp;
+	mVal0[j] = ~tmp;
+	mVal1[j] =  tmp;
 	++ j;
 	k = 0;
 	tmp = 0;
@@ -267,8 +254,8 @@ BitVector::operator=(
     }
     if ( k != 0 ) {
       uword mask = ALL1 << (k * 8);
-      mVal0.get()[j] = ~tmp | mask;
-      mVal1.get()[j] =  tmp;
+      mVal0[j] = ~tmp | mask;
+      mVal1[j] =  tmp;
     }
   }
   return *this;
@@ -279,9 +266,7 @@ BitVector::BitVector(
   double val
 )
 {
-  double r = rint(val);
-  int intval = static_cast<int>(r);
-  set(~intval, intval, BLOCK_SIZE, false, true, 10);
+  operator=(val);
 }
 
 // @brief 浮動小数点数からの代入演算子
@@ -292,7 +277,7 @@ BitVector::operator=(
 {
   double r = rint(val);
   int intval = static_cast<int>(r);
-  set(~intval, intval, BLOCK_SIZE, false, true, 10);
+  set_word(~intval, intval, BLOCK_SIZE, false, true, 10);
   return *this;
 }
 
@@ -304,6 +289,12 @@ BitVector::BitVector(
   const std::string& str
 )
 {
+  {
+    std::cout << "BitVector(size = " << size
+	      << ", is_signed = " << is_signed
+	      << ", base = " << base
+	      << ", str = " << str << ")" << std::endl;
+  }
   bool is_sized = true;
   if ( size == 0 ) {
     size = BLOCK_SIZE;
@@ -340,12 +331,12 @@ BitVector::BitVector(
     uword m = mask(l);
     if ( pos == 0 ) {
       for ( SizeType i = 0; i < b - 1; ++ i ) {
-	mVal0.get()[blk] = bv.mVal0.get()[i];
-	mVal1.get()[blk] = bv.mVal1.get()[i];
+	mVal0[blk] = bv.mVal0[i];
+	mVal1[blk] = bv.mVal1[i];
 	++ blk;
       }
-      mVal0.get()[blk] = bv.mVal0.get()[b - 1] & m;
-      mVal1.get()[blk] = bv.mVal1.get()[b - 1] & m;
+      mVal0[blk] = bv.mVal0[b - 1] & m;
+      mVal1[blk] = bv.mVal1[b - 1] & m;
       pos = s;
       if ( pos == BLOCK_SIZE ) {
 	pos = 0;
@@ -355,23 +346,23 @@ BitVector::BitVector(
     else {
       SizeType rpos = BLOCK_SIZE - pos;
       for ( SizeType i = 0; i < b - 1; ++ i ) {
-	mVal0.get()[blk] |= (bv.mVal0.get()[i] << pos);
-	mVal1.get()[blk] |= (bv.mVal1.get()[i] << pos);
+	mVal0[blk] |= (bv.mVal0[i] << pos);
+	mVal1[blk] |= (bv.mVal1[i] << pos);
 	++ blk;
-	mVal0.get()[blk] |= (bv.mVal0.get()[i] >> rpos);
-	mVal1.get()[blk] |= (bv.mVal1.get()[i] >> rpos);
+	mVal0[blk] |= (bv.mVal0[i] >> rpos);
+	mVal1[blk] |= (bv.mVal1[i] >> rpos);
       }
-      uword val0 = bv.mVal0.get()[b - 1] & m;
-      uword val1 = bv.mVal1.get()[b - 1] & m;
-      mVal0.get()[blk] |= (val0 << pos);
-      mVal1.get()[blk] |= (val1 << pos);
+      uword val0 = bv.mVal0[b - 1] & m;
+      uword val1 = bv.mVal1[b - 1] & m;
+      mVal0[blk] |= (val0 << pos);
+      mVal1[blk] |= (val1 << pos);
       pos += s;
       if ( pos >= BLOCK_SIZE ) {
 	++ blk;
 	pos -= BLOCK_SIZE;
 	if ( pos > 0 ) {
-	  mVal0.get()[blk] |= (val0 >> rpos);
-	  mVal1.get()[blk] |= (val1 >> rpos);
+	  mVal0[blk] |= (val0 >> rpos);
+	  mVal1[blk] |= (val1 >> rpos);
 	}
       }
     }
@@ -383,13 +374,13 @@ BitVector::BitVector(
   const BitVector& src
 ) : mSize{src.mSize},
     mFlags{src.mFlags},
-    mVal0{std::unique_ptr<uword>{new uword[block(mSize)]}},
-    mVal1{std::unique_ptr<uword>{new uword[block(mSize)]}}
+    mVal0{new uword[block(mSize)]},
+    mVal1{new uword[block(mSize)]}
 {
-  int n = block(mSize);
-  for ( int i = 0; i < n; ++ i ) {
-    mVal0.get()[i] = src.mVal0.get()[i];
-    mVal1.get()[i] = src.mVal1.get()[i];
+  auto n = block(mSize);
+  for ( SizeType i = 0; i < n; ++ i ) {
+    mVal0[i] = src.mVal0[i];
+    mVal1[i] = src.mVal1[i];
   }
 }
 
@@ -398,9 +389,11 @@ BitVector::BitVector(
   BitVector&& src
 ) : mSize{src.mSize},
     mFlags{src.mFlags},
-    mVal0{std::move(src.mVal0)},
-    mVal1{std::move(src.mVal1)}
+    mVal0{src.mVal0},
+    mVal1{src.mVal1}
 {
+  src.mVal0 = nullptr;
+  src.mVal1 = nullptr;
 }
 
 // コピー代入演算子
@@ -413,11 +406,13 @@ BitVector::operator=(
     mSize = src.mSize;
     mFlags = src.mFlags;
     SizeType n = block(mSize);
-    mVal0 = std::unique_ptr<uword>{new uword[n]};
-    mVal1 = std::unique_ptr<uword>{new uword[n]};
-    for ( int i = 0; i < n; ++ i ) {
-      mVal0.get()[i] = src.mVal0.get()[i];
-      mVal1.get()[i] = src.mVal1.get()[i];
+    delete [] mVal0;
+    delete [] mVal1;
+    mVal0 = new uword[n];
+    mVal1 = new uword[n];
+    for ( SizeType i = 0; i < n; ++ i ) {
+      mVal0[i] = src.mVal0[i];
+      mVal1[i] = src.mVal1[i];
     }
   }
   return *this;
@@ -431,8 +426,10 @@ BitVector::operator=(
 {
   mSize = src.mSize;
   mFlags = src.mFlags;
-  mVal0 = std::move(src.mVal0);
-  mVal1 = std::move(src.mVal1);
+  mVal0 = src.mVal0;
+  mVal1 = src.mVal1;
+  src.mVal0 = nullptr;
+  src.mVal1 = nullptr;
   return *this;
 }
 
@@ -442,8 +439,8 @@ BitVector::BitVector(
   SizeType size
 )
 {
-  set(src.mVal0.get(), src.mVal1.get(), src.size(), size, true,
-      src.is_signed(), src.base());
+  set_wordptr(src.mVal0, src.mVal1, src.size(), size,
+	      true, src.is_signed(), src.base());
 }
 
 // ビット長の変換と属性の変更を行うコピーコンストラクタもどき
@@ -455,7 +452,15 @@ BitVector::BitVector(
   SizeType base
 )
 {
-  set(src.mVal0.get(), src.mVal1.get(), src.size(), size, is_sized, is_signed, base);
+  set_wordptr(src.mVal0, src.mVal1, src.size(), size,
+	      is_sized, is_signed, base);
+}
+
+// @brief デストラクタ
+BitVector::~BitVector()
+{
+  delete [] mVal0;
+  delete [] mVal1;
 }
 
 // @brief スカラ値からの代入演算子
@@ -468,20 +473,20 @@ BitVector::operator=(
   set_type(true, false, 2);
 
   if ( value.is_zero() ) {
-    mVal0.get()[0] = 1;
-    mVal1.get()[0] = 0;
+    mVal0[0] = 1;
+    mVal1[0] = 0;
   }
   else if ( value.is_one() ) {
-    mVal0.get()[0] = 0;
-    mVal1.get()[0] = 1;
+    mVal0[0] = 0;
+    mVal1[0] = 1;
   }
   else if ( value.is_x() ) {
-    mVal0.get()[0] = 1;
-    mVal1.get()[0] = 1;
+    mVal0[0] = 1;
+    mVal1[0] = 1;
   }
   else if ( value.is_z() ) {
-    mVal0.get()[0] = 0;
-    mVal1.get()[0] = 0;
+    mVal0[0] = 0;
+    mVal1[0] = 0;
   }
   else {
     ASSERT_NOT_REACHED;
@@ -499,7 +504,8 @@ BitVector::set_with_attr(
   SizeType base
 )
 {
-  set(src.mVal0.get(), src.mVal1.get(), src.size(), size, is_sized, is_signed, base);
+  set_wordptr(src.mVal0, src.mVal1,
+	      src.size(), size, is_sized, is_signed, base);
 }
 
 // Verilog-HDL (IEEE1364-2001) の形式の文字列からの値をセットする．
@@ -569,10 +575,10 @@ BitVector::set_from_verilog_string(
   }
 
   switch ( base ) {
-  case  2: set_from_binstring(size, is_sized, is_signed, str, 0); break;
-  case  8: set_from_octstring(size, is_sized, is_signed, str, 0); break;
-  case 10: set_from_decstring(size, is_sized, is_signed, str, 0); break;
-  case 16: set_from_hexstring(size, is_sized, is_signed, str, 0); break;
+  case  2: set_from_binstring(size, is_sized, is_signed, str, pos); break;
+  case  8: set_from_octstring(size, is_sized, is_signed, str, pos); break;
+  case 10: set_from_decstring(size, is_sized, is_signed, str, pos); break;
+  case 16: set_from_hexstring(size, is_sized, is_signed, str, pos); break;
   default: std::cerr << "illegal base : " << base << std::endl;
   }
 
@@ -594,7 +600,8 @@ BitVector::coerce(
       set_type(is_sized, is_signed, base());
     }
     else {
-      set(mVal0.get(), mVal1.get(), size(), req_size, is_sized, is_signed, base());
+      set_wordptr(mVal0, mVal1, size(), req_size,
+		  is_sized, is_signed, base());
     }
   }
 
@@ -692,7 +699,8 @@ BitVector::set_from_binstring(
   // この文字列の先頭に - はつかないので結果は必ず非負の数だが，
   // MSBが1の場合にこれをそのまま符号つき数とみなすと符号拡張して
   // しまうのでいったん符号なし数として拡張した後で符号付きに変えている．
-  set(val0,val1, src_size, size, is_sized, false, 2);
+  set_wordptr(val0, val1, src_size,
+	      size, is_sized, false, 2);
   if ( is_signed ) {
     set_type(is_sized, true, 2);
   }
@@ -768,7 +776,8 @@ BitVector::set_from_octstring(
   // この文字列の先頭に - はつかないので結果は必ず非負の数だが，
   // MSBが1の場合にこれをそのまま符号つき数とみなすと符号拡張して
   // しまうのでいったん符号なし数として拡張した後で符号付きに変えている．
-  set(val0, val1, src_size, size, is_sized, false, 8);
+  set_wordptr(val0, val1, src_size,
+	      size, is_sized, false, 8);
   if ( is_signed ) {
     set_type(is_sized, true, 8);
   }
@@ -794,28 +803,26 @@ BitVector::set_from_decstring(
   for ( ; pos < end; ++ pos ) {
     char c = str[pos];
     if ( c < '0' || '9' < c ) {
-      // 本当は例外を投げるのがいいな．
-      std::cerr << "illegal character (" << c << ") in string "
-		<< str << std::endl;
-      return;
+      std::ostringstream buf;
+      buf << "illegal character (" << c << ") in string "
+	  << str;
+      throw std::logic_error{buf.str()};
     }
-    else {
-      auto n = val1.size();
-      uword carry = c - '0';
-      for ( SizeType i = 0; i < n; ++ i ) {
-	uword tmp = val1[i];
-	uword u = tmp >> sft;
-	uword l = tmp - (u << sft);
-	uword u10 = u * 10;
-	uword l10 = l * 10;
-	val1[i] = carry + l10 + ((u10 % 16) << sft);
-	val0[i] = ~val1[i];
-	carry = u10 / 16;
-      }
-      if ( carry ) {
-	val1.push_back(carry);
-	val0.push_back(~carry);
-      }
+    auto n = val1.size();
+    uword carry = c - '0';
+    for ( SizeType i = 0; i < n; ++ i ) {
+      uword tmp = val1[i];
+      uword u = tmp >> sft;
+      uword l = tmp - (u << sft);
+      uword u10 = u * 10;
+      uword l10 = l * 10;
+      val1[i] = carry + l10 + ((u10 % 16) << sft);
+      val0[i] = ~val1[i];
+      carry = u10 / 16;
+    }
+    if ( carry ) {
+      val1.push_back(carry);
+      val0.push_back(~carry);
     }
   }
   auto last = val1.size();
@@ -838,7 +845,8 @@ BitVector::set_from_decstring(
   // この文字列の先頭に - はつかないので結果は必ず非負の数だが，
   // MSBが1の場合にこれをそのまま符号つき数とみなすと符号拡張して
   // しまうのでいったん符号なし数として拡張した後で符号付きに変えている．
-  set(val0, val1, src_size, size, is_sized, false, 10);
+  set_wordvector(val0, val1, src_size,
+		 size, is_sized, false, 10);
   if ( is_signed ) {
     set_type(is_sized, true, 10);
   }
@@ -912,7 +920,8 @@ BitVector::set_from_hexstring(
   // この文字列の先頭に - はつかないので結果は必ず非負の数だが，
   // MSBが1の場合にこれをそのまま符号つき数とみなすと符号拡張して
   // しまうのでいったん符号なし数として拡張した後で符号付きに変えている．
-  set(val0, val1, src_size, size, is_sized, false, 16);
+  set_wordptr(val0, val1, src_size,
+	      size, is_sized, false, 16);
   if ( is_signed ) {
     set_type(is_sized, true, 16);
   }
@@ -938,8 +947,8 @@ BitVector::set_from_string(
     tmp += (static_cast<uword>(c) << (k * 8));
     ++ k;
     if ( k == 4 ) {
-      mVal0.get()[j] = ~tmp;
-      mVal1.get()[j] =  tmp;
+      mVal0[j] = ~tmp;
+      mVal1[j] =  tmp;
       ++ j;
       k = 0;
       tmp = 0;
@@ -947,8 +956,8 @@ BitVector::set_from_string(
   }
   if ( k != 0 ) {
     uword mask = ALL1 << (k * 8);
-    mVal0.get()[j] = ~tmp | mask;
-    mVal1.get()[j] = tmp;
+    mVal0[j] = ~tmp | mask;
+    mVal1[j] = tmp;
   }
 }
 

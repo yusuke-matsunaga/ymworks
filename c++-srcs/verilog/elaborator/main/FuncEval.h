@@ -9,9 +9,9 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ym/vl/VlFwd.h"
-#include "ym/VlValue.h"
+#include "ym/vl/VlValue.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/VlModule.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ElbFwd.h"
 
 
@@ -31,19 +31,19 @@ public:
   virtual
   void
   add_iodecl(
-    ElbIOHead* head,         ///< [in] ヘッダ
-    const PtIOItem* pt_item, ///< [in] パース木のIO宣言要素
-    const VlDecl* decl       ///< [in] 対応する宣言要素
+    ElbIOHead* head,           ///< [in] ヘッダ
+    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
+    const VlDecl* decl         ///< [in] 対応する宣言要素
   ) = 0;
 
   /// @brief ポートの初期設定を行う．
   virtual
   void
   init_port(
-    SizeType index,        ///< [in] ポート番号
-    const PtPort* pt_port, ///< [in] パース木のポート定義
-    ElbExpr* low_conn,     ///< [in] 下位の接続
-    VpiDir dir             ///< [in] 向き
+    SizeType index,          ///< [in] ポート番号
+    const AstPort* ast_port, ///< [in] パース木のポート定義
+    ElbExpr* low_conn,       ///< [in] 下位の接続
+    VpiDir dir               ///< [in] 向き
   ) = 0;
 
   /// @brief ポートの high_conn を接続する．

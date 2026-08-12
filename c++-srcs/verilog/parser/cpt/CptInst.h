@@ -5,7 +5,7 @@
 /// @brief CptInst のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "CptItem.h"
@@ -25,11 +25,15 @@ public:
   CptGateH(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    PtiInstArray&& inst_array
-  );
+    PtInstArray&& inst_array
+  ) : mFileRegion{file_region},
+      mPrimType{prim_type},
+      mInstArray{std::move(inst_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptGateH();
+  ~CptGateH() {}
 
 
 public:
@@ -42,7 +46,7 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  PtItemType
+  Type
   type() const override;
 
   /// @brief プリミティブタイプを返す．
@@ -54,7 +58,7 @@ public:
   inst_num() const override;
 
   /// @brief module/UDP/gate instance の取得
-  const PtInst*
+  const AstInst*
   inst(
     SizeType pos ///< [in] 位置 ( 0 <= pos < inst_num() )
   ) const override;
@@ -72,7 +76,7 @@ private:
   VpiPrimType mPrimType;
 
   // 要素の配列
-  PtiInstArray mInstArray;
+  PtInstArray mInstArray;
 
 };
 
@@ -89,12 +93,15 @@ public:
   CptGateHS(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    const PtStrength* strength,
-    PtiInstArray&& inst_array
-  );
+    const AstStrength* strength,
+    PtInstArray&& inst_array
+  ) : CptGateH(file_region, prim_type, std::move(inst_array)),
+      mStrength{strength}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptGateHS();
+  ~CptGateHS() {}
 
 
 public:
@@ -103,7 +110,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
 
@@ -113,7 +120,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const PtStrength* mStrength;
+  const AstStrength* mStrength;
 
 };
 
@@ -130,12 +137,15 @@ public:
   CptGateHD(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    const PtDelay* delay,
-    PtiInstArray&& inst_array
-  );
+    const AstDelay* delay,
+    PtInstArray&& inst_array
+  ) : CptGateH(file_region, prim_type, std::move(inst_array)),
+      mDelay{delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptGateHD();
+  ~CptGateHD() {}
 
 
 public:
@@ -144,7 +154,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief delay を返す．
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
 
@@ -154,7 +164,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // delay
-  const PtDelay* mDelay;
+  const AstDelay* mDelay;
 
 };
 
@@ -171,13 +181,17 @@ public:
   CptGateHSD(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    const PtStrength* strength,
-    const PtDelay* delay,
-    PtiInstArray&& inst_array
-  );
+    const AstStrength* strength,
+    const AstDelay* delay,
+    PtInstArray&& inst_array
+  ) : CptGateH(file_region, prim_type, std::move(inst_array)),
+      mStrength{strength},
+      mDelay{delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptGateHSD();
+  ~CptGateHSD() {}
 
 
 public:
@@ -186,11 +200,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
   /// @brief delay を返す．
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
 
@@ -200,10 +214,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const PtStrength* mStrength;
+  const AstStrength* mStrength;
 
   // delay
-  const PtDelay* mDelay;
+  const AstDelay* mDelay;
 
 };
 
@@ -220,11 +234,15 @@ public:
   CptMuH(
     const FileRegion& file_region,
     const char* def_name,
-    PtiInstArray&& inst_array
-  );
+    PtInstArray&& inst_array
+  ) : mFileRegion{file_region},
+      mName{def_name},
+      mInstArray{std::move(inst_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptMuH() override;
+  ~CptMuH() {}
 
 
 public:
@@ -237,7 +255,7 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  PtItemType
+  Type
   type() const override;
 
   /// @brief 定義名を返す．
@@ -249,7 +267,7 @@ public:
   inst_num() const override;
 
   /// @brief module/UDP/gate instance の取得
-  const PtInst*
+  const AstInst*
   inst(
     SizeType pos ///< [in] 位置 ( 0 <= pos < inst_num() )
   ) const override;
@@ -267,7 +285,7 @@ private:
   const char* mName;
 
   // 要素の配列
-  PtiInstArray mInstArray;
+  PtInstArray mInstArray;
 
 };
 
@@ -284,12 +302,15 @@ public:
   CptMuHP(
     const FileRegion& file_region,
     const char* def_name,
-    PtiConnectionArray&& con_array,
-    PtiInstArray&& inst_array
-  );
+    PtConnectionArray&& con_array,
+    PtInstArray&& inst_array
+  ) : CptMuH(file_region, def_name, std::move(inst_array)),
+      mParamAssignArray{std::move(con_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptMuHP();
+  ~CptMuHP() {}
 
 
 public:
@@ -302,7 +323,7 @@ public:
   paramassign_num() const override;
 
   /// @brief パラメータ割り当ての取得
-  const PtConnection*
+  const AstConnection*
   paramassign(
     SizeType pos ///< [in] 位置 ( 0 <= pos < paramassign_num() )
   ) const override;
@@ -314,7 +335,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パラメータ割り当ての配列
-  PtiConnectionArray mParamAssignArray;
+  PtConnectionArray mParamAssignArray;
 
 };
 
@@ -331,12 +352,15 @@ public:
   CptMuHS(
     const FileRegion& file_region,
     const char* def_name,
-    const PtStrength* strength,
-    PtiInstArray&& inst_array
-  );
+    const AstStrength* strength,
+    PtInstArray&& inst_array
+  ) : CptMuH(file_region, def_name, std::move(inst_array)),
+      mStrength{strength}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptMuHS();
+  ~CptMuHS() {}
 
 
 public:
@@ -345,7 +369,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
 
@@ -355,7 +379,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const PtStrength* mStrength;
+  const AstStrength* mStrength;
 
 };
 
@@ -372,12 +396,15 @@ public:
   CptMuHD(
     const FileRegion& file_region,
     const char* def_name,
-    const PtDelay* delay,
-    PtiInstArray&& inst_array
-  );
+    const AstDelay* delay,
+    PtInstArray&& inst_array
+  ) : CptMuH(file_region, def_name, std::move(inst_array)),
+      mDelay{delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptMuHD();
+  ~CptMuHD() {}
 
 
 public:
@@ -386,7 +413,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief delay を返す．
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
 
@@ -396,7 +423,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // delay
-  const PtDelay* mDelay;
+  const AstDelay* mDelay;
 
 };
 
@@ -413,13 +440,17 @@ public:
   CptMuHSD(
     const FileRegion& file_region,
     const char* def_name,
-    const PtStrength* strength,
-    const PtDelay* delay,
-    PtiInstArray&& inst_array
-  );
+    const AstStrength* strength,
+    const AstDelay* delay,
+    PtInstArray&& inst_array
+  ) : CptMuH(file_region, def_name, std::move(inst_array)),
+      mStrength{strength},
+      mDelay{delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptMuHSD();
+  ~CptMuHSD() {}
 
 
 public:
@@ -428,11 +459,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const PtStrength*
+  const AstStrength*
   strength() const override;
 
   /// @brief delay を返す．
-  const PtDelay*
+  const AstDelay*
   delay() const override;
 
 
@@ -442,10 +473,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const PtStrength* mStrength;
+  const AstStrength* mStrength;
 
   // delay
-  const PtDelay* mDelay;
+  const AstDelay* mDelay;
 
 };
 
@@ -461,11 +492,14 @@ public:
   /// @brief コンストラクタ
   CptInst(
     const FileRegion& file_region,
-    PtiConnectionArray&& con_array
-  );
+    PtConnectionArray&& con_array
+  ) : mFileRegion{file_region},
+      mPortArray{std::move(con_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptInst();
+  ~CptInst() {}
 
 
 public:
@@ -484,7 +518,7 @@ public:
 
   /// @brief 範囲の取得
   /// @return 範囲
-  const PtRange*
+  const AstRange*
   range() const override;
 
   /// @brief ポートの要素数の取得
@@ -492,7 +526,7 @@ public:
   port_num() const override;
 
   /// @brief ポートの取得
-  const PtConnection*
+  const AstConnection*
   port(
     SizeType pos ///< [in] 位置 ( 0 <= pos < port_num() )
   ) const override;
@@ -507,7 +541,7 @@ private:
   FileRegion mFileRegion;
 
   // ポート割り当ての配列
-  PtiConnectionArray mPortArray;
+  PtConnectionArray mPortArray;
 
 };
 
@@ -524,11 +558,14 @@ public:
   CptInstN(
     const FileRegion& file_region,
     const char* name,
-    PtiConnectionArray&& con_array
-  );
+    PtConnectionArray&& con_array
+  ) : CptInst(file_region, std::move(con_array)),
+      mName{name}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptInstN();
+  ~CptInstN() {}
 
 
 public:
@@ -564,12 +601,15 @@ public:
   CptInstR(
     const FileRegion& file_region,
     const char* name,
-    const PtRange* range,
-    PtiConnectionArray&& con_array
-  );
+    const AstRange* range,
+    PtConnectionArray&& con_array
+  ) : CptInstN(file_region, name, std::move(con_array)),
+      mRange{range}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptInstR();
+  ~CptInstR() {}
 
 
 public:
@@ -578,7 +618,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 範囲を取出す．
-  const PtRange*
+  const AstRange*
   range() const override;
 
 
@@ -588,7 +628,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const PtRange* mRange;
+  const AstRange* mRange;
 
 };
 

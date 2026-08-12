@@ -5,11 +5,11 @@
 /// @brief EiAttribute のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/vl/VlAttribute.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,9 +25,9 @@ public:
 
   /// @brief コンストラクタ
   EiAttribute(
-    const PtAttrSpec* pt_attr, ///< [in] パース木の定義要素
-    const VlExpr* expr,        ///< [in] 値
-    bool def                   ///< [in] 定義側の属性の時 true
+    const AstAttrSpec* ast_attr, ///< [in] パース木の定義要素
+    const VlExpr* expr,          ///< [in] 値
+    bool def                     ///< [in] 定義側の属性の時 true
   );
 
   /// @brief デストラクタ
@@ -72,7 +72,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const PtAttrSpec* mPtAttrSpec;
+  const AstAttrSpec* mAstAttrSpec;
 
   // 値
   const VlExpr* mExpr;

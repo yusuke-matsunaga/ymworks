@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -123,11 +123,11 @@ BitVector::negate()
   // z のビットは x にするのでともに1と立てる
   auto n = block(size());
   for ( SizeType i = 0; i < n; ++ i ) {
-    uword pat0 = mVal0.get()[i];
-    uword pat1 = mVal1.get()[i];
+    uword pat0 = mVal0[i];
+    uword pat1 = mVal1[i];
     uword zpat = ~pat0 & ~pat1; // 1 なら Z
-    mVal0.get()[i] = pat1 | zpat;
-    mVal1.get()[i] = pat0 | zpat;
+    mVal0[i] = pat1 | zpat;
+    mVal1[i] = pat0 | zpat;
   }
   return *this;
 }
@@ -151,7 +151,8 @@ BitVector::operator&=(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
 
   if ( src.size() < ans_size ) {
@@ -164,22 +165,22 @@ BitVector::operator&=(
   // z を含んでいたときが例外となる．
   auto n = block(size());
   for ( SizeType i = 0; i < n; ++ i ) {
-    uword val1_0 = mVal0.get()[i];
-    uword val1_1 = mVal1.get()[i];
+    uword val1_0 = mVal0[i];
+    uword val1_1 = mVal1[i];
     uword zpat;
     // z のパタンを x に直しておく．
     zpat = ~val1_0 & ~val1_1;
     val1_0 |= zpat;
     val1_1 |= zpat;
-    uword val2_0 = src.mVal0.get()[i];
-    uword val2_1 = src.mVal1.get()[i];
+    uword val2_0 = src.mVal0[i];
+    uword val2_1 = src.mVal1[i];
     // z のパタンを x に直しておく．
     zpat = ~val2_0 & ~val2_1;
     val2_0 |= zpat;
     val2_1 |= zpat;
 
-    mVal0.get()[i] = val1_0 | val2_0;
-    mVal1.get()[i] = val1_1 & val2_1;
+    mVal0[i] = val1_0 | val2_0;
+    mVal1[i] = val1_1 & val2_1;
   }
 
   return *this;
@@ -204,7 +205,8 @@ BitVector::operator|=(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
 
   if ( src.size() < ans_size ) {
@@ -217,22 +219,22 @@ BitVector::operator|=(
   // z を含んでいたときが例外となる．
   auto n = block(size());
   for ( SizeType i = 0; i < n; ++ i ) {
-    uword val1_0 = mVal0.get()[i];
-    uword val1_1 = mVal1.get()[i];
+    uword val1_0 = mVal0[i];
+    uword val1_1 = mVal1[i];
     uword zpat;
     // z のパタンを x に直しておく．
     zpat = ~val1_0 & ~val1_1;
     val1_0 |= zpat;
     val1_1 |= zpat;
-    uword val2_0 = src.mVal0.get()[i];
-    uword val2_1 = src.mVal1.get()[i];
+    uword val2_0 = src.mVal0[i];
+    uword val2_1 = src.mVal1[i];
     // z のパタンを x に直しておく．
     zpat = ~val2_0 & ~val2_1;
     val2_0 |= zpat;
     val2_1 |= zpat;
 
-    mVal0.get()[i] = val1_0 & val2_0;
-    mVal1.get()[i] = val1_1 | val2_1;
+    mVal0[i] = val1_0 & val2_0;
+    mVal1[i] = val1_1 | val2_1;
   }
 
   return *this;
@@ -257,7 +259,8 @@ BitVector::operator^=(
   }
 
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
 
   if ( src.size() < ans_size ) {
@@ -269,22 +272,22 @@ BitVector::operator^=(
   // 計算の仕方は否定とANDとORを組み合わせたもの
   auto n = block(size());
   for ( SizeType i = 0; i < n; ++ i ) {
-    uword val1_0 = mVal0.get()[i];
-    uword val1_1 = mVal1.get()[i];
+    uword val1_0 = mVal0[i];
+    uword val1_1 = mVal1[i];
     uword zpat;
     // z のパタンを x に直しておく．
     zpat = ~val1_0 & ~val1_1;
     val1_0 |= zpat;
     val1_1 |= zpat;
-    uword val2_0 = mVal0.get()[i];
-    uword val2_1 = mVal1.get()[i];
+    uword val2_0 = mVal0[i];
+    uword val2_1 = mVal1[i];
     // z のパタンを x に直しておく．
     zpat = ~val2_0 & ~val2_1;
     val2_0 |= zpat;
     val2_1 |= zpat;
 
-    mVal0.get()[i] = (val1_0 | val2_1) & (val1_1 | val2_0);
-    mVal1.get()[i] = (val1_1 & val2_0) | (val1_0 & val2_1);
+    mVal0[i] = (val1_0 | val2_1) & (val1_1 | val2_0);
+    mVal1[i] = (val1_1 & val2_0) | (val1_0 & val2_1);
   }
 
   return *this;
@@ -310,12 +313,12 @@ BitVector::reduction_and() const
   auto n = block(size());
   uword m = mask(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    if ( mVal0.get()[i] ) {
+    if ( mVal0[i] ) {
       // 1 ビットでも 0 のビットがあれば結果は0
       return VlScalarVal::zero();
     }
   }
-  if ( mVal0.get()[n - 1] & m ) {
+  if ( mVal0[n - 1] & m ) {
     // 1 ビットでも 0 のビットがあれば結果は0
     return VlScalarVal::zero();
   }
@@ -333,12 +336,12 @@ BitVector::reduction_nand() const
   auto n = block(size());
   uword m = mask(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    if ( mVal0.get()[i] ) {
+    if ( mVal0[i] ) {
       // 1 ビットでも 0 のビットがあれば結果は1
       return VlScalarVal::one();
     }
   }
-  if ( mVal0.get()[n - 1] & m ) {
+  if ( mVal0[n - 1] & m ) {
     // 1 ビットでも 0 のビットがあれば結果は1
     return VlScalarVal::one();
   }
@@ -355,12 +358,12 @@ BitVector::reduction_or() const
   auto n = block(size());
   uword m = mask(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    if ( mVal1.get()[i] ) {
+    if ( mVal1[i] ) {
       // 1 ビットでも 1 のビットがあれば結果は1
       return VlScalarVal::one();
     }
   }
-  if ( mVal1.get()[n - 1] & m ) {
+  if ( mVal1[n - 1] & m ) {
     // 1 ビットでも 1 のビットがあれば結果は1
     return VlScalarVal::one();
   }
@@ -377,12 +380,12 @@ BitVector::reduction_nor() const
   auto n = block(size());
   uword m = mask(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    if ( mVal1.get()[i] ) {
+    if ( mVal1[i] ) {
       // 1 ビットでも 1 のビットがあれば結果は0
       return VlScalarVal::zero();
     }
   }
-  if ( mVal1.get()[n - 1] & m ) {
+  if ( mVal1[n - 1] & m ) {
     // 1 ビットでも 1 のビットがあれば結果は0
     return VlScalarVal::zero();
   }
@@ -402,14 +405,14 @@ BitVector::reduction_xor() const
   uword v = 0;
   for ( SizeType i = 0; i < n - 1; ++ i ) {
     for ( int b = 0; b < BLOCK_SIZE; b ++ ) {
-      if ( (mVal1.get()[i] >> b) & 1 ) {
+      if ( (mVal1[i] >> b) & 1 ) {
 	v ^= 1;
       }
     }
   }
   auto s = shift(size());
   for ( SizeType b = 0; b < s; b ++ ) {
-    if ( (mVal1.get()[n - 1] >> b) & 1 ) {
+    if ( (mVal1[n - 1] >> b) & 1 ) {
       v ^= 1;
     }
   }
@@ -434,14 +437,14 @@ BitVector::reduction_xnor() const
   uword v = 0;
   for ( SizeType i = 0; i < n - 1; ++ i ) {
     for ( SizeType b = 0; b < BLOCK_SIZE; b ++ ) {
-      if ( (mVal1.get()[i] >> b) & 1 ) {
+      if ( (mVal1[i] >> b) & 1 ) {
 	v ^= 1;
       }
     }
   }
   auto s = shift(size());
   for ( SizeType b = 0; b < s; ++ b ) {
-    if ( (mVal1.get()[n - 1] >> b) & 1 ) {
+    if ( (mVal1[n - 1] >> b) & 1 ) {
       v ^= 1;
     }
   }
@@ -501,24 +504,24 @@ BitVector::operator<<=(
   if ( bit_sft == 0 ) {
     // この向きでコピーしないと破壊してしまう．
     for ( int i = en; i -- > 0; ) {
-      mVal0.get()[i + blk_sft] = mVal0.get()[i];
-      mVal1.get()[i + blk_sft] = mVal1.get()[i];
+      mVal0[i + blk_sft] = mVal0[i];
+      mVal1[i + blk_sft] = mVal1[i];
     }
   }
   else {
     for ( int i = en; i -- > 0; ) {
-      uword lval0 = (mVal0.get()[i] << bit_sft);
-      uword lval1 = (mVal1.get()[i] << bit_sft);
-      uword rval0 = ((i > 0) ? mVal0.get()[i - 1] : ALL1) >> rbit_sft;
-      uword rval1 = ((i > 0) ? mVal1.get()[i - 1] : ALL0) >> rbit_sft;
-      mVal0.get()[i + blk_sft] = lval0 | rval0;
-      mVal1.get()[i + blk_sft] = lval1 | rval1;
+      uword lval0 = (mVal0[i] << bit_sft);
+      uword lval1 = (mVal1[i] << bit_sft);
+      uword rval0 = ((i > 0) ? mVal0[i - 1] : ALL1) >> rbit_sft;
+      uword rval1 = ((i > 0) ? mVal1[i - 1] : ALL0) >> rbit_sft;
+      mVal0[i + blk_sft] = lval0 | rval0;
+      mVal1[i + blk_sft] = lval1 | rval1;
     }
   }
   // 空のブロックを詰める
   for ( SizeType i = 0; i < blk_sft; ++ i ) {
-    mVal0.get()[i] = ALL1;
-    mVal1.get()[i] = ALL0;
+    mVal0[i] = ALL1;
+    mVal1[i] = ALL0;
   }
 
   return *this;
@@ -561,24 +564,24 @@ BitVector::operator>>=(
 
   if ( bit_sft == 0 ) {
     for ( SizeType i = blk_sft; i < n; ++ i ) {
-      mVal0.get()[i - blk_sft] = mVal0.get()[i];
-      mVal1.get()[i - blk_sft] = mVal1.get()[i];
+      mVal0[i - blk_sft] = mVal0[i];
+      mVal1[i - blk_sft] = mVal1[i];
     }
   }
   else {
     for ( SizeType i = blk_sft; i < n; ++ i ) {
-      uword r0 = mVal0.get()[i] >> bit_sft;
-      uword r1 = mVal1.get()[i] >> bit_sft;
-      uword l0 = ((i < n - 1) ? mVal0.get()[i + 1] : ALL1) << lbit_sft;
-      uword l1 = ((i < n - 1) ? mVal1.get()[i + 1] : ALL0) << lbit_sft;
-      mVal0.get()[i - blk_sft] = l0 | r0;
-      mVal1.get()[i - blk_sft] = l1 | r1;
+      uword r0 = mVal0[i] >> bit_sft;
+      uword r1 = mVal1[i] >> bit_sft;
+      uword l0 = ((i < n - 1) ? mVal0[i + 1] : ALL1) << lbit_sft;
+      uword l1 = ((i < n - 1) ? mVal1[i + 1] : ALL0) << lbit_sft;
+      mVal0[i - blk_sft] = l0 | r0;
+      mVal1[i - blk_sft] = l1 | r1;
     }
   }
   // 上位ビットに0を詰めておく．
   for ( SizeType i = n - blk_sft; i < n; ++ i ) {
-    mVal0.get()[i] = ALL1;
-    mVal1.get()[i] = ALL0;
+    mVal0[i] = ALL1;
+    mVal1[i] = ALL0;
   }
   return *this;
 }
@@ -627,23 +630,23 @@ BitVector::arshift(
 
   if ( bit_sft == 0 ) {
     for ( SizeType i = blk_sft; i < n; ++ i ) {
-      mVal0.get()[i - blk_sft] = mVal0.get()[i];
-      mVal1.get()[i - blk_sft] = mVal1.get()[i];
+      mVal0[i - blk_sft] = mVal0[i];
+      mVal1[i - blk_sft] = mVal1[i];
     }
   }
   else {
     for ( SizeType i = blk_sft; i < n; ++ i ) {
-      uword r0 = mVal0.get()[i] >> bit_sft;
-      uword r1 = mVal1.get()[i] >> bit_sft;
-      uword l0 = ((i < n - 1) ? mVal0.get()[i + 1] : pad0) << lbit_sft;
-      uword l1 = ((i < n - 1) ? mVal1.get()[i + 1] : pad1) << lbit_sft;
-      mVal0.get()[i - blk_sft] = l0 | r0;
-      mVal1.get()[i - blk_sft] = l1 | r1;
+      uword r0 = mVal0[i] >> bit_sft;
+      uword r1 = mVal1[i] >> bit_sft;
+      uword l0 = ((i < n - 1) ? mVal0[i + 1] : pad0) << lbit_sft;
+      uword l1 = ((i < n - 1) ? mVal1[i + 1] : pad1) << lbit_sft;
+      mVal0[i - blk_sft] = l0 | r0;
+      mVal1[i - blk_sft] = l1 | r1;
     }
   }
   for ( SizeType i = n - blk_sft; i < n; ++ i ) {
-    mVal0.get()[i] = pad0;
-    mVal1.get()[i] = pad1;
+    mVal0[i] = pad0;
+    mVal1[i] = pad1;
   }
   return *this;
 }
@@ -802,65 +805,65 @@ BitVector::part_select_op(
 
   if ( sft0 == 0 ) {
     for ( SizeType i = 0; i < src_blk - 1; ++ i ) {
-      mVal0.get()[i + blk0] = val.mVal0.get()[i];
-      mVal1.get()[i + blk0] = val.mVal1.get()[i];
+      mVal0[i + blk0] = val.mVal0[i];
+      mVal1[i + blk0] = val.mVal1[i];
     }
-    mVal0.get()[src_blk + blk0 - 1] &= ~src_mask;
-    mVal0.get()[src_blk + blk0 - 1] |=  src_mask & val.mVal0.get()[src_blk - 1];
-    mVal1.get()[src_blk + blk0 - 1] &= ~src_mask;
-    mVal1.get()[src_blk + blk0 - 1] |=  src_mask & val.mVal1.get()[src_blk - 1];
+    mVal0[src_blk + blk0 - 1] &= ~src_mask;
+    mVal0[src_blk + blk0 - 1] |=  src_mask & val.mVal0[src_blk - 1];
+    mVal1[src_blk + blk0 - 1] &= ~src_mask;
+    mVal1[src_blk + blk0 - 1] |=  src_mask & val.mVal1[src_blk - 1];
   }
   else {
     if ( src_blk == 1 ) {
-      uword val0 = val.mVal0.get()[0] & src_mask;
-      uword val1 = val.mVal1.get()[0] & src_mask;
+      uword val0 = val.mVal0[0] & src_mask;
+      uword val1 = val.mVal1[0] & src_mask;
       uword lval0 = val0 << sft0;
       uword rval0 = val0 >> (BLOCK_SIZE - sft0);
       uword lval1 = val1 << sft0;
       uword rval1 = val1 >> (BLOCK_SIZE - sft0);
       uword lsrc_mask = src_mask << sft0;
       uword rsrc_mask = src_mask >> (BLOCK_SIZE - sft0);
-      mVal0.get()[blk0] &= ~lsrc_mask;
-      mVal0.get()[blk0] |=  lval0;
-      mVal1.get()[blk0] &= ~lsrc_mask;
-      mVal1.get()[blk0] |=  lval1;
+      mVal0[blk0] &= ~lsrc_mask;
+      mVal0[blk0] |=  lval0;
+      mVal1[blk0] &= ~lsrc_mask;
+      mVal1[blk0] |=  lval1;
       if ( rsrc_mask ) {
-	mVal0.get()[blk0 + 1] &= ~rsrc_mask;
-	mVal0.get()[blk0 + 1] |=  rval0;
-	mVal1.get()[blk0 + 1] &= ~rsrc_mask;
-	mVal1.get()[blk0 + 1] |=  rval1;
+	mVal0[blk0 + 1] &= ~rsrc_mask;
+	mVal0[blk0 + 1] |=  rval0;
+	mVal1[blk0 + 1] &= ~rsrc_mask;
+	mVal1[blk0 + 1] |=  rval1;
       }
     }
     else {
-      uword val0 = val.mVal0.get()[0];
-      uword val1 = val.mVal1.get()[0];
+      uword val0 = val.mVal0[0];
+      uword val1 = val.mVal1[0];
       uword lval0 = val0 << sft0;
       uword rval0 = val0 >> (BLOCK_SIZE - sft0);
       uword lval1 = val1 << sft0;
       uword rval1 = val1 >> (BLOCK_SIZE - sft0);
       uword lmask = ALL1 << sft0;
       uword rmask = ALL1 >> (BLOCK_SIZE - sft0);
-      mVal0.get()[blk0] &= ~lmask;
-      mVal0.get()[blk0] |= lval0;
-      mVal1.get()[blk0] &= ~lmask;
-      mVal1.get()[blk0] |= lval1;
+      mVal0[blk0] &= ~lmask;
+      mVal0[blk0] |= lval0;
+      mVal1[blk0] &= ~lmask;
+      mVal1[blk0] |= lval1;
       for ( SizeType i = 1; i < src_blk - 1; ++ i ) {
-	val0 = val.mVal0.get()[i];
-	val1 = val.mVal1.get()[i];
+	val0 = val.mVal0[i];
+	val1 = val.mVal1[i];
 	lval0 = val0 << sft0;
 	lval1 = val1 << sft0;
-	mVal0.get()[blk0 + i] = lval0 | rval0;
-	mVal1.get()[blk0 + i] = lval1 | rval1;
+	mVal0[blk0 + i] = lval0 | rval0;
+	mVal1[blk0 + i] = lval1 | rval1;
 	rval0 = val0 >> (BLOCK_SIZE - sft0);
 	rval1 = val1 >> (BLOCK_SIZE - sft0);
       }
-      lval0 = (val.mVal0.get()[src_blk - 1] & src_mask) << sft0;
-      lval1 = (val.mVal1.get()[src_blk - 1] & src_mask) << sft0;
+      lval0 = (val.mVal0[src_blk - 1] & src_mask) << sft0;
+      lval1 = (val.mVal1[src_blk - 1] & src_mask) << sft0;
       uword lsrc_mask = src_mask << sft0;
-      mVal0.get()[blk0 + src_blk - 1] &= ~(lsrc_mask | rmask);
-      mVal0.get()[blk0 + src_blk - 1] |= lval0 | rval0;
-      mVal1.get()[blk0 + src_blk - 1] &= ~(lsrc_mask | rmask);
-      mVal1.get()[blk0 + src_blk - 1] |= lval1 | rval1;
+      mVal0[blk0 + src_blk - 1] &= ~(lsrc_mask | rmask);
+      mVal0[blk0 + src_blk - 1] |= lval0 | rval0;
+      mVal1[blk0 + src_blk - 1] &= ~(lsrc_mask | rmask);
+      mVal1[blk0 + src_blk - 1] |= lval1 | rval1;
     }
   }
 }
@@ -882,20 +885,20 @@ BitVector::bit_select_op(
   SizeType sft = bpos - blk * BLOCK_SIZE;
   uword msk = 1 << sft;
   if ( val.is_zero() ) {
-    mVal0.get()[blk] |= msk;
-    mVal1.get()[blk] &= ~msk;
+    mVal0[blk] |= msk;
+    mVal1[blk] &= ~msk;
   }
   else if ( val.is_one() ) {
-    mVal0.get()[blk] &= ~msk;
-    mVal1.get()[blk] |= msk;
+    mVal0[blk] &= ~msk;
+    mVal1[blk] |= msk;
   }
   else if ( val.is_x() ) {
-    mVal0.get()[blk] |= msk;
-    mVal1.get()[blk] |= msk;
+    mVal0[blk] |= msk;
+    mVal1[blk] |= msk;
   }
   else if ( val.is_z() ) {
-    mVal0.get()[blk] &= ~msk;
-    mVal1.get()[blk] &= ~msk;
+    mVal0[blk] &= ~msk;
+    mVal1[blk] &= ~msk;
   }
   else {
     ASSERT_NOT_REACHED;
@@ -925,7 +928,8 @@ BitVector::merge(
     ans_base = 2;
   }
   if ( size() < ans_size ) {
-    set(mVal0.get(), mVal1.get(), size(), ans_size, ans_sized, ans_signed, ans_base);
+    set_wordptr(mVal0, mVal1, size(), ans_size,
+		ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return merge(BitVector(src, ans_size));
@@ -935,10 +939,10 @@ BitVector::merge(
 
   SizeType n = block(size());
   for ( SizeType i = 0; i < n; ++ i ) {
-    uword val1_0 = mVal0.get()[i];
-    uword val1_1 = mVal1.get()[i];
-    uword val2_0 = src.mVal0.get()[i];
-    uword val2_1 = src.mVal1.get()[i];
+    uword val1_0 = mVal0[i];
+    uword val1_1 = mVal1[i];
+    uword val2_0 = src.mVal0[i];
+    uword val2_1 = src.mVal1[i];
     // z を x に変換する
     uword zpat1 = ~val1_0 & ~val1_1;
     val1_0 |= zpat1;
@@ -946,8 +950,8 @@ BitVector::merge(
     uword zpat2 = ~val2_0 & ~val2_1;
     val2_0 |= zpat2;
     val2_1 |= zpat2;
-    mVal0.get()[i] = val1_0 | val2_0;
-    mVal1.get()[i] = val1_1 | val2_1;
+    mVal0[i] = val1_0 | val2_0;
+    mVal1[i] = val1_1 | val2_1;
   }
 
   return *this;

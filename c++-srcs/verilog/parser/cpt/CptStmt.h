@@ -5,13 +5,12 @@
 /// @brief CptStmt のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/pt/PtStmt.h"
+#include "parser/PtStmt.h"
 #include "ym/FileRegion.h"
-#include "parser/PtiArray.h"
-#include "parser/PtiFwd.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,15 +26,17 @@ public:
   /// @brief コンストラクタ
   CptStmt(
     const FileRegion& file_region
-  );
+  ) : mFileRegion{file_region}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptStmt();
+  ~CptStmt() {}
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtStmt の派生クラスのための仮想関数
+  // AstStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置の取得
@@ -48,7 +49,7 @@ public:
   namebranch_num() const override;
 
   /// @brief 階層ブランチの取得
-  const PtNameBranch*
+  const AstNameBranch*
   namebranch(
     SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
   ) const override;
@@ -68,44 +69,44 @@ public:
   arg_num() const override;
 
   /// @brief 引数の取得
-  const PtExpr*
+  const AstExpr*
   arg(
     SizeType pos ///< [in] 位置 ( 0 <= pos < arg_num() )
   ) const override;
 
   /// @brief コントロールの取得
   /// @return ディレイ/イベントコントロール
-  const PtControl*
+  const AstControl*
   control() const override;
 
   /// @brief 本体のステートメントの取得
   /// @return 本体のステートメント
-  const PtStmt*
+  const AstStmt*
   body() const override;
 
   /// @brief 式の取得
   /// @return 式
-  const PtExpr*
+  const AstExpr*
   expr() const override;
 
   /// @brief 左辺式の取得
   /// @return 左辺式
-  const PtExpr*
+  const AstExpr*
   lhs() const override;
 
   /// @brief 右辺式の取得
   /// @return 右辺式
-  const PtExpr*
+  const AstExpr*
   rhs() const override;
 
   /// @brief イベントプライマリの取得
   /// @return イベントプライマリ
-  const PtExpr*
+  const AstExpr*
   primary() const override;
 
   /// @brief 条件が成り立たなかったとき実行されるステートメントの取得
   /// @return 条件が成り立たなかったとき実行されるステートメント
-  const PtStmt*
+  const AstStmt*
   else_body() const override;
 
   /// @brief case item のリストの要素数の取得
@@ -113,19 +114,19 @@ public:
   caseitem_num() const override;
 
   /// @brief case item の取得
-  const PtCaseItem*
+  const AstCaseItem*
   caseitem(
     SizeType pos ///< [in] 位置 ( 0 <= pos < caseitem_num() )
   ) const override;
 
   /// @brief 初期化代入文の取得
   /// @return 初期化代入文
-  const PtStmt*
+  const AstStmt*
   init_stmt() const override;
 
   /// @brief 繰り返し代入文の取得
   /// @return 繰り返し代入文
-  const PtStmt*
+  const AstStmt*
   next_stmt() const override;
 
   /// @brief 宣言ヘッダ配列の要素数の取得
@@ -133,7 +134,7 @@ public:
   declhead_num() const override;
 
   /// @brief 宣言ヘッダの取得
-  const PtDeclHead*
+  const AstDeclHead*
   declhead(
     SizeType pos ///< [in] 位置 ( 0 <= pos < declhead_num() )
   ) const override;
@@ -143,7 +144,7 @@ public:
   stmt_num() const override;
 
   /// @brief 子供のステートメントの取得
-  const PtStmt*
+  const AstStmt*
   stmt(
     SizeType pos ///< [in] 位置 ( 0 <= pos < stmt_num() )
   ) const override;
@@ -172,19 +173,22 @@ public:
   CptDisable(
     const FileRegion& file_region,
     const char* name
-  );
+  ) : CptStmt(file_region),
+    mName{name}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptDisable();
+  ~CptDisable() {}
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtStmt の派生クラスのための仮想関数
+  // AstStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 
@@ -220,12 +224,15 @@ public:
   /// @brief コンストラクタ
   CptDisableH(
     const FileRegion& file_region,
-    PtiNameBranchArray&& nb_array,
+    PtNameBranchArray&& nb_array,
     const char* tail_name
-  );
+  ) : CptDisable{file_region, tail_name},
+    mNbArray{std::move(nb_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptDisableH();
+  ~CptDisableH() {}
 
 
 public:
@@ -238,7 +245,7 @@ public:
   namebranch_num() const override;
 
   /// @brief 階層ブランチの取得
-  const PtNameBranch*
+  const AstNameBranch*
   namebranch(
     SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
   ) const override;
@@ -250,7 +257,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 階層ブランチのリスト
-  PtiNameBranchArray mNbArray;
+  PtNameBranchArray mNbArray;
 
 };
 
@@ -267,11 +274,15 @@ protected:
   CptEnableBase(
     const FileRegion& file_region,
     const char* name,
-    PtiExprArray&& arg_array
-  );
+    PtExprArray&& arg_array
+  ) : CptStmt(file_region),
+    mName{name},
+    mArgArray{std::move(arg_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptEnableBase();
+  ~CptEnableBase() {}
 
 
 public:
@@ -288,7 +299,7 @@ public:
   arg_num() const override;
 
   /// @brief 引数の取得
-  const PtExpr*
+  const AstExpr*
   arg(
     SizeType pos ///< [in] 位置 ( 0 <= pos < arg_num() )
   ) const override;
@@ -303,7 +314,7 @@ private:
   const char* mName;
 
   // 引数の配列
-  PtiExprArray mArgArray;
+  PtExprArray mArgArray;
 
 };
 
@@ -320,11 +331,13 @@ public:
   CptEnable(
     const FileRegion& file_region,
     const char* name,
-    PtiExprArray&& arg_array
-  );
+    PtExprArray&& arg_array
+  ) : CptEnableBase(file_region, name, std::move(arg_array))
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptEnable();
+  ~CptEnable() {}
 
 
 public:
@@ -333,7 +346,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -350,13 +363,16 @@ public:
   /// @brief コンストラクタ
   CptEnableH(
     const FileRegion& file_region,
-    PtiNameBranchArray&& nb_array,
+    PtNameBranchArray&& nb_array,
     const char* tail_name,
-    PtiExprArray&& arg_array
-  );
+    PtExprArray&& arg_array
+  ) : CptEnable(file_region, tail_name, std::move(arg_array)),
+    mNbArray{std::move(nb_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptEnableH();
+  ~CptEnableH() {}
 
 
 public:
@@ -369,7 +385,7 @@ public:
   namebranch_num() const override;
 
   /// @brief 階層ブランチの取得
-  const PtNameBranch*
+  const AstNameBranch*
   namebranch(
     SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
   ) const override;
@@ -381,7 +397,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 階層ブランチのリスト
-  PtiNameBranchArray mNbArray;
+  PtNameBranchArray mNbArray;
 
 };
 
@@ -398,11 +414,13 @@ public:
   CptSysEnable(
     const FileRegion& file_region,
     const char* task_name,
-    PtiExprArray&& arg_array
-  );
+    PtExprArray&& arg_array
+  ) : CptEnableBase(file_region, task_name, std::move(arg_array))
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptSysEnable();
+  ~CptSysEnable() {}
 
 
 public:
@@ -411,7 +429,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -428,12 +446,22 @@ protected:
   /// @brief コンストラクタ
   CptCtrlStmt(
     const FileRegion& file_region,
-    const PtControl* delay,
-    const PtStmt* body
-  );
+    const AstControl* control,
+    const AstStmt* body
+  ) : CptStmt(file_region),
+      mControl{control},
+      mBody{body}
+  {
+    if ( control == nullptr ) {
+      throw std::logic_error{"control = nullptr"};
+    }
+    if ( body == nullptr ) {
+      throw std::logic_error{"body = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptCtrlStmt();
+  ~CptCtrlStmt() {}
 
 
 public:
@@ -442,11 +470,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief コントロールを返す．
-  const PtControl*
+  const AstControl*
   control() const override;
 
   /// @brief 本体を取り出す．
-  const PtStmt*
+  const AstStmt*
   body() const override;
 
 
@@ -456,10 +484,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // コントロール
-  const PtControl* mDelay;
+  const AstControl* mControl;
 
   // 本体
-  const PtStmt* mBody;
+  const AstStmt* mBody;
 
 };
 
@@ -475,12 +503,14 @@ public:
   /// @brief コンストラクタ
   CptDcStmt(
     const FileRegion& file_region,
-    const PtControl* delay,
-    const PtStmt* body
-  );
+    const AstControl* delay,
+    const AstStmt* body
+  ) : CptCtrlStmt(file_region, delay, body)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptDcStmt();
+  ~CptDcStmt() {}
 
 
 public:
@@ -489,7 +519,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -506,12 +536,14 @@ public:
   /// @brief コンストラクタ
   CptEcStmt(
     const FileRegion& file_region,
-    const PtControl* event,
-    const PtStmt* body
-  );
+    const AstControl* event,
+    const AstStmt* body
+  ) : CptCtrlStmt(file_region, event, body)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptEcStmt();
+  ~CptEcStmt() {}
 
 
 public:
@@ -520,7 +552,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -537,12 +569,22 @@ public:
   /// @brief コンストラクタ
   CptWait(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    const PtStmt* body
-  );
+    const AstExpr* expr,
+    const AstStmt* body
+  ) : CptStmt(file_region),
+      mExpr{expr},
+      mBody{body}
+  {
+    if ( expr == nullptr ) {
+      throw std::logic_error{"expr = nullptr"};
+    }
+    if ( body == nullptr ) {
+      throw std::logic_error{"body = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptWait() override;
+  ~CptWait() {}
 
 
 public:
@@ -551,15 +593,15 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
   /// @brief 条件を返す．
-  const PtExpr*
+  const AstExpr*
   expr() const override;
 
   /// @brief 実行すべき本体を返す．
-  const PtStmt*
+  const AstStmt*
   body() const override;
 
 
@@ -569,10 +611,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 条件
-  const PtExpr* mExpr;
+  const AstExpr* mExpr;
 
   // 実行すべき本体
-  const PtStmt* mBody;
+  const AstStmt* mBody;
 
 };
 
@@ -588,11 +630,17 @@ protected:
   /// @brief コンストラクタ
   CptAssignBase(
     const FileRegion& file_region,
-    const PtExpr* lhs
-  );
+    const AstExpr* lhs
+  ) : CptStmt(file_region),
+    mLhs{lhs}
+  {
+    if ( lhs == nullptr ) {
+      throw std::logic_error{"lhs = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptAssignBase();
+  ~CptAssignBase() {}
 
 
 public:
@@ -601,7 +649,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief lhs を得る．
-  const PtExpr*
+  const AstExpr*
   lhs() const override;
 
 
@@ -611,7 +659,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 左辺
-  const PtExpr* mLhs;
+  const AstExpr* mLhs;
 
 };
 
@@ -627,12 +675,18 @@ public:
   /// @brief コンストラクタ
   CptAssign(
     const FileRegion& file_region,
-    const PtExpr* lhs,
-    const PtExpr* rhs
-  );
+    const AstExpr* lhs,
+    const AstExpr* rhs
+  ) : CptAssignBase(file_region, lhs),
+      mRhs{rhs}
+  {
+    if ( rhs == nullptr ) {
+      throw std::logic_error{"rhs = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptAssign();
+  ~CptAssign() {}
 
 
 public:
@@ -641,11 +695,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
   /// @brief rhs を得る．
-  const PtExpr*
+  const AstExpr*
   rhs() const override;
 
 
@@ -655,7 +709,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 右辺
-  const PtExpr* mRhs;
+  const AstExpr* mRhs;
 
 };
 
@@ -671,13 +725,19 @@ public:
   /// @brief コンストラクタ
   CptAssignC(
     const FileRegion& file_region,
-    const PtExpr* lhs,
-    const PtExpr* rhs,
-    const PtControl* control
-  );
+    const AstExpr* lhs,
+    const AstExpr* rhs,
+    const AstControl* control
+  ) : CptAssign(file_region, lhs, rhs),
+      mControl{control}
+  {
+    if ( control == nullptr ) {
+      throw std::logic_error{"control = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptAssignC();
+  ~CptAssignC() {}
 
 
 public:
@@ -686,7 +746,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief コントロールを返す．
-  const PtControl*
+  const AstControl*
   control() const override;
 
 
@@ -696,7 +756,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // コントロール
-  const PtControl* mControl;
+  const AstControl* mControl;
 
 };
 
@@ -712,12 +772,14 @@ public:
   /// @brief コンストラクタ
   CptNbAssign(
     const FileRegion& file_region,
-    const PtExpr* lhs,
-    const PtExpr* rhs
-  );
+    const AstExpr* lhs,
+    const AstExpr* rhs
+  ) : CptAssign(file_region, lhs, rhs)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNbAssign();
+  ~CptNbAssign() {}
 
 
 public:
@@ -726,7 +788,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -743,13 +805,15 @@ public:
   /// @brief コンストラクタ
   CptNbAssignC(
     const FileRegion& file_region,
-    const PtExpr* lhs,
-    const PtExpr* rhs,
-    const PtControl* control
-  );
+    const AstExpr* lhs,
+    const AstExpr* rhs,
+    const AstControl* control
+  ) : CptAssignC(file_region, lhs, rhs, control)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNbAssignC();
+  ~CptNbAssignC() {}
 
 
 public:
@@ -758,7 +822,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -775,12 +839,18 @@ public:
   /// @brief コンストラクタ
   CptPcAssign(
     const FileRegion& file_region,
-    const PtExpr* lhs,
-    const PtExpr* rhs
-  );
+    const AstExpr* lhs,
+    const AstExpr* rhs
+  ) : CptAssignBase(file_region, lhs),
+      mRhs{rhs}
+  {
+    if ( rhs == nullptr ) {
+      throw std::logic_error{"rhs = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptPcAssign();
+  ~CptPcAssign() {}
 
 
 public:
@@ -789,11 +859,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
   /// @brief 右辺式を返す．
-  const PtExpr*
+  const AstExpr*
   rhs() const override;
 
 
@@ -803,7 +873,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 右辺
-  const PtExpr* mRhs;
+  const AstExpr* mRhs;
 
 };
 
@@ -819,11 +889,13 @@ public:
   /// @brief コンストラクタ
   CptDeassign(
     const FileRegion& file_region,
-    const PtExpr* lhs
-  );
+    const AstExpr* lhs
+  ) : CptAssignBase(file_region, lhs)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptDeassign();
+  ~CptDeassign() {}
 
 
 public:
@@ -832,7 +904,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -849,12 +921,14 @@ public:
   /// @brief コンストラクタ
   CptForce(
     const FileRegion& file_region,
-    const PtExpr* lhs,
-    const PtExpr* rhs
-  );
+    const AstExpr* lhs,
+    const AstExpr* rhs
+  ) : CptPcAssign(file_region, lhs, rhs)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptForce();
+  ~CptForce() {}
 
 
 public:
@@ -863,7 +937,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -880,11 +954,13 @@ public:
   /// @brief コンストラクタ
   CptRelease(
     const FileRegion& file_region,
-    const PtExpr* lhs
-  );
+    const AstExpr* lhs
+  ) : CptDeassign(file_region, lhs)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptRelease();
+  ~CptRelease() {}
 
 
 public:
@@ -893,7 +969,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -910,11 +986,17 @@ public:
   /// @brief コンストラクタ
   CptEventStmt(
     const FileRegion& file_region,
-    const PtExpr* event
-  );
+    const AstExpr* event
+  ) : CptStmt(file_region),
+    mPrimary{event}
+  {
+    if ( event == nullptr ) {
+      throw std::logic_error{"event = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptEventStmt();
+  ~CptEventStmt() {}
 
 
 public:
@@ -923,11 +1005,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
   /// @brief イベントプライマリを返す．
-  const PtExpr*
+  const AstExpr*
   primary() const override;
 
 
@@ -937,7 +1019,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // イベント名を表すプライマリ
-  const PtExpr* mPrimary;
+  const AstExpr* mPrimary;
 
 };
 
@@ -953,10 +1035,12 @@ public:
   /// @brief コンストラクタ
   CptNullStmt(
     const FileRegion& file_region
-  );
+  ) : CptStmt(file_region)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptNullStmt();
+  ~CptNullStmt() {}
 
 
 public:
@@ -965,7 +1049,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -982,12 +1066,19 @@ public:
   /// @brief コンストラクタ
   CptIf(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    const PtStmt* then_body
-  );
+    const AstExpr* expr,
+    const AstStmt* then_body
+  ) : CptStmt(file_region),
+      mCond{expr},
+      mThen{then_body}
+  {
+    if ( expr == nullptr ) {
+      throw std::logic_error{"expr = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptIf();
+  ~CptIf() {}
 
 
 public:
@@ -996,15 +1087,15 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
   /// @brief 条件式を返す．
-  const PtExpr*
+  const AstExpr*
   expr() const override;
 
   /// @brief 成り立ったとき実行されるステートメント
-  const PtStmt*
+  const AstStmt*
   body() const override;
 
 
@@ -1014,10 +1105,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 条件式
-  const PtExpr* mCond;
+  const AstExpr* mCond;
 
   // 成り立ったとき実行されるステートメント
-  const PtStmt* mThen;
+  const AstStmt* mThen;
 
 };
 
@@ -1033,13 +1124,19 @@ public:
   /// @brief コンストラクタ
   CptIfElse(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    const PtStmt* then_body,
-    const PtStmt* else_body
-  );
+    const AstExpr* expr,
+    const AstStmt* then_body,
+    const AstStmt* else_body
+  ) : CptIf(file_region, expr, then_body),
+      mElse{else_body}
+  {
+    if ( expr == nullptr ) {
+      throw std::logic_error{"expr = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptIfElse();
+  ~CptIfElse() {}
 
 
 public:
@@ -1048,7 +1145,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 成り立たなかったとき実行されるステートメント
-  const PtStmt*
+  const AstStmt*
   else_body() const override;
 
 
@@ -1058,7 +1155,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 成り立たなかったとき実行されるステートメント
-  const PtStmt* mElse;
+  const AstStmt* mElse;
 
 };
 
@@ -1074,12 +1171,19 @@ public:
   /// @brief コンストラクタ
   CptCaseItem(
     const FileRegion& file_region,
-    PtiExprArray&& label_array,
-    const PtStmt* body
-  );
+    PtExprArray&& label_array,
+    const AstStmt* body
+  ) : mFileRegion{file_region},
+      mLabelArray{std::move(label_array)},
+      mBody{body}
+  {
+    if ( body == nullptr ) {
+      throw std::logic_error{"body = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptCaseItem();
+  ~CptCaseItem() {}
 
 
 public:
@@ -1096,13 +1200,13 @@ public:
   label_num() const override;
 
   /// @brief ラベルの取得
-  const PtExpr*
+  const AstExpr*
   label(
     SizeType pos ///< [in] 位置 ( 0 <= pos < label_num() )
   ) const override;
 
   /// @brief 本体のステートメント得る．
-  const PtStmt*
+  const AstStmt*
   body() const override;
 
 
@@ -1115,10 +1219,10 @@ private:
   FileRegion mFileRegion;
 
   // ラベルの配列
-  PtiExprArray mLabelArray;
+  PtExprArray mLabelArray;
 
   // ラベルが一致したときに実行されるステートメント
-  const PtStmt* mBody;
+  const AstStmt* mBody;
 
 };
 
@@ -1134,12 +1238,19 @@ public:
   /// @brief コンストラクタ
   CptCase(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    PtiCaseItemArray&& caseitem_array
-  );
+    const AstExpr* expr,
+    PtCaseItemArray&& caseitem_array
+  ) : CptStmt(file_region),
+      mExpr{expr},
+      mCaseItemArray{std::move(caseitem_array)}
+  {
+    if ( expr == nullptr ) {
+      throw std::logic_error{"expr = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptCase();
+  ~CptCase() {}
 
 
 public:
@@ -1148,11 +1259,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
   /// @brief 比較される式を返す．
-  const PtExpr*
+  const AstExpr*
   expr() const override;
 
   /// @brief case item のリストの要素数の取得
@@ -1160,7 +1271,7 @@ public:
   caseitem_num() const override;
 
   /// @brief case item の取得
-  const PtCaseItem*
+  const AstCaseItem*
   caseitem(
     SizeType pos ///< [in] 位置 ( 0 <= pos < caseitem_num() )
   ) const override;
@@ -1172,10 +1283,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 比較される式
-  const PtExpr* mExpr;
+  const AstExpr* mExpr;
 
   // case item の配列
-  PtiCaseItemArray mCaseItemArray;
+  PtCaseItemArray mCaseItemArray;
 
 };
 
@@ -1191,12 +1302,14 @@ public:
   /// @brief コンストラクタ
   CptCaseX(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    PtiCaseItemArray&& caseitem_array
-  );
+    const AstExpr* expr,
+    PtCaseItemArray&& caseitem_array
+  ) : CptCase(file_region, expr, std::move(caseitem_array))
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptCaseX();
+  ~CptCaseX() {}
 
 
 public:
@@ -1205,7 +1318,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -1222,12 +1335,14 @@ public:
   /// @brief コンストラクタ
   CptCaseZ(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    PtiCaseItemArray&& caseitem_array
-  );
+    const AstExpr* expr,
+    PtCaseItemArray&& caseitem_array
+  ) : CptCase(file_region, expr, std::move(caseitem_array))
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptCaseZ();
+  ~CptCaseZ() {}
 
 
 public:
@@ -1236,7 +1351,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -1253,11 +1368,17 @@ protected:
   /// @brief コンストラクタ
   CptLoopStmt(
     const FileRegion& file_region,
-    const PtStmt* body
-  );
+    const AstStmt* body
+  ) : CptStmt(file_region),
+      mBody{body}
+  {
+    if ( body == nullptr ) {
+      throw std::logic_error{"body = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptLoopStmt();
+  ~CptLoopStmt() {}
 
 
 public:
@@ -1266,7 +1387,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 実行すべき本体を返す．
-  const PtStmt*
+  const AstStmt*
   body() const override;
 
 
@@ -1276,7 +1397,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 実行すべき本体
-  const PtStmt* mBody;
+  const AstStmt* mBody;
 
 };
 
@@ -1292,11 +1413,13 @@ public:
   /// @brief コンストラクタ
   CptForever(
     const FileRegion& file_region,
-    const PtStmt* body
-  );
+    const AstStmt* body
+  ) : CptLoopStmt(file_region, body)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptForever();
+  ~CptForever() {}
 
 
 public:
@@ -1305,7 +1428,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -1322,12 +1445,18 @@ public:
   /// @brief コンストラクタ
   CptRepeat(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    const PtStmt* body
-  );
+    const AstExpr* expr,
+    const AstStmt* body
+  ) : CptLoopStmt(file_region, body),
+      mExpr{expr}
+  {
+    if ( expr == nullptr ) {
+      throw std::logic_error{"expr = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptRepeat();
+  ~CptRepeat() {}
 
 
 public:
@@ -1336,11 +1465,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
   /// @brief 繰り返し式を返す．
-  const PtExpr*
+  const AstExpr*
   expr() const override;
 
 
@@ -1350,7 +1479,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 繰り返し式
-  const PtExpr* mExpr;
+  const AstExpr* mExpr;
 
 };
 
@@ -1366,12 +1495,14 @@ public:
   /// @brief コンストラクタ
   CptWhile(
     const FileRegion& file_region,
-    const PtExpr* expr,
-    const PtStmt* body
-  );
+    const AstExpr* expr,
+    const AstStmt* body
+  ) : CptRepeat(file_region, expr, body)
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptWhile();
+  ~CptWhile() {}
 
 
 public:
@@ -1380,7 +1511,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -1397,14 +1528,24 @@ public:
   /// @brief コンストラクタ
   CptFor(
     const FileRegion& file_region,
-    const PtStmt* init,
-    const PtExpr* cond,
-    const PtStmt* next,
-    const PtStmt* body
-  );
+    const AstStmt* init,
+    const AstExpr* cond,
+    const AstStmt* next,
+    const AstStmt* body
+  ) : CptRepeat(file_region, cond, body),
+      mInit{init},
+      mNext{next}
+  {
+    if ( init == nullptr ) {
+      throw std::logic_error{"init = nullptr"};
+    }
+    if ( next == nullptr ) {
+      throw std::logic_error{"next = nullptr"};
+    }
+  }
 
   /// @brief デストラクタ
-  ~CptFor();
+  ~CptFor() {}
 
 
 public:
@@ -1413,15 +1554,15 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
   /// @brief 初期化代入式を取出す
-  const PtStmt*
+  const AstStmt*
   init_stmt() const override;
 
   /// @brief 繰り返し代入式を取出す
-  const PtStmt*
+  const AstStmt*
   next_stmt() const override;
 
 
@@ -1431,10 +1572,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 初期化文
-  const PtStmt* mInit;
+  const AstStmt* mInit;
 
   // 増加処理文
-  const PtStmt* mNext;
+  const AstStmt* mNext;
 
 };
 
@@ -1450,11 +1591,14 @@ protected:
   /// @brief コンストラクタ
   CptStmtBlock(
     const FileRegion& file_region,
-    PtiStmtArray&& stmt_array
-  );
+    PtStmtArray&& stmt_array
+  ) : CptStmt(file_region),
+      mStmtArray{std::move(stmt_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptStmtBlock();
+  ~CptStmtBlock() {}
 
 
 public:
@@ -1467,7 +1611,7 @@ public:
   stmt_num() const override;
 
   /// @brief 子供のステートメントの取得
-  const PtStmt*
+  const AstStmt*
   stmt(
     SizeType pos ///< [in] 位置 ( 0 <= pos < stmt_num() )
   ) const override;
@@ -1479,7 +1623,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ステートメントの配列
-  PtiStmtArray mStmtArray;
+  PtStmtArray mStmtArray;
 
 };
 
@@ -1496,12 +1640,16 @@ public:
   CptStmtBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtiDeclHeadArray&& declhead_array,
-    PtiStmtArray&& stmt_array
-  );
+    PtDeclHeadArray&& declhead_array,
+    PtStmtArray&& stmt_array
+  ) : CptStmtBlock(file_region, std::move(stmt_array)),
+      mName{name},
+      mDeclHeadArray{std::move(declhead_array)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptStmtBlockN();
+  ~CptStmtBlockN() {}
 
 
 public:
@@ -1518,7 +1666,7 @@ public:
   declhead_num() const override;
 
   /// @brief 宣言ヘッダの取得
-  const PtDeclHead*
+  const AstDeclHead*
   declhead(
     SizeType pos ///< [in] 位置 ( 0 <= pos < declhead_num() )
   ) const override;
@@ -1533,7 +1681,7 @@ private:
   const char* mName;
 
   // 宣言の配列
-  PtiDeclHeadArray mDeclHeadArray;
+  PtDeclHeadArray mDeclHeadArray;
 
 };
 
@@ -1549,11 +1697,13 @@ public:
   /// @brief コンストラクタ
   CptParBlock(
     const FileRegion& file_region,
-    PtiStmtArray&& stmt_array
-  );
+    PtStmtArray&& stmt_array
+  ) : CptStmtBlock(file_region, std::move(stmt_array))
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptParBlock();
+  ~CptParBlock() {}
 
 
 public:
@@ -1562,7 +1712,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -1580,12 +1730,16 @@ public:
   CptParBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtiDeclHeadArray&& declhead_array,
-    PtiStmtArray&& stmt_array
-  );
+    PtDeclHeadArray&& declhead_array,
+    PtStmtArray&& stmt_array
+  ) : CptStmtBlockN(file_region, name,
+		    std::move(declhead_array),
+		    std::move(stmt_array))
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptParBlockN();
+  ~CptParBlockN() {}
 
 
 public:
@@ -1594,7 +1748,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -1611,11 +1765,13 @@ public:
   /// @brief コンストラクタ
   CptSeqBlock(
     const FileRegion& file_region,
-    PtiStmtArray&& stmt_array
-  );
+    PtStmtArray&& stmt_array
+  ) : CptStmtBlock(file_region, std::move(stmt_array))
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptSeqBlock();
+  ~CptSeqBlock() {}
 
 
 public:
@@ -1624,7 +1780,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };
@@ -1642,12 +1798,16 @@ public:
   CptSeqBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtiDeclHeadArray&& declhead_array,
-    PtiStmtArray&& stmt_array
-  );
+    PtDeclHeadArray&& declhead_array,
+    PtStmtArray&& stmt_array
+  ) : CptStmtBlockN(file_region, name,
+		  std::move(declhead_array),
+		  std::move(stmt_array))
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptSeqBlockN();
+  ~CptSeqBlockN() {}
 
 
 public:
@@ -1656,7 +1816,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  PtStmtType
+  Type
   type() const override;
 
 };

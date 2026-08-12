@@ -10,14 +10,14 @@
 
 #include "ym/MsgMgr.h"
 #include "ym/FileRegion.h"
-#include "ym/pt/PtP.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtStmt.h"
-#include "ym/pt/PtExpr.h"
-
 #include "parser/Parser.h"
-#include "parser/PtrList.h"
-#include "parser/PuHierName.h"
+#include "parser/PtDecl.h"
+#include "parser/PtItem.h"
+#include "parser/PtStmt.h"
+#include "parser/PtExpr.h"
+#include "parser/PtMisc.h"
+#include "parser/PtList.h"
+#include "parser/PtHierName.h"
 
 
 // より詳細なエラー情報を出力させる．
@@ -118,40 +118,40 @@ fr_merge(
   VpiVsType vstype;
   char udpsymbol;
 
-  PuHierName* hiername;
+  PtHierName* hiername;
 
-  PtiIOHead* iohead;
-  PtiDeclHead* declhead;
+  PtIOHead* iohead;
+  PtDeclHead* declhead;
 
-  const PtItem* item;
+  PtItem* item;
 
-  const PtGenCaseItem* gencaseitem;
-  const PtPathDecl* pathdecl;
-  const PtPathDelay* pathdelay;
+  PtGenCaseItem* gencaseitem;
+  PtPathDecl* pathdecl;
+  PtPathDelay* pathdelay;
 
-  const PtStmt* stmt;
-  const PtCaseItem* caseitem;
+  PtStmt* stmt;
+  PtCaseItem* caseitem;
 
-  const PtExpr* expr;
-  const PtRange* range;
-  const PtPart* part;
+  PtExpr* expr;
+  PtRange* range;
+  PtPart* part;
 
-  const PtStrength* strength;
-  const PtDelay* delay;
-  const PtControl* control;
-  const PtConnection* connection;
+  PtStrength* strength;
+  PtDelay* delay;
+  PtControl* control;
+  PtConnection* connection;
 
-  const PtAttrInst* attrinst;
-  const PtAttrSpec* attrspec;
+  PtAttrInst* attrinst;
+  PtAttrSpec* attrspec;
 
-  PtrList<const PtGenCaseItem>* gcilist;
-  PtrList<const PtStmt>* stmtlist;
-  PtrList<const PtCaseItem>* cilist;
-  PtrList<const PtRange>* rangelist;
-  PtrList<const PtExpr>* exprlist;
-  PtrList<const PtConnection>* conlist;
-  PtrList<const PtAttrInst>* ailist;
-  PtrList<const PtAttrSpec>* aslist;
+  PtAttrInstList* ailist;
+  PtAttrSpecList* aslist;
+  PtCaseItemList* cilist;
+  PtConnectionList* conlist;
+  PtExprList* exprlist;
+  PtGenCaseItemList* gcilist;
+  PtRangeList* rangelist;
+  PtStmtList* stmtlist;
 }
 
 // Lex 内部のみで用いられるトークン
@@ -1133,7 +1133,7 @@ parameter_override
 defparam_head
 : DEFPARAM
 {
-  parser.init_defparam();
+  parser.init_defparam_list();
 }
 
 // [SPEC*] nzlist_of_defparam_assignment ::=
@@ -2289,7 +2289,7 @@ specparam_assignment
 nzlist_of_dimensions
 : range
 {
-  $$ = parser.new_list<const PtRange>();
+  $$ = parser.new_range_list();
   $$->push_back($1);
 }
 | nzlist_of_dimensions range
@@ -3186,7 +3186,7 @@ n_input_gate_instance
 n_input_gate_terminals
 : net_lvalue ',' expression
 {
-  $$ = parser.new_list<const PtConnection>();
+  $$ = parser.new_connection_list();
   $$->push_back(parser.new_OrderedCon($1));
   $$->push_back(parser.new_OrderedCon($3));
 }
@@ -3227,7 +3227,7 @@ n_output_gate_instance
 n_output_gate_terminals
 : expression ',' expression
 {
-  $$ = parser.new_list<const PtConnection>();
+  $$ = parser.new_connection_list();
   $$->push_back(parser.new_OrderedCon($1));
   $$->push_back(parser.new_OrderedCon($3));
 }
@@ -3570,7 +3570,7 @@ mu_head
 : IDENTIFIER
 {
   $$ = $1;
-  parser.init_inst();
+  parser.init_inst_list();
 }
 ;
 
@@ -3579,7 +3579,7 @@ mu_head
 list_of_ordered_param_assign
 : expression
 {
-  $$ = parser.new_list<const PtConnection>();
+  $$ = parser.new_connection_list();
   $$->push_back(parser.new_OrderedCon($1));
 }
 | list_of_ordered_param_assign ',' expression
@@ -3594,7 +3594,7 @@ list_of_ordered_param_assign
 list_of_named_param_assign
 : named_parameter_assignment
 {
-  $$ = parser.new_list<const PtConnection>();
+  $$ = parser.new_connection_list();
   $$->push_back($1);
 }
 | list_of_named_param_assign ',' named_parameter_assignment
@@ -3681,7 +3681,7 @@ mu_instance
 list_of_ordered_port_connections
 : ordered_port_connection
 {
-  $$ = parser.new_list<const PtConnection>();
+  $$ = parser.new_connection_list();
   $$->push_back($1);
 }
 | list_of_ordered_port_connections ',' ordered_port_connection
@@ -3717,7 +3717,7 @@ ordered_port_connection
 list_of_named_port_connections
 : named_port_connection
 {
-  $$ = parser.new_list<const PtConnection>();
+  $$ = parser.new_connection_list();
   $$->push_back($1);
 }
 | list_of_named_port_connections ',' named_port_connection
@@ -3916,7 +3916,7 @@ gen_end
 list_of_gencaseitem
 : genvar_case_item
 {
-  $$ = parser.new_list<const PtGenCaseItem>();
+  $$ = parser.new_gencaseitem_list();
   $$->push_back($1);
 }
 | list_of_gencaseitem genvar_case_item
@@ -3947,12 +3947,12 @@ genvar_case_head
 | DEFAULT
 {
   parser.init_generate();
-  $$ = parser.new_list<const PtExpr>();
+  $$ = parser.new_expr_list();
 }
 | DEFAULT               ':'
 {
   parser.init_generate();
-  $$ = parser.new_list<const PtExpr>();
+  $$ = parser.new_expr_list();
 }
 ;
 
@@ -4485,7 +4485,7 @@ continuous_assign
 assign_head
 : ASSIGN
 {
-  parser.init_contassign();
+  parser.init_contassign_list();
 }
 ;
 
@@ -4712,7 +4712,7 @@ end
 nzlist_of_stmt
 : statement
 {
-  $$ = parser.new_list<const PtStmt>();
+  $$ = parser.new_stmt_list();
   $$->push_back($1);
 }
 | nzlist_of_stmt statement
@@ -5005,7 +5005,7 @@ event_trigger
 event_expression
 : event_primary
 {
-  $$ = parser.new_list<const PtExpr>();
+  $$ = parser.new_expr_list();
   $$->push_back($1);
 }
 | event_expression OR event_primary
@@ -5155,7 +5155,7 @@ case_statement
 list_of_case_items
 : case_item
 {
-  $$ = parser.new_list<const PtCaseItem>();
+  $$ = parser.new_caseitem_list();
   $$->push_back($1);
 }
 | list_of_case_items case_item
@@ -5515,7 +5515,7 @@ specify_terminal
 nzlist_of_terminals
 : specify_terminal
 {
-  $$ = parser.new_list<const PtExpr>();
+  $$ = parser.new_expr_list();
   $$->push_back($1);
 }
 | nzlist_of_terminals ',' specify_terminal
@@ -6046,7 +6046,7 @@ multiple_concatenation
 nzlist_of_expressions
 : expression
 {
-  $$ = parser.new_list<const PtExpr>();
+  $$ = parser.new_expr_list();
   $$->push_back($1);
 }
 | nzlist_of_expressions ',' expression
@@ -6136,7 +6136,7 @@ system_function_call
 nzlist_of_arguments
 : argument
 {
-  $$ = parser.new_list<const PtExpr>();
+  $$ = parser.new_expr_list();
   $$->push_back($1);
 }
 | nzlist_of_arguments ',' argument
@@ -6647,7 +6647,7 @@ lvalue
 nzlist_of_index
 : index
 {
-  $$ = parser.new_list<const PtExpr>();
+  $$ = parser.new_expr_list();
   $$->push_back($1);
 }
 | nzlist_of_index index
@@ -6669,7 +6669,7 @@ index
 nzlist_of_lvalues
 : lvalue
 {
-  $$ = parser.new_list<const PtExpr>();
+  $$ = parser.new_expr_list();
   $$->push_back($1);
 }
 | nzlist_of_lvalues ',' lvalue
@@ -6702,7 +6702,7 @@ number
 }
 | UNUM_INT numbase UNUMBER
 {
-  // 2番目の UNUMBER は number に対して適切な文字から構成されている
+  // 2番目の UNUMBER は numbase に対して適切な文字から構成されている
   // はず．
   $$ = parser.new_IntConst(@$, $1, $2, $3);
 }
@@ -6804,7 +6804,7 @@ ai_list
 nz_ai_list
 : attr_inst
 {
-  $$ = parser.new_list<const PtAttrInst>();
+  $$ = parser.new_attrinst_list();
   $$->push_back($1);
 }
 | nz_ai_list attr_inst
@@ -6830,7 +6830,7 @@ attr_inst
 nzlist_of_attr_spec
 : attr_spec
 {
-  $$ = parser.new_list<const PtAttrSpec>();
+  $$ = parser.new_attrspec_list();
   $$->push_back($1);
 }
 | nzlist_of_attr_spec ',' attr_spec

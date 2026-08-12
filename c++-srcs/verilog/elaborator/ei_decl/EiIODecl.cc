@@ -13,7 +13,7 @@
 
 #include "ym/vl/VlScope.h"
 #include "ym/vl/VlTaskFunc.h"
-#include "ym/pt/PtDecl.h"
+#include "ym/vl/AstDecl.h"
 
 
 
@@ -23,24 +23,24 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbIOHead*
 EiFactory::new_IOHead(
   const VlModule* module,
-  const PtIOHead* pt_header
+  const AstIOHead* ast_header
 )
 {
-  return new EiModIOHead(module, pt_header);
+  return new EiModIOHead(module, ast_header);
 }
 
 // @brief タスク/関数 IO ヘッダを生成する．
 ElbIOHead*
 EiFactory::new_IOHead(
   const VlTaskFunc* taskfunc,
-  const PtIOHead* pt_header
+  const AstIOHead* ast_header
 )
 {
   if ( taskfunc->type() == VpiObjType::Task ) {
-    return new EiTaskIOHead(taskfunc, pt_header);
+    return new EiTaskIOHead(taskfunc, ast_header);
   }
   else { // VpiObjType::Function
-    return new EiFunctionIOHead(taskfunc, pt_header);
+    return new EiFunctionIOHead(taskfunc, ast_header);
   }
 }
 
@@ -51,8 +51,8 @@ EiFactory::new_IOHead(
 
 // @brief コンストラクタ
 EiIOHead::EiIOHead(
-  const PtIOHead* pt_header
-) : mPtHead{pt_header}
+  const AstIOHead* ast_header
+) : mAstHead{ast_header}
 {
 }
 
@@ -65,7 +65,7 @@ EiIOHead::~EiIOHead()
 VpiDir
 EiIOHead::direction() const
 {
-  return mPtHead->direction();
+  return mAstHead->direction();
 }
 
 // @brief 親のモジュールの取得
@@ -97,8 +97,8 @@ EiIOHead::function() const
 // @brief コンストラクタ
 EiModIOHead::EiModIOHead(
   const VlModule* module,
-  const PtIOHead* pt_header
-) : EiIOHead(pt_header),
+  const AstIOHead* ast_header
+) : EiIOHead(ast_header),
     mModule{module}
 {
 }
@@ -123,8 +123,8 @@ EiModIOHead::module() const
 // @brief コンストラクタ
 EiTaskIOHead::EiTaskIOHead(
   const VlTaskFunc* task,
-  const PtIOHead* pt_header
-) : EiIOHead(pt_header),
+  const AstIOHead* ast_header
+) : EiIOHead(ast_header),
     mTask{task}
 {
 }
@@ -149,8 +149,8 @@ EiTaskIOHead::task() const
 // @brief コンストラクタ
 EiFunctionIOHead::EiFunctionIOHead(
   const VlTaskFunc* func,
-  const PtIOHead* pt_header
-) : EiIOHead(pt_header),
+  const AstIOHead* ast_header
+) : EiIOHead(ast_header),
     mFunction{func}
 {
 }
@@ -175,10 +175,10 @@ EiFunctionIOHead::function() const
 // @brief コンストラクタ
 EiIODecl::EiIODecl(
   ElbIOHead* head,
-  const PtIOItem* pt_item,
+  const AstIOItem* ast_item,
   const VlDecl* decl
 ) : mHead{head},
-    mPtItem{pt_item},
+    mAstItem{ast_item},
     mDecl{decl}
 {
 }
@@ -199,14 +199,14 @@ EiIODecl::type() const
 FileRegion
 EiIODecl::file_region() const
 {
-  return mPtItem->file_region();
+  return mAstItem->file_region();
 }
 
 // @brief 名前を返す．
 std::string
 EiIODecl::name() const
 {
-  return mPtItem->name();
+  return mAstItem->name();
 }
 
 // @brief 方向を返す．

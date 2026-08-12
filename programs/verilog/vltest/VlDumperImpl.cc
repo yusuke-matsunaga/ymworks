@@ -7,10 +7,9 @@
 /// All rights reserved.
 
 #include "VlDumperImpl.h"
-
 #include "ym/FileRegion.h"
-#include "ym/VlMgr.h"
-#include "ym/VlValue.h"
+#include "ym/vl/VlMgr.h"
+#include "ym/vl/VlValue.h"
 #include "ym/vl/VlModule.h"
 #include "ym/vl/VlUdp.h"
 

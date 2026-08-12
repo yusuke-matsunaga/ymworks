@@ -8,8 +8,7 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiBinaryOp.h"
-
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -21,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 2項演算子を生成する．
 ElbExpr*
 EiFactory::new_BinaryOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   VpiOpType op_type,
   ElbExpr* opr0,
   ElbExpr* opr1
@@ -32,27 +31,27 @@ EiFactory::new_BinaryOp(
   case VpiOpType::BitOr:
   case VpiOpType::BitXNor:
   case VpiOpType::BitXor:
-    return new EiBinaryBitOp(pt_expr, opr0, opr1);
+    return new EiBinaryBitOp(ast_expr, opr0, opr1);
 
   case VpiOpType::Add:
   case VpiOpType::Sub:
   case VpiOpType::Mult:
   case VpiOpType::Div:
   case VpiOpType::Mod:
-    return new EiBinaryArithOp(pt_expr, opr0, opr1);
+    return new EiBinaryArithOp(ast_expr, opr0, opr1);
 
   case VpiOpType::Power:
-    return new EiPowerOp(pt_expr, opr0, opr1);
+    return new EiPowerOp(ast_expr, opr0, opr1);
 
   case VpiOpType::LShift:
   case VpiOpType::RShift:
   case VpiOpType::ArithLShift:
   case VpiOpType::ArithRShift:
-    return new EiShiftOp(pt_expr, opr0, opr1);
+    return new EiShiftOp(ast_expr, opr0, opr1);
 
   case VpiOpType::LogAnd:
   case VpiOpType::LogOr:
-    return new EiBinaryLogOp(pt_expr, opr0, opr1);
+    return new EiBinaryLogOp(ast_expr, opr0, opr1);
 
   case VpiOpType::CaseEq:
   case VpiOpType::CaseNeq:
@@ -62,7 +61,7 @@ EiFactory::new_BinaryOp(
   case VpiOpType::Gt:
   case VpiOpType::Le:
   case VpiOpType::Lt:
-    return new EiCompareOp(pt_expr, opr0, opr1);
+    return new EiCompareOp(ast_expr, opr0, opr1);
 
   default:
     break;
@@ -78,10 +77,10 @@ EiFactory::new_BinaryOp(
 
 // @brief コンストラクタ
 EiBinaryOp::EiBinaryOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiOperation(pt_expr),
+) : EiOperation(ast_expr),
     mOpr{opr1, opr2}
 {
 }
@@ -131,10 +130,10 @@ EiBinaryOp::operand_list() const
 
 // @brief コンストラクタ
 EiCompareOp::EiCompareOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp(pt_expr, opr1, opr2)
+) : EiBinaryOp(ast_expr, opr1, opr2)
 {
   // 比較演算は大きい方の型を用いる．
   auto type1 = opr1->value_type();
@@ -175,10 +174,10 @@ EiCompareOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiBinaryLogOp::EiBinaryLogOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp(pt_expr, opr1, opr2)
+) : EiBinaryOp(ast_expr, opr1, opr2)
 {
   // 論理演算の場合はオペランドも1ビットスカラーのはずだが
   // 仕様書には max(L(i), L(j)) なんて書いてある．
@@ -218,10 +217,10 @@ EiBinaryLogOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiBinaryBitOp::EiBinaryBitOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp(pt_expr, opr1, opr2)
+) : EiBinaryOp(ast_expr, opr1, opr2)
 {
   // オペランドのサイズの大きい方で決まる．
   auto type1 = opr1->value_type();
@@ -264,10 +263,10 @@ EiBinaryBitOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiBinaryArithOp::EiBinaryArithOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp(pt_expr, opr1, opr2)
+) : EiBinaryOp(ast_expr, opr1, opr2)
 {
   // オペランドのサイズの大きい方で決まる．
   auto type1 = opr1->value_type();
@@ -306,10 +305,10 @@ EiBinaryArithOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiPowerOp::EiPowerOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp(pt_expr, opr1, opr2)
+) : EiBinaryOp(ast_expr, opr1, opr2)
 {
   // 巾乗演算の場合, どちらかのオペランドが real, integer, signed
   // なら結果は real, どちらも unsigned の時のみ unsigned となる．
@@ -354,10 +353,10 @@ EiPowerOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiShiftOp::EiShiftOp(
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
-) : EiBinaryOp(pt_expr, opr1, opr2)
+) : EiBinaryOp(ast_expr, opr1, opr2)
 {
   // シフト演算子は第1オペランドの型とサイズをそのまま引き継ぐ
   mType = opr1->value_type();

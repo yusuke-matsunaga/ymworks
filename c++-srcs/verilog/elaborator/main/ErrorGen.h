@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ym/vl/VlFwd.h"
 #include "ym/FileRegion.h"
 
@@ -56,7 +56,7 @@ public:
   no_param(
     const char* file,           ///< [in] ファイル名
     int line,                   ///< [in] 行番号
-    const PtConnection* pt_con, ///< [in] パラメータポート割り当てのパース木
+    const AstConnection* ast_con, ///< [in] パラメータポート割り当てのパース木
     const char* name            ///< [in] パラメータ名
   );
 
@@ -102,7 +102,7 @@ public:
   no_impnet(
     const char* file,       ///< [in] ファイル名
     int line,               ///< [in] 行番号
-    const PtIOItem* pt_item ///< [in] 対象の構文木要素
+    const AstIOItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief 暗黙ネットが初期値を持っている．
@@ -111,7 +111,7 @@ public:
   impnet_with_init(
     const char* file,       ///< [in] ファイル名
     int line,               ///< [in] 行番号
-    const PtIOItem* pt_item ///< [in] 対象の構文木要素
+    const AstIOItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief IO 宣言に aux_type と宣言が重複している．
@@ -120,7 +120,7 @@ public:
   duplicate_type(
     const char* file,          ///< [in] ファイル名
     int line,                  ///< [in] 行番号
-    const PtIOItem* pt_item,   ///< [in] IO宣言のパース木の要素
+    const AstIOItem* ast_item,   ///< [in] IO宣言のパース木の要素
     const FileRegion& prev_loc ///< [in] 元の要素が宣言されていた箇所
   );
 
@@ -130,7 +130,7 @@ public:
   array_io(
     const char* file,       ///< [in] ファイル名
     int line,               ///< [in] 行番号
-    const PtIOItem* pt_item ///< [in] IO宣言のパース木の要素
+    const AstIOItem* ast_item ///< [in] IO宣言のパース木の要素
   );
 
   /// @brief IO 宣言に不適切な宣言要素が使われていた．
@@ -139,7 +139,7 @@ public:
   illegal_io(
     const char* file,        ///< [in] ファイル名
     int line,                ///< [in] 行番号
-    const PtIOItem* pt_item, ///< [in] IO宣言のパース木の要素
+    const AstIOItem* ast_item, ///< [in] IO宣言のパース木の要素
     const std::string& name, ///< [in] 名前
     bool is_module           ///< [in] モジュールのIOの時 true とする．
   );
@@ -150,7 +150,7 @@ public:
   conflict_io_range(
     const char* file,       ///< [in] ファイル名
     int line,               ///< [in] 行番号
-    const PtIOItem* pt_item ///< [in] 対象の構文木要素
+    const AstIOItem* ast_item ///< [in] 対象の構文木要素
   );
 
 
@@ -165,7 +165,7 @@ public:
   not_a_parameter(
     const char* file,         ///< [in] ファイル名
     int line,                 ///< [in] 行番号
-    const PtDefParam* pt_item ///< [in] 対象の構文木要素
+    const AstDefParam* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief 対象が localparam だった．
@@ -174,7 +174,7 @@ public:
   is_a_localparam(
     const char* file,         ///< [in] ファイル名
     int line,                 ///< [in] 行番号
-    const PtDefParam* pt_item ///< [in] 対象の構文木要素
+    const AstDefParam* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief 重複した generate case ラベル
@@ -183,7 +183,7 @@ public:
   duplicate_gencase_labels(
     const char* file,     ///< [in] ファイル名
     int line,             ///< [in] 行番号
-    const PtItem* pt_item ///< [in] 対象の構文木要素
+    const AstItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief generate for 文の変数が見つからない．
@@ -192,7 +192,7 @@ public:
   genvar_not_found(
     const char* file,     ///< [in] ファイル名
     int line,             ///< [in] 行番号
-    const PtItem* pt_item ///< [in] 対象の構文木要素
+    const AstItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief genvar でなかった．
@@ -201,7 +201,7 @@ public:
   not_a_genvar(
     const char* file,     ///< [in] ファイル名
     int line,             ///< [in] 行番号
-    const PtItem* pt_item ///< [in] 対象の構文木要素
+    const AstItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief 他の generate for loop ですでに用いられている．
@@ -210,7 +210,7 @@ public:
   genvar_in_use(
     const char* file,     ///< [in] ファイル名
     int line,             ///< [in] 行番号
-    const PtItem* pt_item ///< [in] 対象の構文木要素
+    const AstItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief genvar の値が負の値だった．
@@ -219,7 +219,7 @@ public:
   genvar_negative(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtItem* pt_item ///< [in] 対象の構文木要素
+    const AstItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief モジュールの依存関係が循環している．
@@ -228,7 +228,7 @@ public:
   cyclic_dependency(
     const char* file,         ///< [in] ファイル名
     int line,		      ///< [in] 行番号
-    const PtModule* pt_module ///< [in] 対象の構文木要素
+    const AstModule* ast_module ///< [in] 対象の構文木要素
   );
 
   /// @brief 名無しのモジュール定義
@@ -237,7 +237,7 @@ public:
   noname_module(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtInst* pt_inst ///< [in] 対象の構文木要素
+    const AstInst* ast_inst ///< [in] 対象の構文木要素
   );
 
   /// @brief UDP インスタンスに名前付きのparameter割り当てがあった．
@@ -246,7 +246,7 @@ public:
   udp_with_named_paramassign(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtItem* pt_item ///< [in] 対象の構文木要素
+    const AstItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief UDP インスタンスにparameter割り当てがあった．
@@ -255,7 +255,7 @@ public:
   udp_with_ordered_paramassign(
     const char* file,      ///< [in] ファイル名
     int line,		   ///< [in] 行番号
-    const PtItem* pt_item  ///< [in] 対象の構文木要素
+    const AstItem* ast_item  ///< [in] 対象の構文木要素
   );
 
   /// @brief セルインスタンスにparameter割り当てがあった．
@@ -264,7 +264,7 @@ public:
   cell_with_paramassign(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtItem* pt_item ///< [in] 対象の構文木要素
+    const AstItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief インスタンスが見つからなかった．
@@ -273,7 +273,7 @@ public:
   instance_not_found(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtItem* pt_item ///< [in] 対象の構文木要素
+    const AstItem* ast_item ///< [in] 対象の構文木要素
   );
 
   /// @brief モジュールインスタンスのポート数が合わない．
@@ -282,7 +282,7 @@ public:
   too_many_items_in_port_list(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtInst* pt_inst ///< [in] 対象の構文木要素
+    const AstInst* ast_inst ///< [in] 対象の構文木要素
   );
 
   /// @brief ポート名が存在しなかった．
@@ -291,7 +291,7 @@ public:
   illegal_port_name(
     const char* file,          ///< [in] ファイル名
     int line,		       ///< [in] 行番号
-    const PtConnection* pt_con ///< [in] 対象の構文木要素
+    const AstConnection* ast_con ///< [in] 対象の構文木要素
   );
 
   /// @brief ポートに real 型の式を接続していた．
@@ -309,7 +309,7 @@ public:
   port_size_mismatch(
     const char* file,      ///< [in] ファイル名
     int line,		   ///< [in] 行番号
-    const PtExpr* pt_expr, ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr, ///< [in] 対象の構文木要素
     const std::string& name, ///< [in] モジュール名
     int index              ///< [in] ポート番号(0から始まる)
   );
@@ -320,7 +320,7 @@ public:
   named_port_in_udp_instance(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtInst* pt_inst ///< [in] 対象の構文木要素
+    const AstInst* ast_inst ///< [in] 対象の構文木要素
   );
 
   /// @brief UDP instance のポート数が合わない．
@@ -329,7 +329,7 @@ public:
   port_num_mismatch(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtInst* pt_inst ///< [in] 対象の構文木要素
+    const AstInst* ast_inst ///< [in] 対象の構文木要素
   );
 
   /// @brief cell instance のピン名が合わない．
@@ -338,7 +338,7 @@ public:
   illegal_pin_name(
     const char* file,          ///< [in] ファイル名
     int line,		       ///< [in] 行番号
-    const PtConnection* pt_con ///< [in] 対象の構文木要素
+    const AstConnection* ast_con ///< [in] 対象の構文木要素
   );
 
   /// @brief 空のポート式
@@ -347,7 +347,7 @@ public:
   empty_port_expression(
     const char* file,          ///< [in] ファイル名
     int line,		       ///< [in] 行番号
-    const PtConnection* pt_con ///< [in] 対象の構文木要素
+    const AstConnection* ast_con ///< [in] 対象の構文木要素
   );
 
 
@@ -363,7 +363,7 @@ public:
   illegal_sysfunccall_in_cf(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief constant expression 中にシステム関数呼び出し
@@ -372,7 +372,7 @@ public:
   illegal_sysfunccall_in_ce(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 定数関数は自己再帰できない．
@@ -381,7 +381,7 @@ public:
   uses_itself(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 定数関数ではない．
@@ -390,7 +390,7 @@ public:
   not_a_constant_function(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトの型が constant function 用として不適切
@@ -399,7 +399,7 @@ public:
   illegal_object_cf(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 階層名が constant expression 中にあった
@@ -408,7 +408,7 @@ public:
   hname_in_ce(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 階層名が constant function 中にあった
@@ -417,7 +417,7 @@ public:
   hname_in_cf(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトが parameter でなかった
@@ -426,7 +426,7 @@ public:
   not_a_parameter(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
 
@@ -442,7 +442,7 @@ public:
   illegal_constant_in_event_expression(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief イベント式の根元に関数呼び出し
@@ -451,7 +451,7 @@ public:
   illegal_funccall_in_event_expression(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief イベント式の根元にシステム関数呼び出し
@@ -460,7 +460,7 @@ public:
   illegal_sysfunccall_in_event_expression(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
 
@@ -475,7 +475,7 @@ public:
   illegal_operator_in_lhs(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 左辺式に定数
@@ -484,7 +484,7 @@ public:
   illegal_constant_in_lhs(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 左辺式に関数呼び出し
@@ -493,7 +493,7 @@ public:
   illegal_funccall_in_lhs(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 左辺式にシステム関数呼び出し
@@ -502,7 +502,7 @@ public:
   illegal_sysfunccall_in_lhs(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
 
@@ -535,7 +535,7 @@ public:
   illegal_edge_descriptor(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief real 型のオペランドをとれない
@@ -544,7 +544,7 @@ public:
   illegal_real_type(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 該当する関数が存在しない．
@@ -553,7 +553,7 @@ public:
   no_such_function(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 該当するシステム関数が存在しない．
@@ -562,7 +562,7 @@ public:
   no_such_sysfunction(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 該当するシステムタスクが存在しない．
@@ -571,7 +571,7 @@ public:
   no_such_systask(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtStmt* pt_stmt ///< [in] 対象の構文木要素
+    const AstStmt* ast_stmt ///< [in] 対象の構文木要素
   );
 
   /// @brief 関数ではない．
@@ -580,7 +580,7 @@ public:
   not_a_function(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 引数の数が合わない．
@@ -589,7 +589,7 @@ public:
   n_of_arguments_mismatch(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 引数の数が合わない．
@@ -598,7 +598,7 @@ public:
   n_of_arguments_mismatch(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtStmt* pt_stmt ///< [in] 対象の構文木要素
+    const AstStmt* ast_stmt ///< [in] 対象の構文木要素
   );
 
   /// @brief 引数の型が合わない．
@@ -607,7 +607,7 @@ public:
   illegal_argument_type(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトが存在しない
@@ -616,7 +616,7 @@ public:
   not_found(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトの型が不適切
@@ -625,7 +625,7 @@ public:
   illegal_object(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトが named-event でなかった
@@ -634,7 +634,7 @@ public:
   not_a_namedevent(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 要素の範囲の順番と範囲指定の順番が異なる．
@@ -643,7 +643,7 @@ public:
   range_order(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief named-event に対する範囲指定
@@ -652,7 +652,7 @@ public:
   select_for_namedevent(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief assign/deassign に不適切なビット/範囲指定
@@ -661,7 +661,7 @@ public:
   select_in_pca(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief force/release に不適切なビット/範囲指定
@@ -670,7 +670,7 @@ public:
   select_in_force(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief assign/deassign に不適切な配列要素
@@ -679,7 +679,7 @@ public:
   array_in_pca(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief force/release に不適切な配列要素
@@ -688,7 +688,7 @@ public:
   array_in_force(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 配列の次元が合わない
@@ -697,7 +697,7 @@ public:
   dimension_mismatch(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief real 型に対するビット選択あるいは部分選択があった
@@ -706,7 +706,7 @@ public:
   select_for_real(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const PtExpr* pt_expr ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr ///< [in] 対象の構文木要素
   );
 
 
@@ -721,7 +721,7 @@ private:
   const_with_hname(
     const char* file,      ///< [in] ファイル名
     int line,		   ///< [in] 行番号
-    const PtExpr* pt_expr, ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr, ///< [in] 対象の構文木要素
     const char* label,     ///< [in] エラーラベル
     const std::string& msg ///< [in] エラーメッセージ
   );
@@ -732,7 +732,7 @@ private:
   const_common(
     const char* file,      ///< [in] ファイル名
     int line,		   ///< [in] 行番号
-    const PtExpr* pt_expr, ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr, ///< [in] 対象の構文木要素
     const char* label,     ///< [in] エラーラベル
     const std::string& msg ///< [in] エラーメッセージ
   );
@@ -743,29 +743,29 @@ private:
   expr_with_hname(
     const char* file,      ///< [in] ファイル名
     int line,		   ///< [in] 行番号
-    const PtExpr* pt_expr, ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr, ///< [in] 対象の構文木要素
     const char* label,     ///< [in] エラーラベル
     const std::string& msg ///< [in] エラーメッセージ
   );
 
-  /// @brief PtExpr に関するエラーメッセージを生成する共通部分
+  /// @brief AstExpr に関するエラーメッセージを生成する共通部分
   static
   void
   expr_common(
     const char* file,      ///< [in] ファイル名
     int line,		   ///< [in] 行番号
-    const PtExpr* pt_expr, ///< [in] 対象の構文木要素
+    const AstExpr* ast_expr, ///< [in] 対象の構文木要素
     const char* label,     ///< [in] エラーラベル
     const std::string& msg ///< [in] エラーメッセージ
   );
 
-  /// @brief PtStmt に関するエラーメッセージを生成する共通部分
+  /// @brief AstStmt に関するエラーメッセージを生成する共通部分
   static
   void
   stmt_common(
     const char* file,      ///< [in] ファイル名
     int line,		   ///< [in] 行番号
-    const PtStmt* pt_stmt, ///< [in] 対象の構文木要素
+    const AstStmt* ast_stmt, ///< [in] 対象の構文木要素
     const char* label,     ///< [in] エラーラベル
     const std::string& msg ///< [in] エラーメッセージ
   );
@@ -785,7 +785,7 @@ private:
   static
   std::string
   make_message(
-    const PtExpr* pt_expr, ///< [in] 式を表すパース木
+    const AstExpr* ast_expr, ///< [in] 式を表すパース木
     const std::string& msg ///< [in] メッセージ
   );
 

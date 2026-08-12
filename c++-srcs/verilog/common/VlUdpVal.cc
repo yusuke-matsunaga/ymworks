@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/VlUdpVal.h"
+#include "ym/vl/VlUdpVal.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

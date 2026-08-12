@@ -3,13 +3,14 @@
 /// @brief CptMisc の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "CptMisc.h"
 #include "alloc/Alloc.h"
-#include "parser/CptFactory.h"
-#include "ym/pt/PtExpr.h"
+#include "parser/PtFactory.h"
+#include "parser/PtExpr.h"
+#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,55 +30,39 @@ CptControl::~CptControl()
 }
 
 // @brief  遅延式の取得
-const PtExpr*
+const AstExpr*
 CptControl::delay() const
 {
-  return nullptr;
+  throw std::logic_error{"Not an Delay control type"};
 }
 
 // @brief イベントリストの要素数の取得
 SizeType
 CptControl::event_num() const
 {
-  return 0;
+  throw std::logic_error{"Not an Eent|Repeat control type"};
 }
 
 // @brief イベントリストの要素の取得
-const PtExpr*
+const AstExpr*
 CptControl::event(
   SizeType pos
 ) const
 {
-  ASSERT_NOT_REACHED;
-  return nullptr;
+  throw std::logic_error{"Not an Eent|Repeat control type"};
 }
 
 // @brief 繰り返し数の取得
-const PtExpr*
+const AstExpr*
 CptControl::rep_expr() const
 {
-  return nullptr;
+  throw std::logic_error{"Not a Repeat control type"};
 }
 
 
 //////////////////////////////////////////////////////////////////////
 // delay control を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptDelayControl::CptDelayControl(
-  const FileRegion& file_region,
-  const PtExpr* delay
-) : mTopLoc{file_region.start_loc()},
-    mDelay{delay}
-{
-  ASSERT_COND( delay );
-}
-
-// デストラクタ
-CptDelayControl::~CptDelayControl()
-{
-}
 
 // ファイル位置を返す．
 FileRegion
@@ -87,14 +72,14 @@ CptDelayControl::file_region() const
 }
 
 // 型を返す．
-PtCtrlType
+AstControl::Type
 CptDelayControl::type() const
 {
-  return PtCtrlType::Delay;
+  return Delay;
 }
 
 // 遅延式を返す．
-const PtExpr*
+const AstExpr*
 CptDelayControl::delay() const
 {
   return mDelay;
@@ -105,20 +90,6 @@ CptDelayControl::delay() const
 // event を表すクラス
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptEventControl::CptEventControl(
-  const FileRegion& file_region,
-  PtiExprArray&& event_array
-) : mFileRegion{file_region},
-    mEventArray{std::move(event_array)}
-{
-}
-
-// デストラクタ
-CptEventControl::~CptEventControl()
-{
-}
-
 // ファイル位置を返す．
 FileRegion
 CptEventControl::file_region() const
@@ -127,10 +98,10 @@ CptEventControl::file_region() const
 }
 
 // 型を返す．
-PtCtrlType
+AstControl::Type
 CptEventControl::type() const
 {
-  return PtCtrlType::Event;
+  return Event;
 }
 
 // @brief イベントリストの要素数の取得
@@ -141,7 +112,7 @@ CptEventControl::event_num() const
 }
 
 // @brief イベントリストの要素の取得
-const PtExpr*
+const AstExpr*
 CptEventControl::event(
   SizeType pos
 ) const
@@ -154,31 +125,15 @@ CptEventControl::event(
 // repeat 形式の event を表すクラス
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptRepeatControl::CptRepeatControl(
-  const FileRegion& file_region,
-  const PtExpr* expr,
-  PtiExprArray&& event_array
-) : CptEventControl{file_region, std::move(event_array)},
-    mRepExpr{expr}
-{
-  ASSERT_COND( expr );
-}
-
-// デストラクタ
-CptRepeatControl::~CptRepeatControl()
-{
-}
-
 // 型を返す．
-PtCtrlType
+AstControl::Type
 CptRepeatControl::type() const
 {
-  return PtCtrlType::Repeat;
+  return Repeat;
 }
 
 // 繰り返し数を得る．
-const PtExpr*
+const AstExpr*
 CptRepeatControl::rep_expr() const
 {
   return mRepExpr;
@@ -188,20 +143,6 @@ CptRepeatControl::rep_expr() const
 //////////////////////////////////////////////////////////////////////
 // ordered_connection/named_connection を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptConnection::CptConnection(
-  const FileRegion& file_region,
-  const PtExpr* expr
-) : mFileRegion{file_region},
-    mExpr{expr}
-{
-}
-
-// デストラクタ
-CptConnection::~CptConnection()
-{
-}
 
 // ファイル位置を取出す．
 FileRegion
@@ -218,7 +159,7 @@ CptConnection::name() const
 }
 
 // 式を取出す
-const PtExpr*
+const AstExpr*
 CptConnection::expr() const
 {
   return mExpr;
@@ -226,41 +167,8 @@ CptConnection::expr() const
 
 
 //////////////////////////////////////////////////////////////////////
-// ordered_connection を表すクラス
-//////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptOrderedCon::CptOrderedCon(
-  const FileRegion& file_region,
-  const PtExpr* expr
-) : CptConnection{file_region, expr}
-{
-}
-
-// デストラクタ
-CptOrderedCon::~CptOrderedCon()
-{
-}
-
-
-//////////////////////////////////////////////////////////////////////
 // named_connection を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptNamedCon::CptNamedCon(
-  const FileRegion& file_region,
-  const char* name,
-  const PtExpr* expr
-) : CptConnection{file_region, expr},
-    mName{name}
-{
-}
-
-// デストラクタ
-CptNamedCon::~CptNamedCon()
-{
-}
 
 // 名前を取り出す．
 const char*
@@ -273,30 +181,6 @@ CptNamedCon::name() const
 //////////////////////////////////////////////////////////////////////
 // strength を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// drive strength 用のコンストラクタ
-CptStrength::CptStrength(
-  const FileRegion& file_region,
-  VpiStrength value1,
-  VpiStrength value2
-) : mFileRegion{file_region},
-    mValue{value1, value2, VpiStrength::NoStrength}
-{
-}
-
-// charge strength 用のコンストラクタ
-CptStrength::CptStrength(
-  const FileRegion& file_region,
-  VpiStrength value1
-) : mFileRegion{file_region},
-    mValue{VpiStrength::NoStrength, VpiStrength::NoStrength, value1}
-{
-}
-
-// デストラクタ
-CptStrength::~CptStrength()
-{
-}
 
 // ファイル位置を取出す．
 FileRegion
@@ -331,41 +215,6 @@ CptStrength::charge() const
 // delay を表すクラス
 //////////////////////////////////////////////////////////////////////
 
-// 一つの値をとるコンストラクタ
-CptDelay::CptDelay(
-  const FileRegion& file_region,
-  const PtExpr* value1
-) : mFileRegion{file_region},
-    mValue{value1, nullptr, nullptr}
-{
-}
-
-// 二つの値をとるコンストラクタ
-CptDelay::CptDelay(
-  const FileRegion& file_region,
-  const PtExpr* value1,
-  const PtExpr* value2
-) : mFileRegion{file_region},
-    mValue{value1, value2, nullptr}
-{
-}
-
-// 三つの値をとるコンストラクタ
-CptDelay::CptDelay(
-  const FileRegion& file_region,
-  const PtExpr* value1,
-  const PtExpr* value2,
-  const PtExpr* value3
-) : mFileRegion{file_region},
-    mValue{value1, value2, value3}
-{
-}
-
-// デストラクタ
-CptDelay::~CptDelay()
-{
-}
-
 // ファイル位置を取出す．
 FileRegion
 CptDelay::file_region() const
@@ -374,33 +223,21 @@ CptDelay::file_region() const
 }
 
 // 値を取り出す．
-const PtExpr*
+const AstExpr*
 CptDelay::value(
   SizeType pos
 ) const
 {
-  if ( 0 <= pos && pos < 3 ) {
-    return mValue[pos];
+  if ( pos >= 3 ) {
+    throw std::out_of_range{"pos is out of range"};
   }
-  return nullptr;
+  return mValue[pos];
 }
 
 
 //////////////////////////////////////////////////////////////////////
 // 階層名を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptNameBranch::CptNameBranch(
-  const char* name
-) : mName{name}
-{
-}
-
-// デストラクタ
-CptNameBranch::~CptNameBranch()
-{
-}
 
 // 名前を取り出す．
 const char*
@@ -428,20 +265,6 @@ CptNameBranch::index() const
 // インデックスつきの階層名を表すクラス
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptNameBranchI::CptNameBranchI(
-  const char* name,
-  int index
-) : CptNameBranch{name},
-    mIndex{index}
-{
-}
-
-// デストラクタ
-CptNameBranchI::~CptNameBranchI()
-{
-}
-
 // インデックスを持っている時 true を返す．
 bool
 CptNameBranchI::has_index() const
@@ -460,18 +283,6 @@ CptNameBranchI::index() const
 //////////////////////////////////////////////////////////////////////
 // attribute_instance を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptAttrInst::CptAttrInst(
-  PtiAttrSpecArray&& as_array
-) : mAttrSpecArray{std::move(as_array)}
-{
-}
-
-// デストラクタ
-CptAttrInst::~CptAttrInst()
-{
-}
 
 // @brief ファイル位置を返す．
 FileRegion
@@ -495,7 +306,7 @@ CptAttrInst::attrspec_num() const
 }
 
 // @brief 要素の取得
-const PtAttrSpec*
+const AstAttrSpec*
 CptAttrInst::attrspec(
   SizeType pos
 ) const
@@ -507,22 +318,6 @@ CptAttrInst::attrspec(
 //////////////////////////////////////////////////////////////////////
 // attr_spec を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptAttrSpec::CptAttrSpec(
-  const FileRegion& file_region,
-  const char* name,
-  const PtExpr* expr
-) : mFileRegion{file_region},
-    mName{name},
-    mExpr{expr}
-{
-}
-
-// デストラクタ
-CptAttrSpec::~CptAttrSpec()
-{
-}
 
 // ファイル位置を返す．
 FileRegion
@@ -539,7 +334,7 @@ CptAttrSpec::name() const
 }
 
 // 式を取り出す．nullptr の場合もある．
-const PtExpr*
+const AstExpr*
 CptAttrSpec::expr() const
 {
   return mExpr;
@@ -547,186 +342,158 @@ CptAttrSpec::expr() const
 
 
 //////////////////////////////////////////////////////////////////////
-// その他
+// クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
 // ディレイコントロールを生成する．
-const PtControl*
-CptFactory::new_DelayControl(
+PtControl*
+PtFactory::new_DelayControl(
   const FileRegion& file_region,
-  const PtExpr* value
+  const AstExpr* value
 )
 {
-  ++ mNumDelayControl;
   void* p = mAlloc.get_memory(sizeof(CptDelayControl));
-  auto obj = new (p) CptDelayControl{file_region, value};
-  return obj;
+  return new (p) CptDelayControl(file_region, value);
 }
 
 // イベントコントロールを生成する．
-const PtControl*
-CptFactory::new_EventControl(
+PtControl*
+PtFactory::new_EventControl(
   const FileRegion& file_region,
-  const std::vector<const PtExpr*>& event_array
+  PtExprArray&& event_array
 )
 {
-  ++ mNumEventControl;
   void* p = mAlloc.get_memory(sizeof(CptEventControl));
-  auto obj = new (p) CptEventControl{file_region,
-				     PtiArray<const PtExpr>{mAlloc, event_array}};
-  return obj;
+  return new (p) CptEventControl(file_region, std::move(event_array));
 }
 
 // リピートコントロールを生成する．
-const PtControl*
-CptFactory::new_RepeatControl(
+PtControl*
+PtFactory::new_RepeatControl(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  const std::vector<const PtExpr*>& event_array
+  const AstExpr* expr,
+  PtExprArray&& event_array
 )
 {
-  ++ mNumRepeatControl;
   void* p = mAlloc.get_memory(sizeof(CptRepeatControl));
-  auto obj = new (p) CptRepeatControl{file_region, expr,
-				      PtiArray<const PtExpr>{mAlloc, event_array}};
-  return obj;
+  return new (p) CptRepeatControl(file_region, expr, std::move(event_array));
 }
 
 // 順序つき結合子を生成する．
-const PtConnection*
-CptFactory::new_OrderedCon(
+PtConnection*
+PtFactory::new_OrderedCon(
   const FileRegion& file_region,
-  const PtExpr* expr
+  const AstExpr* expr
 )
 {
-  ++ mNumAiOrderedCon;
   void* p = mAlloc.get_memory(sizeof(CptOrderedCon));
-  auto obj = new (p) CptOrderedCon{file_region, expr};
-  return obj;
+  return new (p) CptOrderedCon(file_region, expr);
 }
 
 // 順序つき結合子を生成する．
-const PtConnection*
-CptFactory::new_OrderedCon(
-  const PtExpr* expr
+PtConnection*
+PtFactory::new_OrderedCon(
+  const AstExpr* expr
 )
 {
-  ++ mNumOrderedCon;
   FileRegion file_region;
   if ( expr ) {
     file_region = expr->file_region();
   }
   void* p = mAlloc.get_memory(sizeof(CptOrderedCon));
-  auto obj = new (p) CptOrderedCon{file_region, expr};
-  return obj;
+  return new (p) CptOrderedCon(file_region, expr);
 }
 
 // 名前つき結合子を生成する．
-const PtConnection*
-CptFactory::new_NamedCon(
+PtConnection*
+PtFactory::new_NamedCon(
   const FileRegion& file_region,
   const char* name,
-  const PtExpr* expr
+  const AstExpr* expr
 )
 {
-  ++ mNumNamedCon;
   void* p = mAlloc.get_memory(sizeof(CptNamedCon));
-  auto obj = new (p) CptNamedCon{file_region, name, expr};
-  return obj;
+  return new (p) CptNamedCon(file_region, name, expr);
 }
 
 // strength を生成する．
-const PtStrength*
-CptFactory::new_Strength(
+PtStrength*
+PtFactory::new_Strength(
   const FileRegion& file_region,
   VpiStrength value1,
   VpiStrength value2
 )
 {
-  ++ mNumStrength;
   void* p = mAlloc.get_memory(sizeof(CptStrength));
-  auto obj = new (p) CptStrength{file_region, value1, value2};
-  return obj;
+  return new (p) CptStrength(file_region, value1, value2);
 }
 
 // strength を生成する．
-const PtStrength*
-CptFactory::new_Strength(
+PtStrength*
+PtFactory::new_Strength(
   const FileRegion& file_region,
   VpiStrength value1
 )
 {
-  ++ mNumStrength;
   void* p = mAlloc.get_memory(sizeof(CptStrength));
-  auto obj = new (p) CptStrength{file_region, value1};
-  return obj;
+  return new (p) CptStrength(file_region, value1);
 }
 
 // delay 値を生成する．
-const PtDelay*
-CptFactory::new_Delay(
+PtDelay*
+PtFactory::new_Delay(
   const FileRegion& file_region,
-  const PtExpr* value1
+  const AstExpr* value1
 )
 {
-  ++ mNumDelay;
   void* p = mAlloc.get_memory(sizeof(CptDelay));
-  auto obj = new (p) CptDelay{file_region, value1};
-  return obj;
+  return new (p) CptDelay(file_region, value1);
 }
 
 // delay 値を生成する．
-const PtDelay*
-CptFactory::new_Delay(
+PtDelay*
+PtFactory::new_Delay(
   const FileRegion& file_region,
-  const PtExpr* value1,
-  const PtExpr* value2
+  const AstExpr* value1,
+  const AstExpr* value2
 )
 {
-  ++ mNumDelay;
   void* p = mAlloc.get_memory(sizeof(CptDelay));
-  auto obj = new (p) CptDelay{file_region, value1, value2};
-  return obj;
+  return new (p) CptDelay(file_region, value1, value2);
 }
 
 // delay 値を生成する．
-const PtDelay*
-CptFactory::new_Delay(
+PtDelay*
+PtFactory::new_Delay(
   const FileRegion& file_region,
-  const PtExpr* value1,
-  const PtExpr* value2,
-  const PtExpr* value3
+  const AstExpr* value1,
+  const AstExpr* value2,
+  const AstExpr* value3
 )
 {
-  ++ mNumDelay;
   void* p = mAlloc.get_memory(sizeof(CptDelay));
-  auto obj = new (p) CptDelay{file_region, value1, value2, value3};
-  return obj;
+  return new (p) CptDelay(file_region, value1, value2, value3);
 }
 
 // 階層名を生成する．
-const PtNameBranch*
-CptFactory::new_NameBranch(
+PtNameBranch*
+PtFactory::new_NameBranch(
   const char* name
 )
 {
-  ++ mNumNameBranch;
   void* p = mAlloc.get_memory(sizeof(CptNameBranch));
-  auto obj = new (p) CptNameBranch{name};
-  return obj;
+  return new (p) CptNameBranch(name);
 }
 
 // 階層名を生成する．
-const PtNameBranch*
-CptFactory::new_NameBranch(
+PtNameBranch*
+PtFactory::new_NameBranch(
   const char* name,
   int index
 )
 {
-  ++ mNumNameBranchI;
   void* p = mAlloc.get_memory(sizeof(CptNameBranchI));
-  auto obj = new (p) CptNameBranchI{name, index};
-  return obj;
+  return new (p) CptNameBranchI(name, index);
 }
 
 
@@ -735,31 +502,27 @@ CptFactory::new_NameBranch(
 //////////////////////////////////////////////////////////////////////
 
 // attribute instance を生成する．
-const PtAttrInst*
-CptFactory::new_AttrInst(
+PtAttrInst*
+PtFactory::new_AttrInst(
   const FileRegion& file_region,
-  const std::vector<const PtAttrSpec*>& as_array
+  PtAttrSpecArray&& as_array
 )
 {
   // file_region は不要
-  ++ mNumAttrInst;
   void* p = mAlloc.get_memory(sizeof(CptAttrInst));
-  auto obj = new (p) CptAttrInst{PtiArray<const PtAttrSpec>{mAlloc, as_array}};
-  return obj;
+  return new (p) CptAttrInst(PtAttrSpecArray(mAlloc, std::move(as_array)));
 }
 
 // attribute spec を生成する．
-const PtAttrSpec*
-CptFactory::new_AttrSpec(
+PtAttrSpec*
+PtFactory::new_AttrSpec(
   const FileRegion& file_region,
   const char* name,
-  const PtExpr* expr
+  const AstExpr* expr
 )
 {
-  ++ mNumAttrSpec;
   void* p = mAlloc.get_memory(sizeof(CptAttrSpec));
-  auto obj = new (p) CptAttrSpec{file_region, name, expr};
-  return obj;
+  return new (p) CptAttrSpec(file_region, name, expr);
 }
 
 END_NAMESPACE_YM_VERILOG

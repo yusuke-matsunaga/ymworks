@@ -31,9 +31,9 @@ public:
   /// @brief コンストラクタ
   EiModuleHead(
     const VlScope* parent,     ///< [in] 親のスコープ
-    const PtModule* pt_module, ///< [in] モジュールテンプレート
-    const PtItem* pt_head,     ///< [in] パース木のヘッダ定義
-    const PtInst* pt_inst      ///< [in] インスタンス定義
+    const AstModule* ast_module, ///< [in] モジュールテンプレート
+    const AstItem* ast_head,     ///< [in] パース木のヘッダ定義
+    const AstInst* ast_inst      ///< [in] インスタンス定義
   );
 
   /// @brief デストラクタ
@@ -139,13 +139,13 @@ private:
   const VlScope* mParent;
 
   // パース木のモジュール定義
-  const PtModule* mPtModule;
+  const AstModule* mAstModule;
 
   // パース木のヘッダ定義
-  const PtItem* mPtHead;
+  const AstItem* mAstHead;
 
   // パース木のモジュールインスタンス定義
-  const PtInst* mPtInst;
+  const AstInst* mAstInst;
 
 };
 
@@ -316,7 +316,7 @@ public:
   void
   add_iodecl(
     ElbIOHead* head,         ///< [in] ヘッダ
-    const PtIOItem* pt_item, ///< [in] パース木のIO宣言要素
+    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
     const VlDecl* decl       ///< [in] 対応する宣言要素
   ) override;
 
@@ -324,7 +324,7 @@ public:
   void
   init_port(
     SizeType index,        ///< [in] ポート番号
-    const PtPort* pt_port, ///< [in] パース木のポート定義
+    const AstPort* ast_port, ///< [in] パース木のポート定義
     ElbExpr* low_conn,     ///< [in] 下位の接続
     VpiDir dir             ///< [in] 向き
   ) override;
@@ -473,9 +473,9 @@ public:
   /// @brief コンストラクタ
   EiModule2(
     const VlScope* parent,     ///< [in] 親のスコープ
-    const PtModule* pt_module, ///< [in] モジュールテンプレート
-    const PtItem* pt_head,     ///< [in] パース木のヘッダ定義
-    const PtInst* pt_inst      ///< [in] パース木のインスタンス定義
+    const AstModule* ast_module, ///< [in] モジュールテンプレート
+    const AstItem* ast_head,     ///< [in] パース木のヘッダ定義
+    const AstInst* ast_inst      ///< [in] パース木のインスタンス定義
   );
 
   /// @brief デストラクタ
@@ -547,10 +547,10 @@ public:
   /// @brief コンストラクタ
   EiModuleArray(
     const VlScope* parent,     ///< [in] 親のスコープ
-    const PtModule* pt_module, ///< [in] モジュールテンプレート
-    const PtItem* pt_head,     ///< [in] パース木のヘッダ定義
-    const PtInst* pt_inst,     ///< [in] パース木のインスタンス定義
-    const PtRange* pt_range,   ///< [in] パース木の範囲定義
+    const AstModule* ast_module, ///< [in] モジュールテンプレート
+    const AstItem* ast_head,     ///< [in] パース木のヘッダ定義
+    const AstInst* ast_inst,     ///< [in] パース木のインスタンス定義
+    const AstRange* ast_range,   ///< [in] パース木の範囲定義
     const RangeVal& range      ///< [in] 範囲の値
   );
 

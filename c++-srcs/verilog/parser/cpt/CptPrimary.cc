@@ -7,14 +7,14 @@
 /// All rights reserved.
 
 #include "CptExpr.h"
-#include "parser/CptFactory.h"
-#include "parser/PuHierName.h"
+#include "parser/PtFactory.h"
+#include "parser/PtHierName.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// PtPrimary のベース実装クラス
+// クラス CptPrimaryBase
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
@@ -30,10 +30,10 @@ CptPrimaryBase::~CptPrimaryBase()
 }
 
 // クラスの型を返す．
-PtExprType
+AstExpr::Type
 CptPrimaryBase::type() const
 {
-  return PtExprType::Primary;
+  return Primary;
 }
 
 // 末尾の名前を取り出す．
@@ -52,7 +52,7 @@ CptPrimaryBase::is_simple() const
 
 
 //////////////////////////////////////////////////////////////////////
-// PtPrimary の実装クラス
+// クラス CptPrimary
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
@@ -78,14 +78,14 @@ CptPrimary::file_region() const
 
 
 //////////////////////////////////////////////////////////////////////
-// インデックスつきの終端記号を表すクラス
+// クラス CptPrimaryI
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryI::CptPrimaryI(
   const FileRegion& file_region,
   const char* name,
-  PtiExprArray&& index_array
+  PtExprArray&& index_array
 ) : CptPrimaryBase(name),
     mFileRegion{file_region},
     mIndexArray{std::move(index_array)}
@@ -112,14 +112,11 @@ CptPrimaryI::index_num() const
 }
 
 // @brief インデックスの取得
-const PtExpr*
+const AstExpr*
 CptPrimaryI::index(
   SizeType pos
 ) const
 {
-  if ( pos >= index_num() ) {
-    throw std::out_of_range{"pos is out of range"};
-  }
   return mIndexArray[pos];
 }
 
@@ -132,14 +129,14 @@ CptPrimaryI::is_simple() const
 
 
 //////////////////////////////////////////////////////////////////////
-// 定数インデックスつきの終端記号を表すクラス
+// クラス CptPrimaryCI
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryCI::CptPrimaryCI(
   const FileRegion& file_region,
   const char* name,
-  PtiExprArray&& index_array
+  PtExprArray&& index_array
 ) : CptPrimaryI(file_region, name, std::move(index_array))
 {
 }
@@ -159,14 +156,14 @@ CptPrimaryCI::is_const_index() const
 
 
 //////////////////////////////////////////////////////////////////////
-// 範囲指定つきの終端記号を表すクラス
+// クラス CptPrimaryR
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryR::CptPrimaryR(
   const FileRegion& file_region,
   const char* name,
-  const PtPart* part
+  const AstPart* part
 ) : CptPrimaryBase(name),
     mFileRegion{file_region},
     mPart{part}
@@ -186,7 +183,7 @@ CptPrimaryR::file_region() const
 }
 
 // 範囲指定の取得
-const PtPart*
+const AstPart*
 CptPrimaryR::part() const
 {
   return mPart;
@@ -201,14 +198,14 @@ CptPrimaryR::is_simple() const
 
 
 //////////////////////////////////////////////////////////////////////
-// 定数範囲指定つきの終端記号を表すクラス
+// クラス CptPrimaryCR
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryCR::CptPrimaryCR(
   const FileRegion& file_region,
   const char* name,
-  const PtPart* part
+  const AstPart* part
 ) : CptPrimaryR(file_region, name, part)
 {
 }
@@ -227,15 +224,15 @@ CptPrimaryCR::is_const_index() const
 
 
 //////////////////////////////////////////////////////////////////////
-// インデックスと範囲指定つきの終端記号を表すクラス
+// クラス CptPrimaryIR
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryIR::CptPrimaryIR(
   const FileRegion& file_region,
   const char* name,
-  PtiExprArray&& index_array,
-  const PtPart* part
+  PtExprArray&& index_array,
+  const AstPart* part
 ) : CptPrimaryI(file_region, name, std::move(index_array)),
     mPart{part}
 {
@@ -247,7 +244,7 @@ CptPrimaryIR::~CptPrimaryIR()
 }
 
 // 範囲指定を取り出す．
-const PtPart*
+const AstPart*
 CptPrimaryIR::part() const
 {
   return mPart;
@@ -255,13 +252,13 @@ CptPrimaryIR::part() const
 
 
 //////////////////////////////////////////////////////////////////////
-// 階層名を持つ primary operator を表すクラス
+// クラス CptPrimaryH
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryH::CptPrimaryH(
   const FileRegion& file_region,
-  PtiNameBranchArray&& nb_array,
+  PtNameBranchArray&& nb_array,
   const char* tail_name
 ) : CptPrimaryBase(tail_name),
     mFileRegion{file_region},
@@ -289,7 +286,7 @@ CptPrimaryH::namebranch_num() const
 }
 
 // @brief 階層ブランチの取得
-const PtNameBranch*
+const AstNameBranch*
 CptPrimaryH::namebranch(
   SizeType pos
 ) const
@@ -299,15 +296,15 @@ CptPrimaryH::namebranch(
 
 
 //////////////////////////////////////////////////////////////////////
-// 階層名を持つインデックスつき primary を表すクラス
+// クラス CptPrimaryHI
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryHI::CptPrimaryHI(
   const FileRegion& file_region,
-  PtiNameBranchArray&& nb_array,
+  PtNameBranchArray&& nb_array,
   const char* tail_name,
-  PtiExprArray&& index_array
+  PtExprArray&& index_array
 ) : CptPrimaryI(file_region, tail_name, std::move(index_array)),
     mNbArray{std::move(nb_array)}
 {
@@ -326,28 +323,25 @@ CptPrimaryHI::namebranch_num() const
 }
 
 // @brief 階層ブランチの取得
-const PtNameBranch*
+const AstNameBranch*
 CptPrimaryHI::namebranch(
   SizeType pos
 ) const
 {
-  if ( pos >= namebranch_num() ) {
-    throw std::out_of_range{"pos is out of range"};
-  }
   return mNbArray[pos];
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// 階層名を持つ定数インデックスつき primary を表すクラス
+// クラス CptPrimaryHCI
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryHCI::CptPrimaryHCI(
   const FileRegion& file_region,
-  PtiNameBranchArray&& nb_array,
+  PtNameBranchArray&& nb_array,
   const char* tail_name,
-  PtiExprArray&& index_array
+  PtExprArray&& index_array
 ) : CptPrimaryHI(file_region, std::move(nb_array),
 		 tail_name, std::move(index_array))
 {
@@ -367,15 +361,15 @@ CptPrimaryHCI::is_const_index() const
 
 
 //////////////////////////////////////////////////////////////////////
-// 階層名を持つ範囲指定つき primary を表すクラス
+// クラス CptPrimaryHR
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryHR::CptPrimaryHR(
   const FileRegion& file_region,
-  PtiNameBranchArray&& nb_array,
+  PtNameBranchArray&& nb_array,
   const char* tail_name,
-  const PtPart* part
+  const AstPart* part
 ) : CptPrimaryR(file_region, tail_name, part),
     mNbArray{std::move(nb_array)}
 {
@@ -394,29 +388,26 @@ CptPrimaryHR::namebranch_num() const
 }
 
 // @brief 階層ブランチの取得
-const PtNameBranch*
+const AstNameBranch*
 CptPrimaryHR::namebranch(
   SizeType pos
 ) const
 {
-  if ( pos >= namebranch_num() ) {
-    throw std::out_of_range{"pos is out of range"};
-  }
   return mNbArray[pos];
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// 階層名を持つインデックスと範囲指定つき primary を表すクラス
+// クラス CptPrimaryHIR
 //////////////////////////////////////////////////////////////////////
 
 // コンストラクタ
 CptPrimaryHIR::CptPrimaryHIR(
   const FileRegion& file_region,
-  PtiNameBranchArray&& nb_array,
+  PtNameBranchArray&& nb_array,
   const char* tail_name,
-  PtiExprArray&& index_array,
-  const PtPart* part
+  PtExprArray&& index_array,
+  const AstPart* part
 ) : CptPrimaryIR(file_region, tail_name,
 		 std::move(index_array),
 		 part),
@@ -437,202 +428,171 @@ CptPrimaryHIR::namebranch_num() const
 }
 
 // @brief 階層ブランチの取得
-const PtNameBranch*
+const AstNameBranch*
 CptPrimaryHIR::namebranch(
   SizeType pos
 ) const
 {
-  if ( pos >= namebranch_num() ) {
-    throw std::out_of_range{"pos is out of range"};
-  }
   return mNbArray[pos];
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// primary 関係
+// クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_Primary(
+PtExpr*
+PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name
 )
 {
-  ++ mNumPrimary;
   void* p = mAlloc.get_memory(sizeof(CptPrimary));
-  auto obj = new (p) CptPrimary(file_region, name);
-  return obj;
+  return new (p) CptPrimary(file_region, name);
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_Primary(
+PtExpr*
+PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<const PtExpr*>& index_array
+  PtExprArray&& index_array
 )
 {
-  ++ mNumPrimaryI;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryI));
-  auto obj = new (p) CptPrimaryI(file_region, name,
-				 PtiArray<const PtExpr>{mAlloc, index_array});
-  return obj;
+  return new (p) CptPrimaryI(file_region, name, std::move(index_array));
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_Primary(
+PtExpr*
+PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  const PtPart* part
+  const AstPart* part
 )
 {
-  ++ mNumPrimaryR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryR));
-  auto obj = new (p) CptPrimaryR(file_region, name, part);
-  return obj;
+  return new (p) CptPrimaryR(file_region, name, part);
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_Primary(
+PtExpr*
+PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<const PtExpr*>& index_array,
-  const PtPart* part
+  PtExprArray&& index_array,
+  const AstPart* part
 )
 {
-  ++ mNumPrimaryIR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryIR));
-  auto obj = new (p) CptPrimaryIR(file_region, name,
-				  PtiArray<const PtExpr>{mAlloc, index_array},
-				  part);
-  return obj;
+  return new (p) CptPrimaryIR(file_region, name,
+			      std::move(index_array),
+			      part);
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_Primary(
+PtExpr*
+PtFactory::new_Primary(
   const FileRegion& file_region,
-  PuHierName* hname
+  PtHierName* hname
 )
 {
-  ++ mNumPrimaryH;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryH));
-  auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryH(file_region,
-				 PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				 tail_name);
-  return obj;
+  return new (p) CptPrimaryH(file_region,
+			     hname->name_branch_to_array(mAlloc),
+			     tail_name);
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_Primary(
+PtExpr*
+PtFactory::new_Primary(
   const FileRegion& file_region,
-  PuHierName* hname,
-  const std::vector<const PtExpr*>& index_array
+  PtHierName* hname,
+  PtExprArray&& index_array
 )
 {
-  ++ mNumPrimaryHI;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHI));
-  auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryHI(file_region,
-				  PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				  tail_name,
-				  PtiArray<const PtExpr>{mAlloc, index_array});
-  return obj;
+  return new (p) CptPrimaryHI(file_region,
+			      hname->name_branch_to_array(mAlloc),
+			      tail_name,
+			      std::move(index_array));
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_Primary(
+PtExpr*
+PtFactory::new_Primary(
   const FileRegion& file_region,
-  PuHierName* hname,
-  const PtPart* part
+  PtHierName* hname,
+  const AstPart* part
 )
 {
-  ++ mNumPrimaryHR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHR));
-  auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryHR(file_region,
-				  PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				  tail_name, part);
-  return obj;
+  return new (p) CptPrimaryHR(file_region,
+			      hname->name_branch_to_array(mAlloc),
+			      tail_name, part);
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_Primary(
+PtExpr*
+PtFactory::new_Primary(
   const FileRegion& file_region,
-  PuHierName* hname,
-  const std::vector<const PtExpr*>& index_array,
-  const PtPart* part
+  PtHierName* hname,
+  PtExprArray&& index_array,
+  const AstPart* part
 )
 {
-  ++ mNumPrimaryHIR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHIR));
-  auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryHIR(file_region,
-				   PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				   tail_name,
-				   PtiArray<const PtExpr>{mAlloc, index_array},
-				   part);
-  return obj;
+  return new (p) CptPrimaryHIR(file_region,
+			       hname->name_branch_to_array(mAlloc),
+			       tail_name,
+			       std::move(index_array),
+			       part);
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_CPrimary(
+PtExpr*
+PtFactory::new_CPrimary(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<const PtExpr*>& index_array
+  PtExprArray&& index_array
 )
 {
-  ++ mNumPrimaryCI;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCI));
-  auto obj = new (p) CptPrimaryCI(file_region, name,
-				  PtiArray<const PtExpr>{mAlloc, index_array});
-  return obj;
+  return new (p) CptPrimaryCI(file_region, name,
+			      std::move(index_array));
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_CPrimary(
+PtExpr*
+PtFactory::new_CPrimary(
   const FileRegion& file_region,
   const char* name,
-  const PtPart* part
+  const AstPart* part
 )
 {
-  ++ mNumPrimaryCR;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCR));
-  auto obj = new (p) CptPrimaryCR(file_region, name, part);
-  return obj;
+  return new (p) CptPrimaryCR(file_region, name, part);
 }
 
 // primary を生成する．
-const PtExpr*
-CptFactory::new_CPrimary(
+PtExpr*
+PtFactory::new_CPrimary(
   const FileRegion& file_region,
-  PuHierName* hname,
-  const std::vector<const PtExpr*>& index_array
+  PtHierName* hname,
+  PtExprArray&& index_array
 )
 {
-  ++ mNumPrimaryHCI;
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHCI));
-  auto nb_array = hname->name_branch_to_vector();
   auto tail_name = hname->tail_name();
-  auto obj = new (p) CptPrimaryHCI(file_region,
-				   PtiArray<const PtNameBranch>{mAlloc, nb_array},
-				   tail_name,
-				   PtiArray<const PtExpr>{mAlloc, index_array});
-  return obj;
+  return new (p) CptPrimaryHCI(file_region,
+			       hname->name_branch_to_array(mAlloc),
+			       tail_name,
+			       std::move(index_array));
 }
 
 END_NAMESPACE_YM_VERILOG

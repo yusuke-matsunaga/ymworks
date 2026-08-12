@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include <gtest/gtest.h>
-#include "ym/VlValueType.h"
+#include "ym/vl/VlValueType.h"
 
 
 BEGIN_NAMESPACE_YM

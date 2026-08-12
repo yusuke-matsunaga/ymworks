@@ -16,6 +16,7 @@
 #include "ym/pt/PtStmt.h"
 #include "ym/pt/PtExpr.h"
 #include "ym/pt/PtMisc.h"
+#include "ym/BitVector.h"
 #include "ym/VlUdpVal.h"
 
 
@@ -876,7 +877,7 @@ PtDumper::put(
 
       put("mFileRegion", expr->file_region());
       put("mConstType", expr->const_type());
-      put("mConstInt", expr->const_int());
+      put("mConstBitVector", expr->const_bitvect());
       put("mConstStr", expr->const_str());
       put("mConstReal", expr->const_real());
     }
@@ -1030,6 +1031,17 @@ PtDumper::put(
 {
   PtHeader x(*this, label, "uint32", false);
   mStream << d;
+}
+
+// @brief ビットベクタ型データの出力
+void
+PtDumper::put(
+  const char* label,
+  const BitVector& bv
+)
+{
+  PtHeader x(*this, label, "bitvector", false);
+  mStream << bv;
 }
 
 // @brief 実数型データの出力

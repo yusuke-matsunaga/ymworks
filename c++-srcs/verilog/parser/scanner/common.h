@@ -8,15 +8,15 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/pt/PtP.h"
-
-#include "parser/PtrList.h"
+#include "ym/vl/Ast.h"
+#include "parser/PtList.h"
+#include "parser/PtFwd.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 class Parser;
-class PuHierName;
+class PtHierName;
 
 #include "verilog_grammer.hh"
 

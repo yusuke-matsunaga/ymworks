@@ -8,11 +8,9 @@
 
 #include "ym/Timer.h"
 #include "VlTestLineWatcher.h"
-#include "ym/VlMgr.h"
+#include "ym/vl/VlMgr.h"
 #include "VlDumper.h"
-
 #include "ym/clib.h"
-
 #include "ym/MsgMgr.h"
 #include "ym/StreamMsgHandler.h"
 

@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/BitVector.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -160,8 +160,8 @@ BitVector::value(
   auto blk = pos / BLOCK_SIZE;
   auto sft = pos - blk * BLOCK_SIZE;
   uword msk = 1 << sft;
-  if ( mVal1.get()[blk] & msk ) {
-    if ( mVal0.get()[blk] & msk ) {
+  if ( mVal1[blk] & msk ) {
+    if ( mVal0[blk] & msk ) {
       return VlScalarVal::x();
     }
     else {
@@ -169,7 +169,7 @@ BitVector::value(
     }
   }
   else {
-    if ( mVal0.get()[blk] & msk ) {
+    if ( mVal0[blk] & msk ) {
       return VlScalarVal::zero();
     }
     else {
@@ -184,14 +184,14 @@ BitVector::has_x() const
 {
   auto n = block(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    uword tmp = mVal0.get()[i] & mVal1.get()[i];
+    uword tmp = mVal0[i] & mVal1[i];
     if ( tmp ) {
       return true;
     }
   }
 
   uword m = mask(size());
-  if ( mVal0.get()[n - 1] & mVal1.get()[n - 1] & m ) {
+  if ( mVal0[n - 1] & mVal1[n - 1] & m ) {
     return true;
   }
   return false;
@@ -203,13 +203,13 @@ BitVector::has_z() const
 {
   auto n = block(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    if ( (mVal0.get()[i] | mVal1.get()[i]) != ALL1 ) {
+    if ( (mVal0[i] | mVal1[i]) != ALL1 ) {
       return true;
     }
   }
 
   uword m = mask(size());
-  if ( (mVal0.get()[n - 1] | mVal1.get()[n - 1] | ~m) != ALL1 ) {
+  if ( (mVal0[n - 1] | mVal1[n - 1] | ~m) != ALL1 ) {
     return true;
   }
   return false;
@@ -221,13 +221,13 @@ BitVector::has_xz() const
 {
   auto n = block(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    if ( (mVal0.get()[i] ^ mVal1.get()[i]) != ALL1 ) {
+    if ( (mVal0[i] ^ mVal1[i]) != ALL1 ) {
       return true;
     }
   }
 
   uword m = mask(size());
-  if ( ((mVal0.get()[n - 1] ^ mVal1.get()[n - 1]) | ~m) != ALL1 ) {
+  if ( ((mVal0[n - 1] ^ mVal1[n - 1]) | ~m) != ALL1 ) {
     return true;
   }
   return false;
@@ -240,14 +240,14 @@ BitVector::z_to_x()
 {
   auto n = block(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    uword zpat = ~mVal0.get()[i] & ~mVal1.get()[i];
-    mVal0.get()[i] |= zpat;
-    mVal1.get()[i] |= zpat;
+    uword zpat = ~mVal0[i] & ~mVal1[i];
+    mVal0[i] |= zpat;
+    mVal1[i] |= zpat;
   }
   uword m = mask(size());
-  uword zpat = ~mVal0.get()[n - 1] & ~mVal1.get()[n - 1] & m;
-  mVal0.get()[n - 1] |= zpat;
-  mVal1.get()[n - 1] |= zpat;
+  uword zpat = ~mVal0[n - 1] & ~mVal1[n - 1] & m;
+  mVal0[n - 1] |= zpat;
+  mVal1[n - 1] |= zpat;
 }
 
 // x/z を 0 に変える．
@@ -257,16 +257,16 @@ BitVector::xz_to_0()
 {
   auto n = block(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    uword pat = ~mVal0.get()[i] & mVal1.get()[i];
-    mVal0.get()[i] = ~pat;
-    mVal1.get()[i] = pat;
+    uword pat = ~mVal0[i] & mVal1[i];
+    mVal0[i] = ~pat;
+    mVal1[i] = pat;
   }
   uword m = mask(size());
-  uword pat = ~mVal0.get()[n - 1] & mVal1.get()[n - 1];
+  uword pat = ~mVal0[n - 1] & mVal1[n - 1];
   uword andpat = ~pat | ~m;
   uword orpat = pat & m;
-  mVal0.get()[n - 1] = (mVal0.get()[n - 1] | orpat) & andpat;
-  mVal1.get()[n - 1] = (mVal1.get()[n - 1] | orpat) & andpat;
+  mVal0[n - 1] = (mVal0[n - 1] | orpat) & andpat;
+  mVal1[n - 1] = (mVal1[n - 1] | orpat) & andpat;
 }
 
 // 値を近い double 型に変換する．
@@ -280,7 +280,7 @@ BitVector::to_real() const
   double ans = 0.0;
   for ( SizeType i = 0; i < n; ++ i ) {
     const double mag = static_cast<double>(1 << (i * BLOCK_SIZE));
-    ans += static_cast<double>(mVal1.get()[i]) * mag;
+    ans += static_cast<double>(mVal1[i]) * mag;
   }
   return ans;
 }
@@ -291,8 +291,8 @@ BitVector::to_logic() const
 {
   auto n = block(size());
   for ( SizeType i = 0; i < n - 1; ++ i ) {
-    uword pat0 = mVal0.get()[i];
-    uword pat_xor = pat0 ^ mVal1.get()[i];
+    uword pat0 = mVal0[i];
+    uword pat_xor = pat0 ^ mVal1[i];
     if ( pat_xor != ALL1 ) {
       // X/Z のパタンがあった
       return VlScalarVal::x();
@@ -302,8 +302,8 @@ BitVector::to_logic() const
     }
   }
   uword m = mask(size());
-  uword pat0 = mVal0.get()[n - 1];
-  uword pat_xor = (pat0 ^ mVal1.get()[n - 1]) | ~m;
+  uword pat0 = mVal0[n - 1];
+  uword pat_xor = (pat0 ^ mVal1[n - 1]) | ~m;
   if ( pat_xor != ALL1 ) {
     // X/Z のパタンがあった
     return VlScalarVal::x();
@@ -421,7 +421,7 @@ BitVector::verilog_string(
 	    ans += "\'sd";
 	  }
 	}
-	else {
+	else if ( is_sized() ) {
 	  ans += "\'d";
 	}
 	ans += dec_str();
@@ -446,7 +446,7 @@ BitVector::verilog_string(
 std::string
 BitVector::dec_str() const
 {
-  return dec_str_sub(mVal1.get(), block(size()));
+  return dec_str_sub(mVal1, block(size()));
 }
 
 // 内容を2進数で表した文字列を返す．
@@ -505,8 +505,8 @@ BitVector::oct_str(
   std::string ans;
   while ( blk -- > 0 ) {
     for ( int i = pos; i -- > 0; ) {
-      uword bit0 = (mVal0.get()[blk] >> i) & 1;
-      uword bit1 = (mVal1.get()[blk] >> i) & 1;
+      uword bit0 = (mVal0[blk] >> i) & 1;
+      uword bit1 = (mVal1[blk] >> i) & 1;
       tmp0 = ((tmp0 << 1) + bit0) & 7;
       tmp1 = ((tmp1 << 1) + bit1) & 7;
       l --;
@@ -561,8 +561,8 @@ BitVector::hex_str(
   std::string ans;
   while ( blk -- > 0 ) {
     for ( int i = pos; i -- > 0; ) {
-      uword bit0 = (mVal0.get()[blk] >> i) & 1;
-      uword bit1 = (mVal1.get()[blk] >> i) & 1;
+      uword bit0 = (mVal0[blk] >> i) & 1;
+      uword bit1 = (mVal1[blk] >> i) & 1;
       tmp0 = ((tmp0 << 1) + bit0) & 15;
       tmp1 = ((tmp1 << 1) + bit1) & 15;
       l --;
@@ -606,7 +606,7 @@ BitVector::hex_str(
 // 値をセットする関数
 // これは1語に収まる時に用いる．
 void
-BitVector::set(
+BitVector::set_word(
   uword val0,
   uword val1,
   SizeType size,
@@ -615,18 +615,20 @@ BitVector::set(
   SizeType base
 )
 {
-  ASSERT_COND( size <= BLOCK_SIZE );
+  if ( size > BLOCK_SIZE ) {
+    throw std::logic_error{"size > BLOCK_SIZE"};
+  }
 
   resize(size);
   set_type(has_size, has_sign, base);
   uword m = mask(size);
-  mVal0.get()[0] = val0 | ~m;
-  mVal1.get()[0] = val1 & m;
+  mVal0[0] = val0 | ~m;
+  mVal1[0] = val1 & m;
 }
 
 // 値をセットする関数
 void
-BitVector::set(
+BitVector::set_wordptr(
   const uword* val0,
   const uword* val1,
   SizeType src_size,
@@ -665,29 +667,29 @@ BitVector::set(
   // コピーする
   for ( SizeType i = 0; i < n; ++ i ) {
     if ( i < src_n - 1 ) {
-      mVal0.get()[i] = val0[i];
-      mVal1.get()[i] = val1[i];
+      mVal0[i] = val0[i];
+      mVal1[i] = val1[i];
     }
     else if ( i == src_n - 1 ) {
       uword sm = mask(src_size);
-      mVal0.get()[i] = (last_val0 & ~sm) | (val0[i] & sm);
-      mVal1.get()[i] = (last_val1 & ~sm) | (val1[i] & sm);
+      mVal0[i] = (last_val0 & ~sm) | (val0[i] & sm);
+      mVal1[i] = (last_val1 & ~sm) | (val1[i] & sm);
     }
     else {
-      mVal0.get()[i] = last_val0;
-      mVal1.get()[i] = last_val1;
+      mVal0[i] = last_val0;
+      mVal1[i] = last_val1;
     }
   }
 
   // 上位ビットをトリミングしておく
   uword m = mask(size);
-  mVal0.get()[n - 1] |= ~m;
-  mVal1.get()[n - 1] &= m;
+  mVal0[n - 1] |= ~m;
+  mVal1[n - 1] &= m;
 }
 
 // 値をセットする関数
 void
-BitVector::set(
+BitVector::set_wordvector(
   const std::vector<uword>& val0,
   const std::vector<uword>& val1,
   SizeType src_size,
@@ -726,24 +728,24 @@ BitVector::set(
   // コピーする
   for ( SizeType i = 0; i < n; ++ i ) {
     if ( i < src_n - 1 ) {
-      mVal0.get()[i] = val0[i];
-      mVal1.get()[i] = val1[i];
+      mVal0[i] = val0[i];
+      mVal1[i] = val1[i];
     }
     else if ( i == src_n - 1 ) {
       uword sm = mask(src_size);
-      mVal0.get()[i] = (last_val0 & ~sm) | (val0[i] & sm);
-      mVal1.get()[i] = (last_val1 & ~sm) | (val1[i] & sm);
+      mVal0[i] = (last_val0 & ~sm) | (val0[i] & sm);
+      mVal1[i] = (last_val1 & ~sm) | (val1[i] & sm);
     }
     else {
-      mVal0.get()[i] = last_val0;
-      mVal1.get()[i] = last_val1;
+      mVal0[i] = last_val0;
+      mVal1[i] = last_val1;
     }
   }
 
   // 上位ビットをトリミングしておく
   uword m = mask(size);
-  mVal0.get()[n - 1] |= ~m;
-  mVal1.get()[n - 1] &= m;
+  mVal0[n - 1] |= ~m;
+  mVal1[n - 1] &= m;
 }
 
 // mVal0, mVal1 のリサイズをする．
@@ -756,8 +758,10 @@ BitVector::resize(
   mSize = size;
   auto new_bsize = block(mSize);
   if ( new_bsize > old_bsize ) {
-    mVal0 = std::unique_ptr<uword>{new uword[new_bsize]};
-    mVal1 = std::unique_ptr<uword>{new uword[new_bsize]};
+    delete [] mVal0;
+    delete [] mVal1;
+    mVal0 = new uword[new_bsize];
+    mVal1 = new uword[new_bsize];
   }
 }
 

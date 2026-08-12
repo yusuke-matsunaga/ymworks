@@ -3,13 +3,12 @@
 /// @brief CptIO の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "CptIO.h"
 #include "alloc/Alloc.h"
-#include "parser/CptFactory.h"
-#include "ym/pt/PtExpr.h"
+#include "parser/PtFactory.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -17,29 +16,6 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 // IO宣言のヘッダのベース実装クラス
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-CptIOHBase::CptIOHBase(
-  const FileRegion& file_region,
-  VpiDir dir,
-  VpiAuxType aux_type,
-  VpiNetType net_type,
-  VpiVarType var_type,
-  bool sign
-) : mFileRegion{file_region}
-{
-  mAttr =
-    static_cast<unsigned int>(sign) |
-    (static_cast<unsigned int>(dir) << 1) |
-    (static_cast<unsigned int>(aux_type) << 8) |
-    (static_cast<unsigned int>(net_type) << 16) |
-    (static_cast<unsigned int>(var_type) << 24);
-}
-
-// @brief デストラクタ
-CptIOHBase::~CptIOHBase()
-{
-}
 
 // @brief ファイル位置の取得
 FileRegion
@@ -84,7 +60,7 @@ CptIOHBase::is_signed() const
 }
 
 // @brief 範囲の取得
-const PtRange*
+const AstRange*
 CptIOHBase::range() const
 {
   return nullptr;
@@ -98,7 +74,7 @@ CptIOHBase::item_num() const
 }
 
 // @brief 要素の取得
-const PtIOItem*
+const AstIOItem*
 CptIOHBase::item(
   SizeType pos
 ) const
@@ -109,7 +85,7 @@ CptIOHBase::item(
 // @brief 要素リストの設定
 void
 CptIOHBase::set_elem(
-  PtiIOItemArray&& elem_array
+  PtIOItemArray&& elem_array
 )
 {
   mItemArray = std::move(elem_array);
@@ -117,53 +93,11 @@ CptIOHBase::set_elem(
 
 
 //////////////////////////////////////////////////////////////////////
-// 範囲を持たない IO宣言のヘッダ
-//////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-CptIOH::CptIOH(
-  const FileRegion& file_region,
-  VpiDir dir,
-  VpiAuxType aux_type,
-  VpiNetType net_type,
-  VpiVarType var_type,
-  bool sign
-) : CptIOHBase(file_region, dir, aux_type,
-	       net_type, var_type, sign)
-{
-}
-
-// @brief デストラクタ
-CptIOH::~CptIOH()
-{
-}
-
-
-//////////////////////////////////////////////////////////////////////
 // ビットベクタ型のIO宣言のヘッダ
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-CptIOHV::CptIOHV(
-  const FileRegion& file_region,
-  VpiDir dir,
-  VpiAuxType aux_type,
-  VpiNetType net_type,
-  bool sign,
-  const PtRange* range
-) : CptIOHBase(file_region, dir, aux_type,
-	       net_type, VpiVarType::None, sign),
-    mRange{range}
-{
-}
-
-// @brief デストラクタ
-CptIOHV::~CptIOHV()
-{
-}
-
 // @brief 範囲の取得
-const PtRange*
+const AstRange*
 CptIOHV::range() const
 {
   return mRange;
@@ -173,20 +107,6 @@ CptIOHV::range() const
 //////////////////////////////////////////////////////////////////////
 // IO宣言要素を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-CptIOItem::CptIOItem(
-  const FileRegion& file_region,
-  const char* name
-) : mLoc{file_region},
-    mName{name}
-{
-}
-
-// @brief デストラクタ
-CptIOItem::~CptIOItem()
-{
-}
 
 // @brief ファイル位置の取得
 FileRegion
@@ -203,7 +123,7 @@ CptIOItem::name() const
 }
 
 // @brief 初期値の取得
-const PtExpr*
+const AstExpr*
 CptIOItem::init_value() const
 {
   return nullptr;
@@ -214,24 +134,6 @@ CptIOItem::init_value() const
 // 初期値をもった IO宣言要素の基底クラス
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-CptIOItemI::CptIOItemI(
-  const FileRegion& file_region,
-  const char* name,
-  const PtExpr* init_value
-) : CptIOItem(file_region, name),
-    mInitValue{init_value}
-{
-  if ( init_value == nullptr ) {
-    throw std::logic_error{"init_value == nullptr"};
-  }
-}
-
-// @brief デストラクタ
-CptIOItemI::~CptIOItemI()
-{
-}
-
 // @brief ファイル位置の取得
 FileRegion
 CptIOItemI::file_region() const
@@ -240,7 +142,7 @@ CptIOItemI::file_region() const
 }
 
 // @brief 初期値の取得
-const PtExpr*
+const AstExpr*
 CptIOItemI::init_value() const
 {
   return mInitValue;
@@ -248,120 +150,94 @@ CptIOItemI::init_value() const
 
 
 //////////////////////////////////////////////////////////////////////
-// IO 宣言関係
+// クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
 // @brief 範囲付きの IO 宣言のヘッダの生成
-PtiIOHead*
-CptFactory::new_IOHead(
+PtIOHead*
+PtFactory::new_IOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const PtRange* range
+  const AstRange* range
 )
 {
   if ( range == nullptr ) {
-    ++ mNumIOH;
     void* p = mAlloc.get_memory(sizeof(CptIOH));
-    auto obj = new (p) CptIOH(file_region, dir, VpiAuxType::None,
-			      VpiNetType::None, VpiVarType::None, sign);
-    return obj;
+    return new (p) CptIOH(file_region, dir, VpiAuxType::None,
+			  VpiNetType::None, VpiVarType::None, sign);
   }
-  else {
-    ++ mNumIOHV;
-    void* p = mAlloc.get_memory(sizeof(CptIOHV));
-    auto obj = new (p) CptIOHV(file_region, dir, VpiAuxType::None,
-			       VpiNetType::None, sign, range);
-    return obj;
-  }
+  void* p = mAlloc.get_memory(sizeof(CptIOHV));
+  return new (p) CptIOHV(file_region, dir, VpiAuxType::None,
+			 VpiNetType::None, sign, range);
 }
 
 // @brief 範囲付きの IO 宣言のヘッダの生成 (reg 型)
-PtiIOHead*
-CptFactory::new_RegIOHead(
+PtIOHead*
+PtFactory::new_RegIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const PtRange* range
+  const AstRange* range
 )
 {
   if ( range == nullptr ) {
-    ++ mNumIOH;
     void* p = mAlloc.get_memory(sizeof(CptIOH));
-    auto obj = new (p) CptIOH(file_region, dir, VpiAuxType::Reg,
-			      VpiNetType::None, VpiVarType::None, sign);
-    return obj;
+    return new (p) CptIOH(file_region, dir, VpiAuxType::Reg,
+			  VpiNetType::None, VpiVarType::None, sign);
   }
-  else {
-    ++ mNumIOHV;
-    void* p = mAlloc.get_memory(sizeof(CptIOHV));
-    auto obj = new (p) CptIOHV(file_region, dir, VpiAuxType::Reg,
-			       VpiNetType::None, sign, range);
-    return obj;
-  }
+  void* p = mAlloc.get_memory(sizeof(CptIOHV));
+  return new (p) CptIOHV(file_region, dir, VpiAuxType::Reg,
+			 VpiNetType::None, sign, range);
 }
 
 // @brief 範囲付きの IO 宣言のヘッダの生成 (ネット型)
-PtiIOHead*
-CptFactory::new_NetIOHead(
+PtIOHead*
+PtFactory::new_NetIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   VpiNetType net_type,
   bool sign,
-  const PtRange* range
+  const AstRange* range
 )
 {
   if ( range == nullptr ) {
-    ++ mNumIOH;
     void* p = mAlloc.get_memory(sizeof(CptIOH));
-    auto obj = new (p) CptIOH(file_region, dir, VpiAuxType::Net,
-			      net_type, VpiVarType::None, sign);
-    return obj;
+    return new (p) CptIOH(file_region, dir, VpiAuxType::Net,
+			  net_type, VpiVarType::None, sign);
   }
-  else {
-    ++ mNumIOHV;
-    void* p = mAlloc.get_memory(sizeof(CptIOHV));
-    auto obj = new (p) CptIOHV(file_region, dir, VpiAuxType::Net,
-			       net_type, sign, range);
-    return obj;
-  }
+  void* p = mAlloc.get_memory(sizeof(CptIOHV));
+  return new (p) CptIOHV(file_region, dir, VpiAuxType::Net,
+			 net_type, sign, range);
 }
 
 // @brief IO 宣言のヘッダの生成 (変数型)
-PtiIOHead*
-CptFactory::new_VarIOHead(
+PtIOHead*
+PtFactory::new_VarIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   VpiVarType var_type
 )
 {
-  ++ mNumIOH;
   void* p = mAlloc.get_memory(sizeof(CptIOH));
-  auto obj = new (p) CptIOH(file_region, dir, VpiAuxType::Var,
-			    VpiNetType::None, var_type, false);
-  return obj;
+  return new (p) CptIOH(file_region, dir, VpiAuxType::Var,
+			VpiNetType::None, var_type, false);
 }
 
 // @brief 初期値付き IO 宣言の要素の生成
 PtIOItem*
-CptFactory::new_IOItem(
+PtFactory::new_IOItem(
   const FileRegion& file_region,
   const char* name,
-  const PtExpr* init_value
+  const AstExpr* init_value
 )
 {
   if ( init_value == nullptr ) {
-    ++ mNumIOItem;
     void* p = mAlloc.get_memory(sizeof(CptIOItem));
-    auto obj = new (p) CptIOItem(file_region, name);
-    return obj;
+    return new (p) CptIOItem(file_region, name);
   }
-  else {
-    ++ mNumIOItemI;
-    void* p = mAlloc.get_memory(sizeof(CptIOItemI));
-    auto obj = new (p) CptIOItemI(file_region, name, init_value);
-    return obj;
-  }
+  void* p = mAlloc.get_memory(sizeof(CptIOItemI));
+  return new (p) CptIOItemI(file_region, name, init_value);
 }
 
 END_NAMESPACE_YM_VERILOG

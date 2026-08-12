@@ -8,7 +8,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/VlValueType.h"
+#include "ym/vl/VlValueType.h"
 #include "ym/vl/VlDecl.h"
 #include "ym/vl/VlDeclArray.h"
 #include "elaborator/ElbHead.h"

@@ -11,10 +11,10 @@
 
 #include "ym/vl/VlDelay.h"
 
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtExpr.h"
-#include "ym/pt/PtItem.h"
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstExpr.h"
+#include "ym/vl/AstItem.h"
+#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,21 +27,21 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const PtDeclHead* pt_head,
-  const PtRange* pt_range,
+  const AstDeclHead* ast_head,
+  const AstRange* ast_range,
   const RangeVal& range,
   bool has_delay
 )
 {
-  if ( pt_range == nullptr ) {
-    throw std::logic_error{"pt_range == nullptr"};
+  if ( ast_range == nullptr ) {
+    throw std::logic_error{"ast_range == nullptr"};
   }
 
   if ( has_delay ) {
-    return new EiDeclHeadPtVD(parent, pt_head, pt_range, range);
+    return new EiDeclHeadAstVD(parent, ast_head, ast_range, range);
   }
   else {
-    return new EiDeclHeadPtV(parent, pt_head, pt_range, range);
+    return new EiDeclHeadAstV(parent, ast_head, ast_range, range);
   }
 }
 
@@ -49,15 +49,15 @@ EiFactory::new_DeclHead(
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const PtDeclHead* pt_head,
+  const AstDeclHead* ast_head,
   bool delay
 )
 {
   if ( delay ) {
-    return new EiDeclHeadPtD{parent, pt_head};
+    return new EiDeclHeadAstD{parent, ast_head};
   }
   else {
-    return new EiDeclHeadPt{parent, pt_head};
+    return new EiDeclHeadAst{parent, ast_head};
   }
 }
 
@@ -65,55 +65,55 @@ EiFactory::new_DeclHead(
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const PtIOHead* pt_head,
+  const AstIOHead* ast_head,
   VpiAuxType aux_type,
-  const PtRange* pt_range,
+  const AstRange* ast_range,
   const RangeVal& range
 )
 {
-  if ( pt_range == nullptr ) {
-    throw std::logic_error{"pt_range == nullptr"};
+  if ( ast_range == nullptr ) {
+    throw std::logic_error{"ast_range == nullptr"};
   }
 
-  return new EiDeclHeadPt2V(parent, pt_head, aux_type,
-			    pt_range, range);
+  return new EiDeclHeadAst2V(parent, ast_head, aux_type,
+			    ast_range, range);
 }
 
 // @brief 宣言要素のヘッダを生成する．(IODecl 中の宣言用)
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const PtIOHead* pt_head,
+  const AstIOHead* ast_head,
   VpiAuxType aux_type
 )
 {
-  return new EiDeclHeadPt2(parent, pt_head, aux_type);
+  return new EiDeclHeadAst2(parent, ast_head, aux_type);
 }
 
 // @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const PtItem* pt_item,
-  const PtRange* pt_range,
+  const AstItem* ast_item,
+  const AstRange* ast_range,
   const RangeVal& range
 )
 {
-  if ( pt_range == nullptr ) {
-    throw std::logic_error{"pt_range == nullptr"};
+  if ( ast_range == nullptr ) {
+    throw std::logic_error{"ast_range == nullptr"};
   }
 
-  return new EiDeclHeadPt3V(parent, pt_item, pt_range, range);
+  return new EiDeclHeadAst3V(parent, ast_item, ast_range, range);
 }
 
 // @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const PtItem* pt_item
+  const AstItem* ast_item
 )
 {
-  return new EiDeclHeadPt3(parent, pt_item);
+  return new EiDeclHeadAst3(parent, ast_item);
 }
 
 
@@ -142,37 +142,37 @@ EiDeclHead::parent_scope() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDeclHeadPt
+// クラス EiDeclHeadAst
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDeclHeadPt::EiDeclHeadPt(
+EiDeclHeadAst::EiDeclHeadAst(
   const VlScope* parent,
-  const PtDeclHead* pt_header
+  const AstDeclHead* ast_header
 ) : EiDeclHead{parent},
-    mPtHead{pt_header}
+    mAstHead{ast_header}
 {
 }
 
 // @brief デストラクタ
-EiDeclHeadPt::~EiDeclHeadPt()
+EiDeclHeadAst::~EiDeclHeadAst()
 {
 }
 
 // @brief 型の取得
 VpiObjType
-EiDeclHeadPt::type() const
+EiDeclHeadAst::type() const
 {
-  switch ( mPtHead->type() ) {
-  case PtDeclType::Param:
-  case PtDeclType::LocalParam:
+  switch ( mAstHead->type() ) {
+  case AstDeclHead::Param:
+  case AstDeclHead::LocalParam:
     return VpiObjType::Parameter;
 
-  case PtDeclType::Reg:
+  case AstDeclHead::Reg:
     return VpiObjType::Reg;
 
-  case PtDeclType::Var:
-    switch ( mPtHead->data_type() ) {
+  case AstDeclHead::Var:
+    switch ( mAstHead->data_type() ) {
     case VpiVarType::Integer:  return VpiObjType::IntegerVar;
     case VpiVarType::Real:     return VpiObjType::RealVar;
     case VpiVarType::Time:     return VpiObjType::TimeVar;
@@ -180,13 +180,13 @@ EiDeclHeadPt::type() const
     }
     break;
 
-  case PtDeclType::Net:
+  case AstDeclHead::Net:
     return VpiObjType::Net;
 
-  case PtDeclType::Event:
+  case AstDeclHead::Event:
     return VpiObjType::NamedEvent;
 
-  case PtDeclType::SpecParam:
+  case AstDeclHead::SpecParam:
     return VpiObjType::SpecParam;
 
   default:
@@ -198,74 +198,74 @@ EiDeclHeadPt::type() const
 
 // @brief 符号の取得
 bool
-EiDeclHeadPt::is_signed() const
+EiDeclHeadAst::is_signed() const
 {
-  return mPtHead->is_signed();
+  return mAstHead->is_signed();
 }
 
 // @brief 範囲指定を持つとき true を返す．
 bool
-EiDeclHeadPt::has_range() const
+EiDeclHeadAst::has_range() const
 {
   return false;
 }
 
 // @brief 範囲の MSB の値を返す．
 int
-EiDeclHeadPt::left_range_val() const
+EiDeclHeadAst::left_range_val() const
 {
   return 0;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
-EiDeclHeadPt::right_range_val() const
+EiDeclHeadAst::right_range_val() const
 {
   return 0;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
-EiDeclHeadPt::left_range_string() const
+EiDeclHeadAst::left_range_string() const
 {
   return {};
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
-EiDeclHeadPt::right_range_string() const
+EiDeclHeadAst::right_range_string() const
 {
   return {};
 }
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiDeclHeadPt::is_big_endian() const
+EiDeclHeadAst::is_big_endian() const
 {
   return true;
 }
 
 // @brief left_range <= right_range の時に true を返す．
 bool
-EiDeclHeadPt::is_little_endian() const
+EiDeclHeadAst::is_little_endian() const
 {
   return true;
 }
 
 // @brief ビット幅を返す．
 SizeType
-EiDeclHeadPt::bit_size() const
+EiDeclHeadAst::bit_size() const
 {
-  switch ( mPtHead->type() ) {
-  case PtDeclType::Reg:
-  case PtDeclType::Net:
+  switch ( mAstHead->type() ) {
+  case AstDeclHead::Reg:
+  case AstDeclHead::Net:
     // この型は範囲指定を含まないので 1ビットとなる．
     return 1;
 
-  case PtDeclType::Param:
-  case PtDeclType::LocalParam:
-  case PtDeclType::Var:
-    switch ( mPtHead->data_type() ) {
+  case AstDeclHead::Param:
+  case AstDeclHead::LocalParam:
+  case AstDeclHead::Var:
+    switch ( mAstHead->data_type() ) {
     case VpiVarType::Integer:
       return kVpiSizeInteger;
 
@@ -281,10 +281,10 @@ EiDeclHeadPt::bit_size() const
     }
     break;
 
-  case PtDeclType::Event:
+  case AstDeclHead::Event:
     return 0;
 
-  case PtDeclType::SpecParam:
+  case AstDeclHead::SpecParam:
     return kVpiSizeInteger;
 
   default:
@@ -296,14 +296,14 @@ EiDeclHeadPt::bit_size() const
 
 // @brief オフセット値の取得
 bool
-EiDeclHeadPt::calc_bit_offset(
+EiDeclHeadAst::calc_bit_offset(
   int index,
   SizeType& offset
 ) const
 {
-  switch ( mPtHead->type() ) {
-  case PtDeclType::Reg:
-  case PtDeclType::Net:
+  switch ( mAstHead->type() ) {
+  case AstDeclHead::Reg:
+  case AstDeclHead::Net:
     // この型は範囲指定を含まないので 1ビットとなる．
     if ( index == 0 ) {
       offset = 0;
@@ -312,10 +312,10 @@ EiDeclHeadPt::calc_bit_offset(
     // 0 以外のインデックスは無効
     return false;
 
-  case PtDeclType::Param:
-  case PtDeclType::LocalParam:
-  case PtDeclType::Var:
-    switch ( mPtHead->data_type() ) {
+  case AstDeclHead::Param:
+  case AstDeclHead::LocalParam:
+  case AstDeclHead::Var:
+    switch ( mAstHead->data_type() ) {
     case VpiVarType::Real:
       // 実数タイプの部分ビット指定は無効
       return false;
@@ -340,13 +340,13 @@ EiDeclHeadPt::calc_bit_offset(
     }
     break;
 
-  case PtDeclType::Event:
+  case AstDeclHead::Event:
     // イベントオブジェクトは部分指定できない．
     // というかたぶん，ここには来ないはず．
     ASSERT_NOT_REACHED;
     return false;
 
-  case PtDeclType::SpecParam:
+  case AstDeclHead::SpecParam:
     // int とみなす．
     if ( index >= 0 && index < static_cast<int>(kVpiSizeInteger) ) {
       offset = index;
@@ -364,31 +364,31 @@ EiDeclHeadPt::calc_bit_offset(
 
 // @brief データ型の取得
 VpiVarType
-EiDeclHeadPt::data_type() const
+EiDeclHeadAst::data_type() const
 {
-  return mPtHead->data_type();
+  return mAstHead->data_type();
 }
 
 // @brief net 型の取得
 VpiNetType
-EiDeclHeadPt::net_type() const
+EiDeclHeadAst::net_type() const
 {
-  return mPtHead->net_type();
+  return mAstHead->net_type();
 }
 
 // @brief vectored|scalared 属性の取得
 VpiVsType
-EiDeclHeadPt::vs_type() const
+EiDeclHeadAst::vs_type() const
 {
-  return mPtHead->vs_type();
+  return mAstHead->vs_type();
 }
 
 // @brief drive0 strength の取得
 VpiStrength
-EiDeclHeadPt::drive0() const
+EiDeclHeadAst::drive0() const
 {
-  if ( mPtHead->strength() ) {
-    return mPtHead->strength()->drive0();
+  if ( mAstHead->strength() ) {
+    return mAstHead->strength()->drive0();
   }
   else {
     return VpiStrength::NoStrength;
@@ -397,10 +397,10 @@ EiDeclHeadPt::drive0() const
 
 // @brief drive1 strength の取得
 VpiStrength
-EiDeclHeadPt::drive1() const
+EiDeclHeadAst::drive1() const
 {
-  if ( mPtHead->strength() ) {
-    return mPtHead->strength()->drive1();
+  if ( mAstHead->strength() ) {
+    return mAstHead->strength()->drive1();
   }
   else {
     return VpiStrength::NoStrength;
@@ -409,10 +409,10 @@ EiDeclHeadPt::drive1() const
 
 // @brief charge strength の取得
 VpiStrength
-EiDeclHeadPt::charge() const
+EiDeclHeadAst::charge() const
 {
-  if ( mPtHead->strength() ) {
-    return mPtHead->strength()->charge();
+  if ( mAstHead->strength() ) {
+    return mAstHead->strength()->charge();
   }
   else {
     return VpiStrength::NoStrength;
@@ -421,32 +421,32 @@ EiDeclHeadPt::charge() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDeclHeadPtD
+// クラス EiDeclHeadAstD
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDeclHeadPtD::EiDeclHeadPtD(
+EiDeclHeadAstD::EiDeclHeadAstD(
   const VlScope* parent,
-  const PtDeclHead* pt_header
-) : EiDeclHeadPt{parent, pt_header}
+  const AstDeclHead* ast_header
+) : EiDeclHeadAst{parent, ast_header}
 {
 }
 
 // @brief デストラクタ
-EiDeclHeadPtD::~EiDeclHeadPtD()
+EiDeclHeadAstD::~EiDeclHeadAstD()
 {
 }
 
 // @brief 遅延式の取得
 const VlDelay*
-EiDeclHeadPtD::delay() const
+EiDeclHeadAstD::delay() const
 {
   return mDelay;
 }
 
 // @brief 遅延式の設定
 void
-EiDeclHeadPtD::set_delay(
+EiDeclHeadAstD::set_delay(
   const VlDelay* delay
 )
 {
@@ -455,84 +455,84 @@ EiDeclHeadPtD::set_delay(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDeclHeadPtV
+// クラス EiDeclHeadAstV
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDeclHeadPtV::EiDeclHeadPtV(
+EiDeclHeadAstV::EiDeclHeadAstV(
   const VlScope* parent,
-  const PtDeclHead* pt_header,
-  const PtRange* pt_range,
+  const AstDeclHead* ast_header,
+  const AstRange* ast_range,
   const RangeVal& range
-) : EiDeclHeadPt{parent, pt_header},
-    mRange(pt_range, range)
+) : EiDeclHeadAst{parent, ast_header},
+    mRange(ast_range, range)
 {
 }
 
 // @brief デストラクタ
-EiDeclHeadPtV::~EiDeclHeadPtV()
+EiDeclHeadAstV::~EiDeclHeadAstV()
 {
 }
 
 // @brief 範囲指定を持つとき true を返す．
 bool
-EiDeclHeadPtV::has_range() const
+EiDeclHeadAstV::has_range() const
 {
   return true;
 }
 
 // @brief 範囲の MSB の値を返す．
 int
-EiDeclHeadPtV::left_range_val() const
+EiDeclHeadAstV::left_range_val() const
 {
   return mRange.left;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
-EiDeclHeadPtV::right_range_val() const
+EiDeclHeadAstV::right_range_val() const
 {
   return mRange.right;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
-EiDeclHeadPtV::left_range_string() const
+EiDeclHeadAstV::left_range_string() const
 {
   return mRange.left_string();
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
-EiDeclHeadPtV::right_range_string() const
+EiDeclHeadAstV::right_range_string() const
 {
   return mRange.right_string();
 }
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiDeclHeadPtV::is_big_endian() const
+EiDeclHeadAstV::is_big_endian() const
 {
   return mRange.is_big_endian();
 }
 
 // @brief left_range <= right_range の時に true を返す．
 bool
-EiDeclHeadPtV::is_little_endian() const
+EiDeclHeadAstV::is_little_endian() const
 {
   return mRange.is_little_endian();
 }
 
 // @brief ビット幅を返す．
 SizeType
-EiDeclHeadPtV::bit_size() const
+EiDeclHeadAstV::bit_size() const
 {
   return mRange.calc_size();
 }
 
 // @brief オフセット値の取得
 bool
-EiDeclHeadPtV::calc_bit_offset(
+EiDeclHeadAstV::calc_bit_offset(
   int index,
   SizeType& offset
 ) const
@@ -542,35 +542,35 @@ EiDeclHeadPtV::calc_bit_offset(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDeclHeadPtVD
+// クラス EiDeclHeadAstVD
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDeclHeadPtVD::EiDeclHeadPtVD(
+EiDeclHeadAstVD::EiDeclHeadAstVD(
   const VlScope* parent,
-  const PtDeclHead* pt_header,
-  const PtRange* pt_range,
+  const AstDeclHead* ast_header,
+  const AstRange* ast_range,
   const RangeVal& range
-) : EiDeclHeadPtV(parent, pt_header, pt_range, range),
+) : EiDeclHeadAstV(parent, ast_header, ast_range, range),
     mDelay{nullptr}
 {
 }
 
 // @brief デストラクタ
-EiDeclHeadPtVD::~EiDeclHeadPtVD()
+EiDeclHeadAstVD::~EiDeclHeadAstVD()
 {
 }
 
 // @brief delay の取得
 const VlDelay*
-EiDeclHeadPtVD::delay() const
+EiDeclHeadAstVD::delay() const
 {
   return mDelay;
 }
 
 // @brief 遅延式の設定
 void
-EiDeclHeadPtVD::set_delay(
+EiDeclHeadAstVD::set_delay(
   const VlDelay* delay
 )
 {
@@ -579,34 +579,34 @@ EiDeclHeadPtVD::set_delay(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDeclHeadPt2
+// クラス EiDeclHeadAst2
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDeclHeadPt2::EiDeclHeadPt2(
+EiDeclHeadAst2::EiDeclHeadAst2(
   const VlScope* parent,
-  const PtIOHead* pt_header,
+  const AstIOHead* ast_header,
   VpiAuxType aux_type
 ) : EiDeclHead(parent),
-    mPtHead{pt_header},
+    mAstHead{ast_header},
     mAuxType{aux_type}
 {
 }
 
 // @brief デストラクタ
-EiDeclHeadPt2::~EiDeclHeadPt2()
+EiDeclHeadAst2::~EiDeclHeadAst2()
 {
 }
 
 // @brief 型の取得
 VpiObjType
-EiDeclHeadPt2::type() const
+EiDeclHeadAst2::type() const
 {
   switch ( mAuxType ) {
   case VpiAuxType::Net: return VpiObjType::Net;
   case VpiAuxType::Reg: return VpiObjType::Reg;
   case VpiAuxType::Var:
-    switch ( mPtHead->var_type() ) {
+    switch ( mAstHead->var_type() ) {
     case VpiVarType::Integer:  return VpiObjType::IntegerVar;
     case VpiVarType::Real:     return VpiObjType::RealVar;
     case VpiVarType::Time:     return VpiObjType::TimeVar;
@@ -623,69 +623,69 @@ EiDeclHeadPt2::type() const
 
 // @brief 符号の取得
 bool
-EiDeclHeadPt2::is_signed() const
+EiDeclHeadAst2::is_signed() const
 {
-  return mPtHead->is_signed();
+  return mAstHead->is_signed();
 }
 
 // @brief 範囲指定を持つとき true を返す．
 bool
-EiDeclHeadPt2::has_range() const
+EiDeclHeadAst2::has_range() const
 {
   return false;
 }
 
 // @brief 範囲の MSB の値を返す．
 int
-EiDeclHeadPt2::left_range_val() const
+EiDeclHeadAst2::left_range_val() const
 {
   return 0;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
-EiDeclHeadPt2::right_range_val() const
+EiDeclHeadAst2::right_range_val() const
 {
   return 0;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
-EiDeclHeadPt2::left_range_string() const
+EiDeclHeadAst2::left_range_string() const
 {
   return {};
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
-EiDeclHeadPt2::right_range_string() const
+EiDeclHeadAst2::right_range_string() const
 {
   return {};
 }
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiDeclHeadPt2::is_big_endian() const
+EiDeclHeadAst2::is_big_endian() const
 {
   return true;
 }
 
 // @brief left_range <= right_range の時に true を返す．
 bool
-EiDeclHeadPt2::is_little_endian() const
+EiDeclHeadAst2::is_little_endian() const
 {
   return true;
 }
 
 // @brief ビット幅を返す．
 SizeType
-EiDeclHeadPt2::bit_size() const
+EiDeclHeadAst2::bit_size() const
 {
   switch ( mAuxType ) {
   case VpiAuxType::Net: return 1;
   case VpiAuxType::Reg: return 1;
   case VpiAuxType::Var:
-    switch ( mPtHead->var_type() ) {
+    switch ( mAstHead->var_type() ) {
     case VpiVarType::Integer:  return kVpiSizeInteger;
     case VpiVarType::Real:     return kVpiSizeReal;
     case VpiVarType::Time:     return kVpiSizeTime;
@@ -702,7 +702,7 @@ EiDeclHeadPt2::bit_size() const
 
 // @brief オフセット値の取得
 bool
-EiDeclHeadPt2::calc_bit_offset(
+EiDeclHeadAst2::calc_bit_offset(
   int index,
   SizeType& offset
 ) const
@@ -719,7 +719,7 @@ EiDeclHeadPt2::calc_bit_offset(
     return false;
 
   case VpiAuxType::Var:
-    switch ( mPtHead->var_type() ) {
+    switch ( mAstHead->var_type() ) {
     case VpiVarType::Integer:
       if ( index >= 0 && index < static_cast<int>(kVpiSizeInteger) ) {
 	offset = index;
@@ -753,99 +753,99 @@ EiDeclHeadPt2::calc_bit_offset(
 
 // @brief データ型の取得
 VpiVarType
-EiDeclHeadPt2::data_type() const
+EiDeclHeadAst2::data_type() const
 {
-  return mPtHead->var_type();
+  return mAstHead->var_type();
 }
 
 // @brief net 型の取得
 VpiNetType
-EiDeclHeadPt2::net_type() const
+EiDeclHeadAst2::net_type() const
 {
-  return mPtHead->net_type();
+  return mAstHead->net_type();
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDeclHeadPt2V
+// クラス EiDeclHeadAst2V
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDeclHeadPt2V::EiDeclHeadPt2V(
+EiDeclHeadAst2V::EiDeclHeadAst2V(
   const VlScope* parent,
-  const PtIOHead* pt_header,
+  const AstIOHead* ast_header,
   VpiAuxType aux_type,
-  const PtRange* pt_range,
+  const AstRange* ast_range,
   const RangeVal& range
-) : EiDeclHeadPt2(parent, pt_header, aux_type),
-    mRange(pt_range, range)
+) : EiDeclHeadAst2(parent, ast_header, aux_type),
+    mRange(ast_range, range)
 {
 }
 
 // @brief デストラクタ
-EiDeclHeadPt2V::~EiDeclHeadPt2V()
+EiDeclHeadAst2V::~EiDeclHeadAst2V()
 {
 }
 
 // @brief 範囲指定を持つとき true を返す．
 bool
-EiDeclHeadPt2V::has_range() const
+EiDeclHeadAst2V::has_range() const
 {
   return true;
 }
 
 // @brief 範囲の MSB の値を返す．
 int
-EiDeclHeadPt2V::left_range_val() const
+EiDeclHeadAst2V::left_range_val() const
 {
   return mRange.left;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
-EiDeclHeadPt2V::right_range_val() const
+EiDeclHeadAst2V::right_range_val() const
 {
   return mRange.right;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
-EiDeclHeadPt2V::left_range_string() const
+EiDeclHeadAst2V::left_range_string() const
 {
   return mRange.left_string();
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
-EiDeclHeadPt2V::right_range_string() const
+EiDeclHeadAst2V::right_range_string() const
 {
   return mRange.right_string();
 }
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiDeclHeadPt2V::is_big_endian() const
+EiDeclHeadAst2V::is_big_endian() const
 {
   return mRange.is_big_endian();
 }
 
 // @brief left_range <= right_range の時に true を返す．
 bool
-EiDeclHeadPt2V::is_little_endian() const
+EiDeclHeadAst2V::is_little_endian() const
 {
   return mRange.is_little_endian();
 }
 
 // @brief ビット幅を返す．
 SizeType
-EiDeclHeadPt2V::bit_size() const
+EiDeclHeadAst2V::bit_size() const
 {
   return mRange.calc_size();
 }
 
 // @brief オフセット値の取得
 bool
-EiDeclHeadPt2V::calc_bit_offset(
+EiDeclHeadAst2V::calc_bit_offset(
   int index,
   SizeType& offset
 ) const
@@ -855,26 +855,26 @@ EiDeclHeadPt2V::calc_bit_offset(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDeclHeadPt3
+// クラス EiDeclHeadAst3
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDeclHeadPt3::EiDeclHeadPt3(
+EiDeclHeadAst3::EiDeclHeadAst3(
   const VlScope* parent,
-  const PtItem* pt_item
+  const AstItem* ast_item
 ) : EiDeclHead(parent),
-    mPtItem{pt_item}
+    mAstItem{ast_item}
 {
 }
 
 // @brief デストラクタ
-EiDeclHeadPt3::~EiDeclHeadPt3()
+EiDeclHeadAst3::~EiDeclHeadAst3()
 {
 }
 
 // @brief 型の取得
 VpiObjType
-EiDeclHeadPt3::type() const
+EiDeclHeadAst3::type() const
 {
   switch ( data_type() ) {
   case VpiVarType::None:     return VpiObjType::Reg;
@@ -890,63 +890,63 @@ EiDeclHeadPt3::type() const
 
 // @brief 符号の取得
 bool
-EiDeclHeadPt3::is_signed() const
+EiDeclHeadAst3::is_signed() const
 {
-  return mPtItem->is_signed();
+  return mAstItem->is_signed();
 }
 
 // @brief 範囲指定を持つとき true を返す．
 bool
-EiDeclHeadPt3::has_range() const
+EiDeclHeadAst3::has_range() const
 {
   return false;
 }
 
 // @brief 範囲の MSB の値を返す．
 int
-EiDeclHeadPt3::left_range_val() const
+EiDeclHeadAst3::left_range_val() const
 {
   return 0;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
-EiDeclHeadPt3::right_range_val() const
+EiDeclHeadAst3::right_range_val() const
 {
   return 0;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
-EiDeclHeadPt3::left_range_string() const
+EiDeclHeadAst3::left_range_string() const
 {
   return {};
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
-EiDeclHeadPt3::right_range_string() const
+EiDeclHeadAst3::right_range_string() const
 {
   return {};
 }
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiDeclHeadPt3::is_big_endian() const
+EiDeclHeadAst3::is_big_endian() const
 {
   return true;
 }
 
 // @brief left_range <= right_range の時に true を返す．
 bool
-EiDeclHeadPt3::is_little_endian() const
+EiDeclHeadAst3::is_little_endian() const
 {
   return true;
 }
 
 // @brief ビット幅を返す．
 SizeType
-EiDeclHeadPt3::bit_size() const
+EiDeclHeadAst3::bit_size() const
 {
   switch ( data_type() ) {
   case VpiVarType::None:     return 1;
@@ -963,7 +963,7 @@ EiDeclHeadPt3::bit_size() const
 
 // @brief オフセット値の取得
 bool
-EiDeclHeadPt3::calc_bit_offset(
+EiDeclHeadAst3::calc_bit_offset(
   int index,
   SizeType& offset
 ) const
@@ -1006,14 +1006,14 @@ EiDeclHeadPt3::calc_bit_offset(
 
 // @brief データ型の取得
 VpiVarType
-EiDeclHeadPt3::data_type() const
+EiDeclHeadAst3::data_type() const
 {
-  return mPtItem->data_type();
+  return mAstItem->data_type();
 }
 
 // @brief net 型の取得
 VpiNetType
-EiDeclHeadPt3::net_type() const
+EiDeclHeadAst3::net_type() const
 {
 
   return VpiNetType::None;
@@ -1021,84 +1021,84 @@ EiDeclHeadPt3::net_type() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDeclHeadPt3V
+// クラス EiDeclHeadAst3V
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDeclHeadPt3V::EiDeclHeadPt3V(
+EiDeclHeadAst3V::EiDeclHeadAst3V(
   const VlScope* parent,
-  const PtItem* pt_item,
-  const PtRange* pt_range,
+  const AstItem* ast_item,
+  const AstRange* ast_range,
   const RangeVal& range
-) : EiDeclHeadPt3(parent, pt_item),
-    mRange(pt_range, range)
+) : EiDeclHeadAst3(parent, ast_item),
+    mRange(ast_range, range)
 {
 }
 
 // @brief デストラクタ
-EiDeclHeadPt3V::~EiDeclHeadPt3V()
+EiDeclHeadAst3V::~EiDeclHeadAst3V()
 {
 }
 
 // @brief 範囲指定を持つとき true を返す．
 bool
-EiDeclHeadPt3V::has_range() const
+EiDeclHeadAst3V::has_range() const
 {
   return true;
 }
 
 // @brief 範囲の MSB の値を返す．
 int
-EiDeclHeadPt3V::left_range_val() const
+EiDeclHeadAst3V::left_range_val() const
 {
   return mRange.left;
 }
 
 // @brief 範囲の LSB の値を返す．
 int
-EiDeclHeadPt3V::right_range_val() const
+EiDeclHeadAst3V::right_range_val() const
 {
   return mRange.right;
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
-EiDeclHeadPt3V::left_range_string() const
+EiDeclHeadAst3V::left_range_string() const
 {
   return mRange.left_string();
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
-EiDeclHeadPt3V::right_range_string() const
+EiDeclHeadAst3V::right_range_string() const
 {
   return mRange.right_string();
 }
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiDeclHeadPt3V::is_big_endian() const
+EiDeclHeadAst3V::is_big_endian() const
 {
   return mRange.is_big_endian();
 }
 
 // @brief left_range <= right_range の時に true を返す．
 bool
-EiDeclHeadPt3V::is_little_endian() const
+EiDeclHeadAst3V::is_little_endian() const
 {
   return mRange.is_little_endian();
 }
 
 // @brief ビット幅を返す．
 SizeType
-EiDeclHeadPt3V::bit_size() const
+EiDeclHeadAst3V::bit_size() const
 {
   return mRange.calc_size();
 }
 
 // @brief オフセット値の取得
 bool
-EiDeclHeadPt3V::calc_bit_offset(
+EiDeclHeadAst3V::calc_bit_offset(
   int index,
   SizeType& offset
 ) const

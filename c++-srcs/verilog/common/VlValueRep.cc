@@ -83,7 +83,7 @@ VlValueError::is_int_compat() const
   return false;
 }
 
-// @brief unsigned int 型に変換可能な時に true を返す．
+// @brief SizeType 型に変換可能な時に true を返す．
 bool
 VlValueError::is_uint_compat() const
 {
@@ -139,8 +139,8 @@ VlValueError::int_value() const
   return 0;
 }
 
-// @brief unsigned int 型の値を返す．
-unsigned int
+// @brief SizeType 型の値を返す．
+SizeType
 VlValueError::uint_value() const
 {
   return 0;
@@ -187,7 +187,7 @@ VlValueError::bitvector_value(
 VlValueRep*
 VlValueError::duplicate() const
 {
-  return new VlValueError{};
+  return new VlValueError;
 }
 
 
@@ -216,7 +216,7 @@ VlValueInt::is_int_compat() const
   return true;
 }
 
-// @brief unsigned int 型に変換可能な時に true を返す．
+// @brief SizeType 型に変換可能な時に true を返す．
 bool
 VlValueInt::is_uint_compat() const
 {
@@ -272,11 +272,11 @@ VlValueInt::int_value() const
   return mVal;
 }
 
-// @brief unsigned int 型の値を返す．
-unsigned int
+// @brief SizeType 型の値を返す．
+SizeType
 VlValueInt::uint_value() const
 {
-  return static_cast<unsigned int>(mVal);
+  return static_cast<SizeType>(mVal);
 }
 
 // @brief スカラー型の値を返す．
@@ -323,7 +323,7 @@ VlValueInt::bitvector_value(
 VlValueRep*
 VlValueInt::duplicate() const
 {
-  return new VlValueInt{mVal};
+  return new VlValueInt(mVal);
 }
 
 
@@ -333,7 +333,7 @@ VlValueInt::duplicate() const
 
 // @brief コンストラクタ
 VlValueUint::VlValueUint(
-  unsigned int val
+  SizeType val
 ) : mVal{val}
 {
 }
@@ -352,7 +352,7 @@ VlValueUint::is_int_compat() const
   return true;
 }
 
-// @brief unsigned int 型に変換可能な時に true を返す．
+// @brief SizeType 型に変換可能な時に true を返す．
 bool
 VlValueUint::is_uint_compat() const
 {
@@ -408,8 +408,8 @@ VlValueUint::int_value() const
   return static_cast<int>(mVal);
 }
 
-// @brief unsigned int 型の値を返す．
-unsigned int
+// @brief SizeType 型の値を返す．
+SizeType
 VlValueUint::uint_value() const
 {
   return mVal;
@@ -443,7 +443,7 @@ VlValueUint::real_value() const
 VlTime
 VlValueUint::time_value() const
 {
-  return VlTime{mVal};
+  return VlTime(mVal);
 }
 
 // @brief ビットベクタ型の値を返す．
@@ -452,14 +452,14 @@ VlValueUint::bitvector_value(
   const VlValueType& req
 ) const
 {
-  return BitVector{mVal}.coerce(req);
+  return BitVector(mVal).coerce(req);
 }
 
 // @brief 自身の複製を返す．
 VlValueRep*
 VlValueUint::duplicate() const
 {
-  return new VlValueUint{mVal};
+  return new VlValueUint(mVal);
 }
 
 
@@ -488,7 +488,7 @@ VlValueScalar::is_int_compat() const
   return !mVal.is_xz();
 }
 
-// @brief unsigned int 型に変換可能な時に true を返す．
+// @brief SizeType 型に変換可能な時に true を返す．
 bool
 VlValueScalar::is_uint_compat() const
 {
@@ -544,11 +544,11 @@ VlValueScalar::int_value() const
   return mVal.to_int();
 }
 
-// @brief unsigned int 型の値を返す．
-unsigned int
+// @brief SizeType 型の値を返す．
+SizeType
 VlValueScalar::uint_value() const
 {
-  return static_cast<unsigned int>(int_value());
+  return static_cast<SizeType>(int_value());
 }
 
 // @brief スカラー型の値を返す．
@@ -588,14 +588,14 @@ VlValueScalar::bitvector_value(
   const VlValueType& req
 ) const
 {
-  return BitVector{mVal}.coerce(req);
+  return BitVector(mVal).coerce(req);
 }
 
 // @brief 自身の複製を返す．
 VlValueRep*
 VlValueScalar::duplicate() const
 {
-  return new VlValueScalar{mVal};
+  return new VlValueScalar(mVal);
 }
 
 
@@ -624,7 +624,7 @@ VlValueReal::is_int_compat() const
   return true;
 }
 
-// @brief unsigned int 型に変換可能な時に true を返す．
+// @brief SizeType 型に変換可能な時に true を返す．
 bool
 VlValueReal::is_uint_compat() const
 {
@@ -680,11 +680,11 @@ VlValueReal::int_value() const
   return static_cast<int>(mVal);
 }
 
-// @brief unsigned int 型の値を返す．
-unsigned int
+// @brief SizeType 型の値を返す．
+SizeType
 VlValueReal::uint_value() const
 {
-  return static_cast<unsigned int>(mVal);
+  return static_cast<SizeType>(mVal);
 }
 
 // @brief スカラー型の値を返す．
@@ -731,7 +731,7 @@ VlValueReal::bitvector_value(
 VlValueRep*
 VlValueReal::duplicate() const
 {
-  return new VlValueReal{mVal};
+  return new VlValueReal(mVal);
 }
 
 
@@ -760,7 +760,7 @@ VlValueTime::is_int_compat() const
   return mVal.value() <= 0x7FFFFFFFUL;
 }
 
-// @brief unsigned int 型に変換可能な時に true を返す．
+// @brief SizeType 型に変換可能な時に true を返す．
 bool
 VlValueTime::is_uint_compat() const
 {
@@ -816,8 +816,8 @@ VlValueTime::int_value() const
   return static_cast<int>(mVal.to_uint());
 }
 
-// @brief unsigned int 型の値を返す．
-unsigned int
+// @brief SizeType 型の値を返す．
+SizeType
 VlValueTime::uint_value() const
 {
   return mVal.to_uint();
@@ -827,7 +827,7 @@ VlValueTime::uint_value() const
 VlScalarVal
 VlValueTime::scalar_value() const
 {
-  return VlScalarVal(mVal.low());
+  return VlScalarVal(static_cast<SizeType>(mVal.low()));
 }
 
 // @brief 論理型の値を返す．
@@ -860,14 +860,14 @@ VlValueTime::bitvector_value(
   const VlValueType& req
 ) const
 {
-  return BitVector{mVal}.coerce(req);
+  return BitVector(mVal).coerce(req);
 }
 
 // @brief 自身の複製を返す．
 VlValueRep*
 VlValueTime::duplicate() const
 {
-  return new VlValueTime{mVal};
+  return new VlValueTime(mVal);
 }
 
 
@@ -896,7 +896,7 @@ VlValueBitVector::is_int_compat() const
   return mVal.is_int();
 }
 
-// @brief unsigned int 型に変換可能な時に true を返す．
+// @brief SizeType 型に変換可能な時に true を返す．
 bool
 VlValueBitVector::is_uint_compat() const
 {
@@ -952,8 +952,8 @@ VlValueBitVector::int_value() const
   return mVal.to_int();
 }
 
-// @brief unsigned int 型の値を返す．
-unsigned int
+// @brief SizeType 型の値を返す．
+SizeType
 VlValueBitVector::uint_value() const
 {
   return mVal.to_uint32();
@@ -993,14 +993,14 @@ VlValueBitVector::bitvector_value(
   const VlValueType& req
 ) const
 {
-  return BitVector{mVal}.coerce(req);
+  return BitVector(mVal).coerce(req);
 }
 
 // @brief 自身の複製を返す．
 VlValueRep*
 VlValueBitVector::duplicate() const
 {
-  return new VlValueBitVector{mVal};
+  return new VlValueBitVector(mVal);
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -10,7 +10,7 @@
 
 #include "ym/vl/VlObj.h"
 #include "ym/vl/VlFwd.h"
-#include "ym/VlUdpVal.h"
+#include "ym/vl/VlUdpVal.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

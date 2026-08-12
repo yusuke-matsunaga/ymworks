@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtP.h"
+#include "ym/vl/Ast.h"
 #include "ElbProxy.h"
 
 
@@ -43,19 +43,19 @@ public:
   void
   phase1_stmt(
     const VlScope* parent, ///< [in] 親のスコープ
-    const PtStmt* pt_stmt, ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt, ///< [in] 対象のステートメント
     bool cf = false        ///< [in] constant function 中のステートメントの時 true
   );
 
   /// @brief ステートメントの実体化を行う．
   ///
-  /// pt_stmt が nullptr の時は nullptr を返す．
+  /// ast_stmt が nullptr の時は nullptr を返す．
   const VlStmt*
   instantiate_stmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス
     const ElbEnv& env,        ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
 
@@ -69,7 +69,7 @@ private:
   instantiate_disable(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief enable の実体化を行う．
@@ -78,7 +78,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,        ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief system enable 文の実体化を行う．
@@ -87,7 +87,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief delay / event control statement の実体化を行う．
@@ -96,7 +96,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// 代入文のインスタンス化を行う．
@@ -105,7 +105,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt,    ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt,    ///< [in] 対象のステートメント
     bool block                ///< [in] ブロッキング代入の時 true
   );
 
@@ -114,7 +114,7 @@ private:
   instantiate_control(
     const VlScope* parent,      ///< [in] 親のスコープ
     const ElbEnv& env,	        ///< [in] 親のプロセス (or nullptr)
-    const PtControl* pt_control ///< [in] パース木のコントロール定義
+    const AstControl* ast_control ///< [in] パース木のコントロール定義
   );
 
   /// @brief event statement の実体化を行う．
@@ -122,7 +122,7 @@ private:
   instantiate_eventstmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief null statement の実体化を行う．
@@ -130,7 +130,7 @@ private:
   instantiate_nullstmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief if 文の生成を行う．
@@ -139,7 +139,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief case 文の実体化を行う．
@@ -148,7 +148,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief wait 文の実体化を行う．
@@ -157,7 +157,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief forever 文のインスタンス化を行う．
@@ -166,7 +166,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief repeat 文のインスタンス化を行う．
@@ -175,7 +175,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief while 文のインスタンス化を行う．
@@ -184,7 +184,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief for 文のインスタンス化を行う．
@@ -193,7 +193,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief procedural continuous assign 文のインスタンス化を行う．
@@ -202,7 +202,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief deassign 文のインスタンス化を行う．
@@ -211,7 +211,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief force 文のインスタンス化を行う．
@@ -220,7 +220,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief release 文のインスタンス化を行う．
@@ -229,7 +229,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief parallel block のインスタンス化を行う．
@@ -238,7 +238,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief sequential block のインスタンス化を行う．
@@ -247,14 +247,14 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief ブロックスコープ内の宣言要素の生成を行う．
   void
   phase2_namedblock(
     const VlScope* parent,
-    const std::vector<const PtDeclHead*>& pt_head_array
+    const std::vector<const AstDeclHead*>& ast_head_array
   );
 
   /// @brief 名前つき parallel block のインスタンス化を行う．
@@ -263,7 +263,7 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief 名前つき sequential block のインスタンス化を行う．
@@ -272,25 +272,25 @@ private:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief Stmt のリストのインスタンス化を行う．
   ///
-  /// pt_stmt はブロック系のステートメント
+  /// ast_stmt はブロック系のステートメント
   std::vector<const VlStmt*>
   instantiate_stmt_list(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const ElbEnv& env,	      ///< [in] 生成時の環境
-    const PtStmt* pt_stmt     ///< [in] 対象のステートメント
+    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
   );
 
   /// @brief ステートメントブロックのスコープを生成する．
   const VlScope*
   new_StmtBlockScope(
     const VlScope* parent,  ///< [in] 親のスコープ
-    const PtStmt* pt_stmt   ///< [in] 対応するパース木の要素
+    const AstStmt* ast_stmt   ///< [in] 対応するパース木の要素
   );
 
 };

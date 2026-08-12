@@ -8,9 +8,9 @@
 
 #include <gtest/gtest.h>
 #include "ParserTest.h"
-#include "ym/pt/PtDecl.h"
-#include "ym/pt/PtMisc.h"
-#include "ym/pt/PtExpr.h"
+#include "parser/PtDecl.h"
+#include "parser/PtMisc.h"
+#include "parser/PtExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -31,32 +31,7 @@ TEST_F(ParserTest, Opr1)
 
     ASSERT_TRUE( expr != nullptr );
     check_expr_name(expr);
-    EXPECT_EQ( PtExprType::Opr, expr->type() );
-    EXPECT_EQ( type, expr->op_type() );
-    EXPECT_EQ( 1, expr->operand_num() );
-    EXPECT_EQ( expr1, expr->operand0() );
-    EXPECT_THROW( expr->operand1(),
-		  std::logic_error );
-    EXPECT_THROW( expr->operand2(),
-		  std::logic_error );
-    EXPECT_EQ( expr1, expr->operand(0) );
-    EXPECT_THROW( expr->operand(1),
-		  std::out_of_range );
-    EXPECT_FALSE( expr->is_const_index() );
-    EXPECT_EQ( 0, expr->index_num() );
-    EXPECT_THROW( expr->index(0),
-		  std::out_of_range );
-    EXPECT_EQ( nullptr, expr->part() );
-    EXPECT_THROW( expr->const_type(),
-		  std::logic_error );
-    EXPECT_THROW( expr->const_size(),
-		  std::logic_error );
-    EXPECT_THROW( expr->const_int(),
-		  std::logic_error );
-    EXPECT_THROW( expr->const_str(),
-		  std::logic_error );
-    EXPECT_THROW( expr->const_real(),
-		  std::logic_error );
+    check_expr_opr(expr, type, {expr1});
     bool exp_is_index_expr = true;
     if ( type == VpiOpType::Posedge || type == VpiOpType::Negedge ) {
       exp_is_index_expr = false;
@@ -130,32 +105,7 @@ TEST_F(ParserTest, Opr2)
 
     ASSERT_TRUE( expr != nullptr );
     check_expr_name(expr);
-    EXPECT_EQ( PtExprType::Opr, expr->type() );
-    EXPECT_EQ( type, expr->op_type() );
-    EXPECT_EQ( 2, expr->operand_num() );
-    EXPECT_EQ( expr1, expr->operand0() );
-    EXPECT_EQ( expr2, expr->operand1() );
-    EXPECT_THROW( expr->operand2(),
-		  std::logic_error );
-    EXPECT_EQ( expr1, expr->operand(0) );
-    EXPECT_EQ( expr2, expr->operand(1) );
-    EXPECT_THROW( expr->operand(2),
-		  std::out_of_range );
-    EXPECT_FALSE( expr->is_const_index() );
-    EXPECT_EQ( 0, expr->index_num() );
-    EXPECT_THROW( expr->index(0),
-		  std::out_of_range );
-    EXPECT_EQ( nullptr, expr->part() );
-    EXPECT_THROW( expr->const_type(),
-		  std::logic_error );
-    EXPECT_THROW( expr->const_size(),
-		  std::logic_error );
-    EXPECT_THROW( expr->const_int(),
-		  std::logic_error );
-    EXPECT_THROW( expr->const_str(),
-		  std::logic_error );
-    EXPECT_THROW( expr->const_real(),
-		  std::logic_error );
+    check_expr_opr(expr, type, {expr1, expr2});
     EXPECT_TRUE( expr->is_index_expr() );
     int exp_index_value = 0;
     switch ( type ) {
@@ -232,32 +182,7 @@ TEST_F(ParserTest, Opr3)
 
   ASSERT_TRUE( expr != nullptr );
   check_expr_name(expr);
-  EXPECT_EQ( PtExprType::Opr, expr->type() );
-  EXPECT_EQ( type, expr->op_type() );
-  EXPECT_EQ( 3, expr->operand_num() );
-  EXPECT_EQ( expr1, expr->operand0() );
-  EXPECT_EQ( expr2, expr->operand1() );
-  EXPECT_EQ( expr3, expr->operand2() );
-  EXPECT_EQ( expr1, expr->operand(0) );
-  EXPECT_EQ( expr2, expr->operand(1) );
-  EXPECT_EQ( expr3, expr->operand(2) );
-  EXPECT_THROW( expr->operand(3),
-		std::out_of_range );
-  EXPECT_FALSE( expr->is_const_index() );
-  EXPECT_EQ( 0, expr->index_num() );
-  EXPECT_THROW( expr->index(0),
-		std::out_of_range );
-  EXPECT_EQ( nullptr, expr->part() );
-  EXPECT_THROW( expr->const_type(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_size(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_int(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_str(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_real(),
-		std::logic_error );
+  check_expr_opr(expr, type, {expr1, expr2, expr3});
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
@@ -269,7 +194,7 @@ TEST_F(ParserTest, Opr3)
 TEST_F(ParserTest, Concat)
 {
   auto fr = make_file_region(1, 2, 3, 4);
-  auto expr_list = parser.new_list<const PtExpr>();
+  auto expr_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto expr1 = parser.new_IntConst(fr1, 1U);
   expr_list->push_back(expr1);
@@ -283,32 +208,7 @@ TEST_F(ParserTest, Concat)
 
   ASSERT_TRUE( expr != nullptr );
   check_expr_name(expr);
-  EXPECT_EQ( PtExprType::Opr, expr->type() );
-  EXPECT_EQ( VpiOpType::Concat, expr->op_type() );
-  EXPECT_EQ( 3, expr->operand_num() );
-  EXPECT_EQ( expr1, expr->operand0() );
-  EXPECT_EQ( expr2, expr->operand1() );
-  EXPECT_EQ( expr3, expr->operand2() );
-  EXPECT_EQ( expr1, expr->operand(0) );
-  EXPECT_EQ( expr2, expr->operand(1) );
-  EXPECT_EQ( expr3, expr->operand(2) );
-  EXPECT_THROW( expr->operand(3),
-		std::out_of_range );
-  EXPECT_FALSE( expr->is_const_index() );
-  EXPECT_EQ( 0, expr->index_num() );
-  EXPECT_THROW( expr->index(0),
-		std::out_of_range );
-  EXPECT_EQ( nullptr, expr->part() );
-  EXPECT_THROW( expr->const_type(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_size(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_int(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_str(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_real(),
-		std::logic_error );
+  check_expr_opr(expr, VpiOpType::Concat, {expr1, expr2, expr3});
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
@@ -322,7 +222,7 @@ TEST_F(ParserTest, MultiConcat)
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto rep = parser.new_IntConst(fr1, 4U);
-  auto expr_list = parser.new_list<const PtExpr>();
+  auto expr_list = parser.new_expr_list();
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto expr1 = parser.new_IntConst(fr2, 1U);
   expr_list->push_back(expr1);
@@ -336,33 +236,7 @@ TEST_F(ParserTest, MultiConcat)
 
   ASSERT_TRUE( expr != nullptr );
   check_expr_name(expr);
-  EXPECT_EQ( PtExprType::Opr, expr->type() );
-  EXPECT_EQ( VpiOpType::MultiConcat, expr->op_type() );
-  EXPECT_EQ( 4, expr->operand_num() );
-  EXPECT_EQ( rep, expr->operand0() );
-  EXPECT_EQ( expr1, expr->operand1() );
-  EXPECT_EQ( expr2, expr->operand2() );
-  EXPECT_EQ( rep, expr->operand(0) );
-  EXPECT_EQ( expr1, expr->operand(1) );
-  EXPECT_EQ( expr2, expr->operand(2) );
-  EXPECT_EQ( expr3, expr->operand(3) );
-  EXPECT_THROW( expr->operand(4),
-		std::out_of_range );
-  EXPECT_FALSE( expr->is_const_index() );
-  EXPECT_EQ( 0, expr->index_num() );
-  EXPECT_THROW( expr->index(0),
-		std::out_of_range );
-  EXPECT_EQ( nullptr, expr->part() );
-  EXPECT_THROW( expr->const_type(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_size(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_int(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_str(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_real(),
-		std::logic_error );
+  check_expr_multiconcat(expr, VpiOpType::MultiConcat, rep, {expr1, expr2, expr3});
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
@@ -384,32 +258,7 @@ TEST_F(ParserTest, MinTypMax)
 
   ASSERT_TRUE( expr != nullptr );
   check_expr_name(expr);
-  EXPECT_EQ( PtExprType::Opr, expr->type() );
-  EXPECT_EQ( VpiOpType::MinTypMax, expr->op_type() );
-  EXPECT_EQ( 3, expr->operand_num() );
-  EXPECT_EQ( expr1, expr->operand0() );
-  EXPECT_EQ( expr2, expr->operand1() );
-  EXPECT_EQ( expr3, expr->operand2() );
-  EXPECT_EQ( expr1, expr->operand(0) );
-  EXPECT_EQ( expr2, expr->operand(1) );
-  EXPECT_EQ( expr3, expr->operand(2) );
-  EXPECT_THROW( expr->operand(3),
-		std::out_of_range );
-  EXPECT_FALSE( expr->is_const_index() );
-  EXPECT_EQ( 0, expr->index_num() );
-  EXPECT_THROW( expr->index(0),
-		std::out_of_range );
-  EXPECT_EQ( nullptr, expr->part() );
-  EXPECT_THROW( expr->const_type(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_size(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_int(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_str(),
-		std::logic_error );
-  EXPECT_THROW( expr->const_real(),
-		std::logic_error );
+  check_expr_opr(expr, VpiOpType::MinTypMax, {expr1, expr2, expr3});
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );

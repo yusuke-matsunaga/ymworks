@@ -21,10 +21,10 @@ struct DefParamStub
   const VlModule* mModule;
 
   /// @brief パース木の DefParam ヘッダ
-  const PtItem* mPtHeader;
+  const AstItem* mAstHeader;
 
   /// @brief パース木の DefParam 文
-  const PtDefParam* mPtDefparam;
+  const AstDefParam* mAstDefparam;
 };
 
 END_NAMESPACE_YM_VERILOG

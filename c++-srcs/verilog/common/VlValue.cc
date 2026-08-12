@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/VlValue.h"
+#include "ym/vl/VlValue.h"
 #include "VlValueRep.h"
 
 

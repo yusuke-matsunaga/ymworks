@@ -9,8 +9,8 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtMisc.h"
-#include "ym/VlValue.h"
+#include "ym/vl/AstMisc.h"
+#include "ym/vl/VlValue.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,10 +22,10 @@ BEGIN_NAMESPACE_YM_VERILOG
 struct ElbParamCon
 {
   // パース木の要素
-  const PtConnection* mPtCon;
+  const AstConnection* mAstCon;
 
   // 式
-  const PtExpr* mExpr;
+  const AstExpr* mExpr;
 
   // 値
   VlValue mValue;

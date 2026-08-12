@@ -8,7 +8,7 @@
 
 #include "CptGenerate.h"
 #include "alloc/Alloc.h"
-#include "parser/CptFactory.h"
+#include "parser/PtFactory.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -19,8 +19,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // コンストラクタ
 CptGenBody::CptGenBody(
-  PtiDeclHeadArray&& declhead_array,
-  PtiItemArray&& item_array
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 ) : mDeclHeadArray{std::move(declhead_array)},
     mItemArray{std::move(item_array)}
 {
@@ -39,8 +39,8 @@ CptGenBody::~CptGenBody()
 // コンストラクタ
 CptGenBase::CptGenBase(
   const FileRegion& file_region,
-  PtiDeclHeadArray&& declhead_array,
-  PtiItemArray&& item_array
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 ) : mFileRegion{file_region},
     mBody{std::move(declhead_array), std::move(item_array)}
 {
@@ -66,7 +66,7 @@ CptGenBase::declhead_num() const
 }
 
 // @brief 宣言ヘッダの取得
-const PtDeclHead*
+const AstDeclHead*
 CptGenBase::declhead(
   SizeType pos
 ) const
@@ -82,7 +82,7 @@ CptGenBase::item_num() const
 }
 
 // @brief item の取得
-const PtItem*
+const AstItem*
 CptGenBase::item(
   SizeType pos
 ) const
@@ -98,9 +98,9 @@ CptGenBase::item(
 // コンストラクタ
 CptGenerate::CptGenerate(
   const FileRegion& file_region,
-  PtiDeclHeadArray&& declhead_array,
-  PtiItemArray&& item_array
-) : CptGenBase{file_region, std::move(declhead_array), std::move(item_array)}
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
+) : CptGenBase(file_region, std::move(declhead_array), std::move(item_array))
 {
 }
 
@@ -110,10 +110,10 @@ CptGenerate::~CptGenerate()
 }
 
 // 型を返す．
-PtItemType
+AstItem::Type
 CptGenerate::type() const
 {
-  return PtItemType::Generate;
+  return Generate;
 }
 
 
@@ -124,9 +124,9 @@ CptGenerate::type() const
 // コンストラクタ
 CptGenBlock::CptGenBlock(
   const FileRegion& file_region,
-  PtiDeclHeadArray&& declhead_array,
-  PtiItemArray&& item_array
-) : CptGenBase{file_region, std::move(declhead_array), std::move(item_array)}
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
+) : CptGenBase(file_region, std::move(declhead_array), std::move(item_array))
 {
 }
 
@@ -136,10 +136,10 @@ CptGenBlock::~CptGenBlock()
 }
 
 // 型を返す．
-PtItemType
+AstItem::Type
 CptGenBlock::type() const
 {
-  return PtItemType::GenBlock;
+  return GenBlock;
 }
 
 
@@ -151,9 +151,9 @@ CptGenBlock::type() const
 CptGenBlockN::CptGenBlockN(
   const FileRegion& file_region,
   const char* name,
-  PtiDeclHeadArray&& declhead_array,
-  PtiItemArray&& item_array
-) : CptGenBlock{file_region, std::move(declhead_array), std::move(item_array)},
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
+) : CptGenBlock(file_region, std::move(declhead_array), std::move(item_array)),
     mName{name}
 {
 }
@@ -178,15 +178,15 @@ CptGenBlockN::name() const
 // コンストラクタ
 CptGenIf::CptGenIf(
   const FileRegion& file_region,
-  const PtExpr* cond,
-  PtiDeclHeadArray&& then_declhead_array,
-  PtiItemArray&& then_item_array,
-  PtiDeclHeadArray&& else_declhead_array,
-  PtiItemArray&& else_item_array
+  const AstExpr* cond,
+  PtDeclHeadArray&& then_declhead_array,
+  PtItemArray&& then_item_array,
+  PtDeclHeadArray&& else_declhead_array,
+  PtItemArray&& else_item_array
 ) : mFileRegion{file_region},
     mCond{cond},
-    mThenBody{std::move(then_declhead_array), std::move(then_item_array)},
-    mElseBody{std::move(else_declhead_array), std::move(else_item_array)}
+    mThenBody(std::move(then_declhead_array), std::move(then_item_array)),
+    mElseBody(std::move(else_declhead_array), std::move(else_item_array))
 {
 }
 
@@ -203,14 +203,14 @@ CptGenIf::file_region() const
 }
 
 // 型を返す．
-PtItemType
+AstItem::Type
 CptGenIf::type() const
 {
-  return PtItemType::GenIf;
+  return GenIf;
 }
 
 // 条件式を返す．
-const PtExpr*
+const AstExpr*
 CptGenIf::expr() const
 {
   return mCond;
@@ -224,7 +224,7 @@ CptGenIf::then_declhead_num() const
 }
 
 // @brief 条件が成り立ったときに生成される宣言ヘッダの取得
-const PtDeclHead*
+const AstDeclHead*
 CptGenIf::then_declhead(
   SizeType pos
 ) const
@@ -240,7 +240,7 @@ CptGenIf::then_item_num() const
 }
 
 // @brief 条件が成り立ったときに生成される item の取得
-const PtItem*
+const AstItem*
 CptGenIf::then_item(
   SizeType pos
 ) const
@@ -256,7 +256,7 @@ CptGenIf::else_declhead_num() const
 }
 
 // @brief 条件が成り立たなかったときに生成される宣言ヘッダの取得
-const PtDeclHead*
+const AstDeclHead*
 CptGenIf::else_declhead(
   SizeType pos
 ) const
@@ -272,7 +272,7 @@ CptGenIf::else_item_num() const
 }
 
 // @brief 条件が成り立たなかったときに生成される item の取得
-const PtItem*
+const AstItem*
 CptGenIf::else_item(
   SizeType pos
 ) const
@@ -288,12 +288,12 @@ CptGenIf::else_item(
 // コンストラクタ
 CptGenCaseItem::CptGenCaseItem(
   const FileRegion& file_region,
-  PtiExprArray&& label_array,
-  PtiDeclHeadArray&& declhead_array,
-  PtiItemArray&& item_array
+  PtExprArray&& label_array,
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 ) : mFileRegion{file_region},
     mLabelArray{std::move(label_array)},
-    mBody{std::move(declhead_array), std::move(item_array)}
+    mBody(std::move(declhead_array), std::move(item_array))
 {
 }
 
@@ -317,7 +317,7 @@ CptGenCaseItem::label_num() const
 }
 
 // @brief ラベルの取得
-const PtExpr*
+const AstExpr*
 CptGenCaseItem::label(
   SizeType pos
 ) const
@@ -333,7 +333,7 @@ CptGenCaseItem::declhead_num() const
 }
 
 // @brief 宣言ヘッダの取得
-const PtDeclHead*
+const AstDeclHead*
 CptGenCaseItem::declhead(
   SizeType pos
 ) const
@@ -349,7 +349,7 @@ CptGenCaseItem::item_num() const
 }
 
 // @brief item の取得
-const PtItem*
+const AstItem*
 CptGenCaseItem::item(
   SizeType pos
 ) const
@@ -365,8 +365,8 @@ CptGenCaseItem::item(
 // コンストラクタ
 CptGenCase::CptGenCase(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  PtiGenCaseItemArray&& item_array
+  const AstExpr* expr,
+  PtGenCaseItemArray&& item_array
 ) : mFileRegion{file_region},
     mExpr{expr},
     mCaseItemArray{std::move(item_array)}
@@ -386,14 +386,14 @@ CptGenCase::file_region() const
 }
 
 // 型を返す．
-PtItemType
+AstItem::Type
 CptGenCase::type() const
 {
-  return PtItemType::GenCase;
+  return GenCase;
 }
 
 // 比較式を返す．
-const PtExpr*
+const AstExpr*
 CptGenCase::expr() const
 {
   return mExpr;
@@ -407,7 +407,7 @@ CptGenCase::caseitem_num() const
 }
 
 // @brief case item の取得
-const PtGenCaseItem*
+const AstGenCaseItem*
 CptGenCase::caseitem(
   SizeType pos
 ) const
@@ -424,19 +424,19 @@ CptGenCase::caseitem(
 CptGenFor::CptGenFor(
   const FileRegion& file_region,
   const char* loop_var,
-  const PtExpr* init_expr,
-  const PtExpr* cond,
-  const PtExpr* next_expr,
+  const AstExpr* init_expr,
+  const AstExpr* cond,
+  const AstExpr* next_expr,
   const char* block_name,
-  PtiDeclHeadArray&& declhead_array,
-  PtiItemArray&& item_array
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 ) : mFileRegion{file_region},
     mName{block_name},
     mLoopVar{loop_var},
     mInitExpr{init_expr},
     mCond{cond},
     mNextExpr{next_expr},
-    mBody{std::move(declhead_array), std::move(item_array)}
+    mBody(std::move(declhead_array), std::move(item_array))
 {
 }
 
@@ -453,10 +453,10 @@ CptGenFor::file_region() const
 }
 
 // 型を返す．
-PtItemType
+AstItem::Type
 CptGenFor::type() const
 {
-  return PtItemType::GenFor;
+  return GenFor;
 }
 
 // 名前を返す．
@@ -474,7 +474,7 @@ CptGenFor::declhead_num() const
 }
 
 // @brief 宣言ヘッダの取得
-const PtDeclHead*
+const AstDeclHead*
 CptGenFor::declhead(
   SizeType pos
 ) const
@@ -490,7 +490,7 @@ CptGenFor::item_num() const
 }
 
 // @brief item の取得
-const PtItem*
+const AstItem*
 CptGenFor::item(
   SizeType pos
 ) const
@@ -506,21 +506,21 @@ CptGenFor::loop_var() const
 }
 
 // 初期化文の右辺を返す．
-const PtExpr*
+const AstExpr*
 CptGenFor::init_expr() const
 {
   return mInitExpr;
 }
 
 // 繰り返し条件を返す．
-const PtExpr*
+const AstExpr*
 CptGenFor::expr() const
 {
   return mCond;
 }
 
 // 増加文の右辺を返す．
-const PtExpr*
+const AstExpr*
 CptGenFor::next_expr() const
 {
   return mNextExpr;
@@ -528,132 +528,118 @@ CptGenFor::next_expr() const
 
 
 //////////////////////////////////////////////////////////////////////
-// generate 文関係
+// クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
 // generate 文を生成する．
-const PtItem*
-CptFactory::new_Generate(
+PtItem*
+PtFactory::new_Generate(
   const FileRegion& file_region,
-  const std::vector<const PtDeclHead*>& declhead_array,
-  const std::vector<const PtItem*>& item_array
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 )
 {
-  ++ mNumGenerate;
   void* p = mAlloc.get_memory(sizeof(CptGenerate));
-  auto obj = new (p) CptGenerate{file_region,
-				 PtiArray<const PtDeclHead>{mAlloc, declhead_array},
-				 PtiArray<const PtItem>{mAlloc, item_array}};
-  return obj;
+  return new (p) CptGenerate(file_region,
+			     std::move(declhead_array),
+			     std::move(item_array));
 }
 
 // generate block 文を生成する．
-const PtItem*
-CptFactory::new_GenBlock(
+PtItem*
+PtFactory::new_GenBlock(
   const FileRegion& file_region,
-  const std::vector<const PtDeclHead*>& declhead_array,
-  const std::vector<const PtItem*>& item_array
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 )
 {
-  ++ mNumGenBlock;
   void* p = mAlloc.get_memory(sizeof(CptGenBlock));
-  auto obj = new (p) CptGenBlock{file_region,
-				 PtiArray<const PtDeclHead>{mAlloc, declhead_array},
-				 PtiArray<const PtItem>{mAlloc, item_array}};
-  return obj;
+  return new (p) CptGenBlock(file_region,
+			     std::move(declhead_array),
+			     std::move(item_array));
 }
 
 // generate block 文を生成する．
-const PtItem*
-CptFactory::new_GenBlock(
+PtItem*
+PtFactory::new_GenBlock(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<const PtDeclHead*>& declhead_array,
-  const std::vector<const PtItem*>& item_array
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 )
 {
-  ++ mNumGenBlockN;
   void* p = mAlloc.get_memory(sizeof(CptGenBlockN));
-  auto obj = new (p) CptGenBlockN{file_region, name,
-				  PtiArray<const PtDeclHead>{mAlloc, declhead_array},
-				  PtiArray<const PtItem>{mAlloc, item_array}};
-  return obj;
+  return new (p) CptGenBlockN(file_region, name,
+			      std::move(declhead_array),
+			      std::move(item_array));
 }
 
 // generate if 文を生成する．
-const PtItem*
-CptFactory::new_GenIf(
+PtItem*
+PtFactory::new_GenIf(
   const FileRegion& file_region,
-  const PtExpr* cond,
-  const std::vector<const PtDeclHead*>& then_declhead_array,
-  const std::vector<const PtItem*>& then_item_array,
-  const std::vector<const PtDeclHead*>& else_declhead_array,
-  const std::vector<const PtItem*>& else_item_array
+  const AstExpr* cond,
+  PtDeclHeadArray&& then_declhead_array,
+  PtItemArray&& then_item_array,
+  PtDeclHeadArray&& else_declhead_array,
+  PtItemArray&& else_item_array
 )
 {
-  ++ mNumGenIf;
   void* p = mAlloc.get_memory(sizeof(CptGenIf));
-  auto obj = new (p) CptGenIf{file_region, cond,
-			      PtiArray<const PtDeclHead>{mAlloc, then_declhead_array},
-			      PtiArray<const PtItem>{mAlloc, then_item_array},
-			      PtiArray<const PtDeclHead>{mAlloc, else_declhead_array},
-			      PtiArray<const PtItem>{mAlloc, else_item_array}};
-  return obj;
+  return new (p) CptGenIf(file_region, cond,
+			  std::move(then_declhead_array),
+			  std::move(then_item_array),
+			  std::move(else_declhead_array),
+			  std::move(else_item_array));
 }
 
 // generate case 文を生成する．
-const PtItem*
-CptFactory::new_GenCase(
+PtItem*
+PtFactory::new_GenCase(
   const FileRegion& file_region,
-  const PtExpr* expr,
-  const std::vector<const PtGenCaseItem*>& item_array
+  const AstExpr* expr,
+  PtGenCaseItemArray&& item_array
 )
 {
-  ++ mNumGenCase;
   void* p = mAlloc.get_memory(sizeof(CptGenCase));
-  auto obj = new (p) CptGenCase{file_region, expr,
-				PtiArray<const PtGenCaseItem>{mAlloc, item_array}};
-  return obj;
+  return new (p) CptGenCase(file_region, expr,
+			    std::move(item_array));
 }
 
 // generate case の要素を生成する．
-const PtGenCaseItem*
-CptFactory::new_GenCaseItem(
+PtGenCaseItem*
+PtFactory::new_GenCaseItem(
   const FileRegion& file_region,
-  const std::vector<const PtExpr*>& label_array,
-  const std::vector<const PtDeclHead*>& declhead_array,
-  const std::vector<const PtItem*>& item_array
+  PtExprArray&& label_array,
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 )
 {
-  ++ mNumGenCaseItem;
   void* p = mAlloc.get_memory(sizeof(CptGenCaseItem));
-  auto obj = new (p) CptGenCaseItem{file_region,
-				    PtiArray<const PtExpr>{mAlloc, label_array},
-				    PtiArray<const PtDeclHead>{mAlloc, declhead_array},
-				    PtiArray<const PtItem>{mAlloc, item_array}};
-  return obj;
+  return new (p) CptGenCaseItem(file_region,
+				std::move(label_array),
+				std::move(declhead_array),
+				std::move(item_array));
 }
 
 // generate for 文を生成する．
-const PtItem*
-CptFactory::new_GenFor(
+PtItem*
+PtFactory::new_GenFor(
   const FileRegion& file_region,
   const char* loop_var,
-  const PtExpr* init_expr,
-  const PtExpr* cond,
-  const PtExpr* next_expr,
+  const AstExpr* init_expr,
+  const AstExpr* cond,
+  const AstExpr* next_expr,
   const char* block_name,
-  const std::vector<const PtDeclHead*>& declhead_array,
-  const std::vector<const PtItem*>& item_array
+  PtDeclHeadArray&& declhead_array,
+  PtItemArray&& item_array
 )
 {
-  ++ mNumGenFor;
   void* p = mAlloc.get_memory(sizeof(CptGenFor));
-  auto obj = new (p) CptGenFor{file_region, loop_var, init_expr, cond,
-			       next_expr, block_name,
-			       PtiArray<const PtDeclHead>{mAlloc, declhead_array},
-			       PtiArray<const PtItem>{mAlloc, item_array}};
-  return obj;
+  return new (p) CptGenFor(file_region, loop_var, init_expr, cond,
+			   next_expr, block_name,
+			   std::move(declhead_array),
+			   std::move(item_array));
 }
 
 END_NAMESPACE_YM_VERILOG

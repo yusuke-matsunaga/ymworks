@@ -11,7 +11,7 @@
 
 #include "elaborator/ElbExpr.h"
 
-#include "ym/pt/PtMisc.h"
+#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -23,32 +23,32 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 遅延コントロールを生成する．
 const VlControl*
 EiFactory::new_DelayControl(
-  const PtControl* pt_control,
+  const AstControl* ast_control,
   ElbExpr* delay
 )
 {
-  return new EiDelayControl(pt_control, delay);
+  return new EiDelayControl(ast_control, delay);
 }
 
 // @brief イベントコントロールを生成する．
 const VlControl*
 EiFactory::new_EventControl(
-  const PtControl* pt_control,
+  const AstControl* ast_control,
   const std::vector<ElbExpr*>& event_list
 )
 {
-  return new EiEventControl(pt_control, event_list);
+  return new EiEventControl(ast_control, event_list);
 }
 
 // @brief リピートコントロールを生成する．
 const VlControl*
 EiFactory::new_RepeatControl(
-  const PtControl* pt_control,
+  const AstControl* ast_control,
   ElbExpr* rep,
   const std::vector<ElbExpr*>& event_list
 )
 {
-  return new EiRepeatControl(pt_control, rep, event_list);
+  return new EiRepeatControl(ast_control, rep, event_list);
 }
 
 
@@ -58,8 +58,8 @@ EiFactory::new_RepeatControl(
 
 // @brief コンストラクタ
 EiControl::EiControl(
-  const PtControl* pt_control
-) : mPtControl{pt_control}
+  const AstControl* ast_control
+) : mAstControl{ast_control}
 {
 }
 
@@ -72,7 +72,7 @@ EiControl::~EiControl()
 FileRegion
 EiControl::file_region() const
 {
-  return mPtControl->file_region();
+  return mAstControl->file_region();
 }
 
 // @brief 遅延式を返す．
@@ -119,9 +119,9 @@ EiControl::event_list() const
 
 // @brief コンストラクタ
 EiDelayControl::EiDelayControl(
-  const PtControl* pt_control,
+  const AstControl* ast_control,
   ElbExpr* delay
-) : EiControl(pt_control),
+) : EiControl(ast_control),
     mDelay{delay}
 {
 }
@@ -152,9 +152,9 @@ EiDelayControl::delay() const
 
 // @brief コンストラクタ
 EiEventControl::EiEventControl(
-  const PtControl* pt_control,
+  const AstControl* ast_control,
   const std::vector<ElbExpr*>& event_list
-) : EiControl(pt_control),
+) : EiControl(ast_control),
     mEventList{event_list}
 {
 }
@@ -204,10 +204,10 @@ EiEventControl::event_list() const
 
 // @brief コンストラクタ
 EiRepeatControl::EiRepeatControl(
-  const PtControl* pt_control,
+  const AstControl* ast_control,
   ElbExpr* rep,
   const std::vector<ElbExpr*>& event_list
-) : EiEventControl(pt_control, event_list),
+) : EiEventControl(ast_control, event_list),
     mExpr{rep}
 {
 }

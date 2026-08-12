@@ -18,9 +18,9 @@
 #include "AttrGen.h"
 
 #include "elaborator/ElbExpr.h"
-#include "parser/PtDumper.h"
+#include "parser/AstDumper.h"
 
-#include "ym/pt/PtExpr.h"
+#include "ym/vl/AstExpr.h"
 #include "ym/MsgMgr.h"
 
 
@@ -72,83 +72,83 @@ ElbProxy::allow_empty_io_range()
 void
 ElbProxy::phase1_module_item(
   ElbModule* module,
-  const PtModule* pt_module,
+  const AstModule* ast_module,
   const std::vector<ElbParamCon>& param_con_list
 )
 {
-  mModuleGen->phase1_module_item(module, pt_module, param_con_list);
+  mModuleGen->phase1_module_item(module, ast_module, param_con_list);
 }
 
 // @brief parameter と genvar を実体化する．
 void
 ElbProxy::phase1_decl(
   const VlScope* parent,
-  const std::vector<const PtDeclHead*>& pt_head_array,
+  const std::vector<const AstDeclHead*>& ast_head_array,
   bool force_to_local
 )
 {
-  mDeclGen->phase1_decl(parent, pt_head_array, force_to_local);
+  mDeclGen->phase1_decl(parent, ast_head_array, force_to_local);
 }
 
 // @brief IO宣言要素を実体化する．
 void
 ElbProxy::instantiate_iodecl(
   ElbModule* module,
-  const std::vector<const PtIOHead*>& pt_head_array
+  const std::vector<const AstIOHead*>& ast_head_array
 )
 {
-  mDeclGen->instantiate_iodecl(module, nullptr, pt_head_array);
+  mDeclGen->instantiate_iodecl(module, nullptr, ast_head_array);
 }
 
 // @brief IO宣言要素を実体化する．
 void
 ElbProxy::instantiate_iodecl(
   ElbTaskFunc* taskfunc,
-  const std::vector<const PtIOHead*>& pt_head_array
+  const std::vector<const AstIOHead*>& ast_head_array
 )
 {
-  mDeclGen->instantiate_iodecl(nullptr, taskfunc, pt_head_array);
+  mDeclGen->instantiate_iodecl(nullptr, taskfunc, ast_head_array);
 }
 
 // @brief 宣言要素のリストをインスタンス化する．
 void
 ElbProxy::instantiate_decl(
   const VlScope* parent,
-  const std::vector<const PtDeclHead*>& pt_head_array
+  const std::vector<const AstDeclHead*>& ast_head_array
 )
 {
-  mDeclGen->instantiate_decl(parent, pt_head_array);
+  mDeclGen->instantiate_decl(parent, ast_head_array);
 }
 
 // @brief スコープに関係する要素を実体化する．
 void
 ElbProxy::phase1_items(
   const VlScope* parent,
-  const std::vector<const PtItem*>& pt_item_array
+  const std::vector<const AstItem*>& ast_item_array
 )
 {
-  mItemGen->phase1_items(parent, pt_item_array);
+  mItemGen->phase1_items(parent, ast_item_array);
 }
 
 // @brief constant function の生成を行う．
 const VlTaskFunc*
 ElbProxy::instantiate_constant_function(
   const VlScope* parent,
-  const PtItem* pt_function
+  const AstItem* ast_function
 )
 {
-  return mItemGen->instantiate_constant_function(parent, pt_function);
+  return mItemGen->instantiate_constant_function(parent, ast_function);
 }
 
 // @brief スコープに関係するステートメントの実体化を行う．
 void
 ElbProxy::phase1_stmt(
   const VlScope* parent,
-  const PtStmt* pt_stmt,
+  const AstStmt* ast_stmt,
   bool cf
 )
 {
-  mStmtGen->phase1_stmt(parent, pt_stmt, cf);
+  mStmtGen->phase1_stmt(parent, ast_stmt, cf);
 }
 
 // @brief ステートメントの実体化を行う．
@@ -157,76 +157,76 @@ ElbProxy::instantiate_stmt(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const PtStmt* pt_stmt
+  const AstStmt* ast_stmt
 )
 {
-  return mStmtGen->instantiate_stmt(parent, process, env, pt_stmt);
+  return mStmtGen->instantiate_stmt(parent, process, env, ast_stmt);
 }
 
-// @brief PtExpr から ElbiExpr を生成する
+// @brief AstExpr から ElbiExpr を生成する
 ElbExpr*
 ElbProxy::instantiate_expr(
   const VlScope* parent,
   const ElbEnv& env,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprGen->instantiate_expr(parent, env, pt_expr);
+  return mExprGen->instantiate_expr(parent, env, ast_expr);
 }
 
-// @brief PtExpr から定数式の ElbExpr を生成する
+// @brief AstExpr から定数式の ElbExpr を生成する
 ElbExpr*
 ElbProxy::instantiate_constant_expr(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprGen->instantiate_constant_expr(parent, pt_expr);
+  return mExprGen->instantiate_constant_expr(parent, ast_expr);
 }
 
-// @brief PtExpr からイベント式の ElbiExpr を生成する
+// @brief AstExpr からイベント式の ElbiExpr を生成する
 ElbExpr*
 ElbProxy::instantiate_event_expr(
   const VlScope* parent,
   const ElbEnv& env,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprGen->instantiate_event_expr(parent, env, pt_expr);
+  return mExprGen->instantiate_event_expr(parent, env, ast_expr);
 }
 
-// @brief PtExpr からシステム関数の引数を生成する．
+// @brief AstExpr からシステム関数の引数を生成する．
 ElbExpr*
 ElbProxy::instantiate_arg(
   const VlScope* parent,
   const ElbEnv& env,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprGen->instantiate_arg(parent, env, pt_expr);
+  return mExprGen->instantiate_arg(parent, env, ast_expr);
 }
 
-// @brief PtExpr から左辺式を生成する
+// @brief AstExpr から左辺式を生成する
 ElbExpr*
 ElbProxy::instantiate_lhs(
   const VlScope* parent,
   const ElbEnv& env,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprGen->instantiate_lhs(parent, env, pt_expr);
+  return mExprGen->instantiate_lhs(parent, env, ast_expr);
 }
 
-// @brief PtExpr から右辺式を生成する
+// @brief AstExpr から右辺式を生成する
 ElbExpr*
 ElbProxy::instantiate_rhs(
   const VlScope* parent,
   const ElbEnv& env,
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   ElbExpr* lhs
 )
 {
-  auto expr = mExprGen->instantiate_expr(parent, env, pt_expr);
+  auto expr = mExprGen->instantiate_expr(parent, env, ast_expr);
   if ( expr ) {
     // lhs の型を expr に設定する．
     expr->set_reqsize(lhs->value_type());
@@ -234,135 +234,135 @@ ElbProxy::instantiate_rhs(
   return expr;
 }
 
-// @brief PtExpr(primary) から named_event を生成する．
+// @brief AstExpr(primary) から named_event を生成する．
 ElbExpr*
 ElbProxy::instantiate_namedevent(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprGen->instantiate_namedevent(parent, pt_expr);
+  return mExprGen->instantiate_namedevent(parent, ast_expr);
 }
 
-// @brief PtDelay から ElbExpr を生成する．
+// @brief AstDelay から ElbExpr を生成する．
 const VlDelay*
 ElbProxy::instantiate_delay(
   const VlScope* parent,
-  const PtDelay* pt_delay
+  const AstDelay* ast_delay
 )
 {
-  return mExprGen->instantiate_delay(parent, pt_delay);
+  return mExprGen->instantiate_delay(parent, ast_delay);
 }
 
-// @brief PtOrderedCon から ElbExpr を生成する．
+// @brief AstOrderedCon から ElbExpr を生成する．
 const VlDelay*
 ElbProxy::instantiate_delay(
   const VlScope* parent,
-  const PtItem* pt_head
+  const AstItem* ast_head
 )
 {
-  return mExprGen->instantiate_delay(parent, pt_head);
+  return mExprGen->instantiate_delay(parent, ast_head);
 }
 
 // @brief 定数式の値を評価する．
 VlValue
 ElbProxy::evaluate_expr(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprEval->evaluate_expr(parent, pt_expr);
+  return mExprEval->evaluate_expr(parent, ast_expr);
 }
 
 // @brief 定数式を評価し int 値を返す．
 int
 ElbProxy::evaluate_int(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprEval->evaluate_int(parent, pt_expr);
+  return mExprEval->evaluate_int(parent, ast_expr);
 }
 
 // @brief 定数式ならばを評価し int 値を返す．
 int
 ElbProxy::evaluate_int_if_const(
   const VlScope* parent,
-  const PtExpr* pt_expr,
+  const AstExpr* ast_expr,
   bool& is_const
 )
 {
-  return mExprEval->evaluate_int_if_const(parent, pt_expr, is_const);
+  return mExprEval->evaluate_int_if_const(parent, ast_expr, is_const);
 }
 
 // @brief 定数式を評価しスカラー値を返す．
 VlScalarVal
 ElbProxy::evaluate_scalar(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprEval->evaluate_scalar(parent, pt_expr);
+  return mExprEval->evaluate_scalar(parent, ast_expr);
 }
 
 // @brief 定数式を評価し bool 値を返す．
 bool
 ElbProxy::evaluate_bool(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprEval->evaluate_bool(parent, pt_expr);
+  return mExprEval->evaluate_bool(parent, ast_expr);
 }
 
 // @brief 定数式を評価しビットベクタ値を返す．
 BitVector
 ElbProxy::evaluate_bitvector(
   const VlScope* parent,
-  const PtExpr* pt_expr
+  const AstExpr* ast_expr
 )
 {
-  return mExprEval->evaluate_bitvector(parent, pt_expr);
+  return mExprEval->evaluate_bitvector(parent, ast_expr);
 }
 
 // @brief 範囲を表す式を評価する．
 RangeVal
 ElbProxy::evaluate_range(
   const VlScope* parent,
-  const PtRange* pt_range
+  const AstRange* ast_range
 )
 {
-  return mExprEval->evaluate_range(parent, pt_range);
+  return mExprEval->evaluate_range(parent, ast_range);
 }
 
 // @brief 範囲を表す式を評価する．
 RangeVal
 ElbProxy::evaluate_range(
   const VlScope* parent,
-  const PtPart* pt_part
+  const AstPart* ast_part
 )
 {
-  return mExprEval->evaluate_range(parent, pt_part);
+  return mExprEval->evaluate_range(parent, ast_part);
 }
 
 // @brief 構文木要素に対応する属性リストを返す．
 const std::vector<const VlAttribute*>&
 ElbProxy::attribute_list(
-  const PtBase* pt_obj
+  const AstBase* ast_obj
 )
 {
-  return mAttrGen->attribute_list(pt_obj);
+  return mAttrGen->attribute_list(ast_obj);
 }
 
 // @brief 構文木要素に対応する属性リストを返す．
 std::vector<const VlAttribute*>
 ElbProxy::attribute_list(
-  const PtBase* pt_obj1,
-  const PtBase* pt_obj2
+  const AstBase* ast_obj1,
+  const AstBase* ast_obj2
 )
 {
-  auto ans = mAttrGen->attribute_list(pt_obj1);
-  const auto& ans1 = mAttrGen->attribute_list(pt_obj2);
+  auto ans = mAttrGen->attribute_list(ast_obj1);
+  const auto& ans1 = mAttrGen->attribute_list(ast_obj2);
   ans.insert(ans.end(), ans1.begin(), ans1.end());
   return ans;
 }

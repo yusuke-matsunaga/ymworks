@@ -9,8 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/pt/PtP.h"
-#include "parser/PtiAttrInfo.h"
+#include "parser/PtAttrInfo.h"
 #include "ElbProxy.h"
 
 
@@ -50,18 +49,18 @@ public:
   // AttrGen の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief PtAttr から VlAttribute を生成する．
+  /// @brief AstAttr から VlAttribute を生成する．
   ///
   /// 結果は mHash に登録される．
   void
   instantiate_attribute(
-    const PtiAttrInfo& attr_info ///< [in] 属性リストの情報
+    const PtAttrInfo& attr_info ///< [in] 属性リストの情報
   );
 
   /// @brief 構文木要素に対応する属性リストを返す．
   const std::vector<const VlAttribute*>&
   attribute_list(
-    const PtBase* pt_obj ///< [in] 元となる構文木要素
+    const AstBase* ast_obj ///< [in] 元となる構文木要素
   );
 
 
@@ -71,7 +70,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ハッシュ表
-  std::unordered_map<const PtBase*, std::vector<const VlAttribute*>> mHash;
+  std::unordered_map<const AstBase*, std::vector<const VlAttribute*>> mHash;
 
   // 空のリスト
   std::vector<const VlAttribute*> mEmptyList{};
