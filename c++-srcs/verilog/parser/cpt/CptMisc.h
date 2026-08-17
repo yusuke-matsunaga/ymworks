@@ -354,29 +354,17 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @brief strength を表すクラス
+/// @brief strength を表す基底クラス
 //////////////////////////////////////////////////////////////////////
 class CptStrength :
   public PtStrength
 {
 public:
 
-  /// @brief drive strength を表すコンストラクタ
+  /// @brief コンストラクタ
   CptStrength(
-    const FileRegion& file_region,
-    VpiStrength value1,
-    VpiStrength value2
-  ) : mFileRegion{file_region},
-      mValue{value1, value2, VpiStrength::NoStrength}
-  {
-  }
-
-  /// @brief charge strength を表すコンストラクタ
-  CptStrength(
-    const FileRegion& file_region,
-    VpiStrength value1
-  ) : mFileRegion{file_region},
-      mValue{VpiStrength::NoStrength, VpiStrength::NoStrength, value1}
+    const FileRegion& file_region
+  ) : mFileRegion{file_region}
   {
   }
 
@@ -392,6 +380,44 @@ public:
   /// @brief ファイル位置を取出す．
   FileRegion
   file_region() const override;
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief drive strength を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptStrength1 :
+  public CptStrength
+{
+public:
+
+  /// @brief drive strength を表すコンストラクタ
+  CptStrength1(
+    const FileRegion& file_region,
+    VpiStrength value1,
+    VpiStrength value2
+  ) : CptStrength(file_region),
+      mValue{value1, value2}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptStrength1() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstStrength の仮想関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief drive strength0 を返す．
   VpiStrength
@@ -411,55 +437,81 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // ファイル位置
-  FileRegion mFileRegion;
-
   // 値の配列
-  VpiStrength mValue[3];
+  VpiStrength mValue[2];
 
 };
 
 
 //////////////////////////////////////////////////////////////////////
-/// @brief delay を表すクラス
+/// @brief charge strength を表すクラス
 //////////////////////////////////////////////////////////////////////
-class CptDelay :
-  public PtDelay
+class CptStrength2 :
+  public CptStrength
 {
 public:
 
-  /// @brief 一つの値をとるコンストラクタ
-  CptDelay(
+  /// @brief コンストラクタ
+  CptStrength2(
     const FileRegion& file_region,
-    const AstExpr* value1
-  ) : mFileRegion{file_region},
-      mValue{value1, nullptr, nullptr}
-  {
-  }
-
-  /// @brief 二つの値をとるコンストラクタ
-  CptDelay(
-    const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2
-  ) : mFileRegion{file_region},
-      mValue{value1, value2, nullptr}
-  {
-  }
-
-  /// @brief 三つの値をとるコンストラクタ
-  CptDelay(
-    const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2,
-    const AstExpr* value3
-  ) : mFileRegion{file_region},
-      mValue{value1, value2, value3}
+    VpiStrength value
+  ) : CptStrength(file_region),
+      mValue{value}
   {
   }
 
   /// @brief デストラクタ
-  ~CptDelay() {}
+  ~CptStrength2() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstStrength の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief drive strength0 を返す．
+  VpiStrength
+  drive0() const override;
+
+  /// @brief drive strength1 を返す．
+  VpiStrength
+  drive1() const override;
+
+  /// @brief charge strength を返す．
+  VpiStrength
+  charge() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  VpiStrength mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 1つの値を持つ delay を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptDelay1 :
+  public PtDelay
+{
+public:
+
+  /// @brief コンストラクタ
+  CptDelay1(
+    const FileRegion& file_region,
+    const AstExpr* value1
+  ) : mFileRegion{file_region},
+      mValue{value1}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptDelay1() {}
 
 
 public:
@@ -473,9 +525,15 @@ public:
 
   /// @brief 値を取り出す．
   const AstExpr*
-  value(
-    SizeType pos
-  ) const override;
+  value0() const override;
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value1() const override;
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value2() const override;
 
 
 private:
@@ -486,8 +544,95 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 値のリスト
-  const AstExpr* mValue[3];
+  // 値
+  const AstExpr* mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 2つの値を持つ delay を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptDelay2 :
+  public CptDelay1
+{
+public:
+
+  /// @brief コンストラクタ
+  CptDelay2(
+    const FileRegion& file_region,
+    const AstExpr* value1,
+    const AstExpr* value2
+  ) : CptDelay1(file_region, value1),
+      mValue{value2}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptDelay2() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value1() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  const AstExpr* mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 3つの値を持つ delay を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptDelay3 :
+  public CptDelay2
+{
+public:
+
+  /// @brief コンストラクタ
+  CptDelay3(
+    const FileRegion& file_region,
+    const AstExpr* value1,
+    const AstExpr* value2,
+    const AstExpr* value3
+  ) : CptDelay2(file_region, value1, value2),
+      mValue{value3}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptDelay3() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value2() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  const AstExpr* mValue;
 
 };
 
@@ -599,8 +744,10 @@ public:
 
   /// @brief コンストラクタ
   CptAttrInst(
+    const FileRegion& file_region,
     PtAttrSpecArray&& as_array
-  ) : mAttrSpecArray{std::move(as_array)}
+  ) : mFileRegion{file_region},
+      mAttrSpecArray{std::move(as_array)}
   {
   }
 
@@ -632,6 +779,9 @@ private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
   //////////////////////////////////////////////////////////////////////
+
+  // ファイル上の位置
+  FileRegion mFileRegion;
 
   // attr spec のリスト
   PtAttrSpecArray mAttrSpecArray;

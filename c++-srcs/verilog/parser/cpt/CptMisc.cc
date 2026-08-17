@@ -167,7 +167,7 @@ CptConnection::expr() const
 
 
 //////////////////////////////////////////////////////////////////////
-// named_connection を表すクラス
+// クラス NamedCon
 //////////////////////////////////////////////////////////////////////
 
 // 名前を取り出す．
@@ -179,7 +179,7 @@ CptNamedCon::name() const
 
 
 //////////////////////////////////////////////////////////////////////
-// strength を表すクラス
+// クラス CptStrength
 //////////////////////////////////////////////////////////////////////
 
 // ファイル位置を取出す．
@@ -189,49 +189,113 @@ CptStrength::file_region() const
   return mFileRegion;
 }
 
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptStrength1
+//////////////////////////////////////////////////////////////////////
+
 // drive strength0 を返す．
 VpiStrength
-CptStrength::drive0() const
+CptStrength1::drive0() const
 {
   return mValue[0];
 }
 
 // drive strength1 を返す．
 VpiStrength
-CptStrength::drive1() const
+CptStrength1::drive1() const
 {
   return mValue[1];
 }
 
 // charge strength を返す．
 VpiStrength
-CptStrength::charge() const
+CptStrength1::charge() const
 {
-  return mValue[2];
+  return VpiStrength::NoStrength;
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// delay を表すクラス
+// クラス CptStrength2
+//////////////////////////////////////////////////////////////////////
+
+// drive strength0 を返す．
+VpiStrength
+CptStrength2::drive0() const
+{
+  return VpiStrength::NoStrength;
+}
+
+// drive strength1 を返す．
+VpiStrength
+CptStrength2::drive1() const
+{
+  return VpiStrength::NoStrength;
+}
+
+// charge strength を返す．
+VpiStrength
+CptStrength2::charge() const
+{
+  return mValue;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptDelay1
 //////////////////////////////////////////////////////////////////////
 
 // ファイル位置を取出す．
 FileRegion
-CptDelay::file_region() const
+CptDelay1::file_region() const
 {
   return mFileRegion;
 }
 
 // 値を取り出す．
 const AstExpr*
-CptDelay::value(
-  SizeType pos
-) const
+CptDelay1::value0() const
 {
-  if ( pos >= 3 ) {
-    throw std::out_of_range{"pos is out of range"};
-  }
-  return mValue[pos];
+  return mValue;
+}
+
+// 値を取り出す．
+const AstExpr*
+CptDelay1::value1() const
+{
+  return nullptr;
+}
+
+// 値を取り出す．
+const AstExpr*
+CptDelay1::value2() const
+{
+  return nullptr;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptDelay2
+//////////////////////////////////////////////////////////////////////
+
+// 値を取り出す．
+const AstExpr*
+CptDelay2::value1() const
+{
+  return mValue;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptDelay3
+//////////////////////////////////////////////////////////////////////
+
+// 値を取り出す．
+const AstExpr*
+CptDelay3::value2() const
+{
+  return mValue;
 }
 
 
@@ -288,14 +352,7 @@ CptNameBranchI::index() const
 FileRegion
 CptAttrInst::file_region() const
 {
-  SizeType n = mAttrSpecArray.size();
-  if ( n == 0 ) {
-    return FileRegion{};
-  }
-  else {
-    return FileRegion{mAttrSpecArray[0]->file_region(),
-		      mAttrSpecArray[n - 1]->file_region()};
-  }
+  return mFileRegion;
 }
 
 // @brief 要素数の取得
@@ -416,7 +473,7 @@ PtFactory::new_NamedCon(
   return new (p) CptNamedCon(file_region, name, expr);
 }
 
-// strength を生成する．
+// drive strength を生成する．
 PtStrength*
 PtFactory::new_Strength(
   const FileRegion& file_region,
@@ -424,19 +481,19 @@ PtFactory::new_Strength(
   VpiStrength value2
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptStrength));
-  return new (p) CptStrength(file_region, value1, value2);
+  void* p = mAlloc.get_memory(sizeof(CptStrength1));
+  return new (p) CptStrength1(file_region, value1, value2);
 }
 
-// strength を生成する．
+// charge strength を生成する．
 PtStrength*
 PtFactory::new_Strength(
   const FileRegion& file_region,
   VpiStrength value1
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptStrength));
-  return new (p) CptStrength(file_region, value1);
+  void* p = mAlloc.get_memory(sizeof(CptStrength2));
+  return new (p) CptStrength2(file_region, value1);
 }
 
 // delay 値を生成する．
@@ -446,8 +503,8 @@ PtFactory::new_Delay(
   const AstExpr* value1
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptDelay));
-  return new (p) CptDelay(file_region, value1);
+  void* p = mAlloc.get_memory(sizeof(CptDelay1));
+  return new (p) CptDelay1(file_region, value1);
 }
 
 // delay 値を生成する．
@@ -458,8 +515,8 @@ PtFactory::new_Delay(
   const AstExpr* value2
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptDelay));
-  return new (p) CptDelay(file_region, value1, value2);
+  void* p = mAlloc.get_memory(sizeof(CptDelay2));
+  return new (p) CptDelay2(file_region, value1, value2);
 }
 
 // delay 値を生成する．
@@ -471,8 +528,8 @@ PtFactory::new_Delay(
   const AstExpr* value3
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptDelay));
-  return new (p) CptDelay(file_region, value1, value2, value3);
+  void* p = mAlloc.get_memory(sizeof(CptDelay3));
+  return new (p) CptDelay3(file_region, value1, value2, value3);
 }
 
 // 階層名を生成する．
@@ -508,9 +565,8 @@ PtFactory::new_AttrInst(
   PtAttrSpecArray&& as_array
 )
 {
-  // file_region は不要
   void* p = mAlloc.get_memory(sizeof(CptAttrInst));
-  return new (p) CptAttrInst(PtAttrSpecArray(mAlloc, std::move(as_array)));
+  return new (p) CptAttrInst(file_region, std::move(as_array));
 }
 
 // attribute spec を生成する．

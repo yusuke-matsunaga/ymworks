@@ -239,6 +239,62 @@ decompile_opr(
   return ans;
 }
 
+// 定数用の処理
+std::string
+decompile_const(
+  const AstExpr* expr
+)
+{
+  if ( expr->const_type() == VpiConstType::Real ) {
+    std::ostringstream buf;
+    buf << expr->const_real();
+    return buf.str();
+  }
+  if ( expr->const_type() == VpiConstType::String ) {
+    return expr->const_str();
+  }
+  std::ostringstream buf;
+  if ( expr->const_size() > 0 ) {
+    buf << expr->const_size() << "'";
+  }
+  switch ( expr->const_type() ) {
+  case VpiConstType::Int:
+    if ( expr->const_str() == nullptr ) {
+      buf << expr->const_bitvect();
+      return buf.str();
+    }
+    break;
+
+  case VpiConstType::SignedBinary:
+    buf << "s";
+  case VpiConstType::Binary:
+    buf << "b";
+    break;
+
+  case VpiConstType::SignedOct:
+    buf << "s";
+  case VpiConstType::Oct:
+    buf << "b";
+    break;
+
+  case VpiConstType::SignedDec:
+    buf << "s";
+  case VpiConstType::Dec:
+    buf << "d";
+    break;
+
+  case VpiConstType::SignedHex:
+    buf << "s";
+  case VpiConstType::Hex:
+    buf << "h";
+    break;
+  default: // Real と String は処理済み
+    break;
+  }
+  buf << expr->const_str();
+  return buf.str();
+}
+
 // @brief decompile() の下請け関数
 std::string
 decompile_impl(
@@ -249,57 +305,9 @@ decompile_impl(
   switch ( expr->type() ) {
   case AstExpr::Opr:
     return decompile_opr(expr, ppri);
-    break;
 
   case AstExpr::Const:
-    {
-      std::ostringstream buf;
-      if ( expr->const_size() > 0 ) {
-	buf << expr->const_size() << "'";
-      }
-
-      switch ( expr->const_type() ) {
-      case VpiConstType::Real:
-	buf << expr->const_real();
-	return buf.str();
-
-      case VpiConstType::String:
-	return expr->const_str();
-
-      case VpiConstType::Int:
-	if ( expr->const_str() == nullptr ) {
-	  buf << expr->const_bitvect();
-	  return buf.str();
-	}
-	break;
-
-      case VpiConstType::SignedBinary:
-	buf << "s";
-      case VpiConstType::Binary:
-	buf << "b";
-	break;
-
-      case VpiConstType::SignedOct:
-	buf << "s";
-      case VpiConstType::Oct:
-	buf << "b";
-	break;
-
-      case VpiConstType::SignedDec:
-	buf << "s";
-      case VpiConstType::Dec:
-	buf << "d";
-	break;
-
-      case VpiConstType::SignedHex:
-	buf << "s";
-      case VpiConstType::Hex:
-	buf << "h";
-	break;
-      }
-      buf << expr->const_str();
-      return buf.str();
-    }
+    return decompile_const(expr);
 
   case AstExpr::FuncCall:
   case AstExpr::SysFuncCall:

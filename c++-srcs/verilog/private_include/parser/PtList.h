@@ -141,10 +141,7 @@ public:
   PtList() = default;
 
   /// @brief デストラクタ
-  ~PtList()
-  {
-    clear();
-  }
+  ~PtList() = default;
 
 
 public:
@@ -153,11 +150,6 @@ public:
   void
   clear()
   {
-    for ( auto cell = mTop; cell; ) {
-      auto next = cell->mLink;
-      delete cell;
-      cell = next;
-    }
     mTop = nullptr;
     mEnd = nullptr;
     mNum = 0;
@@ -166,10 +158,11 @@ public:
   /// @brief 要素を先頭に追加
   void
   push_front(
-    T1* elem ///< [in] 追加する要素
+    Alloc& alloc, ///< [in] アロケータ
+    T1* elem      ///< [in] 追加する要素
   )
   {
-    auto cell = new Cell{elem, mTop};
+    auto cell = new_cell(alloc, elem, mTop);
     mTop = cell;
     if ( mEnd == nullptr ) {
       mEnd = cell;
@@ -180,10 +173,11 @@ public:
   /// @brief 要素を末尾に追加
   void
   push_back(
-    T1* elem ///< [in] 追加する要素
+    Alloc& alloc, ///< [in] アロケータ
+    T1* elem      ///< [in] 追加する要素
   )
   {
-    auto cell = new Cell{elem, nullptr};
+    auto cell = new_cell(alloc, elem, nullptr);
     if ( mEnd == nullptr ) {
       mTop = cell;
     }
@@ -250,10 +244,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容を PtArray<> にコピーする．
-  /// @note この処理の後ではリストは空になる．
+  ///
+  /// この処理の後ではリストは空になる．
   PtArray<T2>
   to_array(
-    Alloc& alloc
+    Alloc& alloc ///< [in] アロケータ
   )
   {
     PtArray<T2> vec(alloc, mNum);
@@ -267,7 +262,8 @@ public:
   }
 
   /// @brief 内容を std::vector<T2> にコピーする．
-  /// @note この処理の後ではリストは空になる．
+  ///
+  /// この処理の後ではリストは空になる．
   std::vector<T2*>
   to_vector()
   {
@@ -278,6 +274,24 @@ public:
     }
     clear();
     return vec;
+  }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief セルを確保する．
+  Cell*
+  new_cell(
+    Alloc& alloc, ///< [in] アロケータ
+    T1* ptr,      ///< [in] 本体の値
+    Cell* link    ///< [in] 次の要素
+  )
+  {
+    void* p = alloc.get_memory(sizeof(Cell));
+    return new (p) Cell{ptr, link};
   }
 
 

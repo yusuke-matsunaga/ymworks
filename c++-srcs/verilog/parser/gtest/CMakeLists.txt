@@ -112,6 +112,24 @@ ym_add_gtest ( verilog_ParserTest_expr3
   ADDRESS_SANITIZE
   )
 
+ym_add_gtest ( verilog_ParserTest_misc
+  ParserTest_misc.cc
+  $<TARGET_OBJECTS:ym_misc_obj_d>
+  $<TARGET_OBJECTS:ym_logic_obj_d>
+  $<TARGET_OBJECTS:ym_clib_obj_d>
+  $<TARGET_OBJECTS:ym_verilog_obj_d>
+  ADDRESS_SANITIZE
+  )
+
+ym_add_gtest ( verilog_ParserTest_udp
+  ParserTest_udp.cc
+  $<TARGET_OBJECTS:ym_misc_obj_d>
+  $<TARGET_OBJECTS:ym_logic_obj_d>
+  $<TARGET_OBJECTS:ym_clib_obj_d>
+  $<TARGET_OBJECTS:ym_verilog_obj_d>
+  ADDRESS_SANITIZE
+  )
+
 
 # ===================================================================
 #  インストールターゲットの設定

@@ -125,7 +125,7 @@ TEST_F(ParserTest, CaseItem)
   auto expr_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto expr = parser.new_IntConst(fr1, 1U);
-  expr_list->push_back(expr);
+  expr_list->push_back(astmgr.alloc(), expr);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto caseitem = parser.new_CaseItem(fr, expr_list, body);
@@ -153,21 +153,21 @@ TEST_F(ParserTest, Case)
   auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
   auto ci1_expr = parser.new_IntConst(fr1, 1U);
-  ci1_expr_list->push_back(ci1_expr);
+  ci1_expr_list->push_back(astmgr.alloc(), ci1_expr);
   auto ci1_fr2 = make_file_region(2, 2, 2, 2);
   auto ci1_body = parser.new_NullStmt(ci1_fr2);
   auto caseitem1 = parser.new_CaseItem(ci1_fr, ci1_expr_list, ci1_body);
-  caseitem_list->push_back(caseitem1);
+  caseitem_list->push_back(astmgr.alloc(), caseitem1);
 
   auto ci2_fr = make_file_region(11, 2, 13, 4);
   auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
   auto ci2_expr = parser.new_IntConst(fr1, 2U);
-  ci2_expr_list->push_back(ci2_expr);
+  ci2_expr_list->push_back(astmgr.alloc(), ci2_expr);
   auto ci2_fr2 = make_file_region(12, 2, 12, 2);
   auto ci2_body = parser.new_NullStmt(ci2_fr2);
   auto caseitem2 = parser.new_CaseItem(ci2_fr, ci2_expr_list, ci2_body);
-  caseitem_list->push_back(caseitem2);
+  caseitem_list->push_back(astmgr.alloc(), caseitem2);
 
   auto stmt = parser.new_Case(fr, cond, caseitem_list);
 
@@ -226,21 +226,21 @@ TEST_F(ParserTest, CaseX)
   auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
   auto ci1_expr = parser.new_IntConst(fr1, 1U);
-  ci1_expr_list->push_back(ci1_expr);
+  ci1_expr_list->push_back(astmgr.alloc(), ci1_expr);
   auto ci1_fr2 = make_file_region(2, 2, 2, 2);
   auto ci1_body = parser.new_NullStmt(ci1_fr2);
   auto caseitem1 = parser.new_CaseItem(ci1_fr, ci1_expr_list, ci1_body);
-  caseitem_list->push_back(caseitem1);
+  caseitem_list->push_back(astmgr.alloc(), caseitem1);
 
   auto ci2_fr = make_file_region(11, 2, 13, 4);
   auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
   auto ci2_expr = parser.new_IntConst(fr1, 2U);
-  ci2_expr_list->push_back(ci2_expr);
+  ci2_expr_list->push_back(astmgr.alloc(), ci2_expr);
   auto ci2_fr2 = make_file_region(12, 2, 12, 2);
   auto ci2_body = parser.new_NullStmt(ci2_fr2);
   auto caseitem2 = parser.new_CaseItem(ci2_fr, ci2_expr_list, ci2_body);
-  caseitem_list->push_back(caseitem2);
+  caseitem_list->push_back(astmgr.alloc(), caseitem2);
 
   auto stmt = parser.new_CaseX(fr, cond, caseitem_list);
 
@@ -299,21 +299,21 @@ TEST_F(ParserTest, CaseZ)
   auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
   auto ci1_expr = parser.new_IntConst(fr1, 1U);
-  ci1_expr_list->push_back(ci1_expr);
+  ci1_expr_list->push_back(astmgr.alloc(), ci1_expr);
   auto ci1_fr2 = make_file_region(2, 2, 2, 2);
   auto ci1_body = parser.new_NullStmt(ci1_fr2);
   auto caseitem1 = parser.new_CaseItem(ci1_fr, ci1_expr_list, ci1_body);
-  caseitem_list->push_back(caseitem1);
+  caseitem_list->push_back(astmgr.alloc(), caseitem1);
 
   auto ci2_fr = make_file_region(11, 2, 13, 4);
   auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
   auto ci2_expr = parser.new_IntConst(fr1, 2U);
-  ci2_expr_list->push_back(ci2_expr);
+  ci2_expr_list->push_back(astmgr.alloc(), ci2_expr);
   auto ci2_fr2 = make_file_region(12, 2, 12, 2);
   auto ci2_body = parser.new_NullStmt(ci2_fr2);
   auto caseitem2 = parser.new_CaseItem(ci2_fr, ci2_expr_list, ci2_body);
-  caseitem_list->push_back(caseitem2);
+  caseitem_list->push_back(astmgr.alloc(), caseitem2);
 
   auto stmt = parser.new_CaseZ(fr, cond, caseitem_list);
 
@@ -570,8 +570,8 @@ TEST_F(ParserTest, ParBlock)
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto stmt2 = parser.new_NullStmt(fr2);
   auto stmt_list = parser.new_stmt_list();
-  stmt_list->push_back(stmt1);
-  stmt_list->push_back(stmt2);
+  stmt_list->push_back(astmgr.alloc(), stmt1);
+  stmt_list->push_back(astmgr.alloc(), stmt2);
   auto stmt = parser.new_ParBlock(fr, stmt_list);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -632,8 +632,8 @@ TEST_F(ParserTest, NamedParBlock)
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto stmt2 = parser.new_NullStmt(fr2);
   auto stmt_list = parser.new_stmt_list();
-  stmt_list->push_back(stmt1);
-  stmt_list->push_back(stmt2);
+  stmt_list->push_back(astmgr.alloc(), stmt1);
+  stmt_list->push_back(astmgr.alloc(), stmt2);
   parser.end_block();
   auto name = "block1";
   auto stmt = parser.new_NamedParBlock(fr, name, stmt_list);
@@ -690,8 +690,8 @@ TEST_F(ParserTest, SeqBlock)
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto stmt2 = parser.new_NullStmt(fr2);
   auto stmt_list = parser.new_stmt_list();
-  stmt_list->push_back(stmt1);
-  stmt_list->push_back(stmt2);
+  stmt_list->push_back(astmgr.alloc(), stmt1);
+  stmt_list->push_back(astmgr.alloc(), stmt2);
   auto stmt = parser.new_SeqBlock(fr, stmt_list);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -752,8 +752,8 @@ TEST_F(ParserTest, NamedSeqBlock)
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto stmt2 = parser.new_NullStmt(fr2);
   auto stmt_list = parser.new_stmt_list();
-  stmt_list->push_back(stmt1);
-  stmt_list->push_back(stmt2);
+  stmt_list->push_back(astmgr.alloc(), stmt1);
+  stmt_list->push_back(astmgr.alloc(), stmt2);
   parser.end_block();
   auto name = "block1";
   auto stmt = parser.new_NamedSeqBlock(fr, name, stmt_list);

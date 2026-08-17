@@ -123,7 +123,7 @@ TEST_F(ParserTest, Enable1)
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto expr = parser.new_IntConst(fr1, 1U);
   auto expr_list = parser.new_expr_list();
-  expr_list->push_back(expr);
+  expr_list->push_back(astmgr.alloc(), expr);
   auto stmt = parser.new_Enable(fr, name, expr_list);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -177,7 +177,7 @@ TEST_F(ParserTest, Enable2)
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto expr = parser.new_IntConst(fr1, 1U);
   auto expr_list = parser.new_expr_list();
-  expr_list->push_back(expr);
+  expr_list->push_back(astmgr.alloc(), expr);
   auto stmt = parser.new_Enable(fr, hname, expr_list);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -232,7 +232,7 @@ TEST_F(ParserTest, SysEnable)
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto expr = parser.new_IntConst(fr1, 1U);
   auto expr_list = parser.new_expr_list();
-  expr_list->push_back(expr);
+  expr_list->push_back(astmgr.alloc(), expr);
   auto stmt = parser.new_SysEnable(fr, name, expr_list);
 
   ASSERT_TRUE( stmt != nullptr );

@@ -325,15 +325,19 @@ ExprGen::instantiate_delay(
   SizeType n = 0;
   std::vector<const AstExpr*> expr_array;
   expr_array.reserve(3);
-  for ( SizeType n = 0; n < 3; ++ n) {
-    auto expr = ast_delay->value(n);
-    if ( expr == nullptr ) break;
-    expr_array.push_back(expr);
+  auto expr0 = ast_delay->value0();
+  if ( expr0 == nullptr ) {
+    throw std::logic_error{"ast_delay->value0() == nullptr"};
   }
-  if ( expr_array.empty() ) {
-    throw std::logic_error{"expr_array.empty()"};
+  expr_array.push_back(expr0);
+  auto expr1 = ast_delay->value1();
+  if ( expr1 != nullptr ) {
+    expr_array.push_back(expr1);
+    auto expr2 = ast_delay->value2();
+    if ( expr2 != nullptr ) {
+      expr_array.push_back(expr2);
+    }
   }
-
   return instantiate_delay_sub(parent, ast_delay, expr_array);
 }
 

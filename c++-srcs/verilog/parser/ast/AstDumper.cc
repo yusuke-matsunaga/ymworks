@@ -1535,9 +1535,9 @@ AstDumper::put(
   AstHeader x(*this, label, "Delay");
 
   put("mFileRegion", delay->file_region());
-  put("mDelay0", delay->value(0));
-  put("mDelay1", delay->value(1));
-  put("mDelay2", delay->value(2));
+  put("mDelay0", delay->value0());
+  put("mDelay1", delay->value1());
+  put("mDelay2", delay->value2());
 }
 
 // @brief 接続情報を表示する．

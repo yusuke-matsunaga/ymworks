@@ -606,7 +606,7 @@ BitVector::hex_str(
 // 値をセットする関数
 // これは1語に収まる時に用いる．
 void
-BitVector::set_word(
+BitVector::set_from_word(
   uword val0,
   uword val1,
   SizeType size,
@@ -628,7 +628,7 @@ BitVector::set_word(
 
 // 値をセットする関数
 void
-BitVector::set_wordptr(
+BitVector::set_from_wordptr(
   const uword* val0,
   const uword* val1,
   SizeType src_size,
@@ -689,7 +689,7 @@ BitVector::set_wordptr(
 
 // 値をセットする関数
 void
-BitVector::set_wordvector(
+BitVector::set_from_wordvector(
   const std::vector<uword>& val0,
   const std::vector<uword>& val1,
   SizeType src_size,

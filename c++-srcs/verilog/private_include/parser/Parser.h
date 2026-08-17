@@ -12,7 +12,12 @@
 #include "ym/PathList.h"
 #include "parser/PtFactory.h"
 #include "parser/PtDecl.h"
+#include "parser/PtExpr.h"
+#include "parser/PtItem.h"
+#include "parser/PtStmt.h"
+#include "parser/PtMisc.h"
 #include "parser/PtList.h"
+#include "parser/PtHierName.h"
 #include "parser/AstMgr.h"
 
 
@@ -272,7 +277,10 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiDir dir,           ///< [in] IO の種類(方向)
     bool sign             ///< [in] 符号付きのとき true となるフラグ
-  );
+  )
+  {
+    return mFactory.new_IOHead(fr, dir, sign, nullptr);
+  }
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成
   PtIOHead*
@@ -281,7 +289,10 @@ public:
     VpiDir dir,           ///< [in] IO の種類(方向)
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range  ///< [in] 範囲
-  );
+  )
+  {
+    return mFactory.new_IOHead(fr, dir, sign, range);
+  }
 
   /// @brief IO 宣言のヘッダの生成 (reg 型)
   PtIOHead*
@@ -289,7 +300,10 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiDir dir,           ///< [in] IO の種類(方向)
     bool sign             ///< [in] 符号付きのとき true となるフラグ
-  );
+  )
+  {
+    return mFactory.new_RegIOHead(fr, dir, sign, nullptr);
+  }
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (reg 型)
   PtIOHead*
@@ -298,7 +312,10 @@ public:
     VpiDir dir,           ///< [in] IO の種類(方向)
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range  ///< [in] 範囲
-  );
+  )
+  {
+    return mFactory.new_RegIOHead(fr, dir, sign, range);
+  }
 
   /// @brief IO 宣言のヘッダの生成 (ネット型)
   PtIOHead*
@@ -307,7 +324,10 @@ public:
     VpiDir dir,           ///< [in] IO の種類(方向)
     VpiNetType net_type,  ///< [in] 補助的なネット型
     bool sign
-  );
+  )
+  {
+    return mFactory.new_NetIOHead(fr, dir, net_type, sign, nullptr);
+  }
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (ネット型)
   PtIOHead*
@@ -317,7 +337,10 @@ public:
     VpiNetType net_type,  ///< [in] 補助的なネット型
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range  ///< [in] 範囲
-  );
+  )
+  {
+    return mFactory.new_NetIOHead(fr, dir, net_type, sign, range);
+  }
 
   /// @brief IO 宣言のヘッダの生成 (変数型)
   PtIOHead*
@@ -325,7 +348,10 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiDir dir,           ///< [in] IO の種類(方向)
     VpiVarType var_type   ///< [in] 補助的な変数型
-  );
+  )
+  {
+    return mFactory.new_VarIOHead(fr, dir, var_type);
+  }
 
   /// @brief IO 宣言の要素の生成
   ///
@@ -334,7 +360,11 @@ public:
   new_IOItem(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name      ///< [in] 要素名
-  );
+  )
+  {
+    auto item = mFactory.new_IOItem(fr, name, nullptr);
+    mIOItemList.push_back(item);
+  }
 
 
   /// @brief 初期値付き IO 宣言の要素の生成
@@ -345,7 +375,11 @@ public:
     const FileRegion& fr,    ///< [in] ファイル位置の情報
     const char* name,        ///< [in] 要素名
     const AstExpr* init_value ///< [in] 初期値を表す式
-  );
+  )
+  {
+    auto item = mFactory.new_IOItem(fr, name, init_value);
+    mIOItemList.push_back(item);
+  }
 
 
 public:
@@ -357,7 +391,10 @@ public:
   PtDeclHead*
   new_ParamH(
     const FileRegion& fr ///< [in] ファイル位置の情報
-  );
+  )
+  {
+    return mFactory.new_ParamH(fr, false, nullptr);
+  }
 
   /// @brief 範囲指定型パラメータ宣言のヘッダの生成
   PtDeclHead*
@@ -365,20 +402,29 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range  ///< [in] 範囲
-  );
+  )
+  {
+    return mFactory.new_ParamH(fr, sign, range);
+  }
 
   /// @brief 組み込み型パラメータ宣言のヘッダの生成
   PtDeclHead*
   new_ParamH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiVarType var_type   ///< [in] データ型
-  );
+  )
+  {
+    return mFactory.new_ParamH(fr, var_type);
+  }
 
   /// @brief local param 宣言のヘッダの生成 (型指定なし)
   PtDeclHead*
   new_LocalParamH(
     const FileRegion& fr ///< [in] ファイル位置の情報
-  );
+  )
+  {
+    return mFactory.new_ParamH(fr, false, nullptr, true);
+  }
 
   /// @brief 範囲指定型 local param 宣言のヘッダの生成
   PtDeclHead*
@@ -386,55 +432,79 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     bool sign,            ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range  ///< [in] 範囲
-  );
+  )
+  {
+    return mFactory.new_ParamH(fr, sign, range, true);
+  }
 
   /// @brief 組み込み型パラメータ宣言のヘッダの生成
   PtDeclHead*
   new_LocalParamH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiVarType var_type   ///< [in] データ型
-  );
+  )
+  {
+    return mFactory.new_ParamH(fr, var_type, true);
+  }
 
   /// @brief specparam 宣言のヘッダの生成
   /// @return 生成された specparam
   PtDeclHead*
   new_SpecParamH(
     const FileRegion& fr ///< [in] ファイル位置の情報
-  );
+  )
+  {
+    return mFactory.new_SpecParamH(fr, nullptr);
+  }
 
   /// @brief 範囲指定型 specparam 宣言のヘッダの生成
   PtDeclHead*
   new_SpecParamH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstRange* range  ///< [in] 範囲
-  );
+  )
+  {
+    return mFactory.new_SpecParamH(fr, range);
+  }
 
   /// @brief イベント宣言のヘッダの生成
   /// @return 生成されたイベント
   PtDeclHead*
   new_EventH(
     const FileRegion& fr ///< [in] ファイル位置の情報
-  );
+  )
+  {
+    return mFactory.new_EventH(fr);
+  }
 
   /// @brief genvar 宣言のヘッダの生成
   PtDeclHead*
   new_GenvarH(
     const FileRegion& fr ///< [in] ファイル位置の情報
-  );
+  )
+  {
+    return mFactory.new_GenvarH(fr);
+  }
 
   /// @brief 変数宣言のヘッダの生成
   PtDeclHead*
   new_VarH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiVarType var_type   ///< [in] データ型
-  );
+  )
+  {
+    return mFactory.new_VarH(fr, var_type);
+  }
 
   /// @brief 1ビット型 reg 宣言のヘッダの生成
   PtDeclHead*
   new_RegH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     bool sign             ///< [in] 符号付きの時 true となるフラグ
-  );
+  )
+  {
+    return mFactory.new_RegH(fr, sign, nullptr);
+  }
 
   /// @brief 範囲指定型 reg 宣言のヘッダの生成
   PtDeclHead*
@@ -442,7 +512,10 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     bool sign,            ///< [in] 符号付きの時 true となるフラグ
     const AstRange* range  ///< [in] 範囲
-  );
+  )
+  {
+    return mFactory.new_RegH(fr, sign, range);
+  }
 
   /// @brief 1ビット型 net 宣言のヘッダの生成
   PtDeclHead*
@@ -450,7 +523,12 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiNetType type,      ///< [in] net の型
     bool sign             ///< [in] 符号の有無を表すフラグ
-  );
+  )
+  {
+    return mFactory.new_NetH(fr, type, VpiVsType::None,
+			     sign, nullptr,
+			     nullptr, nullptr);
+  }
 
   /// @brief 1ビット型 net 宣言のヘッダの生成 (strength あり)
   PtDeclHead*
@@ -459,7 +537,12 @@ public:
     VpiNetType type,           ///< [in] net の型
     bool sign,                 ///< [in] 符号の有無を表すフラグ
     const AstStrength* strength ///< [in] 信号強度
-  );
+  )
+  {
+    return mFactory.new_NetH(fr, type, VpiVsType::None,
+			     sign, nullptr,
+			     strength, nullptr);
+  }
 
   /// @brief 1ビット型 net 宣言のヘッダの生成 (遅延あり)
   PtDeclHead*
@@ -468,7 +551,12 @@ public:
     VpiNetType type,      ///< [in] net の型
     bool sign,            ///< [in] 符号の有無を表すフラグ
     const AstDelay* delay  ///< [in] 遅延
-  );
+  )
+  {
+    return mFactory.new_NetH(fr, type, VpiVsType::None,
+			     sign, nullptr,
+			     nullptr, delay);
+  }
 
   /// @brief 1ビット型 net 宣言のヘッダの生成 (strength, 遅延あり)
   PtDeclHead*
@@ -478,7 +566,12 @@ public:
     bool sign,                  ///< [in] 符号の有無を表すフラグ
     const AstStrength* strength, ///< [in] 信号強度
     const AstDelay* delay        ///< [in] 遅延
-  );
+  )
+  {
+    return mFactory.new_NetH(fr, type, VpiVsType::None,
+			     sign, nullptr,
+			     strength, delay);
+  }
 
   /// @brief 範囲指定型 net 宣言のヘッダの生成
   PtDeclHead*
@@ -488,7 +581,12 @@ public:
     VpiVsType vstype,     ///< [in] vector/scalar 指定
     bool sign,            ///< [in] 符号の有無を表すフラグ
     const AstRange* range  ///< [in] 範囲
-  );
+  )
+  {
+    return mFactory.new_NetH(fr, type, vstype,
+			     sign, range,
+			     nullptr, nullptr);
+  }
 
   /// @brief 範囲指定型 net 宣言のヘッダの生成 (strengthあり)
   PtDeclHead*
@@ -499,7 +597,12 @@ public:
     bool sign,                  ///< [in] 符号の有無を表すフラグ
     const AstRange* range,       ///< [in] 範囲
     const AstStrength* strength  ///< [in] 信号強度
-  );
+  )
+  {
+    return mFactory.new_NetH(fr, type, vstype,
+			     sign, range,
+			     strength, nullptr);
+  }
 
   /// @brief 範囲指定型 net 宣言のヘッダの生成 (遅延あり)
   PtDeclHead*
@@ -510,7 +613,12 @@ public:
     bool sign,		  ///< [in] 符号の有無を表すフラグ
     const AstRange* range, ///< [in] 範囲
     const AstDelay* delay  ///< [in] 遅延
-  );
+  )
+  {
+    return mFactory.new_NetH(fr, type, vstype,
+			     sign, range,
+			     nullptr, delay);
+  }
 
   /// @brief 範囲指定型 net 宣言のヘッダの生成 (strength, 遅延あり)
   PtDeclHead*
@@ -522,7 +630,12 @@ public:
     const AstRange* range,       ///< [in] 範囲
     const AstStrength* strength, ///< [in] 信号強度
     const AstDelay* delay        ///< [in] 遅延
-  );
+  )
+  {
+    return mFactory.new_NetH(fr, type, vstype,
+			     sign, range,
+			     strength, delay);
+  }
 
   /// @brief 宣言要素の生成
   ///
@@ -531,7 +644,11 @@ public:
   new_DeclItem(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name      ///< [in] 名前
-  );
+  )
+  {
+    auto item = mFactory.new_DeclItem(fr, name);
+    mDeclItemList.push_back(item);
+  }
 
   /// @brief 初期値付き宣言要素の生成
   ///
@@ -541,7 +658,11 @@ public:
     const FileRegion& fr,    ///< [in] ファイル位置の情報
     const char* name,        ///< [in] 名前
     const AstExpr* init_value ///< [in] 初期値を表す式
-  );
+  )
+  {
+    auto item = mFactory.new_DeclItem(fr, name, init_value);
+    mDeclItemList.push_back(item);
+  }
 
   /// @brief 配列型宣言要素の生成
   ///
@@ -551,7 +672,12 @@ public:
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     const char* name,       ///< [in] 名前
     PtRangeList* range_list ///< [in] 配列の各次元の範囲のリスト
-  );
+  )
+  {
+    auto item = mFactory.new_DeclItem(fr, name,
+				      range_list->to_array(mAlloc));
+    mDeclItemList.push_back(item);
+  }
 
   /// @brief 範囲の生成
   PtRange*
@@ -559,7 +685,10 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* msb,    ///< [in] MSB を表す式
     const AstExpr* lsb     ///< [in] LSB を表す式
-  );
+  )
+  {
+    return mFactory.new_Range(fr, msb, lsb);
+  }
 
 
 public:
@@ -573,7 +702,11 @@ public:
   PtItem*
   new_DefParamH(
     const FileRegion& fr ///< [in] ファイル位置の情報
-  );
+  )
+  {
+    return mFactory.new_DefParamH(fr,
+				  PtDefParamArray(mAlloc, mDefParamList));
+  }
 
   /// @brief mDefParamList を初期化する．
   void
@@ -590,7 +723,11 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
     const AstExpr* value   ///< [in] 値を表す式
-  );
+  )
+  {
+    auto defparam = mFactory.new_DefParam(fr, name, value);
+    mDefParamList.push_back(defparam);
+  }
 
   /// @brief defparam 文の要素の生成 (階層つき識別子)
   ///
@@ -600,7 +737,11 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     PtHierName* hname,    ///< [in] 階層名
     const AstExpr* value   ///< [in] 値を表す式
-  );
+  )
+  {
+    auto defparam = mFactory.new_DefParam(fr, hname, value);
+    mDefParamList.push_back(defparam);
+  }
 
   /// @brief continuous assign 文のヘッダの生成
   ///
@@ -608,7 +749,11 @@ public:
   PtItem*
   new_ContAssignH(
     const FileRegion& fr ///< [in] ファイル位置の情報
-  );
+  )
+  {
+    return mFactory.new_ContAssignH(fr, nullptr, nullptr,
+				    PtContAssignArray(mAlloc, mContAssignList));
+  }
 
   /// @brief continuous assign 文のヘッダの生成 (strengthつき)
   ///
@@ -617,7 +762,11 @@ public:
   new_ContAssignH(
     const FileRegion& fr,      ///< [in] ファイル位置の情報
     const AstStrength* strength ///< [in] 信号強度
-  );
+  )
+  {
+    return mFactory.new_ContAssignH(fr, strength, nullptr,
+				    PtContAssignArray(mAlloc, mContAssignList));
+  }
 
   /// @brief continuous assign 文のヘッダの生成 (遅延付き)
   ///
@@ -626,7 +775,11 @@ public:
   new_ContAssignH(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstDelay* delay  ///< [in] 遅延値
-  );
+  )
+  {
+    return mFactory.new_ContAssignH(fr, nullptr, delay,
+				    PtContAssignArray(mAlloc, mContAssignList));
+  }
 
   /// @brief continuous assign 文のヘッダの生成 (strength, 遅延付き)
   ///
@@ -636,7 +789,11 @@ public:
     const FileRegion& fr,       ///< [in] ファイル位置の情報
     const AstStrength* strength, ///< [in] 信号強度
     const AstDelay* delay        ///< [in] 遅延値
-  );
+  )
+  {
+    return mFactory.new_ContAssignH(fr, strength, delay,
+				    PtContAssignArray(mAlloc, mContAssignList));
+  }
 
   /// @brief mContAssignList を初期化する．
   void
@@ -653,21 +810,57 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* lhs,    ///< [in] 左辺式
     const AstExpr* rhs     ///< [in] 右辺式
-  );
+  )
+  {
+    auto ca = mFactory.new_ContAssign(fr, lhs, rhs);
+    mContAssignList.push_back(ca);
+  }
 
   /// @brief initial 文の生成
   PtItem*
   new_Initial(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstStmt* body    ///< [in] 本体のステートメント
-  );
+  )
+  {
+    return mFactory.new_Initial(fr, body);
+  }
 
   /// @brief always 文の生成
   PtItem*
   new_Always(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstStmt* body    ///< [in] 本体のステートメント
-  );
+  )
+  {
+    return mFactory.new_Always(fr, body);
+  }
+
+  /// @brief task/function 定義の開始
+  /// - iohead list の初期化
+  /// - paramhead list の初期化
+  /// - localparamhead list の初期化
+  /// - declhead list の初期化
+  /// を行う．
+  void
+  init_tf()
+  {
+    mCurIOHeadList = &mTfIOHeadList;
+    push_declhead_list();
+
+    mCurIOHeadList->clear();
+    mIOItemList.clear();
+    cur_declhead_list().clear();
+    mDeclItemList.clear();
+  }
+
+  /// @brief task/function 定義の終了
+  void
+  end_tf()
+  {
+    mCurIOHeadList = &mModuleIOHeadList;
+    mCurDeclArray = pop_declhead_list();
+  }
 
   /// @brief task 文の生成
   PtItem*
@@ -676,7 +869,13 @@ public:
     const char* name,     ///< [in] task 名
     bool automatic,       ///< [in] automatic task の時に true となるフラグ
     const AstStmt* stmt    ///< [in] 本体のステートメント
-  );
+  )
+  {
+    return mFactory.new_Task(fr, name, automatic,
+			     PtIOHeadArray(mAlloc, mTfIOHeadList, true),
+			     PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+			     stmt);
+  }
 
   /// @brief 1ビット型 function 文の生成
   PtItem*
@@ -686,7 +885,14 @@ public:
     bool automatic,       ///< [in] automatic task の時に true となるフラグ
     bool sign,            ///< [in] signed 属性がついていたら true となるフラグ
     const AstStmt* stmt    ///< [in] 本体のステートメント
-  );
+  )
+  {
+    return mFactory.new_Function(fr, name, automatic,
+				 sign,
+				 PtIOHeadArray(mAlloc, mTfIOHeadList, true),
+				 PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				 stmt);
+  }
 
   /// @brief 範囲指定型 function 文の生成
   PtItem*
@@ -697,7 +903,14 @@ public:
     bool sign,		  ///< [in] signed 属性がついていたら true となるフラグ
     const AstRange* range, ///< [in] 範囲
     const AstStmt* stmt    ///< [in] 本体のステートメント
-  );
+  )
+  {
+    return mFactory.new_SizedFunc(fr, name, automatic,
+				  sign, range,
+				  PtIOHeadArray(mAlloc, mTfIOHeadList, true),
+				PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				  stmt);
+  }
 
   /// @brief 組み込み型 function 文の生成
   PtItem*
@@ -708,7 +921,14 @@ public:
     bool sign,		  ///< [in] signed 属性がついていたら true となるフラグ
     VpiVarType func_type, ///< [in] 関数の戻値の型
     const AstStmt* stmt    ///< [in] 本体のステートメント
-  );
+  )
+  {
+    return mFactory.new_TypedFunc(fr, name, automatic,
+				  sign, func_type,
+				  PtIOHeadArray(mAlloc, mTfIOHeadList, true),
+				  PtDeclHeadArray(mAlloc, mCurDeclArray, true),
+				  stmt);
+  }
 
   /// @brief gate instance 文のヘッダの生成
   ///
@@ -1058,7 +1278,12 @@ public:
     const FileRegion& fr,     ///< [in] ファイル位置の情報
     VpiSpecItemType id,       ///< [in] specify block item の種類
     PtExprList* terminal_list ///< [in] 端子のリスト
-  );
+  )
+  {
+    auto item = mFactory.new_SpecItem(fr, id,
+				      terminal_list->to_array(mAlloc));
+    add_item(item);
+  }
 
   /// @brief path 仕様を生成する．
   ///
@@ -1069,7 +1294,11 @@ public:
     VpiSpecPathType id,         ///< [in] spec path の種類
     const AstExpr* expr,         ///< [in] 条件式
     const AstPathDecl* path_decl ///< [in] パス記述
-  );
+  )
+  {
+    auto item = mFactory.new_SpecPath(fr, id, expr, path_decl);
+    add_item(item);
+  }
 
   /// @brief パス記述の生成
   PtPathDecl*
@@ -1083,7 +1312,14 @@ public:
     int output_pol,               ///< [in] 出力の極性
     const AstExpr* expr,           ///< [in] 条件式
     const AstPathDelay* path_delay ///< [in] パス遅延
-  );
+  )
+  {
+    return mFactory.new_PathDecl(fr, edge,
+				 input_list->to_array(mAlloc), input_pol,
+				 op,
+				 output_list->to_array(mAlloc), output_pol,
+				 expr, path_delay);
+  }
 
   /// @brief パス記述の生成
   PtPathDecl*
@@ -1097,7 +1333,14 @@ public:
     int output_pol,		  ///< [in] 出力の極性
     const AstExpr* expr,		  ///< [in] 条件式
     const AstPathDelay* path_delay ///< [in] パス遅延
-  );
+  )
+  {
+    return mFactory.new_PathDecl(fr, edge,
+				 input_list->to_array(mAlloc), input_pol,
+				 op,
+				 PtExprArray(mAlloc, output), output_pol,
+				 expr, path_delay);
+  }
 
   /// @brief path delay value の生成 (値が1個)
   /// @return 生成された path delay value
@@ -1105,7 +1348,10 @@ public:
   new_PathDelay(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* value   ///< [in] 値
-  );
+  )
+  {
+    return mFactory.new_PathDelay(fr, value);
+  }
 
   /// @brief path delay value の生成 (値が2個)
   /// @return 生成された path delay value
@@ -1114,7 +1360,10 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* value1, ///< [in] 値1
     const AstExpr* value2  ///< [in] 値2
-  );
+  )
+  {
+    return mFactory.new_PathDelay(fr, value1, value2);
+  }
 
   /// @brief path delay value の生成 (値が3個)
   /// @return 生成された path delay value
@@ -1124,7 +1373,10 @@ public:
     const AstExpr* value1, ///< [in] 値1
     const AstExpr* value2, ///< [in] 値2
     const AstExpr* value3  ///< [in] 値3
-  );
+  )
+  {
+    return mFactory.new_PathDelay(fr, value1, value2, value3);
+  }
 
   /// @brief path delay value の生成 (値が6個)
   /// @return 生成された path delay value
@@ -1137,7 +1389,12 @@ public:
     const AstExpr* value4, ///< [in] 値4
     const AstExpr* value5, ///< [in] 値5
     const AstExpr* value6  ///< [in] 値6
-  );
+  )
+  {
+    return mFactory.new_PathDelay(fr,
+				  value1, value2, value3,
+				  value4, value5, value6);
+  }
 
   /// @brief path delay value の生成 (値が12個)
   /// @return 生成された path delay value
@@ -1156,7 +1413,14 @@ public:
     const AstExpr* value10, ///< [in] 値10
     const AstExpr* value11, ///< [in] 値11
     const AstExpr* value12  ///< [in] 値12
-  );
+  )
+  {
+    return mFactory.new_PathDelay(fr,
+				  value1, value2, value3,
+				  value4, value5, value6,
+				  value7, value8, value9,
+				  value10, value11, value12);
+  }
 
 
 public:
@@ -1859,34 +2123,68 @@ public:
   );
 
   /// @brief 階層名の生成
+  ///
+  /// head_name '.' name という階層名を作る．
   PtHierName*
   new_HierName(
     const char* head_name, ///< [in] 階層の上位部分
     const char* name       ///< [in] 階層の最下位部分
-  );
+  )
+  {
+    auto nb = mFactory.new_NameBranch(head_name);
+    return new_HierName(nb, name);
+  }
 
   /// @brief 階層名の生成
+  ///
+  /// head_name '[' index ']' '.' name という階層名を作る．
   PtHierName*
   new_HierName(
     const char* head_name, ///< [in] 階層の上位部分
     int index,             ///< [in] インデックス
     const char* name       ///< [in] 階層の最下位部分
-  );
+  )
+  {
+    auto nb = mFactory.new_NameBranch(head_name, index);
+    return new_HierName(nb, name);
+  }
+
+  /// @brief 階層名の生成
+  PtHierName*
+  new_HierName(
+    const AstNameBranch* nb, ///< [in] 上位の名前のリスト
+    const char* name        ///< [in] 階層の最下位部分
+  )
+  {
+    return mFactory.new_HierName(nb, name);
+  }
 
   /// @brief 階層名の追加
+  ///
+  /// hname の後ろに '.' name を追加する．
   void
   add_HierName(
     PtHierName* hname, ///< [in] 階層名の上位部分
     const char* name   ///< [in] 追加する名前
-  );
+  )
+  {
+    auto nb = mFactory.new_NameBranch(hname->tail_name());
+    hname->add(mAlloc, nb, name);
+  }
 
   /// @brief 階層名の追加
+  ///
+  /// hname の後ろに '[' index ']' '.' name を追加する．
   void
   add_HierName(
     PtHierName* hname, ///< [in] 階層名の上位部分
     int index,         ///< [in] インデックス
     const char* name   ///< [in] 追加する名前
-  );
+  )
+  {
+    auto nb = mFactory.new_NameBranch(hname->tail_name(), index);
+    hname->add(mAlloc, nb, name);
+  }
 
   /// @brief 範囲指定の生成
   PtPart*
@@ -1954,19 +2252,6 @@ public:
   void
   end_udp();
 
-  /// @brief task/function 定義の開始
-  /// - iohead list の初期化
-  /// - paramhead list の初期化
-  /// - localparamhead list の初期化
-  /// - declhead list の初期化
-  /// を行う．
-  void
-  init_tf();
-
-  /// @brief task/function 定義の終了
-  void
-  end_tf();
-
   /// @brief generate block の開始
   void
   init_generate();
@@ -1993,54 +2278,108 @@ public:
 
   /// @brief block-statment の開始
   void
-  init_block();
+  init_block()
+  {
+    push_declhead_list();
+  }
 
   /// @brief block-statement の終了
   void
-  end_block();
+  end_block()
+  {
+    mCurDeclArray = pop_declhead_list();
+  }
 
   /// @brief parameter port 宣言ヘッダを追加する．
   void
   add_paramport_head(
     PtDeclHead* head,
     PtAttrInstList* attr_list
-  );
+  )
+  {
+    if ( head ) {
+      reg_attrinst(head, attr_list);
+      mParamPortHeadList.push_back(head);
+    }
+  }
 
   /// @brief parameter port 宣言の終わり
   void
-  flush_paramport();
+  flush_paramport()
+  {
+    if ( !mDeclItemList.empty() ) {
+      ASSERT_COND( !mParamPortHeadList.empty() );
+      auto last = mParamPortHeadList.back();
+      last->set_elem(PtDeclItemArray(mAlloc, mDeclItemList));
+      mDeclItemList.clear();
+    }
+  }
 
   /// @brief IOポート宣言リストにIO宣言ヘッダを追加する．
   void
   add_ioport_head(
     PtIOHead* head,
     PtAttrInstList* attr_list
-  );
+  )
+  {
+    if ( head ) {
+      reg_attrinst(head, attr_list);
+      mCurIOHeadList->push_back(head);
+    }
+  }
 
   /// @brief IO宣言の終わり
   void
-  flush_io();
+  flush_io()
+  {
+    if ( !mIOItemList.empty() ) {
+      ASSERT_COND( !mCurIOHeadList->empty() );
+      auto last = mCurIOHeadList->back();
+      last->set_elem(PtIOItemArray(mAlloc, mIOItemList));
+      mIOItemList.clear();
+    }
+  }
 
   /// @brief IO宣言リストにIO宣言ヘッダを追加する．
   void
   add_io_head(
     PtIOHead* head,
     PtAttrInstList* attr_list
-  );
+  )
+  {
+    add_ioport_head(head, attr_list);
+    flush_io();
+  }
 
   /// @brief 宣言リストに宣言ヘッダを追加する．
   void
   add_decl_head(
     PtDeclHead* head,
     PtAttrInstList* attr_list = nullptr
-  );
+  )
+  {
+    if ( head ) {
+      reg_attrinst(head, attr_list);
+      cur_declhead_list().push_back(head);
+      if ( !mDeclItemList.empty() ) {
+	head->set_elem(PtDeclItemArray(mAlloc, mDeclItemList));
+      }
+    }
+    mDeclItemList.clear();
+  }
 
   /// @brief item リストに要素を追加する．
   void
   add_item(
     PtItem* item,
     PtAttrInstList* attr_list = nullptr
-  );
+  )
+  {
+    if ( item ) {
+      reg_attrinst(item, attr_list);
+      cur_item_list().push_back(item);
+    }
+  }
 
 
 public:
@@ -2050,38 +2389,175 @@ public:
 
   /// @brief AttrInst のリストを作る．
   PtAttrInstList*
-  new_attrinst_list();
+  new_attrinst_list()
+  {
+    void* p = mAlloc.get_memory(sizeof(PtAttrInstList));
+    return new (p) PtAttrInstList;
+  }
+
+  /// @brief AttrInst のリストの末尾に要素を追加する．
+  void
+  push_back(
+    PtAttrInstList* list,
+    PtAttrInst* elem
+  )
+  {
+    list->push_back(mAlloc, elem);
+  }
 
   /// @brief AttrSpec のリストを作る．
   PtAttrSpecList*
-  new_attrspec_list();
+  new_attrspec_list()
+  {
+    void* p = mAlloc.get_memory(sizeof(PtAttrSpecList));
+    return new (p) PtAttrSpecList;
+  }
+
+  /// @brief AttrSpec のリストの末尾に要素を追加する．
+  void
+  push_back(
+    PtAttrSpecList* list,
+    PtAttrSpec* elem
+  )
+  {
+    list->push_back(mAlloc, elem);
+  }
 
   /// @brief CaseItem のリストを作る．
   PtCaseItemList*
-  new_caseitem_list();
+  new_caseitem_list()
+  {
+    void* p = mAlloc.get_memory(sizeof(PtCaseItemList));
+    return new (p) PtCaseItemList;
+  }
+
+  /// @brief CaseItem のリストの末尾に要素を追加する．
+  void
+  push_back(
+    PtCaseItemList* list,
+    PtCaseItem* elem
+  )
+  {
+    list->push_back(mAlloc, elem);
+  }
 
   /// @brief Connection のリストを作る．
   PtConnectionList*
-  new_connection_list();
+  new_connection_list()
+  {
+    void* p = mAlloc.get_memory(sizeof(PtConnectionList));
+    return new (p) PtConnectionList;
+  }
+
+  /// @brief Connection のリストの末尾に要素を追加する．
+  void
+  push_back(
+    PtConnectionList* list,
+    PtConnection* elem
+  )
+  {
+    list->push_back(mAlloc, elem);
+  }
 
   /// @brief Expr のリストを作る．
   PtExprList*
-  new_expr_list();
+  new_expr_list()
+  {
+    void* p = mAlloc.get_memory(sizeof(PtExprList));
+    return new (p) PtExprList;
+  }
+
+  /// @brief Expr のリストの末尾に要素を追加する．
+  void
+  push_back(
+    PtExprList* list,
+    PtExpr* elem
+  )
+  {
+    list->push_back(mAlloc, elem);
+  }
 
   /// @brief GenCaseItem のリストを作る．
   PtGenCaseItemList*
-  new_gencaseitem_list();
+  new_gencaseitem_list()
+  {
+    void* p = mAlloc.get_memory(sizeof(PtGenCaseItemList));
+    return new (p) PtGenCaseItemList;
+  }
+
+  /// @brief GenCaseItem のリストの末尾に要素を追加する．
+  void
+  push_back(
+    PtGenCaseItemList* list,
+    PtGenCaseItem* elem
+  )
+  {
+    list->push_back(mAlloc, elem);
+  }
 
   /// @brief Range のリストを作る．
   PtRangeList*
-  new_range_list();
+  new_range_list()
+  {
+    void* p = mAlloc.get_memory(sizeof(PtRangeList));
+    return new (p) PtRangeList;
+  }
+
+  /// @brief Range のリストの末尾の要素を追加する．
+  void
+  push_back(
+    PtRangeList* list,
+    PtRange* elem
+  )
+  {
+    list->push_back(mAlloc, elem);
+  }
 
   /// @brief Stmt のリストを作る．
   PtStmtList*
-  new_stmt_list();
+  new_stmt_list()
+  {
+    void* p = mAlloc.get_memory(sizeof(PtStmtList));
+    return new (p) PtStmtList;
+  }
+
+  /// @brief Stmt のリストの末尾に要素を追加する．
+  void
+  push_back(
+    PtStmtList* list,
+    PtStmt* elem
+  )
+  {
+    list->push_back(mAlloc, elem);
+  }
 
 
 public:
+  //////////////////////////////////////////////////////////////////////
+  // Lex 用の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief lex オブジェクトの取得
+  /// @return lex オブジェクトを返す．
+  Lex&
+  lex()
+  {
+    return *mLex;
+  }
+
+  /// @brief yylex とのインターフェイス
+  /// @return 読み込んだトークンの id を返す．
+  int
+  yylex(
+    YYSTYPE& lval,   ///< [out] 値を格納する変数
+    FileRegion& lloc ///< [out] 位置情報を格納する変数
+  );
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // その他の関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 関数内で使えるステートメントかどうかのチェック
   bool
@@ -2100,34 +2576,111 @@ public:
   void
   reg_defname(
     const char* name
-  );
+  )
+  {
+    mAstMgr.reg_defname(name);
+  }
 
   /// @brief attribute instance を登録する．
   void
   reg_attrinst(
-    const AstBase* ptobj,
+    const AstBase* obj,
     PtAttrInstList* attr_list,
     bool def = false
-  );
+  )
+  {
+    mAstMgr.reg_attrinst(obj, attr_list, def);
+  }
 
 
 public:
+  //////////////////////////////////////////////////////////////////////
+  // デバッグ/テスト用の関数
+  //////////////////////////////////////////////////////////////////////
 
-  /// @brief lex オブジェクトの取得
-  /// @return lex オブジェクトを返す．
-  Lex&
-  lex()
+  /// @brief ポートリストを得る．
+  const std::vector<PtPort*>&
+  _port_list() const
   {
-    return *mLex;
+    return mPortList;
   }
 
-  /// @brief yylex とのインターフェイス
-  /// @return 読み込んだトークンの id を返す．
-  int
-  yylex(
-    YYSTYPE& lval,   ///< [out] 値を格納する変数
-    FileRegion& lloc ///< [out] 位置情報を格納する変数
-  );
+  /// @brief ポート参照リストを得る．
+  const std::vector<const AstExpr*>&
+  _poretref_list() const
+  {
+    return mPortRefList;
+  }
+
+  /// @brief パラメータポート宣言リストを得る．
+  const std::vector<PtDeclHead*>&
+  _paramport_list() const
+  {
+    return mParamPortHeadList;
+  }
+
+  /// @brief モジュール用IO宣言リストを得る．
+  const std::vector<PtIOHead*>&
+  _module_io_list() const
+  {
+    return mModuleIOHeadList;
+  }
+
+  /// @brief タスク/関数用IO宣言リストを得る．
+  const std::vector<PtIOHead*>&
+  _tf_io_list() const
+  {
+    return mTfIOHeadList;
+  }
+
+  /// @brief IO宣言要素リストを得る．
+  const std::vector<const AstIOItem*>&
+  _ioitem_list() const
+  {
+    return mIOItemList;
+  }
+
+  /// @brief 宣言要素リストを得る．
+  const std::vector<const AstDeclItem*>&
+  _declitem_list() const
+  {
+    return mDeclItemList;
+  }
+
+  /// @brief UDPエントリのリストを得る．
+  const std::vector<const AstUdpEntry*>&
+  _udp_entry_list() const
+  {
+    return mUdpEntryList;
+  }
+
+  /// @brief UDPテーブルの値のリストを得る．
+  const std::vector<const AstUdpValue*>&
+  _udp_value_list() const
+  {
+    return mUdpValueList;
+  }
+
+  /// @brief defparam 要素のリストを得る．
+  const std::vector<const AstDefParam*>&
+  _defparam_list() const
+  {
+    return mDefParamList;
+  }
+
+  /// @broef contassign のリストを得る．
+  const std::vector<const AstContAssign*>&
+  _contassign_list() const
+  {
+    return mContAssignList;
+  }
+
+  /// @brief インスタンスのリストを得る．
+  const std::vector<const AstInst*>&
+  _inst_list() const
+  {
+    return mInstList;
+  }
 
 
 private:
@@ -2181,13 +2734,6 @@ private:
     return mItemListStack.back();
   }
 
-  /// @brief 階層名の生成
-  PtHierName*
-  new_HierName(
-    const AstNameBranch* nb, ///< [in] 上位の名前のリスト
-    const char* name        ///< [in] 階層の最下位部分
-  );
-
   /// @brief 入出力宣言中の重複チェックを行う．
   bool
   check_PortArray(
@@ -2201,26 +2747,6 @@ private:
     const std::vector<PtIOHead*>& iohead_list,           ///< [in] IO宣言のリスト
     std::unordered_map<std::string, VpiDir>& iodecl_dirs ///< [in] IO宣言名をキーとして向きを保持する辞書
   );
-
-#if 0
-  /// @brief vector を基底クラスの vector に変換する．
-  template <typename T1,
-	    typename T2>
-  static
-  std::vector<T1>
-  convert(
-    const std::vector<T2>& src
-  )
-  {
-    SizeType n = src.size();
-    std::vector<T1> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(src[i]);
-    }
-    return vec;
-  }
-#endif
 
 
 private:

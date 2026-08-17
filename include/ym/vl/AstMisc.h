@@ -72,8 +72,8 @@ public:
 
   /// @brief イベントリストの要素の取得
   ///
-  /// - pos >= event_num() の時 std::out_of_range 例外を送出する．
   /// - type() == Delay の時 std::logic_error 例外を送出する．
+  /// - pos >= event_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstExpr*
   event(
@@ -163,6 +163,10 @@ public:
 /// @ingroup VlParser
 /// @ingroup AstGroup
 /// @brief strength を表すクラス
+///
+/// drive strength を表す場合と charge strength を表す場合の２通りがある．
+/// drive strength の場合の charge() は NoStrength を返す．
+/// charge strength の場合の drive0() と driver1() は NoStrength を返す．
 //////////////////////////////////////////////////////////////////////
 class AstStrength :
   public AstBase
@@ -198,6 +202,9 @@ public:
 /// @ingroup VlParser
 /// @ingroup AstGroup
 /// @brief delay を表すクラス
+///
+/// 最大で3つの値（式）を持つ．
+/// 該当する値がない時は nullptr を返す．
 //////////////////////////////////////////////////////////////////////
 class AstDelay :
   public AstBase
@@ -208,13 +215,25 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値の取得
-  /// @return pos 番目の遅延を表す式\n
+  ///
   /// 該当する要素がなければ nullptr を返す．
   virtual
   const AstExpr*
-  value(
-    SizeType pos ///< [in] 取得する遅延値の位置(0 〜 2)
-  ) const = 0;
+  value0() const = 0;
+
+  /// @brief 値の取得
+  ///
+  /// 該当する要素がなければ nullptr を返す．
+  virtual
+  const AstExpr*
+  value1() const = 0;
+
+  /// @brief 値の取得
+  ///
+  /// 該当する要素がなければ nullptr を返す．
+  virtual
+  const AstExpr*
+  value2() const = 0;
 
 };
 

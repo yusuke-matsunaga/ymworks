@@ -906,7 +906,7 @@ TEST_F(ParserTest, DeclItem3)
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   auto range_list = parser.new_range_list();
-  range_list->push_back(range);
+  range_list->push_back(astmgr.alloc(), range);
   auto fr = make_file_region(1, 2, 3, 4);
   parser.new_DeclItem(fr, name, range_list);
 

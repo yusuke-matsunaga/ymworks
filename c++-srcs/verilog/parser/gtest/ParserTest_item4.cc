@@ -598,10 +598,10 @@ TEST_F(ParserTest, GenCase)
   auto fr3 = make_file_region(1, 1, 1, 1);
   auto expr = parser.new_IntConst(fr3, 1U);
   auto expr_list = parser.new_expr_list();
-  expr_list->push_back(expr);
+  expr_list->push_back(astmgr.alloc(), expr);
   auto fr0 = make_file_region(1, 2, 3, 4);
   auto caseitem0 = parser.new_GenCaseItem(fr0, expr_list);
-  caseitem_list->push_back(caseitem0);
+  caseitem_list->push_back(astmgr.alloc(), caseitem0);
 
   parser.init_generate();
   parser.end_generate();
@@ -609,7 +609,7 @@ TEST_F(ParserTest, GenCase)
   // default の場合
   auto null_list = parser.new_expr_list();
   auto caseitem1 = parser.new_GenCaseItem(fr4, null_list);
-  caseitem_list->push_back(caseitem1);
+  caseitem_list->push_back(astmgr.alloc(), caseitem1);
   auto fr5 = make_file_region(5, 5, 5, 5);
   auto case_expr = parser.new_IntConst(fr5, 123U);
   auto fr6 = make_file_region(6, 6, 6, 6);

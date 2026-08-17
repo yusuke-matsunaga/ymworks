@@ -420,7 +420,7 @@ TEST_F(ParserTest, MuHP)
   auto con_list = parser.new_connection_list();
   auto expr = parser.new_IntConst(fr1, 123U);
   auto con = parser.new_OrderedCon(expr);
-  con_list->push_back(con);
+  con_list->push_back(astmgr.alloc(), con);
   auto item = parser.new_MuH(fr, def_name, con_list);
 
   ASSERT_TRUE( item != nullptr );
@@ -521,7 +521,7 @@ TEST_F(ParserTest, Inst)
   auto expr = parser.new_IntConst(fr1, 123U);
   auto con = parser.new_OrderedCon(expr);
   auto con_list = parser.new_connection_list();
-  con_list->push_back(con);
+  con_list->push_back(astmgr.alloc(), con);
   parser.new_Inst(fr0, con_list);
 
   auto fr3 = make_file_region(1, 2, 3, 4);
@@ -695,7 +695,7 @@ TEST_F(ParserTest, InstN)
   auto expr = parser.new_IntConst(fr1, 123U);
   auto con = parser.new_OrderedCon(expr);
   auto con_list = parser.new_connection_list();
-  con_list->push_back(con);
+  con_list->push_back(astmgr.alloc(), con);
   parser.new_InstN(fr0, name, con_list);
 
   auto fr3 = make_file_region(1, 2, 3, 4);
@@ -876,7 +876,7 @@ TEST_F(ParserTest, InstV)
   auto expr = parser.new_IntConst(fr1, 123U);
   auto con = parser.new_OrderedCon(expr);
   auto con_list = parser.new_connection_list();
-  con_list->push_back(con);
+  con_list->push_back(astmgr.alloc(), con);
   parser.new_InstV(fr0, name, range, con_list);
 
   auto fr3 = make_file_region(1, 2, 3, 4);

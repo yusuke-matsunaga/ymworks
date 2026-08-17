@@ -87,7 +87,7 @@ PtFactory::new_HierName(
 )
 {
   void* p = mAlloc.get_memory(sizeof(PtHierName));
-  return new (p) PtHierName(nb, name);
+  return new (p) PtHierName(mAlloc, nb, name);
 }
 
 END_NAMESPACE_YM_VERILOG

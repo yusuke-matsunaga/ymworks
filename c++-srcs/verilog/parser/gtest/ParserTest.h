@@ -14,6 +14,8 @@
 #include "parser/PtDecl.h"
 #include "parser/PtExpr.h"
 #include "parser/PtMisc.h"
+#include "parser/PtStmt.h"
+#include "parser/PtHierName.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,7 +31,7 @@ public:
 
   // コンストラクタ
   ParserTest(
-  ) : parser(ptmgr),
+  ) : parser(astmgr),
       file_info("filename1")
   {
   }
@@ -315,7 +317,7 @@ public:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  AstMgr ptmgr;
+  AstMgr astmgr;
   Parser parser;
   FileInfo file_info;
 

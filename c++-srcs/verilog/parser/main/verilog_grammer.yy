@@ -2290,12 +2290,12 @@ nzlist_of_dimensions
 : range
 {
   $$ = parser.new_range_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nzlist_of_dimensions range
 {
   $$ = $1;
-  $$->push_back($2);
+  parser.push_back($$, $2);
 }
 ;
 
@@ -3187,13 +3187,13 @@ n_input_gate_terminals
 : net_lvalue ',' expression
 {
   $$ = parser.new_connection_list();
-  $$->push_back(parser.new_OrderedCon($1));
-  $$->push_back(parser.new_OrderedCon($3));
+  parser.push_back($$, parser.new_OrderedCon($1));
+  parser.push_back($$, parser.new_OrderedCon($3));
 }
 | n_input_gate_terminals ',' expression
 {
   $$ = $1;
-  $$->push_back(parser.new_OrderedCon($3));
+  parser.push_back($$, parser.new_OrderedCon($3));
 }
 ;
 
@@ -3228,13 +3228,13 @@ n_output_gate_terminals
 : expression ',' expression
 {
   $$ = parser.new_connection_list();
-  $$->push_back(parser.new_OrderedCon($1));
-  $$->push_back(parser.new_OrderedCon($3));
+  parser.push_back($$, parser.new_OrderedCon($1));
+  parser.push_back($$, parser.new_OrderedCon($3));
 }
 | n_output_gate_terminals ',' expression
 {
   $$ = $1;
-  $$->push_back(parser.new_OrderedCon($3));
+  parser.push_back($$, parser.new_OrderedCon($3));
 }
 ;
 
@@ -3580,12 +3580,12 @@ list_of_ordered_param_assign
 : expression
 {
   $$ = parser.new_connection_list();
-  $$->push_back(parser.new_OrderedCon($1));
+  parser.push_back($$, parser.new_OrderedCon($1));
 }
 | list_of_ordered_param_assign ',' expression
 {
   $$ = $1;
-  $$->push_back(parser.new_OrderedCon($3));
+  parser.push_back($$, parser.new_OrderedCon($3));
 }
 ;
 
@@ -3595,12 +3595,12 @@ list_of_named_param_assign
 : named_parameter_assignment
 {
   $$ = parser.new_connection_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | list_of_named_param_assign ',' named_parameter_assignment
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 
@@ -3682,12 +3682,12 @@ list_of_ordered_port_connections
 : ordered_port_connection
 {
   $$ = parser.new_connection_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | list_of_ordered_port_connections ',' ordered_port_connection
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 
@@ -3718,12 +3718,12 @@ list_of_named_port_connections
 : named_port_connection
 {
   $$ = parser.new_connection_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | list_of_named_port_connections ',' named_port_connection
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 
@@ -3917,12 +3917,12 @@ list_of_gencaseitem
 : genvar_case_item
 {
   $$ = parser.new_gencaseitem_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | list_of_gencaseitem genvar_case_item
 {
   $$ = $1;
-  $$->push_back($2);
+  parser.push_back($$, $2);
 }
 ;
 
@@ -4713,12 +4713,12 @@ nzlist_of_stmt
 : statement
 {
   $$ = parser.new_stmt_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nzlist_of_stmt statement
 {
   $$ = $1;
-  $$->push_back($2);
+  parser.push_back($$, $2);
 }
 ;
 
@@ -5006,17 +5006,17 @@ event_expression
 : event_primary
 {
   $$ = parser.new_expr_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | event_expression OR event_primary
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 | event_expression ',' event_primary
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 
@@ -5156,12 +5156,12 @@ list_of_case_items
 : case_item
 {
   $$ = parser.new_caseitem_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | list_of_case_items case_item
 {
   $$ = $1;
-  $$->push_back($2);
+  parser.push_back($$, $2);
 }
 ;
 
@@ -5516,12 +5516,12 @@ nzlist_of_terminals
 : specify_terminal
 {
   $$ = parser.new_expr_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nzlist_of_terminals ',' specify_terminal
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 
@@ -6047,12 +6047,12 @@ nzlist_of_expressions
 : expression
 {
   $$ = parser.new_expr_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nzlist_of_expressions ',' expression
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 
@@ -6137,12 +6137,12 @@ nzlist_of_arguments
 : argument
 {
   $$ = parser.new_expr_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nzlist_of_arguments ',' argument
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 
@@ -6648,12 +6648,12 @@ nzlist_of_index
 : index
 {
   $$ = parser.new_expr_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nzlist_of_index index
 {
   $$ = $1;
-  $$->push_back($2);
+  parser.push_back($$, $2);
 }
 ;
 
@@ -6670,12 +6670,12 @@ nzlist_of_lvalues
 : lvalue
 {
   $$ = parser.new_expr_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nzlist_of_lvalues ',' lvalue
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 
@@ -6805,12 +6805,12 @@ nz_ai_list
 : attr_inst
 {
   $$ = parser.new_attrinst_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nz_ai_list attr_inst
 {
   $$ = $1;
-  $$->push_back($2);
+  parser.push_back($$, $2);
 }
 ;
 
@@ -6831,12 +6831,12 @@ nzlist_of_attr_spec
 : attr_spec
 {
   $$ = parser.new_attrspec_list();
-  $$->push_back($1);
+  parser.push_back($$, $1);
 }
 | nzlist_of_attr_spec ',' attr_spec
 {
   $$ = $1;
-  $$->push_back($3);
+  parser.push_back($$, $3);
 }
 ;
 

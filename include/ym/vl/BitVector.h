@@ -28,6 +28,13 @@ BEGIN_NAMESPACE_YM_VERILOG
 ///   - 符号の有無
 ///   - 基数
 /// を持つ．
+///
+/// 内部的には std::uint64_t のベクタを2つ(mVal0, mVal1)持つ．
+/// mVal0 は 0 の時に1にするビット， mVal1 は 1 の時に 1 にするビット
+/// 通常は排他的だが，双方 0 の時に Z, 双方 1 の時に X を表す．
+///
+/// ビット数が 64 の倍数でない時は未使用のビットが存在するが，内容は未定とする．
+/// 比較するときは未使用のビットを参照しないようにマスクする必要がある．
 //////////////////////////////////////////////////////////////////////
 class BitVector
 {
@@ -42,15 +49,15 @@ public:
   /// 値は1ビットのXとなる．
   ///
   /// 結果の型は
-  /// - サイズは無し
+  /// - サイズは1ビット
   /// - 符号なし
-  /// - 基数は10
-  BitVector();
+  /// - 基数は2
+  BitVector() : BitVector(VlScalarVal::x()) {}
 
   /// @brief SizeType からの変換コンストラクタ
   ///
   /// 結果の型は
-  /// - サイズは無し
+  /// - サイズは64ビット
   /// - 符号なし
   /// - 基数は10
   explicit
@@ -61,7 +68,7 @@ public:
   /// @brief int からの変換コンストラクタ
   ///
   /// 結果の型は
-  /// - サイズは無し
+  /// - サイズは64ビット
   /// - 符号あり
   /// - 基数は10
   ///
@@ -114,6 +121,10 @@ public:
   /// - サイズはあり
   /// - 符号なし
   /// - 基数は2
+  ///
+  /// 1文字を8ビットのASCIIコードと見なしてビット列に変換する．
+  /// C文字列なので常に最後の８ビットは0となる．
+  /// 最初の文字が MSB 側となる．
   explicit
   BitVector(
     const char* str ///< [in] 文字列 (C文字列)
@@ -125,11 +136,16 @@ public:
   /// - サイズはあり
   /// - 符号なし
   /// - 基数は2
+  ///
+  /// 1文字を8ビットのASCIIコードと見なしてビット列に変換する．
+  /// C文字列なので常に最後の８ビットは0となる．
+  /// 最初の文字が MSB 側となる．
   explicit
   BitVector(
     const std::string& str ///< [in] 文字列 (string)
   );
 
+#if 0
   /// @brief 浮動小数点数をビットベクタにする
   /// @warning 整数で表せない範囲の場合には値は不定
   /// @todo 整数を経由しない方法に書き換えること
@@ -137,6 +153,7 @@ public:
   BitVector(
     double val ///< [in] 浮動小数点数
   );
+#endif
 
   /// @brief Verilog-HDL 形式の文字列からの変換コンストラクタ
   ///
@@ -207,7 +224,7 @@ public:
   /// @return 代入後の自分自身の参照を返す．
   ///
   /// 結果の型は
-  /// - サイズは無し
+  /// - 64ビット
   /// - 符号なし
   /// - 基数は10
   BitVector&
@@ -219,7 +236,7 @@ public:
   /// @return 代入後の自分自身の参照を返す．
   ///
   /// 結果の型は
-  /// - サイズは無し
+  /// - 64ビット
   /// - 符号あり
   /// - 基数は10
   BitVector&
@@ -272,6 +289,10 @@ public:
   /// - サイズはあり
   /// - 符号なし
   /// - 基数は2
+  ///
+  /// 1文字を8ビットのASCIIコードと見なしてビット列に変換する．
+  /// C文字列なので常に最後の８ビットは0となる．
+  /// 最初の文字が MSB 側となる．
   BitVector&
   operator=(
     const char* str ///< [in] C文字列
@@ -284,11 +305,16 @@ public:
   /// - サイズはあり
   /// - 符号なし
   /// - 基数は2
+  ///
+  /// 1文字を8ビットのASCIIコードと見なしてビット列に変換する．
+  /// C文字列なので常に最後の８ビットは0となる．
+  /// 最初の文字が MSB 側となる．
   BitVector&
   operator=(
     const std::string& str ///< [in] 文字列 (string)
   );
 
+#if 0
   /// @brief 浮動小数点数からの代入演算子
   /// @return 代入後の自分自身の参照を返す．
   /// @warning 整数で表せない範囲の場合には値は不定
@@ -297,6 +323,7 @@ public:
   operator=(
     double val ///< [in] 浮動小数点数
   );
+#endif
 
   /// @brief ビット長の変換と属性の変更を行う代入演算子もどき
   void
@@ -981,7 +1008,7 @@ private:
 
   // 値をセットする．(1ワードバージョン)
   void
-  set_word(
+  set_from_word(
     uword val0,
     uword val1,
     SizeType size,
@@ -992,7 +1019,7 @@ private:
 
   // 値をセットする．(ベクタバージョン)
   void
-  set_wordptr(
+  set_from_wordptr(
     const uword* val0,
     const uword* val1,
     SizeType src_size,
@@ -1004,7 +1031,7 @@ private:
 
   // 値をセットする．(ベクタバージョン)
   void
-  set_wordvector(
+  set_from_wordvector(
     const std::vector<uword>& val0,
     const std::vector<uword>& val1,
     SizeType src_size,
@@ -1054,11 +1081,18 @@ private:
     int pos
   );
 
+  // C文字列からの変換用コンストラクタの共通ルーティン
+  void
+  set_from_cstr(
+    SizeType strsize,
+    const char* str
+  );
+
   // 文字列からの変換用コンストラクタの共通ルーティン
   void
   set_from_string(
     SizeType strsize,
-    const char* str
+    const std::string& str
   );
 
   /// @brief src を 10 で割る．

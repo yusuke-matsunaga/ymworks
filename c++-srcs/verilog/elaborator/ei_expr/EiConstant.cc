@@ -260,7 +260,7 @@ EiStringConst::EiStringConst(
   const AstExpr* ast_expr,
   const std::string& value
 ) : EiConstant(ast_expr),
-    mValue{value}
+    mValue(value)
 {
 }
 

@@ -31,19 +31,18 @@ public:
 
   /// @brief コンストラクタ
   PtHierName(
+    Alloc& alloc,            ///< [in] アロケータ
     const AstNameBranch* nb, ///< [in] 階層ブランチ
     const char* name         ///< [in] 名前
-  ) : mNbList{new PtNameBranchList},
-      mTailName{name}
+  ) : mTailName{name}
   {
-    mNbList->push_back(nb);
+    void* p = alloc.get_memory(sizeof(PtNameBranchList));
+    mNbList = new (p) PtNameBranchList;
+    mNbList->push_back(alloc, nb);
   }
 
   /// @brief デストラクタ
-  ~PtHierName()
-  {
-    delete mNbList;
-  }
+  ~PtHierName() = default;
 
 
 public:
@@ -51,11 +50,12 @@ public:
   /// @brief 階層を追加する．
   void
   add(
+    Alloc& alloc,            ///< [in] アロケータ
     const AstNameBranch* nb, ///< [in] 追加する階層ブランチ
     const char* tail_name    ///< [in] 追加する最下層の名前
   )
   {
-    mNbList->push_back(nb);
+    mNbList->push_back(alloc, nb);
     mTailName = tail_name;
   }
 

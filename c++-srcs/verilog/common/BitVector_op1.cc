@@ -164,8 +164,8 @@ BitVector::operator+=(
   }
 
   if ( size() < ans_size ) {
-    set_wordptr(mVal0, mVal1, size(), ans_size,
-		ans_sized, ans_signed, ans_base);
+    set_from_wordptr(mVal0, mVal1, size(), ans_size,
+		     ans_sized, ans_signed, ans_base);
   }
 
   if ( src.size() < ans_size ) {
@@ -216,8 +216,8 @@ BitVector::operator-=(
   }
 
   if ( size() < ans_size ) {
-    set_wordptr(mVal0, mVal1, size(), ans_size,
-		ans_sized, ans_signed, ans_base);
+    set_from_wordptr(mVal0, mVal1, size(), ans_size,
+		     ans_sized, ans_signed, ans_base);
   }
 
   if ( src.size() < ans_size ) {
@@ -267,8 +267,8 @@ BitVector::operator*=(
   }
 
   if ( size() < ans_size ) {
-    set_wordptr(mVal0, mVal1, size(), ans_size,
-		ans_sized, ans_signed, ans_base);
+    set_from_wordptr(mVal0, mVal1, size(), ans_size,
+		     ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return operator*=(BitVector(src, ans_size));
@@ -338,8 +338,8 @@ BitVector::operator/=(
   }
 
   if ( size() < ans_size ) {
-    set_wordptr(mVal0, mVal1, size(), ans_size,
-		ans_sized, ans_signed, ans_base);
+    set_from_wordptr(mVal0, mVal1, size(), ans_size,
+		     ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return operator/=(BitVector(src, ans_size));
@@ -397,8 +397,8 @@ BitVector::operator%=(
   }
 
   if ( size() < ans_size ) {
-    set_wordptr(mVal0, mVal1, size(), ans_size,
-		ans_sized, ans_signed, ans_base);
+    set_from_wordptr(mVal0, mVal1, size(), ans_size,
+		     ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return operator%=(BitVector(src, ans_size));
@@ -453,8 +453,8 @@ BitVector::power(
   }
 
   if ( size() < ans_size ) {
-    set_wordptr(mVal0, mVal1, size(), ans_size,
-		ans_sized, ans_signed, ans_base);
+    set_from_wordptr(mVal0, mVal1, size(), ans_size,
+		     ans_sized, ans_signed, ans_base);
   }
   if ( src.size() < ans_size ) {
     return power(BitVector(src, ans_size));

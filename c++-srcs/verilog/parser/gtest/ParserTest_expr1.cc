@@ -197,13 +197,13 @@ TEST_F(ParserTest, Concat)
   auto expr_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto expr1 = parser.new_IntConst(fr1, 1U);
-  expr_list->push_back(expr1);
+  expr_list->push_back(astmgr.alloc(), expr1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto expr2 = parser.new_IntConst(fr2, 2U);
-  expr_list->push_back(expr2);
+  expr_list->push_back(astmgr.alloc(), expr2);
   auto fr3 = make_file_region(3, 3, 3, 3);
   auto expr3 = parser.new_IntConst(fr3, 3U);
-  expr_list->push_back(expr3);
+  expr_list->push_back(astmgr.alloc(), expr3);
   auto expr = parser.new_Concat(fr, expr_list);
 
   ASSERT_TRUE( expr != nullptr );
@@ -225,13 +225,13 @@ TEST_F(ParserTest, MultiConcat)
   auto expr_list = parser.new_expr_list();
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto expr1 = parser.new_IntConst(fr2, 1U);
-  expr_list->push_back(expr1);
+  expr_list->push_back(astmgr.alloc(), expr1);
   auto fr3 = make_file_region(3, 3, 3, 3);
   auto expr2 = parser.new_IntConst(fr3, 2U);
-  expr_list->push_back(expr2);
+  expr_list->push_back(astmgr.alloc(), expr2);
   auto fr4 = make_file_region(4, 4, 4, 4);
   auto expr3 = parser.new_IntConst(fr4, 3U);
-  expr_list->push_back(expr3);
+  expr_list->push_back(astmgr.alloc(), expr3);
   auto expr = parser.new_MultiConcat(fr, rep, expr_list);
 
   ASSERT_TRUE( expr != nullptr );

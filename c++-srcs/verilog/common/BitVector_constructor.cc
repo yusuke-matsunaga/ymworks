@@ -55,13 +55,6 @@ mask(
 
 END_NONAMESPACE
 
-// 空の変換コンストラクタ
-BitVector::BitVector()
-{
-  // サイズなし，符号なし，基数10
-  set_word(1, 1, 1, false, false, 10);
-}
-
 // SizeType からの変換コンストラクタ
 BitVector::BitVector(
   SizeType val
@@ -76,8 +69,8 @@ BitVector::operator=(
   SizeType val
 )
 {
-  // サイズなし，符号なし，基数10
-  set_word(~val, val, kVpiSizeInteger, false, false, 10);
+  // 64ビット，符号なし，基数10
+  set_from_word(~val, val, 64, false, false, 10);
   return *this;
 }
 
@@ -95,8 +88,8 @@ BitVector::operator=(
   int val
 )
 {
-  // サイズなし，符号あり，基数10
-  set_word(~val, val, kVpiSizeInteger, false, true, 10);
+  // 64ビット，符号あり，基数10
+  set_from_word(~val, val, 64, false, true, 10);
   return *this;
 }
 
@@ -117,7 +110,7 @@ BitVector::operator=(
   uword val1 = value ? 1 : 0;
   uword val0 = 1 - val1;
   // サイズあり(1)，符号なし，基数2
-  set_word(val0, val1, 1, true, false, 2);
+  set_from_word(val0, val1, 1, true, false, 2);
   return *this;
 }
 
@@ -201,14 +194,48 @@ BitVector::operator=(
 )
 {
   if ( str ) {
-    SizeType strsize = strlen(str);
-    set_from_string(strsize, str);
+    SizeType strsize = strlen(str) + 1;
+    set_from_cstr(strsize, str);
   }
   else {
     // "\0" という文字列にしておく (4.2.3.3)
-    set_from_string(1, "\0");
+    set_from_cstr(1, "\0");
   }
   return *this;
+}
+
+// C文字列からの変換用コンストラクタの共通ルーティン
+void
+BitVector::set_from_cstr(
+  SizeType strsize,
+  const char* str
+)
+{
+  auto bitsize = strsize * 8;
+
+  resize(bitsize);
+  set_type(true, false, 2);
+
+  SizeType j = 0;
+  SizeType k = 0;
+  uword tmp = 0;
+  for ( SizeType i = 0; i < strsize; ++ i ) {
+    char c = str[strsize - i - 1];
+    tmp += (static_cast<uword>(c) << (k * 8));
+    ++ k;
+    if ( k == 4 ) {
+      mVal0[j] = ~tmp;
+      mVal1[j] =  tmp;
+      ++ j;
+      k = 0;
+      tmp = 0;
+    }
+  }
+  if ( k != 0 ) {
+    uword mask = ALL1 << (k * 8);
+    mVal0[j] = ~tmp | mask;
+    mVal1[j] = tmp;
+  }
 }
 
 // string 文字列からの変換用コンストラクタ
@@ -227,40 +254,50 @@ BitVector::operator=(
 {
   SizeType strsize = str.size();
   if ( strsize == 0 ) {
-    set_from_string(1, "\0");
+    set_from_cstr(1, "\0");
   }
   else {
-    // 上の set_from_string() を使ってもできるけど
-    // c_str() を呼びたくない．
-    SizeType s = strsize * 8;
-
-    resize(s);
-    set_type(true, false, 2);
-
-    int j = 0;
-    int k = 0;
-    uword tmp = 0;
-    for ( int i = strsize; i -- > 0; ) {
-      char c = str[i];
-      tmp += (static_cast<uword>(c) << (k * 8));
-      ++ k;
-      if ( k == 4 ) {
-	mVal0[j] = ~tmp;
-	mVal1[j] =  tmp;
-	++ j;
-	k = 0;
-	tmp = 0;
-      }
-    }
-    if ( k != 0 ) {
-      uword mask = ALL1 << (k * 8);
-      mVal0[j] = ~tmp | mask;
-      mVal1[j] =  tmp;
-    }
+    set_from_string(strsize, str);
   }
   return *this;
 }
 
+// 文字列からの変換用コンストラクタの共通ルーティン
+void
+BitVector::set_from_string(
+  SizeType strsize,
+  const std::string& str
+)
+{
+  auto bitsize = (strsize + 1) * 8;
+
+  resize(bitsize);
+  set_type(true, false, 2);
+
+  // 末尾は '\0'
+  SizeType j = 0;
+  SizeType k = 1;
+  uword tmp = 0;
+  for ( SizeType i = 1; i < strsize; ++ i ) {
+    char c = str[strsize - i - 1];
+    tmp += (static_cast<uword>(c) << (k * 8));
+    ++ k;
+    if ( k == 4 ) {
+      mVal0[j] = ~tmp;
+      mVal1[j] =  tmp;
+      ++ j;
+      k = 0;
+      tmp = 0;
+    }
+  }
+  if ( k != 0 ) {
+    uword mask = ALL1 << (k * 8);
+    mVal0[j] = ~tmp | mask;
+    mVal1[j] = tmp;
+  }
+}
+
+#if 0
 // 浮動小数点数を整数に変換してからビットベクタにする
 BitVector::BitVector(
   double val
@@ -277,9 +314,10 @@ BitVector::operator=(
 {
   double r = rint(val);
   int intval = static_cast<int>(r);
-  set_word(~intval, intval, BLOCK_SIZE, false, true, 10);
+  set_from_word(~intval, intval, BLOCK_SIZE, false, true, 10);
   return *this;
 }
+#endif
 
 // Verilog-HDL 形式の文字列からの変換コンストラクタ
 BitVector::BitVector(
@@ -289,12 +327,6 @@ BitVector::BitVector(
   const std::string& str
 )
 {
-  {
-    std::cout << "BitVector(size = " << size
-	      << ", is_signed = " << is_signed
-	      << ", base = " << base
-	      << ", str = " << str << ")" << std::endl;
-  }
   bool is_sized = true;
   if ( size == 0 ) {
     size = BLOCK_SIZE;
@@ -305,7 +337,12 @@ BitVector::BitVector(
   case  8: set_from_octstring(size, is_sized, is_signed, str, 0); break;
   case 10: set_from_decstring(size, is_sized, is_signed, str, 0); break;
   case 16: set_from_hexstring(size, is_sized, is_signed, str, 0); break;
-  default: std::cerr << "illegal base : " << base << std::endl;
+  default:
+  {
+    std::ostringstream buf;
+    buf << "illegal base : " << base;
+    throw std::logic_error{buf.str()};
+  }
   }
 }
 
@@ -439,8 +476,8 @@ BitVector::BitVector(
   SizeType size
 )
 {
-  set_wordptr(src.mVal0, src.mVal1, src.size(), size,
-	      true, src.is_signed(), src.base());
+  set_from_wordptr(src.mVal0, src.mVal1, src.size(), size,
+		   true, src.is_signed(), src.base());
 }
 
 // ビット長の変換と属性の変更を行うコピーコンストラクタもどき
@@ -452,8 +489,8 @@ BitVector::BitVector(
   SizeType base
 )
 {
-  set_wordptr(src.mVal0, src.mVal1, src.size(), size,
-	      is_sized, is_signed, base);
+  set_from_wordptr(src.mVal0, src.mVal1, src.size(), size,
+		   is_sized, is_signed, base);
 }
 
 // @brief デストラクタ
@@ -504,8 +541,8 @@ BitVector::set_with_attr(
   SizeType base
 )
 {
-  set_wordptr(src.mVal0, src.mVal1,
-	      src.size(), size, is_sized, is_signed, base);
+  set_from_wordptr(src.mVal0, src.mVal1,
+		   src.size(), size, is_sized, is_signed, base);
 }
 
 // Verilog-HDL (IEEE1364-2001) の形式の文字列からの値をセットする．
@@ -555,19 +592,11 @@ BitVector::set_from_verilog_string(
 	case 'D': base = 10; pos ++; break;
 	case 'h':
 	case 'H': base = 16; pos ++; break;
-	default:
-	  // 本当は例外を投げるのがいいな．
-	  std::cerr << "illegal character (" << str[pos] << ") in string "
-		    << str << std::endl;
-	  return false;
+	default: goto err1;
 	}
       }
       break;
-    default:
-      // 本当は例外を投げるのがいいな．
-      std::cerr << "illegal character (" << str[pos] << ") in string "
-		<< str << std::endl;
-      return false;
+    default: goto err1;
     }
   }
   else {
@@ -579,10 +608,26 @@ BitVector::set_from_verilog_string(
   case  8: set_from_octstring(size, is_sized, is_signed, str, pos); break;
   case 10: set_from_decstring(size, is_sized, is_signed, str, pos); break;
   case 16: set_from_hexstring(size, is_sized, is_signed, str, pos); break;
-  default: std::cerr << "illegal base : " << base << std::endl;
+  default: goto err2;
   }
 
   return true;
+
+err1:
+  {
+    std::ostringstream buf;
+    buf << "illegal character (" << str[pos] << ") in string '"
+	<< str << "'";
+    throw std::logic_error{buf.str()};
+  }
+
+err2:
+  {
+    std::ostringstream buf;
+    buf << "illegal base : " << base
+	<< " in string '" << str << "'";
+    throw std::logic_error{buf.str()};
+  }
 }
 
 // @brief 型変換を行う．
@@ -600,8 +645,8 @@ BitVector::coerce(
       set_type(is_sized, is_signed, base());
     }
     else {
-      set_wordptr(mVal0, mVal1, size(), req_size,
-		  is_sized, is_signed, base());
+      set_from_wordptr(mVal0, mVal1, size(), req_size,
+		       is_sized, is_signed, base());
     }
   }
 
@@ -699,8 +744,8 @@ BitVector::set_from_binstring(
   // この文字列の先頭に - はつかないので結果は必ず非負の数だが，
   // MSBが1の場合にこれをそのまま符号つき数とみなすと符号拡張して
   // しまうのでいったん符号なし数として拡張した後で符号付きに変えている．
-  set_wordptr(val0, val1, src_size,
-	      size, is_sized, false, 2);
+  set_from_wordptr(val0, val1, src_size,
+		   size, is_sized, false, 2);
   if ( is_signed ) {
     set_type(is_sized, true, 2);
   }
@@ -776,8 +821,8 @@ BitVector::set_from_octstring(
   // この文字列の先頭に - はつかないので結果は必ず非負の数だが，
   // MSBが1の場合にこれをそのまま符号つき数とみなすと符号拡張して
   // しまうのでいったん符号なし数として拡張した後で符号付きに変えている．
-  set_wordptr(val0, val1, src_size,
-	      size, is_sized, false, 8);
+  set_from_wordptr(val0, val1, src_size,
+		   size, is_sized, false, 8);
   if ( is_signed ) {
     set_type(is_sized, true, 8);
   }
@@ -845,8 +890,8 @@ BitVector::set_from_decstring(
   // この文字列の先頭に - はつかないので結果は必ず非負の数だが，
   // MSBが1の場合にこれをそのまま符号つき数とみなすと符号拡張して
   // しまうのでいったん符号なし数として拡張した後で符号付きに変えている．
-  set_wordvector(val0, val1, src_size,
-		 size, is_sized, false, 10);
+  set_from_wordvector(val0, val1, src_size,
+		      size, is_sized, false, 10);
   if ( is_signed ) {
     set_type(is_sized, true, 10);
   }
@@ -920,44 +965,10 @@ BitVector::set_from_hexstring(
   // この文字列の先頭に - はつかないので結果は必ず非負の数だが，
   // MSBが1の場合にこれをそのまま符号つき数とみなすと符号拡張して
   // しまうのでいったん符号なし数として拡張した後で符号付きに変えている．
-  set_wordptr(val0, val1, src_size,
-	      size, is_sized, false, 16);
+  set_from_wordptr(val0, val1, src_size,
+		   size, is_sized, false, 16);
   if ( is_signed ) {
     set_type(is_sized, true, 16);
-  }
-}
-
-// 文字列からの変換用コンストラクタの共通ルーティン
-void
-BitVector::set_from_string(
-  SizeType strsize,
-  const char* str
-)
-{
-  auto s = strsize * 8;
-
-  resize(s);
-  set_type(true, false, 2);
-
-  int j = 0;
-  int k = 0;
-  uword tmp = 0;
-  for ( int i = strsize; i -- > 0; ) {
-    char c = str[i];
-    tmp += (static_cast<uword>(c) << (k * 8));
-    ++ k;
-    if ( k == 4 ) {
-      mVal0[j] = ~tmp;
-      mVal1[j] =  tmp;
-      ++ j;
-      k = 0;
-      tmp = 0;
-    }
-  }
-  if ( k != 0 ) {
-    uword mask = ALL1 << (k * 8);
-    mVal0[j] = ~tmp | mask;
-    mVal1[j] = tmp;
   }
 }
 

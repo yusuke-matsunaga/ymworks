@@ -126,35 +126,35 @@ CptExpr::part() const
 VpiConstType
 CptExpr::const_type() const
 {
-  throw std::logic_error{"Not a CONST type"};
+  throw std::logic_error{"const_type(): Not a CONST type"};
 }
 
 // @brief 整数型の定数のサイズの取得
 SizeType
 CptExpr::const_size() const
 {
-  throw std::logic_error{"Not a CONST type"};
+  throw std::logic_error{"const_size(): Not a CONST type"};
 }
 
 // @brief 整数型の値の取得
 BitVector
 CptExpr::const_bitvect() const
 {
-  throw std::logic_error{"Not a INT CONST type"};
+  throw std::logic_error{"const_bitvect(): Not a INT CONST type"};
 }
 
 // @brief 整数型および文字列型の定数の文字列表現の取得
 const char*
 CptExpr::const_str() const
 {
-  throw std::logic_error{"Not a INT/STRING CONST type"};
+  throw std::logic_error{"const_str(): Not a INT/STRING CONST type"};
 }
 
 // @brief 実数型の値の取得
 double
 CptExpr::const_real() const
 {
-  throw std::logic_error{"Not a REAL CONST type"};
+  throw std::logic_error{"const_real(): Not a REAL CONST type"};
 }
 
 // @brief インデックスとして使える式のチェック
@@ -175,7 +175,7 @@ CptExpr::index_value() const
 bool
 CptExpr::is_simple() const
 {
-  throw std::logic_error{"Not a PRIMARY type"};
+  throw std::logic_error{"is_simple(): Not a PRIMARY type"};
 }
 
 
