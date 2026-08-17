@@ -30,7 +30,7 @@ TEST_F(ParserTest, Disable1)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( name, stmt->fullname() );
+  EXPECT_EQ( name, stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Disable, stmt->type() );
   EXPECT_STREQ( "disable statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -81,8 +81,8 @@ TEST_F(ParserTest, Disable2)
   EXPECT_STREQ( head, nb->name() );
   EXPECT_EQ( std::vector<const AstNameBranch*>{nb},
 	     stmt->namebranch_list() );
-  auto exp_fullname = std::string(head) + "." + std::string(name);
-  EXPECT_EQ( exp_fullname, stmt->fullname() );
+  auto exp_name = std::string(head) + "." + std::string(name);
+  EXPECT_EQ( exp_name, stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Disable, stmt->type() );
   EXPECT_STREQ( "disable statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -133,7 +133,7 @@ TEST_F(ParserTest, Enable1)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( name, stmt->fullname() );
+  EXPECT_EQ( name, stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Enable, stmt->type() );
   EXPECT_STREQ( "task enable statement", stmt->stmt_name() );
   EXPECT_EQ( 1, stmt->arg_num() );
@@ -189,8 +189,8 @@ TEST_F(ParserTest, Enable2)
   EXPECT_STREQ( head, nb->name() );
   EXPECT_EQ( std::vector<const AstNameBranch*>{nb},
 	     stmt->namebranch_list() );
-  auto exp_fullname = std::string(head) + "." + std::string(name);
-  EXPECT_EQ( exp_fullname, stmt->fullname() );
+  auto exp_name = std::string(head) + "." + std::string(name);
+  EXPECT_EQ( exp_name, stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Enable, stmt->type() );
   EXPECT_STREQ( "task enable statement", stmt->stmt_name() );
   EXPECT_EQ( 1, stmt->arg_num() );
@@ -242,7 +242,7 @@ TEST_F(ParserTest, SysEnable)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( name, stmt->fullname() );
+  EXPECT_EQ( name, stmt->decompile_name() );
   EXPECT_EQ( AstStmt::SysEnable, stmt->type() );
   EXPECT_STREQ( "system task enable statement", stmt->stmt_name() );
   EXPECT_EQ( 1, stmt->arg_num() );
@@ -294,7 +294,7 @@ TEST_F(ParserTest, DcStmt)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::DelayControl, stmt->type() );
   EXPECT_STREQ( "delay control statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -346,7 +346,7 @@ TEST_F(ParserTest, EcStmt)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::EventControl, stmt->type() );
   EXPECT_STREQ( "event control statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -396,7 +396,7 @@ TEST_F(ParserTest, Wait)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Wait, stmt->type() );
   EXPECT_STREQ( "wait statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -446,7 +446,7 @@ TEST_F(ParserTest, Assign1)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Assign, stmt->type() );
   EXPECT_STREQ( "assignment", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -500,7 +500,7 @@ TEST_F(ParserTest, Assign2)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Assign, stmt->type() );
   EXPECT_STREQ( "assignment", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -550,7 +550,7 @@ TEST_F(ParserTest, NbAssign1)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::NbAssign, stmt->type() );
   EXPECT_STREQ( "nonblocking assignment", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -604,7 +604,7 @@ TEST_F(ParserTest, NbAssign2)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::NbAssign, stmt->type() );
   EXPECT_STREQ( "nonblocking assignment", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -654,7 +654,7 @@ TEST_F(ParserTest, PcAssign)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::PcAssign, stmt->type() );
   EXPECT_STREQ( "procedural continuous assignment", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -702,7 +702,7 @@ TEST_F(ParserTest, Deassign)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Deassign, stmt->type() );
   EXPECT_STREQ( "deassign statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -752,7 +752,7 @@ TEST_F(ParserTest, Force)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Force, stmt->type() );
   EXPECT_STREQ( "force statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -800,7 +800,7 @@ TEST_F(ParserTest, Release)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Release, stmt->type() );
   EXPECT_STREQ( "release statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -848,7 +848,7 @@ TEST_F(ParserTest, EventStmt)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Event, stmt->type() );
   EXPECT_STREQ( "event statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -894,7 +894,7 @@ TEST_F(ParserTest, NullStmt)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Null, stmt->type() );
   EXPECT_STREQ( "null statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );

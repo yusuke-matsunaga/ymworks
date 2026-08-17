@@ -229,7 +229,7 @@ ErrorGen::not_a_parameter(
 )
 {
   std::ostringstream buf;
-  buf << "\"" << ast_item->fullname() << "\" is not a parameter.";
+  buf << "\"" << ast_item->decompile_name() << "\" is not a parameter.";
   error_common(file, line, ast_item->file_region(),
 	       "ELABXXX",
 	       buf.str());
@@ -244,7 +244,7 @@ ErrorGen::is_a_localparam(
 )
 {
   std::ostringstream buf;
-  buf << "\"" << ast_item->fullname()
+  buf << "\"" << ast_item->decompile_name()
       << "\" is a localparam, which shall not be override.";
   error_common(file, line, ast_item->file_region(),
 	       "ELABXXX",
@@ -1092,7 +1092,7 @@ ErrorGen::make_message(
 )
 {
   std::ostringstream buf;
-  buf << ast_expr->fullname() << " : " << msg;
+  buf << ast_expr->decompile_name() << " : " << msg;
   return buf.str();
 }
 

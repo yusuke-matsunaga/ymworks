@@ -169,7 +169,7 @@ public:
 
   /// @brief 階層名を展開する．
   std::string
-  fullname() const;
+  decompile_name() const;
 
   /// @brief 階層ブランチのリストを返す．
   std::vector<const AstNameBranch*>

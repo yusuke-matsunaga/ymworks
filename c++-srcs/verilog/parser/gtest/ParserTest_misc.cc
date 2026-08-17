@@ -360,7 +360,7 @@ TEST_F(ParserTest, HierName1)
   auto nb = nbarray[0];
   EXPECT_STREQ( head, nb->name() );
   EXPECT_FALSE( nb->has_index() );
-  EXPECT_EQ( head, nb->expand_name() );
+  EXPECT_EQ( head, nb->decompile() );
   EXPECT_STREQ( name, hname->tail_name() );
 }
 
@@ -380,7 +380,7 @@ TEST_F(ParserTest, HierName2)
   EXPECT_TRUE( nb->has_index() );
   std::ostringstream buf;
   buf << head << "[" << 0 << "]";
-  EXPECT_EQ( buf.str(), nb->expand_name() );
+  EXPECT_EQ( buf.str(), nb->decompile() );
   EXPECT_STREQ( name, hname->tail_name() );
 }
 
@@ -401,10 +401,10 @@ TEST_F(ParserTest, HierName3)
   auto nb2 = nbarray[1];
   EXPECT_STREQ( head, nb->name() );
   EXPECT_FALSE( nb->has_index() );
-  EXPECT_EQ( head, nb->expand_name() );
+  EXPECT_EQ( head, nb->decompile() );
   EXPECT_STREQ( head2, nb2->name() );
   EXPECT_FALSE( nb2->has_index() );
-  EXPECT_EQ( head2, nb2->expand_name() );
+  EXPECT_EQ( head2, nb2->decompile() );
   EXPECT_STREQ( name, hname->tail_name() );
 }
 
@@ -425,12 +425,12 @@ TEST_F(ParserTest, HierName4)
   auto nb2 = nbarray[1];
   EXPECT_STREQ( head, nb->name() );
   EXPECT_FALSE( nb->has_index() );
-  EXPECT_EQ( head, nb->expand_name() );
+  EXPECT_EQ( head, nb->decompile() );
   EXPECT_STREQ( head2, nb2->name() );
   EXPECT_TRUE( nb2->has_index() );
   std::ostringstream buf;
   buf << head2 << "[" << 1 << "]";
-  EXPECT_EQ( buf.str(), nb2->expand_name() );
+  EXPECT_EQ( buf.str(), nb2->decompile() );
   EXPECT_STREQ( name, hname->tail_name() );
 }
 

@@ -218,7 +218,7 @@ ElbMgr::find_scope_up(
 {
   if ( debug & debug_find_scope ) {
     DOUT << "find_scope_up( "
-	 << ast_obj->fullname()
+	 << ast_obj->decompile_name()
 	 << " ) @"
 	 << base_scope->full_name() << std::endl;
   }

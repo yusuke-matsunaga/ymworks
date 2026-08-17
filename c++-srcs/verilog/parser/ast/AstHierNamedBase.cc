@@ -18,12 +18,12 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief 階層名を展開する．
 std::string
-AstHierNamedBase::fullname() const
+AstHierNamedBase::decompile_name() const
 {
   std::ostringstream buf;
   const char* period = "";
   for ( auto nb: namebranch_list() ) {
-    buf << period << nb->expand_name();
+    buf << period << nb->decompile();
     period = ".";
   }
   if ( name() != nullptr ) {

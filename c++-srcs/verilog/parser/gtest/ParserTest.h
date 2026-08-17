@@ -113,16 +113,16 @@ public:
       exp_list.push_back(nb);
     }
     EXPECT_EQ( exp_list, expr->namebranch_list() );
-    std::string exp_fullname;
+    std::string exp_name;
     if ( expr->name() != nullptr ) {
       for ( SizeType i = 0; i < n; ++ i ) {
 	auto nb = expr->namebranch(i);
-	exp_fullname += nb_list[i];
-	exp_fullname += ".";
+	exp_name += nb_list[i];
+	exp_name += ".";
       }
-      exp_fullname += expr->name();
+      exp_name += expr->name();
     }
-    EXPECT_EQ( exp_fullname, expr->fullname() );
+    EXPECT_EQ( exp_name, expr->decompile_name() );
   }
 
   // AstExpr の Operation 関係のテストを行う．

@@ -330,7 +330,7 @@ StmtGen::instantiate_disable(
   auto handle = mgr().find_obj_up(parent, ast_stmt, nullptr);
   if ( !handle ) {
     std::ostringstream buf;
-    buf << ast_stmt->fullname() << " : Not found.";
+    buf << ast_stmt->decompile_name() << " : Not found.";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    fr,
 		    MsgType::Error,
@@ -374,7 +374,7 @@ StmtGen::instantiate_enable(
   auto handle = mgr().find_obj_up(parent, ast_stmt, nullptr);
   if ( !handle ) {
     std::ostringstream buf;
-    buf << ast_stmt->fullname() << " : Not found.";
+    buf << ast_stmt->decompile_name() << " : Not found.";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    fr,
 		    MsgType::Error,
@@ -384,7 +384,7 @@ StmtGen::instantiate_enable(
   }
   if ( handle->type() != VpiObjType::Task ) {
     std::ostringstream buf;
-    buf << ast_stmt->fullname() << " : Not a task.";
+    buf << ast_stmt->decompile_name() << " : Not a task.";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    fr,
 		    MsgType::Error,

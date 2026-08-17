@@ -134,7 +134,7 @@ TEST_F(ParserTest, DefParam1)
   EXPECT_EQ( 0, defparam->namebranch_num() );
   EXPECT_THROW( defparam->namebranch(0),
 		std::out_of_range );
-  EXPECT_EQ( name, defparam->fullname() );
+  EXPECT_EQ( name, defparam->decompile_name() );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     defparam->namebranch_list() );
   EXPECT_EQ( val, defparam->expr() );
@@ -166,7 +166,7 @@ TEST_F(ParserTest, DefParam2)
   EXPECT_STREQ( head, branch->name() );
   EXPECT_THROW( defparam->namebranch(1),
 		std::out_of_range );
-  EXPECT_EQ( "head.param1", defparam->fullname() );
+  EXPECT_EQ( "head.param1", defparam->decompile_name() );
   EXPECT_EQ( std::vector<const AstNameBranch*>{branch},
 	     defparam->namebranch_list() );
   EXPECT_EQ( val, defparam->expr() );

@@ -245,7 +245,7 @@ Elaborator::operator()(
   for ( auto stub: mDefParamStubList ) {
     auto ast_defparam = stub.mAstDefparam;
     std::ostringstream buf;
-    buf << ast_defparam->fullname() << " : not found.";
+    buf << ast_defparam->decompile_name() << " : not found.";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    ast_defparam->file_region(),
 		    MsgType::Error,

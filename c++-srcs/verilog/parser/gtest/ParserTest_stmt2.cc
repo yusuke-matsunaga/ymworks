@@ -33,7 +33,7 @@ TEST_F(ParserTest, If)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::If, stmt->type() );
   EXPECT_STREQ( "if statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -85,7 +85,7 @@ TEST_F(ParserTest, IfElse)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::If, stmt->type() );
   EXPECT_STREQ( "if statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -178,7 +178,7 @@ TEST_F(ParserTest, Case)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Case, stmt->type() );
   EXPECT_STREQ( "case statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -251,7 +251,7 @@ TEST_F(ParserTest, CaseX)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::CaseX, stmt->type() );
   EXPECT_STREQ( "casex statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -324,7 +324,7 @@ TEST_F(ParserTest, CaseZ)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::CaseZ, stmt->type() );
   EXPECT_STREQ( "casez statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -374,7 +374,7 @@ TEST_F(ParserTest, Forever)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Forever, stmt->type() );
   EXPECT_STREQ( "forever statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -424,7 +424,7 @@ TEST_F(ParserTest, Repeat)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::Repeat, stmt->type() );
   EXPECT_STREQ( "repeat statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -474,7 +474,7 @@ TEST_F(ParserTest, While)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::While, stmt->type() );
   EXPECT_STREQ( "while statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -528,7 +528,7 @@ TEST_F(ParserTest, For)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::For, stmt->type() );
   EXPECT_STREQ( "for-loop statement", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -581,7 +581,7 @@ TEST_F(ParserTest, ParBlock)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::ParBlock, stmt->type() );
   EXPECT_STREQ( "parallel block", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -645,7 +645,7 @@ TEST_F(ParserTest, NamedParBlock)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( name, stmt->fullname() );
+  EXPECT_EQ( name, stmt->decompile_name() );
   EXPECT_EQ( AstStmt::NamedParBlock, stmt->type() );
   EXPECT_STREQ( "parallel block", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -701,7 +701,7 @@ TEST_F(ParserTest, SeqBlock)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->fullname() );
+  EXPECT_EQ( "", stmt->decompile_name() );
   EXPECT_EQ( AstStmt::SeqBlock, stmt->type() );
   EXPECT_STREQ( "sequential block", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );
@@ -765,7 +765,7 @@ TEST_F(ParserTest, NamedSeqBlock)
 		std::out_of_range );
   EXPECT_EQ( std::vector<const AstNameBranch*>{},
 	     stmt->namebranch_list() );
-  EXPECT_EQ( name, stmt->fullname() );
+  EXPECT_EQ( name, stmt->decompile_name() );
   EXPECT_EQ( AstStmt::NamedSeqBlock, stmt->type() );
   EXPECT_STREQ( "sequential block", stmt->stmt_name() );
   EXPECT_EQ( 0, stmt->arg_num() );

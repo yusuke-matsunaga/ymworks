@@ -312,7 +312,7 @@ decompile_impl(
   case AstExpr::FuncCall:
   case AstExpr::SysFuncCall:
     {
-      auto ans = expr->fullname();
+      auto ans = expr->decompile_name();
       ans += "(";
       auto n = expr->operand_num();
       const char* comma = "";
@@ -326,7 +326,7 @@ decompile_impl(
 
   case AstExpr::Primary:
     {
-      auto ans = expr->fullname();
+      auto ans = expr->decompile_name();
       auto n = expr->index_num();
       for ( SizeType i = 0; i < n; ++ i) {
 	ans += "[" + expr->index(i)->decompile() + "]";
