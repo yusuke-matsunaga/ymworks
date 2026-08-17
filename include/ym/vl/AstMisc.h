@@ -243,6 +243,8 @@ public:
 /// @ingroup VlParser
 /// @ingroup AstGroup
 /// @brief 階層名を表すクラス
+///
+/// 通常はただの文字列だが，場合によっては '[' '1' ']' のようなインデックスを含む．
 //////////////////////////////////////////////////////////////////////
 class AstNameBranch
 {
@@ -264,21 +266,21 @@ public:
   /// @brief インデックスの有無のチェック
   /// @retval true インデックスを持っている時
   /// @retval false インデックスを持っていない時
-  /// @note デフォルトで false を返す．
   virtual
   bool
   has_index() const = 0;
 
   /// @brief インデックスの取得
   /// @return インデックスの値
-  /// @note デフォルトで 0 を返す．
+  ///
+  /// has_index() == false の時は std::logic_error 例外を送出する．
   virtual
   int
   index() const = 0;
 
   /// @brief インデックスを含めた名前を返す．
   std::string
-  expand_name() const
+  decompile() const
   {
     std::ostringstream buf;
     buf << name();
@@ -296,6 +298,9 @@ public:
 /// @ingroup VlParser
 /// @ingroup AstGroup
 /// @brief attribute_instance を表すクラス
+///
+/// 実体は AstAttrSpec のリスト
+/// ただしファイル領域としては先頭と末尾の '(*' と '*)' を含んだ領域となる．
 //////////////////////////////////////////////////////////////////////
 class AstAttrInst :
   public AstBase
@@ -340,6 +345,9 @@ public:
 /// @ingroup VlParser
 /// @ingroup AstGroup
 /// @brief attr_spec を表すクラス
+///
+/// 属性名(name)と値(expr)を持つ．
+/// 場合によっては値が nullptr のこともある．
 //////////////////////////////////////////////////////////////////////
 class AstAttrSpec :
   public AstBase

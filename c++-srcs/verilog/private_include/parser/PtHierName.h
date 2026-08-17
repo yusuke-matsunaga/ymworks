@@ -71,7 +71,6 @@ public:
   )
   {
     auto ans = mNbList->to_array(alloc);
-    delete mNbList;
     mNbList = nullptr;
     return ans;
   }
