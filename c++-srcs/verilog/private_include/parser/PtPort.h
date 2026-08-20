@@ -24,15 +24,15 @@ class PtPort :
 {
 public:
   //////////////////////////////////////////////////////////////////////
-  // 設定用の関数
+  // PtPort の継承クラスが実装する仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief portref の方向を設定する．
+  /// @brief 内部のポート結線の向きを設定する．
   virtual
   void
   set_portref_dir(
-    SizeType pos, ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-    VpiDir dir    ///< [in] 方向
+    SizeType index,
+    VpiDir dir
   ) = 0;
 
 };

@@ -24,7 +24,11 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// できるのでその場合を考慮する必要がある．
 /// 結合演算を用いればそれも式として扱えるが，
 /// 複数の式のリストの方が扱いやすい．
-/// また，各々の式の方向の情報も合わせて持っている．
+///
+/// ポートの「向き」は対応する式から推測することが可能だが
+/// 面倒なので向きの情報も持たせている．
+/// ただし複数の式が結合している場合は個々の式ごとに向きが
+/// 異なる可能性がある．
 //////////////////////////////////////////////////////////////////////
 class AstPort :
   public AstBase
@@ -35,13 +39,17 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 外向の名前の取得
-  /// @return 外向の名前(本当のポート名)\n
+  /// @return 外向の名前(本当のポート名)
+  ///
   /// 無い場合は nullptr を返す
   virtual
   const char*
   ext_name() const = 0;
 
   /// @brief 内部の結線を表す式の取得
+  ///
+  /// - nullptr の場合もある．
+  /// - 複数の結線からなる場合には Concat 演算となる．
   virtual
   const AstExpr*
   expr() const = 0;
@@ -51,22 +59,25 @@ public:
   SizeType
   portref_size() const = 0;
 
-  /// @brief 内部のポート結線リストの取得
-  ///
-  /// - pos >= portref_size() の時 std::out_of_range 例外を送出する．
+  /// @brief 内部のポート結線の取得
   virtual
   const AstExpr*
-  portref_elem(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
+  portref(
+    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
   ) const = 0;
 
-  /// @brief 内部ポート結線の方向の取得
+  /// @brief 内部のポート結線のリストの取得
   ///
-  /// - pos >= portref_size() の時 std::out_of_range 例外を送出する．
+  /// portef_size() <= 1 の時は nullptr を返す．
+  virtual
+  AstExprVec
+  portref_list() const = 0;
+
+  /// @brief 内部のポート結線の向きの取得
   virtual
   VpiDir
   portref_dir(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
   ) const = 0;
 
 };

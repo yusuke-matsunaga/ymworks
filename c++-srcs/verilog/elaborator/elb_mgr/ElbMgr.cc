@@ -223,13 +223,13 @@ ElbMgr::find_scope_up(
 	 << base_scope->full_name() << std::endl;
   }
 
-  SizeType n{ast_obj->namebranch_num()};
+  auto n = ast_obj->namebranch_num();
   auto cur_scope{base_scope};
   for ( auto name_branch: ast_obj->namebranch_list() ) {
-    auto top_name{name_branch->name()};
+    auto top_name = name_branch->name();
     const VlScope* top_scope{nullptr};
     // まず普通に探す．
-    auto handle{find_obj(cur_scope, top_name)};
+    auto handle = find_obj(cur_scope, top_name);
     if ( handle ) {
       if ( name_branch->has_index() ) {
 	top_scope = handle->array_elem(name_branch->index());
@@ -240,7 +240,7 @@ ElbMgr::find_scope_up(
     }
     else if ( !name_branch->has_index() ) {
       // モジュール定義名として探す．
-      auto module{mModuleDefDict.find(cur_scope, top_name)};
+      auto module = mModuleDefDict.find(cur_scope, top_name);
       if ( module ) {
 	top_scope = module;
       }

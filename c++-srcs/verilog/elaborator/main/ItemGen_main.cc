@@ -51,10 +51,10 @@ ItemGen::~ItemGen()
 void
 ItemGen::phase1_items(
   const VlScope* parent,
-  const std::vector<const AstItem*>& ast_item_array
+  const std::vector<const AstItem*>& ast_item_list
 )
 {
-  for ( auto ast_item: ast_item_array ) {
+  for ( auto ast_item: ast_item_list ) {
     phase1_item(parent, ast_item);
   }
 }
@@ -310,7 +310,7 @@ ItemGen::phase1_genif(
   const AstItem* ast_genif
 )
 {
-  auto ast_cond = ast_genif->expr();
+  auto ast_cond = ast_genif->cond_expr();
   bool cond = evaluate_bool(parent, ast_cond);
   if ( cond ) {
     phase1_genitem(parent,
@@ -331,7 +331,7 @@ ItemGen::phase1_gencase(
   const AstItem* ast_gencase
 )
 {
-  auto ast_expr = ast_gencase->expr();
+  auto ast_expr = ast_gencase->cond_expr();
   BitVector val{evaluate_bitvector(parent, ast_expr)};
 
   bool already_matched = false;
@@ -428,7 +428,7 @@ ItemGen::phase1_genfor(
 
   for ( ; ; ) {
     // 終了条件のチェック
-    auto ast_cond_expr = ast_genfor->expr();
+    auto ast_cond_expr = ast_genfor->cond_expr();
     bool cond_val = evaluate_bool(parent, ast_cond_expr);
     if ( !cond_val ) {
       break;
@@ -460,16 +460,16 @@ ItemGen::phase1_genfor(
 void
 ItemGen::phase1_genitem(
   const VlScope* parent,
-  const std::vector<const AstDeclHead*>& ast_decl_array,
-  const std::vector<const AstItem*>& ast_item_array
+  const AstDeclHeadVec& ast_decl_list,
+  const AstItemVec& ast_item_list
 )
 {
-  phase1_items(parent, ast_item_array);
+  phase1_items(parent, ast_item_list);
   auto stub = make_stub<ElbProxy,
 			const VlScope*,
-			const std::vector<const AstDeclHead*>&>(static_cast<ElbProxy*>(this),
-							       &ElbProxy::instantiate_decl,
-							       parent, ast_decl_array);
+			const AstDeclHeadVec&>(static_cast<ElbProxy*>(this),
+					       &ElbProxy::instantiate_decl,
+					       parent, ast_decl_list);
   add_phase2stub(stub);
 }
 

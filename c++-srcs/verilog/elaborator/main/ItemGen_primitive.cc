@@ -153,7 +153,7 @@ ItemGen::instantiate_udpheader(
 
   for ( auto ast_inst: ast_head->inst_list() ) {
     auto port_num = ast_inst->port_num();
-    if ( port_num > 0 && ast_inst->port(0)->name() != nullptr ) {
+    if ( port_num > 0 && ast_inst->port_list().front()->name() != nullptr ) {
       ErrorGen::named_port_in_udp_instance(__FILE__, __LINE__, ast_inst);
     }
 
@@ -201,7 +201,7 @@ ItemGen::instantiate_cell(
   for ( auto ast_inst: ast_head->inst_list() ) {
     // ポート数のチェックを行う．
     SizeType port_num = ast_inst->port_num();
-    if ( port_num > 0 && ast_inst->port(0)->name() != nullptr ) {
+    if ( port_num > 0 && ast_inst->port_list().front()->name() != nullptr ) {
       // 名前による結合
       for ( auto ast_con: ast_inst->port_list() ) {
 	auto pin_name = ast_con->name();
@@ -421,7 +421,7 @@ ItemGen::link_cell_array(
   auto prim = prim_array->elem_by_offset(0);
 
   // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (ast_inst->port(0)->name() != nullptr);
+  bool conn_by_name = (ast_inst->port_list().front()->name() != nullptr);
 
   auto cell = prim->cell();
 
@@ -505,7 +505,7 @@ ItemGen::link_cell(
   auto parent = primitive->parent_scope();
 
   // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (ast_inst->port(0)->name() != nullptr);
+  bool conn_by_name = (ast_inst->port_list().front()->name() != nullptr);
 
   auto cell = primitive->cell();
 

@@ -63,20 +63,22 @@ public:
   /// @brief 登録されているモジュールのリストを返す．
   /// @return 登録されているモジュールのリスト
   /// @sa AstModule
-  const std::vector<const AstModule*>&
+  const AstModuleVec&
   ast_module_list() const;
 
   /// @brief 登録されている UDP のリストを返す．
   /// @return 登録されている UDP のリスト
   /// @sa PtUdp
-  const std::vector<const AstUdp*>&
+  const AstUdpVec&
   ast_udp_list() const;
 
   /// @brief attribute instance のリストを表す構文木要素を返す．
   /// @sa AstAttrInst, AstBase
-  std::vector<const AstAttrInst*>
+  ///
+  /// 対応する要素がない場合には空リストを返す．
+  AstAttrInstVec
   ast_attr_list(
-    const AstBase* pt_obj ///< [in] 対象の構文木要素
+    const AstBase* ast_obj ///< [in] 対象の構文木要素
   ) const;
 
 

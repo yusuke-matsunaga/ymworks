@@ -106,15 +106,15 @@ ExprGen::instantiate_opr(
 
   case VpiOpType::Concat:
     {
-      std::vector<ElbExpr*> opr_list(opr_size);
-      for ( SizeType i = 0; i < opr_size; ++ i ) {
-	auto ast_expr1 = ast_expr->operand(i);
+      std::vector<ElbExpr*> opr_list;
+      opr_list.reserve(opr_size);
+      for ( auto ast_expr1: ast_expr->operand_list() ) {
 	auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	auto type1 = expr1->value_type();
 	if ( type1.is_real_type() ) {
 	  ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr1);
 	}
-	opr_list[i] = expr1;
+	opr_list.push_back(expr1);
       }
 
       expr = mgr().new_ConcatOp(ast_expr, opr_list);
@@ -123,19 +123,18 @@ ExprGen::instantiate_opr(
 
   case VpiOpType::MultiConcat:
     {
-      auto ast_expr0{ast_expr->operand(0)};
-
-      int rep_num{evaluate_int(parent, ast_expr0)};
-      auto rep_expr = instantiate_expr(parent, env, ast_expr0);
-      std::vector<ElbExpr*> opr_list(opr_size - 1);
-      for ( SizeType i = 1; i < opr_size; ++ i ) {
-	auto ast_expr1 = ast_expr->operand(i);
+      auto ast_rep = ast_expr->rep();
+      auto rep_num = evaluate_int(parent, ast_rep);
+      auto rep_expr = instantiate_expr(parent, env, ast_rep);
+      std::vector<ElbExpr*> opr_list;
+      opr_list.reserve(opr_size);
+      for ( auto ast_expr1: ast_expr->operand_list() ) {
 	auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	auto type1 = expr1->value_type();
 	if ( type1.is_real_type() ) {
 	  ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr1);
 	}
-	opr_list[i - 1] = expr1;
+	opr_list.push_back(expr1);
       }
       expr = mgr().new_MultiConcatOp(ast_expr, rep_num, rep_expr, opr_list);
     }

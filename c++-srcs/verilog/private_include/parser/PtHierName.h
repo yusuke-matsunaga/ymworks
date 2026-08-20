@@ -62,11 +62,19 @@ public:
 
 public:
 
-  /// @brief 階層ブランチを PtNameBranchArray の形で取り出す．
+  /// @brief 階層ブランチのリストを返す．
+  PtNameBranchList*
+  nb_list() const
+  {
+    return mNbList;
+  }
+
+#if 0
+  /// @brief 階層ブランチのリストを PtNameBranchArray の形で取り出す．
   ///
   /// この関数を呼ぶと mNbList は破壊される．
   PtNameBranchArray
-  name_branch_to_array(
+  nb_listh_to_array(
     Alloc& alloc
   )
   {
@@ -74,6 +82,7 @@ public:
     mNbList = nullptr;
     return ans;
   }
+#endif
 
   /// @brief 最下層の名前を取り出す．
   /// @return 最下層の名前

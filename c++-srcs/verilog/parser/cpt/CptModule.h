@@ -9,8 +9,8 @@
 /// All rights reserved.
 
 #include "parser/PtModule.h"
-#include "ym/FileRegion.h"
 #include "parser/PtArray.h"
+#include "ym/FileRegion.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -42,11 +42,11 @@ public:
     const std::string& config,
     const std::string& library,
     const std::string& cell,
-    PtDeclHeadArray&& paramport_array,
-    PtPortArray&& port_array,
-    PtIOHeadArray&& iohead_array,
-    PtDeclHeadArray&& declhead_array,
-    PtItemArray&& item_array
+    PtDeclHeadArray&& paramport_list,
+    PtPortArray&& port_list,
+    PtIOHeadArray&& iohead_list,
+    PtDeclHeadArray&& declhead_list,
+    PtItemArray&& item_list
   );
 
   /// @brief デストラクタ
@@ -129,30 +129,44 @@ public:
   /// @brief パラメータポート宣言の取得
   const AstDeclHead*
   paramport(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < paramport_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < paramport_num() )
   ) const override;
+
+  /// @brief パラメータポート宣言のリストの取得
+  AstDeclHeadVec
+  paramport_list() const override;
 
   /// @brief ポート数を取り出す．
   SizeType
   port_num() const override;
 
-  /// @brief ポートを取り出す．
+  /// @brief ポートを返す．
   const AstPort*
   port(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < port_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
   ) const override;
+
+  /// @brief ポートのリストを返す．
+  AstPortVec
+  port_list() const override;
 
   /// @brief 入出力宣言ヘッダ配列の要素数の取得
   SizeType
   iohead_num() const override;
 
-  /// @brief 入出力宣言の取得
+  /// @brief 入出力宣言のヘッダを返す．
   const AstIOHead*
   iohead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < iohead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
   ) const override;
 
+  /// @brief 入出力宣言のヘッダのリストを返す．
+  AstIOHeadVec
+  iohead_list() const override;
+
   /// @brief 入出力宣言の要素数の取得
+  ///
+  /// 個々のヘッダが持つ要素数の総和を計算する．
   SizeType
   iodecl_num() const override;
 
@@ -160,21 +174,29 @@ public:
   SizeType
   declhead_num() const override;
 
-  /// @brief 宣言ヘッダの取得
+  /// @brief 宣言ヘッダを返す．
   const AstDeclHead*
   declhead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < declhead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
   ) const override;
+
+  /// @brief 宣言ヘッダのリストを返す．
+  AstDeclHeadVec
+  declhead_list() const override;
 
   /// @brief item 配列の要素数の取得
   SizeType
   item_num() const override;
 
-  /// @brief item の取得
+  /// @brief item を返す．
   const AstItem*
   item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
   ) const override;
+
+  /// @brief item のリストを返す．
+  AstItemVec
+  item_list() const override;
 
   /// @brief top_module フラグを下ろす．
   void
@@ -238,22 +260,22 @@ private:
   std::string mCell;
 
   // パラメータポート宣言のリスト
-  PtDeclHeadArray mParamPortArray;
+  PtDeclHeadArray mParamPortList;
 
-  // ポートの配列
-  PtPortArray mPortArray;
+  // ポートのリスト
+  PtPortArray mPortList;
 
   // 入出力宣言リスト
-  PtIOHeadArray mIOHeadArray;
+  PtIOHeadArray mIOHeadList;
 
   // 入出力宣言の要素数
-  int mIODeclNum;
+  SizeType mIODeclNum;
 
   // 宣言リスト
-  PtDeclHeadArray mDeclHeadArray;
+  PtDeclHeadArray mDeclHeadList;
 
   // 要素のリスト
-  PtItemArray mItemArray;
+  PtItemArray mItemList;
 
 };
 

@@ -64,8 +64,7 @@ Parser::new_Concat(
   PtExprList* expr_list
 )
 {
-  return mFactory.new_Concat(fr,
-			     expr_list->to_array(mAlloc));
+  return mFactory.new_Concat(fr, expr_list);
 }
 
 // @brief multi-concatination 演算子の生成
@@ -76,7 +75,7 @@ Parser::new_MultiConcat(
   PtExprList* expr_list
 )
 {
-  return mFactory.new_MultiConcat(fr, rep, expr_list->to_array(mAlloc));
+  return mFactory.new_MultiConcat(fr, rep, expr_list);
 }
 
 // @brief min/typ/max delay 演算子の生成
@@ -109,8 +108,7 @@ Parser::new_Primary(
   PtExprList* index_array
 )
 {
-  return mFactory.new_Primary(fr, name,
-			      index_array->to_array(mAlloc));
+  return mFactory.new_Primary(fr, name, index_array);
 }
 
 // @brief 範囲指定付き primary の生成
@@ -133,9 +131,7 @@ Parser::new_Primary(
   const AstPart* part
 )
 {
-  return mFactory.new_Primary(fr, name,
-			       index_list->to_array(mAlloc),
-			       part);
+  return mFactory.new_Primary(fr, name, index_list, part);
 }
 
 // @brief primary の生成 (階層付き)
@@ -156,7 +152,7 @@ Parser::new_Primary(
   PtExprList* index_list
 )
 {
-  return mFactory.new_Primary(fr, hname, index_list->to_array(mAlloc));
+  return mFactory.new_Primary(fr, hname, index_list);
 }
 
 // @brief 範囲指定付き primary の生成 (階層付き)
@@ -179,9 +175,7 @@ Parser::new_Primary(
   const AstPart* part
 )
 {
-  return mFactory.new_Primary(fr, hname,
-			       index_list->to_array(mAlloc),
-			       part);
+  return mFactory.new_Primary(fr, hname, index_list, part);
 }
 
 // @brief constant primary の生成
@@ -192,7 +186,9 @@ Parser::new_CPrimary(
   const AstExpr* index
 )
 {
-  return mFactory.new_CPrimary(fr, name, PtExprArray(mAlloc, index));
+  auto index_list = new_expr_list();
+  push_back(index_list, index);
+  return mFactory.new_CPrimary(fr, name, index_list);
 }
 
 // @brief constant primary の生成
@@ -203,8 +199,7 @@ Parser::new_CPrimary(
   PtExprList* index_list
 )
 {
-  return mFactory.new_CPrimary(fr, name,
-			       index_list->to_array(mAlloc));
+  return mFactory.new_CPrimary(fr, name, index_list);
 }
 
 // @brief 範囲指定付き constant primary の生成
@@ -226,8 +221,7 @@ Parser::new_CPrimary(
   PtExprList* index_list
 )
 {
-  return mFactory.new_CPrimary(fr, hname,
-			       index_list->to_array(mAlloc));
+  return mFactory.new_CPrimary(fr, hname, index_list);
 }
 
 // @brief function call の生成
@@ -239,8 +233,7 @@ Parser::new_FuncCall(
   PtAttrInstList* ai_list
 )
 {
-  auto expr = mFactory.new_FuncCall(fr, name,
-				    arg_list->to_array(mAlloc));
+  auto expr = mFactory.new_FuncCall(fr, name, arg_list);
   reg_attrinst(expr, ai_list);
   return expr;
 }
@@ -254,8 +247,7 @@ Parser::new_FuncCall(
   PtAttrInstList* ai_list
 )
 {
-  auto expr = mFactory.new_FuncCall(fr, hname,
-				    arg_list->to_array(mAlloc));
+  auto expr = mFactory.new_FuncCall(fr, hname, arg_list);
   reg_attrinst(expr, ai_list);
   return expr;
 }
@@ -268,8 +260,7 @@ Parser::new_SysFuncCall(
   PtExprList* arg_list
 )
 {
-  return mFactory.new_SysFuncCall(fr, name,
-				  arg_list->to_array(mAlloc));
+  return mFactory.new_SysFuncCall(fr, name, arg_list);
 }
 
 // @brief 整数型の定数の生成

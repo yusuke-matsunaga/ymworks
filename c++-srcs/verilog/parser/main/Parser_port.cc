@@ -40,13 +40,14 @@ Parser::new_Port1(
       name = portref->name();
     }
     mPortRefList.clear();
-    auto port = mFactory.new_Port(file_region, portref, name);
+    auto port = mFactory.new_Port(file_region, name, portref);
     mPortList.push_back(port);
   }
   else {
-    auto port = mFactory.new_Port(file_region,
-				  PtExprArray(mAlloc, mPortRefList),
-				  nullptr);
+    auto expr_list = new_expr_list(mPortRefList);
+    auto expr = new_Concat(file_region, expr_list);
+    auto port = mFactory.new_Port(file_region, nullptr, expr,
+				  new_expr_list(mPortRefList));
     mPortList.push_back(port);
   }
 }
@@ -70,14 +71,16 @@ Parser::new_Port3(
 )
 {
   if ( mPortRefList.size() == 1 ) {
-    auto port = mFactory.new_Port(file_region, mPortRefList.front(), name);
+    auto port = mFactory.new_Port(file_region, name,
+				  mPortRefList.front());
     mPortList.push_back(port);
     mPortRefList.clear();
   }
   else {
-    auto port = mFactory.new_Port(file_region,
-				  PtExprArray(mAlloc, mPortRefList),
-				  name);
+    auto expr_list = new_expr_list(mPortRefList);
+    auto expr = new_Concat(file_region, expr_list);
+    auto port = mFactory.new_Port(file_region, name, expr,
+				  new_expr_list(mPortRefList));
     mPortList.push_back(port);
   }
 }
@@ -131,7 +134,7 @@ Parser::new_PortArray(
     for ( auto elem: head->item_list() ) {
       auto name = elem->name();
       auto portref = mFactory.new_Primary(elem->file_region(), name);
-      auto port = mFactory.new_Port(elem->file_region(), portref, name);
+      auto port = mFactory.new_Port(elem->file_region(), name, portref);
       auto dir = head->direction();
       port->set_portref_dir(0, dir);
       vec.push_back(port);
@@ -164,8 +167,9 @@ Parser::new_PortRef(
   const AstExpr* index
 )
 {
-  auto primary = mFactory.new_Primary(fr, name,
-				      PtExprArray(mAlloc, index));
+  auto index_list = new_expr_list();
+  push_back(index_list, index);
+  auto primary = mFactory.new_Primary(fr, name, index_list);
   mPortRefList.push_back(primary);
 }
 

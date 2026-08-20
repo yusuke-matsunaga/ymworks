@@ -71,7 +71,7 @@ UdpGen::instantiate_udp(
   auto udp = mgr().new_UdpDefn(ast_udp, is_protected);
 
   // 最初のポート名 = 出力のポート名
-  auto outname = ast_udp->port(0)->ext_name();
+  auto outname = ast_udp->port_list().front()->ext_name();
 
   // ポート名をキーにしたIOテンプレートの辞書を作る．
   IODict iodict;
@@ -105,7 +105,7 @@ UdpGen::instantiate_udp(
   // initial 文がある場合と変数宣言の中に初期化式が含まれている場合がある．
   auto ast_init_value = ast_udp->init_value();
   if ( ast_init_value == nullptr ) {
-    ast_init_value = outhead->item(0)->init_value();
+    ast_init_value = outhead->item_list().front()->init_value();
   }
   if ( ast_init_value ) {
     // このチェックはパース時に済んでいるはずなので念のため．
@@ -132,14 +132,11 @@ UdpGen::instantiate_udp(
     // 出力値の位置
     SizeType opos = row_size - 1;
 
-    // 一行文のデータを保持しておくためのバッファ
-    std::vector<VlUdpVal> row_data(row_size);
-
     SizeType pos{0};
     for ( auto ast_udp_entry: ast_udp->table_list() ) {
       const auto& tfr = ast_udp_entry->file_region();
-      auto input_array = ast_udp_entry->input_list();
-      if ( input_array.size() != isize ) {
+      auto input_list = ast_udp_entry->input_list();
+      if ( input_list.size() != isize ) {
 	// サイズが合わない．
 	MsgMgr::put_msg(__FILE__, __LINE__,
 			tfr,
@@ -149,9 +146,12 @@ UdpGen::instantiate_udp(
 	return;
       }
 
+
+      // 一行文のデータを保持しておくためのバッファ
+      std::vector<VlUdpVal> row_data;
+      row_data.reserve(row_size);
       // 入力
-      for ( SizeType j = 0; j < isize; ++ j ) {
-	auto ast_v = input_array[j];
+      for ( auto ast_v: input_list ) {
 	auto symbol = ast_v->symbol();
 	if ( symbol.is_edge_symbol() ) {
 	  // 組合せ回路の場合にはエッジタイプの値は使えない．
@@ -177,7 +177,7 @@ UdpGen::instantiate_udp(
 	  return;
 	}
 
-	row_data[j] = symbol;
+	row_data.push_back(symbol);
       }
 
       { // 現状態
@@ -207,7 +207,7 @@ UdpGen::instantiate_udp(
 	  return;
 	}
 
-	row_data[opos] = symbol;
+	row_data.push_back(symbol);
       }
 
       // 一行文のデータを設定する．
@@ -227,8 +227,6 @@ UdpGen::instantiate_udp(
     // 出力値の位置
     SizeType opos = io_size;
 
-    // 一行文のデータを保持しておくためのバッファ
-    std::vector<VlUdpVal> row_data(row_size);
     SizeType pos = 0;
     for ( auto ast_udp_entry: ast_udp->table_list() ) {
       const auto& tfr = ast_udp_entry->file_region();
@@ -245,9 +243,12 @@ UdpGen::instantiate_udp(
       // 一行中に含まれるエッジタイプのシンボルの数
       SizeType nt = 0;
 
+      // 一行文のデータを保持しておくためのバッファ
+      std::vector<VlUdpVal> row_data;
+      row_data.reserve(row_size);
+
       // 入力
-      for ( SizeType j = 0; j < isize; ++ j ) {
-	auto ast_v = ast_udp_entry->input(j);
+      for ( auto ast_v: ast_udp_entry->input_list() ) {
 	auto symbol = ast_v->symbol();
 	if ( symbol.is_edge_symbol() ) {
 	  ++ nt;
@@ -263,7 +264,7 @@ UdpGen::instantiate_udp(
 	}
 
 	// 順序回路の入力は全ての値/シンボルが使用可
-	row_data[j] = symbol;
+	row_data.push_back(symbol);
       }
 
       { // 現状態
@@ -303,7 +304,7 @@ UdpGen::instantiate_udp(
 	  return;
 	}
 
-	row_data[cpos] = symbol;
+	row_data.push_back(symbol);
       }
 
       { // 出力
@@ -334,7 +335,7 @@ UdpGen::instantiate_udp(
 	  return;
 	}
 
-	row_data[opos] = symbol;
+	row_data.push_back(symbol);
       }
 
       // 一行文のデータを設定する．

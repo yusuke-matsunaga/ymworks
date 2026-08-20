@@ -142,11 +142,11 @@ ExprGen::instantiate_funccall(
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
-  std::vector<ElbExpr*> arg_list(n);
-  for ( SizeType i = 0; i < n; ++ i ) {
-    auto ast_expr1 = ast_expr->operand(i);
+  std::vector<ElbExpr*> arg_list;
+  arg_list.reserve(n);
+  for ( auto ast_expr1: ast_expr->operand_list() ) {
     auto expr1 = instantiate_expr(parent, env, ast_expr1);
-    auto io_decl = child_func->io(i);
+    auto io_decl = child_func->io(arg_list.size());
     auto decl = io_decl->decl();
     if ( decl->value_type() != expr1->value_type() ) {
       if ( debug ) {
@@ -159,7 +159,7 @@ ExprGen::instantiate_funccall(
       }
       ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr);
     }
-    arg_list[i] = expr1;
+    arg_list.push_back(expr1);
   }
 
   // function call の生成
@@ -195,9 +195,9 @@ ExprGen::instantiate_sysfunccall(
   }
 
   // 引数の生成
-  std::vector<ElbExpr*> arg_list(n);
-  for ( SizeType i = 0; i < n; ++ i ) {
-    auto ast_expr1 = ast_expr->operand(i);
+  std::vector<ElbExpr*> arg_list;
+  arg_list.reserve(n);
+  for ( auto ast_expr1: ast_expr->operand_list() ) {
     ElbExpr* arg = nullptr;
     if ( ast_expr ) {
       arg = instantiate_arg(parent, env, ast_expr1);
@@ -206,10 +206,10 @@ ExprGen::instantiate_sysfunccall(
       // 関数呼び出しと異なり，空の引数がありうる．
       ;
     }
-    if ( !user_systf->check_argument(i, arg) ) {
+    if ( !user_systf->check_argument(arg_list.size(), arg) ) {
       ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr);
     }
-    arg_list[i] = arg;
+    arg_list.push_back(arg);
   }
 
   // system function call の生成

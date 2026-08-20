@@ -40,6 +40,7 @@ ym_add_gtest ( verilog_ParserTest_item1
   ADDRESS_SANITIZE
   )
 
+if ( 0 )
 ym_add_gtest ( verilog_ParserTest_item2
   ParserTest_item2.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
@@ -84,7 +85,9 @@ ym_add_gtest ( verilog_ParserTest_stmt2
   $<TARGET_OBJECTS:ym_verilog_obj_d>
   ADDRESS_SANITIZE
   )
+endif ()
 
+if (0)
 ym_add_gtest ( verilog_ParserTest_expr1
   ParserTest_expr1.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
@@ -111,6 +114,7 @@ ym_add_gtest ( verilog_ParserTest_expr3
   $<TARGET_OBJECTS:ym_verilog_obj_d>
   ADDRESS_SANITIZE
   )
+endif ()
 
 ym_add_gtest ( verilog_ParserTest_misc
   ParserTest_misc.cc

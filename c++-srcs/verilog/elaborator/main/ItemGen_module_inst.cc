@@ -190,10 +190,10 @@ ItemGen::phase1_udp(
 {
   // この場合, mParamList は空でなければならない．
   // 問題は delay が mParamList に見える場合があるということ．
-  auto pa_array = ast_head->paramassign_list();
-  SizeType param_size = pa_array.size();
+  auto pa_list = ast_head->paramassign_list();
+  auto param_size = pa_list.size();
   auto ast_delay = ast_head->delay();
-  if ( param_size > 0 && pa_array[0]->name() != nullptr ) {
+  if ( param_size > 0 && pa_list.front()->name() != nullptr ) {
     ErrorGen::udp_with_named_paramassign(__FILE__, __LINE__, ast_head);
   }
   if ( (ast_delay && param_size > 0) || param_size > 1 ) {
@@ -214,8 +214,8 @@ ItemGen::phase1_cell(
 )
 {
   // この場合, parameter 割り当てリストは空でなければならない．
-  auto pa_array = ast_head->paramassign_list();
-  if ( pa_array.size() > 0 ) {
+  auto pa_list = ast_head->paramassign_list();
+  if ( pa_list.size() > 0 ) {
     ErrorGen::cell_with_paramassign(__FILE__, __LINE__, ast_head);
   }
 
@@ -248,7 +248,7 @@ ItemGen::link_module_array(
   // これは Verilog-HDL の仕様がアホ
   // () を取らない形を用意しておけば良かったのに．
   if ( port_num == 0 && n == 1 ) {
-    auto con = port_list[0];
+    auto con = port_list.front();
     if ( /* con->attr_top() == nullptr &&*/
 	 con->name() == nullptr &&
 	 con->expr() == nullptr ) {
@@ -262,7 +262,7 @@ ItemGen::link_module_array(
   // どうやら実際のポート数よりも少ないのはいいらしい
 
   // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (port_list[0]->name() != nullptr);
+  bool conn_by_name = (port_list.front()->name() != nullptr);
   std::unordered_map<std::string, int> port_index;
   if ( conn_by_name ) {
     // ポート名とインデックスの辞書を作る．
@@ -434,7 +434,7 @@ ItemGen::link_module(
   // これは Verilog-HDL の仕様がアホ
   // () を取らない形を用意しておけば良かったのに．
   if ( port_num == 0 && n == 1 ) {
-    auto ast_con = port_list[0];
+    auto ast_con = port_list.front();
     if ( /* ast_con->attr_top() == nullptr &&*/
 	 ast_con->name() == nullptr &&
 	 ast_con->expr() == nullptr ) {
@@ -448,7 +448,7 @@ ItemGen::link_module(
   // どうやら実際のポート数よりも少ないのはいいらしい
 
   // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (port_list[0]->name() != nullptr);
+  bool conn_by_name = (port_list.front()->name() != nullptr);
   std::unordered_map<std::string, SizeType> port_index;
   if ( conn_by_name ) {
     // ポート名とインデックスの辞書を作る．
@@ -560,8 +560,8 @@ ItemGen::gen_param_con_list(
 )
 {
   std::vector<ElbParamCon> param_con_list;
-  auto pa_array = ast_head->paramassign_list();
-  for ( auto ast_con: pa_array ) {
+  auto pa_list = ast_head->paramassign_list();
+  for ( auto ast_con: pa_list ) {
     auto ast_expr = ast_con->expr();
     auto value = evaluate_expr(parent, ast_expr);
     param_con_list.push_back({ast_con, ast_expr, value});

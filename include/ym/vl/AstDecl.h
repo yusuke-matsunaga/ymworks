@@ -70,27 +70,17 @@ public:
   SizeType
   item_num() const = 0;
 
-  /// @brief 要素の取得
-  ///
-  /// - pos >= item_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 要素を返す．
   virtual
   const AstIOItem*
   item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
   ) const = 0;
 
   /// @brief 要素のリストを返す．
-  std::vector<const AstIOItem*>
-  item_list() const
-  {
-    auto n = item_num();
-    std::vector<const AstIOItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(item(i));
-    }
-    return vec;
-  }
+  virtual
+  AstIOItemVec
+  item_list() const = 0;
 
 };
 
@@ -209,27 +199,17 @@ public:
   SizeType
   item_num() const = 0;
 
-  /// @brief 要素の取得
-  ///
-  /// - pos >= item_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 要素を返す．
   virtual
   const AstDeclItem*
   item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
   ) const = 0;
 
   /// @brief 要素のリストを返す．
-  std::vector<const AstDeclItem*>
-  item_list() const
-  {
-    auto n = item_num();
-    std::vector<const AstDeclItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(item(i));
-    }
-    return vec;
-  }
+  virtual
+  AstDeclItemVec
+  item_list() const = 0;
 
 };
 
@@ -248,32 +228,22 @@ public:
   // AstDeclItem の継承クラスが実装する仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief dimension list のサイズの取得
+  /// @brief 範囲のリストの要素数を返す．
   virtual
   SizeType
   range_num() const = 0;
 
-  /// @brief 範囲の取得
-  ///
-  /// - pos >= range_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 範囲を返す．
   virtual
   const AstRange*
   range(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < range_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < range_num() )
   ) const = 0;
 
-  /// @brief 要素のリストを返す．
-  std::vector<const AstRange*>
-  range_list() const
-  {
-    auto n = range_num();
-    std::vector<const AstRange*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(range(i));
-    }
-    return vec;
-  }
+  /// @brief 範囲のリストを返す．
+  virtual
+  AstRangeVec
+  range_list() const = 0;
 
   /// @brief 初期値の取得
   /// @retval 初期値

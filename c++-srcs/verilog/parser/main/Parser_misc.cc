@@ -29,7 +29,7 @@ Parser::new_EventControl(
   const FileRegion& fr
 )
 {
-  return mFactory.new_EventControl(fr, {});
+  return mFactory.new_EventControl(fr);
 }
 
 // @brief イベントコントロールの生成
@@ -41,8 +41,7 @@ Parser::new_EventControl(
 )
 {
   auto expr = new_Primary(name_loc, event_name);
-  return mFactory.new_EventControl(fr,
-				   PtExprArray(mAlloc, expr));
+  return mFactory.new_EventControl(fr, expr);
 }
 
 // @brief イベントコントロールの生成
@@ -54,8 +53,7 @@ Parser::new_EventControl(
 )
 {
   auto expr = new_Primary(name_loc, event_name);
-  return mFactory.new_EventControl(fr,
-				   PtExprArray(mAlloc, expr));
+  return mFactory.new_EventControl(fr, expr);
 }
 
 // @brief イベントコントロールの生成
@@ -65,18 +63,17 @@ Parser::new_EventControl(
   PtExprList* event_list
 )
 {
-  return mFactory.new_EventControl(fr,
-				   event_list->to_array(mAlloc));
+  return mFactory.new_EventControl(fr, event_list);
 }
 
 // @brief リピートコントロールの生成
 PtControl*
 Parser::new_RepeatControl(
   const FileRegion& fr,
-  const AstExpr* expr
+  const AstExpr* rep
 )
 {
-  return mFactory.new_RepeatControl(fr, expr, {});
+  return mFactory.new_RepeatControl(fr, rep);
 }
 
 // @brief リピートコントロールの生成
@@ -88,9 +85,8 @@ Parser::new_RepeatControl(
   const FileRegion& name_loc
 )
 {
-  auto expr = new_Primary(name_loc, event_name);
-  return mFactory.new_RepeatControl(fr, rep,
-				    PtExprArray(mAlloc, expr));
+  auto event = new_Primary(name_loc, event_name);
+  return mFactory.new_RepeatControl(fr, rep, event);
 }
 
 // @brief リピートコントロールの生成
@@ -102,9 +98,8 @@ Parser::new_RepeatControl(
   const FileRegion& name_loc
 )
 {
-  auto expr = new_Primary(name_loc, event_name);
-  return mFactory.new_RepeatControl(fr, rep,
-				    PtExprArray(mAlloc, expr));
+  auto event = new_Primary(name_loc, event_name);
+  return mFactory.new_RepeatControl(fr, rep, event);
 }
 
 // @brief リピートコントロールの生成
@@ -115,8 +110,7 @@ Parser::new_RepeatControl(
   PtExprList* event_list
 )
 {
-  return mFactory.new_RepeatControl(fr, rep,
-				    event_list->to_array(mAlloc));
+  return mFactory.new_RepeatControl(fr, rep, event_list);
 }
 
 // @brief 順序つき結合子の生成
@@ -216,7 +210,7 @@ Parser::new_AttrInst(
   PtAttrSpecList* as_list
 )
 {
-  return mFactory.new_AttrInst(fr, as_list->to_array(mAlloc));
+  return mFactory.new_AttrInst(fr, as_list);
 }
 
 // @brief attribute spec の生成

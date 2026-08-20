@@ -9,15 +9,9 @@
 #include "parser/Parser.h"
 #include "scanner/Lex.h"
 #include "parser/PtFactory.h"
-#include "parser/PtArray.h"
 #include "parser/AstMgr.h"
-#include "parser/PtHierName.h"
 #include "parser/PtModule.h"
 #include "parser/PtUdp.h"
-#include "parser/PtItem.h"
-#include "parser/PtStmt.h"
-#include "parser/PtMisc.h"
-#include "ym/MsgMgr.h"
 
 
 const int debug = 0;

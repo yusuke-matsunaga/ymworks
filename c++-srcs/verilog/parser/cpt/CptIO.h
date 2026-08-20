@@ -86,11 +86,15 @@ public:
   SizeType
   item_num() const override;
 
-  /// @brief 要素の取得
+  /// @brief 要素を返す．
   const AstIOItem*
   item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
   ) const override;
+
+  /// @brief 要素のリストの取得
+  AstIOItemVec
+  item_list() const override;
 
 
 private:
@@ -101,7 +105,7 @@ private:
   /// @brief 要素リストの設定
   void
   set_elem(
-    PtIOItemArray&& elem_array ///< [in] 要素の配列
+    PtIOItemArray&& elem_list ///< [in] 要素のリスト
   ) override;
 
 
@@ -116,8 +120,8 @@ private:
   // type と aux_type と符号を格納するメンバ
   std::uint32_t mAttr;
 
-  // 要素の配列
-  PtIOItemArray mItemArray;
+  // 要素のリスト
+  PtIOItemArray mItemList;
 
 };
 

@@ -1,0 +1,371 @@
+﻿#ifndef CPTCONST_H
+#define CPTCONST_H
+
+/// @file CptConst.h
+/// @brief CptConst のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2026 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "CptExpr.h"
+#include "ym/vl/BitVector.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+// PtConstant のベース実装クラス
+//////////////////////////////////////////////////////////////////////
+class CptConstant :
+  public CptExpr
+{
+protected:
+
+  // コンストラクタ
+  CptConstant(
+    const FileRegion& file_region
+  ) : mFileRegion{file_region}
+  {
+  }
+
+  // デストラクタ
+  ~CptConstant() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+  // クラスの型を返す．
+  // このクラスの場合は kPtConstantExpr を返す．
+  Type
+  type() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+// 整数型の定数の基底クラス
+//////////////////////////////////////////////////////////////////////
+class CptIntConstant :
+  public CptConstant
+{
+public:
+
+  // コンストラクタ
+  CptIntConstant(
+    const FileRegion& file_region
+  ) : CptConstant(file_region)
+  {
+  }
+
+  // デストラクタ
+  ~CptIntConstant() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  // 階層名の添字として使える式の時に true を返す．
+  bool
+  is_index_expr() const override;
+
+  /// @brief インデックスの値の取得
+  /// @return 階層名の添字として使える式の時にその値を返す．
+  int
+  index_value() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtConstant の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 整数型の定数のサイズの取得
+  /// @return サイズ
+  SizeType
+  const_size() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+// 整数型の定数(サイズ/基数の指定なし)
+//////////////////////////////////////////////////////////////////////
+class CptIntConstant1 :
+  public CptIntConstant
+{
+public:
+
+  // コンストラクタ
+  CptIntConstant1(
+    const FileRegion& file_region,
+    SizeType value
+  ) : CptIntConstant(file_region),
+      mValue{value}
+  {
+  }
+
+  // デストラクタ
+  ~CptIntConstant1() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtConstant の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  // 定数の種類を表す型(vpiIntConst, vpiBinaryConst など) を返す．
+  VpiConstType
+  const_type() const override;
+
+  // ビットベクタ型の値の取得
+  BitVector
+  const_bitvect() const override;
+
+  // 整数型の文字列の値の取得
+  const char*
+  const_str() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  SizeType mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+// 整数型の定数(基数のみ指定あり)
+//////////////////////////////////////////////////////////////////////
+class CptIntConstant2 :
+  public CptIntConstant
+{
+public:
+
+  // コンストラクタ
+  CptIntConstant2(
+    const FileRegion& file_region,
+    VpiConstType const_type,
+    const char* value
+  ) : CptIntConstant(file_region),
+      mConstType{const_type},
+      mValue{value}
+  {
+  }
+
+  // デストラクタ
+  ~CptIntConstant2() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtConstant の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  // 定数の種類を表す型(vpiIntConst, vpiBinaryConst など) を返す．
+  VpiConstType
+  const_type() const override;
+
+  // 整数型の値の取得
+  BitVector
+  const_bitvect() const override;
+
+  // 整数型の文字列の値の取得
+  const char*
+  const_str() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 定数の種類
+  VpiConstType mConstType;
+
+  // 値を表す文字列
+  const char* mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+// 整数型の定数(サイズ/基数の指定あり)
+//////////////////////////////////////////////////////////////////////
+class CptIntConstant3 :
+  public CptIntConstant
+{
+public:
+
+  // コンストラクタ
+  CptIntConstant3(
+    const FileRegion& file_region,
+    SizeType size,
+    VpiConstType const_type,
+    const char* value
+  ) : CptIntConstant(file_region),
+      mConstType{const_type},
+      mSize{size},
+      mValue{value}
+  {
+  }
+
+  // デストラクタ
+  ~CptIntConstant3() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtConstant の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  // 定数の種類を表す型(vpiIntConst, vpiBinaryConst など) を返す．
+  VpiConstType
+  const_type() const override;
+
+  // 整数型の定数のサイズの取得
+  SizeType
+  const_size() const override;
+
+  // 整数型の値の取得
+  BitVector
+  const_bitvect() const override;
+
+  // 文字列の値の取得
+  const char*
+  const_str() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 定数の種類
+  VpiConstType mConstType;
+
+  // サイズ
+  SizeType mSize;
+
+  // 値を表す文字列
+  const char* mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+// 実数型の定数
+//////////////////////////////////////////////////////////////////////
+class CptRealConstant :
+  public CptConstant
+{
+public:
+
+  // コンストラクタ
+  CptRealConstant(
+    const FileRegion& file_region,
+    double value
+  ) : CptConstant(file_region),
+      mValue{value}
+  {
+  }
+
+  // デストラクタ
+  ~CptRealConstant() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtConstant の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  // 定数の種類を表す型(vpiRealConst) を返す．
+  VpiConstType
+  const_type() const override;
+
+  // 実数型の値の取得
+  double
+  const_real() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  double mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+// 文字列型の定数
+//////////////////////////////////////////////////////////////////////
+class CptStringConstant :
+  public CptConstant
+{
+public:
+
+  // 値を表す文字列を引数にとるコンストラクタ
+  CptStringConstant(
+    const FileRegion& file_region,
+    const char* value
+  ) : CptConstant(file_region),
+      mValue{value}
+  {
+  }
+
+  // デストラクタ
+  ~CptStringConstant() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtConstant の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  // 定数の種類を表す型(vpiStringConst) を返す．
+  VpiConstType
+  const_type() const override;
+
+  // 文字列型の値の取得
+  const char*
+  const_str() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  const char* mValue;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // CPTCONST_H

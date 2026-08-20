@@ -11,13 +11,6 @@
 #include "ym/MsgMgr.h"
 #include "ym/FileRegion.h"
 #include "parser/Parser.h"
-#include "parser/PtDecl.h"
-#include "parser/PtItem.h"
-#include "parser/PtStmt.h"
-#include "parser/PtExpr.h"
-#include "parser/PtMisc.h"
-#include "parser/PtList.h"
-#include "parser/PtHierName.h"
 
 
 // より詳細なエラー情報を出力させる．

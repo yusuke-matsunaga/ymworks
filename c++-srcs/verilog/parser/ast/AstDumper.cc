@@ -243,24 +243,16 @@ AstDumper::put(
       put("mExprname", port->ext_name());
     }
 
-    for ( int j = 0; j < port->portref_size(); ++ j ) {
-      const AstExpr* pr = port->portref_elem(j);
-      AstHeader x(*this, "mPortRef", "PortRef");
-
-      put("mFileRegion", pr->file_region());
-      put("mDir", port->portref_dir(j));
-      put("mName", pr->name());
-      if ( pr->index_num() == 1 ) {
-	put("mIndex", pr->index(0));
-      }
-      else {
-	ASSERT_COND( pr->index_num() == 0 );
-      }
-      if ( pr->part() != nullptr ) {
-	auto part = pr->part();
-	put("mRangeMode", part->mode());
-	put("mLeftRange", part->left());
-	put("mRightRange", part->right());
+    if ( port->portref_size() == 1 ) {
+      auto expr = port->expr();
+      auto dir = port->portref_dir(0);
+      put_portref(expr, dir);
+    }
+    else if ( port->portref_size() > 1 ) {
+      for ( SizeType index = 0; index < port->portref_size(); ++ index ) {
+	auto expr = port->portref(index);
+	auto dir = port->portref_dir(index);
+	put_portref(expr, dir);
       }
     }
   }
@@ -268,6 +260,31 @@ AstDumper::put(
   put_decls(m->iohead_list(), m->declhead_list());
   for ( auto item: m->item_list() ) {
     put("mItem", item);
+  }
+}
+
+void
+AstDumper::put_portref(
+  const AstExpr* expr,
+  VpiDir dir
+)
+{
+  AstHeader x(*this, "mPortRef", "PortRef");
+
+  put("mFileRegion", expr->file_region());
+  put("mDir", dir);
+  put("mName", expr->name());
+  if ( expr->index_num() == 1 ) {
+    put("mIndex", expr->index_list().front());
+  }
+  else {
+    ASSERT_COND( expr->index_num() == 0 );
+  }
+  if ( expr->part() != nullptr ) {
+    auto part = expr->part();
+    put("mRangeMode", part->mode());
+    put("mLeftRange", part->left());
+    put("mRightRange", part->right());
   }
 }
 
@@ -390,7 +407,8 @@ AstDumper::put(
 
     put("mFileRegion", item->file_region());
     put("mName", item->name());
-    for ( auto range: item->range_list() ) {
+    for ( SizeType i = 0; i < item->range_num(); ++ i ) {
+      auto range = item->range(i);
       AstHeader x(*this, "mDimension", "Range");
 
       put("mLeftRange", range->left());
@@ -575,13 +593,13 @@ AstDumper::put(
     break;
 
   case AstItem::GenIf:
-    put("mCond", item->expr());
+    put("mCond", item->cond_expr());
     put_decl_item("mThenBody", item->then_declhead_list(), item->then_item_list());
     put_decl_item("mElseBody", item->else_declhead_list(), item->else_item_list());
     break;
 
   case AstItem::GenCase:
-    put("mExpr", item->expr());
+    put("mExpr", item->cond_expr());
     for ( auto gci: item->caseitem_list() ) {
       AstHeader x(*this, "mCaseItem", "GenCaseItem");
 
@@ -596,7 +614,7 @@ AstDumper::put(
   case AstItem::GenFor:
     put("mLoopVar", item->loop_var());
     put("mInitehExpr", item->init_expr());
-    put("mCond", item->expr());
+    put("mCond", item->cond_expr());
     put("mNext", item->next_expr());
     put("mName", item->name());
     put_decl_item("mBody", item->declhead_list(), item->item_list());
@@ -853,7 +871,7 @@ AstDumper::put(
   case AstExpr::Opr:
     if ( expr->op_type() == VpiOpType::Null ) {
       // '(' expression ')' なので無視
-      return put(label, expr->operand(0));
+      return put(label, expr->operand0());
     }
     {
       AstHeader x(*this, label, "Opr");
@@ -864,8 +882,8 @@ AstDumper::put(
 #endif
 
       put("mOprType", expr->op_type());
-      for ( int i = 0; i < expr->operand_num(); ++ i ) {
-	put("mOperand",  expr->operand(i));
+      for ( auto expr1: expr->operand_list() ) {
+	put("mOperand",  expr1);
       }
     }
     break;
@@ -900,8 +918,7 @@ AstDumper::put(
 #endif
       put(expr->namebranch_list());
       put("mName", expr->name());
-      for ( int i = 0; i < expr->operand_num(); ++ i ) {
-	const AstExpr* opr = expr->operand(i);
+      for ( auto opr: expr->operand_list() ) {
 	if ( opr ) {
 	  put("mOperand", opr);
 	}
@@ -919,8 +936,7 @@ AstDumper::put(
       put("mFileRegion", expr->file_region());
       put(expr->namebranch_list());
       put("mName", expr->name());
-      for ( int i = 0; i < expr->index_num(); ++ i ) {
-	const AstExpr* index = expr->index(i);
+      for ( auto index: expr->index_list() ) {
 	put("mIndex", index);
       }
       auto part = expr->part();
@@ -953,14 +969,14 @@ AstDumper::put_parent_file(
 /// @brief 宣言を出力する．
 void
 AstDumper::put_decls(
-  const std::vector<const AstIOHead*>& iohead_array,
-  const std::vector<const AstDeclHead*>& declhead_array
+  const AstIOHeadVec& iohead_list,
+  const AstDeclHeadVec& declhead_list
 )
 {
-  for ( auto io: iohead_array ) {
+  for ( auto io: iohead_list ) {
     put("mIODecl", io);
   }
-  for ( auto decl: declhead_array ) {
+  for ( auto decl: declhead_list ) {
     put("mDecl", decl);
   }
 }
@@ -969,16 +985,16 @@ AstDumper::put_decls(
 void
 AstDumper::put_decl_item(
   const char* label,
-  const std::vector<const AstDeclHead*>& decl_array,
-  const std::vector<const AstItem*>& item_array
+  const AstDeclHeadVec& decl_list,
+  const AstItemVec& item_list
 )
 {
   AstHeader x(*this, label, "GenBlock");
 
-  for ( auto decl: decl_array ) {
+  for ( auto decl: decl_list ) {
     put("mDecl", decl);
   }
-  for ( auto item: item_array ) {
+  for ( auto item: item_list ) {
     put("mItem", item);
   }
 }
@@ -986,10 +1002,10 @@ AstDumper::put_decl_item(
 // @brief 階層名の出力
 void
 AstDumper::put(
-  const std::vector<const AstNameBranch*>& nb_array
+  const AstNameBranchVec& nb_list
 )
 {
-  for ( auto nb: nb_array ) {
+  for ( auto nb: nb_list ) {
     put("mNameBranch", nb);
   }
 }

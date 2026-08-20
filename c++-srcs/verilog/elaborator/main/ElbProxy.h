@@ -271,30 +271,30 @@ public:
   /// @brief parameter と genvar を実体化する．
   void
   phase1_decl(
-    const VlScope* parent,                          ///< [in] 親のスコープ
-    const std::vector<const AstDeclHead*>& ast_head_array, ///< [in] 宣言ヘッダの配列
-    bool force_to_local                             ///< [in] true なら parameter を localparam にする．
+    const VlScope* parent, ///< [in] 親のスコープ
+    const std::vector<const AstDeclHead*>& ast_head_list, ///< [in] 宣言ヘッダのリスト
+    bool force_to_local    ///< [in] true なら parameter を localparam にする．
   );
 
   /// @brief IO宣言要素を実体化する．
   void
   instantiate_iodecl(
-    ElbModule* module,                           ///< [in] 親のモジュール
-    const std::vector<const AstIOHead*>& ast_head_array ///< [in] IO宣言ヘッダの配列
+    ElbModule* module,  ///< [in] 親のモジュール
+    const std::vector<const AstIOHead*>& ast_head_list ///< [in] IO宣言ヘッダの配列
   );
 
   /// @brief IO宣言要素を実体化する．
   void
   instantiate_iodecl(
-    ElbTaskFunc* taskfunc,                       ///< [in] 親のタスク/関数
-    const std::vector<const AstIOHead*>& ast_head_array ///< [in] IO宣言ヘッダの配列
+    ElbTaskFunc* taskfunc, ///< [in] 親のタスク/関数
+    const std::vector<const AstIOHead*>& ast_head_list ///< [in] IO宣言ヘッダの配列
   );
 
   /// @brief 宣言要素のリストをインスタンス化する．
   void
   instantiate_decl(
-    const VlScope* parent,                         ///< [in] 親のスコープ
-    const std::vector<const AstDeclHead*>& ast_head_array ///< [in] 宣言ヘッダの配列
+    const VlScope* parent, ///< [in] 親のスコープ
+    const std::vector<const AstDeclHead*>& ast_head_list ///< [in] 宣言ヘッダの配列
   );
 
 
@@ -306,8 +306,8 @@ protected:
   /// @brief スコープに関係する要素を実体化する．
   void
   phase1_items(
-    const VlScope* parent,                     ///< [in] 親のスコープ
-    const std::vector<const AstItem*>& ast_item_array ///< [in] 要素定義の配列
+    const VlScope* parent, ///< [in] 親のスコープ
+    const std::vector<const AstItem*>& ast_item_list ///< [in] 要素定義の配列
   );
 
   /// @brief constant function の生成を行う．

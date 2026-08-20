@@ -55,7 +55,7 @@ AstMgr::check_def_name(
 }
 
 // @brief attribute instance を取り出す．
-std::vector<const AstAttrInst*>
+AstAttrInstVec
 AstMgr::find_attr_list(
   const AstBase* obj
 ) const
@@ -63,7 +63,7 @@ AstMgr::find_attr_list(
   PtAttrInfo key(obj, {});
   if ( mAttrDict.count(key) > 0 ) {
     const auto& attr_info = mAttrDict.find(key);
-    return attr_info->attr_list();
+    return attr_info->attr_list()->to_vector();
   }
   return {};
 }
@@ -129,9 +129,7 @@ AstMgr::reg_attrinst(
 )
 {
   if ( ai_list ) {
-    mAttrDict.emplace(PtAttrInfo(obj,
-				 ai_list->to_vector(),
-				 def));
+    mAttrDict.emplace(PtAttrInfo(obj, ai_list, def));
   }
 }
 

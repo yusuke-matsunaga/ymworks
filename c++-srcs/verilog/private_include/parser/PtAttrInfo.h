@@ -10,6 +10,7 @@
 
 #include "ym/verilog.h"
 #include "ym/vl/AstBase.h"
+#include "parser/PtList.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -24,15 +25,11 @@ class PtAttrInfo
 {
 public:
 
-  using AstAttrInstVec = std::vector<const AstAttrInst*>;
-
-public:
-
   /// @brief コンストラクタ
   PtAttrInfo(
-    const AstBase* obj,              ///< [in] 元の構文木要素
-    const AstAttrInstVec& attr_list, ///< [in] AstAttrInstのリスト
-    bool def = false                 ///< [in] 定義側の時 true とするフラグ
+    const AstBase* obj,        ///< [in] 元の構文木要素
+    PtAttrInstList* attr_list, ///< [in] AstAttrInstのリスト
+    bool def = false           ///< [in] 定義側の時 true とするフラグ
   ) : mObj{obj},
       mAttrList{attr_list},
       mDef{def}
@@ -56,7 +53,7 @@ public:
   }
 
   /// @brief 属性リストを返す．
-  const AstAttrInstVec&
+  PtAttrInstList*
   attr_list() const
   {
     return mAttrList;
@@ -79,7 +76,7 @@ private:
   const AstBase* mObj;
 
   // 属性リスト
-  AstAttrInstVec mAttrList;
+  PtAttrInstList* mAttrList;
 
   // 定義側のフラグ
   bool mDef;

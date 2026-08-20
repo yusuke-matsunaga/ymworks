@@ -41,8 +41,7 @@ Parser::new_Enable(
   PtExprList* arg_list
 )
 {
-  return mFactory.new_Enable(fr, name,
-			     arg_list->to_array(mAlloc));
+  return mFactory.new_Enable(fr, name, arg_list);
 }
 
 // @brief enable 文の生成 (階層付き識別子)
@@ -53,8 +52,7 @@ Parser::new_Enable(
   PtExprList* arg_list
 )
 {
-  return mFactory.new_Enable(fr, hname,
-			     arg_list->to_array(mAlloc));
+  return mFactory.new_Enable(fr, hname, arg_list);
 }
 
 // @brief system task enable 文の生成
@@ -65,8 +63,7 @@ Parser::new_SysEnable(
   PtExprList* arg_list
 )
 {
-  return mFactory.new_SysEnable(fr, name,
-				arg_list->to_array(mAlloc));
+  return mFactory.new_SysEnable(fr, name, arg_list);
 }
 
 // @brief delay control 文の生成
@@ -198,8 +195,7 @@ Parser::new_Case(
   PtCaseItemList* caseitem_list
 )
 {
-  return mFactory.new_Case(fr, expr,
-			   caseitem_list->to_array(mAlloc));
+  return mFactory.new_Case(fr, expr, caseitem_list);
 }
 
 // @brief casex 文の生成
@@ -210,8 +206,7 @@ Parser::new_CaseX(
   PtCaseItemList* caseitem_list
 )
 {
-  return mFactory.new_CaseX(fr, expr,
-			    caseitem_list->to_array(mAlloc));
+  return mFactory.new_CaseX(fr, expr, caseitem_list);
 }
 
 // @brief casez 文の生成
@@ -222,8 +217,7 @@ Parser::new_CaseZ(
   PtCaseItemList* caseitem_list
 )
 {
-  return mFactory.new_CaseZ(fr, expr,
-			    caseitem_list->to_array(mAlloc));
+  return mFactory.new_CaseZ(fr, expr, caseitem_list);
 }
 
 // @brief case item の生成
@@ -234,9 +228,7 @@ Parser::new_CaseItem(
   const AstStmt* body
 )
 {
-  return mFactory.new_CaseItem(fr,
-			       label_list->to_array(mAlloc),
-			       body);
+  return mFactory.new_CaseItem(fr, label_list, body);
 }
 
 // @brief forever 文の生成
@@ -333,8 +325,7 @@ Parser::new_ParBlock(
   PtStmtList* stmt_list
 )
 {
-  return mFactory.new_ParBlock(fr,
-			       stmt_list->to_array(mAlloc));
+  return mFactory.new_ParBlock(fr, stmt_list);
 }
 
 // @brief 名前付き parallel block の生成
@@ -346,8 +337,8 @@ Parser::new_NamedParBlock(
 )
 {
   return mFactory.new_NamedParBlock(fr, name,
-				    PtDeclHeadArray(mAlloc, mCurDeclArray, true),
-				    stmt_list->to_array(mAlloc));
+				    mCurDeclList,
+				    stmt_list);
 }
 
 // @brief sequential block の生成
@@ -357,8 +348,7 @@ Parser::new_SeqBlock(
   PtStmtList* stmt_list
 )
 {
-  return mFactory.new_SeqBlock(fr,
-			       stmt_list->to_array(mAlloc));
+  return mFactory.new_SeqBlock(fr, stmt_list);
 }
 
 // @brief 名前付き sequential block の生成
@@ -370,8 +360,8 @@ Parser::new_NamedSeqBlock(
 )
 {
   return mFactory.new_NamedSeqBlock(fr, name,
-				    PtDeclHeadArray(mAlloc, mCurDeclArray, true),
-				    stmt_list->to_array(mAlloc));
+				    mCurDeclList,
+				    stmt_list);
 }
 
 END_NAMESPACE_YM_VERILOG

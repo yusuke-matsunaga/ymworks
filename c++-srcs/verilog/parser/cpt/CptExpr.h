@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "parser/PtExpr.h"
-#include "parser/PtArray.h"
+#include "parser/PtHierName.h"
 #include "ym/vl/BitVector.h"
 #include "ym/FileRegion.h"
 
@@ -31,11 +31,15 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチの取得
+  /// @brief 階層ブランチを返す．
   const AstNameBranch*
   namebranch(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
   ) const override;
+
+  /// @brief 階層ブランチのリストを返す．
+  AstNameBranchVec
+  namebranch_list() const override;
 
   // 末尾の名前を返す．
   const char*
@@ -45,11 +49,6 @@ public:
   /// @return 演算子の種類
   VpiOpType
   op_type() const override;
-
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  SizeType
-  operand_num() const override;
 
   /// @brief 0番目のオペランドの取得
   const AstExpr*
@@ -63,12 +62,26 @@ public:
   const AstExpr*
   operand2() const override;
 
-  /// @brief オペランドの取得
-  /// @return pos 番目のオペランド
+  /// @brief オペランドの数の取得
+  /// @return 子供の数
+  ///
+  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
+  ///   std::logi_error 例外を送出する．
+  SizeType
+  operand_num() const override;
+
+  /// @brief オペランドのリストの取得
+  ///
+  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
+  ///   std::logi_error 例外を送出する．
   const AstExpr*
   operand(
-    SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
+    SizeType index ///< [in] インデックス ( 0 <= index < operand_num() )
   ) const override;
+
+  /// @brief オペランドのリストの取得
+  AstExprVec
+  operand_list() const override;
 
   /// @brief multi-concat の繰り返し数
   ///
@@ -84,14 +97,22 @@ public:
 
   /// @brief インデックスリストのサイズの取得
   /// @return インデックスリストのサイズ
+  ///
+  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
   SizeType
   index_num() const override;
 
   /// @brief インデックスの取得
+  ///
+  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
   const AstExpr*
   index(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < index_num() )
+    SizeType i ///< [in] インデックス ( 0 <= i < index_num() )
   ) const override;
+
+  /// @brief インデックスリストの取得
+  AstExprVec
+  index_list() const override;
 
   /// @brief 範囲指定を表す構文木を返す．
   /// @return 範囲指定
@@ -144,372 +165,6 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-// 演算子のベース実装クラス
-//////////////////////////////////////////////////////////////////////
-class CptOpr :
-  public CptExpr
-{
-protected:
-
-  // コンストラクタ
-  CptOpr(
-    VpiOpType op_type ///< [in] 演算子の型
-  );
-
-  // デストラクタ
-  ~CptOpr();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // クラスの型を返す．
-  // このクラスの場合は kOpr を返す．
-  Type
-  type() const override;
-
-  // 演算子のトークン番号を得る．
-  VpiOpType
-  op_type() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 演算子を表すトークン番号
-  VpiOpType mOpType;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 単項演算子を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptOpr1 :
-  public CptOpr
-{
-public:
-
-  // コンストラクタ
-  CptOpr1(
-    const FileRegion& file_region,
-    VpiOpType op_type,
-    const AstExpr* opr
-  );
-
-  // デストラクタ
-  ~CptOpr1();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  // 階層名の添字として使える式の時に true を返す．
-  bool
-  is_index_expr() const override;
-
-  // 階層名の添字として使える式の時にその値を返す．
-  int
-  index_value() const override;
-
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  SizeType
-  operand_num() const override;
-
-  /// @brief 0番目のオペランドの取得
-  const AstExpr*
-  operand0() const override;
-
-  /// @brief オペランドの取得
-  /// @return pos 番目のオペランド
-  const AstExpr*
-  operand(
-    SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
-  ) const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-  // オペランド
-  const AstExpr* mOpr;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 二項演算子を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptOpr2 :
-  public CptOpr
-{
-public:
-
-  // コンストラクタ
-  CptOpr2(
-    VpiOpType op_type,
-    const AstExpr* opr1,
-    const AstExpr* opr2
-  );
-
-  // デストラクタ
-  ~CptOpr2();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  SizeType
-  operand_num() const override;
-
-  /// @brief 0番目のオペランドの取得
-  const AstExpr*
-  operand0() const override;
-
-  /// @brief 1番目のオペランドの取得
-  const AstExpr*
-  operand1() const override;
-
-  /// @brief オペランドの取得
-  /// @return pos 番目のオペランド
-  const AstExpr*
-  operand(
-    SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
-  ) const override;
-
-  /// @brief インデックスとして使える式のチェック
-  /// @retval true 階層名の添字として使える式
-  /// @retval false 使えない式
-  bool
-  is_index_expr() const override;
-
-  /// @brief インデックスの値の取得
-  /// @return 階層名の添字として使える式の時にその値を返す．
-  int
-  index_value() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // オペランド
-  const AstExpr* mOpr[2];
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 三項演算子を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptOpr3 :
-  public CptOpr
-{
-public:
-
-  // コンストラクタ
-  CptOpr3(
-    VpiOpType op_type,
-    const AstExpr* opr1,
-    const AstExpr* opr2,
-    const AstExpr* opr3
-  );
-
-  // デストラクタ
-  ~CptOpr3();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  SizeType
-  operand_num() const override;
-
-  /// @brief 0番目のオペランドの取得
-  const AstExpr*
-  operand0() const override;
-
-  /// @brief 1番目のオペランドの取得
-  const AstExpr*
-  operand1() const override;
-
-  /// @brief 2番目のオペランドの取得
-  const AstExpr*
-  operand2() const override;
-
-  /// @brief オペランドの取得
-  /// @return pos 番目のオペランド
-  const AstExpr*
-  operand(
-    SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
-  ) const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // オペランド
-  const AstExpr* mOpr[3];
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// concatenation を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptConcat :
-  public CptExpr
-{
-public:
-
-  // コンストラクタ
-  CptConcat(
-    const FileRegion& file_region,
-    PtExprArray&& expr_array
-  );
-
-  // デストラクタ
-  ~CptConcat();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  // クラスの型を返す．
-  Type
-  type() const override;
-
-  ///演算子の種類の取得
-  VpiOpType
-  op_type() const override;
-
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  SizeType
-  operand_num() const override;
-
-  /// @brief 0番目のオペランドの取得
-  const AstExpr*
-  operand0() const override;
-
-  /// @brief 1番目のオペランドの取得
-  const AstExpr*
-  operand1() const override;
-
-  /// @brief 2番目のオペランドの取得
-  const AstExpr*
-  operand2() const override;
-
-  /// @brief オペランドの取得
-  /// @return pos 番目のオペランド
-  const AstExpr*
-  operand(
-    SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
-  ) const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-  // 結合する式の配列
-  PtExprArray mExprArray;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// multiple concatenation を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptMultiConcat :
-  public CptConcat
-{
-public:
-
-  // コンストラクタ
-  CptMultiConcat(
-    const FileRegion& file_region,
-    const AstExpr* rep,
-    PtExprArray&& expr_array
-  );
-
-  // デストラクタ
-  ~CptMultiConcat();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  ///演算子の種類の取得
-  VpiOpType
-  op_type() const override;
-
-  /// @brief multi-concat の繰り返し数
-  ///
-  /// - type() != Opr および op_type() != MultiConcat の時 std::logic 例外を送出する．
-  const AstExpr*
-  rep() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 繰り返し数
-  const AstExpr* mRep;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
 // min/typ/max delayを表すクラス
 //////////////////////////////////////////////////////////////////////
 class CptMinTypMax :
@@ -522,15 +177,26 @@ public:
     const AstExpr* val0,
     const AstExpr* val1,
     const AstExpr* val2
-  );
+  ) : mValue{val0, val1, val2}
+  {
+    if ( val0 == nullptr ) {
+      throw std::logic_error{"val0 == nullptr"};
+    }
+    if ( val1 == nullptr ) {
+      throw std::logic_error{"val1 == nullptr"};
+    }
+    if ( val2 == nullptr ) {
+      throw std::logic_error{"val2 == nullptr"};
+    }
+  }
 
   // デストラクタ
-  ~CptMinTypMax();
+  ~CptMinTypMax() {}
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtExpr の仮想関数
+  // AstExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // ファイル位置を返す．
@@ -545,11 +211,6 @@ public:
   VpiOpType
   op_type() const override;
 
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  SizeType
-  operand_num() const override;
-
   /// @brief 0番目のオペランドの取得
   const AstExpr*
   operand0() const override;
@@ -561,13 +222,6 @@ public:
   /// @brief 2番目のオペランドの取得
   const AstExpr*
   operand2() const override;
-
-  /// @brief オペランドの取得
-  /// @return pos 番目のオペランド
-  const AstExpr*
-  operand(
-    SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
-  ) const override;
 
 
 private:
@@ -593,11 +247,15 @@ public:
   CptFuncCallBase(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& arg_array
-  );
+    PtExprArray&& arg_list
+  ) : mFileRegion{file_region},
+      mName{name},
+      mArgList{std::move(arg_list)}
+  {
+  }
 
   // デストラクタ
-  ~CptFuncCallBase();
+  ~CptFuncCallBase() {}
 
 
 public:
@@ -615,27 +273,24 @@ public:
 
   /// @brief オペランドの数の取得
   /// @return 子供の数
+  ///
+  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
+  ///   std::logi_error 例外を送出する．
   SizeType
   operand_num() const override;
 
-  /// @brief 0番目のオペランドの取得
-  const AstExpr*
-  operand0() const override;
-
-  /// @brief 1番目のオペランドの取得
-  const AstExpr*
-  operand1() const override;
-
-  /// @brief 2番目のオペランドの取得
-  const AstExpr*
-  operand2() const override;
-
-  /// @brief オペランドの取得
-  /// @return pos 番目のオペランド
+  /// @brief オペランドのリストの取得
+  ///
+  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
+  ///   std::logi_error 例外を送出する．
   const AstExpr*
   operand(
-    SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
+    SizeType index ///< [in] インデックス ( 0 <= index < operand_num() )
   ) const override;
+
+  /// @brief オペランドのリストの取得
+  AstExprVec
+  operand_list() const override;
 
 
 private:
@@ -650,7 +305,7 @@ private:
   const char* mName;
 
   // 引数の配列
-  PtExprArray mArgArray;
+  PtExprArray mArgList;
 
 };
 
@@ -667,11 +322,13 @@ public:
   CptFuncCall(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& arg_array
-  );
+    PtExprArray&& arg_list
+  ) : CptFuncCallBase(file_region, name, std::move(arg_list))
+  {
+  }
 
   // デストラクタ
-  ~CptFuncCall();
+  ~CptFuncCall() {}
 
 
 public:
@@ -698,29 +355,36 @@ public:
   // コンストラクタ
   CptFuncCallH(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_array,
+    PtNameBranchArray&& nb_list,
     const char* tail_name,
-    PtExprArray&& arg_array
-  );
+    PtExprArray&& arg_list
+  ) : CptFuncCall(file_region, tail_name, std::move(arg_list)),
+      mNbList{std::move(nb_list)}
+  {
+  }
 
   // デストラクタ
-  ~CptFuncCallH();
+  ~CptFuncCallH() {}
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtExpr の仮想関数
+  // AstExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 階層ブランチの要素数の取得
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチの取得
+  /// @brief 階層ブランチを返す．
   const AstNameBranch*
   namebranch(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
   ) const override;
+
+  /// @brief 階層ブランチのリストを返す．
+  AstNameBranchVec
+  namebranch_list() const override;
 
 
 private:
@@ -729,7 +393,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 階層ブランチのリスト
-  PtNameBranchArray mNbArray;
+  PtNameBranchArray mNbList;
 
 };
 
@@ -746,1066 +410,23 @@ public:
   CptSysFuncCall(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& arg_array
-  );
+    PtExprArray&& arg_list
+  ) : CptFuncCallBase(file_region, name, std::move(arg_list))
+  {
+  }
 
   // デストラクタ
-  ~CptSysFuncCall();
+  ~CptSysFuncCall() {}
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtExpr の仮想関数
+  // AstExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // クラスの型を返す．
   Type
   type() const override;
-
-};
-
-
-// 解説
-// もとは generic な一つのクラスだったがメモリ使用量を減らすために
-// カスタマイズした．
-// 直交した2つの属性で分類している．
-// - 階層の有無
-// - インデックス/範囲指定の有無, 定数式か否か
-// この2つを多重継承で組み合わせると仮想関数テーブルがその数だけ必要に
-// なってメモリ節約の意味がなくなるのでかっこ悪さを承知で階層の有無に関
-// してはクラスごとに仮想関数を書く．ただし PtSnameHolder もしくは
-// PtHnameHolder を private 継承(俗に言う「実装のための継承」)しているので
-// それらの関数を呼び出すだけで良い．
-// また，これらは全ての組合わせがあるわけではないので実際に使われている
-// クラスだけ考える．具体的には以下の組み合わせ．
-//
-//                             simple             hierarchical
-// none                          X                     X
-// index                                               X
-// constant index                X                     X
-// range                                               X
-// constant range                X
-// index and range                                     X
-// constant index and range
-
-//////////////////////////////////////////////////////////////////////
-// PtPrimary のベース実装クラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryBase :
-  public CptExpr
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryBase(
-    const char* name
-  );
-
-  // デストラクタ
-  ~CptPrimaryBase();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // クラスの型を返す．
-  Type
-  type() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // 末尾の名前を取り出す．
-  const char*
-  name() const override;
-
-  // index_list も range も持たないとき true を返す．
-  bool
-  is_simple() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 末尾の名前
-  const char* mName;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// PtPrimary のベース実装クラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimary :
-  public CptPrimaryBase
-{
-public:
-
-  // コンストラクタ
-  CptPrimary(
-    const FileRegion& file_region,
-    const char* name
-  );
-
-  // デストラクタ
-  ~CptPrimary();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// インデックスつきの primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryI :
-  public CptPrimaryBase
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryI(
-    const FileRegion& file_region,
-    const char* name,
-    PtExprArray&& index_array
-  );
-
-  // デストラクタ
-  ~CptPrimaryI();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  /// @brief インデックスリストのサイズの取得
-  /// @return インデックスリストのサイズ
-  SizeType
-  index_num() const override;
-
-  /// @brief インデックスの取得
-  const AstExpr*
-  index(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < index_num() )
-  ) const override;
-
-  // index_list も range も持たないとき true を返す．
-  bool
-  is_simple() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-  // インデックスの配列
-  PtExprArray mIndexArray;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 定数インデックスつきの primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryCI :
-  public CptPrimaryI
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryCI(
-    const FileRegion& file_region,
-    const char* name,
-    PtExprArray&& index_array
-  );
-
-  // デストラクタ
-  ~CptPrimaryCI();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // インデックスもしくは範囲が定数にならなければならないとき true を返す．
-  bool
-  is_const_index() const override;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 範囲指定つきの primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryR :
-  public CptPrimaryBase
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryR(
-    const FileRegion& file_region,
-    const char* name,
-    const AstPart* part
-  );
-
-  // デストラクタ
-  ~CptPrimaryR();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // Primary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  // 範囲指定の取得
-  const AstPart*
-  part() const override;
-
-  // index_list も range も持たないとき true を返す．
-  bool
-  is_simple() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-  // 範囲指定
-  const AstPart* mPart;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 定数の範囲指定つきの primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryCR :
-  public CptPrimaryR
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryCR(
-    const FileRegion& file_region,
-    const char* name,
-    const AstPart* part
-  );
-
-  // デストラクタ
-  ~CptPrimaryCR();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // インデックスもしくは範囲が定数にならなければならないとき true を返す．
-  bool
-  is_const_index() const override;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// インデックスと範囲指定つきの primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryIR :
-  public CptPrimaryI
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryIR(
-    const FileRegion& file_region,
-    const char* name,
-    PtExprArray&& index_array,
-    const AstPart* part
-  );
-
-  // デストラクタ
-  ~CptPrimaryIR();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // 範囲指定を取出す．
-  const AstPart*
-  part() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 範囲指定
-  const AstPart* mPart;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 階層名を持つ primary operatorを表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryH :
-  public CptPrimaryBase
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryH(
-    const FileRegion& file_region,
-    PtNameBranchArray&& nb_array,
-    const char* tail_name
-  );
-
-  // デストラクタ
-  ~CptPrimaryH();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 階層ブランチの取得
-  const AstNameBranch*
-  namebranch(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
-  ) const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbArray;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 階層名を持つインデックスつき primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryHI :
-  public CptPrimaryI
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryHI(
-    const FileRegion& file_region,
-    PtNameBranchArray&& nb_array,
-    const char* tail_name,
-    PtExprArray&& index_array
-  );
-
-  // デストラクタ
-  ~CptPrimaryHI();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 階層ブランチの取得
-  const AstNameBranch*
-  namebranch(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
-  ) const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbArray;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 階層名を持つ定数インデックスつき primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryHCI :
-  public CptPrimaryHI
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryHCI(
-    const FileRegion& file_region,
-    PtNameBranchArray&& nb_array,
-    const char* tail_name,
-    PtExprArray&& index_array
-  );
-
-  // デストラクタ
-  ~CptPrimaryHCI();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // インデックスもしくは範囲が定数にならなければならないとき true を返す．
-  bool
-  is_const_index() const override;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 階層名を持つ範囲指定つき primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryHR :
-  public CptPrimaryR
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryHR(
-    const FileRegion& file_region,
-    PtNameBranchArray&& nb_array,
-    const char* tail_name,
-    const AstPart* part
-  );
-
-  // デストラクタ
-  ~CptPrimaryHR();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 階層ブランチの取得
-  const AstNameBranch*
-  namebranch(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
-  ) const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbArray;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 階層名を持つインデックスと範囲指定つき primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryHIR :
-  public CptPrimaryIR
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryHIR(
-    const FileRegion& file_region,
-    PtNameBranchArray&& nb_array,
-    const char* tail_name,
-    PtExprArray&& index_array,
-    const AstPart* part
-  );
-
-  // デストラクタ
-  ~CptPrimaryHIR();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 階層ブランチの取得
-  const AstNameBranch*
-  namebranch(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
-  ) const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbArray;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// PtConstant のベース実装クラス
-//////////////////////////////////////////////////////////////////////
-class CptConstant :
-  public CptExpr
-{
-protected:
-
-  // コンストラクタ
-  CptConstant(
-    const FileRegion& file_region
-  );
-
-  // デストラクタ
-  ~CptConstant();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  // クラスの型を返す．
-  // このクラスの場合は kPtConstantExpr を返す．
-  Type
-  type() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 整数型の定数の基底クラス
-//////////////////////////////////////////////////////////////////////
-class CptIntConstant :
-  public CptConstant
-{
-public:
-
-  // コンストラクタ
-  CptIntConstant(
-    const FileRegion& file_region
-  );
-
-  // デストラクタ
-  ~CptIntConstant();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // 階層名の添字として使える式の時に true を返す．
-  bool
-  is_index_expr() const override;
-
-  /// @brief インデックスの値の取得
-  /// @return 階層名の添字として使える式の時にその値を返す．
-  int
-  index_value() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtConstant の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 整数型の定数のサイズの取得
-  /// @return サイズ
-  SizeType
-  const_size() const override;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 整数型の定数(サイズ/基数の指定なし)
-//////////////////////////////////////////////////////////////////////
-class CptIntConstant1 :
-  public CptIntConstant
-{
-public:
-
-  // コンストラクタ
-  CptIntConstant1(
-    const FileRegion& file_region,
-    SizeType value
-  );
-
-  // デストラクタ
-  ~CptIntConstant1();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtConstant の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // 定数の種類を表す型(vpiIntConst, vpiBinaryConst など) を返す．
-  VpiConstType
-  const_type() const override;
-
-  // ビットベクタ型の値の取得
-  BitVector
-  const_bitvect() const override;
-
-  // 整数型の文字列の値の取得
-  const char*
-  const_str() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 値
-  SizeType mValue;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 整数型の定数(基数のみ指定あり)
-//////////////////////////////////////////////////////////////////////
-class CptIntConstant2 :
-  public CptIntConstant
-{
-public:
-
-  // コンストラクタ
-  CptIntConstant2(
-    const FileRegion& file_region,
-    VpiConstType const_type,
-    const char* value
-  );
-
-  // デストラクタ
-  ~CptIntConstant2();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtConstant の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // 定数の種類を表す型(vpiIntConst, vpiBinaryConst など) を返す．
-  VpiConstType
-  const_type() const override;
-
-  // 整数型の値の取得
-  BitVector
-  const_bitvect() const override;
-
-  // 整数型の文字列の値の取得
-  const char*
-  const_str() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 定数の種類
-  VpiConstType mConstType;
-
-  // 値を表す文字列
-  const char* mValue;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 整数型の定数(サイズ/基数の指定あり)
-//////////////////////////////////////////////////////////////////////
-class CptIntConstant3 :
-  public CptIntConstant
-{
-public:
-
-  // コンストラクタ
-  CptIntConstant3(
-    const FileRegion& file_region,
-    SizeType size,
-    VpiConstType const_type,
-    const char* value
-  );
-
-  // デストラクタ
-  ~CptIntConstant3();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtConstant の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // 定数の種類を表す型(vpiIntConst, vpiBinaryConst など) を返す．
-  VpiConstType
-  const_type() const override;
-
-  // 整数型の定数のサイズの取得
-  SizeType
-  const_size() const override;
-
-  // 整数型の値の取得
-  BitVector
-  const_bitvect() const override;
-
-  // 文字列の値の取得
-  const char*
-  const_str() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 定数の種類
-  VpiConstType mConstType;
-
-  // サイズ
-  SizeType mSize;
-
-  // 値を表す文字列
-  const char* mValue;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 実数型の定数
-//////////////////////////////////////////////////////////////////////
-class CptRealConstant :
-  public CptConstant
-{
-public:
-
-  // コンストラクタ
-  CptRealConstant(
-    const FileRegion& file_region,
-    double value
-  );
-
-  // デストラクタ
-  ~CptRealConstant();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtConstant の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // 定数の種類を表す型(vpiRealConst) を返す．
-  VpiConstType
-  const_type() const override;
-
-  // 実数型の値の取得
-  double
-  const_real() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 値
-  double mValue;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// 文字列型の定数
-//////////////////////////////////////////////////////////////////////
-class CptStringConstant :
-  public CptConstant
-{
-public:
-
-  // 値を表す文字列を引数にとるコンストラクタ
-  CptStringConstant(
-    const FileRegion& file_region,
-    const char* value
-  );
-
-  // デストラクタ
-  ~CptStringConstant();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtConstant の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  // 定数の種類を表す型(vpiStringConst) を返す．
-  VpiConstType
-  const_type() const override;
-
-  // 文字列型の値の取得
-  const char*
-  const_str() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 値
-  const char* mValue;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class CptPart CptExpr.h "CptExpr.h"
-/// @brief PtPart の実装クラス
-//////////////////////////////////////////////////////////////////////
-class CptPart :
-  public PtPart
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPart(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    const AstExpr* expr1, ///< [in] 1番目の式
-    const AstExpr* expr2  ///< [in] 2番目の式
-  ) : mFileRegion{fr},
-      mLeft{expr1},
-      mRight{expr2}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptPart() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 外部インターフェイス
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
-  /// @brief 1番目の式を取り出す．
-  const AstExpr*
-  left() const override;
-
-  /// @brief 2番めの式を取り出す．
-  const AstExpr*
-  right() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-  // 1番目の式
-  const AstExpr* mLeft;
-
-  // 2番目の式
-  const AstExpr* mRight;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class CptPartC CptExpr.h "CptExpr.h"
-/// @brief Const モードの CptPart
-//////////////////////////////////////////////////////////////////////
-class CptPartC :
-  public CptPart
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPartC(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    const AstExpr* expr1, ///< [in] 1番目の式
-    const AstExpr* expr2  ///< [in] 2番目の式
-  ) : CptPart(fr, expr1, expr2)
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptPartC() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 外部インターフェイス
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 範囲指定のモードを返す．
-  VpiRangeMode
-  mode() const override;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class CptPartP CptExpr.h "CptExpr.h"
-/// @brief Plus モードの CptPart
-//////////////////////////////////////////////////////////////////////
-class CptPartP :
-  public CptPart
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPartP(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    const AstExpr* expr1, ///< [in] 1番目の式
-    const AstExpr* expr2  ///< [in] 2番目の式
-  ) : CptPart(fr, expr1, expr2)
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptPartP() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 外部インターフェイス
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 範囲指定のモードを返す．
-  VpiRangeMode
-  mode() const override;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class CptPartM CptExpr.h "CptExpr.h"
-/// @brief Minus モードの CptPart
-//////////////////////////////////////////////////////////////////////
-class CptPartM :
-  public CptPart
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPartM(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    const AstExpr* expr1, ///< [in] 1番目の式
-    const AstExpr* expr2  ///< [in] 2番目の式
-  ) : CptPart(fr, expr1, expr2)
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptPartM() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 外部インターフェイス
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 範囲指定のモードを返す．
-  VpiRangeMode
-  mode() const override;
 
 };
 

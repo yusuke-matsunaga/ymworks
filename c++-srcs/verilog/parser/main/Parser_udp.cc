@@ -39,7 +39,7 @@ Parser::init_udp()
 void
 Parser::end_udp()
 {
-  mCurDeclArray = pop_declhead_list();
+  mCurDeclList = pop_declhead_list();
 }
 
 // UDP を生成する．(Verilog-1995)
@@ -83,8 +83,7 @@ Parser::new_Udp1995(
       // これは YACC の文法が正しくかけていれば成り立つはず．
       ASSERT_COND( item_list.size() == 1 );
 
-      out_item = item_list[0];
-
+      out_item = item_list.front();
       if ( io->aux_type() == VpiAuxType::Reg ) {
 	is_seq = true;
       }
@@ -158,22 +157,22 @@ Parser::new_Udp1995(
   // 次に decl_list の要素数が1以下であり，
   // さらにその要素が REG で名前が出力名と一致することを確認する．
   // ちなみに YACC の文法から REG 以外の宣言要素はありえない．
-  if ( mCurDeclArray.size() > 1 ) {
+  if ( mCurDeclList.size() > 1 ) {
     // 二つ以上の reg 宣言があった．
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    mCurDeclArray[1]->file_region(),
+		    mCurDeclList[1]->file_region(),
 		    MsgType::Error,
 		    "PARS",
 		    "More than two 'reg' declarations.");
     sane = false;
   }
-  else if ( mCurDeclArray.size() == 1 ) {
-    auto reghead = mCurDeclArray[0];
+  else if ( mCurDeclList.size() == 1 ) {
+    auto reghead = mCurDeclList[0];
     if ( reghead ) {
       is_seq = true;
       ASSERT_COND( reghead->type() == AstDeclHead::Reg );
       ASSERT_COND( reghead->item_num() == 1 );
-      auto regitem = reghead->item(0);
+      auto regitem = reghead->item_list().front();
       ASSERT_COND( regitem );
       if ( strcmp(regitem->name(), out_item->name()) != 0 ) {
 	// output と名前が違う
@@ -225,7 +224,7 @@ Parser::new_Udp2001(
   auto out_head = mModuleIOHeadList[0];
   ASSERT_COND( out_head->direction() == VpiDir::Output );
   ASSERT_COND( out_head->item_num() == 1 );
-  auto out_item = out_head->item(0);
+  auto out_item = out_head->item_list().front();
 
   if ( out_head->aux_type() == VpiAuxType::Reg ) {
     is_seq = true;
@@ -301,10 +300,10 @@ Parser::new_Udp(
     // が空でない場合がある．
     udp = mFactory.new_SeqUdp(file_region,
 			      udp_name,
-			      PtPortArray(mAlloc, port_array, true),
-			      PtIOHeadArray(mAlloc, iohead_array, true),
+			      port_array,
+			      iohead_array,
 			      init_value,
-			      PtUdpEntryArray(mAlloc, mUdpEntryList));
+			      mUdpEntryList);
   }
   else {
     if ( init_name ) {
@@ -318,9 +317,9 @@ Parser::new_Udp(
     }
     udp = mFactory.new_CmbUdp(file_region,
 			      udp_name,
-			      PtPortArray(mAlloc, port_array, true),
-			      PtIOHeadArray(mAlloc, iohead_array, true),
-			      PtUdpEntryArray(mAlloc, mUdpEntryList));
+			      port_array,
+			      iohead_array,
+			      mUdpEntryList);
   }
 
   mAstMgr.reg_udp(udp);
@@ -336,9 +335,7 @@ Parser::new_UdpEntry(
 )
 {
   auto output = mFactory.new_UdpValue(output_loc, output_symbol);
-  auto entry = mFactory.new_UdpEntry(fr,
-				     PtUdpValueArray(mAlloc, mUdpValueList),
-				     output);
+  auto entry = mFactory.new_UdpEntry(fr, mUdpValueList, output);
   mUdpEntryList.push_back(entry);
 }
 
@@ -354,9 +351,7 @@ Parser::new_UdpEntry(
 {
   auto current = mFactory.new_UdpValue(current_loc, current_symbol);
   auto output = mFactory.new_UdpValue(output_loc, output_symbol);
-  auto entry = mFactory.new_UdpEntry(fr,
-				     PtUdpValueArray(mAlloc, mUdpValueList),
-				     current, output);
+  auto entry = mFactory.new_UdpEntry(fr, mUdpValueList, current, output);
   mUdpEntryList.push_back(entry);
 }
 

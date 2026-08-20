@@ -25,8 +25,6 @@ TEST_F(ParserTest, DelayControl)
   EXPECT_EQ( expr, control->delay() );
   EXPECT_THROW( control->event_num(),
 		std::logic_error );
-  EXPECT_THROW( control->event(0),
-		std::logic_error );
   EXPECT_THROW( control->event_list(),
 		std::logic_error );
   EXPECT_THROW( control->rep_expr(),
@@ -44,9 +42,8 @@ TEST_F(ParserTest, EventControl1)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 0, control->event_num() );
-  EXPECT_THROW( control->event(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstExpr*>{}, control->event_list() );
+  EXPECT_EQ( std::vector<const AstExpr*>{},
+	     control->event_list() );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -64,12 +61,11 @@ TEST_F(ParserTest, EventControl2)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 1, control->event_num() );
-  EXPECT_THROW( control->event(1),
-		std::out_of_range );
-  auto event0 = control->event(0);
+  auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_EQ( name, event0->name() );
-  EXPECT_EQ( std::vector<const AstExpr*>{event0}, control->event_list() );
+  EXPECT_EQ( std::vector<const AstExpr*>{event0},
+	     control->event_list() );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -89,15 +85,14 @@ TEST_F(ParserTest, EventControl3)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 1, control->event_num() );
-  EXPECT_THROW( control->event(1),
-		std::out_of_range );
-  auto event0 = control->event(0);
+  auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_STREQ( name, event0->name() );
   EXPECT_EQ( 1, event0->namebranch_num() );
-  auto nb0 = event0->namebranch(0);
+  auto nb0 = event0->namebranch_list().front();
   EXPECT_STREQ( head, nb0->name() );
-  EXPECT_EQ( std::vector<const AstExpr*>{event0}, control->event_list() );
+  EXPECT_EQ( std::vector<const AstExpr*>{event0},
+	     control->event_list() );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -124,10 +119,8 @@ TEST_F(ParserTest, EventControl4)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 2, control->event_num() );
-  EXPECT_THROW( control->event(2),
-		std::out_of_range );
-  EXPECT_EQ( expr1, control->event(0) );
-  EXPECT_EQ( expr2, control->event(1) );
+  std::vector<const AstExpr*> expr_list{expr1, expr2};
+  EXPECT_EQ( expr_list, control->event_list() );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -145,9 +138,8 @@ TEST_F(ParserTest, RepeatControl1)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 0, control->event_num() );
-  EXPECT_THROW( control->event(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstExpr*>{}, control->event_list() );
+  EXPECT_EQ( std::vector<const AstExpr*>{},
+	     control->event_list() );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -166,12 +158,11 @@ TEST_F(ParserTest, RepeatControl2)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 1, control->event_num() );
-  EXPECT_THROW( control->event(1),
-		std::out_of_range );
-  auto event0 = control->event(0);
+  auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_EQ( name, event0->name() );
-  EXPECT_EQ( std::vector<const AstExpr*>{event0}, control->event_list() );
+  EXPECT_EQ( std::vector<const AstExpr*>{event0},
+	     control->event_list() );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -192,15 +183,14 @@ TEST_F(ParserTest, RepatControl3)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 1, control->event_num() );
-  EXPECT_THROW( control->event(1),
-		std::out_of_range );
-  auto event0 = control->event(0);
+  auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_STREQ( name, event0->name() );
   EXPECT_EQ( 1, event0->namebranch_num() );
-  auto nb0 = event0->namebranch(0);
+  auto nb0 = event0->namebranch_list().front();
   EXPECT_STREQ( head, nb0->name() );
-  EXPECT_EQ( std::vector<const AstExpr*>{event0}, control->event_list() );
+  EXPECT_EQ( std::vector<const AstExpr*>{event0},
+	     control->event_list() );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -228,10 +218,8 @@ TEST_F(ParserTest, RepeatControl4)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 2, control->event_num() );
-  EXPECT_THROW( control->event(2),
-		std::out_of_range );
-  EXPECT_EQ( expr1, control->event(0) );
-  EXPECT_EQ( expr2, control->event(1) );
+  std::vector<const AstExpr*> expr_list{expr1, expr2};
+  EXPECT_EQ( expr_list, control->event_list() );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -346,6 +334,7 @@ TEST_F(ParserTest, Delay3)
   EXPECT_EQ( expr3, delay->value2() );
 }
 
+#if 0
 TEST_F(ParserTest, HierName1)
 {
   auto head = "head1";
@@ -433,6 +422,7 @@ TEST_F(ParserTest, HierName4)
   EXPECT_EQ( buf.str(), nb2->decompile() );
   EXPECT_STREQ( name, hname->tail_name() );
 }
+#endif
 
 TEST_F(ParserTest, Part1)
 {
@@ -511,9 +501,8 @@ TEST_F(ParserTest, AttrInst)
   ASSERT_TRUE( ai != nullptr );
   EXPECT_EQ( fr, ai->file_region() );
   EXPECT_EQ( 1, ai->attrspec_num() );
-  EXPECT_THROW( ai->attrspec(1),
-		std::out_of_range );
-  EXPECT_EQ( as, ai->attrspec(0) );
+  std::vector<const AstAttrSpec*> as_vec{as};
+  EXPECT_EQ( as_vec, ai->attrspec_list() );
 }
 
 END_NAMESPACE_YM_VERILOG

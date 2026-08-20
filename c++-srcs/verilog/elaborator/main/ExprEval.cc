@@ -188,9 +188,10 @@ ExprEval::evaluate_opr(
   auto op_size = ast_expr->operand_num();
 
   // オペランドの値の評価を行う．
-  std::vector<VlValue> val(op_size);
-  for ( SizeType i = 0; i < op_size; ++ i ) {
-    val[i] = evaluate_expr(parent, ast_expr->operand(i));
+  std::vector<VlValue> val;
+  val.reserve(op_size);
+  for ( auto ast_expr1: ast_expr->operand_list() ) {
+    val.push_back(evaluate_expr(parent, ast_expr1));
   }
 
   // 結果の型のチェックを行う．
@@ -220,12 +221,16 @@ ExprEval::evaluate_opr(
   case VpiOpType::Concat:
   case VpiOpType::MultiConcat:
     // この演算はビットベクタ型に変換できなければならない．
-    for ( SizeType i = 0; i < op_size; ++ i ) {
+  {
+    SizeType i = 0;
+    for ( auto ast_expr1: ast_expr->operand_list() ) {
       if ( !val[i].is_bitvector_compat() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr->operand(i));
+	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr1);
       }
+      ++ i;
     }
-    break;
+  }
+  break;
 
   case VpiOpType::Plus:
   case VpiOpType::Minus:
@@ -407,7 +412,7 @@ ExprEval::evaluate_primary(
   int index1 = 0;
   int index2 = 0;
   if ( has_bit_select ) {
-    index1 = evaluate_int(parent, ast_expr->index(0));
+    index1 = evaluate_int(parent, ast_expr->index_list().front());
   }
   if ( has_range_select ) {
     auto ast_left = ast_part->left();
@@ -651,11 +656,11 @@ ExprEval::evaluate_funccall(
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
-  std::vector<VlValue> arg_list(n);
-  for ( SizeType i = 0; i < n; ++ i ) {
-    auto ast_expr1 = ast_expr->operand(i);
+  std::vector<VlValue> arg_list;
+  arg_list.reserve(n);
+  for ( auto ast_expr1: ast_expr->operand_list() ) {
     auto val1 = evaluate_expr(parent, ast_expr1);
-    auto io_decl = child_func->io(i);
+    auto io_decl = child_func->io(arg_list.size());
     auto decl = io_decl->decl();
     auto decl_type = decl->value_type();
     if ( decl_type.is_real_type() ) {
@@ -670,7 +675,7 @@ ExprEval::evaluate_funccall(
 	ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr1);
       }
     }
-    arg_list[i] = val1;
+    arg_list.push_back(val1);
   }
 
   // 関数の評価を行う．

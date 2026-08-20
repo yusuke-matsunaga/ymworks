@@ -21,6 +21,69 @@ BEGIN_NAMESPACE_YM_VERILOG
 ///
 /// 個々の型ごとに専用の関数を持つ．
 /// それ以外の型では std::logic_error 例外を送出する．
+/// AstItem は特に種類が多いので注意が必要．
+///
+/// - 共通(AstNamedBase)
+///   * file_region()
+///   * name()
+///   * type()
+///
+/// - cond_expr()
+///   * SpecPath
+///   * GenIf
+///   * GenCase
+///
+/// - body()
+///   * Initial
+///   * Always
+///   * Task
+///   * Func
+///
+/// - strength(), delay()
+///   * ContAssign
+///   * GateInst
+///
+/// - defparam_list()
+///   * DefParam
+///
+/// - contassign_list()
+///   * ContAssign
+///
+/// - prim_type()
+///   * GateInst
+///
+/// - paramassign_lsit()
+///   * MuInst
+
+/// - inst_list()
+///   * GateInst
+///   * MuInst
+///
+/// - declhead_list(), item_list()
+///   * Task
+///   * Func
+///   * Generate/GenBlock
+///   * GenFor
+///
+/// - automatic(), ioitem_num(), iohead_list()
+///   * Task
+///   * Func
+///
+/// - is_signed(), range(), data_type()
+///   * Func
+///
+/// - specitem_type(), terminal_list()
+///   * SpecItem
+///
+/// - specpath_type(), path_decl()
+///   * SpecPath
+///
+/// - then_declhead_list(), then_item_list(),
+///   else_declhead_list(), else_item_list()
+///   * GenIf
+///
+/// - loop_var(), init_expr(), next_expr()
+///   * GenFor
 //////////////////////////////////////////////////////////////////////
 class AstItem :
   public AstNamedBase
@@ -61,14 +124,20 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // GateInst 型の関数
+  // 様々な型で用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief プリミティブタイプの取得
-  /// @return プリミティブタイプ
+  /// @brief 条件式の取得
+  /// @return 条件式
   virtual
-  VpiPrimType
-  prim_type() const = 0;
+  const AstExpr*
+  cond_expr() const = 0;
+
+  /// @brief 本体のステートメントの取得
+  /// @return 本体のステートメント
+  virtual
+  const AstStmt*
+  body() const = 0;
 
   /// @brief strength の取得
   /// @return 信号強度
@@ -88,32 +157,22 @@ public:
   // DefParam 型の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief パラメータ割り当て数の取得
+  /// @brief パラメータ割り当ての要素数の取得
   virtual
   SizeType
   paramassign_num() const = 0;
 
   /// @brief パラメータ割り当ての取得
-  ///
-  /// - pos >= paramassign_num() の時 std::logic_error 例外を送出する．
   virtual
   const AstConnection*
   paramassign(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < paramassign_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < paramassign_num() )
   ) const = 0;
 
   /// @brief パラメータ割り当てのリストの取得
-  std::vector<const AstConnection*>
-  paramassign_list() const
-  {
-    auto n = paramassign_num();
-    std::vector<const AstConnection*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(paramassign(i));
-    }
-    return vec;
-  }
+  virtual
+  AstConnectionVec
+  paramassign_list() const = 0;
 
   /// @brief defparam の要素数の取得
   virtual
@@ -121,26 +180,16 @@ public:
   defparam_num() const = 0;
 
   /// @brief defparam の取得
-  ///
-  /// - pos >= defparam_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstDefParam*
   defparam(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < defparam_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < defparam_num() )
   ) const = 0;
 
   /// @brief defparam リストの取得
-  std::vector<const AstDefParam*>
-  defparam_list() const
-  {
-    auto n = defparam_num();
-    std::vector<const AstDefParam*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(defparam(i));
-    }
-    return vec;
-  }
+  virtual
+  AstDefParamVec
+  defparam_list() const = 0;
 
 
 public:
@@ -154,31 +203,33 @@ public:
   contassign_num() const = 0;
 
   /// @brief continuous assign の取得
-  ///
-  /// - pos >= contassign_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstContAssign*
   contassign(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < contassign_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < contassign_num() )
   ) const = 0;
 
   /// @brief continuous assign リストの取得
-  std::vector<const AstContAssign*>
-  contassign_list() const
-  {
-    auto n = contassign_num();
-    std::vector<const AstContAssign*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(contassign(i));
-    }
-    return vec;
-  }
+  virtual
+  AstContAssignVec
+  contassign_list() const = 0;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // MuInst の関数
+  // GateInst 型の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief プリミティブタイプの取得
+  /// @return プリミティブタイプ
+  virtual
+  VpiPrimType
+  prim_type() const = 0;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // GateInst/MuInst の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief module/UDP/gate instance の要素数の取得
@@ -186,27 +237,58 @@ public:
   SizeType
   inst_num() const = 0;
 
-  /// @brief module/UDP/gate instance の取得
-  ///
-  /// - pos >= inst_num() の時 std::out_of_range 例外を送出する．
+  /// @brief module/UDP/gate instance リストの取得
   virtual
   const AstInst*
   inst(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < inst_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < inst_num() )
   ) const = 0;
 
   /// @brief module/UDP/gate instance リストの取得
-  std::vector<const AstInst*>
-  inst_list() const
-  {
-    auto n = inst_num();
-    std::vector<const AstInst*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(inst(i));
-    }
-    return vec;
-  }
+  virtual
+  AstInstVec
+  inst_list() const = 0;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 内部に要素を持つタイプの関数
+  // Task/Function/Generate系
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 宣言ヘッダの要素数の取得
+  virtual
+  SizeType
+  declhead_num() const = 0;
+
+  /// @brief 宣言ヘッダの取得
+  virtual
+  const AstDeclHead*
+  declhead(
+    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
+  ) const = 0;
+
+  /// @brief 宣言ヘッダリストの取得
+  virtual
+  AstDeclHeadVec
+  declhead_list() const = 0;
+
+  /// @brief item リストの要素数の取得
+  virtual
+  SizeType
+  item_num() const = 0;
+
+  /// @brief item の取得
+  virtual
+  const AstItem*
+  item(
+    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
+  ) const = 0;
+
+  /// @brief item リストの取得
+  virtual
+  AstItemVec
+  item_list() const = 0;
 
 
 public:
@@ -232,91 +314,21 @@ public:
   iohead_num() const = 0;
 
   /// @brief IO宣言ヘッダの取得
-  ///
-  /// - pos >= iohead_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstIOHead*
   iohead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < iohead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
   ) const = 0;
 
   /// @brief IO宣言ヘッダリストの取得
-  std::vector<const AstIOHead*>
-  iohead_list() const
-  {
-    auto n = iohead_num();
-    std::vector<const AstIOHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(iohead(i));
-    }
-    return vec;
-  }
-
-  /// @brief 宣言ヘッダの要素数の取得
   virtual
-  SizeType
-  declhead_num() const = 0;
-
-  /// @brief 宣言ヘッダの取得
-  ///
-  /// - pos >= declhead_num() の時 std::out_of_range 例外を送出する．
-  virtual
-  const AstDeclHead*
-  declhead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < declhead_num() )
-  ) const = 0;
-
-  /// @brief 宣言ヘッダリストの取得
-  std::vector<const AstDeclHead*>
-  declhead_list() const
-  {
-    auto n = declhead_num();
-    std::vector<const AstDeclHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(declhead(i));
-    }
-    return vec;
-  }
-
-  /// @brief item リストの要素数の取得
-  virtual
-  SizeType
-  item_num() const = 0;
-
-  /// @brief item の取得
-  ///
-  /// - pos >= item_num() の時 std::out_of_range 例外を送出する．
-  virtual
-  const AstItem*
-  item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
-  ) const = 0;
-
-  /// @brief item リストの取得
-  std::vector<const AstItem*>
-  item_list() const
-  {
-    auto n = item_num();
-    std::vector<const AstItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(item(i));
-    }
-    return vec;
-  }
-
-  /// @brief 本体のステートメントの取得
-  /// @return 本体のステートメント
-  virtual
-  const AstStmt*
-  body() const = 0;
+  AstIOHeadVec
+  iohead_list() const = 0;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // Func の関数
+  // Function の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 符号の取得
@@ -366,11 +378,22 @@ public:
   VpiSpecItemType
   specitem_type() const = 0;
 
-  /// @brief specify block path の種類の取得
-  /// @return specify block path の種類
+  /// @brief ターミナルの要素数の取得
   virtual
-  VpiSpecPathType
-  specpath_type() const = 0;
+  SizeType
+  terminal_num() const = 0;
+
+  /// @brief ターミナルの取得
+  virtual
+  const AstExpr*
+  terminal(
+    SizeType index ///< [in] インデックス ( 0 <= index < terminal_num() )
+  ) const = 0;
+
+  /// @brief ターミナルリストの取得
+  virtual
+  AstExprVec
+  terminal_list() const = 0;
 
 
 public:
@@ -378,32 +401,11 @@ public:
   // SpecPath の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief ターミナルの要素数の取得
+  /// @brief specify block path の種類の取得
+  /// @return specify block path の種類
   virtual
-  SizeType
-  terminal_num() const = 0;
-
-  /// @brief ターミナルの取得
-  ///
-  /// - pos >= terminal_num() の時 std::out_of_range 例外を送出する．
-  virtual
-  const AstExpr*
-  terminal(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < terminal_num() )
-  ) const = 0;
-
-  /// @brief ターミナルリストの取得
-  std::vector<const AstExpr*>
-  terminal_list() const
-  {
-    auto n = terminal_num();
-    std::vector<const AstExpr*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(terminal(i));
-    }
-    return vec;
-  }
+  VpiSpecPathType
+  specpath_type() const = 0;
 
   /// @brief パス記述の取得
   /// @return パス記述
@@ -411,125 +413,79 @@ public:
   const AstPathDecl*
   path_decl() const = 0;
 
-  /// @brief 条件式の取得
-  /// @return 条件式
-  virtual
-  const AstExpr*
-  expr() const = 0;
-
 
 public:
   //////////////////////////////////////////////////////////////////////
   // GenIf の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 条件が成り立ったときに生成される宣言ヘッダ配列の要素数の取得
+  /// @brief 条件が成り立ったときに生成される宣言ヘッダの要素数の取得
   virtual
   SizeType
   then_declhead_num() const = 0;
 
-  /// @brief 条件が成り立ったときに生成される宣言ヘッダの取得
-  ///
-  /// - pos >= then_declhead_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 条件が成り立った時に生成される宣言ヘッダの取得
   virtual
   const AstDeclHead*
   then_declhead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < then_declhead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < then_declhead_num() )
   ) const = 0;
 
   /// @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-  std::vector<const AstDeclHead*>
-  then_declhead_list() const
-  {
-    auto n = then_declhead_num();
-    std::vector<const AstDeclHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(then_declhead(i));
-    }
-    return vec;
-  }
+  virtual
+  AstDeclHeadVec
+  then_declhead_list() const = 0;
 
-  /// @brief 条件が成り立ったときに生成される item 配列の要素数の取得
+  /// @brief 条件が成り立ったときに生成される要素数の取得
   virtual
   SizeType
   then_item_num() const = 0;
 
-  /// @brief 条件が成り立ったときに生成される item の取得
-  ///
-  /// - pos >= then_item_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 条件が成り立った時に生成される要素の取得
   virtual
   const AstItem*
   then_item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < then_item_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < then_item_num() )
   ) const = 0;
 
-  /// @brief 条件が成り立った時に生成されるitemリストの取得
-  std::vector<const AstItem*>
-  then_item_list() const
-  {
-    auto n = then_item_num();
-    std::vector<const AstItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(then_item(i));
-    }
-    return vec;
-  }
+  /// @brief 条件が成り立った時に生成される要素リストの取得
+  virtual
+  AstItemVec
+  then_item_list() const = 0;
 
   /// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
   virtual
   SizeType
   else_declhead_num() const = 0;
 
-  /// @brief 条件が成り立たなかったときに生成される宣言ヘッダの取得
-  ///
-  /// - pos >= else_declhead_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
   virtual
   const AstDeclHead*
   else_declhead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < else_declhead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < else_declhead_num() )
   ) const = 0;
 
   /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-  std::vector<const AstDeclHead*>
-  else_declhead_list() const
-  {
-    auto n = else_declhead_num();
-    std::vector<const AstDeclHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(else_declhead(i));
-    }
-    return vec;
-  }
+  virtual
+  AstDeclHeadVec
+  else_declhead_list() const = 0;
 
-  /// @brief 条件が成り立たなかったときに生成される item 配列の要素数の取得
+  /// @brief 条件が成り立たなかったときに生成される要素数の取得
   virtual
   SizeType
   else_item_num() const = 0;
 
-  /// @brief 条件が成り立たなかったときに生成される item の取得
-  ///
-  /// - pos >= else_item_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 条件が成り立たなかった時に生成される要素の取得
   virtual
   const AstItem*
   else_item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < else_item_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < else_item_num() )
   ) const = 0;
 
   /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
-  std::vector<const AstItem*>
-  else_item_list() const
-  {
-    auto n = then_item_num();
-    std::vector<const AstItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(else_item(i));
-    }
-    return vec;
-  }
+  virtual
+  AstItemVec
+  else_item_list() const = 0;
 
 
 public:
@@ -543,26 +499,16 @@ public:
   caseitem_num() const = 0;
 
   /// @brief case item の取得
-  ///
-  /// - pose >= caseitem_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstGenCaseItem*
   caseitem(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < caseitem_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < caseitem_num() )
   ) const = 0;
 
   /// @brief case item リストの取得
-  std::vector<const AstGenCaseItem*>
-  caseitem_list() const
-  {
-    auto n = caseitem_num();
-    std::vector<const AstGenCaseItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(caseitem(i));
-    }
-    return vec;
-  }
+  virtual
+  AstGenCaseItemVec
+  caseitem_list() const = 0;
 
 
 public:
@@ -696,27 +642,17 @@ public:
   SizeType
   port_num() const = 0;
 
-  /// @brief ポートの取得
-  ///
-  /// - pos >= port_num() の時 std::out_of_range 例外を送出する．
+  /// @brief ポート接続の取得
   virtual
   const AstConnection*
   port(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < port_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
   ) const = 0;
 
   /// @brief ポートリストの取得
-  std::vector<const AstConnection*>
-  port_list() const
-  {
-    auto n = port_num();
-    std::vector<const AstConnection*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(port(i));
-    }
-    return vec;
-  }
+  virtual
+  AstConnectionVec
+  port_list() const = 0;
 
 };
 
@@ -741,26 +677,16 @@ public:
   label_num() const = 0;
 
   /// @brief ラベルの取得
-  ///
-  /// - pos >= label_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstExpr*
   label(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < label_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < label_num() )
   ) const = 0;
 
   /// @brief ラベルリストの取得
-  std::vector<const AstExpr*>
-  label_list() const
-  {
-    auto n = label_num();
-    std::vector<const AstExpr*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(label(i));
-    }
-    return vec;
-  }
+  virtual
+  AstExprVec
+  label_list() const = 0;
 
   /// @brief 宣言の要素数の取得
   virtual
@@ -768,26 +694,16 @@ public:
   declhead_num() const = 0;
 
   /// @brief 宣言の取得
-  ///
-  /// - pos >= declhead_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstDeclHead*
   declhead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < declhead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
   ) const = 0;
 
   /// @brief 宣言リストの取得
-  std::vector<const AstDeclHead*>
-  declhead_list() const
-  {
-    auto n = declhead_num();
-    std::vector<const AstDeclHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(declhead(i));
-    }
-    return vec;
-  }
+  virtual
+  AstDeclHeadVec
+  declhead_list() const = 0;
 
   /// @brief item の要素数の取得
   virtual
@@ -795,26 +711,16 @@ public:
   item_num() const = 0;
 
   /// @brief item の取得
-  ///
-  /// - pos >= item_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstItem*
   item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
   ) const = 0;
 
   /// @brief item リストの取得
-  std::vector<const AstItem*>
-  item_list() const
-  {
-    auto n = item_num();
-    std::vector<const AstItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(item(i));
-    }
-    return vec;
-  }
+  virtual
+  AstItemVec
+  item_list() const = 0;
 
 };
 
@@ -834,7 +740,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief edge_descriptor の取得
-  /// @return edge_descriptor\n
+  /// @return edge_descriptor
+  ///
   /// 0の場合もある．
   virtual
   int
@@ -846,26 +753,16 @@ public:
   input_num() const = 0;
 
   /// @brief 入力の取得
-  ///
-  /// - pos >= input_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstExpr*
   input(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < input_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < input_num() )
   ) const = 0;
 
   /// @brief 入力のリストの取得
-  std::vector<const AstExpr*>
-  input_list() const
-  {
-    auto n = input_num();
-    std::vector<const AstExpr*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(input(i));
-    }
-    return vec;
-  }
+  virtual
+  AstExprVec
+  input_list() const = 0;
 
   /// @brief 入力の極性の取得
   /// @return 入力の極性\n
@@ -886,26 +783,16 @@ public:
   output_num() const = 0;
 
   /// @brief 出力の取得
-  ///
-  /// - pos >= output_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstExpr*
   output(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < output_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < output_num() )
   ) const = 0;
 
   /// @brief 出力リストの取得
-  std::vector<const AstExpr*>
-  output_list() const
-  {
-    auto n = output_num();
-    std::vector<const AstExpr*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(output(i));
-    }
-    return vec;
-  }
+  virtual
+  AstExprVec
+  output_list() const = 0;
 
   /// @brief 出力の極性の取得
   /// @return 出力の極性\n

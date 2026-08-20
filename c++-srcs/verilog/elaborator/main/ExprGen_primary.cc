@@ -120,7 +120,7 @@ ExprGen::instantiate_primary(
       }
     }
     else if ( isize == 1 ) {
-      auto ast_expr1 = ast_expr->index(0);
+      auto ast_expr1 = ast_expr->index_list().front();
       auto index = evaluate_int(parent, ast_expr1);
       auto scope = handle->array_elem(index);
       if ( scope ) {
@@ -178,7 +178,8 @@ ExprGen::instantiate_primary(
 
   if ( has_bit_select ) {
     // ビット指定付きの場合
-    auto ast_expr1 = ast_expr->index(isize - 1);
+    auto index_vec = ast_expr->index_list();
+    auto ast_expr1 = index_vec[isize - 1];
     bool is_const;
     int index_val = evaluate_int_if_const(parent, ast_expr1, is_const);
     if ( is_const ) {
@@ -427,7 +428,7 @@ ExprGen::instantiate_genvar(
 
   auto has_bit_select = (isize == 1);
   if ( has_bit_select ) {
-    auto index1 = evaluate_int(parent, ast_expr->index(0));
+    auto index1 = evaluate_int(parent, ast_expr->index_list().front());
     val >>= index1;
     val &= 1;
   }
@@ -497,9 +498,10 @@ ExprGen::instantiate_primary_sub(
       SizeType offset = 0;
       SizeType mlt = 1;
       auto const_index = true;
+      auto ast_index_list = ast_expr->index_list();
       for ( SizeType i = 0; i < dsize; ++ i ) {
 	auto j = dsize - i - 1;
-	auto ast_expr1 = ast_expr->index(j);
+	auto ast_expr1 = ast_index_list[j];
 	bool is_const;
 	auto index_val = evaluate_int_if_const(parent, ast_expr1, is_const);
 	if ( is_const ) {
@@ -518,7 +520,7 @@ ExprGen::instantiate_primary_sub(
 	std::vector<ElbExpr*> index_list;
 	index_list.reserve(dsize);
 	for ( SizeType i = 0; i < dsize; ++ i ) {
-	  auto ast_expr1 = ast_expr->index(i);
+	  auto ast_expr1 = ast_index_list[i];
 	  auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	  index_list.push_back(expr1);
 	}

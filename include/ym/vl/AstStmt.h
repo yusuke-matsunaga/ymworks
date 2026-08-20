@@ -85,28 +85,19 @@ public:
 
   /// @brief 引数の取得
   ///
-  /// - pos >= arg_num() の時 std::out_of_range 例外を送出する．
   /// - type() != Enable の時 std::logic_error 例外を送出する．
   virtual
   const AstExpr*
   arg(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < arg_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < arg_num() )
   ) const = 0;
 
   /// @brief 引数のリストの取得
   ///
   /// - type() != Enable の時 std::logic_error 例外を送出する．
-  std::vector<const AstExpr*>
-  arg_list() const
-  {
-    auto n = arg_num();
-    std::vector<const AstExpr*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(arg(i));
-    }
-    return vec;
-  }
+  virtual
+  AstExprVec
+  arg_list() const = 0;
 
   /// @brief コントロールの取得
   /// @return ディレイ/イベントコントロール
@@ -176,28 +167,19 @@ public:
 
   /// @brief case item の取得
   ///
-  /// - pos >= caseitem_num() の時 std::out_of_range 例外を送出する．
   /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
   virtual
   const AstCaseItem*
   caseitem(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < caseitem_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < caseitem_num() )
   ) const = 0;
 
   /// @brief case item のリストの取得
   ///
   /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  std::vector<const AstCaseItem*>
-  caseitem_list() const
-  {
-    auto n = caseitem_num();
-    std::vector<const AstCaseItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(caseitem(i));
-    }
-    return vec;
-  }
+  virtual
+  AstCaseItemVec
+  caseitem_list() const = 0;
 
   /// @brief 初期化代入文の取得
   /// @return 初期化代入文
@@ -224,30 +206,21 @@ public:
 
   /// @brief 宣言ヘッダの取得
   ///
-  /// - pos >= declhead_num() の時 std::out_of_range 例外を送出する．
   /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
   virtual
   const AstDeclHead*
   declhead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < declhead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
   ) const = 0;
 
   /// @brief 宣言ヘッダのリストの取得
   ///
   /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  std::vector<const AstDeclHead*>
-  declhead_list() const
-  {
-    auto n = declhead_num();
-    std::vector<const AstDeclHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(declhead(i));
-    }
-    return vec;
-  }
+  virtual
+  AstDeclHeadVec
+  declhead_list() const = 0;
 
-  /// @brief 子供のステートメント配列の要素数の取得
+  /// @brief 子供のステートメントリストの要素数の取得
   ///
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
@@ -256,32 +229,22 @@ public:
   stmt_num() const = 0;
 
   /// @brief 子供のステートメントの取得
-  /// @note kParBlock/kSeqBlock で意味のある関数
   ///
-  /// - pos >= stmt_num() の時 std::out_of_range 例外を送出する．
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
   virtual
   const AstStmt*
   stmt(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < stmt_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < stmt_num() )
   ) const = 0;
 
   /// @brief 子供のステートメントのリストの取得
   ///
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
-  std::vector<const AstStmt*>
-  stmt_list() const
-  {
-    auto n = stmt_num();
-    std::vector<const AstStmt*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(stmt(i));
-    }
-    return vec;
-  }
+  virtual
+  AstStmtVec
+  stmt_list() const = 0;
 
 };
 
@@ -306,26 +269,16 @@ public:
   label_num() const = 0;
 
   /// @brief ラベルの取得
-  ///
-  /// - pos >= label_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstExpr*
   label(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < label_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < label_num() )
   ) const = 0;
 
   /// @brief ラベルリストの取得
-  std::vector<const AstExpr*>
-  label_list() const
-  {
-    auto n = label_num();
-    std::vector<const AstExpr*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(label(i));
-    }
-    return vec;
-  }
+  virtual
+  AstExprVec
+  label_list() const = 0;
 
   /// @brief 本体のステートメントの取得
   /// @return 本体のステートメント

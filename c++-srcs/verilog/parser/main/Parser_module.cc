@@ -22,32 +22,6 @@ BEGIN_NAMESPACE_YM_VERILOG
 // Module 関係
 //////////////////////////////////////////////////////////////////////
 
-// @brief モジュール定義の開始
-void
-Parser::init_module()
-{
-
-  mCurIOHeadList = &mModuleIOHeadList;
-  push_declhead_list();
-  push_item_list();
-
-  mPortList.clear();
-  mParamPortHeadList.clear();
-  mCurIOHeadList->clear();
-  mIOItemList.clear();
-  cur_declhead_list().clear();
-  mDeclItemList.clear();
-  cur_item_list().clear();
-}
-
-// @brief モジュール定義の終了
-void
-Parser::end_module()
-{
-  mCurDeclArray = pop_declhead_list();
-  mCurItemArray = pop_item_list();
-}
-
 // Verilog1995 タイプのモジュールを生成する．
 void
 Parser::new_Module1995(
@@ -90,10 +64,9 @@ Parser::new_Module1995(
       // 1つでも名前を持たないポートがあったら名前での結合はできない．
       named_port = false;
     }
-    SizeType n = port->portref_size();
-    for ( int i = 0; i < n; ++ i ) {
-      auto portref = port->portref_elem(i);
-      auto name = portref->name();
+    for ( SizeType index = 0; index < port->portref_size(); ++ index ) {
+      auto expr = port->portref(index);
+      auto name = expr->name();
       if ( iodecl_dirs.count(name) == 0 ) {
 	// name は IOH リストに存在しない．
 	std::ostringstream buf;
@@ -106,7 +79,7 @@ Parser::new_Module1995(
       }
       else {
 	auto dir = iodecl_dirs.at(name);
-	port->set_portref_dir(i, dir);
+	port->set_portref_dir(index, dir);
       }
     }
   }
@@ -122,11 +95,11 @@ Parser::new_Module1995(
 				    named_port,
 				    portfaults, suppress_faults,
 				    config, library, cell,
-				    PtDeclHeadArray(mAlloc, mParamPortHeadList, true),
-				    PtPortArray(mAlloc, mPortList, true),
-				    PtIOHeadArray(mAlloc, mModuleIOHeadList, true),
-				    PtDeclHeadArray(mAlloc, mCurDeclArray, true),
-				    PtItemArray(mAlloc, mCurItemArray, true));
+				    mParamPortHeadList,
+				    mPortList,
+				    mModuleIOHeadList,
+				    mCurDeclList,
+				    mCurItemList);
   mAstMgr.reg_module(module);
   reg_attrinst(module, ai_list, true);
 }
@@ -176,11 +149,11 @@ Parser::new_Module2001(
 				    true,
 				    portfaults, suppress_faults,
 				    config, library, cell,
-				    PtDeclHeadArray(mAlloc, mParamPortHeadList, true),
-				    PtPortArray(mAlloc, port_array, true),
-				    PtIOHeadArray(mAlloc, mModuleIOHeadList, true),
-				    PtDeclHeadArray(mAlloc, mCurDeclArray, true),
-				    PtItemArray(mAlloc, mCurItemArray, true));
+				    mParamPortHeadList,
+				    port_array,
+				    mModuleIOHeadList,
+				    mCurDeclList,
+				    mCurItemList);
   mAstMgr.reg_module(module);
   reg_attrinst(module, ai_list, true);
 }
@@ -197,10 +170,9 @@ Parser::check_IO(
   // に登録する．
   std::unordered_set<std::string> portref_dic;
   for ( auto port: port_array ) {
-    SizeType n = port->portref_size();
-    for ( int i = 0; i < n; ++ i ) {
-      auto portref = port->portref_elem(i);
-      auto name = portref->name();
+    for ( SizeType i = 0; i < port->portref_size(); ++ i ) {
+      auto expr = port->portref(i);
+      auto name = expr->name();
       portref_dic.insert(name);
     }
   }

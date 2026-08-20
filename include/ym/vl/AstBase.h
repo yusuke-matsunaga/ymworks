@@ -26,65 +26,69 @@ class AstHierNamedBase;
 // in AstUdp.h
 class AstUdp;
 class AstUdpEntry;
-//using AstUdpEntryList = std::vector<const AstUdpEntry*>;
 class AstUdpValue;
-//using AsgUdpValueList = std::vector<const AstUdpValue*>;
 
 // in AstModule.h
 class AstModule;
 
 // in AstPort.h
 class AstPort;
-//using AstPortList = std::vector<const AstPort*>;
 
 // in AstDecl.h
 class AstIOHead;
-//using AstIOHeadList = std::vector<const AstIOHead*>;
-
 class AstIOItem;
-
 class AstDeclHead;
-//using AstDeclHeadList = std::vector<const AstDeclHead*>;
-
 class AstDeclItem;
 class AstRange;
-//using AstRangeList = std::vector<const AstRange*>;
 class AstPart;
 
 // in AstItem.h
 class AstItem;
-//using AstItemList = std::vector<const AstItem*>;
 class AstDefParam;
-//using AstDefparamList = std::vector<const AstDefparam*>;
 class AstContAssign;
-//using AstContAssignList = std::vector<const AstContAssign*>;
 class AstInst;
-//using AstInstList = std::vector<const AstInst*>;
 class AstGenCaseItem;
-//using AstGenCaseItemList = std::vector<const AstGenCaseItem*>;
 class AstPathDecl;
 class AstPathDelay;
 
 // in AstStmt.h
 class AstStmt;
-//using AstStmtList = std::vector<const AstStmt*>;
 class AstCaseItem;
-//using AstCaseItemList = std::vector<const AstCaseItem*>;
 
 // in AstExpr.h
 class AstExpr;
-//using AstExprList = std::vector<const AstExpr*>;
 
 // in AstMisc.h
 class AstStrength;
 class AstDelay;
 class AstControl;
 class AstConnection;
-//using AstConnectionList = std::vector<const AstConnection*>;
 class AstNameBranch;
-//using AstNameBranchList = std::vector<const AstNameBranch*>;
 class AstAttrInst;
 class AstAttrSpec;
+
+using AstAttrInstVec    = std::vector<const AstAttrInst*>;
+using AstAttrSpecVec    = std::vector<const AstAttrSpec*>;
+using AstCaseItemVec    = std::vector<const AstCaseItem*>;
+using AstConnectionVec  = std::vector<const AstConnection*>;
+using AstContAssignVec  = std::vector<const AstContAssign*>;
+using AstDeclHeadVec    = std::vector<const AstDeclHead*>;
+using AstDeclItemVec    = std::vector<const AstDeclItem*>;
+using AstDefParamVec    = std::vector<const AstDefParam*>;
+using AstExprVec        = std::vector<const AstExpr*>;
+using AstGenCaseItemVec = std::vector<const AstGenCaseItem*>;
+using AstInstVec        = std::vector<const AstInst*>;
+using AstIOHeadVec      = std::vector<const AstIOHead*>;
+using AstIOItemVec      = std::vector<const AstIOItem*>;
+using AstItemVec        = std::vector<const AstItem*>;
+using AstModuleVec      = std::vector<const AstModule*>;
+using AstNameBranchVec  = std::vector<const AstNameBranch*>;
+using AstPortVec        = std::vector<const AstPort*>;
+using AstRangeVec       = std::vector<const AstRange*>;
+using AstStmtVec        = std::vector<const AstStmt*>;
+using AstUdpVec         = std::vector<const AstUdp*>;
+using AstUdpEntryVec    = std::vector<const AstUdpEntry*>;
+using AstUdpValueVec    = std::vector<const AstUdpValue*>;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -158,32 +162,21 @@ public:
   SizeType
   namebranch_num() const = 0;
 
-  /// @brief 階層ブランチの取得
-  ///
-  /// - pos >= namebranch_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 階層ブランチを返す．
   virtual
   const AstNameBranch*
   namebranch(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < namebranch_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
   ) const = 0;
+
+  /// @brief 階層ブランチのリストを返す．
+  virtual
+  AstNameBranchVec
+  namebranch_list() const = 0;
 
   /// @brief 階層名を展開する．
   std::string
   decompile_name() const;
-
-  /// @brief 階層ブランチのリストを返す．
-  std::vector<const AstNameBranch*>
-  namebranch_list() const
-  {
-    auto n = namebranch_num();
-    std::vector<const AstNameBranch*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      auto nb = namebranch(i);
-      vec.push_back(nb);
-    }
-    return vec;
-  }
 
 };
 

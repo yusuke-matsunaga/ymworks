@@ -69,7 +69,7 @@ public:
   /// @return AstAttrInst のリスト
   ///
   /// 空の場合もある．
-  std::vector<const AstAttrInst*>
+  AstAttrInstVec
   find_attr_list(
     const AstBase* ast_obj ///< [in] 対象の構文木の要素
   ) const;

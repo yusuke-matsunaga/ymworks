@@ -70,30 +70,21 @@ public:
   SizeType
   event_num() const = 0;
 
-  /// @brief イベントリストの要素の取得
+  /// @brief イベントの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
-  /// - pos >= event_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstExpr*
   event(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < event_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < event_num() )
   ) const = 0;
 
   /// @brief イベントリストの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
-  std::vector<const AstExpr*>
-  event_list() const
-  {
-    auto n = event_num();
-    std::vector<const AstExpr*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(event(i));
-    }
-    return vec;
-  }
+  virtual
+  AstExprVec
+  event_list() const = 0;
 
 
 public:
@@ -316,26 +307,16 @@ public:
   attrspec_num() const = 0;
 
   /// @brief 要素の取得
-  ///
-  /// - pos >= attrspec_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstAttrSpec*
   attrspec(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < attrspec_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < attrspec_num() )
   ) const = 0;
 
   /// @brief 要素のリストの取得
-  std::vector<const AstAttrSpec*>
-  attrspec_list() const
-  {
-    auto n = attrspec_num();
-    std::vector<const AstAttrSpec*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(attrspec(i));
-    }
-    return vec;
-  }
+  virtual
+  AstAttrSpecVec
+  attrspec_list() const = 0;
 
 };
 

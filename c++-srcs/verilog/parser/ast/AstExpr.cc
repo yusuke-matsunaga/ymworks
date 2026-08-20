@@ -141,7 +141,7 @@ decompile_opr(
   switch ( optype ) {
     // 空
   case VpiOpType::Null:
-    ans += decompile_impl(expr->operand(0), 0);
+    ans += decompile_impl(expr->operand0(), 0);
     break;
 
     // 単項演算子
@@ -157,7 +157,8 @@ decompile_opr(
   case VpiOpType::UnaryXor:
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
-    ans += sym_table[static_cast<int>(optype)] + decompile_impl(expr->operand(0), pri);
+    ans += sym_table[static_cast<int>(optype)] +
+      decompile_impl(expr->operand0(), pri);
     break;
 
     // 二項演算子
@@ -185,31 +186,30 @@ decompile_opr(
   case VpiOpType::Power:
   case VpiOpType::RShift:
   case VpiOpType::Sub:
-    ans += decompile_impl(expr->operand(0), pri) +
+    ans += decompile_impl(expr->operand0(), pri) +
       sym_table[static_cast<int>(optype)] +
-      decompile_impl(expr->operand(1), pri);
+      decompile_impl(expr->operand1(), pri);
     break;
 
     // 三項演算子
   case VpiOpType::Condition:
-    ans += decompile_impl(expr->operand(0), pri) + "?" +
-      decompile_impl(expr->operand(1), pri) + ":" +
-      decompile_impl(expr->operand(2), pri);
+    ans += decompile_impl(expr->operand0(), pri) + "?" +
+      decompile_impl(expr->operand1(), pri) + ":" +
+      decompile_impl(expr->operand2(), pri);
     break;
 
   case VpiOpType::MinTypMax:
-    ans += decompile_impl(expr->operand(0), pri) + ":" +
-      decompile_impl(expr->operand(1), pri) + ":" +
-      decompile_impl(expr->operand(2), pri);
+    ans += decompile_impl(expr->operand0(), pri) + ":" +
+      decompile_impl(expr->operand1(), pri) + ":" +
+      decompile_impl(expr->operand2(), pri);
     break;
 
   case VpiOpType::Concat:
     {
       ans += "{";
       const char* delim = "";
-      auto n = expr->operand_num();
-      for ( SizeType i = 0; i < n; ++ i) {
-	ans += delim + expr->operand(i)->decompile();
+      for ( auto expr1: expr->operand_list() ) {
+	ans += delim + expr1->decompile();
 	delim = ",";
       }
       ans += "}";
@@ -221,9 +221,8 @@ decompile_opr(
       ans = "{";
       ans += expr->rep()->decompile() + "{";
       const char* delim = "";
-      auto n = expr->operand_num();
-      for ( SizeType i = 0; i < n; ++ i) {
-	ans += delim + expr->operand(i)->decompile();
+      for ( auto expr1: expr->operand_list() ) {
+	ans += delim + expr1->decompile();
 	delim = ",";
       }
       ans += "}}";
@@ -314,10 +313,9 @@ decompile_impl(
     {
       auto ans = expr->decompile_name();
       ans += "(";
-      auto n = expr->operand_num();
       const char* comma = "";
-      for ( SizeType i = 0; i < n; ++ i) {
-	ans += comma + expr->operand(i)->decompile();
+      for ( auto expr1: expr->operand_list() ) {
+	ans += comma + expr1->decompile();
 	comma = ", ";
       }
       ans += ")";
@@ -328,8 +326,8 @@ decompile_impl(
     {
       auto ans = expr->decompile_name();
       auto n = expr->index_num();
-      for ( SizeType i = 0; i < n; ++ i) {
-	ans += "[" + expr->index(i)->decompile() + "]";
+      for ( auto index: expr->index_list() ) {
+	ans += "[" + index->decompile() + "]";
       }
       if ( expr->part() != nullptr ) {
 	auto part = expr->part();

@@ -120,10 +120,10 @@ StmtGen::phase1_stmt(
       else {
 	auto stub = make_stub<StmtGen,
 			      const VlScope*,
-			      const std::vector<const AstDeclHead*>&>(this,
-								&StmtGen::phase2_namedblock,
-								block_scope,
-								ast_stmt->declhead_list());
+			      const AstDeclHeadVec&>(this,
+						     &StmtGen::phase2_namedblock,
+						     block_scope,
+						     ast_stmt->declhead_list());
 	add_phase2stub(stub);
       }
     }
@@ -439,22 +439,18 @@ StmtGen::instantiate_sysenable(
   }
 
   // 引数を生成する．
-  std::vector<ElbExpr*> arg_list(n);
-  for ( SizeType i = 0; i < n; ++ i ) {
-    auto ast_expr = ast_stmt->arg(i);
+  std::vector<ElbExpr*> arg_list;
+  arg_list.reserve(n);
+  for ( auto ast_expr: ast_stmt->arg_list() ) {
     // 空の引数があるのでエラーと区別する．
     ElbExpr* arg = nullptr;
     if ( ast_expr ) {
       arg = instantiate_arg(parent, env, ast_expr);
-      arg_list.push_back(arg);
     }
-    else {
-      arg_list.push_back(nullptr);
-    }
-    if ( !user_systf->check_argument(i, arg) ) {
+    if ( !user_systf->check_argument(arg_list.size(), arg) ) {
       ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr);
     }
-    arg_list[i] = arg;
+    arg_list.push_back(arg);
   }
 
   // system task call ステートメントの生成

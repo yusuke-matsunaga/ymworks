@@ -121,83 +121,54 @@ public:
   paramport_num() const = 0;
 
   /// @brief パラメータポート宣言の取得
-  ///
-  /// - pos >= paramport_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstDeclHead*
   paramport(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < paramport_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < paramport_num() )
   ) const = 0;
 
-  /// @brief パラメータポート宣言のリストを返す．
-  std::vector<const AstDeclHead*>
-  paramport_list() const
-  {
-    auto n = paramport_num();
-    std::vector<const AstDeclHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(paramport(i));
-    }
-    return vec;
-  }
+  /// @brief パラメータポート宣言のリストの取得
+  virtual
+  AstDeclHeadVec
+  paramport_list() const = 0;
 
   /// @brief ポート数を取り出す．
   virtual
   SizeType
   port_num() const = 0;
 
-  /// @brief ポートを取り出す．
-  ///
-  /// - pos >= port_num() の時 std::out_of_range 例外を送出する．
+  /// @brief ポートを返す．
   virtual
   const AstPort*
   port(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < port_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
   ) const = 0;
 
   /// @brief ポートのリストを返す．
-  std::vector<const AstPort*>
-  port_list() const
-  {
-    auto n = port_num();
-    std::vector<const AstPort*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(port(i));
-    }
-    return vec;
-  }
+  virtual
+  AstPortVec
+  port_list() const = 0;
 
   /// @brief 入出力宣言ヘッダ配列の要素数の取得
   virtual
   SizeType
   iohead_num() const = 0;
 
-  /// @brief 入出力宣言の取得
-  ///
-  /// - pos >= iohead_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 入出力宣言のヘッダを返す．
   virtual
   const AstIOHead*
   iohead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < iohead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
   ) const = 0;
 
   /// @brief 入出力宣言のヘッダのリストを返す．
-  std::vector<const AstIOHead*>
-  iohead_list() const
-  {
-    auto n = iohead_num();
-    std::vector<const AstIOHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(iohead(i));
-    }
-    return vec;
-  }
+  virtual
+  AstIOHeadVec
+  iohead_list() const = 0;
 
   /// @brief 入出力宣言の要素数の取得
-  /// @note 個々のヘッダが持つ要素数の総和を計算する．
+  ///
+  /// 個々のヘッダが持つ要素数の総和を計算する．
   virtual
   SizeType
   iodecl_num() const = 0;
@@ -207,54 +178,34 @@ public:
   SizeType
   declhead_num() const = 0;
 
-  /// @brief 宣言ヘッダの取得
-  ///
-  /// - pos >= declhead_num() の時 std::out_of_range 例外を送出する．
+  /// @brief 宣言ヘッダを返す．
   virtual
   const AstDeclHead*
   declhead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < declhead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
   ) const = 0;
 
   /// @brief 宣言ヘッダのリストを返す．
-  std::vector<const AstDeclHead*>
-  declhead_list() const
-  {
-    auto n = declhead_num();
-    std::vector<const AstDeclHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(declhead(i));
-    }
-    return vec;
-  }
+  virtual
+  AstDeclHeadVec
+  declhead_list() const = 0;
 
   /// @brief item 配列の要素数の取得
   virtual
   SizeType
   item_num() const = 0;
 
-  /// @brief item の取得
-  ///
-  /// - pos >= item_num() の時 std::out_of_range 例外を送出する．
+  /// @brief item を返す．
   virtual
   const AstItem*
   item(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < item_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
   ) const = 0;
 
   /// @brief item のリストを返す．
-  std::vector<const AstItem*>
-  item_list() const
-  {
-    auto n = item_num();
-    std::vector<const AstItem*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(item(i));
-    }
-    return vec;
-  }
+  virtual
+  AstItemVec
+  item_list() const = 0;
 
   /// @brief top_module フラグを下ろす
   virtual

@@ -9,8 +9,8 @@
 /// All rights reserved.
 
 #include "parser/PtPort.h"
-#include "ym/FileRegion.h"
 #include "parser/PtArray.h"
+#include "ym/FileRegion.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -52,6 +52,45 @@ public:
   const char*
   ext_name() const override;
 
+  /// @brief 内側のポート結線を表す式の取得
+  const AstExpr*
+  expr() const override;
+
+  /// @brief 内部のポート結線リストのサイズの取得
+  SizeType
+  portref_size() const override;
+
+  /// @brief 内部のポート結線式の取得
+  const AstExpr*
+  portref(
+    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
+  ) const override;
+
+  /// @brief 内部のポート結線のリストの取得
+  ///
+  /// portef_size() <= 1 の時は nullptr を返す．
+  AstExprVec
+  portref_list() const override;
+
+  /// @brief 内部のポート結線の向きの取得
+  VpiDir
+  portref_dir(
+    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
+  ) const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtPort の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 内部のポート結線の向きを設定する．
+  void
+  set_portref_dir(
+    SizeType index,
+    VpiDir dir
+  ) override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -68,67 +107,6 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @brief 内部の式を持たないポート
-//////////////////////////////////////////////////////////////////////
-class CptPort0 :
-  public CptPort
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPort0(
-    const FileRegion& file_region,
-    const char* ext_name
-  ) : CptPort(file_region, ext_name)
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptPort0() {}
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtPort の継承クラスが実装しなければならない仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 内側のポート結線を表す式の取得
-  const AstExpr*
-  expr() const override;
-
-  /// @brief 内部のポート結線リストのサイズの取得
-  SizeType
-  portref_size() const override;
-
-  /// @brief 内部のポート結線リストの取得
-  const AstExpr*
-  portref_elem(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-  ) const override;
-
-  /// @brief 内部ポート結線の方向の取得
-  VpiDir
-  portref_dir(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-  ) const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 設定用の関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief portref の方向を設定する．
-  void
-  set_portref_dir(
-    SizeType pos, ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-    VpiDir dir    ///< [in] 方向
-  ) override;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
 /// @brief port を表すクラス (portref が1つ)
 //////////////////////////////////////////////////////////////////////
 class CptPort1 :
@@ -139,10 +117,10 @@ public:
   /// @brief コンストラクタ
   CptPort1(
     const FileRegion& file_region,
-    const AstExpr* portref,
-    const char* ext_name
+    const char* ext_name,
+    const AstExpr* expr
   ) : CptPort(file_region, ext_name),
-      mPortRef{portref}
+      mExpr{expr}
   {
   }
 
@@ -152,7 +130,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtPort の継承クラスが実装しなければならない仮想関数
+  // AstPort の継承クラスが実装しなければならない仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内側のポート結線を表す式の取得
@@ -163,30 +141,53 @@ public:
   SizeType
   portref_size() const override;
 
-  /// @brief 内部のポート結線リストの取得
+  /// @brief 内部のポート結線の取得
   const AstExpr*
-  portref_elem(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
+  portref(
+    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
   ) const override;
 
-  ///@brief 内部ポート結線の方向の取得
+  /// @brief 内部のポート結線のリストの取得
+  ///
+  /// portef_size() <= 1 の時は nullptr を返す．
+  AstExprVec
+  portref_list() const override;
+
+  /// @brief 内部のポート結線の向きの取得
   VpiDir
   portref_dir(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
   ) const override;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // 設定用の関数
+  // PtPort の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief portref の方向を設定する．
+  /// @brief 内部のポート結線の向きを設定する．
   void
   set_portref_dir(
-    SizeType pos, ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-    VpiDir dir    ///< [in] 方向
+    SizeType index,
+    VpiDir dir
   ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief index をチェックする．
+  void
+  _check_index(
+    SizeType index
+  ) const
+  {
+    if ( index >= 1 ) {
+      throw std::out_of_range{"index is out of range"};
+    }
+  }
 
 
 private:
@@ -194,10 +195,10 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 内部向きの接続を表す式
-  const AstExpr* mPortRef;
+  // 唯一の要素
+  const AstExpr* mExpr;
 
-  // 方向
+  // 向き
   VpiDir mDir;
 
 };
@@ -214,14 +215,14 @@ public:
   /// @brief コンストラクタ
   CptPort2(
     const FileRegion& file_region,
-    const AstExpr* expr,
-    PtExprArray&& portref_array,
     const char* ext_name,
-    void* q // mDirArray 用のメモリ領域
+    const AstExpr* expr,
+    PtExprArray&& portref_list,
+    VpiDir* dir_array
   ) : CptPort(file_region, ext_name),
       mExpr{expr},
-      mPortRefArray{std::move(portref_array)},
-      mDirArray{new (q) VpiDir[mPortRefArray.size()]}
+      mPortRefList{std::move(portref_list)},
+      mDirArray{dir_array}
   {
   }
 
@@ -231,7 +232,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtPort の継承クラスが実装しなければならない仮想関数
+  // AstPort の継承クラスが実装しなければならない仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内側のポート結線を表す式の取得
@@ -242,30 +243,53 @@ public:
   SizeType
   portref_size() const override;
 
-  /// @brief 内部のポート結線リストの取得
+  /// @brief 内部のポート結線の取得
   const AstExpr*
-  portref_elem(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
+  portref(
+    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
   ) const override;
 
-  ///@brief 内部ポート結線の方向の取得
+  /// @brief 内部のポート結線のリストの取得
+  ///
+  /// portef_size() <= 1 の時は nullptr を返す．
+  AstExprVec
+  portref_list() const override;
+
+  /// @brief 内部のポート結線の向きの取得
   VpiDir
   portref_dir(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < portref_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
   ) const override;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // 設定用の関数
+  // PtPort の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief portref の方向を設定する．
+  /// @brief 内部のポート結線の向きを設定する．
   void
   set_portref_dir(
-    SizeType pos, ///< [in] 位置番号 ( 0 <= pos < portref_num() )
-    VpiDir dir    ///< [in] 方向
+    SizeType index,
+    VpiDir dir
   ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief index をチェックする．
+  void
+  _check_index(
+    SizeType index
+  ) const
+  {
+    if ( index >= portref_size() ) {
+      throw std::out_of_range{"index is out of range"};
+    }
+  }
 
 
 private:
@@ -276,10 +300,10 @@ private:
   // 全体を表す式
   const AstExpr* mExpr;
 
-  // ポート参照式の配列
-  PtExprArray mPortRefArray;
+  // ポート参照式のリスト
+  PtExprArray mPortRefList;
 
-  // 方向の配列
+  // 向きの配列
   VpiDir* mDirArray;
 
 };

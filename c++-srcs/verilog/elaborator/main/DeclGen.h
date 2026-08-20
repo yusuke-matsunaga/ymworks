@@ -43,7 +43,7 @@ public:
   void
   phase1_decl(
     const VlScope* parent,  ///< [in] 親のスコープ
-    const std::vector<const AstDeclHead*>& ast_head_array, ///< [in] 宣言ヘッダの配列
+    const std::vector<const AstDeclHead*>& ast_head_list, ///< [in] 宣言ヘッダのリスト
     bool force_to_local  ///< [in] true なら parameter を localparam にする．
   );
 
@@ -54,14 +54,14 @@ public:
   instantiate_iodecl(
     ElbModule* module,      ///< [in] 親のモジュール
     ElbTaskFunc* taskfunc,  ///< [in] 親のタスク/関数
-    const std::vector<const AstIOHead*>& ast_head_array ///< [in] IO宣言ヘッダの配列
+    const std::vector<const AstIOHead*>& ast_head_array ///< [in] IO宣言ヘッダのリスト
   );
 
   /// @brief 宣言要素のリストをインスタンス化する．
   void
   instantiate_decl(
     const VlScope* parent,  ///< [in] 親のスコープ
-    const std::vector<const AstDeclHead*>& ast_head_array ///< [in] 宣言ヘッダの配列
+    const std::vector<const AstDeclHead*>& ast_head_array ///< [in] 宣言ヘッダのリスト
   );
 
 

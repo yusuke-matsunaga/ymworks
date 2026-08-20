@@ -16,22 +16,6 @@ BEGIN_NAMESPACE_YM_VERILOG
 // specify_block の item を表すクラス
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-CptSpecItem::CptSpecItem(
-  const FileRegion& file_region,
-  VpiSpecItemType id,
-  PtExprArray&& terminal_array
-) : mFileRegion{file_region},
-    mId{id},
-    mTerminalArray{std::move(terminal_array)}
-{
-}
-
-// デストラクタ
-CptSpecItem::~CptSpecItem()
-{
-}
-
 // ファイル位置を返す．
 FileRegion
 CptSpecItem::file_region() const
@@ -57,40 +41,29 @@ CptSpecItem::specitem_type() const
 SizeType
 CptSpecItem::terminal_num() const
 {
-  return mTerminalArray.size();
+  return mTerminalList.size();
 }
 
 // @brief ターミナルの取得
 const AstExpr*
 CptSpecItem::terminal(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mTerminalArray[pos];
+  return mTerminalList[index];
+}
+
+// @brief ターミナルリストの取得
+AstExprVec
+CptSpecItem::terminal_list() const
+{
+  return mTerminalList.to_vector();
 }
 
 
 //////////////////////////////////////////////////////////////////////
 // specify_block の path_declaration を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptSpecPath::CptSpecPath(
-  const FileRegion& file_region,
-  VpiSpecPathType id,
-  const AstExpr* expr,
-  const AstPathDecl* path_decl
-) : mFileRegion{file_region},
-    mId{id},
-    mExpr{expr},
-    mPathDecl{path_decl}
-{
-}
-
-// デストラクタ
-CptSpecPath::~CptSpecPath()
-{
-}
 
 // ファイル位置を返す．
 FileRegion
@@ -115,7 +88,7 @@ CptSpecPath::specpath_type() const
 
 // モジュールパスの式を返す．
 const AstExpr*
-CptSpecPath::expr() const
+CptSpecPath::cond_expr() const
 {
   return mExpr;
 }
@@ -131,34 +104,6 @@ CptSpecPath::path_decl() const
 //////////////////////////////////////////////////////////////////////
 // path_decl を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptPathDecl::CptPathDecl(
-  const FileRegion& file_region,
-  int edge,
-  PtExprArray&& input_array,
-  int input_pol,
-  VpiPathType op,
-  PtExprArray&& output_array,
-  int output_pol,
-  const AstExpr* expr,
-  const AstPathDelay* path_delay
-) : mFileRegion{file_region},
-    mEdge{edge},
-    mInputArray{std::move(input_array)},
-    mInputPol{input_pol},
-    mOp{op},
-    mOutputArray{std::move(output_array)},
-    mOutputPol{output_pol},
-    mExpr{expr},
-    mPathDelay{path_delay}
-{
-}
-
-// デストラクタ
-CptPathDecl::~CptPathDecl()
-{
-}
 
 // ファイル位置を返す．
 FileRegion
@@ -178,16 +123,23 @@ CptPathDecl::edge() const
 SizeType
 CptPathDecl::input_num() const
 {
-  return mInputArray.size();
+  return mInputList.size();
 }
 
 // @brief 入力の取得
 const AstExpr*
 CptPathDecl::input(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mInputArray[pos];
+  return mInputList[index];
+}
+
+// @brief 入力のリストの取得
+AstExprVec
+CptPathDecl::input_list() const
+{
+  return mInputList.to_vector();
 }
 
 // 入力の極性を取り出す．
@@ -208,16 +160,23 @@ CptPathDecl::op() const
 SizeType
 CptPathDecl::output_num() const
 {
-  return mOutputArray.size();
+  return mOutputList.size();
 }
 
 // @brief 出力の取得
 const AstExpr*
 CptPathDecl::output(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mOutputArray[pos];
+  return mOutputList[index];
+}
+
+// @brief 出力リストの取得
+AstExprVec
+CptPathDecl::output_list() const
+{
+  return mOutputList.to_vector();
 }
 
 // 出力の極性を取り出す．
@@ -355,12 +314,12 @@ PtItem*
 PtFactory::new_SpecItem(
   const FileRegion& file_region,
   VpiSpecItemType id,
-  PtExprArray&& terminal_array
+  PtExprList* terminal_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecItem));
   return new (p) CptSpecItem(file_region, id,
-			     std::move(terminal_array));
+			     terminal_list->to_array(mAlloc));
 }
 
 // path 仕様を生成する．
@@ -381,10 +340,10 @@ PtPathDecl*
 PtFactory::new_PathDecl(
   const FileRegion& file_region,
   int edge,
-  PtExprArray&& input_array,
+  PtExprList* input_list,
   int input_pol,
   VpiPathType op,
-  PtExprArray&& output_array,
+  PtExprList* output_list,
   int output_pol,
   const AstExpr* expr,
   const AstPathDelay* path_delay
@@ -392,10 +351,10 @@ PtFactory::new_PathDecl(
 {
   void* p = mAlloc.get_memory(sizeof(CptPathDecl));
   return new (p) CptPathDecl(file_region, edge,
-			     std::move(input_array),
+			     input_list->to_array(mAlloc),
 			     input_pol,
 			     op,
-			     std::move(output_array),
+			     output_list->to_array(mAlloc),
 			     output_pol,
 			     expr, path_delay);
 }

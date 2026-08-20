@@ -10,7 +10,7 @@
 
 #include "ym/FileRegion.h"
 #include "ym/vl/Ast.h"
-#include "parser/PtArray.h"
+#include "parser/PtList.h"
 #include "parser/PtFwd.h"
 
 
@@ -44,42 +44,42 @@ public:
   /// @return 生成された UDP
   PtUdp*
   new_CmbUdp(
-    const FileRegion& fr,         ///< [in] ファイル位置情報
-    const char* name,             ///< [in] UDP名
-    PtPortArray&& port_array,     ///< [in] ポート名の配列
-    PtIOHeadArray&& io_array,     ///< [in] IOの配列
-    PtUdpEntryArray&& entry_array ///< [in] テーブルエントリの配列
+    const FileRegion& fr,      ///< [in] ファイル位置情報
+    const char* name,          ///< [in] UDP名
+    const std::vector<PtPort*>& port_list,     ///< [in] ポート名の配列
+    const std::vector<PtIOHead*>& io_list, ///< [in] IOの配列
+    const AstUdpEntryVec& entry_list ///< [in] テーブルエントリの配列
   );
 
   /// @brief sequential UDP の生成
   /// @return 生成された UDP
   PtUdp*
   new_SeqUdp(
-    const FileRegion& fr,         ///< [in] ファイル位置情報
-    const char* name,	          ///< [in] UDP名
-    PtPortArray&& port_array,     ///< [in] ポート名の配列
-    PtIOHeadArray&& io_array,     ///< [in] IOの配列
-    const AstExpr* init_value,    ///< [in] 初期値を表す式
-    PtUdpEntryArray&& entry_array ///< [in] テーブルエントリの配列
+    const FileRegion& fr,      ///< [in] ファイル位置情報
+    const char* name,	       ///< [in] UDP名
+    const std::vector<PtPort*>& port_list,     ///< [in] ポート名の配列
+    const std::vector<PtIOHead*>& io_list, ///< [in] IOの配列
+    const AstExpr* init_value, ///< [in] 初期値を表す式
+    const AstUdpEntryVec& entry_list ///< [in] テーブルエントリの配列
   );
 
   /// @brief combinational UDP 用のテーブルエントリの生成
   /// @return 生成されたテーブルエントリ
   PtUdpEntry*
   new_UdpEntry(
-    const FileRegion& fr,          ///< [in] ファイル位置の情報
-    PtUdpValueArray&& input_array, ///< [in] 入力値の配列
-    const AstUdpValue* output      ///< [in] 出力値
+    const FileRegion& fr,       ///< [in] ファイル位置の情報
+    const AstUdpValueVec& input_list, ///< [in] 入力値の配列
+    const AstUdpValue* output   ///< [in] 出力値
   );
 
   /// @brief sequential UDP 用のテーブルエントリの生成
   /// @return 生成されたテーブルエントリ
   PtUdpEntry*
   new_UdpEntry(
-    const FileRegion& fr,          ///< [in] ファイル位置の情報
-    PtUdpValueArray&& input_array, ///< [in] 入力値の配列
-    const AstUdpValue* current,	   ///< [in] 現状態値
-    const AstUdpValue* output      ///< [in] 出力値
+    const FileRegion& fr,       ///< [in] ファイル位置の情報
+    const AstUdpValueVec& input_list, ///< [in] 入力値の配列
+    const AstUdpValue* current,	///< [in] 現状態値
+    const AstUdpValue* output   ///< [in] 出力値
   );
 
   /// @brief UDP のテーブルエントリの要素の値の生成
@@ -134,11 +134,11 @@ public:
     const std::string& config,  ///< [in] config 情報
     const std::string& library, ///< [in] library 情報
     const std::string& cell,    ///< [in] cell 情報
-    PtDeclHeadArray&& paramport_array, ///< [in] パラメータポートのリスト
-    PtPortArray&& port_array,          ///< [in] ポートのリスト
-    PtIOHeadArray&& iodecl_array,      ///< [in] 入出力のリスト
-    PtDeclHeadArray&& decl_array,      ///< [in] 宣言のリスト
-    PtItemArray&& item_array           ///< [in] 要素のリスト
+    const std::vector<PtDeclHead*>& paramport_list, ///< [in] パラメータポートのリスト
+    const std::vector<PtPort*>& port_list,          ///< [in] ポートのリスト
+    const std::vector<PtIOHead*>& iodecl_list,      ///< [in] 入出力のリスト
+    const std::vector<PtDeclHead*>& decl_list,      ///< [in] 宣言のリスト
+    const AstItemVec& item_list           ///< [in] 要素のリスト
   );
 
 
@@ -158,18 +158,19 @@ public:
   /// @return 生成されたポート
   PtPort*
   new_Port(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    const AstExpr* portref, ///< [in] ポートに接続している式 (ポート参照式)
-    const char* ext_name    ///< [in] ポート名 (空文字列の場合もある)
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* ext_name, ///< [in] ポート名 (空文字列の場合もある)
+    const AstExpr* expr   ///< [in] ポートに接続している式 (ポート参照式)
   );
 
   /// @brief ポートの生成 (連結型のポート参照式があるポート)
   /// @return 生成されたポート
   PtPort*
   new_Port(
-    const FileRegion& fr,       ///< [in] ファイル位置の情報
-    PtExprArray&& portref_list, ///< [in] ポートに接続している式 (ポート参照式)のリスト
-    const char* ext_name        ///< [in] ポート名 (空文字列の場合もある)
+    const FileRegion& fr,  ///< [in] ファイル位置の情報
+    const char* ext_name,  ///< [in] ポート名 (空文字列の場合もある)
+    const AstExpr* expr,   ///< [in] ポートに接続している式 (ポート参照式)
+    PtExprList* portref_list ///< [in] ポートに接続している式 (ポート参照式)のリスト
   );
 
 
@@ -323,9 +324,9 @@ public:
   /// @return 生成された要素
   PtDeclItem*
   new_DeclItem(
-    const FileRegion& fr,      ///< [in] ファイル位置の情報
-    const char* name,          ///< [in] 名前
-    PtRangeArray&& range_array ///< [in] 配列の各次元の範囲のリスト
+    const FileRegion& fr,   ///< [in] ファイル位置の情報
+    const char* name,       ///< [in] 名前
+    PtRangeList* range_list ///< [in] 配列の各次元の範囲のリスト
   );
 
   /// @brief 範囲の生成
@@ -345,8 +346,8 @@ public:
   /// @return 生成された defparam ヘッダ
   PtItem*
   new_DefParamH(
-    const FileRegion& fr,        ///< [in] ファイル位置の情報
-    PtDefParamArray&& elem_array ///< [in] 要素のリスト
+    const FileRegion& fr,           ///< [in] ファイル位置の情報
+    const AstDefParamVec& elem_list ///< [in] 要素のリスト
   );
 
   /// @brief defparam 文の要素の生成
@@ -371,10 +372,10 @@ public:
   /// @return 生成された continuous assign 文のヘッダ
   PtItem*
   new_ContAssignH(
-    const FileRegion& fr,          ///< [in] ファイル位置の情報
-    const AstStrength* strength,   ///< [in] 信号強度
-    const AstDelay* delay,         ///< [in] 遅延値
-    PtContAssignArray&& elem_array ///< [in] 要素のリスト
+    const FileRegion& fr,        ///< [in] ファイル位置の情報
+    const AstStrength* strength, ///< [in] 信号強度
+    const AstDelay* delay,       ///< [in] 遅延値
+    const AstContAssignVec& elem_list  ///< [in] 要素のリスト
   );
 
   /// @brief continuous assign 文の生成
@@ -409,9 +410,9 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] task 名
     bool automatic,       ///< [in] automatic task の時に true となるフラグ
-    PtIOHeadArray&& iodecl_array, ///< [in] IO宣言のリスト
-    PtDeclHeadArray&& decl_array, ///< [in] 宣言のリスト
-    const AstStmt* stmt   ///< [in] 本体のステートメント
+    const std::vector<PtIOHead*>& iodecl_list, ///< [in] IO宣言のリスト
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
+    const AstStmt* stmt        ///< [in] 本体のステートメント
   );
 
   /// @brief 1ビット型 function 文の生成
@@ -422,8 +423,8 @@ public:
     const char* name,	  ///< [in] task 名
     bool automatic,	  ///< [in] automatic task の時に true となるフラグ
     bool sign,		  ///< [in] signed 属性がついていたら true となるフラグ
-    PtIOHeadArray&& iodecl_array, ///< [in] IO宣言のリスト
-    PtDeclHeadArray&& decl_array, ///< [in] 宣言のリスト
+    const std::vector<PtIOHead*>& iodecl_list, ///< [in] IO宣言のリスト
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
     const AstStmt* stmt	  ///< [in] 本体のステートメント
   );
 
@@ -436,8 +437,8 @@ public:
     bool automatic,	   ///< [in] automatic task の時に true となるフラグ
     bool sign,		   ///< [in] signed 属性がついていたら true となるフラグ
     const AstRange* range, ///< [in] パース木の範囲定義
-    PtIOHeadArray&& iodecl_array, ///< [in] IO宣言のリスト
-    PtDeclHeadArray&& decl_array, ///< [in] 宣言のリスト
+    const std::vector<PtIOHead*>& iodecl_list, ///< [in] IO宣言のリスト
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
     const AstStmt* stmt	   ///< [in] 本体のステートメント
   );
 
@@ -450,8 +451,8 @@ public:
     bool automatic,	    ///< [in] automatic task の時に true となるフラグ
     bool sign,		    ///< [in] signed 属性がついていたら true となるフラグ
     VpiVarType func_type,   ///< [in] 関数の戻値の型
-    PtIOHeadArray&& iodecl_array, ///< [in] IO宣言のリスト
-    PtDeclHeadArray&& decl_array, ///< [in] 宣言のリスト
+    const std::vector<PtIOHead*>& iodecl_list, ///< [in] IO宣言のリスト
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
     const AstStmt* stmt	    ///< [in] 本体のステートメント
   );
 
@@ -463,7 +464,7 @@ public:
     VpiPrimType type,	         ///< [in] primitive の型
     const AstStrength* strength, ///< [in] 信号強度
     const AstDelay* delay,	 ///< [in] 遅延値
-    PtInstArray&& elem_array     ///< [in] 要素の配列
+    const AstInstVec& elem_list  ///< [in] 要素の配列
   );
 
   /// @brief module instance/UDP instance 文のヘッダの生成 (strength, 遅延付き)
@@ -474,109 +475,155 @@ public:
     const char* def_name,	 ///< [in] 定義名
     const AstStrength* strength, ///< [in] 信号強度
     const AstDelay* delay,       ///< [in] 遅延値
-    PtInstArray&& elem_array     ///< [in] 要素の配列
+    const AstInstVec& elem_list  ///< [in] 要素の配列
   );
 
   /// @brief module instance/UDP instance 文のヘッダの生成
   /// @return 生成された module instance/UDP instance 文のヘッダ
   PtItem*
   new_MuH(
-    const FileRegion& fr,          ///< [in]ファイル位置の情報
-    const char* def_name,          ///< [in] 定義名
-    PtConnectionArray&& con_array, ///< [in] ポート割り当てリスト
-    PtInstArray&& elem_array       ///< [in] 要素の配列
+    const FileRegion& fr,       ///< [in]ファイル位置の情報
+    const char* def_name,       ///< [in] 定義名
+    PtConnectionList* con_list, ///< [in] ポート割り当てリスト
+    const AstInstVec& elem_list  ///< [in] 要素の配列
   );
 
   /// @brief 名前と範囲付き module instance/UDP/gate instance の要素の生成
   /// @return 生成された module instance/UDP instance の要素
   PtInst*
   new_Inst(
-    const FileRegion& fr,         ///< [in] ファイル位置の情報
-    const char* name,		  ///< [in] 名前
-    const AstRange* range,        ///< [in] パース木の範囲定義
-    PtConnectionArray&& con_array ///< [in] ポート割り当ての配列
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* name,	       ///< [in] 名前
+    const AstRange* range,     ///< [in] パース木の範囲定義
+    PtConnectionList* con_list ///< [in] ポート割り当ての配列
+  );
+
+  /// @brief 名前と範囲付き module instance/UDP/gate instance の要素の生成
+  /// @return 生成された module instance/UDP instance の要素
+  PtInst*
+  new_Inst(
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* name,	       ///< [in] 名前
+    const AstRange* range,     ///< [in] パース木の範囲定義
+    const AstExpr* expr1       ///< [in] 接続1
+  );
+
+  /// @brief 名前と範囲付き module instance/UDP/gate instance の要素の生成
+  /// @return 生成された module instance/UDP instance の要素
+  PtInst*
+  new_Inst(
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* name,	       ///< [in] 名前
+    const AstRange* range,     ///< [in] パース木の範囲定義
+    const AstExpr* expr1,      ///< [in] 接続1
+    const AstExpr* expr2       ///< [in] 接続2
+  );
+
+  /// @brief 名前と範囲付き module instance/UDP/gate instance の要素の生成
+  /// @return 生成された module instance/UDP instance の要素
+  PtInst*
+  new_Inst(
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* name,	       ///< [in] 名前
+    const AstRange* range,     ///< [in] パース木の範囲定義
+    const AstExpr* expr1,      ///< [in] 接続1
+    const AstExpr* expr2,      ///< [in] 接続2
+    const AstExpr* expr3       ///< [in] 接続3
+  );
+
+  /// @brief 名前と範囲付き module instance/UDP/gate instance の要素の生成
+  /// @return 生成された module instance/UDP instance の要素
+  PtInst*
+  new_Inst(
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* name,	       ///< [in] 名前
+    const AstRange* range,     ///< [in] パース木の範囲定義
+    const AstExpr* expr1,      ///< [in] 接続1
+    const AstExpr* expr2,      ///< [in] 接続2
+    const AstExpr* expr3,      ///< [in] 接続3
+    const AstExpr* expr4       ///< [in] 接続4
   );
 
   /// @brief generate 文の生成
   /// @return 生成された generate 文
   PtItem*
   new_Generate(
-    const FileRegion& fr,         ///< [in] ファイル位置の情報
-    PtDeclHeadArray&& decl_array, ///< [in] 宣言のリスト
-    PtItemArray&& item_array      ///< [in] 要素のリスト
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
+    const AstItemVec& item_list      ///< [in] 要素のリスト
   );
 
   /// @brief generate block 文の生成
   /// @return 生成された generate block 文
   PtItem*
   new_GenBlock(
-    const FileRegion& fr,        ///< [in] ファイル位置の情報
-    PtDeclHeadArray&& decl_list, ///< [in] 宣言のリスト
-    PtItemArray&& item_list      ///< [in] 要素のリスト
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
+    const AstItemVec& item_list      ///< [in] 要素のリスト
   );
 
   /// @brief 名前付き generate block 文の生成
   /// @return 生成された generate block 文
   PtItem*
   new_GenBlock(
-    const FileRegion& fr,        ///< [in] ファイル位置の情報
-    const char* name,            ///< [in] 名前
-    PtDeclHeadArray&& decl_list, ///< [in] 宣言のリスト
-    PtItemArray&& item_list      ///< [in] 要素のリスト
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* name,          ///< [in] 名前
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
+    const AstItemVec& item_list      ///< [in] 要素のリスト
   );
 
   /// @brief generate if 文の生成
   /// @return 生成された generate if 文
   PtItem*
   new_GenIf(
-    const FileRegion& fr,             ///< [in] ファイル位置の情報
-    const AstExpr* cond,              ///< [in] 条件を表す式
-    PtDeclHeadArray&& then_decl_list, ///< [in] then 節の宣言のリスト
-    PtItemArray&& then_item_list,     ///< [in] then 節の要素のリスト
-    PtDeclHeadArray&& else_decl_list, ///< [in] else 節の宣言のリスト
-    PtItemArray&& else_item_list      ///< [in] else 節の要素のリスト
+    const FileRegion& fr,           ///< [in] ファイル位置の情報
+    const AstExpr* cond,            ///< [in] 条件を表す式
+    const std::vector<PtDeclHead*>& then_decl_list, ///< [in] then 節の宣言のリスト
+    const AstItemVec& then_item_list,     ///< [in] then 節の要素のリスト
+    const std::vector<PtDeclHead*>& else_decl_list, ///< [in] else 節の宣言のリスト
+    const AstItemVec& else_item_list      ///< [in] else 節の要素のリスト
   );
 
   /// @brief generate case 文の生成
   /// @return 生成された generate case 文
   PtItem*
   new_GenCase(
-    const FileRegion& fr,          ///< [in] ファイル位置の情報
-    const AstExpr* expr,           ///< [in] 選択式
-    PtGenCaseItemArray&& item_list ///< [in] generate case item のリスト
+    const FileRegion& fr,        ///< [in] ファイル位置の情報
+    const AstExpr* expr,         ///< [in] 選択式
+    PtGenCaseItemList* item_list ///< [in] generate case item のリスト
   );
 
   /// @brief generate case の要素の生成
   /// @return 生成された generate case item
   PtGenCaseItem*
   new_GenCaseItem(
-    const FileRegion& fr,        ///< [in] ファイル位置の情報
-    PtExprArray&& label_list,    ///< [in] 比較式のリスト
-    PtDeclHeadArray&& decl_list, ///< [in] 宣言のリスト
-    PtItemArray&& item_list      ///< [in] 要素のリスト
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    PtExprList* label_list,    ///< [in] 比較式のリスト
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
+    const AstItemVec& item_list      ///< [in] 要素のリスト
   );
 
   /// @brief generate for 文の生成
   /// @return 生成された generate for 文
   PtItem*
   new_GenFor(
-    const FileRegion& fr,        ///< [in] ファイル位置の情報
-    const char* loop_var,        ///< [in] ループ変数
-    const AstExpr* init_expr,    ///< [in] 初期化式
-    const AstExpr* cond,         ///< [in] ループ条件式
-    const AstExpr* next_expr,    ///< [in] 増加式
-    const char* block_name,      ///< [in] ブロック名
-    PtDeclHeadArray&& decl_list, ///< [in] 宣言のリスト
-    PtItemArray&& item_list      ///< [in] 要素のリスト
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* loop_var,      ///< [in] ループ変数
+    const AstExpr* init_expr,  ///< [in] 初期化式
+    const AstExpr* cond,       ///< [in] ループ条件式
+    const AstExpr* next_expr,  ///< [in] 増加式
+    const char* block_name,    ///< [in] ブロック名
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
+    const AstItemVec& item_list      ///< [in] 要素のリスト
   );
 
   /// @brief specify block item の生成
   /// @return 生成された specify block item
   PtItem*
   new_SpecItem(
-    const FileRegion& fr,       ///< [in] ファイル位置の情報
-    VpiSpecItemType id,         ///< [in] specify block item の種類
-    PtExprArray&& terminal_list ///< [in] 端子のリスト
+    const FileRegion& fr,     ///< [in] ファイル位置の情報
+    VpiSpecItemType id,       ///< [in] specify block item の種類
+    PtExprList* terminal_list ///< [in] 端子のリスト
   );
 
   /// @brief path 仕様を生成する．
@@ -595,10 +642,10 @@ public:
   new_PathDecl(
     const FileRegion& fr,         ///< [in] ファイル位置の情報
     int edge,
-    PtExprArray&& input_list,
+    PtExprList* input_list,
     int input_pol,
     VpiPathType op,
-    PtExprArray&& output_list,
+    PtExprList* output_list,
     int output_pol,
     const AstExpr* expr,
     const AstPathDelay* path_delay
@@ -688,27 +735,27 @@ public:
   /// @return 生成された enable 文
   PtStmt*
   new_Enable(
-    const FileRegion& fr,  ///< [in] ファイル位置の情報
-    const char* name,      ///< [in] 起動するタスク名
-    PtExprArray&& arg_list ///< [in] 引数のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* name,     ///< [in] 起動するタスク名
+    PtExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief enable 文の生成 (階層付き識別子)
   /// @return 生成された enable 文
   PtStmt*
   new_Enable(
-    const FileRegion& fr,  ///< [in] ファイル位置の情報
-    PtHierName* hname,	   ///< [in] 起動するタスクの階層付き名
-    PtExprArray&& arg_list ///< [in] 引数のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    PtHierName* hname,	  ///< [in] 起動するタスクの階層付き名
+    PtExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief system task enable 文の生成
   /// @return 生成された system task enable 文
   PtStmt*
   new_SysEnable(
-    const FileRegion& fr,  ///< [in] ファイル位置の情報
-    const char* name,	   ///< [in] 起動するシステムタスク名
-    PtExprArray&& arg_list ///< [in] 引数のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* name,	  ///< [in] 起動するシステムタスク名
+    PtExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief delay control 文の生成
@@ -814,36 +861,36 @@ public:
   /// @return 生成された case 文
   PtStmt*
   new_Case(
-    const FileRegion& fr,           ///< [in] ファイル位置の情報
-    const AstExpr* expr,            ///< [in] 条件式
-    PtCaseItemArray&& caseitem_list ///< [in] case item のリスト
+    const FileRegion& fr,         ///< [in] ファイル位置の情報
+    const AstExpr* expr,          ///< [in] 条件式
+    PtCaseItemList* caseitem_list ///< [in] case item のリスト
   );
 
   /// @brief casex 文の生成
   /// @return 生成された case 文
   PtStmt*
   new_CaseX(
-    const FileRegion& fr,           ///< [in] ファイル位置の情報
-    const AstExpr* expr,	    ///< [in] 条件式
-    PtCaseItemArray&& caseitem_list ///< [in] case item のリスト
+    const FileRegion& fr,         ///< [in] ファイル位置の情報
+    const AstExpr* expr,          ///< [in] 条件式
+    PtCaseItemList* caseitem_list ///< [in] case item のリスト
   );
 
   /// @brief casez 文の生成
   /// @return 生成された case 文
   PtStmt*
   new_CaseZ(
-    const FileRegion& fr,           ///< [in] ファイル位置の情報
-    const AstExpr* expr,	    ///< [in] 条件式
-    PtCaseItemArray&& caseitem_list ///< [in] case item のリスト
+    const FileRegion& fr,         ///< [in] ファイル位置の情報
+    const AstExpr* expr,	  ///< [in] 条件式
+    PtCaseItemList* caseitem_list ///< [in] case item のリスト
   );
 
   /// @brief case item の生成
   /// @return 生成された case item
   PtCaseItem*
   new_CaseItem(
-    const FileRegion& fr,     ///< [in] ファイル位置の情報
-    PtExprArray&& label_list, ///< [in] ラベルのリスト
-    const AstStmt* body       ///< [in] 本体のステートメント
+    const FileRegion& fr,   ///< [in] ファイル位置の情報
+    PtExprList* label_list, ///< [in] ラベルのリスト
+    const AstStmt* body     ///< [in] 本体のステートメント
   );
 
   /// @brief forever 文の生成
@@ -921,36 +968,36 @@ public:
   /// @return 生成された parallel block
   PtStmt*
   new_ParBlock(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    PtStmtArray&& stmt_list ///< [in] 本体のステートメントのリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    PtStmtList* stmt_list ///< [in] 本体のステートメントのリスト
   );
 
   /// @brief 名前付き parallel block の生成
   /// @return 生成された parallel block
   PtStmt*
   new_NamedParBlock(
-    const FileRegion& fr,        ///< [in] ファイル位置の情報
-    const char* name,            ///< [in] ブロック名
-    PtDeclHeadArray&& decl_list, ///< [in] 宣言のリスト
-    PtStmtArray&& stmt_list      ///< [in] 本体のステートメントのリスト
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* name,          ///< [in] ブロック名
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
+    PtStmtList* stmt_list      ///< [in] 本体のステートメントのリスト
   );
 
   /// @brief sequential block の生成
   /// @return 生成された sequential block
   PtStmt*
   new_SeqBlock(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    PtStmtArray&& stmt_list ///< [in] 本体のステートメントのリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    PtStmtList* stmt_list ///< [in] 本体のステートメントのリスト
   );
 
   /// @brief 名前付き sequential block の生成
   /// @return 生成された sequential block
   PtStmt*
   new_NamedSeqBlock(
-    const FileRegion& fr,        ///< [in] ファイル位置の情報
-    const char* name,            ///< [in] ブロック名
-    PtDeclHeadArray&& decl_list, ///< [in] 宣言のリスト
-    PtStmtArray&& stmt_list      ///< [in] 本体のステートメントのリスト
+    const FileRegion& fr,      ///< [in] ファイル位置の情報
+    const char* name,          ///< [in] ブロック名
+    const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
+    PtStmtList* stmt_list      ///< [in] 本体のステートメントのリスト
   );
 
 
@@ -992,17 +1039,17 @@ public:
   /// @return 生成された concatination 演算子
   PtExpr*
   new_Concat(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    PtExprArray&& expr_list ///< [in] オペランドのリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    PtExprList* expr_list ///< [in] オペランドのリスト
   );
 
   /// @brief multi-concatination 演算子の生成
   /// @return 生成された multi-concatination 演算子
   PtExpr*
   new_MultiConcat(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    const AstExpr* rep,     ///< [in] 繰り返し数
-    PtExprArray&& expr_list ///< [in] 結合するオペランドのリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* rep,   ///< [in] 繰り返し数
+    PtExprList* expr_list ///< [in] 結合するオペランドのリスト
   );
 
   /// @brief min/typ/max delay 演算子の生成
@@ -1027,9 +1074,9 @@ public:
   /// @return 生成された primary
   PtExpr*
   new_Primary(
-    const FileRegion& fr,    ///< [in] ファイル位置の情報
-    const char* name,        ///< [in] 識別子名
-    PtExprArray&& index_list ///< [in] インデックスのリスト
+    const FileRegion& fr,  ///< [in] ファイル位置の情報
+    const char* name,      ///< [in] 識別子名
+    PtExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き primary の生成
@@ -1045,10 +1092,10 @@ public:
   /// @return 生成された primary
   PtExpr*
   new_Primary(
-    const FileRegion& fr,      ///< [in] ファイル位置の情報
-    const char* name,          ///< [in] 識別子名
-    PtExprArray&& index_array, ///< [in] インデックスのリスト
-    const AstPart* part        ///< [in] 範囲指定
+    const FileRegion& fr,   ///< [in] ファイル位置の情報
+    const char* name,       ///< [in] 識別子名
+    PtExprList* index_list, ///< [in] インデックスのリスト
+    const AstPart* part     ///< [in] 範囲指定
   );
 
   /// @brief primary の生成 (階層付き)
@@ -1063,9 +1110,9 @@ public:
   /// @return 生成された primary
   PtExpr*
   new_Primary(
-    const FileRegion& fr,    ///< [in] ファイル位置の情報
-    PtHierName* hname,	     ///< [in] 階層付き識別子
-    PtExprArray&& index_list ///< [in] インデックスのリスト
+    const FileRegion& fr,  ///< [in] ファイル位置の情報
+    PtHierName* hname,	   ///< [in] 階層付き識別子
+    PtExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き primary の生成 (階層付き)
@@ -1081,19 +1128,19 @@ public:
   /// @return 生成された primary
   PtExpr*
   new_Primary(
-    const FileRegion& fr,     ///< [in] ファイル位置の情報
-    PtHierName* hname,	      ///< [in] 階層付き識別子
-    PtExprArray&& index_list, ///< [in] インデックスのリスト
-    const AstPart* part       ///< [in] 範囲指定
+    const FileRegion& fr,   ///< [in] ファイル位置の情報
+    PtHierName* hname,	    ///< [in] 階層付き識別子
+    PtExprList* index_list, ///< [in] インデックスのリスト
+    const AstPart* part     ///< [in] 範囲指定
   );
 
   /// @brief constant primary の生成
   /// @return 生成された const primary
   PtExpr*
   new_CPrimary(
-    const FileRegion& fr,    ///< [in] ファイル位置の情報
-    const char* name,        ///< [in] 識別子名
-    PtExprArray&& index_list ///< [in] インデックスのリスト
+    const FileRegion& fr,  ///< [in] ファイル位置の情報
+    const char* name,      ///< [in] 識別子名
+    PtExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き constant primary の生成
@@ -1109,36 +1156,36 @@ public:
   /// @return 生成された constant primary
   PtExpr*
   new_CPrimary(
-    const FileRegion& fr,    ///< [in] ファイル位置の情報
-    PtHierName* hname,	     ///< [in] 階層付き識別子
-    PtExprArray&& index_list ///< [in] インデックスのリスト
+    const FileRegion& fr,  ///< [in] ファイル位置の情報
+    PtHierName* hname,	   ///< [in] 階層付き識別子
+    PtExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief function call の生成
   /// @return 生成された function call
   PtExpr*
   new_FuncCall(
-    const FileRegion& fr,  ///< [in] ファイル位置の情報
-    const char* name,      ///< [in] 関数名
-    PtExprArray&& arg_list ///< [in] 引数のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* name,     ///< [in] 関数名
+    PtExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief function call の生成 (階層付き)
   /// @return 生成された function call
   PtExpr*
   new_FuncCall(
-    const FileRegion& fr,  ///< [in] ファイル位置の情報
-    PtHierName* hname,     ///< [in] 階層付き関数名
-    PtExprArray&& arg_list ///< [in] 引数のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    PtHierName* hname,    ///< [in] 階層付き関数名
+    PtExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief system function call の生成
   /// @return 生成された function call
   PtExpr*
   new_SysFuncCall(
-    const FileRegion& fr,  ///< [in] ファイル位置の情報
-    const char* name,      ///< [in] 関数名
-    PtExprArray&& arg_list ///< [in] 引数のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* name,     ///< [in] 関数名
+    PtExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief 整数型の定数の生成
@@ -1209,17 +1256,49 @@ public:
   /// @return 生成されたイベントコントロール
   PtControl*
   new_EventControl(
-    const FileRegion& fr,    ///< [in] ファイル位置の情報
-    PtExprArray&& event_list ///< [in] イベントのリスト
+    const FileRegion& fr  ///< [in] ファイル位置の情報
+  );
+
+  /// @brief イベントコントロールの生成
+  /// @return 生成されたイベントコントロール
+  PtControl*
+  new_EventControl(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* event  ///< [in] イベントのリスト
+  );
+
+  /// @brief イベントコントロールの生成
+  /// @return 生成されたイベントコントロール
+  PtControl*
+  new_EventControl(
+    const FileRegion& fr,  ///< [in] ファイル位置の情報
+    PtExprList* event_list ///< [in] イベントのリスト
   );
 
   /// @brief リピートコントロールの生成
   /// @return 生成されたリピートコントロール
   PtControl*
   new_RepeatControl(
-    const FileRegion& fr,    ///< [in] ファイル位置の情報
-    const AstExpr* expr,     ///< [in] 繰り返し数を表す式
-    PtExprArray&& event_list ///< [in] 繰り返しの単位となるイベントのリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* rep    ///< [in] 繰り返し数を表す式
+  );
+
+  /// @brief リピートコントロールの生成
+  /// @return 生成されたリピートコントロール
+  PtControl*
+  new_RepeatControl(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* rep,   ///< [in] 繰り返し数を表す式
+    const AstExpr* event  ///< [in] 繰り返しの単位となるイベントのリスト
+  );
+
+  /// @brief リピートコントロールの生成
+  /// @return 生成されたリピートコントロール
+  PtControl*
+  new_RepeatControl(
+    const FileRegion& fr,  ///< [in] ファイル位置の情報
+    const AstExpr* rep,    ///< [in] 繰り返し数を表す式
+    PtExprList* event_list ///< [in] 繰り返しの単位となるイベントのリスト
   );
 
   /// @brief 順序つき結合子の生成
@@ -1364,8 +1443,8 @@ public:
   /// @return 生成された attribute instance
   PtAttrInst*
   new_AttrInst(
-    const FileRegion& fr,      ///< [in] ファイル位置の情報
-    PtAttrSpecArray&& as_array ///< [in] attribute spec のリスト
+    const FileRegion& fr,   ///< [in] ファイル位置の情報
+    PtAttrSpecList* as_list ///< [in] attribute spec のリスト
   );
 
   /// @brief attribute spec の生成

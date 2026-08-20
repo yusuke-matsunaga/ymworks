@@ -46,8 +46,8 @@ public:
   /// @brief スコープに関係する要素を実体化する．
   void
   phase1_items(
-    const VlScope* parent,                     ///< [in] 親のスコープ
-    const std::vector<const AstItem*>& ast_item_array ///< [in] 要素定義のリスト
+    const VlScope* parent,           ///< [in] 親のスコープ
+    const std::vector<const AstItem*>& ast_item_list ///< [in] 要素定義のリスト
   );
 
   /// @brief defparam 文によるパラメータ割り当てを行う．
@@ -274,9 +274,9 @@ private:
   /// と同時の残りの処理をキューに積む．
   void
   phase1_genitem(
-    const VlScope* parent,                          ///< [in] 親のスコープ
-    const std::vector<const AstDeclHead*>& ast_decl_array, ///< [in] パース木の宣言の配列
-    const std::vector<const AstItem*>& ast_item_array      ///< [in] パース木の要素の配列
+    const VlScope* parent,                ///< [in] 親のスコープ
+    const std::vector<const AstDeclHead*>& ast_decl_list, ///< [in] パース木の宣言の配列
+    const std::vector<const AstItem*>& ast_item_list      ///< [in] パース木の要素の配列
   );
 
   /// @brief パラメータ割り当て情報を作る．

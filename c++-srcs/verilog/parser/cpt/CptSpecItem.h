@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,11 +25,15 @@ public:
   CptSpecItem(
     const FileRegion& file_region,
     VpiSpecItemType id,
-    PtExprArray&& terminal_array
-  );
+    PtExprArray&& terminal_list
+  ) : mFileRegion{file_region},
+      mId{id},
+      mTerminalList{std::move(terminal_list)}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptSpecItem();
+  ~CptSpecItem() {}
 
 
 public:
@@ -57,8 +60,12 @@ public:
   /// @brief ターミナルの取得
   const AstExpr*
   terminal(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < terminal_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < terminal_num() )
   ) const override;
+
+  /// @brief ターミナルリストの取得
+  AstExprVec
+  terminal_list() const override;
 
 
 private:
@@ -72,8 +79,8 @@ private:
   // トークン番号
   VpiSpecItemType mId;
 
-  // ターミナルの配列
-  PtExprArray mTerminalArray;
+  // ターミナルのリスト
+  PtExprArray mTerminalList;
 
 };
 
@@ -92,10 +99,15 @@ public:
     VpiSpecPathType id,
     const AstExpr* expr,
     const AstPathDecl* path_decl
-  );
+  ) : mFileRegion{file_region},
+      mId{id},
+      mExpr{expr},
+      mPathDecl{path_decl}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptSpecPath();
+  ~CptSpecPath() {}
 
 
 public:
@@ -117,7 +129,7 @@ public:
 
   /// @brief モジュールパスの式を返す．
   const AstExpr*
-  expr() const override;
+  cond_expr() const override;
 
   /// @brief パス記述を返す．
   const AstPathDecl*
@@ -156,17 +168,27 @@ public:
   CptPathDecl(
     const FileRegion& file_region,
     int edge,
-    PtExprArray&& input_array,
+    PtExprArray&& input_list,
     int input_pol,
     VpiPathType op,
-    PtExprArray&& output_array,
+    PtExprArray&& output_list,
     int output_pol,
     const AstExpr* expr,
     const AstPathDelay* path_delay
-  );
+  ) : mFileRegion{file_region},
+      mEdge{edge},
+      mInputList{std::move(input_list)},
+      mInputPol{input_pol},
+      mOp{op},
+      mOutputList{std::move(output_list)},
+      mOutputPol{output_pol},
+      mExpr{expr},
+      mPathDelay{path_delay}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptPathDecl();
+  ~CptPathDecl() {}
 
 
 public:
@@ -189,8 +211,12 @@ public:
   /// @brief 入力の取得
   const AstExpr*
   input(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < input_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < input_num() )
   ) const override;
+
+  /// @brief 入力のリストの取得
+  AstExprVec
+  input_list() const override;
 
   /// @brief 入力の極性を取り出す．
   int
@@ -207,8 +233,12 @@ public:
   /// @brief 出力の取得
   const AstExpr*
   output(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < output_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < output_num() )
   ) const override;
+
+  /// @brief 出力リストの取得
+  AstExprVec
+  output_list() const override;
 
   /// @brief 出力の極性を取り出す．
   int
@@ -232,10 +262,10 @@ private:
   FileRegion mFileRegion;
 
   int mEdge;
-  PtExprArray mInputArray;
+  PtExprArray mInputList;
   int mInputPol;
   VpiPathType mOp;
-  PtExprArray mOutputArray;
+  PtExprArray mOutputList;
   int mOutputPol;
   const AstExpr* mExpr;
   const AstPathDelay* mPathDelay;

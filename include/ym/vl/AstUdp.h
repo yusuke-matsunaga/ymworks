@@ -38,26 +38,16 @@ public:
   port_num() const = 0;
 
   /// @brief ポートを取り出す．
-  ///
-  /// - pos >= port_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstPort*
   port(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < port_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
   ) const = 0;
 
   /// @brief ポートのリストを取り出す．
-  std::vector<const AstPort*>
-  port_list() const
-  {
-    auto n = port_num();
-    std::vector<const AstPort*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(port(i));
-    }
-    return vec;
-  }
+  virtual
+  AstPortVec
+  port_list() const = 0;
 
   /// @brief 入出力宣言ヘッダ配列の要素数の取得
   virtual
@@ -65,26 +55,16 @@ public:
   iohead_num() const = 0;
 
   /// @brief 入出力宣言ヘッダの取得
-  ///
-  /// - pos >= iohead_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstIOHead*
   iohead(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < iohead_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
   ) const = 0;
 
-  /// @brief 入出力のリストの取得
-  std::vector<const AstIOHead*>
-  iohead_list() const
-  {
-    auto n = iohead_num();
-    std::vector<const AstIOHead*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(iohead(i));
-    }
-    return vec;
-  }
+  /// @brief 入出力宣言ヘッダのリストの取得
+  virtual
+  AstIOHeadVec
+  iohead_list() const = 0;
 
   /// @brief 初期値を取出す．
   virtual
@@ -96,27 +76,17 @@ public:
   SizeType
   table_num() const = 0;
 
-  /// @brief テーブルの要素を取り出す．
-  ///
-  /// - pos >= table_num() の時 std::out_of_range 例外を送出する．
+  /// @brief テーブルを返す．
   virtual
   const AstUdpEntry*
   table(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < table_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < table_num() )
   ) const = 0;
 
   /// @brief テーブルのリストを返す．
-  std::vector<const AstUdpEntry*>
-  table_list() const
-  {
-    auto n = table_num();
-    std::vector<const AstUdpEntry*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(table(i));
-    }
-    return vec;
-  }
+  virtual
+  AstUdpEntryVec
+  table_list() const = 0;
 
 };
 
@@ -141,26 +111,16 @@ public:
   input_num() const = 0;
 
   /// @brief 入力値を取り出す．
-  ///
-  /// - pos >= input_num() の時 std::out_of_range 例外を送出する．
   virtual
   const AstUdpValue*
   input(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < input_num() )
+    SizeType index ///< [in] インデックス ( 0 <= index < input_num() )
   ) const = 0;
 
   /// @brief 入力値のリストを取り出す．
-  std::vector<const AstUdpValue*>
-  input_list() const
-  {
-    auto n = input_num();
-    std::vector<const AstUdpValue*> vec;
-    vec.reserve(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      vec.push_back(input(i));
-    }
-    return vec;
-  }
+  virtual
+  AstUdpValueVec
+  input_list() const = 0;
 
   /// @brief 現状態の値を取り出す．
   virtual

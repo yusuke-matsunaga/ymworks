@@ -202,12 +202,13 @@ ExprGen::instantiate_lhs(
     // 左辺では concatination しか適当でない．
     if ( ast_expr->op_type() == VpiOpType::Concat ) {
       std::vector<ElbExpr*> elem_array;
-      SizeType opr_size{ast_expr->operand_num()};
+      auto opr_size = ast_expr->operand_num();
+      auto ast_opr_list = ast_expr->operand_list();
       std::vector<ElbExpr*> opr_list(opr_size);
       for ( SizeType i = 0; i < opr_size; ++ i ) {
 	// 現れた順は上位ビットからなので位置が逆になる．
-	SizeType pos{opr_size - i - 1};
-	auto ast_expr1 = ast_expr->operand(pos);
+	SizeType pos = opr_size - i - 1;
+	auto ast_expr1 = ast_opr_list[pos];
 	auto expr1 = instantiate_lhs_sub(parent, env, ast_expr1, elem_array);
 	opr_list[pos] = expr1;
       }
@@ -261,11 +262,12 @@ ExprGen::instantiate_lhs_sub(
   case AstExpr::Opr:
     // 左辺では concatination しか適当でない．
     if ( ast_expr->op_type() == VpiOpType::Concat ) {
-      SizeType opr_size{ast_expr->operand_num()};
+      auto opr_size = ast_expr->operand_num();
+      auto ast_opr_list = ast_expr->operand_list();
       std::vector<ElbExpr*> opr_list(opr_size);
       for ( SizeType i = 0; i < opr_size; ++ i ) {
-	SizeType pos{opr_size - i - 1};
-	auto ast_expr1 = ast_expr->operand(pos);
+	SizeType pos = opr_size - i - 1;
+	auto ast_expr1 = ast_opr_list[pos];
 	  opr_list[pos] = instantiate_lhs_sub(parent, env, ast_expr1, elem_array);
       }
       auto expr = mgr().new_ConcatOp(ast_expr, opr_list);
@@ -359,7 +361,7 @@ ExprGen::instantiate_delay(
     throw std::logic_error{"n != 1"};
   }
 
-  auto ast_con = ast_header->paramassign(0);
+  auto ast_con = ast_header->paramassign_list().front();
   std::vector<const AstExpr*> expr_array{ast_con->expr()};
 
   return instantiate_delay_sub(parent, ast_header, expr_array);

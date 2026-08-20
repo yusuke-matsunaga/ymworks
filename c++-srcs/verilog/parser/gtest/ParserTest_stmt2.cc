@@ -27,20 +27,12 @@ TEST_F(ParserTest, If)
   auto stmt = parser.new_If(fr, cond, body);
 
   ASSERT_TRUE( stmt != nullptr );
-  EXPECT_STREQ( nullptr, stmt->name() );
-  EXPECT_EQ( 0, stmt->namebranch_num() );
-  EXPECT_THROW( stmt->namebranch(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstNameBranch*>{},
-	     stmt->namebranch_list() );
-  EXPECT_EQ( "", stmt->decompile_name() );
+  check_stmt_name(stmt);
   EXPECT_EQ( AstStmt::If, stmt->type() );
   EXPECT_STREQ( "if statement", stmt->stmt_name() );
-  EXPECT_EQ( 0, stmt->arg_num() );
-  EXPECT_THROW( stmt->arg(0),
-		std::out_of_range );
+  EXPECT_THROW( stmt->arg_num() );
   EXPECT_EQ( std::vector<const AstExpr*>{},
-	     stmt->arg_list() );
+	     stmt->arg_list().to_vector() );
   EXPECT_EQ( nullptr, stmt->control() );
   EXPECT_EQ( body, stmt->body() );
   EXPECT_EQ( cond, stmt->expr() );

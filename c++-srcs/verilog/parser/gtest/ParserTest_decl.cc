@@ -6,119 +6,94 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include <gtest/gtest.h>
-#include "ParserTest.h"
-#include "parser/PtDecl.h"
-#include "parser/PtExpr.h"
-#include "parser/PtItem.h"
-#include "parser/PtMisc.h"
+#include "ParserTest_Decl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ParserTest, empty)
-{
-}
-
-TEST_F(ParserTest, IOHead)
+TEST_F(ParserTest_Decl, IOHead1)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_IOHead(fr, dir, sign);
-      ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( dir, head->direction() );
-      EXPECT_EQ( VpiAuxType::None, head->aux_type() );
-      EXPECT_EQ( VpiNetType::None, head->net_type() );
-      EXPECT_EQ( VpiVarType::None, head->var_type() );
-      EXPECT_EQ( sign, head->is_signed() );
-      EXPECT_EQ( nullptr, head->range() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstIOItem*>{},
-		 head->item_list() );
+      parser.add_io_head(head, nullptr);
+
+      check_IOHead(head, fr, dir,
+		   VpiAuxType::None,
+		   VpiNetType::None,
+		   VpiVarType::None,
+		   sign, nullptr,
+		   std::vector<const AstIOItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, IOHead2)
+TEST_F(ParserTest_Decl, IOHead2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_IOHead(fr, dir, sign, range);
-      ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( dir, head->direction() );
-      EXPECT_EQ( VpiAuxType::None, head->aux_type() );
-      EXPECT_EQ( VpiNetType::None, head->net_type() );
-      EXPECT_EQ( VpiVarType::None, head->var_type() );
-      EXPECT_EQ( sign, head->is_signed() );
-      EXPECT_EQ( range, head->range() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstIOItem*>{},
-		 head->item_list() );
+      parser.add_io_head(head, nullptr);
+
+      check_IOHead(head, fr, dir,
+		   VpiAuxType::None,
+		   VpiNetType::None,
+		   VpiVarType::None,
+		   sign, range,
+		   std::vector<const AstIOItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, RegIOHead)
+TEST_F(ParserTest_Decl, RegIOHead)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_RegIOHead(fr, dir, sign);
-      ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( dir, head->direction() );
-      EXPECT_EQ( VpiAuxType::Reg, head->aux_type() );
-      EXPECT_EQ( VpiNetType::None, head->net_type() );
-      EXPECT_EQ( VpiVarType::None, head->var_type() );
-      EXPECT_EQ( sign, head->is_signed() );
-      EXPECT_EQ( nullptr, head->range() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstIOItem*>{},
-		 head->item_list() );
+      parser.add_io_head(head, nullptr);
+
+      check_IOHead(head, fr, dir,
+		   VpiAuxType::Reg,
+		   VpiNetType::None,
+		   VpiVarType::None,
+		   sign, nullptr,
+		   std::vector<const AstIOItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, RegIOHead2)
+TEST_F(ParserTest_Decl, RegIOHead2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_RegIOHead(fr, dir, sign, range);
-      ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( dir, head->direction() );
-      EXPECT_EQ( VpiAuxType::Reg, head->aux_type() );
-      EXPECT_EQ( VpiNetType::None, head->net_type() );
-      EXPECT_EQ( VpiVarType::None, head->var_type() );
-      EXPECT_EQ( sign, head->is_signed() );
-      EXPECT_EQ( range, head->range() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstIOItem*>{},
-		 head->item_list() );
+      parser.add_io_head(head, nullptr);
+
+      check_IOHead(head, fr, dir,
+		   VpiAuxType::Reg,
+		   VpiNetType::None,
+		   VpiVarType::None,
+		   sign, range,
+		   std::vector<const AstIOItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, NetIOHead)
+TEST_F(ParserTest_Decl, NetIOHead)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
@@ -126,27 +101,23 @@ TEST_F(ParserTest, NetIOHead)
 		      VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		      VpiNetType::Supply1, VpiNetType::Supply0 } ) {
       for ( bool sign: { true, false } ) {
+	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.new_NetIOHead(fr, dir, net, sign);
-	ASSERT_TRUE( head != nullptr );
-	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( dir, head->direction() );
-	EXPECT_EQ( VpiAuxType::Net, head->aux_type() );
-	EXPECT_EQ( net, head->net_type() );
-	EXPECT_EQ( VpiVarType::None, head->var_type() );
-	EXPECT_EQ( sign, head->is_signed() );
-	EXPECT_EQ( nullptr, head->range() );
-	EXPECT_EQ( 0, head->item_num() );
-	EXPECT_THROW( head->item(0),
-		      std::out_of_range );
-	EXPECT_EQ( std::vector<const AstIOItem*>{},
-		   head->item_list() );
+	parser.add_io_head(head, nullptr);
+
+	check_IOHead(head, fr, dir,
+		     VpiAuxType::Net,
+		     net,
+		     VpiVarType::None,
+		     sign, nullptr,
+		     std::vector<const AstIOItem*>{});
       }
     }
   }
 }
 
-TEST_F(ParserTest, NetIOHead2)
+TEST_F(ParserTest_Decl, NetIOHead2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
@@ -157,438 +128,373 @@ TEST_F(ParserTest, NetIOHead2)
 		      VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		      VpiNetType::Supply1, VpiNetType::Supply0 } ) {
       for ( bool sign: { true, false } ) {
+	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.new_NetIOHead(fr, dir, net, sign, range);
-	ASSERT_TRUE( head != nullptr );
-	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( dir, head->direction() );
-	EXPECT_EQ( VpiAuxType::Net, head->aux_type() );
-	EXPECT_EQ( net, head->net_type() );
-	EXPECT_EQ( VpiVarType::None, head->var_type() );
-	EXPECT_EQ( sign, head->is_signed() );
-	EXPECT_EQ( range, head->range() );
-	EXPECT_EQ( 0, head->item_num() );
-	EXPECT_THROW( head->item(0),
-		      std::out_of_range );
-	EXPECT_EQ( std::vector<const AstIOItem*>{},
-		   head->item_list() );
+	parser.add_io_head(head, nullptr);
+
+	check_IOHead(head, fr, dir,
+		     VpiAuxType::Net,
+		     net,
+		     VpiVarType::None,
+		     sign, range,
+		     std::vector<const AstIOItem*>{});
       }
     }
   }
 }
 
-TEST_F(ParserTest, VarIOHead)
+TEST_F(ParserTest_Decl, VarIOHead)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		      VpiVarType::Time, VpiVarType::Realtime } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_VarIOHead(fr, dir, var);
+      parser.add_io_head(head, nullptr);
       ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( dir, head->direction() );
-      EXPECT_EQ( VpiAuxType::Var, head->aux_type() );
-      EXPECT_EQ( VpiNetType::None, head->net_type() );
-      EXPECT_EQ( var, head->var_type() );
-      EXPECT_EQ( false, head->is_signed() );
-      EXPECT_EQ( nullptr, head->range() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstIOItem*>{},
-		 head->item_list() );
+
+      check_IOHead(head, fr, dir,
+		   VpiAuxType::Var,
+		   VpiNetType::None,
+		   var,
+		   false, nullptr,
+		   std::vector<const AstIOItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, IOItem)
+TEST_F(ParserTest_Decl, IOItem)
 {
   parser.init_module();
-
-  auto dir = VpiDir::Input;
-  auto sign = false;
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto head = parser.new_IOHead(fr1, dir, sign);
-  parser.add_ioport_head(head, nullptr);
-
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "port1";
   parser.new_IOItem(fr, name);
-  parser.flush_io();
+  auto item = parser._ioitem_list().front();
 
-  EXPECT_EQ( 1, head->item_num() );
-  auto item = head->item(0);
-  EXPECT_EQ( fr, item->file_region() );
-  EXPECT_STREQ( name, item->name() );
-  EXPECT_EQ( nullptr, item->init_value() );
-  EXPECT_THROW( head->item(1),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstIOItem*>{item},
-	     head->item_list() );
+  check_IOItem(item, fr, name, nullptr);
 }
 
-TEST_F(ParserTest, IOItem2)
+TEST_F(ParserTest_Decl, IOItem2)
 {
   parser.init_module();
 
-  auto fr1 = make_file_region(1, 1, 1, 8);
   auto fr2 = make_file_region(1, 10, 3, 14);
   auto fr3 = make_file_region(2, 20, 2, 22);
-  auto dir = VpiDir::Input;
-  auto sign = false;
-  auto head = parser.new_IOHead(fr1, dir, sign);
-  parser.add_ioport_head(head, nullptr);
-
   auto name = "port1";
   auto expr = parser.new_IntConst(fr3, 123U);
   parser.new_IOItem(fr2, name, expr);
-  parser.flush_io();
+  auto item = parser._ioitem_list().front();
 
-  auto fr = FileRegion(fr2, fr3);
-  EXPECT_EQ( 1, head->item_num() );
-  auto item = head->item(0);
-  ASSERT_TRUE( item != nullptr );
-  EXPECT_EQ( fr, item->file_region() );
-  EXPECT_STREQ( name, item->name() );
-  EXPECT_EQ( expr, item->init_value() );
-  EXPECT_THROW( head->item(1),
-		std::out_of_range );
+  check_IOItem(item, FileRegion(fr2, fr3), name, expr);
 }
 
-TEST_F(ParserTest, ParamH)
+TEST_F(ParserTest_Decl, ParamH)
 {
+  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.new_ParamH(fr);
-  ASSERT_TRUE( head != nullptr );
-  EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( AstDeclHead::Param, head->type() );
-  EXPECT_EQ( false, head->is_signed() );
-  EXPECT_EQ( nullptr, head->range() );
-  EXPECT_EQ( VpiVarType::None, head->data_type() );
-  EXPECT_EQ( VpiNetType::None, head->net_type() );
-  EXPECT_EQ( VpiVsType::None, head->vs_type() );
-  EXPECT_EQ( nullptr, head->strength() );
-  EXPECT_EQ( nullptr, head->delay() );
-  EXPECT_EQ( 0, head->item_num() );
-  EXPECT_THROW( head->item(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	     head->item_list() );
+  parser.add_decl_head(head);
+
+  check_DeclHead(head, fr,
+		 AstDeclHead::Param,
+		 false,
+		 nullptr,
+		 VpiVarType::None,
+		 VpiNetType::None,
+		 VpiVsType::None,
+		 nullptr,
+		 nullptr,
+		 std::vector<const AstDeclItem*>{});
 }
 
-TEST_F(ParserTest, ParamH2)
+TEST_F(ParserTest_Decl, ParamH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   for ( auto sign: { true, false } ) {
+    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_ParamH(fr, sign, range);
-    ASSERT_TRUE( head != nullptr );
-    EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( AstDeclHead::Param, head->type() );
-    EXPECT_EQ( sign, head->is_signed() );
-    EXPECT_EQ( range, head->range() );
-    EXPECT_EQ( VpiVarType::None, head->data_type() );
-    EXPECT_EQ( VpiNetType::None, head->net_type() );
-    EXPECT_EQ( VpiVsType::None, head->vs_type() );
-    EXPECT_EQ( nullptr, head->strength() );
-    EXPECT_EQ( nullptr, head->delay() );
-    EXPECT_EQ( 0, head->item_num() );
-    EXPECT_THROW( head->item(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	       head->item_list() );
+    parser.add_decl_head(head);
+
+    check_DeclHead(head, fr,
+		   AstDeclHead::Param,
+		   sign,
+		   range,
+		   VpiVarType::None,
+		   VpiNetType::None,
+		   VpiVsType::None,
+		   nullptr,
+		   nullptr,
+		   std::vector<const AstDeclItem*>{});
   }
 }
 
-TEST_F(ParserTest, ParamH3)
+TEST_F(ParserTest_Decl, ParamH3)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
+    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_ParamH(fr, var);
-    ASSERT_TRUE( head != nullptr );
-    EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( AstDeclHead::Param, head->type() );
-    auto sign = (var == VpiVarType::Time) ? false : true;
-    EXPECT_EQ( sign, head->is_signed() );
-    EXPECT_EQ( nullptr, head->range() );
-    EXPECT_EQ( var, head->data_type() );
-    EXPECT_EQ( VpiNetType::None, head->net_type() );
-    EXPECT_EQ( VpiVsType::None, head->vs_type() );
-    EXPECT_EQ( nullptr, head->strength() );
-    EXPECT_EQ( nullptr, head->delay() );
-    EXPECT_EQ( 0, head->item_num() );
-    EXPECT_THROW( head->item(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	       head->item_list() );
+    parser.add_decl_head(head);
+
+    check_DeclHead(head, fr,
+		   AstDeclHead::Param,
+		   (var == VpiVarType::Time) ? false : true,
+		   nullptr,
+		   var,
+		   VpiNetType::None,
+		   VpiVsType::None,
+		   nullptr,
+		   nullptr,
+		   std::vector<const AstDeclItem*>{});
   }
 }
 
-TEST_F(ParserTest, LocalParamH)
+TEST_F(ParserTest_Decl, LocalParamH)
 {
+  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.new_LocalParamH(fr);
-  ASSERT_TRUE( head != nullptr );
-  EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( AstDeclHead::LocalParam, head->type() );
-  EXPECT_EQ( false, head->is_signed() );
-  EXPECT_EQ( nullptr, head->range() );
-  EXPECT_EQ( VpiVarType::None, head->data_type() );
-  EXPECT_EQ( VpiNetType::None, head->net_type() );
-  EXPECT_EQ( VpiVsType::None, head->vs_type() );
-  EXPECT_EQ( nullptr, head->strength() );
-  EXPECT_EQ( nullptr, head->delay() );
-  EXPECT_EQ( 0, head->item_num() );
-  EXPECT_THROW( head->item(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	     head->item_list() );
+  parser.add_decl_head(head);
+
+  check_DeclHead(head, fr,
+		 AstDeclHead::LocalParam,
+		 false,
+		 nullptr,
+		 VpiVarType::None,
+		 VpiNetType::None,
+		 VpiVsType::None,
+		 nullptr,
+		 nullptr,
+		 std::vector<const AstDeclItem*>{});
 }
 
-TEST_F(ParserTest, LocalParamH2)
+TEST_F(ParserTest_Decl, LocalParamH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   for ( auto sign: { true, false } ) {
+    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_LocalParamH(fr, sign, range);
-    ASSERT_TRUE( head != nullptr );
-    EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( AstDeclHead::LocalParam, head->type() );
-    EXPECT_EQ( sign, head->is_signed() );
-    EXPECT_EQ( range, head->range() );
-    EXPECT_EQ( VpiVarType::None, head->data_type() );
-    EXPECT_EQ( VpiNetType::None, head->net_type() );
-    EXPECT_EQ( VpiVsType::None, head->vs_type() );
-    EXPECT_EQ( nullptr, head->strength() );
-    EXPECT_EQ( nullptr, head->delay() );
-    EXPECT_EQ( 0, head->item_num() );
-    EXPECT_THROW( head->item(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	       head->item_list() );
+    parser.add_decl_head(head);
+
+    check_DeclHead(head, fr,
+		   AstDeclHead::LocalParam,
+		   sign,
+		   range,
+		   VpiVarType::None,
+		   VpiNetType::None,
+		   VpiVsType::None,
+		   nullptr,
+		   nullptr,
+		   std::vector<const AstDeclItem*>{});
   }
 }
 
-TEST_F(ParserTest, LocalParamH3)
+TEST_F(ParserTest_Decl, LocalParamH3)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
+    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_LocalParamH(fr, var);
-    ASSERT_TRUE( head != nullptr );
-    EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( AstDeclHead::LocalParam, head->type() );
+    parser.add_decl_head(head);
+
     auto sign = (var == VpiVarType::Time) ? false : true;
-    EXPECT_EQ( sign, head->is_signed() );
-    EXPECT_EQ( nullptr, head->range() );
-    EXPECT_EQ( var, head->data_type() );
-    EXPECT_EQ( VpiNetType::None, head->net_type() );
-    EXPECT_EQ( VpiVsType::None, head->vs_type() );
-    EXPECT_EQ( nullptr, head->strength() );
-    EXPECT_EQ( nullptr, head->delay() );
-    EXPECT_EQ( 0, head->item_num() );
-    EXPECT_THROW( head->item(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	       head->item_list() );
+    check_DeclHead(head, fr,
+		   AstDeclHead::LocalParam,
+		   sign,
+		   nullptr,
+		   var,
+		   VpiNetType::None,
+		   VpiVsType::None,
+		   nullptr,
+		   nullptr,
+		   std::vector<const AstDeclItem*>{});
   }
 }
 
-TEST_F(ParserTest, SpecParamH)
+TEST_F(ParserTest_Decl, SpecParamH)
 {
+  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.new_SpecParamH(fr);
-  ASSERT_TRUE( head != nullptr );
-  EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( AstDeclHead::SpecParam, head->type() );
-  EXPECT_EQ( false, head->is_signed() );
-  EXPECT_EQ( nullptr, head->range() );
-  EXPECT_EQ( VpiVarType::None, head->data_type() );
-  EXPECT_EQ( VpiNetType::None, head->net_type() );
-  EXPECT_EQ( VpiVsType::None, head->vs_type() );
-  EXPECT_EQ( nullptr, head->strength() );
-  EXPECT_EQ( nullptr, head->delay() );
-  EXPECT_EQ( 0, head->item_num() );
-  EXPECT_THROW( head->item(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	     head->item_list() );
+  parser.add_decl_head(head);
+
+  check_DeclHead(head, fr,
+		 AstDeclHead::SpecParam,
+		 false,
+		 nullptr,
+		 VpiVarType::None,
+		 VpiNetType::None,
+		 VpiVsType::None,
+		 nullptr,
+		 nullptr,
+		 std::vector<const AstDeclItem*>{});
 }
 
-TEST_F(ParserTest, SpecParamH2)
+TEST_F(ParserTest_Decl, SpecParamH2)
 {
+  parser.init_module();
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.new_SpecParamH(fr, range);
-  ASSERT_TRUE( head != nullptr );
-  EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( AstDeclHead::SpecParam, head->type() );
-  EXPECT_EQ( false, head->is_signed() );
-  EXPECT_EQ( range, head->range() );
-  EXPECT_EQ( VpiVarType::None, head->data_type() );
-  EXPECT_EQ( VpiNetType::None, head->net_type() );
-  EXPECT_EQ( VpiVsType::None, head->vs_type() );
-  EXPECT_EQ( nullptr, head->strength() );
-  EXPECT_EQ( nullptr, head->delay() );
-  EXPECT_EQ( 0, head->item_num() );
-  EXPECT_THROW( head->item(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	     head->item_list() );
+  parser.add_decl_head(head);
+
+  check_DeclHead(head, fr,
+		 AstDeclHead::SpecParam,
+		 false,
+		 range,
+		 VpiVarType::None,
+		 VpiNetType::None,
+		 VpiVsType::None,
+		 nullptr,
+		 nullptr,
+		 std::vector<const AstDeclItem*>{});
 }
 
-TEST_F(ParserTest, EventH)
+TEST_F(ParserTest_Decl, EventH)
 {
+  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.new_EventH(fr);
-  ASSERT_TRUE( head != nullptr );
-  EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( AstDeclHead::Event, head->type() );
-  EXPECT_EQ( false, head->is_signed() );
-  EXPECT_EQ( nullptr, head->range() );
-  EXPECT_EQ( VpiVarType::None, head->data_type() );
-  EXPECT_EQ( VpiNetType::None, head->net_type() );
-  EXPECT_EQ( VpiVsType::None, head->vs_type() );
-  EXPECT_EQ( nullptr, head->strength() );
-  EXPECT_EQ( nullptr, head->delay() );
-  EXPECT_EQ( 0, head->item_num() );
-  EXPECT_THROW( head->item(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	     head->item_list() );
+  parser.add_decl_head(head);
+
+  check_DeclHead(head, fr,
+		 AstDeclHead::Event,
+		 false,
+		 nullptr,
+		 VpiVarType::None,
+		 VpiNetType::None,
+		 VpiVsType::None,
+		 nullptr,
+		 nullptr,
+		 std::vector<const AstDeclItem*>{});
 }
 
-TEST_F(ParserTest, GenvarH)
+TEST_F(ParserTest_Decl, GenvarH)
 {
+  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.new_GenvarH(fr);
-  ASSERT_TRUE( head != nullptr );
-  EXPECT_EQ( fr, head->file_region() );
-  EXPECT_EQ( AstDeclHead::Genvar, head->type() );
-  EXPECT_EQ( false, head->is_signed() );
-  EXPECT_EQ( nullptr, head->range() );
-  EXPECT_EQ( VpiVarType::None, head->data_type() );
-  EXPECT_EQ( VpiNetType::None, head->net_type() );
-  EXPECT_EQ( VpiVsType::None, head->vs_type() );
-  EXPECT_EQ( nullptr, head->strength() );
-  EXPECT_EQ( nullptr, head->delay() );
-  EXPECT_EQ( 0, head->item_num() );
-  EXPECT_THROW( head->item(0),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	     head->item_list() );
+  parser.add_decl_head(head);
+
+  check_DeclHead(head, fr,
+		 AstDeclHead::Genvar,
+		 false,
+		 nullptr,
+		 VpiVarType::None,
+		 VpiNetType::None,
+		 VpiVsType::None,
+		 nullptr,
+		 nullptr,
+		 std::vector<const AstDeclItem*>{});
 }
 
-TEST_F(ParserTest, VarH)
+TEST_F(ParserTest_Decl, VarH)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
+    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_VarH(fr, var);
-    ASSERT_TRUE( head != nullptr );
-    EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( AstDeclHead::Var, head->type() );
+    parser.add_decl_head(head);
+
     auto sign = (var == VpiVarType::Time) ? false : true;
-    EXPECT_EQ( sign, head->is_signed() );
-    EXPECT_EQ( nullptr, head->range() );
-    EXPECT_EQ( var, head->data_type() );
-    EXPECT_EQ( VpiNetType::None, head->net_type() );
-    EXPECT_EQ( VpiVsType::None, head->vs_type() );
-    EXPECT_EQ( nullptr, head->strength() );
-    EXPECT_EQ( nullptr, head->delay() );
-    EXPECT_EQ( 0, head->item_num() );
-    EXPECT_THROW( head->item(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	       head->item_list() );
+    check_DeclHead(head, fr,
+		   AstDeclHead::Var,
+		   sign,
+		   nullptr,
+		   var,
+		   VpiNetType::None,
+		   VpiVsType::None,
+		   nullptr,
+		   nullptr,
+		   std::vector<const AstDeclItem*>{});
   }
 }
 
-TEST_F(ParserTest, RegH)
+TEST_F(ParserTest_Decl, RegH)
 {
   for ( bool sign: { true, false } ) {
+    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_RegH(fr, sign);
-    ASSERT_TRUE( head != nullptr );
-    EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( AstDeclHead::Reg, head->type() );
-    EXPECT_EQ( sign, head->is_signed() );
-    EXPECT_EQ( nullptr, head->range() );
-    EXPECT_EQ( VpiVarType::None, head->data_type() );
-    EXPECT_EQ( VpiNetType::None, head->net_type() );
-    EXPECT_EQ( VpiVsType::None, head->vs_type() );
-    EXPECT_EQ( nullptr, head->strength() );
-    EXPECT_EQ( nullptr, head->delay() );
-    EXPECT_EQ( 0, head->item_num() );
-    EXPECT_THROW( head->item(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	       head->item_list() );
+    parser.add_decl_head(head);
+
+    check_DeclHead(head, fr,
+		   AstDeclHead::Reg,
+		   sign,
+		   nullptr,
+		   VpiVarType::None,
+		   VpiNetType::None,
+		   VpiVsType::None,
+		   nullptr,
+		   nullptr,
+		   std::vector<const AstDeclItem*>{});
   }
 }
 
-TEST_F(ParserTest, RegH2)
+TEST_F(ParserTest_Decl, RegH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   for ( bool sign: { true, false } ) {
+    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.new_RegH(fr, sign, range);
-    ASSERT_TRUE( head != nullptr );
-    EXPECT_EQ( fr, head->file_region() );
-    EXPECT_EQ( AstDeclHead::Reg, head->type() );
-    EXPECT_EQ( sign, head->is_signed() );
-    EXPECT_EQ( range, head->range() );
-    EXPECT_EQ( VpiVarType::None, head->data_type() );
-    EXPECT_EQ( VpiNetType::None, head->net_type() );
-    EXPECT_EQ( VpiVsType::None, head->vs_type() );
-    EXPECT_EQ( nullptr, head->strength() );
-    EXPECT_EQ( nullptr, head->delay() );
-    EXPECT_EQ( 0, head->item_num() );
-    EXPECT_THROW( head->item(0),
-		  std::out_of_range );
-    EXPECT_EQ( std::vector<const AstDeclItem*>{},
-	       head->item_list() );
+    parser.add_decl_head(head);
+
+    check_DeclHead(head, fr,
+		   AstDeclHead::Reg,
+		   sign,
+		   range,
+		   VpiVarType::None,
+		   VpiNetType::None,
+		   VpiVsType::None,
+		   nullptr,
+		   nullptr,
+		   std::vector<const AstDeclItem*>{});
   }
 }
 
-TEST_F(ParserTest, NetH)
+TEST_F(ParserTest_Decl, NetH)
 {
   for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( bool sign: { true, false } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_NetH(fr, net, sign);
-      ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( AstDeclHead::Net, head->type() );
-      EXPECT_EQ( sign, head->is_signed() );
-      EXPECT_EQ( nullptr, head->range() );
-      EXPECT_EQ( VpiVarType::None, head->data_type() );
-      EXPECT_EQ( net, head->net_type() );
-      EXPECT_EQ( VpiVsType::None, head->vs_type() );
-      EXPECT_EQ( nullptr, head->strength() );
-      EXPECT_EQ( nullptr, head->delay() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstDeclItem*>{},
-		 head->item_list() );
+      parser.add_decl_head(head);
+
+      check_DeclHead(head, fr,
+		     AstDeclHead::Net,
+		     sign,
+		     nullptr,
+		     VpiVarType::None,
+		     net,
+		     VpiVsType::None,
+		     nullptr,
+		     nullptr,
+		     std::vector<const AstDeclItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, NetHS)
+TEST_F(ParserTest_Decl, NetHS)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto str = parser.new_Strength(fr1,
@@ -599,28 +505,26 @@ TEST_F(ParserTest, NetHS)
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( bool sign: { true, false } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_NetH(fr, net, sign, str);
-      ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( AstDeclHead::Net, head->type() );
-      EXPECT_EQ( sign, head->is_signed() );
-      EXPECT_EQ( nullptr, head->range() );
-      EXPECT_EQ( VpiVarType::None, head->data_type() );
-      EXPECT_EQ( net, head->net_type() );
-      EXPECT_EQ( VpiVsType::None, head->vs_type() );
-      EXPECT_EQ( str, head->strength() );
-      EXPECT_EQ( nullptr, head->delay() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstDeclItem*>{},
-		 head->item_list() );
+      parser.add_decl_head(head);
+
+      check_DeclHead(head, fr,
+		     AstDeclHead::Net,
+		     sign,
+		     nullptr,
+		     VpiVarType::None,
+		     net,
+		     VpiVsType::None,
+		     str,
+		     nullptr,
+		     std::vector<const AstDeclItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, NetHD)
+TEST_F(ParserTest_Decl, NetHD)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto val = parser.new_IntConst(fr1, 1U);
@@ -631,28 +535,26 @@ TEST_F(ParserTest, NetHD)
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( bool sign: { true, false } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_NetH(fr, net, sign, delay);
-      ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( AstDeclHead::Net, head->type() );
-      EXPECT_EQ( sign, head->is_signed() );
-      EXPECT_EQ( nullptr, head->range() );
-      EXPECT_EQ( VpiVarType::None, head->data_type() );
-      EXPECT_EQ( net, head->net_type() );
-      EXPECT_EQ( VpiVsType::None, head->vs_type() );
-      EXPECT_EQ( nullptr, head->strength() );
-      EXPECT_EQ( delay, head->delay() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstDeclItem*>{},
-		 head->item_list() );
+      parser.add_decl_head(head);
+
+      check_DeclHead(head, fr,
+		     AstDeclHead::Net,
+		     sign,
+		     nullptr,
+		     VpiVarType::None,
+		     net,
+		     VpiVsType::None,
+		     nullptr,
+		     delay,
+		     std::vector<const AstDeclItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, NetHSD)
+TEST_F(ParserTest_Decl, NetHSD)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto str = parser.new_Strength(fr1,
@@ -667,28 +569,26 @@ TEST_F(ParserTest, NetHSD)
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( bool sign: { true, false } ) {
+      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = parser.new_NetH(fr, net, sign, str, delay);
-      ASSERT_TRUE( head != nullptr );
-      EXPECT_EQ( fr, head->file_region() );
-      EXPECT_EQ( AstDeclHead::Net, head->type() );
-      EXPECT_EQ( sign, head->is_signed() );
-      EXPECT_EQ( nullptr, head->range() );
-      EXPECT_EQ( VpiVarType::None, head->data_type() );
-      EXPECT_EQ( net, head->net_type() );
-      EXPECT_EQ( VpiVsType::None, head->vs_type() );
-      EXPECT_EQ( str, head->strength() );
-      EXPECT_EQ( delay, head->delay() );
-      EXPECT_EQ( 0, head->item_num() );
-      EXPECT_THROW( head->item(0),
-		    std::out_of_range );
-      EXPECT_EQ( std::vector<const AstDeclItem*>{},
-		 head->item_list() );
+      parser.add_decl_head(head);
+
+      check_DeclHead(head, fr,
+		     AstDeclHead::Net,
+		     sign,
+		     nullptr,
+		     VpiVarType::None,
+		     net,
+		     VpiVsType::None,
+		     str,
+		     delay,
+		     std::vector<const AstDeclItem*>{});
     }
   }
 }
 
-TEST_F(ParserTest, NetH2)
+TEST_F(ParserTest_Decl, NetH2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
@@ -699,29 +599,27 @@ TEST_F(ParserTest, NetH2)
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
+	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.new_NetH(fr, net, vs, sign, range);
-	ASSERT_TRUE( head != nullptr );
-	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( AstDeclHead::Net, head->type() );
-	EXPECT_EQ( sign, head->is_signed() );
-	EXPECT_EQ( range, head->range() );
-	EXPECT_EQ( VpiVarType::None, head->data_type() );
-	EXPECT_EQ( net, head->net_type() );
-	EXPECT_EQ( vs, head->vs_type() );
-	EXPECT_EQ( nullptr, head->strength() );
-	EXPECT_EQ( nullptr, head->delay() );
-	EXPECT_EQ( 0, head->item_num() );
-	EXPECT_THROW( head->item(0),
-		      std::out_of_range );
-	EXPECT_EQ( std::vector<const AstDeclItem*>{},
-		   head->item_list() );
+	parser.add_decl_head(head);
+
+	check_DeclHead(head, fr,
+		       AstDeclHead::Net,
+		       sign,
+		       range,
+		       VpiVarType::None,
+		       net,
+		       vs,
+		       nullptr,
+		       nullptr,
+		       std::vector<const AstDeclItem*>{});
       }
     }
   }
 }
 
-TEST_F(ParserTest, NetHS2)
+TEST_F(ParserTest_Decl, NetHS2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
@@ -736,29 +634,27 @@ TEST_F(ParserTest, NetHS2)
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
+	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.new_NetH(fr, net, vs, sign, range, str);
-	ASSERT_TRUE( head != nullptr );
-	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( AstDeclHead::Net, head->type() );
-	EXPECT_EQ( sign, head->is_signed() );
-	EXPECT_EQ( range, head->range() );
-	EXPECT_EQ( VpiVarType::None, head->data_type() );
-	EXPECT_EQ( net, head->net_type() );
-	EXPECT_EQ( vs, head->vs_type() );
-	EXPECT_EQ( str, head->strength() );
-	EXPECT_EQ( nullptr, head->delay() );
-	EXPECT_EQ( 0, head->item_num() );
-	EXPECT_THROW( head->item(0),
-		      std::out_of_range );
-	EXPECT_EQ( std::vector<const AstDeclItem*>{},
-		   head->item_list() );
+	parser.add_decl_head(head);
+
+	check_DeclHead(head, fr,
+		       AstDeclHead::Net,
+		       sign,
+		       range,
+		       VpiVarType::None,
+		       net,
+		       vs,
+		       str,
+		       nullptr,
+		       std::vector<const AstDeclItem*>{});
       }
     }
   }
 }
 
-TEST_F(ParserTest, NetHD2)
+TEST_F(ParserTest_Decl, NetHD2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
@@ -773,29 +669,27 @@ TEST_F(ParserTest, NetHD2)
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
+	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.new_NetH(fr, net, vs, sign, range, delay);
-	ASSERT_TRUE( head != nullptr );
-	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( AstDeclHead::Net, head->type() );
-	EXPECT_EQ( sign, head->is_signed() );
-	EXPECT_EQ( range, head->range() );
-	EXPECT_EQ( VpiVarType::None, head->data_type() );
-	EXPECT_EQ( net, head->net_type() );
-	EXPECT_EQ( vs, head->vs_type() );
-	EXPECT_EQ( nullptr, head->strength() );
-	EXPECT_EQ( delay, head->delay() );
-	EXPECT_EQ( 0, head->item_num() );
-	EXPECT_THROW( head->item(0),
-		      std::out_of_range );
-	EXPECT_EQ( std::vector<const AstDeclItem*>{},
-		   head->item_list() );
+	parser.add_decl_head(head);
+
+	check_DeclHead(head, fr,
+		       AstDeclHead::Net,
+		       sign,
+		       range,
+		       VpiVarType::None,
+		       net,
+		       vs,
+		       nullptr,
+		       delay,
+		       std::vector<const AstDeclItem*>{});
       }
     }
   }
 }
 
-TEST_F(ParserTest, NetHSD2)
+TEST_F(ParserTest_Decl, NetHSD2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
@@ -814,90 +708,53 @@ TEST_F(ParserTest, NetHSD2)
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
+	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.new_NetH(fr, net, vs, sign, range, str, delay);
-	ASSERT_TRUE( head != nullptr );
-	EXPECT_EQ( fr, head->file_region() );
-	EXPECT_EQ( AstDeclHead::Net, head->type() );
-	EXPECT_EQ( sign, head->is_signed() );
-	EXPECT_EQ( range, head->range() );
-	EXPECT_EQ( VpiVarType::None, head->data_type() );
-	EXPECT_EQ( net, head->net_type() );
-	EXPECT_EQ( vs, head->vs_type() );
-	EXPECT_EQ( str, head->strength() );
-	EXPECT_EQ( delay, head->delay() );
-	EXPECT_EQ( 0, head->item_num() );
-	EXPECT_THROW( head->item(0),
-		      std::out_of_range );
-	EXPECT_EQ( std::vector<const AstDeclItem*>{},
-		   head->item_list() );
+	parser.add_decl_head(head);
+
+	check_DeclHead(head, fr,
+		       AstDeclHead::Net,
+		       sign,
+		       range,
+		       VpiVarType::None,
+		       net,
+		       vs,
+		       str,
+		       delay,
+		       std::vector<const AstDeclItem*>{});
       }
     }
   }
 }
 
-TEST_F(ParserTest, DeclItem)
+TEST_F(ParserTest_Decl, DeclItem)
 {
   parser.init_module();
 
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "port1";
   parser.new_DeclItem(fr, name);
+  auto item = parser._declitem_list().front();
 
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto sign = false;
-  auto type = VpiNetType::Wire;
-  auto head = parser.new_NetH(fr1, type, sign);
-  parser.add_decl_head(head, nullptr);
-
-  EXPECT_EQ( 1, head->item_num() );
-  auto item = head->item(0);
-  ASSERT_TRUE( item != nullptr );
-  EXPECT_EQ( fr, item->file_region() );
-  EXPECT_STREQ( name, item->name() );
-  EXPECT_EQ( nullptr, item->init_value() );
-  EXPECT_EQ( 0, item->range_num() );
-  EXPECT_THROW( head->item(1),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{item},
-	     head->item_list() );
-  EXPECT_THROW( item->range(0),
-		std::out_of_range );
+  check_DeclItem(item, fr, name, {}, nullptr);
 }
 
-TEST_F(ParserTest, DeclItem2)
+TEST_F(ParserTest_Decl, DeclItem2)
 {
   parser.init_module();
 
-  auto fr1 = make_file_region(1, 2, 1, 4);
   auto fr2 = make_file_region(1, 10, 1, 14);
   auto fr3 = make_file_region(1, 20, 1, 28);
   auto name = "port1";
   auto expr = parser.new_IntConst(fr3, 123U);
   parser.new_DeclItem(fr2, name, expr);
-  auto fr = FileRegion(fr2, fr3);
+  auto item = parser._declitem_list().front();
 
-  auto sign = false;
-  auto type = VpiNetType::Wire;
-  auto head = parser.new_NetH(fr1, type, sign);
-  parser.add_decl_head(head, nullptr);
-
-  EXPECT_EQ( 1, head->item_num() );
-  auto item = head->item(0);
-  ASSERT_TRUE( item != nullptr );
-  EXPECT_EQ( fr, item->file_region() );
-  EXPECT_STREQ( name, item->name() );
-  EXPECT_EQ( expr, item->init_value() );
-  EXPECT_EQ( 0, item->range_num() );
-  EXPECT_THROW( head->item(1),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{item},
-	     head->item_list() );
-  EXPECT_THROW( item->range(0),
-		std::out_of_range );
+  check_DeclItem(item, FileRegion(fr2, fr3), name, {}, expr);
 }
 
-TEST_F(ParserTest, DeclItem3)
+TEST_F(ParserTest_Decl, DeclItem3)
 {
   parser.init_module();
 
@@ -909,28 +766,12 @@ TEST_F(ParserTest, DeclItem3)
   range_list->push_back(astmgr.alloc(), range);
   auto fr = make_file_region(1, 2, 3, 4);
   parser.new_DeclItem(fr, name, range_list);
+  auto item = parser._declitem_list().front();
 
-  auto sign = false;
-  auto type = VpiNetType::Wire;
-  auto fr5 = make_file_region(5, 5, 5, 5);
-  auto head = parser.new_NetH(fr5, type, sign);
-  parser.add_decl_head(head, nullptr);
-
-  EXPECT_EQ( 1, head->item_num() );
-  auto item = head->item(0);
-  ASSERT_TRUE( item != nullptr );
-  EXPECT_EQ( fr, item->file_region() );
-  EXPECT_STREQ( name, item->name() );
-  EXPECT_EQ( nullptr, item->init_value() );
-  EXPECT_EQ( 1, item->range_num() );
-  EXPECT_EQ( range, item->range(0) );
-  EXPECT_THROW( head->item(1),
-		std::out_of_range );
-  EXPECT_EQ( std::vector<const AstDeclItem*>{item},
-	     head->item_list() );
+  check_DeclItem(item, fr, name, {range}, nullptr);
 }
 
-TEST_F(ParserTest, Range)
+TEST_F(ParserTest_Decl, Range)
 {
   auto left_fr = make_file_region(1, 1, 1, 1);
   SizeType left_val = 31U;
@@ -939,8 +780,8 @@ TEST_F(ParserTest, Range)
   auto left = parser.new_IntConst(left_fr, left_val);
   auto right = parser.new_IntConst(right_fr, right_val);
   auto range = parser.new_Range(FileRegion(left_fr, right_fr), left, right);
-  ASSERT_TRUE( range != nullptr );
-  EXPECT_EQ( FileRegion(left_fr, right_fr), range->file_region() );
+
+  check_Base(range, FileRegion(left_fr, right_fr));
   EXPECT_EQ( left, range->left() );
   EXPECT_EQ( right, range->right() );
 }

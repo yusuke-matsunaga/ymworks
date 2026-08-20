@@ -50,11 +50,11 @@ DeclGen::~DeclGen()
 void
 DeclGen::phase1_decl(
   const VlScope* scope,
-  const std::vector<const AstDeclHead*>& ast_head_array,
+  const AstDeclHeadVec& ast_head_list,
   bool force_to_local
 )
 {
-  for ( auto ast_head: ast_head_array ) {
+  for ( auto ast_head: ast_head_list ) {
     try {
       switch ( ast_head->type() ) {
       case AstDeclHead::Param:
@@ -85,7 +85,7 @@ void
 DeclGen::instantiate_iodecl(
   ElbModule* module,
   ElbTaskFunc* taskfunc,
-  const std::vector<const AstIOHead*>& ast_head_array
+  const AstIOHeadVec& ast_head_list
 )
 {
   auto scope = (const VlScope*){nullptr};
@@ -99,7 +99,7 @@ DeclGen::instantiate_iodecl(
     throw std::logic_error{"scope == nullptr"};
   }
 
-  for ( auto ast_head: ast_head_array ) {
+  for ( auto ast_head: ast_head_list ) {
     auto def_aux_type = ast_head->aux_type();
     auto sign = ast_head->is_signed();
     auto ast_range = ast_head->range();
@@ -296,10 +296,10 @@ DeclGen::instantiate_iodecl(
 void
 DeclGen::instantiate_decl(
   const VlScope* scope,
-  const std::vector<const AstDeclHead*>& ast_head_array
+  const AstDeclHeadVec& ast_head_list
 )
 {
-  for ( auto ast_head: ast_head_array ) {
+  for ( auto ast_head: ast_head_list ) {
     try {
       switch ( ast_head->type() ) {
       case AstDeclHead::Param:
@@ -764,7 +764,8 @@ DeclGen::instantiate_dimension_list(
   auto n = ast_item->range_num();
   range_src.reserve(n);
 
-  for ( auto ast_range: ast_item->range_list() ) {
+  for ( SizeType i = 0; i < n; ++ i ) {
+    auto ast_range = ast_item->range(i);
     auto range = evaluate_range(scope, ast_range);
     range_src.push_back(ElbRangeSrc(ast_range,
 				    ast_range->left(), ast_range->right(),

@@ -88,52 +88,58 @@ public:
   VpiOpType
   op_type() const = 0;
 
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  ///
-  /// - type() != Opr の時 std::logi_error 例外を送出する．
-  virtual
-  SizeType
-  operand_num() const = 0;
-
   /// @brief 0番目のオペランドの取得
   ///
-  /// - operand_num() == 0 の時は std::out_of_range 例外を送出する．
-  /// - type() != Opr の時 std::logi_error 例外を送出する．
+  /// - 単項，二項，三項演算以外は std::logic_error 例外を送出する．
   virtual
   const AstExpr*
   operand0() const = 0;
 
   /// @brief 1番目のオペランドの取得
   ///
-  /// - operand_num() <= 1 の時は std::out_of_range 例外を送出する．
-  /// - type() != Opr の時 std::logi_error 例外を送出する．
+  /// - 二項，三項演算以外は std::logic_error 例外を送出する．
   virtual
   const AstExpr*
   operand1() const = 0;
 
   /// @brief 2番目のオペランドの取得
   ///
-  /// - operand_num() <= 2 の時は std::out_of_range 例外を送出する．
-  /// - type() != Opr の時 std::logi_error 例外を送出する．
+  /// - 三項演算以外は std::logic_error 例外を送出する．
   virtual
   const AstExpr*
   operand2() const = 0;
 
-  /// @brief オペランドの取得
-  /// @return pos 番目のオペランド
+  /// @brief オペランドの数の取得
+  /// @return 子供の数
   ///
-  /// - operand_num() <= pos の時は std::out_of_range 例外を送出する．
-  /// - type() != Opr の時 std::logi_error 例外を送出する．
+  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
+  ///   std::logi_error 例外を送出する．
+  virtual
+  SizeType
+  operand_num() const = 0;
+
+  /// @brief オペランドのリストの取得
+  ///
+  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
+  ///   std::logi_error 例外を送出する．
   virtual
   const AstExpr*
   operand(
-    SizeType pos ///< [in] 取り出すオペランンドの位置(最初の位置は 0)
+    SizeType index ///< [in] インデックス ( 0 <= index < operand_num() )
   ) const = 0;
+
+  /// @brief オペランドのリストの取得
+  ///
+  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
+  ///   std::logi_error 例外を送出する．
+  virtual
+  AstExprVec
+  operand_list() const = 0;
 
   /// @brief multi-concat の繰り返し数
   ///
-  /// - type() != Opr および op_type() != MultiConcat の時 std::logic 例外を送出する．
+  /// - type() != Opr および op_type() != MultiConcat の時
+  ///   std::logic 例外を送出する．
   virtual
   const AstExpr*
   rep() const = 0;
@@ -163,13 +169,19 @@ public:
 
   /// @brief インデックスの取得
   ///
-  /// - index_num() <= pos の時 std::out_of_range 例外を送出する．
   /// - op_type() != Primary の時 std::logic_error 例外を送出する．
   virtual
   const AstExpr*
   index(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < index_num() )
+    SizeType i ///< [in] インデックス ( 0 <= i < index_num() )
   ) const = 0;
+
+  /// @brief インデックスリストの取得
+  ///
+  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
+  virtual
+  AstExprVec
+  index_list() const = 0;
 
   /// @brief 範囲指定を表す構文木を返す．
   /// @return 範囲指定

@@ -70,25 +70,32 @@ CptIOHBase::range() const
 SizeType
 CptIOHBase::item_num() const
 {
-  return mItemArray.size();
+  return mItemList.size();
 }
 
-// @brief 要素の取得
+// @brief 要素を返す．
 const AstIOItem*
 CptIOHBase::item(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mItemArray[pos];
+  return mItemList[index];
+}
+
+// @brief 要素のリストの取得
+AstIOItemVec
+CptIOHBase::item_list() const
+{
+  return mItemList.to_vector();
 }
 
 // @brief 要素リストの設定
 void
 CptIOHBase::set_elem(
-  PtIOItemArray&& elem_array
+  PtIOItemArray&& elem_list
 )
 {
-  mItemArray = std::move(elem_array);
+  mItemList = std::move(elem_list);
 }
 
 

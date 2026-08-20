@@ -124,25 +124,32 @@ private:
     const FileLoc& file_loc ///< [in] ファイルの位置情報
   );
 
+  /// @brief ポート結線式を出力する．
+  void
+  put_portref(
+    const AstExpr* expr,
+    VpiDir dir
+  );
+
   /// @brief 宣言を出力する．
   void
   put_decls(
-    const std::vector<const AstIOHead*>& iohead_array,
-    const std::vector<const AstDeclHead*>& declhead_array
+    const AstIOHeadVec& iohead_list,    ///< [in] IO宣言のリスト
+    const AstDeclHeadVec& declhead_list ///< [in] 宣言のリスト
   );
 
   /// @brief 宣言と要素を出力する．
   void
   put_decl_item(
-    const char* label,                                ///< [in] ラベル
-    const std::vector<const AstDeclHead*>& decl_array, ///< [in] 宣言の配列
-    const std::vector<const AstItem*>& item_array      ///< [in] 要素の配列
+    const char* label,                  ///< [in] ラベル
+    const AstDeclHeadVec& decl_list,    ///< [in] 宣言のリスト
+    const AstItemVec& item_list         ///< [in] 要素のリスト
   );
 
   /// @brief 階層名の出力
   void
   put(
-    const std::vector<const AstNameBranch*>& nb_array
+    const AstNameBranchVec& nb_list
   );
 
   /// @brief ブール型データの出力

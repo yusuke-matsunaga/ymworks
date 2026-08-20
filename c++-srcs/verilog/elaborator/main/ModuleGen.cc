@@ -194,9 +194,10 @@ ModuleGen::phase2_module_item(
   instantiate_iodecl(module, ast_module->iohead_list());
 
   // ポートを実体化する
-  for ( SizeType index = 0; index < ast_module->port_num(); ++ index ) {
-    auto ast_port = ast_module->port(index);
+  SizeType index = 0;
+  for ( auto ast_port: ast_module->port_list() ) {
     instantiate_port(module, index, ast_port);
+    ++ index;
   }
 }
 
@@ -216,32 +217,38 @@ ModuleGen::instantiate_port(
   }
   else if ( n == 1 ) {
     // 単一の要素の場合
-    auto ast_portref = ast_port->portref_elem(0);
+    auto ast_expr = ast_port->portref(0);
     auto dir = ast_port->portref_dir(0);
-    auto low_conn = instantiate_portref(module, ast_portref);
+    auto low_conn = instantiate_portref(module, ast_expr);
     module->init_port(index, ast_port, low_conn, dir);
   }
   else if ( n > 1 ) {
     // 複数要素の結合の場合
-    std::vector<ElbExpr*> expr_list(n);
-    std::vector<ElbExpr*> lhs_elem_array(n);
+    std::vector<ElbExpr*> expr_list;
+    expr_list.reserve(n);
     auto dir = VpiDir::NoDirection;
-    for ( SizeType i = 0; i < n; ++ i ) {
-      auto ast_portexpr = ast_port->portref_elem(i);
-      auto portexpr = instantiate_portref(module, ast_portexpr);
-      if ( !portexpr ) {
+    for ( SizeType i = 0; i < ast_port->portref_size(); ++ i ) {
+      auto ast_expr = ast_port->portref(i);
+      auto expr = instantiate_portref(module, ast_expr);
+      if ( !expr ) {
 	return;
       }
-      expr_list[i] = portexpr;
-      lhs_elem_array[n - i - 1] = portexpr;
 
-      auto dir1 = ast_port->portref_dir(i);
+      auto dir1 = ast_port->portref_dir(expr_list.size());
       if ( dir == VpiDir::NoDirection ) {
 	dir = dir1;
       }
       else if ( dir != dir1 ) {
 	dir = VpiDir::MixedIO;
       }
+      expr_list.push_back(expr);
+    }
+
+    // lhs_elem_array は expr_list の逆順にする．
+    std::vector<ElbExpr*> lhs_elem_array(n);
+    for ( SizeType i = 0; i < n; ++ i ) {
+      auto expr = expr_list[i];
+      lhs_elem_array[n - i - 1] = expr;
     }
 
     auto low_conn = mgr().new_Lhs(ast_port->expr(), expr_list, lhs_elem_array);
@@ -253,33 +260,33 @@ ModuleGen::instantiate_port(
 ElbExpr*
 ModuleGen::instantiate_portref(
   ElbModule* module,
-  const AstExpr* ast_portref
+  const AstExpr* ast_expr
 )
 {
-  auto name = ast_portref->name();
+  auto name = ast_expr->name();
   auto handle = mgr().find_obj(module, name);
   if ( !handle ) {
     ErrorGen::not_found(__FILE__, __LINE__,
-			ast_portref->file_region(), name);
+			ast_expr->file_region(), name);
   }
 
   if ( handle->declarray() ) {
     ErrorGen::port_array(__FILE__, __LINE__,
-			 ast_portref->file_region(), handle->declarray());
+			 ast_expr->file_region(), handle->declarray());
   }
 
   auto decl = handle->decl();
   if ( decl == nullptr ) {
     ErrorGen::illegal_port(__FILE__, __LINE__,
-			   ast_portref->file_region(), name);
+			   ast_expr->file_region(), name);
   }
 
-  auto primary = mgr().new_Primary(ast_portref, decl);
+  auto primary = mgr().new_Primary(ast_expr, decl);
 
   // 添字の部分を実体化する．
-  const AstExpr* ast_index{nullptr};
-  if ( ast_portref->index_num() == 0 ) {
-    ast_index = ast_portref->index(0);
+  const AstExpr* ast_index = nullptr;
+  if ( ast_expr->index_num() > 0 ) {
+    ast_index = ast_expr->index_list().front();
   }
   if ( ast_index ) {
     int index_val = evaluate_int(module, ast_index);
@@ -289,9 +296,9 @@ ModuleGen::instantiate_portref(
       // 添字が範囲外
       warning_index_out_of_range(ast_index->file_region());
     }
-    return mgr().new_BitSelect(ast_portref, primary, ast_index, index_val);
+    return mgr().new_BitSelect(ast_expr, primary, ast_index, index_val);
   }
-  auto ast_part = ast_portref->part();
+  auto ast_part = ast_expr->part();
   if ( ast_part != nullptr ) {
     auto range = evaluate_range(module, ast_part);
     SizeType offset;
@@ -305,7 +312,7 @@ ModuleGen::instantiate_portref(
       // 右の添字が範囲外
       warning_right_index_out_of_range(ast_part->right()->file_region());
     }
-    return mgr().new_PartSelect(ast_portref, primary,
+    return mgr().new_PartSelect(ast_expr, primary,
 				ast_part->left(), ast_part->right(),
 				range.left, range.right);
   }

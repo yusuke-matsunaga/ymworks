@@ -29,7 +29,7 @@ END_NONAMESPACE
 void
 StmtGen::phase2_namedblock(
   const VlScope* parent,
-  const std::vector<const AstDeclHead*>& ast_head_array
+  const AstDeclHeadVec& ast_head_list
 )
 {
   if ( debug ) {
@@ -41,7 +41,7 @@ StmtGen::phase2_namedblock(
 	 << "] )" << std::endl;
   }
 
-  instantiate_decl(parent, ast_head_array);
+  instantiate_decl(parent, ast_head_list);
 
   if ( debug ) {
     dout << "phase2_namedblock end" << std::endl

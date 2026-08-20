@@ -54,6 +54,7 @@ TEST_F(ParserTest, UdpEntry1)
   auto fr1 = make_file_region(1, 1, 1, 9);
   auto isym1 = '0';
   parser.new_UdpValue(fr1, isym1);
+  auto val1 = parser._udp_value_list().front();
   auto fr2 = make_file_region(1, 10, 1, 19);
   auto osym1 = '1';
   parser.new_UdpEntry(fr1, fr2, osym1);
@@ -63,9 +64,9 @@ TEST_F(ParserTest, UdpEntry1)
 
   ASSERT_TRUE( ue != nullptr );
   EXPECT_EQ( 1, ue->input_num() );
-  EXPECT_THROW( ue->input(1),
-		std::out_of_range );
-  auto val1 = ue->input(0);
+  EXPECT_EQ( std::vector<const AstUdpValue*>{val1},
+	     ue->input_list() );
+
   EXPECT_EQ( VlUdpVal(isym1), val1->symbol() );
   EXPECT_EQ( nullptr, ue->current() );
   auto oval = ue->output();
@@ -80,6 +81,7 @@ TEST_F(ParserTest, UdpEntry2)
   auto fr1 = make_file_region(1, 1, 1, 9);
   auto isym1 = '0';
   parser.new_UdpValue(fr1, isym1);
+  auto val1 = parser._udp_value_list().front();
   auto fr2 = make_file_region(1, 10, 1, 19);
   auto csym1 = 'x';
   auto fr3 = make_file_region(1, 20, 1, 29);
@@ -91,9 +93,9 @@ TEST_F(ParserTest, UdpEntry2)
 
   ASSERT_TRUE( ue != nullptr );
   EXPECT_EQ( 1, ue->input_num() );
-  EXPECT_THROW( ue->input(1),
-		std::out_of_range );
-  auto val1 = ue->input(0);
+  EXPECT_EQ( std::vector<const AstUdpValue*>{val1},
+	     ue->input_list() );
+
   EXPECT_EQ( VlUdpVal(isym1), val1->symbol() );
   auto cval = ue->current();
   EXPECT_EQ( VlUdpVal(csym1), cval->symbol() );

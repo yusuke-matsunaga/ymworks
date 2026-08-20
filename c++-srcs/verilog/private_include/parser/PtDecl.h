@@ -30,7 +30,7 @@ public:
   virtual
   void
   set_elem(
-    PtIOItemArray&& elem_array ///< [in] 要素の配列
+    PtIOItemArray&& elem_list ///< [in] 要素の配列
   ) = 0;
 
 };
@@ -62,7 +62,7 @@ public:
   virtual
   void
   set_elem(
-    PtDeclItemArray&& elem_array ///< [in] 要素の配列
+    PtDeclItemArray&& elem_list ///< [in] 要素の配列
   ) = 0;
 
 };

@@ -136,9 +136,9 @@ public:
   /// 不適切な式ならば内部でエラーメッセージを出力して nullptr を返す．
   const VlDelay*
   instantiate_delay_sub(
-    const VlScope* parent,                     ///< [in] 親のスコープ
-    const AstBase* ast_obj,                      ///< [in] 遅延式を表すパース木
-    const std::vector<const AstExpr*>& ast_expr_array ///< [in] 遅延式の配列
+    const VlScope* parent,           ///< [in] 親のスコープ
+    const AstBase* ast_obj,          ///< [in] 遅延式を表すパース木
+    const std::vector<const AstExpr*>& ast_expr_list ///< [in] 遅延式の配列
   );
 
 

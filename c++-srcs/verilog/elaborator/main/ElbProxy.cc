@@ -83,51 +83,51 @@ ElbProxy::phase1_module_item(
 void
 ElbProxy::phase1_decl(
   const VlScope* parent,
-  const std::vector<const AstDeclHead*>& ast_head_array,
+  const AstDeclHeadVec& ast_head_list,
   bool force_to_local
 )
 {
-  mDeclGen->phase1_decl(parent, ast_head_array, force_to_local);
+  mDeclGen->phase1_decl(parent, ast_head_list, force_to_local);
 }
 
 // @brief IO宣言要素を実体化する．
 void
 ElbProxy::instantiate_iodecl(
   ElbModule* module,
-  const std::vector<const AstIOHead*>& ast_head_array
+  const AstIOHeadVec& ast_head_list
 )
 {
-  mDeclGen->instantiate_iodecl(module, nullptr, ast_head_array);
+  mDeclGen->instantiate_iodecl(module, nullptr, ast_head_list);
 }
 
 // @brief IO宣言要素を実体化する．
 void
 ElbProxy::instantiate_iodecl(
   ElbTaskFunc* taskfunc,
-  const std::vector<const AstIOHead*>& ast_head_array
+  const AstIOHeadVec& ast_head_list
 )
 {
-  mDeclGen->instantiate_iodecl(nullptr, taskfunc, ast_head_array);
+  mDeclGen->instantiate_iodecl(nullptr, taskfunc, ast_head_list);
 }
 
 // @brief 宣言要素のリストをインスタンス化する．
 void
 ElbProxy::instantiate_decl(
   const VlScope* parent,
-  const std::vector<const AstDeclHead*>& ast_head_array
+  const AstDeclHeadVec& ast_head_list
 )
 {
-  mDeclGen->instantiate_decl(parent, ast_head_array);
+  mDeclGen->instantiate_decl(parent, ast_head_list);
 }
 
 // @brief スコープに関係する要素を実体化する．
 void
 ElbProxy::phase1_items(
   const VlScope* parent,
-  const std::vector<const AstItem*>& ast_item_array
+  const AstItemVec& ast_item_list
 )
 {
-  mItemGen->phase1_items(parent, ast_item_array);
+  mItemGen->phase1_items(parent, ast_item_list);
 }
 
 // @brief constant function の生成を行う．

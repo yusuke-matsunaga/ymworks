@@ -8,6 +8,8 @@
 
 #include "CptModule.h"
 #include "alloc/Alloc.h"
+#include "parser/PtPort.h"
+#include "parser/PtDecl.h"
 #include "parser/PtFactory.h"
 
 
@@ -36,22 +38,22 @@ CptModule::CptModule(
   const std::string& config,
   const std::string& library,
   const std::string& cell,
-  PtDeclHeadArray&& paramport_array,
-  PtPortArray&& port_array,
-  PtIOHeadArray&& iohead_array,
-  PtDeclHeadArray&& declhead_array,
-  PtItemArray&& item_array
+  PtDeclHeadArray&& paramport_list,
+  PtPortArray&& port_list,
+  PtIOHeadArray&& iohead_list,
+  PtDeclHeadArray&& declhead_list,
+  PtItemArray&& item_list
 ) : mFileRegion{file_region},
     mName{name},
     mDefDecayTime{decay},
     mConfig{config},
     mLibrary{library},
     mCell{cell},
-    mParamPortArray{std::move(paramport_array)},
-    mPortArray{std::move(port_array)},
-    mIOHeadArray{std::move(iohead_array)},
-    mDeclHeadArray{std::move(declhead_array)},
-    mItemArray{std::move(item_array)}
+    mParamPortList{std::move(paramport_list)},
+    mPortList{std::move(port_list)},
+    mIOHeadList{std::move(iohead_list)},
+    mDeclHeadList{std::move(declhead_list)},
+    mItemList{std::move(item_list)}
 {
   mFlags =
     static_cast<std::uint32_t>(is_cell)
@@ -69,7 +71,7 @@ CptModule::CptModule(
     ;
 
   mIODeclNum = 0;
-  for ( auto head: mIOHeadArray ) {
+  for ( auto head: mIOHeadList ) {
     mIODeclNum += head->item_num();
   }
 }
@@ -97,48 +99,69 @@ CptModule::name() const
 SizeType
 CptModule::paramport_num() const
 {
-  return mParamPortArray.size();
+  return mParamPortList.size();
 }
 
 // @brief パラメータポート宣言の取得
 const AstDeclHead*
 CptModule::paramport(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mParamPortArray[pos];
+  return mParamPortList[index];
+}
+
+// @brief パラメータポート宣言のリストの取得
+AstDeclHeadVec
+CptModule::paramport_list() const
+{
+  return mParamPortList.to_vector();
 }
 
 // @brief ポート数を取り出す．
 SizeType
 CptModule::port_num() const
 {
-  return mPortArray.size();
+  return mPortList.size();
 }
 
-// @brief ポートを取り出す．
+// @brief ポートを返す．
 const AstPort*
 CptModule::port(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mPortArray[pos];
+  return mPortList[index];
+}
+
+// @brief ポートのリストを返す．
+AstPortVec
+CptModule::port_list() const
+{
+  return mPortList.to_vector();
 }
 
 // @brief 入出力宣言ヘッダ配列の要素数の取得
 SizeType
 CptModule::iohead_num() const
 {
-  return mIOHeadArray.size();
+  return mIOHeadList.size();
 }
 
-// @brief 入出力宣言の取得
+// @brief 入出力宣言のヘッダを返す．
 const AstIOHead*
 CptModule::iohead(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mIOHeadArray[pos];
+  return mIOHeadList[index];
+}
+
+// @brief 入出力宣言のヘッダのリストを返す．
+AstIOHeadVec
+CptModule::iohead_list() const
+{
+  return mIOHeadList.to_vector();
 }
 
 // @brief 入出力宣言の要素数の取得
@@ -152,32 +175,46 @@ CptModule::iodecl_num() const
 SizeType
 CptModule::declhead_num() const
 {
-  return mDeclHeadArray.size();
+  return mDeclHeadList.size();
 }
 
-// @brief 宣言ヘッダの取得
+// @brief 宣言ヘッダを返す．
 const AstDeclHead*
 CptModule::declhead(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mDeclHeadArray[pos];
+  return mDeclHeadList[index];
+}
+
+// @brief 宣言ヘッダのリストを返す．
+AstDeclHeadVec
+CptModule::declhead_list() const
+{
+  return mDeclHeadList.to_vector();
 }
 
 // @brief item 配列の要素数の取得
 SizeType
 CptModule::item_num() const
 {
-  return mItemArray.size();
+  return mItemList.size();
 }
 
-// @brief item の取得
+// @brief item を返す．
 const AstItem*
 CptModule::item(
-  SizeType pos
+  SizeType index
 ) const
 {
-  return mItemArray[pos];
+  return mItemList[index];
+}
+
+// @brief item のリストを返す．
+AstItemVec
+CptModule::item_list() const
+{
+  return mItemList.to_vector();
 }
 
 // macromodule の時 true を返す．
@@ -352,11 +389,11 @@ PtFactory::new_Module(
   const std::string& config,
   const std::string& library,
   const std::string& cell,
-  PtDeclHeadArray&& paramport_array,
-  PtPortArray&& port_array,
-  PtIOHeadArray&& iohead_array,
-  PtDeclHeadArray&& declhead_array,
-  PtItemArray&& item_array
+  const std::vector<PtDeclHead*>& paramport_list,
+  const std::vector<PtPort*>& port_list,
+  const std::vector<PtIOHead*>& iohead_list,
+  const std::vector<PtDeclHead*>& decl_list,
+  const AstItemVec& item_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptModule));
@@ -368,11 +405,11 @@ PtFactory::new_Module(
 			   explicit_name,
 			   portfaults, suppress_faults,
 			   config, library, cell,
-			   std::move(paramport_array),
-			   std::move(port_array),
-			   std::move(iohead_array),
-			   std::move(declhead_array),
-			   std::move(item_array));
+			   PtDeclHeadArray(mAlloc, paramport_list),
+			   PtPortArray(mAlloc, port_list),
+			   PtIOHeadArray(mAlloc, iohead_list),
+			   PtDeclHeadArray(mAlloc, decl_list),
+			   PtItemArray(mAlloc, item_list));
 }
 
 END_NAMESPACE_YM_VERILOG

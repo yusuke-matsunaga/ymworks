@@ -10,33 +10,27 @@
 
 #include "ym/verilog.h"
 #include "ym/vl/Ast.h"
+#include "ym/MsgMgr.h"
 #include "parser/PtArray.h"
+#include "alloc/Alloc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-template <typename T1,
-	  typename T2>
-class PtList;
-
 //////////////////////////////////////////////////////////////////////
-/// @class PtListCell PtList.h "PtList.h"
-/// @brief PtList 用のセル
+/// @class PtListCell PtList.h "parser/PtList.h"
+/// @brief PtList のセルを表すクラス
 //////////////////////////////////////////////////////////////////////
 template <typename T>
 struct PtListCell
 {
-  // 本体を指すポインタ
-  T* mPtr;
-
-  // リンクポインタ
-  PtListCell* mLink;
-
+  T mVal;            ///< 要素
+  PtListCell* mLink; ///< リンクポインタ
 };
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class PtListIterator PtList.h "PtList.h"
+/// @class PtListIterator PList.h "parser/PtList.h"
 /// @brief PtList 用の反復子
 //////////////////////////////////////////////////////////////////////
 template <typename T>
@@ -45,19 +39,16 @@ class PtListIterator
   using Cell = PtListCell<T>;
 
 public:
+  //////////////////////////////////////////////////////////////////////
+  // コンストラクタ/デストラクタ
+  //////////////////////////////////////////////////////////////////////
 
-  /// @brief コンストラクタ
+  /// @brief 空のコンストラクタ
   PtListIterator() = default;
 
-  /// @brief コピーコンストラクタ
+  /// @brief AstList が用いるコンストラクタ
   PtListIterator(
-    const PtListIterator& src ///< [in] ソース
-  ) = default;
-
-  /// @brief PtList が用いるコンストラクタ
-  explicit
-  PtListIterator(
-    Cell* cell ///< [in] 要素
+    Cell* cell
   ) : mCell{cell}
   {
   }
@@ -67,15 +58,18 @@ public:
 
 
 public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容を取り出す演算子
-  T*
+  T
   operator*() const
   {
-    if ( mCell ) {
-      return mCell->mPtr;
+    if ( mCell == nullptr ) {
+      throw std::logic_error{"illegal position"};
     }
-    return nullptr;
+    return mCell->mVal;
   }
 
   /// @brief 次の要素を指す．
@@ -86,12 +80,12 @@ public:
       mCell = mCell->mLink;
     }
     return *this;
-  }
+  };
 
   /// @brief 等価比較演算子
   bool
   operator==(
-    const PtListIterator& right ///< [in] 相手のオペランド
+    const PtListIterator& right
   ) const
   {
     return mCell == right.mCell;
@@ -100,7 +94,7 @@ public:
   /// @brief 非等価比較演算子
   bool
   operator!=(
-    const PtListIterator<T>& right
+    const PtListIterator& right
   ) const
   {
     return !operator==(right);
@@ -118,21 +112,20 @@ private:
 };
 
 
-
 //////////////////////////////////////////////////////////////////////
-/// @class PtList PtList.h "PtList.h"
+/// @class PtList PtList.h "parser/PtList.h"
 /// @brief リスト構造のテンプレートクラス
-/// @note T2 は T1 の親クラス
 ///
 /// 単純なリンクトリストの実装
+///
+/// T2 は T1 の継承クラスであると仮定している．
 //////////////////////////////////////////////////////////////////////
-template <typename T1,
-	  typename T2 = T1>
+template <typename T1, typename T2>
 class PtList
 {
 public:
 
-  using const_iterator = PtListIterator<T1>;
+  using iterator = PtListIterator<T1>;
   using Cell = PtListCell<T1>;
 
 public:
@@ -140,11 +133,110 @@ public:
   /// @brief コンストラクタ
   PtList() = default;
 
+  /// @brief std::vector<T1> からのコンストラクタ
+  PtList(
+    Alloc& alloc,
+    const std::vector<T1>& vec
+  )
+  {
+    for ( auto elem: vec ) {
+      push_back(alloc, elem);
+    }
+  }
+
+  /// @brief std::vector<T2> からのコンストラクタ
+  PtList(
+    Alloc& alloc,
+    const std::vector<T2>& vec
+  )
+  {
+    for ( auto elem: vec ) {
+      push_back(alloc, elem);
+    }
+  }
+
   /// @brief デストラクタ
   ~PtList() = default;
 
 
 public:
+  //////////////////////////////////////////////////////////////////////
+  // 内容を読み出す関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要素数の取得
+  SizeType
+  size() const
+  {
+    return mSize;
+  }
+
+  /// @brief 空の時に true を返す．
+  bool
+  empty() const
+  {
+    return mSize == 0;
+  }
+
+  /// @brief 先頭の反復子を返す．
+  iterator
+  begin() const
+  {
+    return iterator(mTop);
+  }
+
+  /// @brief 末尾の反復子を返す．
+  iterator
+  end() const
+  {
+    return iterator(nullptr);
+  }
+
+  /// @brief 先頭の要素を返す．
+  T1
+  front() const
+  {
+    if ( mTop == nullptr ) {
+      throw std::logic_error{"list is empty"};
+    }
+    return mTop->mVal;
+  }
+
+  /// @brief 内容を PtArray<T1> に変換する．
+  ///
+  /// この処理の後ではリストは空になる．
+  PtArray<T1, T2>
+  to_array(
+    Alloc& alloc ///< [in] アロケータ
+  )
+  {
+    PtArray<T1, T2> vec(alloc, mSize);
+    SizeType pos = 0;
+    for ( auto elem: *this ) {
+      vec.set(pos, elem);
+      ++ pos;
+    }
+    clear();
+    return vec;
+  }
+
+  /// @brief std::vector<T1> に変換する．
+  std::vector<T1>
+  to_vector() const
+  {
+    std::vector<T1> vec;
+    vec.reserve(mSize);
+    for ( auto elem: *this ) {
+      vec.push_back(elem);
+    }
+    return vec;
+  }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 内容を設定する関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief リストのクリア
   void
@@ -152,14 +244,14 @@ public:
   {
     mTop = nullptr;
     mEnd = nullptr;
-    mNum = 0;
+    mSize = 0;
   }
 
   /// @brief 要素を先頭に追加
   void
   push_front(
     Alloc& alloc, ///< [in] アロケータ
-    T1* elem      ///< [in] 追加する要素
+    T1 elem       ///< [in] 追加する要素
   )
   {
     auto cell = new_cell(alloc, elem, mTop);
@@ -167,14 +259,14 @@ public:
     if ( mEnd == nullptr ) {
       mEnd = cell;
     }
-    ++ mNum;
+    ++ mSize;
   }
 
   /// @brief 要素を末尾に追加
   void
   push_back(
     Alloc& alloc, ///< [in] アロケータ
-    T1* elem      ///< [in] 追加する要素
+    T1 elem       ///< [in] 追加する要素
   )
   {
     auto cell = new_cell(alloc, elem, nullptr);
@@ -185,95 +277,25 @@ public:
       mEnd->mLink = cell;
     }
     mEnd = cell;
-    ++ mNum;
+    ++ mSize;
   }
 
-  /// @brief 要素数の取得
-  /// @return 要素数
-  SizeType
-  size() const
-  {
-    return mNum;
-  }
-
-  /// @brief 空の時に true を返す．
-  bool
-  empty() const
-  {
-    return mNum == 0;
-  }
-
-  /// @brief 先頭の反復子を返す．
-  const_iterator
-  begin() const
-  {
-    return PtListIterator<T1>(mTop);
-  }
-
-  /// @brief 末尾の反復子を返す．
-  const_iterator
-  end() const
-  {
-    return PtListIterator<T1>(nullptr);
-  }
-
-  /// @brief 先頭の要素を返す．
-  T1*
-  front() const
-  {
-    if ( mTop ) {
-      return mTop->mPtr;
-    }
-    return nullptr;
-  }
-
-  /// @brief 末尾の要素を返す．
-  T1*
-  back() const
-  {
-    if ( mEnd ) {
-      return mEnd->mPtr;
-    }
-    return nullptr;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  /// 特別な関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 内容を PtArray<> にコピーする．
-  ///
-  /// この処理の後ではリストは空になる．
-  PtArray<T2>
-  to_array(
-    Alloc& alloc ///< [in] アロケータ
+  /// @brief 要素を末尾に追加
+  void
+  push_back(
+    Alloc& alloc, ///< [in] アロケータ
+    T2 elem       ///< [in] 追加する要素
   )
   {
-    PtArray<T2> vec(alloc, mNum);
-    SizeType pos = 0;
-    for ( auto elem: *this ) {
-      vec.set(pos, elem);
-      ++ pos;
+    auto cell = new_cell(alloc, elem, nullptr);
+    if ( mEnd == nullptr ) {
+      mTop = cell;
     }
-    clear();
-    return vec;
-  }
-
-  /// @brief 内容を std::vector<T2> にコピーする．
-  ///
-  /// この処理の後ではリストは空になる．
-  std::vector<T2*>
-  to_vector()
-  {
-    std::vector<T2*> vec;
-    vec.reserve(mNum);
-    for ( auto elem: *this ) {
-      vec.push_back(elem);
+    else {
+      mEnd->mLink = cell;
     }
-    clear();
-    return vec;
+    mEnd = cell;
+    ++ mSize;
   }
 
 
@@ -286,7 +308,7 @@ private:
   Cell*
   new_cell(
     Alloc& alloc, ///< [in] アロケータ
-    T1* ptr,      ///< [in] 本体の値
+    T1 ptr,       ///< [in] 本体の値
     Cell* link    ///< [in] 次の要素
   )
   {
@@ -300,14 +322,14 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
+  // 要素数
+  SizeType mSize{0};
+
   // 先頭の要素
   Cell* mTop{nullptr};
 
   // 末尾の要素
   Cell* mEnd{nullptr};
-
-  // 要素数
-  SizeType mNum{0};
 
 };
 
@@ -315,21 +337,26 @@ class PtAttrInst;
 class PtAttrSpec;
 class PtCaseItem;
 class PtConnection;
+class PtDeclHead;
 class PtExpr;
 class PtGenCaseItem;
 class PtNameBranch;
+class PtPort;
 class PtRange;
 class PtStmt;
 
-using PtAttrInstList    = PtList<const PtAttrInst, const AstAttrInst>;
-using PtAttrSpecList    = PtList<const PtAttrSpec, const AstAttrSpec>;
-using PtCaseItemList    = PtList<const PtCaseItem, const AstCaseItem>;
-using PtConnectionList  = PtList<const PtConnection, const AstConnection>;
-using PtExprList        = PtList<const PtExpr, const AstExpr>;
-using PtGenCaseItemList = PtList<const PtGenCaseItem, const AstGenCaseItem>;
-using PtNameBranchList  = PtList<const AstNameBranch>;
-using PtRangeList       = PtList<const PtRange, const AstRange>;
-using PtStmtList        = PtList<const PtStmt, const AstStmt>;
+using PtAttrInstList    = PtList<const AstAttrInst*,    PtAttrInst*>;
+using PtAttrSpecList    = PtList<const AstAttrSpec*,    PtAttrSpec*>;
+using PtCaseItemList    = PtList<const AstCaseItem*,    PtCaseItem*>;
+using PtConnectionList  = PtList<const AstConnection*,  PtConnection*>;
+using PtDeclHeadList    = PtList<const AstDeclHead*,    PtDeclHead*>;
+using PtExprList        = PtList<const AstExpr*,        PtExpr*>;
+using PtGenCaseItemList = PtList<const AstGenCaseItem*, PtGenCaseItem*>;
+using PtIOHeadList      = PtList<const AstIOHead*,      PtIOHead*>;
+using PtNameBranchList  = PtList<const AstNameBranch*,  PtNameBranch*>;
+using PtPortList        = PtList<const AstPort*,        PtPort*>;
+using PtRangeList       = PtList<const AstRange*,       PtRange*>;
+using PtStmtList        = PtList<const AstStmt*,        PtStmt*>;
 
 END_NAMESPACE_YM_VERILOG
 
