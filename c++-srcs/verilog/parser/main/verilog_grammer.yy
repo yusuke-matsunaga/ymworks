@@ -115,6 +115,7 @@ fr_merge(
 
   PtIOHead* iohead;
   PtDeclHead* declhead;
+  PtRange* range;
 
   PtItem* item;
 
@@ -126,7 +127,7 @@ fr_merge(
   PtCaseItem* caseitem;
 
   PtExpr* expr;
-  PtRange* range;
+  PtExprList* exprlist;
   PtPart* part;
 
   PtStrength* strength;
@@ -138,7 +139,6 @@ fr_merge(
   PtAttrInst* attrinst;
   PtAttrSpec* attrspec;
 
-  PtExprList* exprlist;
 }
 
 // Lex 内部のみで用いられるトークン
@@ -3927,12 +3927,14 @@ genvar_case_head
 | DEFAULT
 {
   parser.init_generate();
-  $$ = parser.new_expr_list();
+  // 空リスト
+  $$ = parser.new_ExprList({});
 }
 | DEFAULT               ':'
 {
   parser.init_generate();
-  $$ = parser.new_expr_list();
+  // 空リスト
+  $$ = parser.new_ExprList({});
 }
 ;
 
@@ -4986,20 +4988,25 @@ event_trigger
 // event_primary という非終端ノードを定義する．
 // そもそも expression のなかに hierarchical_identifier は含まれてるでしょ．
 event_expression
+: eve_list
+{
+  $$ = parser.end_expr_list();
+}
+;
+
+eve_list
 : event_primary
 {
-  $$ = parser.new_expr_list();
-  parser.push_back($$, $1);
+  parser.init_expr_list();
+  parser.add_expr($1);
 }
-| event_expression OR event_primary
+| eve_list OR event_primary
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_expr($3);
 }
-| event_expression ',' event_primary
+| eve_list ',' event_primary
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_expr($3);
 }
 ;
 
@@ -5167,11 +5174,13 @@ case_item_label
 }
 | DEFAULT
 {
-  $$ = nullptr;
+  // 空リスト
+  $$ = parser.new_ExprList({});
 }
 | DEFAULT               ':'
 {
-  $$ = nullptr;
+  // 空リスト
+  $$ = parser.new_ExprList({});
 }
 ;
 
@@ -5320,19 +5329,23 @@ specify_item
 : specparam_declaration
 | PULSESTYLE_ONEVENT  nzlist_of_terminals ';'
 {
-  parser.new_SpecItem(@$, VpiSpecItemType::PulsestyleOnEvent, $2);
+  auto terminal_list = parser.end_expr_list();
+  parser.new_SpecItem(@$, VpiSpecItemType::PulsestyleOnEvent, terminal_list);
 }
 | PULSESTYLE_ONDETECT nzlist_of_terminals ';'
 {
-  parser.new_SpecItem(@$, VpiSpecItemType::PulsestyleOnDetect, $2);
+  auto terminal_list = parser.end_expr_list();
+  parser.new_SpecItem(@$, VpiSpecItemType::PulsestyleOnDetect, terminal_list);
 }
 | SHOWCANCELLED   nzlist_of_terminals ';'
 {
-  parser.new_SpecItem(@$, VpiSpecItemType::Showcancelled, $2);
+  auto terminal_list = parser.end_expr_list();
+  parser.new_SpecItem(@$, VpiSpecItemType::Showcancelled, terminal_list);
 }
 | NOSHOWCANCELLED nzlist_of_terminals ';'
 {
-  parser.new_SpecItem(@$, VpiSpecItemType::Noshowcancelled, $2);
+  auto terminal_list = parser.end_expr_list();
+  parser.new_SpecItem(@$, VpiSpecItemType::Noshowcancelled, terminal_list);
 }
 | path_declaration ';'
 {
@@ -5498,15 +5511,21 @@ specify_terminal
 // [SPEC*] nzlist_of_terminals ::=
 //              specify_terminal {',' specify_terminal}
 nzlist_of_terminals
+: nzlo_term
+{
+  $$ = parser.end_expr_list();
+}
+;
+
+nzlo_term
 : specify_terminal
 {
-  $$ = parser.new_expr_list();
-  parser.push_back($$, $1);
+  parser.init_expr_list();
+  parser.add_expr($1);
 }
-| nzlist_of_terminals ',' specify_terminal
+| nzlo_term ',' specify_terminal
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_expr($3);
 }
 ;
 
@@ -6029,15 +6048,21 @@ multiple_concatenation
 // [SPEC*] nzlist_of_expression ::=
 //              expression {',' expression }
 nzlist_of_expressions
+: nzlo_expr
+{
+  $$ = parser.end_expr_list();
+}
+;
+
+nzlo_expr
 : expression
 {
-  $$ = parser.new_expr_list();
-  parser.push_back($$, $1);
+  parser.init_expr_list();
+  parser.add_expr($1);
 }
-| nzlist_of_expressions ',' expression
+| nzlo_expr ',' expression
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_expr($3);
 }
 ;
 
@@ -6119,15 +6144,20 @@ system_function_call
 
 // [SPEC*] nzlist_of_arguments ::= argument {',' argument }
 nzlist_of_arguments
+: nzlo_arg
+{
+  $$ = parser.end_expr_list();
+}
+;
+
+nzlo_arg
 : argument
 {
-  $$ = parser.new_expr_list();
-  parser.push_back($$, $1);
+  parser.add_expr($1);
 }
-| nzlist_of_arguments ',' argument
+| nzlo_arg ',' argument
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_expr($3);
 }
 ;
 
@@ -6630,15 +6660,21 @@ lvalue
 
 // [SPEC*] nzlist_of_index ::= index { index }
 nzlist_of_index
+: nzlo_index
+{
+  $$ = parser.end_expr_list();
+}
+;
+
+nzlo_index
 : index
 {
-  $$ = parser.new_expr_list();
-  parser.push_back($$, $1);
+  parser.init_expr_list();
+  parser.add_expr($1);
 }
-| nzlist_of_index index
+| nzlo_index index
 {
-  $$ = $1;
-  parser.push_back($$, $2);
+  parser.add_expr($2);
 }
 ;
 
@@ -6652,15 +6688,21 @@ index
 
 // [SPEC*] nzlist_of_lvalues ::= lvalue {',' lvalue }
 nzlist_of_lvalues
+: nzlo_lval
+{
+  $$ = parser.end_expr_list();
+}
+;
+
+nzlo_lval
 : lvalue
 {
-  $$ = parser.new_expr_list();
-  parser.push_back($$, $1);
+  parser.init_expr_list();
+  parser.add_expr($1);
 }
-| nzlist_of_lvalues ',' lvalue
+| nzlo_lval ',' lvalue
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_expr($3);
 }
 ;
 

@@ -247,10 +247,10 @@ public:
   CptFuncCallBase(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& arg_list
+    const AstExprList* arg_list
   ) : mFileRegion{file_region},
       mName{name},
-      mArgList{std::move(arg_list)}
+      mArgList{arg_list}
   {
   }
 
@@ -305,7 +305,7 @@ private:
   const char* mName;
 
   // 引数の配列
-  PtExprArray mArgList;
+  const AstExprList* mArgList;
 
 };
 
@@ -322,8 +322,8 @@ public:
   CptFuncCall(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& arg_list
-  ) : CptFuncCallBase(file_region, name, std::move(arg_list))
+    const AstExprList* arg_list
+  ) : CptFuncCallBase(file_region, name, arg_list)
   {
   }
 
@@ -357,8 +357,8 @@ public:
     const FileRegion& file_region,
     PtNameBranchArray&& nb_list,
     const char* tail_name,
-    PtExprArray&& arg_list
-  ) : CptFuncCall(file_region, tail_name, std::move(arg_list)),
+    const AstExprList* arg_list
+  ) : CptFuncCall(file_region, tail_name, arg_list),
       mNbList{std::move(nb_list)}
   {
   }
@@ -410,8 +410,8 @@ public:
   CptSysFuncCall(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& arg_list
-  ) : CptFuncCallBase(file_region, name, std::move(arg_list))
+    const AstExprList* arg_list
+  ) : CptFuncCallBase(file_region, name, arg_list)
   {
   }
 
@@ -427,6 +427,57 @@ public:
   // クラスの型を返す．
   Type
   type() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class CptExprList CptExpr.h "CptExpr.h"
+/// @brief
+//////////////////////////////////////////////////////////////////////
+class CptExprList :
+  public PtExprList
+{
+public:
+
+  /// @brief コンストラクタ
+  CptExprList(
+    PtExprArray&& expr_list
+  ) : mExprList{std::move(expr_list)}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptExprList() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要素数を返す．
+  SizeType
+  size() const override;
+
+  /// @brief 要素を取り出す．
+  const AstExpr*
+  expr(
+    SizeType index ///< [in] インデックス ( 0 <= index < size() )
+  ) const override;
+
+  /// @brief ベクタに変換する．
+  AstExprVec
+  to_vector() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // Expr のリスト
+  PtExprArray mExprList;
 
 };
 

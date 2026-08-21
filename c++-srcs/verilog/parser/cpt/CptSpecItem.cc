@@ -41,7 +41,7 @@ CptSpecItem::specitem_type() const
 SizeType
 CptSpecItem::terminal_num() const
 {
-  return mTerminalList.size();
+  return mTerminalList->size();
 }
 
 // @brief ターミナルの取得
@@ -50,14 +50,14 @@ CptSpecItem::terminal(
   SizeType index
 ) const
 {
-  return mTerminalList[index];
+  return mTerminalList->expr(index);
 }
 
 // @brief ターミナルリストの取得
 AstExprVec
 CptSpecItem::terminal_list() const
 {
-  return mTerminalList.to_vector();
+  return mTerminalList->to_vector();
 }
 
 
@@ -123,7 +123,7 @@ CptPathDecl::edge() const
 SizeType
 CptPathDecl::input_num() const
 {
-  return mInputList.size();
+  return mInputList->size();
 }
 
 // @brief 入力の取得
@@ -132,14 +132,14 @@ CptPathDecl::input(
   SizeType index
 ) const
 {
-  return mInputList[index];
+  return mInputList->expr(index);
 }
 
 // @brief 入力のリストの取得
 AstExprVec
 CptPathDecl::input_list() const
 {
-  return mInputList.to_vector();
+  return mInputList->to_vector();
 }
 
 // 入力の極性を取り出す．
@@ -160,7 +160,7 @@ CptPathDecl::op() const
 SizeType
 CptPathDecl::output_num() const
 {
-  return mOutputList.size();
+  return mOutputList->size();
 }
 
 // @brief 出力の取得
@@ -169,14 +169,14 @@ CptPathDecl::output(
   SizeType index
 ) const
 {
-  return mOutputList[index];
+  return mOutputList->expr(index);
 }
 
 // @brief 出力リストの取得
 AstExprVec
 CptPathDecl::output_list() const
 {
-  return mOutputList.to_vector();
+  return mOutputList->to_vector();
 }
 
 // 出力の極性を取り出す．
@@ -314,12 +314,11 @@ PtItem*
 PtFactory::new_SpecItem(
   const FileRegion& file_region,
   VpiSpecItemType id,
-  PtExprList* terminal_list
+  const AstExprList* terminal_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecItem));
-  return new (p) CptSpecItem(file_region, id,
-			     terminal_list->to_array(mAlloc));
+  return new (p) CptSpecItem(file_region, id, terminal_list);
 }
 
 // path 仕様を生成する．
@@ -340,10 +339,10 @@ PtPathDecl*
 PtFactory::new_PathDecl(
   const FileRegion& file_region,
   int edge,
-  PtExprList* input_list,
+  const AstExprList* input_list,
   int input_pol,
   VpiPathType op,
-  PtExprList* output_list,
+  const AstExprList* output_list,
   int output_pol,
   const AstExpr* expr,
   const AstPathDelay* path_delay
@@ -351,11 +350,9 @@ PtFactory::new_PathDecl(
 {
   void* p = mAlloc.get_memory(sizeof(CptPathDecl));
   return new (p) CptPathDecl(file_region, edge,
-			     input_list->to_array(mAlloc),
-			     input_pol,
+			     input_list, input_pol,
 			     op,
-			     output_list->to_array(mAlloc),
-			     output_pol,
+			     output_list, output_pol,
 			     expr, path_delay);
 }
 

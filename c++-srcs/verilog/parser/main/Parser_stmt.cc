@@ -38,7 +38,7 @@ PtStmt*
 Parser::new_Enable(
   const FileRegion& fr,
   const char* name,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   return mFactory.new_Enable(fr, name, arg_list);
@@ -49,7 +49,7 @@ PtStmt*
 Parser::new_Enable(
   const FileRegion& fr,
   PtHierName* hname,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   return mFactory.new_Enable(fr, hname, arg_list);
@@ -60,7 +60,7 @@ PtStmt*
 Parser::new_SysEnable(
   const FileRegion& fr,
   const char* name,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   return mFactory.new_SysEnable(fr, name, arg_list);
@@ -224,7 +224,7 @@ Parser::new_CaseZ(
 PtCaseItem*
 Parser::new_CaseItem(
   const FileRegion& fr,
-  PtExprList* label_list,
+  const AstExprList* label_list,
   const AstStmt* body
 )
 {

@@ -170,7 +170,7 @@ public:
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const char* ext_name,  ///< [in] ポート名 (空文字列の場合もある)
     const AstExpr* expr,   ///< [in] ポートに接続している式 (ポート参照式)
-    PtExprList* portref_list ///< [in] ポートに接続している式 (ポート参照式)のリスト
+    const AstExprList* portref_list ///< [in] ポートに接続している式 (ポート参照式)のリスト
   );
 
 
@@ -589,7 +589,7 @@ public:
   PtGenCaseItem*
   new_GenCaseItem(
     const FileRegion& fr,      ///< [in] ファイル位置の情報
-    PtExprList* label_list,    ///< [in] 比較式のリスト
+    const AstExprList* label_list,    ///< [in] 比較式のリスト
     const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
     const AstItemVec& item_list      ///< [in] 要素のリスト
   );
@@ -614,7 +614,7 @@ public:
   new_SpecItem(
     const FileRegion& fr,     ///< [in] ファイル位置の情報
     VpiSpecItemType id,       ///< [in] specify block item の種類
-    PtExprList* terminal_list ///< [in] 端子のリスト
+    const AstExprList* terminal_list ///< [in] 端子のリスト
   );
 
   /// @brief path 仕様を生成する．
@@ -633,10 +633,10 @@ public:
   new_PathDecl(
     const FileRegion& fr,         ///< [in] ファイル位置の情報
     int edge,
-    PtExprList* input_list,
+    const AstExprList* input_list,
     int input_pol,
     VpiPathType op,
-    PtExprList* output_list,
+    const AstExprList* output_list,
     int output_pol,
     const AstExpr* expr,
     const AstPathDelay* path_delay
@@ -728,7 +728,7 @@ public:
   new_Enable(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 起動するタスク名
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief enable 文の生成 (階層付き識別子)
@@ -737,7 +737,7 @@ public:
   new_Enable(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     PtHierName* hname,	  ///< [in] 起動するタスクの階層付き名
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief system task enable 文の生成
@@ -746,7 +746,7 @@ public:
   new_SysEnable(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,	  ///< [in] 起動するシステムタスク名
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief delay control 文の生成
@@ -880,7 +880,7 @@ public:
   PtCaseItem*
   new_CaseItem(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
-    PtExprList* label_list, ///< [in] ラベルのリスト
+    const AstExprList* label_list, ///< [in] ラベルのリスト
     const AstStmt* body     ///< [in] 本体のステートメント
   );
 
@@ -1031,7 +1031,7 @@ public:
   PtExpr*
   new_Concat(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    PtExprList* expr_list ///< [in] オペランドのリスト
+    const AstExprList* expr_list ///< [in] オペランドのリスト
   );
 
   /// @brief multi-concatination 演算子の生成
@@ -1040,7 +1040,7 @@ public:
   new_MultiConcat(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* rep,   ///< [in] 繰り返し数
-    PtExprList* expr_list ///< [in] 結合するオペランドのリスト
+    const AstExprList* expr_list ///< [in] 結合するオペランドのリスト
   );
 
   /// @brief min/typ/max delay 演算子の生成
@@ -1067,7 +1067,7 @@ public:
   new_Primary(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const char* name,      ///< [in] 識別子名
-    PtExprList* index_list ///< [in] インデックスのリスト
+    const AstExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き primary の生成
@@ -1085,7 +1085,7 @@ public:
   new_Primary(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     const char* name,       ///< [in] 識別子名
-    PtExprList* index_list, ///< [in] インデックスのリスト
+    const AstExprList* index_list, ///< [in] インデックスのリスト
     const AstPart* part     ///< [in] 範囲指定
   );
 
@@ -1103,7 +1103,7 @@ public:
   new_Primary(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     PtHierName* hname,	   ///< [in] 階層付き識別子
-    PtExprList* index_list ///< [in] インデックスのリスト
+    const AstExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き primary の生成 (階層付き)
@@ -1121,7 +1121,7 @@ public:
   new_Primary(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     PtHierName* hname,	    ///< [in] 階層付き識別子
-    PtExprList* index_list, ///< [in] インデックスのリスト
+    const AstExprList* index_list, ///< [in] インデックスのリスト
     const AstPart* part     ///< [in] 範囲指定
   );
 
@@ -1131,7 +1131,7 @@ public:
   new_CPrimary(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const char* name,      ///< [in] 識別子名
-    PtExprList* index_list ///< [in] インデックスのリスト
+    const AstExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き constant primary の生成
@@ -1149,7 +1149,7 @@ public:
   new_CPrimary(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     PtHierName* hname,	   ///< [in] 階層付き識別子
-    PtExprList* index_list ///< [in] インデックスのリスト
+    const AstExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief function call の生成
@@ -1158,7 +1158,7 @@ public:
   new_FuncCall(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 関数名
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief function call の生成 (階層付き)
@@ -1167,7 +1167,7 @@ public:
   new_FuncCall(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     PtHierName* hname,    ///< [in] 階層付き関数名
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief system function call の生成
@@ -1176,7 +1176,7 @@ public:
   new_SysFuncCall(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 関数名
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief 整数型の定数の生成
@@ -1230,6 +1230,12 @@ public:
     const char* value     ///< [in] 文字列
   );
 
+  /// @brief ExprList の生成
+  PtExprList*
+  new_ExprList(
+    const AstExprVec& expr_list
+  );
+
 
   //////////////////////////////////////////////////////////////////////
   // その他
@@ -1263,7 +1269,7 @@ public:
   PtControl*
   new_EventControl(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
-    PtExprList* event_list ///< [in] イベントのリスト
+    const AstExprList* event_list ///< [in] イベントのリスト
   );
 
   /// @brief リピートコントロールの生成
@@ -1289,7 +1295,7 @@ public:
   new_RepeatControl(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const AstExpr* rep,    ///< [in] 繰り返し数を表す式
-    PtExprList* event_list ///< [in] 繰り返しの単位となるイベントのリスト
+    const AstExprList* event_list ///< [in] 繰り返しの単位となるイベントのリスト
   );
 
   /// @brief 順序つき結合子の生成

@@ -153,7 +153,7 @@ CptPort2::expr() const
 SizeType
 CptPort2::portref_size() const
 {
-  return mPortRefList.size();
+  return mPortRefList->size();
 }
 
 // @brief 内部のポート結線の取得
@@ -162,14 +162,14 @@ CptPort2::portref(
   SizeType index
 ) const
 {
-  return mPortRefList[index];
+  return mPortRefList->expr(index);
 }
 
 // @brief 内部のポート結線のリストの取得
 AstExprVec
 CptPort2::portref_list() const
 {
-  return mPortRefList.to_vector();
+  return mPortRefList->to_vector();
 }
 
 // @brief 内部のポート結線の向きの取得
@@ -228,7 +228,7 @@ PtFactory::new_Port(
   const FileRegion& file_region,
   const char* ext_name,
   const AstExpr* expr,
-  PtExprList* portref_list
+  const AstExprList* portref_list
 )
 {
   auto n = portref_list->size();
@@ -236,7 +236,7 @@ PtFactory::new_Port(
   auto dir_array = mAlloc.get_array<VpiDir>(n);
   return new (p) CptPort2(file_region, ext_name,
 			  expr,
-			  portref_list->to_array(mAlloc),
+			  portref_list,
 			  dir_array);
 }
 

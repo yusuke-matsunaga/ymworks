@@ -50,7 +50,7 @@ Parser::new_Udp1995(
   const char* init_name,
   const FileRegion& init_loc,
   const AstExpr* init_value,
-  PtAttrInstList* ai_list
+  const AstAttrInstList* ai_list
 )
 {
   const AstIOItem* out_item = nullptr;
@@ -213,7 +213,7 @@ Parser::new_Udp2001(
   const char* init_name,
   const FileRegion& init_loc,
   const AstExpr* init_value,
-  PtAttrInstList* ai_list
+  const AstAttrInstList* ai_list
 )
 {
   bool is_seq = false;
@@ -255,7 +255,7 @@ Parser::new_Udp(
   const char* init_name,
   const FileRegion& init_loc,
   const AstExpr* init_value,
-  PtAttrInstList* ai_list,
+  const AstAttrInstList* ai_list,
   bool is_seq,
   const AstIOItem* out_item,
   const std::vector<PtPort*>& port_array,

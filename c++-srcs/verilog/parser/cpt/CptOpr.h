@@ -264,9 +264,9 @@ public:
   // コンストラクタ
   CptConcat(
     const FileRegion& file_region,
-    PtExprArray&& expr_list
+    const AstExprList* expr_list
   ) : mFileRegion{file_region},
-      mExprList{std::move(expr_list)}
+      mExprList{expr_list}
   {
   }
 
@@ -322,7 +322,7 @@ private:
   FileRegion mFileRegion;
 
   // 結合する式のリスト
-  PtExprArray mExprList;
+  const AstExprList* mExprList;
 
 };
 
@@ -339,8 +339,8 @@ public:
   CptMultiConcat(
     const FileRegion& file_region,
     const AstExpr* rep,
-    PtExprArray&& expr_list
-  ) : CptConcat(file_region, std::move(expr_list)),
+    const AstExprList* expr_list
+  ) : CptConcat(file_region, expr_list),
       mRep{rep}
   {
   }

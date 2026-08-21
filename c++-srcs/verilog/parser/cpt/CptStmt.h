@@ -325,10 +325,10 @@ protected:
   CptEnableBase(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& arg_list
+    const AstExprList* arg_list
   ) : CptStmt(file_region),
       mName{name},
-      mArgList{std::move(arg_list)}
+      mArgList{arg_list}
   {
   }
 
@@ -375,7 +375,7 @@ private:
   const char* mName;
 
   // 引数のリスト
-  PtExprArray mArgList;
+  const AstExprList* mArgList;
 
 };
 
@@ -392,9 +392,8 @@ public:
   CptEnable(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& arg_list
-  ) : CptEnableBase(file_region, name,
-		    std::move(arg_list))
+    const AstExprList* arg_list
+  ) : CptEnableBase(file_region, name, arg_list)
   {
   }
 
@@ -427,9 +426,8 @@ public:
     const FileRegion& file_region,
     PtNameBranchArray&& nb_list,
     const char* tail_name,
-    PtExprArray&& arg_list
-  ) : CptEnable(file_region, tail_name,
-		std::move(arg_list)),
+    const AstExprList* arg_list
+  ) : CptEnable(file_region, tail_name, arg_list),
       mNbList{std::move(nb_list)}
   {
   }
@@ -481,9 +479,8 @@ public:
   CptSysEnable(
     const FileRegion& file_region,
     const char* task_name,
-    PtExprArray&& arg_list
-  ) : CptEnableBase(file_region, task_name,
-		    std::move(arg_list))
+    const AstExprList* arg_list
+  ) : CptEnableBase(file_region, task_name, arg_list)
   {
   }
 
@@ -1381,10 +1378,10 @@ public:
   /// @brief コンストラクタ
   CptCaseItem(
     const FileRegion& file_region,
-    PtExprArray&& label_list,
+    const AstExprList* label_list,
     const AstStmt* body
   ) : mFileRegion{file_region},
-      mLabelList{std::move(label_list)},
+      mLabelList{label_list},
       mBody{body}
   {
     if ( body == nullptr ) {
@@ -1433,7 +1430,7 @@ private:
   FileRegion mFileRegion;
 
   // ラベルのリスト
-  PtExprArray mLabelList;
+  const AstExprList* mLabelList;
 
   // ラベルが一致したときに実行されるステートメント
   const AstStmt* mBody;

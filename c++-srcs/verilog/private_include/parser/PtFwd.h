@@ -32,6 +32,7 @@ class PtRange;
 
 // in PtExpr.h
 class PtExpr;
+class PtExprList;
 class PtPart;
 
 // in PtHierName.h

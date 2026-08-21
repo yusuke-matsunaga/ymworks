@@ -40,7 +40,6 @@ class AstIOItem;
 class AstDeclHead;
 class AstDeclItem;
 class AstRange;
-class AstPart;
 
 // in AstItem.h
 class AstItem;
@@ -57,6 +56,8 @@ class AstCaseItem;
 
 // in AstExpr.h
 class AstExpr;
+class AstExprList;
+class AstPart;
 
 // in AstMisc.h
 class AstStrength;

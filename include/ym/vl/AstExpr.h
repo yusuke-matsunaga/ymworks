@@ -271,7 +271,38 @@ operator<<(
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class AstPart AstDecl.h "ym/vl/AstDecl.h"
+/// @class AstExprList AstExpr.h "ym/vl/AstExpr.h"
+/// @brief AstExpr のリストを表すクラス
+//////////////////////////////////////////////////////////////////////
+class AstExprList
+{
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要素数を返す．
+  virtual
+  SizeType
+  size() const = 0;
+
+  /// @brief 要素を取り出す．
+  virtual
+  const AstExpr*
+  expr(
+    SizeType index ///< [in] インデックス ( 0 <= index < size() )
+  ) const = 0;
+
+  /// @brief ベクタに変換する．
+  virtual
+  AstExprVec
+  to_vector() const = 0;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class AstPart AstExpr.h "ym/vl/AstExpr.h"
 /// @ingroup VlParser
 /// @ingroup AstGroup
 /// @brief 範囲指定を表すクラス

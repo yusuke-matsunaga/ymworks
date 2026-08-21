@@ -162,7 +162,7 @@ CptEventControl1::event_list() const
 SizeType
 CptEventControl2::event_num() const
 {
-  return mEventList.size();
+  return mEventList->size();
 }
 
 // @brief イベントの取得
@@ -171,14 +171,14 @@ CptEventControl2::event(
   SizeType index
 ) const
 {
-  return mEventList[index];
+  return mEventList->expr(index);
 }
 
 // @brief イベントリストの取得
 AstExprVec
 CptEventControl2::event_list() const
 {
-  return mEventList.to_vector();
+  return mEventList->to_vector();
 }
 
 
@@ -279,12 +279,11 @@ PtFactory::new_EventControl(
 PtControl*
 PtFactory::new_EventControl(
   const FileRegion& file_region,
-  PtExprList* event_list
+  const AstExprList* event_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEventControl2));
-  return new (p) CptEventControl2(file_region,
-				  event_list->to_array(mAlloc));
+  return new (p) CptEventControl2(file_region, event_list);
 }
 
 // リピートコントロールを生成する．
@@ -315,12 +314,11 @@ PtControl*
 PtFactory::new_RepeatControl(
   const FileRegion& file_region,
   const AstExpr* rep,
-  PtExprList* event_list
+  const AstExprList* event_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptRepeatControl2));
-  return new (p) CptRepeatControl2(file_region, rep,
-				   event_list->to_array(mAlloc));
+  return new (p) CptRepeatControl2(file_region, rep, event_list);
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -268,7 +268,7 @@ CptFuncCallBase::name() const
 SizeType
 CptFuncCallBase::operand_num() const
 {
-  return mArgList.size();
+  return mArgList->size();
 }
 
 // @brief オペランドのリストの取得
@@ -277,14 +277,14 @@ CptFuncCallBase::operand(
   SizeType index
 ) const
 {
-  return mArgList[index];
+  return mArgList->expr(index);
 }
 
 // @brief オペランドのリストの取得
 AstExprVec
 CptFuncCallBase::operand_list() const
 {
-  return mArgList.to_vector();
+  return mArgList->to_vector();
 }
 
 
@@ -341,6 +341,34 @@ CptSysFuncCall::type() const
 
 
 //////////////////////////////////////////////////////////////////////
+// クラス CptExprList
+//////////////////////////////////////////////////////////////////////
+
+// @brief 要素数を返す．
+SizeType
+CptExprList::size() const
+{
+  return mExprList.size();
+}
+
+// @brief 要素を取り出す．
+const AstExpr*
+CptExprList::expr(
+  SizeType index
+) const
+{
+  return mExprList[index];
+}
+
+// @brief ベクタに変換する．
+AstExprVec
+CptExprList::to_vector() const
+{
+  return mExprList.to_vector();
+}
+
+
+//////////////////////////////////////////////////////////////////////
 // クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
@@ -363,12 +391,11 @@ PtExpr*
 PtFactory::new_FuncCall(
   const FileRegion& file_region,
   const char* name,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptFuncCall));
-  return new (p) CptFuncCall(file_region, name,
-			     arg_list->to_array(mAlloc));
+  return new (p) CptFuncCall(file_region, name, arg_list);
 }
 
 // function call を生成する．
@@ -376,14 +403,14 @@ PtExpr*
 PtFactory::new_FuncCall(
   const FileRegion& file_region,
   PtHierName* hname,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptFuncCallH));
   return new (p) CptFuncCallH(file_region,
 			      hname->nb_list()->to_array(mAlloc),
 			      hname->tail_name(),
-			      arg_list->to_array(mAlloc));
+			      arg_list);
 }
 
 // system function call を生成する．
@@ -391,12 +418,21 @@ PtExpr*
 PtFactory::new_SysFuncCall(
   const FileRegion& file_region,
   const char* name,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptSysFuncCall));
-  return new CptSysFuncCall(file_region, name,
-			    arg_list->to_array(mAlloc));
+  return new CptSysFuncCall(file_region, name, arg_list);
+}
+
+// @brief ExprList の生成
+PtExprList*
+PtFactory::new_ExprList(
+  const AstExprVec& expr_list
+)
+{
+  auto p = mAlloc.get_memory(sizeof(CptExprList));
+  return new (p) CptExprList(PtExprArray(mAlloc, expr_list));
 }
 
 END_NAMESPACE_YM_VERILOG

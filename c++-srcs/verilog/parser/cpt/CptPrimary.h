@@ -142,10 +142,10 @@ public:
   CptPrimaryI(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& index_list
+    const AstExprList* index_list
   ) : CptPrimaryBase(name),
       mFileRegion{file_region},
-      mIndexList{std::move(index_list)}
+      mIndexList{index_list}
   {
   }
 
@@ -195,7 +195,7 @@ private:
   FileRegion mFileRegion;
 
   // インデックスの配列
-  PtExprArray mIndexList;
+  const AstExprList* mIndexList;
 
 };
 
@@ -212,8 +212,8 @@ public:
   CptPrimaryCI(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& index_list
-  ) : CptPrimaryI(file_region, name, std::move(index_list))
+    const AstExprList* index_list
+  ) : CptPrimaryI(file_region, name, index_list)
   {
   }
 
@@ -333,9 +333,9 @@ public:
   CptPrimaryIR(
     const FileRegion& file_region,
     const char* name,
-    PtExprArray&& index_list,
+    const AstExprList* index_list,
     const AstPart* part
-  ) : CptPrimaryI(file_region, name, std::move(index_list)),
+  ) : CptPrimaryI(file_region, name, index_list),
       mPart{part}
   {
   }
@@ -439,9 +439,8 @@ public:
     const FileRegion& file_region,
     PtNameBranchArray&& nb_list,
     const char* tail_name,
-    PtExprArray&& index_list
-  ) : CptPrimaryI(file_region, tail_name,
-		  std::move(index_list)),
+    const AstExprList* index_list
+  ) : CptPrimaryI(file_region, tail_name, index_list),
       mNbList{std::move(nb_list)}
   {
   }
@@ -494,9 +493,9 @@ public:
     const FileRegion& file_region,
     PtNameBranchArray&& nb_list,
     const char* tail_name,
-    PtExprArray&& index_list
+    const AstExprList* index_list
   ) : CptPrimaryHI(file_region, std::move(nb_list),
-		   tail_name, std::move(index_list))
+		   tail_name, index_list)
   {
   }
 
@@ -583,10 +582,10 @@ public:
     const FileRegion& file_region,
     PtNameBranchArray&& nb_list,
     const char* tail_name,
-    PtExprArray&& index_list,
+    const AstExprList* index_list,
     const AstPart* part
   ) : CptPrimaryIR(file_region, tail_name,
-		   std::move(index_list), part),
+		   index_list, part),
       mNbList{std::move(nb_list)}
   {
   }

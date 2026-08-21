@@ -25,10 +25,10 @@ public:
   CptSpecItem(
     const FileRegion& file_region,
     VpiSpecItemType id,
-    PtExprArray&& terminal_list
+    const AstExprList* terminal_list
   ) : mFileRegion{file_region},
       mId{id},
-      mTerminalList{std::move(terminal_list)}
+      mTerminalList{terminal_list}
   {
   }
 
@@ -80,7 +80,7 @@ private:
   VpiSpecItemType mId;
 
   // ターミナルのリスト
-  PtExprArray mTerminalList;
+  const AstExprList* mTerminalList;
 
 };
 
@@ -168,10 +168,10 @@ public:
   CptPathDecl(
     const FileRegion& file_region,
     int edge,
-    PtExprArray&& input_list,
+    const AstExprList* input_list,
     int input_pol,
     VpiPathType op,
-    PtExprArray&& output_list,
+    const AstExprList* output_list,
     int output_pol,
     const AstExpr* expr,
     const AstPathDelay* path_delay
@@ -262,10 +262,10 @@ private:
   FileRegion mFileRegion;
 
   int mEdge;
-  PtExprArray mInputList;
+  const AstExprList* mInputList;
   int mInputPol;
   VpiPathType mOp;
-  PtExprArray mOutputList;
+  const AstExprList* mOutputList;
   int mOutputPol;
   const AstExpr* mExpr;
   const AstPathDelay* mPathDelay;

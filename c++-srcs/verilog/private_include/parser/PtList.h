@@ -330,10 +330,8 @@ private:
 
 };
 
-class PtExpr;
 class PtNameBranch;
 
-using PtExprList        = PtList<const AstExpr*,        PtExpr*>;
 using PtNameBranchList  = PtList<const AstNameBranch*,  PtNameBranch*>;
 
 END_NAMESPACE_YM_VERILOG

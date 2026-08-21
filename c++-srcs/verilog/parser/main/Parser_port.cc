@@ -44,10 +44,10 @@ Parser::new_Port1(
     mPortList.push_back(port);
   }
   else {
-    auto expr_list = new_expr_list(mPortRefList);
+    auto expr_list = new_ExprList(mPortRefList);
     auto expr = new_Concat(file_region, expr_list);
     auto port = mFactory.new_Port(file_region, nullptr, expr,
-				  new_expr_list(mPortRefList));
+				  expr_list);
     mPortList.push_back(port);
   }
 }
@@ -77,10 +77,10 @@ Parser::new_Port3(
     mPortRefList.clear();
   }
   else {
-    auto expr_list = new_expr_list(mPortRefList);
+    auto expr_list = new_ExprList(mPortRefList);
     auto expr = new_Concat(file_region, expr_list);
     auto port = mFactory.new_Port(file_region, name, expr,
-				  new_expr_list(mPortRefList));
+				  expr_list);
     mPortList.push_back(port);
   }
 }
@@ -167,8 +167,7 @@ Parser::new_PortRef(
   const AstExpr* index
 )
 {
-  auto index_list = new_expr_list();
-  push_back(index_list, index);
+  auto index_list = new_ExprList({index});
   auto primary = mFactory.new_Primary(fr, name, index_list);
   mPortRefList.push_back(primary);
 }
@@ -183,13 +182,6 @@ Parser::new_PortRef(
 {
   auto primary = mFactory.new_Primary(fr, name, part);
   mPortRefList.push_back(primary);
-}
-
-// @brief ポート参照リストを初期化する．
-void
-Parser::init_portref_list()
-{
-  mPortRefList.clear();
 }
 
 END_NAMESPACE_YM_VERILOG

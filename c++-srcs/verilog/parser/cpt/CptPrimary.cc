@@ -65,7 +65,7 @@ CptPrimaryI::file_region() const
 SizeType
 CptPrimaryI::index_num() const
 {
-  return mIndexList.size();
+  return mIndexList->size();
 }
 
 // @brief インデックスの取得
@@ -74,14 +74,14 @@ CptPrimaryI::index(
   SizeType i
 ) const
 {
-  return mIndexList[i];
+  return mIndexList->expr(i);
 }
 
 // @brief インデックスリストの取得
 AstExprVec
 CptPrimaryI::index_list() const
 {
-  return mIndexList.to_vector();
+  return mIndexList->to_vector();
 }
 
 // index_list も range も持たないとき true を返す．
@@ -306,12 +306,11 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  PtExprList* index_list
+  const AstExprList* index_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryI));
-  return new (p) CptPrimaryI(file_region, name,
-			     index_list->to_array(mAlloc));
+  return new (p) CptPrimaryI(file_region, name, index_list);
 }
 
 // primary を生成する．
@@ -331,14 +330,13 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  PtExprList* index_list,
+  const AstExprList* index_list,
   const AstPart* part
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryIR));
   return new (p) CptPrimaryIR(file_region, name,
-			      index_list->to_array(mAlloc),
-			      part);
+			      index_list, part);
 }
 
 // primary を生成する．
@@ -359,14 +357,14 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   PtHierName* hname,
-  PtExprList* index_list
+  const AstExprList* index_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHI));
   return new (p) CptPrimaryHI(file_region,
 			      hname->nb_list()->to_array(mAlloc),
 			      hname->tail_name(),
-			      index_list->to_array(mAlloc));
+			      index_list);
 }
 
 // primary を生成する．
@@ -389,7 +387,7 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   PtHierName* hname,
-  PtExprList* index_list,
+  const AstExprList* index_list,
   const AstPart* part
 )
 {
@@ -397,8 +395,7 @@ PtFactory::new_Primary(
   return new (p) CptPrimaryHIR(file_region,
 			       hname->nb_list()->to_array(mAlloc),
 			       hname->tail_name(),
-			       index_list->to_array(mAlloc),
-			       part);
+			       index_list, part);
 }
 
 // primary を生成する．
@@ -406,12 +403,12 @@ PtExpr*
 PtFactory::new_CPrimary(
   const FileRegion& file_region,
   const char* name,
-  PtExprList* index_list
+  const AstExprList* index_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCI));
   return new (p) CptPrimaryCI(file_region, name,
-			      index_list->to_array(mAlloc));
+			      index_list);
 }
 
 // primary を生成する．
@@ -431,14 +428,14 @@ PtExpr*
 PtFactory::new_CPrimary(
   const FileRegion& file_region,
   PtHierName* hname,
-  PtExprList* index_list
+  const AstExprList* index_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHCI));
   return new (p) CptPrimaryHCI(file_region,
 			       hname->nb_list()->to_array(mAlloc),
 			       hname->tail_name(),
-			       index_list->to_array(mAlloc));
+			       index_list);
 }
 
 END_NAMESPACE_YM_VERILOG

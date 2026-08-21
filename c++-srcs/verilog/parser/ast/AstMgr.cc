@@ -124,7 +124,7 @@ AstMgr::reg_defname(
 void
 AstMgr::reg_attrinst(
   const AstBase* obj,
-  PtAttrInstList* ai_list,
+  const AstAttrInstList* ai_list,
   bool def
 )
 {

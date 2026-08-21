@@ -501,7 +501,7 @@ public:
   /// @brief コンストラクタ
   CptGenCaseItem(
     const FileRegion& file_region,
-    PtExprArray&& label_list,
+    const AstExprList* label_list,
     PtDeclHeadArray&& declhead_list,
     PtItemArray&& item_list
   ) : mFileRegion{file_region},
@@ -576,7 +576,7 @@ private:
   FileRegion mFileRegion;
 
   // ラベルのリスト
-  PtExprArray mLabelList;
+  const AstExprList* mLabelList;
 
   // 生成される本体
   CptGenBody mBody;

@@ -292,7 +292,7 @@ CptConcat::op_type() const
 SizeType
 CptConcat::operand_num() const
 {
-  return mExprList.size();
+  return mExprList->size();
 }
 
 // @brief オペランドのリストの取得
@@ -301,14 +301,14 @@ CptConcat::operand(
   SizeType index
 ) const
 {
-  return mExprList[index];
+  return mExprList->expr(index);
 }
 
 // @brief オペランドのリストの取得
 AstExprVec
 CptConcat::operand_list() const
 {
-  return mExprList.to_vector();
+  return mExprList->to_vector();
 }
 
 
@@ -378,12 +378,11 @@ PtFactory::new_Opr(
 PtExpr*
 PtFactory::new_Concat(
   const FileRegion& file_region,
-  PtExprList* expr_list
+  const AstExprList* expr_list
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptConcat));
-  return new (p) CptConcat(file_region,
-			   expr_list->to_array(mAlloc));
+  return new (p) CptConcat(file_region, expr_list);
 }
 
 // multiple concatenation を生成する．
@@ -391,12 +390,11 @@ PtExpr*
 PtFactory::new_MultiConcat(
   const FileRegion& file_region,
   const AstExpr* rep,
-  PtExprList* expr_list
+  const AstExprList* expr_list
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptMultiConcat));
-  return new (p) CptMultiConcat(file_region, rep,
-				expr_list->to_array(mAlloc));
+  return new (p) CptMultiConcat(file_region, rep, expr_list);
 }
 
 END_NAMESPACE_YM_VERILOG

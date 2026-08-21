@@ -241,7 +241,7 @@ CptGenCaseItem::file_region() const
 SizeType
 CptGenCaseItem::label_num() const
 {
-  return mLabelList.size();
+  return mLabelList->size();
 }
 
 // @brief ラベルの取得
@@ -250,14 +250,14 @@ CptGenCaseItem::label(
   SizeType index
 ) const
 {
-  return mLabelList[index];
+  return mLabelList->expr(index);
 }
 
 // @brief ラベルリストの取得
 AstExprVec
 CptGenCaseItem::label_list() const
 {
-  return mLabelList.to_vector();
+  return mLabelList->to_vector();
 }
 
 // @brief 宣言の要素数の取得
@@ -487,14 +487,13 @@ PtFactory::new_GenCase(
 PtGenCaseItem*
 PtFactory::new_GenCaseItem(
   const FileRegion& file_region,
-  PtExprList* label_list,
+  const AstExprList* label_list,
   const std::vector<PtDeclHead*>& declhead_list,
   const AstItemVec& item_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenCaseItem));
-  return new (p) CptGenCaseItem(file_region,
-				label_list->to_array(mAlloc),
+  return new (p) CptGenCaseItem(file_region, label_list,
 				PtDeclHeadArray(mAlloc, declhead_list),
 				PtItemArray(mAlloc, item_list));
 }

@@ -28,7 +28,7 @@ Parser::new_Module1995(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  PtAttrInstList* ai_list
+  const AstAttrInstList* ai_list
 )
 {
   bool is_cell = lex().cell_define();
@@ -111,7 +111,7 @@ Parser::new_Module2001(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  PtAttrInstList* ai_list
+  const AstAttrInstList* ai_list
 )
 {
   bool is_cell = lex().cell_define();

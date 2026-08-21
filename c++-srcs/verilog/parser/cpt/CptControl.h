@@ -261,9 +261,9 @@ public:
   /// @brief コンストラクタ
   CptEventControl2(
     const FileRegion& file_region,
-    PtExprArray&& event_list
+    const AstExprList* event_list
   ) : CptEventControl(file_region),
-      mEventList{std::move(event_list)}
+      mEventList{event_list}
   {
   }
 
@@ -303,7 +303,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // イベントのリスト
-  PtExprArray mEventList;
+  const AstExprList* mEventList;
 
 };
 
@@ -419,8 +419,8 @@ public:
   CptRepeatControl2(
     const FileRegion& file_region,
     const AstExpr* rep,
-    PtExprArray&& event_list
-  ) : CptEventControl2(file_region, std::move(event_list)),
+    const AstExprList* event_list
+  ) : CptEventControl2(file_region, event_list),
       mRepExpr{rep}
   {
     if ( rep == nullptr ) {

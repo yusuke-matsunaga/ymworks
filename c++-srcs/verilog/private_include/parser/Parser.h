@@ -106,7 +106,7 @@ public:
     const char* init_name,         ///< [in] 初期値の名前
     const FileRegion& init_loc,    ///< [in] 初期値の位置
     const AstExpr* init_value,     ///< [in] 初期値のパース木
-    PtAttrInstList* ai_list        ///< [in] 属性リスト
+    const AstAttrInstList* ai_list        ///< [in] 属性リスト
   );
 
   /// @brief Verilog2001 タイプのUDP を生成する．
@@ -117,7 +117,7 @@ public:
     const char* init_name,	   ///< [in] 初期値の名前
     const FileRegion& init_loc,	   ///< [in] 初期値の位置
     const AstExpr* init_value,	   ///< [in] 初期値のパース木
-    PtAttrInstList* ai_list        ///< [in] 属性リスト
+    const AstAttrInstList* ai_list        ///< [in] 属性リスト
   );
 
 
@@ -191,7 +191,7 @@ private:
     const char* init_name,
     const FileRegion& init_loc,
     const AstExpr* init_value,
-    PtAttrInstList* ai_list,
+    const AstAttrInstList* ai_list,
     bool is_seq,
     const AstIOItem* out_item,
     const std::vector<PtPort*>& port_list,
@@ -253,7 +253,7 @@ public:
     const FileRegion& file_region,
     bool is_macro,
     const char* name,
-    PtAttrInstList* ai_list
+    const AstAttrInstList* ai_list
   );
 
   /// @brief Verilog2001 タイプのモジュール(のテンプレート)を生成する．
@@ -262,7 +262,7 @@ public:
     const FileRegion& file_region,
     bool is_macro,
     const char* name,
-    PtAttrInstList* ai_list
+    const AstAttrInstList* ai_list
   );
 
 
@@ -273,7 +273,10 @@ public:
 
   /// @brief ポート参照リストを初期化する．
   void
-  init_portref_list();
+  init_portref_list()
+  {
+    mPortRefList.clear();
+  }
 
   /// @brief 入出力宣言からポートを作る．
   std::vector<PtPort*>
@@ -1681,8 +1684,8 @@ public:
   /// 要素を持つ GenCaseItem を生成する．
   PtGenCaseItem*
   new_GenCaseItem(
-    const FileRegion& fr,  ///< [in] ファイル位置の情報
-    PtExprList* label_list ///< [in] 比較式のリスト
+    const FileRegion& fr,         ///< [in] ファイル位置の情報
+    const AstExprList* label_list ///< [in] 比較式のリスト
   )
   {
     return mFactory.new_GenCaseItem(fr, label_list,
@@ -1743,9 +1746,9 @@ public:
   /// 結果は cur_item_list() に追加される．
   void
   new_SpecItem(
-    const FileRegion& fr,     ///< [in] ファイル位置の情報
-    VpiSpecItemType id,       ///< [in] specify block item の種類
-    PtExprList* terminal_list ///< [in] 端子のリスト
+    const FileRegion& fr,            ///< [in] ファイル位置の情報
+    VpiSpecItemType id,              ///< [in] specify block item の種類
+    const AstExprList* terminal_list ///< [in] 端子のリスト
   )
   {
     auto item = mFactory.new_SpecItem(fr, id, terminal_list);
@@ -1772,10 +1775,10 @@ public:
   new_PathDecl(
     const FileRegion& fr,    ///< [in] ファイル位置の情報
     int edge,                ///< [in] エッジ
-    PtExprList* input_list,  ///< [in] 入力リスト
+    const AstExprList* input_list,  ///< [in] 入力リスト
     int input_pol,           ///< [in] 入力の極性
     VpiPathType op,          ///< [in] パスタイプ
-    PtExprList* output_list, ///< [in] 出力リスト
+    const AstExprList* output_list, ///< [in] 出力リスト
     int output_pol,          ///< [in] 出力の極性
     const AstExpr* expr,     ///< [in] 条件式
     PtPathDelay* path_delay  ///< [in] パス遅延
@@ -1793,7 +1796,7 @@ public:
   new_PathDecl(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     int edge,		    ///< [in] エッジ
-    PtExprList* input_list, ///< [in] 入力リスト
+    const AstExprList* input_list, ///< [in] 入力リスト
     int input_pol,	    ///< [in] 入力の極性
     VpiPathType op,	    ///< [in] パスタイプ
     const AstExpr* output,  ///< [in] 出力
@@ -1802,9 +1805,7 @@ public:
     PtPathDelay* path_delay ///< [in] パス遅延
   )
   {
-    void* p = mAlloc.get_memory(sizeof(PtExprList));
-    auto output_list = new (p) PtExprList;
-    output_list->push_back(mAlloc, output);
+    auto output_list = new_ExprList({output});
     return mFactory.new_PathDecl(fr, edge,
 				 input_list, input_pol,
 				 op,
@@ -1920,7 +1921,7 @@ public:
   new_Enable(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief enable 文の生成 (階層付き識別子)
@@ -1929,7 +1930,7 @@ public:
   new_Enable(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     PtHierName* hname,    ///< [in] 階層名
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief system task enable 文の生成
@@ -1937,7 +1938,7 @@ public:
   new_SysEnable(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief delay control 文の生成
@@ -2090,7 +2091,7 @@ public:
   PtCaseItem*
   new_CaseItem(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
-    PtExprList* label_list, ///< [in] ラベルのリスト
+    const AstExprList* label_list, ///< [in] ラベルのリスト
     const AstStmt* body     ///< [in] 本体のステートメント
   );
 
@@ -2253,7 +2254,7 @@ public:
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     VpiOpType type,         ///< [in] 演算の種類
     const AstExpr* opr,     ///< [in] オペランド
-    PtAttrInstList* ai_list ///< [in] 属性リスト
+    const AstAttrInstList* ai_list ///< [in] 属性リスト
   );
 
   /// @brief 二項演算子の生成
@@ -2264,7 +2265,7 @@ public:
     VpiOpType type,         ///< [in] 演算の種類
     const AstExpr* opr1,    ///< [in] オペランド1
     const AstExpr* opr2,    ///< [in] オペランド2
-    PtAttrInstList* ai_list ///< [in] 属性リスト
+    const AstAttrInstList* ai_list ///< [in] 属性リスト
   );
 
   /// @brief 三項演算子の生成
@@ -2276,7 +2277,7 @@ public:
     const AstExpr* opr1,    ///< [in] オペランド1
     const AstExpr* opr2,    ///< [in] オペランド2
     const AstExpr* opr3,    ///< [in] オペランド3
-    PtAttrInstList* ai_list ///< [in] 属性リスト
+    const AstAttrInstList* ai_list ///< [in] 属性リスト
   );
 
   /// @brief concatination 演算子の生成
@@ -2284,7 +2285,7 @@ public:
   PtExpr*
   new_Concat(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    PtExprList* expr_list ///< [in] オペランドのリスト
+    const AstExprList* expr_list ///< [in] オペランドのリスト
   );
 
   /// @brief multi-concatination 演算子の生成
@@ -2293,7 +2294,7 @@ public:
   new_MultiConcat(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* rep,   ///< [in] 繰り返し数
-    PtExprList* expr_list ///< [in] オペランドのリスト
+    const AstExprList* expr_list ///< [in] オペランドのリスト
   );
 
   /// @brief min/typ/max delay 演算子の生成
@@ -2321,7 +2322,7 @@ public:
   new_Primary(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     const char* name,       ///< [in] 名前
-    PtExprList* index_array ///< [in] インデックスのリスト
+    const AstExprList* index_array ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き primary の生成
@@ -2339,7 +2340,7 @@ public:
   new_Primary(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     const char* name,       ///< [in] 名前
-    PtExprList* index_list, ///< [in] インデックスのリスト
+    const AstExprList* index_list, ///< [in] インデックスのリスト
     const AstPart* part     ///< [in] 範囲指定
   );
 
@@ -2357,7 +2358,7 @@ public:
   new_Primary(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     PtHierName* hname,     ///< [in] 階層名
-    PtExprList* index_list ///< [in] インデックスのリスト
+    const AstExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き primary の生成 (階層付き)
@@ -2375,7 +2376,7 @@ public:
   new_Primary(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     PtHierName* hname,      ///< [in] 階層名
-    PtExprList* index_list, ///< [in] インデックスのリスト
+    const AstExprList* index_list, ///< [in] インデックスのリスト
     const AstPart* part     ///< [in] 範囲指定
   );
 
@@ -2394,7 +2395,7 @@ public:
   new_CPrimary(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const char* name,      ///< [in] 名前
-    PtExprList* index_list ///< [in] インデックスのリスト
+    const AstExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief 範囲指定付き constant primary の生成
@@ -2412,7 +2413,7 @@ public:
   new_CPrimary(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     PtHierName* hname,     ///< [in] 階層名
-    PtExprList* index_list ///< [in] インデックスのリスト
+    const AstExprList* index_list ///< [in] インデックスのリスト
   );
 
   /// @brief function call の生成
@@ -2420,8 +2421,8 @@ public:
   new_FuncCall(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     const char* name,       ///< [in] 名前
-    PtExprList* arg_list,   ///< [in] 引数のリスト
-    PtAttrInstList* ai_list ///< [in] 属性リスト
+    const AstExprList* arg_list,   ///< [in] 引数のリスト
+    const AstAttrInstList* ai_list ///< [in] 属性リスト
   );
 
   /// @brief function call の生成 (階層付き)
@@ -2430,8 +2431,8 @@ public:
   new_FuncCall(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     PtHierName* hname,      ///< [in] 階層名
-    PtExprList* arg_list,   ///< [in] 引数のリスト
-    PtAttrInstList* ai_list ///< [in] 属性リスト
+    const AstExprList* arg_list,   ///< [in] 引数のリスト
+    const AstAttrInstList* ai_list ///< [in] 属性リスト
   );
 
   /// @brief system function call の生成
@@ -2440,7 +2441,7 @@ public:
   new_SysFuncCall(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    PtExprList* arg_list  ///< [in] 引数のリスト
+    const AstExprList* arg_list  ///< [in] 引数のリスト
   );
 
   /// @brief 整数型の定数の生成
@@ -2501,6 +2502,46 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
+  // ExprList の生成関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief AstExpr のリストを生成する．
+  PtExprList*
+  new_ExprList(
+    const AstExprVec& expr_list ///< [in] AstExpr のリスト
+  )
+  {
+    return mFactory.new_ExprList(expr_list);
+  }
+
+  /// @brief AstExpr の内部リストを初期化する
+  void
+  init_expr_list()
+  {
+    mExprListStack.push_back(AstExprVec());
+  }
+
+  /// @brief AstExpr の内部リストに追加する．
+  void
+  add_expr(
+    const AstExpr* expr
+  )
+  {
+    mExprListStack.back().push_back(expr);
+  }
+
+  /// @brief AstExpr の内部リストを取り出す．
+  PtExprList*
+  end_expr_list()
+  {
+    auto expr_list = new_ExprList(mExprListStack.back());
+    mExprListStack.pop_back();
+    return expr_list;
+  }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
   // その他
   //////////////////////////////////////////////////////////////////////
 
@@ -2556,7 +2597,7 @@ public:
   PtControl*
   new_EventControl(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
-    PtExprList* event_list ///< [in] イベントのリスト
+    const AstExprList* event_list ///< [in] イベントのリスト
   )
   {
     return mFactory.new_EventControl(fr, event_list);
@@ -2607,7 +2648,7 @@ public:
   new_RepeatControl(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const AstExpr* rep,    ///< [in] 繰り返し数を表す式
-    PtExprList* event_list ///< [in] 繰り返しの単位となるイベントのリスト
+    const AstExprList* event_list ///< [in] 繰り返しの単位となるイベントのリスト
   )
   {
     return mFactory.new_RepeatControl(fr, rep, event_list);
@@ -2629,7 +2670,7 @@ public:
   new_OrderedCon(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     const AstExpr* expr,    ///< [in] 結合する式
-    PtAttrInstList* ai_list ///< [in] 属性リスト
+    const AstAttrInstList* ai_list ///< [in] 属性リスト
   )
   {
     auto con = mFactory.new_OrderedCon(fr, expr);
@@ -2644,7 +2685,7 @@ public:
     const FileRegion& fr,             ///< [in] ファイル位置の情報
     const char* name,                 ///< [in] 名前
     const AstExpr* expr = nullptr,    ///< [in] 結合する式
-    PtAttrInstList* ai_list = nullptr ///< [in] 属性リスト
+    const AstAttrInstList* ai_list = nullptr ///< [in] 属性リスト
   )
   {
     auto con = mFactory.new_NamedCon(fr, name, expr);
@@ -2858,7 +2899,7 @@ public:
   void
   add_paramport_head(
     PtDeclHead* head,
-    PtAttrInstList* attr_list
+    const AstAttrInstList* attr_list
   )
   {
     if ( head ) {
@@ -2883,7 +2924,7 @@ public:
   void
   add_ioport_head(
     PtIOHead* head,
-    PtAttrInstList* attr_list
+    const AstAttrInstList* attr_list
   )
   {
     if ( head ) {
@@ -2908,7 +2949,7 @@ public:
   void
   add_io_head(
     PtIOHead* head,
-    PtAttrInstList* attr_list
+    const AstAttrInstList* attr_list
   )
   {
     add_ioport_head(head, attr_list);
@@ -2919,7 +2960,7 @@ public:
   void
   add_decl_head(
     PtDeclHead* head,
-    PtAttrInstList* attr_list = nullptr
+    const AstAttrInstList* attr_list = nullptr
   )
   {
     if ( head == nullptr ) {
@@ -2935,145 +2976,13 @@ public:
   void
   add_item(
     PtItem* item,
-    PtAttrInstList* attr_list = nullptr
+    const AstAttrInstList* attr_list = nullptr
   )
   {
     if ( item ) {
       reg_attrinst(item, attr_list);
       cur_item_list().push_back(item);
     }
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // リスト関係
-  //////////////////////////////////////////////////////////////////////
-
-#if 0
-  /// @brief Connection のリストを作る．
-  PtConnectionList*
-  new_connection_list()
-  {
-    void* p = mAlloc.get_memory(sizeof(PtConnectionList));
-    return new (p) PtConnectionList;
-  }
-
-  /// @brief Connection のリストを作る．
-  PtConnectionList*
-  new_connection_list(
-    const AstExpr* expr1
-  )
-  {
-    auto list = new_connection_list();
-    push_back(list, new_OrderedCon(expr1));
-    return list;
-  }
-
-  /// @brief Connection のリストを作る．
-  PtConnectionList*
-  new_connection_list(
-    const AstExpr* expr1,
-    const AstExpr* expr2
-  )
-  {
-    auto list = new_connection_list(expr1);
-    push_back(list, new_OrderedCon(expr2));
-    return list;
-  }
-
-  /// @brief Connection のリストを作る．
-  PtConnectionList*
-  new_connection_list(
-    const AstExpr* expr1,
-    const AstExpr* expr2,
-    const AstExpr* expr3
-  )
-  {
-    auto list = new_connection_list(expr1, expr2);
-    push_back(list, new_OrderedCon(expr3));
-    return list;
-  }
-
-  /// @brief Connection のリストを作る．
-  PtConnectionList*
-  new_connection_list(
-    const AstExpr* expr1,
-    const AstExpr* expr2,
-    const AstExpr* expr3,
-    const AstExpr* expr4
-  )
-  {
-    auto list = new_connection_list(expr1, expr2, expr3);
-    push_back(list, new_OrderedCon(expr4));
-    return list;
-  }
-
-  /// @brief Connection のリストの末尾に要素を追加する．
-  void
-  push_back(
-    PtConnectionList* list,
-    PtConnection* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
-  }
-#endif
-
-  /// @brief Expr のリストを作る．
-  PtExprList*
-  new_expr_list()
-  {
-    void* p = mAlloc.get_memory(sizeof(PtExprList));
-    return new (p) PtExprList;
-  }
-
-  /// @brief Expr のリストを作る．
-  PtExprList*
-  new_expr_list(
-    const std::vector<const AstExpr*>& vec
-  )
-  {
-    void* p = mAlloc.get_memory(sizeof(PtExprList));
-    return new (p) PtExprList(mAlloc, vec);
-  }
-
-  /// @brief Expr のリストの末尾に要素を追加する．
-  void
-  push_back(
-    PtExprList* list,
-    PtExpr* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
-  }
-
-  /// @brief Expr のリストの末尾に要素を追加する．
-  void
-  push_back(
-    PtExprList* list,
-    const AstExpr* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
-  }
-
-  /// @brief Stmt のリストを作る．
-  PtStmtList*
-  new_stmt_list()
-  {
-    void* p = mAlloc.get_memory(sizeof(PtStmtList));
-    return new (p) PtStmtList;
-  }
-
-  /// @brief Stmt のリストの末尾に要素を追加する．
-  void
-  push_back(
-    PtStmtList* list,
-    PtStmt* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
   }
 
 
@@ -3128,7 +3037,7 @@ public:
   void
   reg_attrinst(
     const AstBase* obj,
-    PtAttrInstList* attr_list,
+    const AstAttrInstList* attr_list,
     bool def = false
   )
   {
@@ -3470,6 +3379,7 @@ private:
   AstItemVec mGenElseItemList;
 
   // generate-case の GenCaseItem のリスト
+  // スタックから取り出された最終結果
   AstGenCaseItemVec mCurGenCaseItemList;
 
 
@@ -3492,6 +3402,9 @@ public:
 
   // GenCaseItemList のスタック
   std::vector<AstGenCaseItemVec> mGenCaseItemListStack;
+
+  // ExprList のスタック
+  std::vector<AstExprVec> mExprListStack;
 
 };
 

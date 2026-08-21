@@ -108,9 +108,10 @@ TEST_F(ParserTest, EventControl4)
   auto name2 = "event2";
   auto hname = parser.new_HierName(head, name2);
   auto expr2 = parser.new_Primary(fr2, hname);
-  auto event_list = parser.new_expr_list();
-  event_list->push_back(astmgr.alloc(), expr1);
-  event_list->push_back(astmgr.alloc(), expr2);
+  parser.init_expr_list();
+  parser.add_expr(expr1);
+  parser.add_expr(expr2);
+  auto event_list = parser.end_expr_list();
   auto control = parser.new_EventControl(fr, event_list);
 
   ASSERT_TRUE( control != nullptr );
@@ -209,9 +210,10 @@ TEST_F(ParserTest, RepeatControl4)
   auto name2 = "event2";
   auto hname = parser.new_HierName(head, name2);
   auto expr2 = parser.new_Primary(fr2, hname);
-  auto event_list = parser.new_expr_list();
-  event_list->push_back(astmgr.alloc(), expr1);
-  event_list->push_back(astmgr.alloc(), expr2);
+  parser.init_expr_list();
+  parser.add_expr(expr1);
+  parser.add_expr(expr2);
+  auto event_list = parser.end_expr_list();
   auto control = parser.new_RepeatControl(fr, rep, event_list);
 
   ASSERT_TRUE( control != nullptr );

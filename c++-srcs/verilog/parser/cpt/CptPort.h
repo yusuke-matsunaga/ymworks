@@ -217,11 +217,11 @@ public:
     const FileRegion& file_region,
     const char* ext_name,
     const AstExpr* expr,
-    PtExprArray&& portref_list,
+    const AstExprList* portref_list,
     VpiDir* dir_array
   ) : CptPort(file_region, ext_name),
       mExpr{expr},
-      mPortRefList{std::move(portref_list)},
+      mPortRefList{portref_list},
       mDirArray{dir_array}
   {
   }
@@ -301,7 +301,7 @@ private:
   const AstExpr* mExpr;
 
   // ポート参照式のリスト
-  PtExprArray mPortRefList;
+  const AstExprList* mPortRefList;
 
   // 向きの配列
   VpiDir* mDirArray;

@@ -308,7 +308,7 @@ CptEnableBase::name() const
 SizeType
 CptEnableBase::arg_num() const
 {
-  return mArgList.size();
+  return mArgList->size();
 }
 
 // @brief 引数の取得
@@ -317,14 +317,14 @@ CptEnableBase::arg(
   SizeType index
 ) const
 {
-  return mArgList[index];
+  return mArgList->expr(index);
 }
 
 // @brief 引数のリストの取得
 AstExprVec
 CptEnableBase::arg_list() const
 {
-  return mArgList.to_vector();
+  return mArgList->to_vector();
 }
 
 
@@ -721,7 +721,7 @@ CptCaseItem::file_region() const
 SizeType
 CptCaseItem::label_num() const
 {
-  return mLabelList.size();
+  return mLabelList->size();
 }
 
 // @brief ラベルの取得
@@ -730,14 +730,14 @@ CptCaseItem::label(
   SizeType index
 ) const
 {
-  return mLabelList[index];
+  return mLabelList->expr(index);
 }
 
 // @brief ラベルリストの取得
 AstExprVec
 CptCaseItem::label_list() const
 {
-  return mLabelList.to_vector();
+  return mLabelList->to_vector();
 }
 
 // 本体のステートメント得る．
@@ -972,26 +972,25 @@ PtStmt*
 PtFactory::new_Enable(
   const FileRegion& file_region,
   const char* name,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEnable));
-  return new (p) CptEnable(file_region, name,
-			   arg_list->to_array(mAlloc));
+  return new (p) CptEnable(file_region, name, arg_list);
 }
 
 PtStmt*
 PtFactory::new_Enable(
   const FileRegion& file_region,
   PtHierName* hname,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEnableH));
   return new (p) CptEnableH(file_region,
 			    hname->nb_list()->to_array(mAlloc),
 			    hname->tail_name(),
-			    arg_list->to_array(mAlloc));
+			    arg_list);
 
 }
 
@@ -1000,12 +999,11 @@ PtStmt*
 PtFactory::new_SysEnable(
   const FileRegion& file_region,
   const char* task_name,
-  PtExprList* arg_list
+  const AstExprList* arg_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSysEnable));
-  return new (p) CptSysEnable(file_region, task_name,
-			      arg_list->to_array(mAlloc));
+  return new (p) CptSysEnable(file_region, task_name, arg_list);
 }
 
 // delay control 文を生成する．
@@ -1184,14 +1182,12 @@ PtFactory::new_CaseZ(
 PtCaseItem*
 PtFactory::new_CaseItem(
   const FileRegion& file_region,
-  PtExprList* label_list,
+  const AstExprList* label_list,
   const AstStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCaseItem));
-  return new (p) CptCaseItem(file_region,
-			     label_list->to_array(mAlloc),
-			     body);
+  return new (p) CptCaseItem(file_region, label_list, body);
 }
 
 // forever 文を生成する．
