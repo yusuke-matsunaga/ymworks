@@ -28,7 +28,8 @@ Parser::new_Module1995(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  PtAttrInstList* ai_list)
+  PtAttrInstList* ai_list
+)
 {
   bool is_cell = lex().cell_define();
   bool is_protected = false; // これどうやって決めるの？

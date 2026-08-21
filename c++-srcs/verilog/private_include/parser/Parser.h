@@ -73,7 +73,30 @@ public:
 public:
   //////////////////////////////////////////////////////////////////////
   // UDP 関連の生成関数
+  //
+  // 最初に init_udp() を呼ぶ．
+  // 宣言要素や UDP Entry などの生成を行う．
+  // 最後に end_udp() を呼ぶ．
+  // 直後に new_Udp() を呼ぶことで，直前の init_udp() から end_udp()
+  // の間に生成された要素を持つ UDP を生成する．
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief UDP定義の開始
+  ///
+  /// - port list の初期化
+  /// - iohead list の初期化
+  /// - declhead list の初期化
+  /// - UDP entry list の初期化
+  /// を行う．
+  /// 'udp' キーワードに連動して呼ばれることを想定している．
+  void
+  init_udp();
+
+  /// @brief UDP 定義の終了
+  ///
+  /// 'endudp' キーワードに連動して呼ばれることを想定している．
+  void
+  end_udp();
 
   /// @brief Verilog1995 タイプのUDP を生成する．
   void
@@ -96,6 +119,23 @@ public:
     const AstExpr* init_value,	   ///< [in] 初期値のパース木
     PtAttrInstList* ai_list        ///< [in] 属性リスト
   );
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // UdpEntry の生成
+  //
+  // 最初に init_udp_value_list() を呼ぶ．
+  // new_UdpValue() を呼んでテーブルの要素を生成する．
+  // 最後に new_UdpEntry() を呼んで1行分のエントリを生成する．
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief UdpValue のリストを初期化する．
+  void
+  init_udp_value_list()
+  {
+    mUdpValueList.clear();
+  }
 
   /// @brief combinational UDP 用のテーブルエントリの生成
   ///
@@ -120,13 +160,6 @@ public:
     const FileRegion& output_loc,  ///< [in] 出力記号の位置
     char output_symbol             ///< [in] 出力記号
   );
-
-  /// @brief UdpValue のリストを初期化する．
-  void
-  init_udp_value_list()
-  {
-    mUdpValueList.clear();
-  }
 
   /// @brief UDP のテーブルエントリの要素の値の生成
   ///
@@ -169,7 +202,50 @@ private:
 public:
   //////////////////////////////////////////////////////////////////////
   // モジュール関連の要素の生成関数
+  //
+  // 最初に init_module() を呼ぶ．
+  // 要素の生成を行う．
+  // 最後に end_module() を呼ぶ．
+  // 直後に new_Module() を呼ぶことで直前の init_module() から
+  // end_module() の間に生成された要素を持つモジュールを生成する．
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief モジュール定義の開始
+  /// - port list の初期化
+  /// - paramport list の初期化
+  /// - iohead list の初期化
+  /// - paramhead list の初期化
+  /// - localparamhead list の初期化
+  /// - declhead list の初期化
+  /// - item list の初期化
+  /// を行う．
+  ///
+  /// 'module' キーワードに連動して呼ばれることを想定している．
+  void
+  init_module()
+  {
+    mCurIOHeadList = &mModuleIOHeadList;
+    push_declhead_list();
+    push_item_list();
+
+    mPortList.clear();
+    mParamPortHeadList.clear();
+    mCurIOHeadList->clear();
+    mIOItemList.clear();
+    cur_declhead_list().clear();
+    mDeclItemList.clear();
+    cur_item_list().clear();
+  }
+
+  /// @brief モジュール定義の終了
+  ///
+  /// 'endmodule' キーワードに連動して呼ばれることを想定している．
+  void
+  end_module()
+  {
+    mCurDeclList = pop_declhead_list();
+    mCurItemList = pop_item_list();
+  }
 
   /// @brief Verilog1995 タイプのモジュール(のテンプレート)を生成する．
   void
@@ -194,6 +270,10 @@ public:
   //////////////////////////////////////////////////////////////////////
   // ポート関連の要素の生成関数
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief ポート参照リストを初期化する．
+  void
+  init_portref_list();
 
   /// @brief 入出力宣言からポートを作る．
   std::vector<PtPort*>
@@ -234,10 +314,6 @@ public:
     const FileRegion& file_region, ///< [in] ファイル位置
     const char* name               ///< [in] 外側の名前
   );
-
-  /// @brief ポート参照リストを初期化する．
-  void
-  init_portref_list();
 
   /// @brief ポート参照式の生成
   ///
@@ -646,10 +722,17 @@ public:
   void
   new_DeclItem(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    const char* name      ///< [in] 名前
+    const char* name,     ///< [in] 名前
+    bool has_dimension    ///< [in] 配列型の時 true
   )
   {
-    auto item = mFactory.new_DeclItem(fr, name);
+    PtDeclItem* item;
+    if ( has_dimension ) {
+      item = mFactory.new_DeclItem(fr, name, mRangeList);
+    }
+    else {
+      item = mFactory.new_DeclItem(fr, name);
+    }
     mDeclItemList.push_back(item);
   }
 
@@ -667,6 +750,7 @@ public:
     mDeclItemList.push_back(item);
   }
 
+#if 0
   /// @brief 配列型宣言要素の生成
   ///
   /// 結果は mDeclItemList に追加される．
@@ -679,6 +763,23 @@ public:
   {
     auto item = mFactory.new_DeclItem(fr, name, range_list);
     mDeclItemList.push_back(item);
+  }
+#endif
+
+  /// @brief 範囲のリストの初期化
+  void
+  init_range_list()
+  {
+    mRangeList.clear();
+  }
+
+  /// @brief 範囲の追加
+  void
+  add_range(
+    const AstRange* range
+  )
+  {
+    mRangeList.push_back(range);
   }
 
   /// @brief 範囲の生成
@@ -695,8 +796,20 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // item 関連の要素の生成
+  // DefParam 関連の要素の生成
+  //
+  // 最初に init_defparam_list() を呼ぶ．
+  // その後 new_DefParam() を読んで個々の DefParam 要素を生成する．
+  // 最後に new_DefParamH() を呼ぶことで直前の init_defparam_list()
+  // 以降に生成された DefParam 要素を持つ DefParam ヘッダを生成する．
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief mDefParamList を初期化する．
+  void
+  init_defparam_list()
+  {
+    mDefParamList.clear();
+  }
 
   /// @brief defparam 文のヘッダの生成
   ///
@@ -707,13 +820,6 @@ public:
   )
   {
     return mFactory.new_DefParamH(fr, mDefParamList);
-  }
-
-  /// @brief mDefParamList を初期化する．
-  void
-  init_defparam_list()
-  {
-    mDefParamList.clear();
   }
 
   /// @brief defparam 文の要素の生成
@@ -742,6 +848,24 @@ public:
   {
     auto defparam = mFactory.new_DefParam(fr, hname, value);
     mDefParamList.push_back(defparam);
+  }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ContAssign 関連の要素の生成
+  //
+  // 最初に init_contassign_list() を呼ぶ．
+  // その後に new_ContAssign() を呼んで ContAssign 要素を生成する．
+  // 最後に new_ContAssignH() を呼んで直前の init_contassign_list()
+  // 以降に生成した ContAssign 要素を持つ ContAssign ヘッダを生成する．
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief mContAssignList を初期化する．
+  void
+  init_contassign_list()
+  {
+    mContAssignList.clear();
   }
 
   /// @brief continuous assign 文のヘッダの生成
@@ -796,13 +920,6 @@ public:
 				    mContAssignList);
   }
 
-  /// @brief mContAssignList を初期化する．
-  void
-  init_contassign_list()
-  {
-    mContAssignList.clear();
-  }
-
   /// @brief continuous assign 文の生成
   ///
   /// 結果は mContAssignList に追加される．
@@ -816,6 +933,12 @@ public:
     auto ca = mFactory.new_ContAssign(fr, lhs, rhs);
     mContAssignList.push_back(ca);
   }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // Initia/Always の生成
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief initial 文の生成
   PtItem*
@@ -836,6 +959,16 @@ public:
   {
     return mFactory.new_Always(fr, body);
   }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // Task/Func の生成
+  //
+  // 最初に init_tf() を呼ぶ．
+  // 宣言要素などの生成を行う．
+  // 最後に new_Task()/new_Function() を呼ぶ．
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief task/function 定義の開始
   /// - iohead list の初期化
@@ -931,6 +1064,24 @@ public:
 				  stmt);
   }
 
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // GateInst/MuInst 関係の生成
+  //
+  // 最初に init_inst_list() を呼ぶ．
+  // new_Inst() でインスタンスの生成を行う．
+  // 最後に new_GateH() などを呼び出し，直前の init_inst_list()
+  // 以降に生成されたインスタンスを持つインスタンスヘッダを生成する．
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief mInstList を初期化する．
+  void
+  init_inst_list()
+  {
+    mInstList.clear();
+  }
+
   /// @brief gate instance 文のヘッダの生成
   ///
   /// 現在の mInstList を要素とする．
@@ -997,7 +1148,7 @@ public:
   )
   {
     auto item = mFactory.new_MuH(fr, def_name, nullptr, nullptr,
-				 mInstList);
+				 mParamAssignList, mInstList);
     reg_defname(def_name);
     return item;
   }
@@ -1013,7 +1164,7 @@ public:
   )
   {
     auto item = mFactory.new_MuH(fr, def_name, strength, nullptr,
-				 mInstList);
+				 {}, mInstList);
     reg_defname(def_name);
     return item;
   }
@@ -1029,7 +1180,7 @@ public:
   )
   {
     auto item = mFactory.new_MuH(fr, def_name, nullptr, delay,
-				 mInstList);
+				 {}, mInstList);
     reg_defname(def_name);
     return item;
   }
@@ -1046,32 +1197,61 @@ public:
   )
   {
     auto item = mFactory.new_MuH(fr, def_name, strength, delay,
-				 mInstList);
+				 {}, mInstList);
     reg_defname(def_name);
     return item;
   }
 
-  /// @brief module instance/UDP instance 文のヘッダの生成
-  ///
-  /// 現在の mInstList を要素とする．
-  PtItem*
-  new_MuH(
-    const FileRegion& fr,      ///< [in] ファイル位置の情報
-    const char* def_name,      ///< [in] 定義名
-    PtConnectionList* con_list ///< [in] ポート割り当てリスト
+  /// @brief ParamAssign のリストを初期化する．
+  void
+  init_paramassign_list()
+  {
+    mParamAssignList.clear();
+  }
+
+  /// @brief Paramassign のリストに追加する．
+  void
+  add_paramassign(
+    PtConnection* item
   )
   {
-    auto item = mFactory.new_MuH(fr, def_name, con_list,
-				 mInstList);
-    reg_defname(def_name);
-    return item;
+    mParamAssignList.push_back(item);
   }
 
-  /// @brief mInstList を初期化する．
+  /// @brief Paramassign のリストに追加する．
   void
-  init_inst_list()
+  add_paramassign(
+    PtExpr* expr
+  )
   {
-    mInstList.clear();
+    auto con = new_OrderedCon(expr);
+    mParamAssignList.push_back(con);
+  }
+
+  /// @brief Connection のリストを初期化する．
+  void
+  init_connection_list()
+  {
+    mConnectionList.clear();
+  }
+
+  /// @brief Connection のリストに追加する．
+  void
+  add_connection(
+    PtConnection* item
+  )
+  {
+    mConnectionList.push_back(item);
+  }
+
+  /// @brief Connection のリストに追加する．
+  void
+  add_connection(
+    PtExpr* expr
+  )
+  {
+    auto con = new_OrderedCon(expr);
+    mConnectionList.push_back(con);
   }
 
   /// @brief module instance/UDP/gate instance の要素の生成
@@ -1079,11 +1259,11 @@ public:
   /// 結果は mInstList に追加される．
   void
   new_Inst(
-    const FileRegion& fr,      ///< [in] ファイル位置の情報
-    PtConnectionList* con_list ///< [in] ポート割り当ての配列
+    const FileRegion& fr ///< [in] ファイル位置の情報
   )
   {
-    auto item = mFactory.new_Inst(fr, nullptr, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, nullptr, nullptr,
+				  mConnectionList);
     mInstList.push_back(item);
   }
 
@@ -1096,8 +1276,8 @@ public:
     const AstExpr* expr1   ///< [in] ポート割り当て
   )
   {
-    auto con_list = new_connection_list(expr1);
-    auto item = mFactory.new_Inst(fr, nullptr, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, nullptr, nullptr,
+				  expr1);
     mInstList.push_back(item);
   }
 
@@ -1111,8 +1291,8 @@ public:
     const AstExpr* expr2   ///< [in] ポート割り当て式2
   )
   {
-    auto con_list = new_connection_list(expr1, expr2);
-    auto item = mFactory.new_Inst(fr, nullptr, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, nullptr, nullptr,
+				  expr1, expr2);
     mInstList.push_back(item);
   }
 
@@ -1127,8 +1307,8 @@ public:
     const AstExpr* expr3  ///< [in] ポート割り当て式3
   )
   {
-    auto con_list = new_connection_list(expr1, expr2, expr3);
-    auto item = mFactory.new_Inst(fr, nullptr, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, nullptr, nullptr,
+				  expr1, expr2, expr3);
     mInstList.push_back(item);
   }
 
@@ -1144,8 +1324,8 @@ public:
     const AstExpr* expr4   ///< [in] ポート割り当て式4
   )
   {
-    auto con_list = new_connection_list(expr1, expr2, expr3, expr4);
-    auto item = mFactory.new_Inst(fr, nullptr, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, nullptr, nullptr,
+				  expr1, expr2, expr3, expr4);
     mInstList.push_back(item);
   }
 
@@ -1154,12 +1334,12 @@ public:
   /// 結果は mInstList に追加される．
   void
   new_InstN(
-    const FileRegion& fr,      ///< [in] ファイル位置の情報
-    const char* name,          ///< [in] 名前
-    PtConnectionList* con_list ///< [in] ポート割り当ての配列
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* name      ///< [in] 名前
   )
   {
-    auto item = mFactory.new_Inst(fr, name, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, name, nullptr,
+				  mConnectionList);
     mInstList.push_back(item);
   }
 
@@ -1173,8 +1353,8 @@ public:
     const AstExpr* expr1   ///< [in] ポート割り当て式1
   )
   {
-    auto con_list = new_connection_list(expr1);
-    auto item = mFactory.new_Inst(fr, name, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, name, nullptr,
+				  expr1);
     mInstList.push_back(item);
   }
 
@@ -1189,8 +1369,8 @@ public:
     const AstExpr* expr2   ///< [in] ポート割り当て式2
   )
   {
-    auto con_list = new_connection_list(expr1, expr2);
-    auto item = mFactory.new_Inst(fr, name, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, name, nullptr,
+				  expr1, expr2);
     mInstList.push_back(item);
   }
 
@@ -1206,8 +1386,8 @@ public:
     const AstExpr* expr3   ///< [in] ポート割り当て式3
   )
   {
-    auto con_list = new_connection_list(expr1, expr2, expr3);
-    auto item = mFactory.new_Inst(fr, name, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, name, nullptr,
+				  expr1, expr2, expr3);
     mInstList.push_back(item);
   }
 
@@ -1224,8 +1404,8 @@ public:
     const AstExpr* expr4   ///< [in] ポート割り当て式4
   )
   {
-    auto con_list = new_connection_list(expr1, expr2, expr3, expr4);
-    auto item = mFactory.new_Inst(fr, name, nullptr, con_list);
+    auto item = mFactory.new_Inst(fr, name, nullptr,
+				  expr1, expr2, expr3, expr4);
     mInstList.push_back(item);
   }
 
@@ -1234,13 +1414,13 @@ public:
   /// 結果は mInstList に追加される．
   void
   new_InstV(
-    const FileRegion& fr,      ///< [in] ファイル位置の情報
-    const char* name,          ///< [in] 名前
-    const AstRange* range,     ///< [in] 範囲
-    PtConnectionList* con_list ///< [in] ポート割り当ての配列
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* name,     ///< [in] 名前
+    const AstRange* range ///< [in] 範囲
   )
   {
-    auto item = mFactory.new_Inst(fr, name, range, con_list);
+    auto item = mFactory.new_Inst(fr, name, range,
+				  mConnectionList);
     mInstList.push_back(item);
   }
 
@@ -1255,8 +1435,8 @@ public:
     const AstExpr* expr1   ///< [in] ポート割り当て式1
   )
   {
-    auto con_list = new_connection_list(expr1);
-    auto item = mFactory.new_Inst(fr, name, range, con_list);
+    auto item = mFactory.new_Inst(fr, name, range,
+				  expr1);
     mInstList.push_back(item);
   }
 
@@ -1272,8 +1452,8 @@ public:
     const AstExpr* expr2   ///< [in] ポート割り当て式2
   )
   {
-    auto con_list = new_connection_list(expr1, expr2);
-    auto item = mFactory.new_Inst(fr, name, range, con_list);
+    auto item = mFactory.new_Inst(fr, name, range,
+				  expr1, expr2);
     mInstList.push_back(item);
   }
 
@@ -1290,8 +1470,8 @@ public:
     const AstExpr* expr3   ///< [in] ポート割り当て式3
   )
   {
-    auto con_list = new_connection_list(expr1, expr2, expr3);
-    auto item = mFactory.new_Inst(fr, name, range, con_list);
+    auto item = mFactory.new_Inst(fr, name, range,
+				  expr1, expr2, expr3);
     mInstList.push_back(item);
   }
 
@@ -1309,9 +1489,38 @@ public:
     const AstExpr* expr4   ///< [in] ポート割り当て式4
   )
   {
-    auto con_list = new_connection_list(expr1, expr2, expr3, expr4);
-    auto item = mFactory.new_Inst(fr, name, range, con_list);
+    auto item = mFactory.new_Inst(fr, name, range,
+				  expr1, expr2, expr3, expr4);
     mInstList.push_back(item);
+  }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // Generate 関係の生成
+  //
+  // 最初に init_generate() を呼ぶ．
+  // 宣言要素とItemの生成を行う．
+  // 最後に end_generate() を呼ぶ．
+  // 直後に new_Generate() や new_GenBlock() を呼ぶことで直前の
+  // init_generate() から end_generate() の間に生成された要素を
+  // 持つ Generate ブロックを生成する．
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief generate block の開始
+  void
+  init_generate()
+  {
+    push_declhead_list();
+    push_item_list();
+  }
+
+  /// @brief generate block の終了
+  void
+  end_generate()
+  {
+    mCurDeclList = pop_declhead_list();
+    mCurItemList = pop_item_list();
   }
 
   /// @brief generate 文の生成
@@ -1349,6 +1558,50 @@ public:
     add_item(item);
   }
 
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // GenIf の生成
+  //
+  // 条件が成り立った時に生成する要素を
+  // init_genif() から end_genif() の間で生成する．
+  // 条件が成り立たなかった時に生成する要素を
+  // init_genelse() からの end_genelse() の間に生成する．
+  // 最後に new_GenIf() か new_GenIfElse() を呼ぶ．
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief generate-if の開始
+  void
+  init_genif()
+  {
+    push_declhead_list();
+    push_item_list();
+  }
+
+  /// @brief generate-if の終了
+  void
+  end_genif()
+  {
+    mGenThenDeclList = pop_declhead_list();
+    mGenThenItemList = pop_item_list();
+  }
+
+  /// @brief generate-if の else 節の開始
+  void
+  init_genelse()
+  {
+    push_declhead_list();
+    push_item_list();
+  }
+
+  /// @brief generate-if の else 節の終了
+  void
+  end_genelse()
+  {
+    mGenElseDeclList = pop_declhead_list();
+    mGenElseItemList = pop_item_list();
+  }
+
   /// @brief generate if 文の生成
   ///
   /// 結果は cur_item_list() に追加される．
@@ -1379,22 +1632,53 @@ public:
     add_item(item);
   }
 
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // GenCase の生成
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief generate case の開始
+  void
+  init_gencase()
+  {
+    push_gencaseitem_list();
+  }
+
+  void
+  add_gencaseitem(
+    PtGenCaseItem* item
+  )
+  {
+    mGenCaseItemListStack.back().push_back(item);
+  }
+
+  /// @brief generate case の終了
+  void
+  end_gencase()
+  {
+    pop_gencaseitem_list();
+  }
+
   /// @brief generate case 文の生成
   ///
   /// 結果は cur_item_list() に追加される．
   void
   new_GenCase(
-    const FileRegion& fr,        ///< [in] ファイル位置の情報
-    const AstExpr* expr,         ///< [in] 選択式
-    PtGenCaseItemList* item_list ///< [in] generate case item のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* expr   ///< [in] 選択式
   )
   {
-    auto item = mFactory.new_GenCase(fr, expr, item_list);
+    auto item = mFactory.new_GenCase(fr, expr,
+				     mCurGenCaseItemList);
     add_item(item);
   }
 
   /// @brief generate case の要素の生成
   /// @return 生成された generate case item
+  ///
+  /// 直前の init_generate() から end_generate() の間に生成された
+  /// 要素を持つ GenCaseItem を生成する．
   PtGenCaseItem*
   new_GenCaseItem(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
@@ -1402,8 +1686,15 @@ public:
   )
   {
     return mFactory.new_GenCaseItem(fr, label_list,
-				    mCurDeclList, mCurItemList);
+				    mCurDeclList,
+				    mCurItemList);
   }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // GenFor の生成
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief generate for 文の生成
   ///
@@ -1440,6 +1731,12 @@ public:
 				    mCurDeclList,mCurItemList);
     add_item(item);
   }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // SpecItem 関係の生成関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief specify block item の生成
   ///
@@ -1742,31 +2039,50 @@ public:
     const AstStmt* else_body  ///< [in] 成り立たなかったときに実行されるステートメント
   );
 
+  /// @brief case の開始
+  void
+  init_case()
+  {
+    push_caseitem_list();
+  }
+
+  void
+  add_caseitem(
+    PtCaseItem* item
+  )
+  {
+    mCaseItemListStack.back().push_back(item);
+  }
+
+  /// @brief case の終了
+  void
+  end_case()
+  {
+    pop_caseitem_list();
+  }
+
   /// @brief case 文の生成
   /// @return 生成された case 文
   PtStmt*
   new_Case(
-    const FileRegion& fr,         ///< [in] ファイル位置の情報
-    const AstExpr* expr,          ///< [in] 条件を表す式
-    PtCaseItemList* caseitem_list ///< [in] case item のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* expr   ///< [in] 条件を表す式
   );
 
   /// @brief casex 文の生成
   /// @return 生成された case 文
   PtStmt*
   new_CaseX(
-    const FileRegion& fr,         ///< [in] ファイル位置の情報
-    const AstExpr* expr,	  ///< [in] 条件を表す式
-    PtCaseItemList* caseitem_list ///< [in] case item のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* expr	  ///< [in] 条件を表す式
   );
 
   /// @brief casez 文の生成
   /// @return 生成された case 文
   PtStmt*
   new_CaseZ(
-    const FileRegion& fr,         ///< [in] ファイル位置の情報
-    const AstExpr* expr,	  ///< [in] 条件を表す式
-    PtCaseItemList* caseitem_list ///< [in] case item のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* expr	  ///< [in] 条件を表す式
   );
 
   /// @brief case item の生成
@@ -1849,38 +2165,79 @@ public:
     const AstExpr* lhs     ///< [in] 左辺式
   );
 
+  /// @brief StmtList の初期化
+  void
+  init_stmt_list()
+  {
+    push_stmt_list();
+  }
+
+  /// @brief stmt を追加する．
+  void
+  add_stmt(
+    PtStmt* stmt
+  )
+  {
+    mStmtListStack.back().push_back(stmt);
+  }
+
+  /// @brief StmtList の終了
+  ///
+  /// 結果は mCurStmtList が保持している．
+  void
+  end_stmt_list()
+  {
+    pop_stmt_list();
+  }
+
+  /// @brief block-statment の開始
+  void
+  init_block()
+  {
+    push_declhead_list();
+  }
+
+  /// @brief block-statement の終了
+  void
+  end_block()
+  {
+    mCurDeclList = pop_declhead_list();
+  }
+
   /// @brief parallel block の生成
   /// @return 生成された parallel block
   PtStmt*
   new_ParBlock(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    PtStmtList* stmt_list ///< [in] 本体のステートメントのリスト
+    const FileRegion& fr ///< [in] ファイル位置の情報
   );
 
   /// @brief 名前付き parallel block の生成
   /// @return 生成された parallel block
+  ///
+  /// 直前の init_block() から end_block() の間で生成された
+  /// 宣言要素を持つ．
   PtStmt*
   new_NamedParBlock(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    const char* name,     ///< [in] 名前
-    PtStmtList* stmt_list ///< [in] 本体のステートメントのリスト
+    const char* name      ///< [in] 名前
   );
 
   /// @brief sequential block の生成
   /// @return 生成された sequential block
   PtStmt*
   new_SeqBlock(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    PtStmtList* stmt_list ///< [in] 本体のステートメントのリスト
+    const FileRegion& fr ///< [in] ファイル位置の情報
   );
 
   /// @brief 名前付き sequential block の生成
   /// @return 生成された sequential block
+  ///
+  /// 直前の init_block() から end_block() の間で生成された
+  /// 宣言要素を持つ．
   PtStmt*
   new_NamedSeqBlock(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    const char* name,     ///< [in] 名前
-    PtStmtList* stmt_list ///< [in] 本体のステートメントのリスト
+    const char* name      ///< [in] 名前
   );
 
 
@@ -2153,14 +2510,20 @@ public:
   new_DelayControl(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* value   ///< [in] 遅延を表す式
-  );
+  )
+  {
+    return mFactory.new_DelayControl(fr, value);
+  }
 
   /// @brief イベントコントロールの生成 (any-event)
   /// @return 生成されたイベントコントロール
   PtControl*
   new_EventControl(
     const FileRegion& fr ///< [in] ファイル位置の情報
-  );
+  )
+  {
+    return mFactory.new_EventControl(fr);
+  }
 
   /// @brief イベントコントロールの生成
   /// @return 生成されたイベントコントロール
@@ -2169,7 +2532,11 @@ public:
     const FileRegion& fr,      ///< [in] ファイル位置の情報
     const char* event_name,    ///< [in] イベントを表す名前
     const FileRegion& name_loc ///< [in] event_name の位置
-  );
+  )
+  {
+    auto expr = new_Primary(name_loc, event_name);
+    return mFactory.new_EventControl(fr, expr);
+  }
 
   /// @brief イベントコントロールの生成
   /// @return 生成されたイベントコントロール
@@ -2178,7 +2545,11 @@ public:
     const FileRegion& fr,      ///< [in] ファイル位置の情報
     PtHierName* event_name,    ///< [in] イベントを表す名前
     const FileRegion& name_loc ///< [in] event_name の位置
-  );
+  )
+  {
+    auto expr = new_Primary(name_loc, event_name);
+    return mFactory.new_EventControl(fr, expr);
+  }
 
   /// @brief イベントコントロールの生成
   /// @return 生成されたイベントコントロール
@@ -2186,7 +2557,10 @@ public:
   new_EventControl(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     PtExprList* event_list ///< [in] イベントのリスト
-  );
+  )
+  {
+    return mFactory.new_EventControl(fr, event_list);
+  }
 
   /// @brief リピートコントロールの生成 (any-event)
   /// @return 生成されたリピートコントロール
@@ -2194,7 +2568,10 @@ public:
   new_RepeatControl(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* rep     ///< [in] 繰り返し数を表す式
-  );
+  )
+  {
+    return mFactory.new_RepeatControl(fr, rep);
+  }
 
   /// @brief リピートコントロールの生成
   /// @return 生成されたリピートコントロール
@@ -2204,7 +2581,11 @@ public:
     const AstExpr* rep,         ///< [in] 繰り返し数を表す式
     const char* event_name,    ///< [in] 繰り返しの単位となるイベント
     const FileRegion& name_loc ///< [in] event_name の位置
-  );
+  )
+  {
+    auto event = new_Primary(name_loc, event_name);
+    return mFactory.new_RepeatControl(fr, rep, event);
+  }
 
   /// @brief リピートコントロールの生成
   /// @return 生成されたリピートコントロール
@@ -2214,7 +2595,11 @@ public:
     const AstExpr* rep,	       ///< [in] 繰り返し数を表す式
     PtHierName* event_name,    ///< [in] 繰り返しの単位となるイベント
     const FileRegion& name_loc ///< [in] event_name の位置
-  );
+  )
+  {
+    auto event = new_Primary(name_loc, event_name);
+    return mFactory.new_RepeatControl(fr, rep, event);
+  }
 
   /// @brief リピートコントロールの生成
   /// @return 生成されたリピートコントロール
@@ -2223,14 +2608,20 @@ public:
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const AstExpr* rep,    ///< [in] 繰り返し数を表す式
     PtExprList* event_list ///< [in] 繰り返しの単位となるイベントのリスト
-  );
+  )
+  {
+    return mFactory.new_RepeatControl(fr, rep, event_list);
+  }
 
   /// @brief 順序つき結合子の生成
   /// @return 生成された結合子
   PtConnection*
   new_OrderedCon(
     const AstExpr* expr ///< [in] 結合する式
-  );
+  )
+  {
+    return mFactory.new_OrderedCon(expr);
+  }
 
   /// @brief 順序つき結合子の生成
   /// @return 生成された結合子
@@ -2239,7 +2630,12 @@ public:
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     const AstExpr* expr,    ///< [in] 結合する式
     PtAttrInstList* ai_list ///< [in] 属性リスト
-  );
+  )
+  {
+    auto con = mFactory.new_OrderedCon(fr, expr);
+    reg_attrinst(con, ai_list);
+    return con;
+  }
 
   /// @brief 名前付き結合子の生成
   /// @return 生成された結合子
@@ -2249,7 +2645,12 @@ public:
     const char* name,                 ///< [in] 名前
     const AstExpr* expr = nullptr,    ///< [in] 結合する式
     PtAttrInstList* ai_list = nullptr ///< [in] 属性リスト
-  );
+  )
+  {
+    auto con = mFactory.new_NamedCon(fr, name, expr);
+    reg_attrinst(con, ai_list);
+    return con;
+  }
 
   /// @brief strength の生成
   /// @return 生成された strength
@@ -2258,7 +2659,10 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiStrength value0,   ///< [in] '0' の強度
     VpiStrength value1    ///< [in] '1' の強度
-  );
+  )
+  {
+    return mFactory.new_Strength(fr, value0, value1);
+  }
 
   /// @brief charge strength の生成
   /// @return 生成された strength
@@ -2266,7 +2670,10 @@ public:
   new_Strength(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiStrength value     ///< [in] 強度
-  );
+  )
+  {
+    return mFactory.new_Strength(fr, value);
+  }
 
   /// @brief 遅延値の生成 (1つの値)
   /// @return 生成された遅延値
@@ -2274,7 +2681,10 @@ public:
   new_Delay(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* value1 ///< [in] 値1
-  );
+  )
+  {
+    return mFactory.new_Delay(fr, value1);
+  }
 
   /// @brief 遅延値の生成 (2つの値)
   /// @return 生成された遅延値
@@ -2283,7 +2693,10 @@ public:
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const AstExpr* value1, ///< [in] 値1
     const AstExpr* value2  ///< [in] 値2
-  );
+  )
+  {
+    return mFactory.new_Delay(fr, value1, value2);
+  }
 
   /// @brief 遅延値の生成 (3つの値)
   /// @return 生成された遅延値
@@ -2293,7 +2706,10 @@ public:
     const AstExpr* value1, ///< [in] 値1
     const AstExpr* value2, ///< [in] 値2
     const AstExpr* value3  ///< [in] 値3
-  );
+  )
+  {
+    return mFactory.new_Delay(fr, value1, value2, value3);
+  }
 
   /// @brief 階層名の生成
   ///
@@ -2373,136 +2789,70 @@ public:
   // attribute instance 関係
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief AttrInstList の生成
+  PtAttrInstList*
+  new_AttrInstList()
+  {
+    return mFactory.new_AttrInstList(mAttrInstList);
+  }
+
+  /// @brief mAttrInstList の初期化
+  void
+  init_attrinst_list()
+  {
+    mAttrInstList.clear();
+  }
+
+  /// @brief AttrInst をリストに追加する．
+  void
+  add_attrinst(
+    PtAttrInst* attrinst
+  )
+  {
+    mAttrInstList.push_back(attrinst);
+  }
+
   /// @brief attribute instance の生成
-  /// @return 生成された attribute instance
   PtAttrInst*
   new_AttrInst(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    PtAttrSpecList* as_list ///< [in] attribute spec のリスト
-  );
+    const FileRegion& fr ///< [in] ファイル位置の情報
+  )
+  {
+    return mFactory.new_AttrInst(fr, mAttrSpecList);
+  }
+
+  /// @brief mAttrSpecList の初期化
+  void
+  init_attrspec_list()
+  {
+    mAttrSpecList.clear();
+  }
+
+  /// @brief AttrSpec をリストに追加する．
+  void
+  add_attrspec(
+    PtAttrSpec* attrspec
+  )
+  {
+    mAttrSpecList.push_back(attrspec);
+  }
 
   /// @brief attribute spec の生成
-  /// @return 生成された attribute spec
   PtAttrSpec*
   new_AttrSpec(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,     ///< [in] 名前
-    const AstExpr* expr    ///< [in] 値
-  );
+    const AstExpr* expr   ///< [in] 値
+  )
+  {
+    return mFactory.new_AttrSpec(fr, name, expr);
+  }
 
 
 public:
   //////////////////////////////////////////////////////////////////////
   // Ver2.0 リスト関係
   //////////////////////////////////////////////////////////////////////
-
-  /// @brief モジュール定義の開始
-  /// - port list の初期化
-  /// - paramport list の初期化
-  /// - iohead list の初期化
-  /// - paramhead list の初期化
-  /// - localparamhead list の初期化
-  /// - declhead list の初期化
-  /// - item list の初期化
-  /// を行う．
-  void
-  init_module()
-  {
-    mCurIOHeadList = &mModuleIOHeadList;
-    push_declhead_list();
-    push_item_list();
-
-    mPortList.clear();
-    mParamPortHeadList.clear();
-    mCurIOHeadList->clear();
-    mIOItemList.clear();
-    cur_declhead_list().clear();
-    mDeclItemList.clear();
-    cur_item_list().clear();
-  }
-
-  /// @brief モジュール定義の終了
-  void
-  end_module()
-  {
-    mCurDeclList = pop_declhead_list();
-    mCurItemList = pop_item_list();
-  }
-
-  /// @brief UDP定義の開始
-  /// - port list の初期化
-  /// - iohead list の初期化
-  /// - declhead list の初期化
-  /// - UDP entry list の初期化
-  /// を行う．
-  void
-  init_udp();
-
-  /// @brief UDP 定義の終了
-  void
-  end_udp();
-
-  /// @brief generate block の開始
-  void
-  init_generate()
-  {
-    push_declhead_list();
-    push_item_list();
-  }
-
-  /// @brief generate block の終了
-  void
-  end_generate()
-  {
-    mCurDeclList = pop_declhead_list();
-    mCurItemList = pop_item_list();
-  }
-
-  /// @brief generate-if の開始
-  void
-  init_genif()
-  {
-    push_declhead_list();
-    push_item_list();
-  }
-
-  /// @brief generate-if の終了
-  void
-  end_genif()
-  {
-    mGenThenDeclList = pop_declhead_list();
-    mGenThenItemList = pop_item_list();
-  }
-
-  /// @brief generate-if の else 節の開始
-  void
-  init_genelse()
-  {
-    push_declhead_list();
-    push_item_list();
-  }
-
-  /// @brief generate-if の else 節の終了
-  void
-  end_genelse()
-  {
-    mGenElseDeclList = pop_declhead_list();
-    mGenElseItemList = pop_item_list();
-  }
-
-  /// @brief block-statment の開始
-  void
-  init_block()
-  {
-    push_declhead_list();
-  }
-
-  /// @brief block-statement の終了
-  void
-  end_block()
-  {
-    mCurDeclList = pop_declhead_list();
-  }
 
   /// @brief parameter port 宣言ヘッダを追加する．
   void
@@ -2600,60 +2950,7 @@ public:
   // リスト関係
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief AttrInst のリストを作る．
-  PtAttrInstList*
-  new_attrinst_list()
-  {
-    void* p = mAlloc.get_memory(sizeof(PtAttrInstList));
-    return new (p) PtAttrInstList;
-  }
-
-  /// @brief AttrInst のリストの末尾に要素を追加する．
-  void
-  push_back(
-    PtAttrInstList* list,
-    PtAttrInst* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
-  }
-
-  /// @brief AttrSpec のリストを作る．
-  PtAttrSpecList*
-  new_attrspec_list()
-  {
-    void* p = mAlloc.get_memory(sizeof(PtAttrSpecList));
-    return new (p) PtAttrSpecList;
-  }
-
-  /// @brief AttrSpec のリストの末尾に要素を追加する．
-  void
-  push_back(
-    PtAttrSpecList* list,
-    PtAttrSpec* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
-  }
-
-  /// @brief CaseItem のリストを作る．
-  PtCaseItemList*
-  new_caseitem_list()
-  {
-    void* p = mAlloc.get_memory(sizeof(PtCaseItemList));
-    return new (p) PtCaseItemList;
-  }
-
-  /// @brief CaseItem のリストの末尾に要素を追加する．
-  void
-  push_back(
-    PtCaseItemList* list,
-    PtCaseItem* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
-  }
-
+#if 0
   /// @brief Connection のリストを作る．
   PtConnectionList*
   new_connection_list()
@@ -2721,6 +3018,7 @@ public:
   {
     list->push_back(mAlloc, elem);
   }
+#endif
 
   /// @brief Expr のリストを作る．
   PtExprList*
@@ -2755,42 +3053,6 @@ public:
   push_back(
     PtExprList* list,
     const AstExpr* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
-  }
-
-  /// @brief GenCaseItem のリストを作る．
-  PtGenCaseItemList*
-  new_gencaseitem_list()
-  {
-    void* p = mAlloc.get_memory(sizeof(PtGenCaseItemList));
-    return new (p) PtGenCaseItemList;
-  }
-
-  /// @brief GenCaseItem のリストの末尾に要素を追加する．
-  void
-  push_back(
-    PtGenCaseItemList* list,
-    PtGenCaseItem* elem
-  )
-  {
-    list->push_back(mAlloc, elem);
-  }
-
-  /// @brief Range のリストを作る．
-  PtRangeList*
-  new_range_list()
-  {
-    void* p = mAlloc.get_memory(sizeof(PtRangeList));
-    return new (p) PtRangeList;
-  }
-
-  /// @brief Range のリストの末尾の要素を追加する．
-  void
-  push_back(
-    PtRangeList* list,
-    PtRange* elem
   )
   {
     list->push_back(mAlloc, elem);
@@ -2850,9 +3112,7 @@ public:
 
   /// @brief default ラベルが2つ以上含まれていないかどうかのチェック
   bool
-  check_default_label(
-    const PtCaseItemList* ci_list
-  );
+  check_default_label();
 
   /// @brief 使用されているモジュール名を登録する．
   /// @param[in] name 登録する名前
@@ -2965,6 +3225,20 @@ public:
     return mInstList;
   }
 
+  /// @brief AttrInst のリストを得る．
+  const AstAttrInstVec&
+  _attrinst_list() const
+  {
+    return mAttrInstList;
+  }
+
+  /// @brief AttrSpec のリストを得る．
+  const AstAttrSpecVec&
+  _attrspec_list() const
+  {
+    return mAttrSpecList;
+  }
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -3016,6 +3290,57 @@ private:
   {
     return mItemListStack.back();
   }
+
+  /// @brief StmtList のスタックに空のリストを追加する．
+  void
+  push_stmt_list()
+  {
+    mStmtListStack.push_back(AstStmtVec());
+  }
+
+  /// @brief StmtList のスタックのトップを取り出す．
+  void
+  pop_stmt_list()
+  {
+    mCurStmtList = mStmtListStack.back();
+    mStmtListStack.pop_back();
+  }
+
+  /// @brief CaseItemList のスタックに空のリストを追加する．
+  void
+  push_caseitem_list()
+  {
+    mCaseItemListStack.push_back(AstCaseItemVec());
+  }
+
+  /// @brief CaseItemList のスタックのトップを取り出す．
+  void
+  pop_caseitem_list()
+  {
+    mCurCaseItemList = mCaseItemListStack.back();
+    mCaseItemListStack.pop_back();
+  }
+
+  /// @brief GenCaseItemList のスタックに空のリストを追加する．
+  void
+  push_gencaseitem_list()
+  {
+    mGenCaseItemListStack.push_back(AstGenCaseItemVec());
+  }
+
+  /// @brief GenCaseItemList のスタックのトップを取り出す．
+  void
+  pop_gencaseitem_list()
+  {
+    mCurGenCaseItemList = mGenCaseItemListStack.back();
+    mGenCaseItemListStack.pop_back();
+  }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // チェックを行う関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 入出力宣言中の重複チェックを行う．
   bool
@@ -3091,6 +3416,21 @@ public:
   // instance リスト
   AstInstVec mInstList;
 
+  // Range のリスト
+  AstRangeVec mRangeList;
+
+  // ParamAssign のリスト
+  AstConnectionVec mParamAssignList;
+
+  // Connection のリスト
+  AstConnectionVec mConnectionList;
+
+  // AttrInst のリスト
+  AstAttrInstVec mAttrInstList;
+
+  // AttrSpec のリスト
+  AstAttrSpecVec mAttrSpecList;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -3109,6 +3449,14 @@ private:
   // スタックから取り出された最終結果
   AstItemVec mCurItemList;
 
+  // 現在の stmt の配列
+  // スタックから取り出された最終結果
+  AstStmtVec mCurStmtList;
+
+  // 現在の caseitem の配列
+  // スタックから取り出された最終結果
+  AstCaseItemVec mCurCaseItemList;
+
   // generate-if の then 節の宣言ヘッダリスト
   std::vector<PtDeclHead*> mGenThenDeclList;
 
@@ -3121,6 +3469,9 @@ private:
   // generate-if の else 節の item リスト
   AstItemVec mGenElseItemList;
 
+  // generate-case の GenCaseItem のリスト
+  AstGenCaseItemVec mCurGenCaseItemList;
+
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -3132,6 +3483,15 @@ public:
 
   // item リストのスタック
   std::vector<AstItemVec> mItemListStack;
+
+  // StmtList のスタック
+  std::vector<AstStmtVec> mStmtListStack;
+
+  // CaseItemList のスタック
+  std::vector<AstCaseItemVec> mCaseItemListStack;
+
+  // GenCaseItemList のスタック
+  std::vector<AstGenCaseItemVec> mGenCaseItemListStack;
 
 };
 

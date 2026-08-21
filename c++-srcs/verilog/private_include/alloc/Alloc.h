@@ -30,6 +30,13 @@ public:
   /// @brief コンストラクタ
   Alloc() = default;
 
+  /// @brief 実際の継承クラスを生成するクラスメソッド
+  static
+  Alloc*
+  new_obj(
+    const std::string name = {} ///< [in] 名前
+  );
+
   /// @brief デストラクタ
   virtual
   ~Alloc() = default;

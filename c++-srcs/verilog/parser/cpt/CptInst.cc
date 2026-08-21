@@ -341,15 +341,21 @@ PtFactory::new_MuH(
   const char* def_name,
   const AstStrength* strength,
   const AstDelay* delay,
+  const AstConnectionVec& paramassign_list,
   const AstInstVec& inst_list
 )
 {
   if ( strength == nullptr ) {
     if ( delay == nullptr ) {
-      void* p = mAlloc.get_memory(sizeof(CptMuH));
-      return new (p) CptMuH(file_region, def_name,
-			    PtInstArray(mAlloc, inst_list));
-
+      if ( paramassign_list.empty() ) {
+	void* p = mAlloc.get_memory(sizeof(CptMuH));
+	return new (p) CptMuH(file_region, def_name,
+			      PtInstArray(mAlloc, inst_list));
+      }
+      void* p = mAlloc.get_memory(sizeof(CptMuHP));
+      return new (p) CptMuHP(file_region, def_name,
+			     PtConnectionArray(mAlloc, paramassign_list),
+			     PtInstArray(mAlloc, inst_list));
     }
     void* p = mAlloc.get_memory(sizeof(CptMuHD));
     return new (p) CptMuHD(file_region, def_name,
@@ -368,43 +374,28 @@ PtFactory::new_MuH(
 			  PtInstArray(mAlloc, inst_list));
 }
 
-// module instance/UDP instance 文のヘッダを生成する．
-PtItem*
-PtFactory::new_MuH(
-  const FileRegion& file_region,
-  const char* def_name,
-  PtConnectionList* con_list,
-  const AstInstVec& inst_list
-)
-{
-  void* p = mAlloc.get_memory(sizeof(CptMuHP));
-  return new (p) CptMuHP(file_region, def_name,
-			 con_list->to_array(mAlloc),
-			 PtInstArray(mAlloc, inst_list));
-}
-
 // module instance/UDP instance の要素を生成する．
 PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
   const AstRange* range,
-  PtConnectionList* con_list
+  const AstConnectionVec& con_list
 )
 {
   if ( name == nullptr ) {
     void* p = mAlloc.get_memory(sizeof(CptInst));
     return new (p) CptInst(file_region,
-			   con_list->to_array(mAlloc));
+			   PtConnectionArray(mAlloc, con_list));
   }
   if ( range == nullptr ) {
     void* p = mAlloc.get_memory(sizeof(CptInstN));
     return new (p) CptInstN(file_region, name,
-			    con_list->to_array(mAlloc));
+			    PtConnectionArray(mAlloc, con_list));
   }
   void* p = mAlloc.get_memory(sizeof(CptInstR));
   return new (p) CptInstR(file_region, name, range,
-			  con_list->to_array(mAlloc));
+			  PtConnectionArray(mAlloc, con_list));
 }
 
 // module instance/UDP instance の要素を生成する．

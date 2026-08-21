@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "alloc/SimpleAlloc.h"
+#include "alloc/Alloc.h"
 
 int
 main(
@@ -18,11 +18,11 @@ main(
   using namespace nsYm::nsVerilog;
 
   for ( int i = 0; i < 10000; ++ i ) {
-    SimpleAlloc alloc(4096);
+    auto alloc = std::unique_ptr<Alloc>{Alloc::new_obj()};
     std::vector<char*> p_list;
     int a = 0;
     for ( int j = 0; j < 10000; ++ j ) {
-      void* p = alloc.get_memory(1000);
+      void* p = alloc->get_memory(1000);
       a += j * j;
       char* q = new char[4096];
       p_list.push_back(q);

@@ -203,8 +203,6 @@ public:
   }
 
   /// @brief 内容を PtArray<T1> に変換する．
-  ///
-  /// この処理の後ではリストは空になる．
   PtArray<T1, T2>
   to_array(
     Alloc& alloc ///< [in] アロケータ
@@ -216,7 +214,6 @@ public:
       vec.set(pos, elem);
       ++ pos;
     }
-    clear();
     return vec;
   }
 
@@ -333,30 +330,11 @@ private:
 
 };
 
-class PtAttrInst;
-class PtAttrSpec;
-class PtCaseItem;
-class PtConnection;
-class PtDeclHead;
 class PtExpr;
-class PtGenCaseItem;
 class PtNameBranch;
-class PtPort;
-class PtRange;
-class PtStmt;
 
-using PtAttrInstList    = PtList<const AstAttrInst*,    PtAttrInst*>;
-using PtAttrSpecList    = PtList<const AstAttrSpec*,    PtAttrSpec*>;
-using PtCaseItemList    = PtList<const AstCaseItem*,    PtCaseItem*>;
-using PtConnectionList  = PtList<const AstConnection*,  PtConnection*>;
-using PtDeclHeadList    = PtList<const AstDeclHead*,    PtDeclHead*>;
 using PtExprList        = PtList<const AstExpr*,        PtExpr*>;
-using PtGenCaseItemList = PtList<const AstGenCaseItem*, PtGenCaseItem*>;
-using PtIOHeadList      = PtList<const AstIOHead*,      PtIOHead*>;
 using PtNameBranchList  = PtList<const AstNameBranch*,  PtNameBranch*>;
-using PtPortList        = PtList<const AstPort*,        PtPort*>;
-using PtRangeList       = PtList<const AstRange*,       PtRange*>;
-using PtStmtList        = PtList<const AstStmt*,        PtStmt*>;
 
 END_NAMESPACE_YM_VERILOG
 

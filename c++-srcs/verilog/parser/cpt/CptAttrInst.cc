@@ -14,6 +14,34 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
+// クラス CptAttrInstList
+//////////////////////////////////////////////////////////////////////
+
+// @brief 要素数を返す．
+SizeType
+CptAttrInstList::attrinst_num() const
+{
+  return mList.size();
+}
+
+// @brief 要素を返す．
+const AstAttrInst*
+CptAttrInstList::attrinst(
+  SizeType index
+) const
+{
+  return mList[index];
+}
+
+// @brief 要素のリストを返す．
+AstAttrInstVec
+CptAttrInstList::attrinst_list() const
+{
+  return mList.to_vector();
+}
+
+
+//////////////////////////////////////////////////////////////////////
 // クラス CptAttrInst
 //////////////////////////////////////////////////////////////////////
 
@@ -78,16 +106,26 @@ CptAttrSpec::expr() const
 // クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
+// @brief AttrInstList の生成
+PtAttrInstList*
+PtFactory::new_AttrInstList(
+  const AstAttrInstVec& ai_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptAttrInstList));
+  return new (p) CptAttrInstList(PtAttrInstArray(mAlloc, ai_list));
+}
+
 // attribute instance を生成する．
 PtAttrInst*
 PtFactory::new_AttrInst(
   const FileRegion& file_region,
-  PtAttrSpecList* as_list
+  const AstAttrSpecVec& as_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptAttrInst));
   return new (p) CptAttrInst(file_region,
-			     as_list->to_array(mAlloc));
+			     PtAttrSpecArray(mAlloc, as_list));
 }
 
 // attribute spec を生成する．

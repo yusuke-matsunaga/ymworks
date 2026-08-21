@@ -134,17 +134,11 @@ fr_merge(
   PtControl* control;
   PtConnection* connection;
 
+  PtAttrInstList* ailist;
   PtAttrInst* attrinst;
   PtAttrSpec* attrspec;
 
-  PtAttrInstList* ailist;
-  PtAttrSpecList* aslist;
-  PtCaseItemList* cilist;
-  PtConnectionList* conlist;
   PtExprList* exprlist;
-  PtGenCaseItemList* gcilist;
-  PtRangeList* rangelist;
-  PtStmtList* stmtlist;
 }
 
 // Lex 内部のみで用いられるトークン
@@ -424,8 +418,6 @@ fr_merge(
 %type <item> gate_instantiation module_instantiation
 %type <item> initial_construct always_construct
 
-%type <stmtlist> nzlist_of_stmt
-
 %type <stmt> blocking_assignment nonblocking_assignment
 %type <stmt> procedural_continuous_assignments
 %type <stmt> variable_assignment
@@ -438,7 +430,6 @@ fr_merge(
 
 %type <exprlist> nzlist_of_expressions
 %type <exprlist> nzlist_of_lvalues
-%type <conlist> n_input_gate_terminals n_output_gate_terminals
 %type <exprlist> nzlist_of_terminals
 %type <exprlist> nzlist_of_arguments
 
@@ -452,8 +443,6 @@ fr_merge(
 %type <expr> number unumber rnumber
 %type <expr> argument
 
-%type <rangelist> nzlist_of_dimensions
-
 %type <exprlist> nzlist_of_index
 
 %type <expr> index
@@ -466,7 +455,6 @@ fr_merge(
 %type <vstype> vstype
 %type <inttype> sign
 
-%type <gcilist> list_of_gencaseitem
 %type <gencaseitem> genvar_case_item
 %type <exprlist> genvar_case_head
 
@@ -485,10 +473,6 @@ fr_merge(
 %type <primtype> n_input_gatetype n_output_gatetype pass_en_switchtype
 %type <primtype> pass_switchtype
 
-%type <conlist> list_of_ordered_param_assign
-%type <conlist> list_of_ordered_port_connections
-%type <conlist> list_of_named_param_assign
-%type <conlist> list_of_named_port_connections
 %type <connection> named_parameter_assignment
 %type <connection> named_port_connection
 %type <connection> ordered_port_connection
@@ -530,7 +514,6 @@ fr_merge(
 %type <consttype> numbase
 %type <ailist> ai_list nz_ai_list
 %type <attrinst> attr_inst
-%type <aslist> nzlist_of_attr_spec
 %type <attrspec> attr_spec
 %type <hiername> hierarchical_identifier
 
@@ -2099,11 +2082,11 @@ list_of_event_identifiers
 list_of_genvar_identifiers
 : IDENTIFIER
 {
-  parser.new_DeclItem(@1, $1);
+  parser.new_DeclItem(@1, $1, false);
 }
 | list_of_genvar_identifiers ',' IDENTIFIER
 {
-  parser.new_DeclItem(@3, $3);
+  parser.new_DeclItem(@3, $3, false);
 }
 ;
 
@@ -2282,13 +2265,12 @@ specparam_assignment
 nzlist_of_dimensions
 : range
 {
-  $$ = parser.new_range_list();
-  parser.push_back($$, $1);
+  parser.init_range_list();
+  parser.add_range($1);
 }
 | nzlist_of_dimensions range
 {
-  $$ = $1;
-  parser.push_back($$, $2);
+  parser.add_range($2);
 }
 ;
 
@@ -2441,7 +2423,6 @@ function_head
 function_tail
 : ENDFUNCTION
 {
-  parser.end_tf();
 }
 ;
 
@@ -2897,11 +2878,11 @@ block_variable_type
 identifier_with_range
 : IDENTIFIER
 {
-  parser.new_DeclItem(@1, $1);
+  parser.new_DeclItem(@1, $1, false);
 }
 | IDENTIFIER nzlist_of_dimensions
 {
-  parser.new_DeclItem(@$, $1, $2);
+  parser.new_DeclItem(@$, $1, true);
 }
 ;
 
@@ -3160,15 +3141,15 @@ mos_switch_instance
 n_input_gate_instance
 :                  '(' n_input_gate_terminals ')'
 {
-  parser.new_Inst(@$, $2);
+  parser.new_Inst(@$);
 }
 | IDENTIFIER       '(' n_input_gate_terminals ')'
 {
-  parser.new_InstN(@$, $1, $3);
+  parser.new_InstN(@$, $1);
 }
 | IDENTIFIER range '(' n_input_gate_terminals ')'
 {
-  parser.new_InstV(@$, $1, $2, $4);
+  parser.new_InstV(@$, $1, $2);
 }
 ;
 
@@ -3179,14 +3160,13 @@ n_input_gate_instance
 n_input_gate_terminals
 : net_lvalue ',' expression
 {
-  $$ = parser.new_connection_list();
-  parser.push_back($$, parser.new_OrderedCon($1));
-  parser.push_back($$, parser.new_OrderedCon($3));
+  parser.init_connection_list();
+  parser.add_connection($1);
+  parser.add_connection($3);
 }
 | n_input_gate_terminals ',' expression
 {
-  $$ = $1;
-  parser.push_back($$, parser.new_OrderedCon($3));
+  parser.add_connection($3);
 }
 ;
 
@@ -3200,15 +3180,15 @@ n_input_gate_terminals
 n_output_gate_instance
 :                  '(' n_output_gate_terminals ')'
 {
-  parser.new_Inst(@$, $2);
+  parser.new_Inst(@$);
 }
 | IDENTIFIER       '(' n_output_gate_terminals ')'
 {
-  parser.new_InstN(@$, $1, $3);
+  parser.new_InstN(@$, $1);
 }
 | IDENTIFIER range '(' n_output_gate_terminals ')'
 {
-  parser.new_InstV(@$, $1, $2, $4);
+  parser.new_InstV(@$, $1, $2);
 }
 ;
 
@@ -3220,14 +3200,13 @@ n_output_gate_instance
 n_output_gate_terminals
 : expression ',' expression
 {
-  $$ = parser.new_connection_list();
-  parser.push_back($$, parser.new_OrderedCon($1));
-  parser.push_back($$, parser.new_OrderedCon($3));
+  parser.init_connection_list();
+  parser.add_connection($1);
+  parser.add_connection($3);
 }
 | n_output_gate_terminals ',' expression
 {
-  $$ = $1;
-  parser.push_back($$, parser.new_OrderedCon($3));
+  parser.add_connection($3);
 }
 ;
 
@@ -3519,11 +3498,11 @@ module_instantiation
 }
 | mu_head '#' '(' list_of_ordered_param_assign ')' nzlist_of_mu_inst ';'
 {
-  $$ = parser.new_MuH(@$, $1, $4);
+  $$ = parser.new_MuH(@$, $1);
 }
 | mu_head '#' '(' list_of_named_param_assign ')'   nzlist_of_mu_inst ';'
 {
-  $$ = parser.new_MuH(@$, $1, $4);
+  $$ = parser.new_MuH(@$, $1);
 }
 | mu_head '#' unumber                              nzlist_of_mu_inst ';'
              // これは delay2 の特殊形
@@ -3572,13 +3551,12 @@ mu_head
 list_of_ordered_param_assign
 : expression
 {
-  $$ = parser.new_connection_list();
-  parser.push_back($$, parser.new_OrderedCon($1));
+  parser.init_paramassign_list();
+  parser.add_paramassign($1);
 }
 | list_of_ordered_param_assign ',' expression
 {
-  $$ = $1;
-  parser.push_back($$, parser.new_OrderedCon($3));
+  parser.add_paramassign($3);
 }
 ;
 
@@ -3587,13 +3565,12 @@ list_of_ordered_param_assign
 list_of_named_param_assign
 : named_parameter_assignment
 {
-  $$ = parser.new_connection_list();
-  parser.push_back($$, $1);
+  parser.init_paramassign_list();
+  parser.add_paramassign($1);
 }
 | list_of_named_param_assign ',' named_parameter_assignment
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_paramassign($3);
 }
 ;
 
@@ -3644,27 +3621,27 @@ nzlist_of_mu_inst
 mu_instance
 :                  '(' list_of_ordered_port_connections ')'
 {
-  parser.new_Inst(@$, $2);
+  parser.new_Inst(@$);
 }
 |                  '(' list_of_named_port_connections ')'
 {
-  parser.new_Inst(@$, $2);
+  parser.new_Inst(@$);
 }
 | IDENTIFIER       '(' list_of_ordered_port_connections ')'
 {
-  parser.new_InstN(@$, $1, $3);
+  parser.new_InstN(@$, $1);
 }
 | IDENTIFIER       '(' list_of_named_port_connections ')'
 {
-  parser.new_InstN(@$, $1, $3);
+  parser.new_InstN(@$, $1);
 }
 | IDENTIFIER range '(' list_of_ordered_port_connections ')'
 {
-  parser.new_InstV(@$, $1, $2, $4);
+  parser.new_InstV(@$, $1, $2);
 }
 | IDENTIFIER range '(' list_of_named_port_connections ')'
 {
-  parser.new_InstV(@$, $1, $2, $4);
+  parser.new_InstV(@$, $1, $2);
 }
 ;
 
@@ -3674,13 +3651,12 @@ mu_instance
 list_of_ordered_port_connections
 : ordered_port_connection
 {
-  $$ = parser.new_connection_list();
-  parser.push_back($$, $1);
+  parser.init_connection_list();
+  parser.add_connection($1);
 }
 | list_of_ordered_port_connections ',' ordered_port_connection
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_connection($3);
 }
 ;
 
@@ -3689,7 +3665,7 @@ ordered_port_connection
 : // 空
 {
   // でも NULL は返さない．
-  $$ = parser.new_OrderedCon(NULL);
+  $$ = parser.new_OrderedCon(nullptr);
 }
 | expression
 {
@@ -3710,13 +3686,12 @@ ordered_port_connection
 list_of_named_port_connections
 : named_port_connection
 {
-  $$ = parser.new_connection_list();
-  parser.push_back($$, $1);
+  parser.init_connection_list();
+  parser.add_connection($1);
 }
 | list_of_named_port_connections ',' named_port_connection
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_connection($3);
 }
 ;
 
@@ -3830,12 +3805,12 @@ generate_item
 {
   parser.end_genelse();
 }
-| CASE '(' expression ')' list_of_gencaseitem ENDCASE
+| gen_case '(' expression ')' list_of_gencaseitem gen_endcase
 {
-  parser.new_GenCase(@$, $3, $5);
+  parser.new_GenCase(@$, $3);
 
 }
-| CASE error ENDCASE
+| gen_case error gen_endcase
 {
   yyerrok;
 }
@@ -3890,6 +3865,20 @@ gen_else
 }
 ;
 
+gen_case
+: CASE
+{
+  parser.init_gencase();
+}
+;
+
+gen_endcase
+: ENDCASE
+{
+  parser.end_gencase();
+}
+;
+
 gen_begin
 : BEGIN
 {
@@ -3909,13 +3898,11 @@ gen_end
 list_of_gencaseitem
 : genvar_case_item
 {
-  $$ = parser.new_gencaseitem_list();
-  parser.push_back($$, $1);
+  parser.add_gencaseitem($1);
 }
 | list_of_gencaseitem genvar_case_item
 {
-  $$ = $1;
-  parser.push_back($$, $2);
+  parser.add_gencaseitem($2);
 }
 ;
 
@@ -4153,7 +4140,7 @@ udp_reg_declaration
 : REG IDENTIFIER ';'
 {
   $$ = parser.new_RegH(@$, false);
-  parser.new_DeclItem(@2, $2);
+  parser.new_DeclItem(@2, $2, false);
 }
 | REG error ';'
 {
@@ -4612,35 +4599,37 @@ procedural_continuous_assignments
 //             "join"
 
 par_block
-: FORK JOIN // わざと fork/join を使わない．
+: FORK JOIN // これを for join にするとシフト還元エラーになる．
 {
-  $$ = parser.new_ParBlock(@$, NULL);
+  parser.init_stmt_list();
+  parser.end_stmt_list();
+  $$ = parser.new_ParBlock(@$);
 }
-| FORK nzlist_of_stmt JOIN // わざと fork/join を使わない．
+| FORK nzlist_of_stmt JOIN // これを for join にするとシフト還元エラーになる．
 {
-  $$ = parser.new_ParBlock(@$, $2);
+  $$ = parser.new_ParBlock(@$);
 }
-| named_fork IDENTIFIER
+| fork IDENTIFIER
     list_of_bitem_decl
   join
 {
-  $$ = parser.new_NamedParBlock(@$, $2, NULL);
+  $$ = parser.new_NamedParBlock(@$, $2);
 }
-| named_fork IDENTIFIER
+| fork IDENTIFIER
     list_of_bitem_decl
     nzlist_of_stmt
   join
 {
-  $$ = parser.new_NamedParBlock(@$, $2, $4);
+  $$ = parser.new_NamedParBlock(@$, $2);
 }
-| named_fork error join
+| fork error join
 {
   $$ = parser.new_NullStmt(@$);
   yyerrok;
 }
 ;
 
-named_fork
+fork
 : FORK ':'
 {
   parser.init_block();
@@ -4660,35 +4649,37 @@ join
 //             "end"
 
 seq_block
-: BEGIN END
+: BEGIN END // これを begin end にするとシフト還元エラーになる．
 {
-  $$ = parser.new_SeqBlock(@$, NULL);
+  parser.init_stmt_list();
+  parser.end_stmt_list();
+  $$ = parser.new_SeqBlock(@$);
 }
-| BEGIN nzlist_of_stmt END
+| BEGIN nzlist_of_stmt END // これを begin end にするとシフト還元エラーになる．
 {
-  $$ = parser.new_SeqBlock(@$, $2);
+  $$ = parser.new_SeqBlock(@$);
 }
-| named_begin IDENTIFIER
+| begin IDENTIFIER
     list_of_bitem_decl
   end
 {
-  $$ = parser.new_NamedSeqBlock(@$, $2, NULL);
+  $$ = parser.new_NamedSeqBlock(@$, $2);
 }
-| named_begin IDENTIFIER
+| begin IDENTIFIER
     list_of_bitem_decl
     nzlist_of_stmt
   end
 {
-  $$ = parser.new_NamedSeqBlock(@$, $2, $4);
+  $$ = parser.new_NamedSeqBlock(@$, $2);
 }
-| named_begin error end
+| begin error end
 {
   $$ = parser.new_NullStmt(@$);
   yyerrok;
 }
 ;
 
-named_begin
+begin
 : BEGIN ':'
 {
   parser.init_block();
@@ -4705,13 +4696,12 @@ end
 nzlist_of_stmt
 : statement
 {
-  $$ = parser.new_stmt_list();
-  parser.push_back($$, $1);
+  parser.init_stmt_list();
+  parser.add_stmt($1);
 }
 | nzlist_of_stmt statement
 {
-  $$ = $1;
-  parser.push_back($$, $2);
+  parser.add_stmt($2);
 }
 ;
 
@@ -5113,8 +5103,9 @@ case_statement
   list_of_case_items
   ENDCASE
 {
-  if ( parser.check_default_label($5) ) {
-    $$ = parser.new_Case(@$, $3, $5);
+  parser.end_case();
+  if ( parser.check_default_label() ) {
+    $$ = parser.new_Case(@$, $3);
   }
   else {
     YYERROR;
@@ -5124,8 +5115,9 @@ case_statement
   list_of_case_items
   ENDCASE
 {
-  if ( parser.check_default_label($5) ) {
-    $$ = parser.new_CaseX(@$, $3, $5);
+  parser.end_case();
+  if ( parser.check_default_label() ) {
+    $$ = parser.new_CaseX(@$, $3);
   }
   else {
     YYERROR;
@@ -5135,8 +5127,9 @@ case_statement
   list_of_case_items
   ENDCASE
 {
-  if ( parser.check_default_label($5) ) {
-    $$ = parser.new_CaseZ(@$, $3, $5);
+  parser.end_case();
+  if ( parser.check_default_label() ) {
+    $$ = parser.new_CaseZ(@$, $3);
   }
   else {
     YYERROR;
@@ -5148,13 +5141,12 @@ case_statement
 list_of_case_items
 : case_item
 {
-  $$ = parser.new_caseitem_list();
-  parser.push_back($$, $1);
+  parser.init_case();
+  parser.add_caseitem($1);
 }
 | list_of_case_items case_item
 {
-  $$ = $1;
-  parser.push_back($$, $2);
+  parser.add_caseitem($2);
 }
 ;
 
@@ -6785,11 +6777,10 @@ ai_list
 : // 空もありうる
 {
   $$ = nullptr;
-  @$ = FileRegion();
 }
 | nz_ai_list
 {
-  $$ = $1;
+  $$ = parser.new_AttrInstList();
 }
 ;
 
@@ -6797,20 +6788,19 @@ ai_list
 nz_ai_list
 : attr_inst
 {
-  $$ = parser.new_attrinst_list();
-  parser.push_back($$, $1);
+  parser.init_attrinst_list();
+  parser.add_attrinst($1);
 }
 | nz_ai_list attr_inst
 {
-  $$ = $1;
-  parser.push_back($$, $2);
+  parser.add_attrinst($2);
 }
 ;
 
 attr_inst
 : PRSTAR nzlist_of_attr_spec STARPR
 {
-  $$ = parser.new_AttrInst(@$, $2);
+  $$ = parser.new_AttrInst(@$);
 }
 | PRSTAR error STARPR
 {
@@ -6823,13 +6813,12 @@ attr_inst
 nzlist_of_attr_spec
 : attr_spec
 {
-  $$ = parser.new_attrspec_list();
-  parser.push_back($$, $1);
+  parser.init_attrspec_list();
+  parser.add_attrspec($1);
 }
 | nzlist_of_attr_spec ',' attr_spec
 {
-  $$ = $1;
-  parser.push_back($$, $3);
+  parser.add_attrspec($3);
 }
 ;
 

@@ -191,33 +191,33 @@ Parser::new_If(
 PtStmt*
 Parser::new_Case(
   const FileRegion& fr,
-  const AstExpr* expr,
-  PtCaseItemList* caseitem_list
+  const AstExpr* expr
 )
 {
-  return mFactory.new_Case(fr, expr, caseitem_list);
+  return mFactory.new_Case(fr, expr,
+			   mCurCaseItemList);
 }
 
 // @brief casex 文の生成
 PtStmt*
 Parser::new_CaseX(
   const FileRegion& fr,
-  const AstExpr* expr,
-  PtCaseItemList* caseitem_list
+  const AstExpr* expr
 )
 {
-  return mFactory.new_CaseX(fr, expr, caseitem_list);
+  return mFactory.new_CaseX(fr, expr,
+			   mCurCaseItemList);
 }
 
 // @brief casez 文の生成
 PtStmt*
 Parser::new_CaseZ(
   const FileRegion& fr,
-  const AstExpr* expr,
-  PtCaseItemList* caseitem_list
+  const AstExpr* expr
 )
 {
-  return mFactory.new_CaseZ(fr, expr, caseitem_list);
+  return mFactory.new_CaseZ(fr, expr,
+			    mCurCaseItemList);
 }
 
 // @brief case item の生成
@@ -321,47 +321,43 @@ Parser::new_Release(
 // @brief parallel block の生成
 PtStmt*
 Parser::new_ParBlock(
-  const FileRegion& fr,
-  PtStmtList* stmt_list
+  const FileRegion& fr
 )
 {
-  return mFactory.new_ParBlock(fr, stmt_list);
+  return mFactory.new_ParBlock(fr, mCurStmtList);
 }
 
 // @brief 名前付き parallel block の生成
 PtStmt*
 Parser::new_NamedParBlock(
   const FileRegion& fr,
-  const char* name,
-  PtStmtList* stmt_list
+  const char* name
 )
 {
   return mFactory.new_NamedParBlock(fr, name,
 				    mCurDeclList,
-				    stmt_list);
+				    mCurStmtList);
 }
 
 // @brief sequential block の生成
 PtStmt*
 Parser::new_SeqBlock(
-  const FileRegion& fr,
-  PtStmtList* stmt_list
+  const FileRegion& fr
 )
 {
-  return mFactory.new_SeqBlock(fr, stmt_list);
+  return mFactory.new_SeqBlock(fr, mCurStmtList);
 }
 
 // @brief 名前付き sequential block の生成
 PtStmt*
 Parser::new_NamedSeqBlock(
   const FileRegion& fr,
-  const char* name,
-  PtStmtList* stmt_list
+  const char* name
 )
 {
   return mFactory.new_NamedSeqBlock(fr, name,
 				    mCurDeclList,
-				    stmt_list);
+				    mCurStmtList);
 }
 
 END_NAMESPACE_YM_VERILOG

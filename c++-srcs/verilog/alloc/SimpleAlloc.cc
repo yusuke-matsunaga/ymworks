@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 
-#include "alloc/SimpleAlloc.h"
+#include "SimpleAlloc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

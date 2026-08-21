@@ -7,10 +7,10 @@
 /// All rights reserved.
 
 #include "parser/AstMgr.h"
-#include "alloc/SimpleAlloc.h"
 #include "parser/PtModule.h"
 #include "parser/PtUdp.h"
 #include "parser/PtMisc.h"
+#include "alloc/Alloc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 AstMgr::AstMgr() :
-  mAlloc{new SimpleAlloc}
+  mAlloc{Alloc::new_obj()}
 {
 }
 
@@ -63,7 +63,7 @@ AstMgr::find_attr_list(
   PtAttrInfo key(obj, {});
   if ( mAttrDict.count(key) > 0 ) {
     const auto& attr_info = mAttrDict.find(key);
-    return attr_info->attr_list()->to_vector();
+    return attr_info->attr_list()->attrinst_list();
   }
   return {};
 }

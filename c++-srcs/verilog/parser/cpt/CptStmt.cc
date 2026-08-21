@@ -1146,12 +1146,12 @@ PtStmt*
 PtFactory::new_Case(
   const FileRegion& file_region,
   const AstExpr* expr,
-  PtCaseItemList* caseitem_list
+  const AstCaseItemVec& caseitem_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCase));
   return new (p) CptCase(file_region, expr,
-			 caseitem_list->to_array(mAlloc));
+			 PtCaseItemArray(mAlloc, caseitem_list));
 }
 
 // casex 文を生成する．
@@ -1159,12 +1159,12 @@ PtStmt*
 PtFactory::new_CaseX(
   const FileRegion& file_region,
   const AstExpr* expr,
-  PtCaseItemList* caseitem_list
+  const AstCaseItemVec& caseitem_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCaseX));
   return new (p) CptCaseX(file_region, expr,
-			 caseitem_list->to_array(mAlloc));
+			  PtCaseItemArray(mAlloc, caseitem_list));
 }
 
 // casez 文を生成する．
@@ -1172,12 +1172,12 @@ PtStmt*
 PtFactory::new_CaseZ(
   const FileRegion& file_region,
   const AstExpr* expr,
-  PtCaseItemList* caseitem_list
+  const AstCaseItemVec& caseitem_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCaseZ));
   return new (p) CptCaseZ(file_region, expr,
-			  caseitem_list->to_array(mAlloc));
+			  PtCaseItemArray(mAlloc, caseitem_list));
 }
 
 // case item を生成する．
@@ -1293,12 +1293,12 @@ PtFactory::new_Release(
 PtStmt*
 PtFactory::new_ParBlock(
   const FileRegion& file_region,
-  PtStmtList* stmt_list
+  const AstStmtVec& stmt_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptParBlock));
   return new (p) CptParBlock(file_region,
-			     stmt_list->to_array(mAlloc));
+			     PtStmtArray(mAlloc, stmt_list));
 }
 
 // par block を生成する．
@@ -1307,25 +1307,25 @@ PtFactory::new_NamedParBlock(
   const FileRegion& file_region,
   const char* name,
   const std::vector<PtDeclHead*>& declhead_list,
-  PtStmtList* stmt_list
+  const AstStmtVec& stmt_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptParBlockN));
   return new (p) CptParBlockN(file_region, name,
 			      PtDeclHeadArray(mAlloc, declhead_list),
-			      stmt_list->to_array(mAlloc));
+			      PtStmtArray(mAlloc, stmt_list));
 }
 
 // seq block を生成する．
 PtStmt*
 PtFactory::new_SeqBlock(
   const FileRegion& file_region,
-  PtStmtList* stmt_list
+  const AstStmtVec& stmt_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSeqBlock));
   return new (p) CptSeqBlock(file_region,
-			     stmt_list->to_array(mAlloc));
+			     PtStmtArray(mAlloc, stmt_list));
 }
 
 // seq block を生成する．
@@ -1334,13 +1334,13 @@ PtFactory::new_NamedSeqBlock(
   const FileRegion& file_region,
   const char* name,
   const std::vector<PtDeclHead*>& declhead_list,
-  PtStmtList* stmt_list
+  const AstStmtVec& stmt_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSeqBlockN));
   return new (p) CptSeqBlockN(file_region, name,
 			      PtDeclHeadArray(mAlloc, declhead_list),
-			      stmt_list->to_array(mAlloc));
+			      PtStmtArray(mAlloc, stmt_list));
 }
 
 END_NAMESPACE_YM_VERILOG

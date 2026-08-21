@@ -192,12 +192,10 @@ Parser::check_function_statement(
 
 // default ラベルが2つ以上含まれていないかどうかのチェック
 bool
-Parser::check_default_label(
-  const PtCaseItemList* ci_list
-)
+Parser::check_default_label()
 {
   SizeType n = 0;
-  for ( auto ci: *ci_list ) {
+  for ( auto ci: mCurCaseItemList ) {
     if ( ci->label_num() == 0 ) {
       ++ n;
       if ( n > 1 ) {

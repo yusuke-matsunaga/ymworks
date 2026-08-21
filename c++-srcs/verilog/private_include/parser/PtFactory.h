@@ -326,7 +326,7 @@ public:
   new_DeclItem(
     const FileRegion& fr,   ///< [in] ファイル位置の情報
     const char* name,       ///< [in] 名前
-    PtRangeList* range_list ///< [in] 配列の各次元の範囲のリスト
+    const AstRangeVec& range_list ///< [in] 配列の各次元の範囲のリスト
   );
 
   /// @brief 範囲の生成
@@ -475,16 +475,7 @@ public:
     const char* def_name,	 ///< [in] 定義名
     const AstStrength* strength, ///< [in] 信号強度
     const AstDelay* delay,       ///< [in] 遅延値
-    const AstInstVec& elem_list  ///< [in] 要素の配列
-  );
-
-  /// @brief module instance/UDP instance 文のヘッダの生成
-  /// @return 生成された module instance/UDP instance 文のヘッダ
-  PtItem*
-  new_MuH(
-    const FileRegion& fr,       ///< [in]ファイル位置の情報
-    const char* def_name,       ///< [in] 定義名
-    PtConnectionList* con_list, ///< [in] ポート割り当てリスト
+    const AstConnectionVec& paramassign_list, ///< [in] パラメータ割り当てリスト
     const AstInstVec& elem_list  ///< [in] 要素の配列
   );
 
@@ -495,7 +486,7 @@ public:
     const FileRegion& fr,      ///< [in] ファイル位置の情報
     const char* name,	       ///< [in] 名前
     const AstRange* range,     ///< [in] パース木の範囲定義
-    PtConnectionList* con_list ///< [in] ポート割り当ての配列
+    const AstConnectionVec& con_list ///< [in] ポート割り当ての配列
   );
 
   /// @brief 名前と範囲付き module instance/UDP/gate instance の要素の生成
@@ -590,7 +581,7 @@ public:
   new_GenCase(
     const FileRegion& fr,        ///< [in] ファイル位置の情報
     const AstExpr* expr,         ///< [in] 選択式
-    PtGenCaseItemList* item_list ///< [in] generate case item のリスト
+    const AstGenCaseItemVec& item_list ///< [in] generate case item のリスト
   );
 
   /// @brief generate case の要素の生成
@@ -863,7 +854,7 @@ public:
   new_Case(
     const FileRegion& fr,         ///< [in] ファイル位置の情報
     const AstExpr* expr,          ///< [in] 条件式
-    PtCaseItemList* caseitem_list ///< [in] case item のリスト
+    const AstCaseItemVec& caseitem_list ///< [in] case item のリスト
   );
 
   /// @brief casex 文の生成
@@ -872,7 +863,7 @@ public:
   new_CaseX(
     const FileRegion& fr,         ///< [in] ファイル位置の情報
     const AstExpr* expr,          ///< [in] 条件式
-    PtCaseItemList* caseitem_list ///< [in] case item のリスト
+    const AstCaseItemVec& caseitem_list ///< [in] case item のリスト
   );
 
   /// @brief casez 文の生成
@@ -881,7 +872,7 @@ public:
   new_CaseZ(
     const FileRegion& fr,         ///< [in] ファイル位置の情報
     const AstExpr* expr,	  ///< [in] 条件式
-    PtCaseItemList* caseitem_list ///< [in] case item のリスト
+    const AstCaseItemVec& caseitem_list ///< [in] case item のリスト
   );
 
   /// @brief case item の生成
@@ -969,7 +960,7 @@ public:
   PtStmt*
   new_ParBlock(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    PtStmtList* stmt_list ///< [in] 本体のステートメントのリスト
+    const AstStmtVec& stmt_list ///< [in] 本体のステートメントのリスト
   );
 
   /// @brief 名前付き parallel block の生成
@@ -979,7 +970,7 @@ public:
     const FileRegion& fr,      ///< [in] ファイル位置の情報
     const char* name,          ///< [in] ブロック名
     const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
-    PtStmtList* stmt_list      ///< [in] 本体のステートメントのリスト
+    const AstStmtVec& stmt_list ///< [in] 本体のステートメントのリスト
   );
 
   /// @brief sequential block の生成
@@ -987,7 +978,7 @@ public:
   PtStmt*
   new_SeqBlock(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    PtStmtList* stmt_list ///< [in] 本体のステートメントのリスト
+    const AstStmtVec& stmt_list ///< [in] 本体のステートメントのリスト
   );
 
   /// @brief 名前付き sequential block の生成
@@ -997,7 +988,7 @@ public:
     const FileRegion& fr,      ///< [in] ファイル位置の情報
     const char* name,          ///< [in] ブロック名
     const std::vector<PtDeclHead*>& decl_list, ///< [in] 宣言のリスト
-    PtStmtList* stmt_list      ///< [in] 本体のステートメントのリスト
+    const AstStmtVec& stmt_list ///< [in] 本体のステートメントのリスト
   );
 
 
@@ -1439,12 +1430,18 @@ public:
   // attribute instance 関係
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief AttrInstList の生成
+  PtAttrInstList*
+  new_AttrInstList(
+    const AstAttrInstVec& ai_list
+  );
+
   /// @brief attribute instance の生成
   /// @return 生成された attribute instance
   PtAttrInst*
   new_AttrInst(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    PtAttrSpecList* as_list ///< [in] attribute spec のリスト
+    const FileRegion& fr,         ///< [in] ファイル位置の情報
+    const AstAttrSpecVec& as_list ///< [in] attribute spec のリスト
   );
 
   /// @brief attribute spec の生成

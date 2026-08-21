@@ -119,6 +119,8 @@ TEST_F(ParserTest, EventControl4)
   EXPECT_THROW( control->delay(),
 		std::logic_error);
   EXPECT_EQ( 2, control->event_num() );
+  EXPECT_EQ( expr1, control->event(0) );
+  EXPECT_EQ( expr2, control->event(1) );
   std::vector<const AstExpr*> expr_list{expr1, expr2};
   EXPECT_EQ( expr_list, control->event_list() );
   EXPECT_THROW( control->rep_expr(),
@@ -238,7 +240,17 @@ TEST_F(ParserTest, OrderedCon2)
 {
   auto fr = make_file_region(1, 1, 1, 9);
   auto expr = parser.new_IntConst(fr, 1U);
-  auto ai_list = parser.new_attrinst_list();
+  auto attr_name = "attr1";
+  auto fr1 = make_file_region(1, 2, 3, 4);
+  auto attr_val = parser.new_IntConst(fr1, 2);
+  auto as = parser.new_AttrSpec(fr1, attr_name, attr_val);
+  parser.init_attrspec_list();
+  parser.add_attrspec(as);
+  auto fr2 = make_file_region(2, 2, 2, 2);
+  auto ai = parser.new_AttrInst(fr2);
+  parser.init_attrinst_list();
+  parser.add_attrinst(ai);
+  auto ai_list = parser.new_AttrInstList();
   auto con = parser.new_OrderedCon(fr, expr, ai_list);
 
   ASSERT_TRUE( con != nullptr );
@@ -489,14 +501,15 @@ TEST_F(ParserTest, AttrSpec)
 TEST_F(ParserTest, AttrInst)
 {
   auto fr = make_file_region(1, 2, 3, 4);
-  auto as_list = parser.new_attrspec_list();
+  parser.init_attrspec_list();
   auto fr1 = make_file_region(1, 10, 1, 19);
   auto name1 = "attr1";
   auto fr2 = make_file_region(1, 20, 1, 29);
   auto expr1 = parser.new_IntConst(fr2, 1);
   auto as = parser.new_AttrSpec(fr1, name1, expr1);
-  as_list->push_back(astmgr.alloc(), as);
-  auto ai = parser.new_AttrInst(fr, as_list);
+  parser.add_attrspec(as);
+  parser.init_attrinst_list();
+  auto ai = parser.new_AttrInst(fr);
 
   ASSERT_TRUE( ai != nullptr );
   EXPECT_EQ( fr, ai->file_region() );

@@ -285,6 +285,37 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
+/// @class AstAttrInstList AstAttrInstList.h "AstAttrInstList.h"
+/// @brief AttrInst のリストを表すクラス
+//////////////////////////////////////////////////////////////////////
+class AstAttrInstList
+{
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要素数を返す．
+  virtual
+  SizeType
+  attrinst_num() const = 0;
+
+  /// @brief 要素を返す．
+  virtual
+  const AstAttrInst*
+  attrinst(
+    SizeType index ///< [in] インデックス ( 0 <= index < attrinst_num() )
+  ) const = 0;
+
+  /// @brief 要素のリストを返す．
+  virtual
+  AstAttrInstVec
+  attrinst_list() const = 0;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
 /// @class AstAttrInst AstMisc.h "ym/vl/AstMisc.h"
 /// @ingroup VlParser
 /// @ingroup AstGroup

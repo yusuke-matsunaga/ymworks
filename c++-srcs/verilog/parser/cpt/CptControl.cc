@@ -271,7 +271,7 @@ PtFactory::new_EventControl(
   const AstExpr* event
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptEventControl));
+  void* p = mAlloc.get_memory(sizeof(CptEventControl1));
   return new (p) CptEventControl1(file_region, event);
 }
 
@@ -282,9 +282,9 @@ PtFactory::new_EventControl(
   PtExprList* event_list
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptEventControl));
+  void* p = mAlloc.get_memory(sizeof(CptEventControl2));
   return new (p) CptEventControl2(file_region,
-				 event_list->to_array(mAlloc));
+				  event_list->to_array(mAlloc));
 }
 
 // リピートコントロールを生成する．
@@ -306,7 +306,7 @@ PtFactory::new_RepeatControl(
   const AstExpr* event
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptRepeatControl));
+  void* p = mAlloc.get_memory(sizeof(CptRepeatControl1));
   return new (p) CptRepeatControl1(file_region, rep, event);
 }
 
@@ -318,7 +318,7 @@ PtFactory::new_RepeatControl(
   PtExprList* event_list
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptRepeatControl));
+  void* p = mAlloc.get_memory(sizeof(CptRepeatControl2));
   return new (p) CptRepeatControl2(file_region, rep,
 				   event_list->to_array(mAlloc));
 }

@@ -8,13 +8,32 @@
 
 
 #include "alloc/Alloc.h"
-
+#include "SimpleAlloc.h"
+#include "RawAlloc.h"
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
 // クラス Alloc
 //////////////////////////////////////////////////////////////////////
+
+// @brief 実際の継承クラスを生成するクラスメソッド
+Alloc*
+Alloc::new_obj(
+  const std::string name
+)
+{
+  if ( name == "simple" || name == "" ) {
+    return new SimpleAlloc;
+  }
+  if ( name == "raw" ) {
+    return new RawAlloc;
+  }
+  std::ostringstream buf;
+  buf << "Alloc::new_obj(" << name << "): "
+      << "invalid argument";
+  throw std::invalid_argument{buf.str()};
+}
 
 // @brief n バイトの領域を確保する．
 void*

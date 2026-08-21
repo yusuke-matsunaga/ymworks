@@ -59,7 +59,6 @@ public:
     const AstExpr* init_value
   )
   {
-    ASSERT_TRUE( ioitem != nullptr );
     check_NamedBase(ioitem, fr, name);
     EXPECT_EQ( init_value, ioitem->init_value() );
   }

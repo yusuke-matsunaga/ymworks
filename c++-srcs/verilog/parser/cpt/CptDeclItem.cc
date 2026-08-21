@@ -152,12 +152,12 @@ PtDeclItem*
 PtFactory::new_DeclItem(
   const FileRegion& file_region,
   const char* name,
-  PtRangeList* range_list
+  const AstRangeVec& range_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDeclItemR));
   return new (p) CptDeclItemR(file_region, name,
-			      range_list->to_array(mAlloc));
+			      PtRangeArray(mAlloc, range_list));
 }
 
 END_NAMESPACE_YM_VERILOG

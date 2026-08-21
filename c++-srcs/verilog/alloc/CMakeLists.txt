@@ -45,6 +45,7 @@
 set ( alloc_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/Alloc.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/SimpleAlloc.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/RawAlloc.cc
   PARENT_SCOPE
   )
 

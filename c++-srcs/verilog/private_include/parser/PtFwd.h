@@ -52,6 +52,7 @@ class PtConnection;
 class PtStrength;
 class PtDelay;
 class PtNameBranch;
+class PtAttrInstList;
 class PtAttrInst;
 class PtAttrSpec;
 

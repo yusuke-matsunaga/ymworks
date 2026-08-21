@@ -475,12 +475,12 @@ PtItem*
 PtFactory::new_GenCase(
   const FileRegion& file_region,
   const AstExpr* expr,
-  PtGenCaseItemList* item_list
+  const AstGenCaseItemVec& item_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenCase));
   return new (p) CptGenCase(file_region, expr,
-			    item_list->to_array(mAlloc));
+			    PtGenCaseItemArray(mAlloc, item_list));
 }
 
 // generate case の要素を生成する．

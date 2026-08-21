@@ -734,7 +734,7 @@ TEST_F(ParserTest_Decl, DeclItem)
 
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "port1";
-  parser.new_DeclItem(fr, name);
+  parser.new_DeclItem(fr, name, false);
   auto item = parser._declitem_list().front();
 
   check_DeclItem(item, fr, name, {}, nullptr);
@@ -762,10 +762,10 @@ TEST_F(ParserTest_Decl, DeclItem3)
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
-  auto range_list = parser.new_range_list();
-  range_list->push_back(astmgr.alloc(), range);
+  parser.init_range_list();
+  parser.add_range(range);
   auto fr = make_file_region(1, 2, 3, 4);
-  parser.new_DeclItem(fr, name, range_list);
+  parser.new_DeclItem(fr, name, true);
   auto item = parser._declitem_list().front();
 
   check_DeclItem(item, fr, name, {range}, nullptr);

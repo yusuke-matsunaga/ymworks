@@ -1,5 +1,5 @@
-﻿#ifndef PARSER_SIMPLEALLOC_H
-#define PARSER_SIMPLEALLOC_H
+﻿#ifndef SIMPLEALLOC_H
+#define SIMPLEALLOC_H
 
 /// @file SimpleAlloc.h
 /// @brief SimpleAlloc のヘッダファイル
@@ -98,7 +98,7 @@ private:
       SizeType size
     )
     {
-      auto p{static_cast<void*>(&mDummy[mNextPos])};
+      auto p = static_cast<void*>(&mDummy[mNextPos]);
       mNextPos += size;
       return p;
     }
@@ -151,4 +151,4 @@ private:
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // PARSER_SIMPLEALLOC_H
+#endif // SIMPLEALLOC_H
