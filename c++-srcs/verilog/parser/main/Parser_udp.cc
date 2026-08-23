@@ -24,13 +24,11 @@ BEGIN_NAMESPACE_YM_VERILOG
 void
 Parser::init_udp()
 {
-  mCurIOHeadList = &mModuleIOHeadList;
+  mModuleIOHeadList.clear();
+  mPortList.clear();
   push_declhead_list();
 
-  mPortList.clear();
-  mCurIOHeadList->clear();
   mIOItemList.clear();
-  cur_declhead_list().clear();
   mDeclItemList.clear();
   mUdpEntryList.clear();
 }
@@ -324,58 +322,6 @@ Parser::new_Udp(
 
   mAstMgr.reg_udp(udp);
   reg_attrinst(udp, ai_list);
-}
-
-// @brief combinational UDP 用のテーブルエントリの生成
-void
-Parser::new_UdpEntry(
-  const FileRegion& fr,
-  const FileRegion& output_loc,
-  char output_symbol
-)
-{
-  auto output = mFactory.new_UdpValue(output_loc, output_symbol);
-  auto entry = mFactory.new_UdpEntry(fr, mUdpValueList, output);
-  mUdpEntryList.push_back(entry);
-}
-
-// @brief sequential UDP 用のテーブルエントリの生成
-void
-Parser::new_UdpEntry(
-  const FileRegion& fr,
-  const FileRegion& current_loc,
-  char current_symbol,
-  const FileRegion& output_loc,
-  char output_symbol
-)
-{
-  auto current = mFactory.new_UdpValue(current_loc, current_symbol);
-  auto output = mFactory.new_UdpValue(output_loc, output_symbol);
-  auto entry = mFactory.new_UdpEntry(fr, mUdpValueList, current, output);
-  mUdpEntryList.push_back(entry);
-}
-
-// @brief UDP のテーブルエントリの要素の値の生成
-void
-Parser::new_UdpValue(
-  const FileRegion& fr,
-  char symbol
-)
-{
-  auto value = mFactory.new_UdpValue(fr, symbol);
-  mUdpValueList.push_back(value);
-}
-
-// @brief UDP のテーブルエントリの要素の値の生成
-void
-Parser::new_UdpValue(
-  const FileRegion& fr,
-  char symbol1,
-  char symbol2
-)
-{
-  auto value = mFactory.new_UdpValue(fr, symbol1, symbol2);
-  mUdpValueList.push_back(value);
 }
 
 END_NAMESPACE_YM_VERILOG

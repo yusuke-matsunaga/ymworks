@@ -651,7 +651,7 @@ TEST_F(ParserTest, GateHS)
 TEST_F(ParserTest, GateHD)
 {
   auto fr1 = make_file_region(1, 2, 3, 4);
-  auto val = parser.new_IntConst(fr1, 1U);
+  auto val = parser.factory().new_IntConst(fr1, 1U);
   auto delay = parser.new_Delay(fr1, val);
   auto fr = make_file_region(1, 1, 2, 2);
   for ( auto type: { VpiPrimType::And, VpiPrimType::Nand, VpiPrimType::Nor,
@@ -763,7 +763,7 @@ TEST_F(ParserTest, GateHSD)
 				 VpiStrength::SupplyDrive,
 				 VpiStrength::StrongDrive);
   auto fr2 = make_file_region(5, 6, 7, 8);
-  auto val = parser.new_IntConst(fr2, 1U);
+  auto val = parser.factory().new_IntConst(fr2, 1U);
   auto delay = parser.new_Delay(fr2, val);
   auto fr = make_file_region(1, 1, 2, 2);
   for ( auto type: { VpiPrimType::And, VpiPrimType::Nand, VpiPrimType::Nor,

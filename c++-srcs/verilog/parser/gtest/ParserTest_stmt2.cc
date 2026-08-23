@@ -21,7 +21,7 @@ TEST_F(ParserTest, If)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 1U);
+  auto cond = parser.factory().new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto stmt = parser.new_If(fr, cond, body);
@@ -63,7 +63,7 @@ TEST_F(ParserTest, IfElse)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 1U);
+  auto cond = parser.factory().new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto fr3 = make_file_region(3, 3, 3, 3);
@@ -116,7 +116,7 @@ TEST_F(ParserTest, CaseItem)
   auto fr = make_file_region(1, 2, 3, 4);
   auto expr_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr1, 1U);
+  auto expr = parser.factory().new_IntConst(fr1, 1U);
   expr_list->push_back(astmgr.alloc(), expr);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
@@ -137,14 +137,14 @@ TEST_F(ParserTest, Case)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 1U);
+  auto cond = parser.factory().new_IntConst(fr1, 1U);
 
   auto caseitem_list = parser.new_caseitem_list();
 
   auto ci1_fr = make_file_region(1, 2, 3, 4);
   auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
-  auto ci1_expr = parser.new_IntConst(fr1, 1U);
+  auto ci1_expr = parser.factory().new_IntConst(fr1, 1U);
   ci1_expr_list->push_back(astmgr.alloc(), ci1_expr);
   auto ci1_fr2 = make_file_region(2, 2, 2, 2);
   auto ci1_body = parser.new_NullStmt(ci1_fr2);
@@ -154,7 +154,7 @@ TEST_F(ParserTest, Case)
   auto ci2_fr = make_file_region(11, 2, 13, 4);
   auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
-  auto ci2_expr = parser.new_IntConst(fr1, 2U);
+  auto ci2_expr = parser.factory().new_IntConst(fr1, 2U);
   ci2_expr_list->push_back(astmgr.alloc(), ci2_expr);
   auto ci2_fr2 = make_file_region(12, 2, 12, 2);
   auto ci2_body = parser.new_NullStmt(ci2_fr2);
@@ -210,14 +210,14 @@ TEST_F(ParserTest, CaseX)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 1U);
+  auto cond = parser.factory().new_IntConst(fr1, 1U);
 
   auto caseitem_list = parser.new_caseitem_list();
 
   auto ci1_fr = make_file_region(1, 2, 3, 4);
   auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
-  auto ci1_expr = parser.new_IntConst(fr1, 1U);
+  auto ci1_expr = parser.factory().new_IntConst(fr1, 1U);
   ci1_expr_list->push_back(astmgr.alloc(), ci1_expr);
   auto ci1_fr2 = make_file_region(2, 2, 2, 2);
   auto ci1_body = parser.new_NullStmt(ci1_fr2);
@@ -227,7 +227,7 @@ TEST_F(ParserTest, CaseX)
   auto ci2_fr = make_file_region(11, 2, 13, 4);
   auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
-  auto ci2_expr = parser.new_IntConst(fr1, 2U);
+  auto ci2_expr = parser.factory().new_IntConst(fr1, 2U);
   ci2_expr_list->push_back(astmgr.alloc(), ci2_expr);
   auto ci2_fr2 = make_file_region(12, 2, 12, 2);
   auto ci2_body = parser.new_NullStmt(ci2_fr2);
@@ -283,14 +283,14 @@ TEST_F(ParserTest, CaseZ)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 1U);
+  auto cond = parser.factory().new_IntConst(fr1, 1U);
 
   auto caseitem_list = parser.new_caseitem_list();
 
   auto ci1_fr = make_file_region(1, 2, 3, 4);
   auto ci1_expr_list = parser.new_expr_list();
   auto ci1_fr1 = make_file_region(1, 1, 1, 1);
-  auto ci1_expr = parser.new_IntConst(fr1, 1U);
+  auto ci1_expr = parser.factory().new_IntConst(fr1, 1U);
   ci1_expr_list->push_back(astmgr.alloc(), ci1_expr);
   auto ci1_fr2 = make_file_region(2, 2, 2, 2);
   auto ci1_body = parser.new_NullStmt(ci1_fr2);
@@ -300,7 +300,7 @@ TEST_F(ParserTest, CaseZ)
   auto ci2_fr = make_file_region(11, 2, 13, 4);
   auto ci2_expr_list = parser.new_expr_list();
   auto ci2_fr1 = make_file_region(11, 1, 11, 1);
-  auto ci2_expr = parser.new_IntConst(fr1, 2U);
+  auto ci2_expr = parser.factory().new_IntConst(fr1, 2U);
   ci2_expr_list->push_back(astmgr.alloc(), ci2_expr);
   auto ci2_fr2 = make_file_region(12, 2, 12, 2);
   auto ci2_body = parser.new_NullStmt(ci2_fr2);
@@ -404,7 +404,7 @@ TEST_F(ParserTest, Repeat)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr1, 1U);
+  auto expr = parser.factory().new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto stmt = parser.new_Repeat(fr, expr, body);
@@ -454,7 +454,7 @@ TEST_F(ParserTest, While)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 1U);
+  auto cond = parser.factory().new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
   auto stmt = parser.new_While(fr, cond, body);
@@ -506,7 +506,7 @@ TEST_F(ParserTest, For)
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto init = parser.new_NullStmt(fr1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto cond = parser.new_IntConst(fr1, 1U);
+  auto cond = parser.factory().new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
   auto next = parser.new_NullStmt(fr3);
   auto fr4 = make_file_region(4, 4, 4, 4);

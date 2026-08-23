@@ -9,6 +9,7 @@
 #include "CptExpr.h"
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -31,11 +32,9 @@ CptExpr::namebranch_num() const
   throw std::logic_error{"namebranch_num(): type mismatch"};
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptExpr::namebranch(
-  SizeType index
-) const
+CptExpr::namebranch_top() const
 {
   throw std::logic_error{"namebranch(): type mismatch"};
 }
@@ -308,23 +307,21 @@ CptFuncCall::type() const
 SizeType
 CptFuncCallH::namebranch_num() const
 {
-  return mNbList.size();
+  return mNbTop->count_num();
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptFuncCallH::namebranch(
-  SizeType index
-) const
+CptFuncCallH::namebranch_top() const
 {
-  return mNbList[index];
+  return mNbTop;
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptFuncCallH::namebranch_list() const
 {
-  return mNbList.to_vector();
+  return mNbTop->to_vector();
 }
 
 
@@ -402,15 +399,27 @@ PtFactory::new_FuncCall(
 PtExpr*
 PtFactory::new_FuncCall(
   const FileRegion& file_region,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* arg_list
 )
 {
+  auto nb_top = hname.nb_top->reverse();
+  auto tail_name = hname.tail_name;
   auto p = mAlloc.get_memory(sizeof(CptFuncCallH));
   return new (p) CptFuncCallH(file_region,
-			      hname->nb_list()->to_array(mAlloc),
-			      hname->tail_name(),
+			      nb_top, tail_name,
 			      arg_list);
+}
+
+// system function call を生成する．
+PtExpr*
+PtFactory::new_SysFuncCall(
+  const FileRegion& file_region,
+  const char* name
+)
+{
+  auto p = mAlloc.get_memory(sizeof(CptSysFuncCall));
+  return new CptSysFuncCall(file_region, name, nullptr);
 }
 
 // system function call を生成する．

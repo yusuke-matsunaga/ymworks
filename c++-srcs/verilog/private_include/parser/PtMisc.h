@@ -60,6 +60,29 @@ class PtDelay :
 class PtNameBranch :
   public AstNameBranch
 {
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtNameBranch の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief link を設定する．
+  virtual
+  void
+  set_link(
+    PtNameBranch* link
+  ) = 0;
+
+  /// @brief PtNameBranch* 型のリンクを返す．
+  virtual
+  PtNameBranch*
+  _link() const = 0;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  virtual
+  PtNameBranch*
+  reverse() = 0;
+
 };
 
 

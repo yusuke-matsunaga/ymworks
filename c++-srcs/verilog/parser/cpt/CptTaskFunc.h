@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

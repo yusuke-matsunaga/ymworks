@@ -178,6 +178,24 @@ CptDelay3::value2() const
 
 // 順序つき結合子を生成する．
 PtConnection*
+PtFactory::new_OrderedCon()
+{
+  void* p = mAlloc.get_memory(sizeof(CptOrderedCon));
+  return new (p) CptOrderedCon({}, nullptr);
+}
+
+// 順序つき結合子を生成する．
+PtConnection*
+PtFactory::new_OrderedCon(
+  const AstExpr* expr
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptOrderedCon));
+  return new (p) CptOrderedCon(expr->file_region(), expr);
+}
+
+// 順序つき結合子を生成する．
+PtConnection*
 PtFactory::new_OrderedCon(
   const FileRegion& file_region,
   const AstExpr* expr
@@ -187,18 +205,15 @@ PtFactory::new_OrderedCon(
   return new (p) CptOrderedCon(file_region, expr);
 }
 
-// 順序つき結合子を生成する．
+// 名前つき結合子を生成する．
 PtConnection*
-PtFactory::new_OrderedCon(
-  const AstExpr* expr
+PtFactory::new_NamedCon(
+  const FileRegion& file_region,
+  const char* name
 )
 {
-  FileRegion file_region;
-  if ( expr ) {
-    file_region = expr->file_region();
-  }
-  void* p = mAlloc.get_memory(sizeof(CptOrderedCon));
-  return new (p) CptOrderedCon(file_region, expr);
+  void* p = mAlloc.get_memory(sizeof(CptNamedCon));
+  return new (p) CptNamedCon(file_region, name, nullptr);
 }
 
 // 名前つき結合子を生成する．

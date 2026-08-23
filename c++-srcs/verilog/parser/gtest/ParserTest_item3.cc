@@ -216,7 +216,7 @@ TEST_F(ParserTest, MuHD)
 {
   auto fr1 = make_file_region(1, 10, 1, 19);
   auto def_name = "module1";
-  auto val = parser.new_IntConst(fr1, 1U);
+  auto val = parser.factory().new_IntConst(fr1, 1U);
   auto delay = parser.new_Delay(fr1, val);
   auto fr = make_file_region(1, 1, 2, 2);
   auto item = parser.new_MuH(fr, def_name, delay);
@@ -318,7 +318,7 @@ TEST_F(ParserTest, MuHSD)
 				 VpiStrength::SupplyDrive,
 				 VpiStrength::StrongDrive);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto val = parser.new_IntConst(fr2, 1U);
+  auto val = parser.factory().new_IntConst(fr2, 1U);
   auto delay = parser.new_Delay(fr2, val);
   auto fr = make_file_region(1, 1, 2, 2);
   auto item = parser.new_MuH(fr, def_name, str, delay);
@@ -418,7 +418,7 @@ TEST_F(ParserTest, MuHP)
   auto def_name = "module1";
   auto fr1 = make_file_region(1, 10, 1, 19);
   auto con_list = parser.new_connection_list();
-  auto expr = parser.new_IntConst(fr1, 123U);
+  auto expr = parser.factory().new_IntConst(fr1, 123U);
   auto con = parser.new_OrderedCon(expr);
   con_list->push_back(astmgr.alloc(), con);
   auto item = parser.new_MuH(fr, def_name, con_list);
@@ -518,7 +518,7 @@ TEST_F(ParserTest, Inst)
 {
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr = parser.new_IntConst(fr1, 123U);
+  auto expr = parser.factory().new_IntConst(fr1, 123U);
   auto con = parser.new_OrderedCon(expr);
   auto con_list = parser.new_connection_list();
   con_list->push_back(astmgr.alloc(), con);
@@ -549,7 +549,7 @@ TEST_F(ParserTest, Inst1)
 {
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   parser.new_Inst(fr0, expr1);
 
   auto fr3 = make_file_region(1, 2, 3, 4);
@@ -577,9 +577,9 @@ TEST_F(ParserTest, Inst2)
 {
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   parser.new_Inst(fr0, expr1, expr2);
 
   auto fr3 = make_file_region(1, 2, 3, 4);
@@ -610,11 +610,11 @@ TEST_F(ParserTest, Inst3)
 {
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto fr3 = make_file_region(1, 20, 1, 29);
-  auto expr3 = parser.new_IntConst(fr3, 456U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   parser.new_Inst(fr0, expr1, expr2, expr3);
 
   auto fr4 = make_file_region(1, 2, 3, 4);
@@ -648,13 +648,13 @@ TEST_F(ParserTest, Inst4)
 {
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto fr3 = make_file_region(1, 30, 1, 39);
-  auto expr3 = parser.new_IntConst(fr3, 456U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   auto fr4 = make_file_region(1, 40, 1, 49);
-  auto expr4 = parser.new_IntConst(fr3, 456U);
+  auto expr4 = parser.factory().new_IntConst(fr3, 456U);
   parser.new_Inst(fr0, expr1, expr2, expr3, expr4);
 
   auto fr5 = make_file_region(1, 2, 3, 4);
@@ -692,7 +692,7 @@ TEST_F(ParserTest, InstN)
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto name = "inst_name";
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr = parser.new_IntConst(fr1, 123U);
+  auto expr = parser.factory().new_IntConst(fr1, 123U);
   auto con = parser.new_OrderedCon(expr);
   auto con_list = parser.new_connection_list();
   con_list->push_back(astmgr.alloc(), con);
@@ -724,7 +724,7 @@ TEST_F(ParserTest, InstN1)
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto name = "inst_name";
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   parser.new_InstN(fr0, name, expr1);
 
   auto fr3 = make_file_region(1, 2, 3, 4);
@@ -753,9 +753,9 @@ TEST_F(ParserTest, InstN2)
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto name = "inst_name";
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   parser.new_InstN(fr0, name, expr1, expr2);
 
   auto fr3 = make_file_region(1, 2, 3, 4);
@@ -787,11 +787,11 @@ TEST_F(ParserTest, InstN3)
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto fr1 = make_file_region(1, 10, 1, 19);
   auto name = "inst_name";
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto fr3 = make_file_region(1, 20, 1, 29);
-  auto expr3 = parser.new_IntConst(fr3, 456U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   parser.new_InstN(fr0, name, expr1, expr2, expr3);
 
   auto fr4 = make_file_region(1, 2, 3, 4);
@@ -826,13 +826,13 @@ TEST_F(ParserTest, InstN4)
   auto fr0 = make_file_region(1, 1, 1, 9);
   auto name = "inst_name";
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto fr3 = make_file_region(1, 30, 1, 39);
-  auto expr3 = parser.new_IntConst(fr3, 456U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   auto fr4 = make_file_region(1, 40, 1, 49);
-  auto expr4 = parser.new_IntConst(fr3, 456U);
+  auto expr4 = parser.factory().new_IntConst(fr3, 456U);
   parser.new_InstN(fr0, name, expr1, expr2, expr3, expr4);
 
   auto fr5 = make_file_region(1, 2, 3, 4);
@@ -873,7 +873,7 @@ TEST_F(ParserTest, InstV)
   auto range = new_range(frl, 0, frr, 15);
   auto name = "inst_name";
   auto fr1 = make_file_region(1, 30, 1, 39);
-  auto expr = parser.new_IntConst(fr1, 123U);
+  auto expr = parser.factory().new_IntConst(fr1, 123U);
   auto con = parser.new_OrderedCon(expr);
   auto con_list = parser.new_connection_list();
   con_list->push_back(astmgr.alloc(), con);
@@ -908,7 +908,7 @@ TEST_F(ParserTest, InstV1)
   auto frr = make_file_region(1, 20, 1, 29);
   auto range = new_range(frl, 0, frr, 15);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   parser.new_InstV(fr0, name, range, expr1);
 
   auto fr3 = make_file_region(1, 2, 3, 4);
@@ -940,9 +940,9 @@ TEST_F(ParserTest, InstV2)
   auto frr = make_file_region(1, 20, 1, 29);
   auto range = new_range(frl, 0, frr, 15);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   parser.new_InstV(fr0, name, range, expr1, expr2);
 
   auto fr3 = make_file_region(1, 2, 3, 4);
@@ -977,11 +977,11 @@ TEST_F(ParserTest, InstV3)
   auto frr = make_file_region(1, 20, 1, 29);
   auto range = new_range(frl, 0, frr, 15);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto fr3 = make_file_region(1, 20, 1, 29);
-  auto expr3 = parser.new_IntConst(fr3, 456U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   parser.new_InstV(fr0, name, range, expr1, expr2, expr3);
 
   auto fr4 = make_file_region(1, 2, 3, 4);
@@ -1019,13 +1019,13 @@ TEST_F(ParserTest, InstV4)
   auto frr = make_file_region(1, 20, 1, 29);
   auto range = new_range(frl, 0, frr, 15);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr2 = parser.new_IntConst(fr2, 456U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto fr3 = make_file_region(1, 30, 1, 39);
-  auto expr3 = parser.new_IntConst(fr3, 456U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   auto fr4 = make_file_region(1, 40, 1, 49);
-  auto expr4 = parser.new_IntConst(fr3, 456U);
+  auto expr4 = parser.factory().new_IntConst(fr3, 456U);
   parser.new_InstV(fr0, name, range, expr1, expr2, expr3, expr4);
 
   auto fr5 = make_file_region(1, 2, 3, 4);

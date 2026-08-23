@@ -9,8 +9,7 @@
 /// All rights reserved.
 
 #include "parser/PtExpr.h"
-#include "parser/PtHierName.h"
-#include "ym/vl/BitVector.h"
+#include "parser/PtArray.h"
 #include "ym/FileRegion.h"
 
 
@@ -31,11 +30,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -355,11 +352,11 @@ public:
   // コンストラクタ
   CptFuncCallH(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_list,
+    const AstNameBranch* nb_top,
     const char* tail_name,
     const AstExprList* arg_list
   ) : CptFuncCall(file_region, tail_name, arg_list),
-      mNbList{std::move(nb_list)}
+      mNbTop{nb_top}
   {
   }
 
@@ -376,11 +373,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -392,8 +387,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbList;
+  // 先頭の階層ブランチ
+  const AstNameBranch* mNbTop;
 
 };
 

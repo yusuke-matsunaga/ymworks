@@ -22,6 +22,28 @@ BEGIN_NAMESPACE_YM_VERILOG
 // Module 関係
 //////////////////////////////////////////////////////////////////////
 
+// @brief モジュール定義の開始
+void
+Parser::init_module()
+{
+  mModuleIOHeadList.clear();
+  mPortList.clear();
+  push_declhead_list();
+  push_item_list();
+
+  mParamPortHeadList.clear();
+  mIOItemList.clear();
+  mDeclItemList.clear();
+}
+
+// @brief モジュール定義の終了
+void
+Parser::end_module()
+{
+  mCurDeclList = pop_declhead_list();
+  mCurItemList = pop_item_list();
+}
+
 // Verilog1995 タイプのモジュールを生成する．
 void
 Parser::new_Module1995(

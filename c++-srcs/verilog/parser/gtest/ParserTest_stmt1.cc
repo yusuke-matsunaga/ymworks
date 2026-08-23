@@ -121,7 +121,7 @@ TEST_F(ParserTest, Enable1)
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "name1";
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr1, 1U);
+  auto expr = parser.factory().new_IntConst(fr1, 1U);
   auto expr_list = parser.new_expr_list();
   expr_list->push_back(astmgr.alloc(), expr);
   auto stmt = parser.new_Enable(fr, name, expr_list);
@@ -175,7 +175,7 @@ TEST_F(ParserTest, Enable2)
   auto name = "name1";
   auto hname = parser.new_HierName(head, name);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr1, 1U);
+  auto expr = parser.factory().new_IntConst(fr1, 1U);
   auto expr_list = parser.new_expr_list();
   expr_list->push_back(astmgr.alloc(), expr);
   auto stmt = parser.new_Enable(fr, hname, expr_list);
@@ -230,7 +230,7 @@ TEST_F(ParserTest, SysEnable)
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "$name1";
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr1, 1U);
+  auto expr = parser.factory().new_IntConst(fr1, 1U);
   auto expr_list = parser.new_expr_list();
   expr_list->push_back(astmgr.alloc(), expr);
   auto stmt = parser.new_SysEnable(fr, name, expr_list);
@@ -281,7 +281,7 @@ TEST_F(ParserTest, DcStmt)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr1, 1U);
+  auto expr = parser.factory().new_IntConst(fr1, 1U);
   auto delay = parser.new_DelayControl(fr1, expr);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto body = parser.new_NullStmt(fr2);
@@ -384,7 +384,7 @@ TEST_F(ParserTest, Wait)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto cond = parser.new_IntConst(fr1, 1U);
+  auto cond = parser.factory().new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
   auto body = parser.new_NullStmt(fr3);
   auto stmt = parser.new_Wait(fr, cond, body);
@@ -434,9 +434,9 @@ TEST_F(ParserTest, Assign1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto lhs = parser.new_IntConst(fr1, 1U);
+  auto lhs = parser.factory().new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto rhs = parser.new_IntConst(fr3, 1U);
+  auto rhs = parser.factory().new_IntConst(fr3, 1U);
   auto stmt = parser.new_Assign(fr, lhs, rhs);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -484,9 +484,9 @@ TEST_F(ParserTest, Assign2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto lhs = parser.new_IntConst(fr1, 1U);
+  auto lhs = parser.factory().new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto rhs = parser.new_IntConst(fr3, 1U);
+  auto rhs = parser.factory().new_IntConst(fr3, 1U);
   auto fr4 = make_file_region(4, 4, 4, 4);
   auto fr5 = make_file_region(5, 5, 5, 5);
   auto event_name = "event1";
@@ -538,9 +538,9 @@ TEST_F(ParserTest, NbAssign1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto lhs = parser.new_IntConst(fr1, 1U);
+  auto lhs = parser.factory().new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto rhs = parser.new_IntConst(fr3, 1U);
+  auto rhs = parser.factory().new_IntConst(fr3, 1U);
   auto stmt = parser.new_NbAssign(fr, lhs, rhs);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -588,9 +588,9 @@ TEST_F(ParserTest, NbAssign2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto lhs = parser.new_IntConst(fr1, 1U);
+  auto lhs = parser.factory().new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto rhs = parser.new_IntConst(fr3, 1U);
+  auto rhs = parser.factory().new_IntConst(fr3, 1U);
   auto fr4 = make_file_region(4, 4, 4, 4);
   auto fr5 = make_file_region(5, 5, 5, 5);
   auto event_name = "event1";
@@ -642,9 +642,9 @@ TEST_F(ParserTest, PcAssign)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto lhs = parser.new_IntConst(fr1, 1U);
+  auto lhs = parser.factory().new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto rhs = parser.new_IntConst(fr3, 1U);
+  auto rhs = parser.factory().new_IntConst(fr3, 1U);
   auto stmt = parser.new_PcAssign(fr, lhs, rhs);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -692,7 +692,7 @@ TEST_F(ParserTest, Deassign)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto lhs = parser.new_IntConst(fr1, 1U);
+  auto lhs = parser.factory().new_IntConst(fr1, 1U);
   auto stmt = parser.new_Deassign(fr, lhs);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -740,9 +740,9 @@ TEST_F(ParserTest, Force)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto lhs = parser.new_IntConst(fr1, 1U);
+  auto lhs = parser.factory().new_IntConst(fr1, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto rhs = parser.new_IntConst(fr3, 1U);
+  auto rhs = parser.factory().new_IntConst(fr3, 1U);
   auto stmt = parser.new_Force(fr, lhs, rhs);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -790,7 +790,7 @@ TEST_F(ParserTest, Release)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto lhs = parser.new_IntConst(fr1, 1U);
+  auto lhs = parser.factory().new_IntConst(fr1, 1U);
   auto stmt = parser.new_Release(fr, lhs);
 
   ASSERT_TRUE( stmt != nullptr );
@@ -838,7 +838,7 @@ TEST_F(ParserTest, EventStmt)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto event = parser.new_IntConst(fr1, 1U);
+  auto event = parser.factory().new_IntConst(fr1, 1U);
   auto stmt = parser.new_EventStmt(fr, event);
 
   ASSERT_TRUE( stmt != nullptr );

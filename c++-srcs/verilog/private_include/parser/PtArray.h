@@ -285,15 +285,6 @@ using PtStmtArray        = PtArray<const AstStmt*,        PtStmt*>;
 using PtUdpEntryArray    = PtArray<const AstUdpEntry*,    PtUdpEntry*>;
 using PtUdpValueArray    = PtArray<const AstUdpValue*,    PtUdpValue*>;
 
-/// @relates PtNameBranchArray
-/// @brief 階層名を作り出す関数
-/// @return 階層名を展開したものを返す．
-std::string
-expand_full_name(
-  const PtNameBranchArray* nb_array, ///< [in] 階層ブランチリスト
-  const char* name                   ///< [in] 末尾の名前
-);
-
 END_NAMESPACE_YM_VERILOG
 
 #endif // PTARRAY_H

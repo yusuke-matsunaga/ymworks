@@ -157,30 +157,28 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @brief path_delay_declaration を表すクラス
+/// @brief path_delay_declaration を表す基底クラス
 //////////////////////////////////////////////////////////////////////
-class CptPathDecl :
+class CptPathDeclBase :
   public PtPathDecl
 {
 public:
 
   /// @brief コンストラクタ
-  CptPathDecl(
+  CptPathDeclBase(
     const FileRegion& file_region,
     int edge,
     const AstExprList* input_list,
     int input_pol,
     VpiPathType op,
-    const AstExprList* output_list,
     int output_pol,
     const AstExpr* expr,
     const AstPathDelay* path_delay
   ) : mFileRegion{file_region},
       mEdge{edge},
-      mInputList{std::move(input_list)},
+      mInputList{input_list},
       mInputPol{input_pol},
       mOp{op},
-      mOutputList{std::move(output_list)},
       mOutputPol{output_pol},
       mExpr{expr},
       mPathDelay{path_delay}
@@ -188,7 +186,7 @@ public:
   }
 
   /// @brief デストラクタ
-  ~CptPathDecl() {}
+  ~CptPathDeclBase() {}
 
 
 public:
@@ -226,20 +224,6 @@ public:
   VpiPathType
   op() const override;
 
-  /// @brief 出力のリストの要素数の取得
-  SizeType
-  output_num() const override;
-
-  /// @brief 出力の取得
-  const AstExpr*
-  output(
-    SizeType index ///< [in] インデックス ( 0 <= index < output_num() )
-  ) const override;
-
-  /// @brief 出力リストの取得
-  AstExprVec
-  output_list() const override;
-
   /// @brief 出力の極性を取り出す．
   int
   output_pol() const override;
@@ -265,10 +249,131 @@ private:
   const AstExprList* mInputList;
   int mInputPol;
   VpiPathType mOp;
-  const AstExprList* mOutputList;
   int mOutputPol;
   const AstExpr* mExpr;
   const AstPathDelay* mPathDelay;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 単一出力の PathDecl
+//////////////////////////////////////////////////////////////////////
+class CptPathDecl1 :
+  public CptPathDeclBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPathDecl1(
+    const FileRegion& file_region,
+    int edge,
+    const AstExprList* input_list,
+    int input_pol,
+    VpiPathType op,
+    const AstExpr* output,
+    int output_pol,
+    const AstExpr* expr,
+    const AstPathDelay* path_delay
+  ) : CptPathDeclBase(file_region, edge,
+		      input_list, input_pol,
+		      op, output_pol,
+		      expr, path_delay),
+      mOutput{output}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPathDecl1() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstPathDecl の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 出力のリストの要素数の取得
+  SizeType
+  output_num() const override;
+
+  /// @brief 出力の取得
+  const AstExpr*
+  output(
+    SizeType index ///< [in] インデックス ( 0 <= index < output_num() )
+  ) const override;
+
+  /// @brief 出力リストの取得
+  AstExprVec
+  output_list() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  const AstExpr* mOutput;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 複数出力の PathDecl
+//////////////////////////////////////////////////////////////////////
+class CptPathDecl2 :
+  public CptPathDeclBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPathDecl2(
+    const FileRegion& file_region,
+    int edge,
+    const AstExprList* input_list,
+    int input_pol,
+    VpiPathType op,
+    const AstExprList* output_list,
+    int output_pol,
+    const AstExpr* expr,
+    const AstPathDelay* path_delay
+  ) : CptPathDeclBase(file_region, edge,
+		      input_list, input_pol,
+		      op, output_pol,
+		      expr, path_delay),
+      mOutputList{output_list}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPathDecl2() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstPathDecl の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 出力のリストの要素数の取得
+  SizeType
+  output_num() const override;
+
+  /// @brief 出力の取得
+  const AstExpr*
+  output(
+    SizeType index ///< [in] インデックス ( 0 <= index < output_num() )
+  ) const override;
+
+  /// @brief 出力リストの取得
+  AstExprVec
+  output_list() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  const AstExprList* mOutputList;
 
 };
 

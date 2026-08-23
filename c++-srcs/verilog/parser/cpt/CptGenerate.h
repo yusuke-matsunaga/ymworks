@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -302,15 +303,11 @@ public:
     const FileRegion& file_region,
     const AstExpr* cond,
     PtDeclHeadArray&& then_declhead_list,
-    PtItemArray&& then_item_list,
-    PtDeclHeadArray&& else_declhead_list,
-    PtItemArray&& else_item_list
+    PtItemArray&& then_item_list
   ) : mFileRegion{file_region},
       mCond{cond},
       mThenBody(std::move(then_declhead_list),
-		std::move(then_item_list)),
-      mElseBody(std::move(else_declhead_list),
-		std::move(else_item_list))
+		std::move(then_item_list))
   {
   }
 
@@ -405,6 +402,76 @@ private:
 
   // 成り立ったとき生成される本体
   CptGenBody mThenBody;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief ELSE 付きの gen_if 文 を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptGenIfElse :
+  public CptGenIf
+{
+public:
+
+  /// @brief コンストラクタ
+  CptGenIfElse(
+    const FileRegion& file_region,
+    const AstExpr* cond,
+    PtDeclHeadArray&& then_declhead_list,
+    PtItemArray&& then_item_list,
+    PtDeclHeadArray&& else_declhead_list,
+    PtItemArray&& else_item_list
+  ) : CptGenIf(file_region, cond,
+	       std::move(then_declhead_list),
+	       std::move(then_item_list)),
+      mElseBody(std::move(else_declhead_list),
+		std::move(else_item_list))
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptGenIfElse() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstItem の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
+  SizeType
+  else_declhead_num() const override;
+
+  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
+  const AstDeclHead*
+  else_declhead(
+    SizeType index ///< [in] インデックス ( 0 <= index < else_declhead_num() )
+  ) const override;
+
+  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
+  AstDeclHeadVec
+  else_declhead_list() const override;
+
+  /// @brief 条件が成り立たなかったときに生成される要素数の取得
+  SizeType
+  else_item_num() const override;
+
+  /// @brief 条件が成り立たなかった時に生成される要素の取得
+  const AstItem*
+  else_item(
+    SizeType index ///< [in] インデックス ( 0 <= index < else_item_num() )
+  ) const override;
+
+  /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
+  AstItemVec
+  else_item_list() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
 
   // 成り立たなかったとき生成される本体
   CptGenBody mElseBody;

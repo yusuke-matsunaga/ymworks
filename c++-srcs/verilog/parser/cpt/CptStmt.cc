@@ -64,30 +64,28 @@ CptStmt::stmt_name() const
 SizeType
 CptStmt::namebranch_num() const
 {
-  return 0;
+  throw std::logic_error{"namebranch_num(): typemismatch"};
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptStmt::namebranch(
-  SizeType index
-) const
+CptStmt::namebranch_top() const
 {
-  throw std::out_of_range{"index is out of range"};
+  throw std::logic_error{"namebranch_top(): typemismatch"};
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptStmt::namebranch_list() const
 {
-  return {};
+  throw std::logic_error{"namebranch_list(): typemismatch"};
 }
 
 // @brief 名前の取得
 const char*
 CptStmt::name() const
 {
-  return nullptr;
+  throw std::logic_error{"name(): typemismatch"};
 }
 
 // @brief 引数の数の取得
@@ -117,49 +115,49 @@ CptStmt::arg_list() const
 const AstControl*
 CptStmt::control() const
 {
-  return nullptr;
+  throw std::logic_error{"control(): type miscmatch"};
 }
 
 // @brief 本体のステートメントの取得
 const AstStmt*
 CptStmt::body() const
 {
-  return nullptr;
+  throw std::logic_error{"body(): type mismatch"};
 }
 
 // @brief 式の取得
 const AstExpr*
 CptStmt::expr() const
 {
-  return nullptr;
+  throw std::logic_error{"expr(): type mismatch"};
 }
 
 // @brief 左辺式の取得
 const AstExpr*
 CptStmt::lhs() const
 {
-  return nullptr;
+  throw std::logic_error{"lhs(): type mismatch"};
 }
 
 // @brief 右辺式の取得
 const AstExpr*
 CptStmt::rhs() const
 {
-  return nullptr;
+  throw std::logic_error{"rhs(): type mismatch"};
 }
 
 // @brief イベントプライマリの取得
 const AstExpr*
 CptStmt::primary() const
 {
-  return nullptr;
+  throw std::logic_error{"primary(): type mismatch"};
 }
 
 // @brief 条件が成り立たなかったとき実行されるステートメントの取得
 const AstStmt*
 CptStmt::else_body() const
 {
-  return nullptr;
+  throw std::logic_error{"else_body(): type mismatch"};
 }
 
 // @brief case item のリストの要素数の取得
@@ -189,13 +187,14 @@ CptStmt::caseitem_list() const
 const AstStmt*
 CptStmt::init_stmt() const
 {
-  return nullptr;
+  throw std::logic_error{"init_stmt(): type mismatch"};
 }
 
 // @brief 繰り返し代入文の取得
 const AstStmt*
 CptStmt::next_stmt() const
 {
+  throw std::logic_error{"next_stmt(): type mismatch"};
   return nullptr;
 }
 
@@ -264,6 +263,27 @@ CptDisable::name() const
   return mName;
 }
 
+// @brief 階層ブランチの要素数の取得
+SizeType
+CptDisable::namebranch_num() const
+{
+  return 0;
+}
+
+// @brief 先頭の階層ブランチを返す．
+const AstNameBranch*
+CptDisable::namebranch_top() const
+{
+  return nullptr;
+}
+
+// @brief 階層ブランチのリストを返す．
+AstNameBranchVec
+CptDisable::namebranch_list() const
+{
+  return {};
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス CptDisableH
@@ -273,23 +293,21 @@ CptDisable::name() const
 SizeType
 CptDisableH::namebranch_num() const
 {
-  return mNbList.size();
+  return mNbTop->count_num();
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptDisableH::namebranch(
-  SizeType index
-) const
+CptDisableH::namebranch_top() const
 {
-  return mNbList[index];
+  return mNbTop;
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptDisableH::namebranch_list() const
 {
-  return mNbList.to_vector();
+  return mNbTop->to_vector();
 }
 
 
@@ -339,6 +357,27 @@ CptEnable::type() const
   return Enable;
 }
 
+// @brief 階層ブランチの要素数の取得
+SizeType
+CptEnable::namebranch_num() const
+{
+  return 0;
+}
+
+// @brief 先頭の階層ブランチを返す．
+const AstNameBranch*
+CptEnable::namebranch_top() const
+{
+  return nullptr;
+}
+
+// @brief 階層ブランチのリストを返す．
+AstNameBranchVec
+CptEnable::namebranch_list() const
+{
+  return {};
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス CptEnableH
@@ -348,23 +387,21 @@ CptEnable::type() const
 SizeType
 CptEnableH::namebranch_num() const
 {
-  return mNbList.size();
+  return mNbTop->count_num();
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptEnableH::namebranch(
-  SizeType index
-) const
+CptEnableH::namebranch_top() const
 {
-  return mNbList[index];
+  return mNbTop;
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptEnableH::namebranch_list() const
 {
-  return mNbList.to_vector();
+  return mNbTop->to_vector();
 }
 
 
@@ -958,13 +995,11 @@ PtFactory::new_Disable(
 PtStmt*
 PtFactory::new_Disable(
   const FileRegion& file_region,
-  PtHierName* hname
+  const PtHierName& hname
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDisableH));
-  return new (p) CptDisableH(file_region,
-			     hname->nb_list()->to_array(mAlloc),
-			     hname->tail_name());
+  return new (p) CptDisableH(file_region, hname);
 }
 
 // enable 文を生成する．
@@ -982,15 +1017,12 @@ PtFactory::new_Enable(
 PtStmt*
 PtFactory::new_Enable(
   const FileRegion& file_region,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* arg_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEnableH));
-  return new (p) CptEnableH(file_region,
-			    hname->nb_list()->to_array(mAlloc),
-			    hname->tail_name(),
-			    arg_list);
+  return new (p) CptEnableH(file_region, hname, arg_list);
 
 }
 
@@ -1125,9 +1157,9 @@ PtFactory::new_If(
   return new (p) CptIf(file_region, expr, then_body);
 }
 
-// if 文を生成する．
+// if-else 文を生成する．
 PtStmt*
-PtFactory::new_If(
+PtFactory::new_IfElse(
   const FileRegion& file_region,
   const AstExpr* expr,
   const AstStmt* then_body,

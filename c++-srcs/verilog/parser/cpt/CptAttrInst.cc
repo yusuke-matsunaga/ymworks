@@ -132,6 +132,17 @@ PtFactory::new_AttrInst(
 PtAttrSpec*
 PtFactory::new_AttrSpec(
   const FileRegion& file_region,
+  const char* name
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptAttrSpec));
+  return new (p) CptAttrSpec(file_region, name, nullptr);
+}
+
+// attribute spec を生成する．
+PtAttrSpec*
+PtFactory::new_AttrSpec(
+  const FileRegion& file_region,
   const char* name,
   const AstExpr* expr
 )

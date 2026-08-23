@@ -133,24 +133,23 @@ private:
 //////////////////////////////////////////////////////////////////////
 // インデックスつきの primary を表すクラス
 //////////////////////////////////////////////////////////////////////
-class CptPrimaryI :
-  public CptPrimaryBase
+class CptPrimaryI1 :
+  public CptPrimary
 {
 public:
 
   // コンストラクタ
-  CptPrimaryI(
+  CptPrimaryI1(
     const FileRegion& file_region,
     const char* name,
-    const AstExprList* index_list
-  ) : CptPrimaryBase(name),
-      mFileRegion{file_region},
-      mIndexList{index_list}
+    const AstExpr* index
+  ) : CptPrimary(file_region, name),
+      mIndex{index}
   {
   }
 
   // デストラクタ
-  ~CptPrimaryI() {}
+  ~CptPrimaryI1() {}
 
 
 public:
@@ -158,9 +157,67 @@ public:
   // AstPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  // ファイル位置を返す．
-  FileRegion
-  file_region() const override;
+  /// @brief インデックスリストのサイズの取得
+  /// @return インデックスリストのサイズ
+  ///
+  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
+  SizeType
+  index_num() const override;
+
+  /// @brief インデックスの取得
+  ///
+  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
+  const AstExpr*
+  index(
+    SizeType i ///< [in] インデックス ( 0 <= i < index_num() )
+  ) const override;
+
+  /// @brief インデックスリストの取得
+  AstExprVec
+  index_list() const override;
+
+  // index_list も range も持たないとき true を返す．
+  bool
+  is_simple() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // インデックス
+  const AstExpr* mIndex;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+// インデックスリストつきの primary を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptPrimaryI2 :
+  public CptPrimary
+{
+public:
+
+  // コンストラクタ
+  CptPrimaryI2(
+    const FileRegion& file_region,
+    const char* name,
+    const AstExprList* index_list
+  ) : CptPrimary(file_region, name),
+      mIndexList{index_list}
+  {
+  }
+
+  // デストラクタ
+  ~CptPrimaryI2() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstPrimary の仮想関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief インデックスリストのサイズの取得
   /// @return インデックスリストのサイズ
@@ -204,7 +261,7 @@ private:
 // 定数インデックスつきの primary を表すクラス
 //////////////////////////////////////////////////////////////////////
 class CptPrimaryCI :
-  public CptPrimaryI
+  public CptPrimaryI2
 {
 public:
 
@@ -213,7 +270,7 @@ public:
     const FileRegion& file_region,
     const char* name,
     const AstExprList* index_list
-  ) : CptPrimaryI(file_region, name, index_list)
+  ) : CptPrimaryI2(file_region, name, index_list)
   {
   }
 
@@ -325,7 +382,7 @@ public:
 // インデックスと範囲指定つきの primary を表すクラス
 //////////////////////////////////////////////////////////////////////
 class CptPrimaryIR :
-  public CptPrimaryI
+  public CptPrimaryI2
 {
 public:
 
@@ -335,7 +392,7 @@ public:
     const char* name,
     const AstExprList* index_list,
     const AstPart* part
-  ) : CptPrimaryI(file_region, name, index_list),
+  ) : CptPrimaryI2(file_region, name, index_list),
       mPart{part}
   {
   }
@@ -376,11 +433,10 @@ public:
   // コンストラクタ
   CptPrimaryH(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_list,
-    const char* tail_name
-  ) : CptPrimaryBase(tail_name),
+    const PtHierName& hname
+  ) : CptPrimaryBase(hname.tail_name),
       mFileRegion{file_region},
-      mNbList{std::move(nb_list)}
+      mNbTop{hname.nb_top->reverse()}
   {
   }
 
@@ -401,11 +457,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -420,8 +474,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbList;
+  // 先頭の階層ブランチ
+  const AstNameBranch* mNbTop;
 
 };
 
@@ -430,18 +484,17 @@ private:
 // 階層名を持つインデックスつき primary を表すクラス
 //////////////////////////////////////////////////////////////////////
 class CptPrimaryHI :
-  public CptPrimaryI
+  public CptPrimaryI2
 {
 public:
 
   // コンストラクタ
   CptPrimaryHI(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_list,
-    const char* tail_name,
+    const PtHierName& hname,
     const AstExprList* index_list
-  ) : CptPrimaryI(file_region, tail_name, index_list),
-      mNbList{std::move(nb_list)}
+  ) : CptPrimaryI2(file_region, hname.tail_name, index_list),
+      mNbTop{hname.nb_top->reverse()}
   {
   }
 
@@ -458,11 +511,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -474,8 +525,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbList;
+  // 先頭の階層ブランチ
+  const AstNameBranch* mNbTop;
 
 };
 
@@ -491,11 +542,9 @@ public:
   // コンストラクタ
   CptPrimaryHCI(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_list,
-    const char* tail_name,
+    const PtHierName& hname,
     const AstExprList* index_list
-  ) : CptPrimaryHI(file_region, std::move(nb_list),
-		   tail_name, index_list)
+  ) : CptPrimaryHI(file_region, hname, index_list)
   {
   }
 
@@ -526,11 +575,10 @@ public:
   // コンストラクタ
   CptPrimaryHR(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_list,
-    const char* tail_name,
+    const PtHierName& hname,
     const AstPart* part
-  ) : CptPrimaryR(file_region, tail_name, part),
-      mNbList{std::move(nb_list)}
+  ) : CptPrimaryR(file_region, hname.tail_name, part),
+      mNbTop{hname.nb_top->reverse()}
   {
   }
 
@@ -547,11 +595,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -563,8 +609,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbList;
+  // 先頭の階層ブランチ
+  const AstNameBranch* mNbTop;
 
 };
 
@@ -580,13 +626,12 @@ public:
   // コンストラクタ
   CptPrimaryHIR(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_list,
-    const char* tail_name,
+    const PtHierName& hname,
     const AstExprList* index_list,
     const AstPart* part
-  ) : CptPrimaryIR(file_region, tail_name,
+  ) : CptPrimaryIR(file_region, hname.tail_name,
 		   index_list, part),
-      mNbList{std::move(nb_list)}
+      mNbTop{hname.nb_top->reverse()}
   {
   }
 
@@ -603,11 +648,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -620,7 +663,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 階層ブランチのリスト
-  PtNameBranchArray mNbList;
+  const AstNameBranch* mNbTop;
 
 };
 

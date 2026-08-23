@@ -8,7 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtList.h"
+#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -18,91 +18,22 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @ingroup VlParser
 /// @brief 階層つき名を表すクラス
 ///
-/// 中身は階層部分を表す PtNameBranch のリストと末尾の名前を表す
-/// 文字列から成る．
+/// 中身は階層ブランチの先頭と文字列から成る．
+/// 実際にはパーズ中は階層ブランチは逆順のリンクトリストになっている．
+/// 最後に逆転してから構文木に組み込む．
 ///
-/// コンストラクタでは最下層の名前の設定のみを行う．
-/// 階層の追加は add(const char*), add(int index, const char*)
-/// で行う．これは内部で PtNameBranch を生成していることに因る．
+/// YACC/BISON の YYSTYPE で用いるためコンストラクタ/デストラクタ
+/// を持つことができない．
+/// なので初期化や終了処理が必要のないポインタのみを持つ．
 //////////////////////////////////////////////////////////////////////
-class PtHierName
+struct PtHierName
 {
-public:
 
-  /// @brief コンストラクタ
-  PtHierName(
-    Alloc& alloc,            ///< [in] アロケータ
-    const AstNameBranch* nb, ///< [in] 階層ブランチ
-    const char* name         ///< [in] 名前
-  ) : mTailName{name}
-  {
-    void* p = alloc.get_memory(sizeof(PtNameBranchList));
-    mNbList = new (p) PtNameBranchList;
-    mNbList->push_back(alloc, nb);
-  }
-
-  /// @brief デストラクタ
-  ~PtHierName() = default;
-
-
-public:
-
-  /// @brief 階層を追加する．
-  void
-  add(
-    Alloc& alloc,            ///< [in] アロケータ
-    const AstNameBranch* nb, ///< [in] 追加する階層ブランチ
-    const char* tail_name    ///< [in] 追加する最下層の名前
-  )
-  {
-    mNbList->push_back(alloc, nb);
-    mTailName = tail_name;
-  }
-
-
-public:
-
-  /// @brief 階層ブランチのリストを返す．
-  PtNameBranchList*
-  nb_list() const
-  {
-    return mNbList;
-  }
-
-#if 0
-  /// @brief 階層ブランチのリストを PtNameBranchArray の形で取り出す．
-  ///
-  /// この関数を呼ぶと mNbList は破壊される．
-  PtNameBranchArray
-  nb_listh_to_array(
-    Alloc& alloc
-  )
-  {
-    auto ans = mNbList->to_array(alloc);
-    mNbList = nullptr;
-    return ans;
-  }
-#endif
-
-  /// @brief 最下層の名前を取り出す．
-  /// @return 最下層の名前
-  const char*
-  tail_name() const
-  {
-    return mTailName;
-  }
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 階層ブランチのリスト
-  PtNameBranchList* mNbList;
+  // 先頭の階層ブランチ
+  PtNameBranch* nb_top;
 
   // 最下層の名前
-  const char* mTailName;
+  const char* tail_name;
 
 };
 

@@ -38,6 +38,48 @@ CptNameBranch::index() const
   throw std::logic_error{"has_index() == false"};
 }
 
+// @brief 次の要素の取得
+const AstNameBranch*
+CptNameBranch::link() const
+{
+  return mLink;
+}
+
+// @brief link を設定する．
+void
+CptNameBranch::set_link(
+  PtNameBranch* link
+)
+{
+  mLink = link;
+}
+
+// @brief PtNameBranch* 型のリンクを返す．
+PtNameBranch*
+CptNameBranch::_link() const
+{
+  return mLink;
+}
+
+// @brief リンクトリストを逆順にする．
+PtNameBranch*
+CptNameBranch::reverse()
+{
+  auto vec = to_vector();
+  SizeType n = count_num();
+  std::vector<PtNameBranch*> tmp_list;
+  tmp_list.reserve(n);
+  for ( PtNameBranch* nb = this; nb != nullptr; nb = nb->_link() ) {
+    tmp_list.push_back(nb);
+  }
+  PtNameBranch* last = nullptr;
+  for ( auto nb: tmp_list ) {
+    nb->set_link(last);
+    last = nb;
+  }
+  return last;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス CptNameBranchI

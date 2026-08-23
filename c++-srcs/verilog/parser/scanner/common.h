@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "ym/vl/Ast.h"
-#include "parser/PtList.h"
 #include "parser/PtFwd.h"
 
 

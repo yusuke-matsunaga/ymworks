@@ -36,10 +36,10 @@ TEST_F(ParserTest, Primary2)
   auto name = "net1";
   auto index_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto index1 = parser.new_IntConst(fr1, 1U);
+  auto index1 = parser.factory().new_IntConst(fr1, 1U);
   index_list->push_back(astmgr.alloc(), index1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto index2 = parser.new_IntConst(fr2, 2U);
+  auto index2 = parser.factory().new_IntConst(fr2, 2U);
   index_list->push_back(astmgr.alloc(), index2);
   auto expr = parser.new_Primary(fr, name, index_list);
 
@@ -80,10 +80,10 @@ TEST_F(ParserTest, Primary4)
   auto name = "net1";
   auto index_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto index1 = parser.new_IntConst(fr1, 1U);
+  auto index1 = parser.factory().new_IntConst(fr1, 1U);
   index_list->push_back(astmgr.alloc(), index1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto index2 = parser.new_IntConst(fr2, 2U);
+  auto index2 = parser.factory().new_IntConst(fr2, 2U);
   index_list->push_back(astmgr.alloc(), index2);
   auto fr3 = make_file_region(3, 3, 3, 3);
   SizeType left_val = 3;
@@ -128,10 +128,10 @@ TEST_F(ParserTest, PrimaryH2)
   auto hname = parser.new_HierName(head, name);
   auto index_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto index1 = parser.new_IntConst(fr1, 1U);
+  auto index1 = parser.factory().new_IntConst(fr1, 1U);
   index_list->push_back(astmgr.alloc(), index1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto index2 = parser.new_IntConst(fr2, 2U);
+  auto index2 = parser.factory().new_IntConst(fr2, 2U);
   index_list->push_back(astmgr.alloc(), index2);
   auto expr = parser.new_Primary(fr, hname, index_list);
 
@@ -176,10 +176,10 @@ TEST_F(ParserTest, PrimaryH4)
   auto hname = parser.new_HierName(head, name);
   auto index_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto index1 = parser.new_IntConst(fr1, 1U);
+  auto index1 = parser.factory().new_IntConst(fr1, 1U);
   index_list->push_back(astmgr.alloc(), index1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto index2 = parser.new_IntConst(fr2, 2U);
+  auto index2 = parser.factory().new_IntConst(fr2, 2U);
   index_list->push_back(astmgr.alloc(), index2);
   auto fr3 = make_file_region(3, 3, 3, 3);
   SizeType left_val = 3;
@@ -205,7 +205,7 @@ TEST_F(ParserTest, CPrimary1)
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "param1";
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto index1 = parser.new_IntConst(fr1, 1U);
+  auto index1 = parser.factory().new_IntConst(fr1, 1U);
   auto expr = parser.new_CPrimary(fr, name, index1);
 
   ASSERT_TRUE( expr != nullptr );
@@ -223,10 +223,10 @@ TEST_F(ParserTest, CPrimary2)
   auto name = "param1";
   auto index_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto index1 = parser.new_IntConst(fr1, 1U);
+  auto index1 = parser.factory().new_IntConst(fr1, 1U);
   index_list->push_back(astmgr.alloc(), index1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto index2 = parser.new_IntConst(fr2, 2U);
+  auto index2 = parser.factory().new_IntConst(fr2, 2U);
   index_list->push_back(astmgr.alloc(), index2);
   auto expr = parser.new_CPrimary(fr, name, index_list);
 
@@ -269,10 +269,10 @@ TEST_F(ParserTest, CPrimary4)
   auto hname = parser.new_HierName(head, name);
   auto index_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto index1 = parser.new_IntConst(fr1, 1U);
+  auto index1 = parser.factory().new_IntConst(fr1, 1U);
   index_list->push_back(astmgr.alloc(), index1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto index2 = parser.new_IntConst(fr2, 2U);
+  auto index2 = parser.factory().new_IntConst(fr2, 2U);
   index_list->push_back(astmgr.alloc(), index2);
   auto expr = parser.new_CPrimary(fr, hname, index_list);
 

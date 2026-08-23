@@ -70,6 +70,7 @@ add_custom_command (
   "${CMAKE_CURRENT_SOURCE_DIR}/parser/main/verilog_grammer.yy"
   -o "${CMAKE_CURRENT_BINARY_DIR}/verilog_grammer.cc"
   -d -v
+  -Wcounterexamples
   OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/verilog_grammer.cc"
   "${CMAKE_CURRENT_BINARY_DIR}/verilog_grammer.hh"
   "${CMAKE_CURRENT_BINARY_DIR}/verilog_grammer.output"

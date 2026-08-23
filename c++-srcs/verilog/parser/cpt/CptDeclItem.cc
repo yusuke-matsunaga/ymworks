@@ -126,7 +126,6 @@ CptDeclItemI::init_value() const
 // その他の宣言関係
 //////////////////////////////////////////////////////////////////////
 
-// 宣言要素を生成する．
 PtDeclItem*
 PtFactory::new_DeclItem(
   const FileRegion& file_region,

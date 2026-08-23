@@ -308,27 +308,52 @@ PtItem*
 PtFactory::new_GateH(
   const FileRegion& file_region,
   VpiPrimType type,
+  const AstInstVec& inst_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptGateH));
+  return new (p) CptGateH(file_region, type,
+			  PtInstArray(mAlloc, inst_list));
+}
+
+// gate instance 文のヘッダを生成する．
+PtItem*
+PtFactory::new_GateH(
+  const FileRegion& file_region,
+  VpiPrimType type,
+  const AstDelay* delay,
+  const AstInstVec& inst_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptGateHD));
+  return new (p) CptGateHD(file_region, type, delay,
+			   PtInstArray(mAlloc, inst_list));
+}
+
+// gate instance 文のヘッダを生成する．
+PtItem*
+PtFactory::new_GateH(
+  const FileRegion& file_region,
+  VpiPrimType type,
+  const AstStrength* strength,
+  const AstInstVec& inst_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptGateHS));
+  return new (p) CptGateHS(file_region, type, strength,
+			   PtInstArray(mAlloc, inst_list));
+}
+
+// gate instance 文のヘッダを生成する．
+PtItem*
+PtFactory::new_GateH(
+  const FileRegion& file_region,
+  VpiPrimType type,
   const AstStrength* strength,
   const AstDelay* delay,
   const AstInstVec& inst_list
 )
 {
-  if ( strength == nullptr ) {
-    if ( delay == nullptr ) {
-      void* p = mAlloc.get_memory(sizeof(CptGateH));
-      return new (p) CptGateH(file_region, type,
-			      PtInstArray(mAlloc, inst_list));
-    }
-    void* p = mAlloc.get_memory(sizeof(CptGateHD));
-    return new (p) CptGateHD(file_region, type, delay,
-			     PtInstArray(mAlloc, inst_list));
-
-  }
-  if ( delay == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptGateHS));
-    return new (p) CptGateHS(file_region, type, strength,
-			     PtInstArray(mAlloc, inst_list));
-  }
   void* p = mAlloc.get_memory(sizeof(CptGateHSD));
   return new (p) CptGateHSD(file_region, type, strength, delay,
 			    PtInstArray(mAlloc, inst_list));
@@ -339,39 +364,98 @@ PtItem*
 PtFactory::new_MuH(
   const FileRegion& file_region,
   const char* def_name,
-  const AstStrength* strength,
-  const AstDelay* delay,
+  const AstInstVec& inst_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptMuH));
+  return new (p) CptMuH(file_region, def_name,
+			PtInstArray(mAlloc, inst_list));
+}
+
+// module instance/UDP instance 文のヘッダを生成する．
+PtItem*
+PtFactory::new_MuH(
+  const FileRegion& file_region,
+  const char* def_name,
   const AstConnectionVec& paramassign_list,
   const AstInstVec& inst_list
 )
 {
-  if ( strength == nullptr ) {
-    if ( delay == nullptr ) {
-      if ( paramassign_list.empty() ) {
-	void* p = mAlloc.get_memory(sizeof(CptMuH));
-	return new (p) CptMuH(file_region, def_name,
-			      PtInstArray(mAlloc, inst_list));
-      }
-      void* p = mAlloc.get_memory(sizeof(CptMuHP));
-      return new (p) CptMuHP(file_region, def_name,
-			     PtConnectionArray(mAlloc, paramassign_list),
-			     PtInstArray(mAlloc, inst_list));
-    }
-    void* p = mAlloc.get_memory(sizeof(CptMuHD));
-    return new (p) CptMuHD(file_region, def_name,
-			   delay,
-			   PtInstArray(mAlloc, inst_list));
-  }
-  if ( delay == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptMuHS));
-    return new (p) CptMuHS(file_region, def_name,
-			   strength,
-			   PtInstArray(mAlloc, inst_list));
-  }
+  void* p = mAlloc.get_memory(sizeof(CptMuHP));
+  return new (p) CptMuHP(file_region, def_name,
+			 PtConnectionArray(mAlloc, paramassign_list),
+			 PtInstArray(mAlloc, inst_list));
+}
+
+// module instance/UDP instance 文のヘッダを生成する．
+PtItem*
+PtFactory::new_MuH(
+  const FileRegion& file_region,
+  const char* def_name,
+  const AstDelay* delay,
+  const AstInstVec& inst_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptMuHD));
+  return new (p) CptMuHD(file_region, def_name,
+			 delay,
+			 PtInstArray(mAlloc, inst_list));
+}
+
+// module instance/UDP instance 文のヘッダを生成する．
+PtItem*
+PtFactory::new_MuH(
+  const FileRegion& file_region,
+  const char* def_name,
+  const AstStrength* strength,
+  const AstInstVec& inst_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptMuHS));
+  return new (p) CptMuHS(file_region, def_name,
+			 strength,
+			 PtInstArray(mAlloc, inst_list));
+}
+
+// module instance/UDP instance 文のヘッダを生成する．
+PtItem*
+PtFactory::new_MuH(
+  const FileRegion& file_region,
+  const char* def_name,
+  const AstStrength* strength,
+  const AstDelay* delay,
+  const AstInstVec& inst_list
+)
+{
   void* p = mAlloc.get_memory(sizeof(CptMuHSD));
   return new (p) CptMuHSD(file_region, def_name,
 			  strength, delay,
 			  PtInstArray(mAlloc, inst_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstConnectionVec& con_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region,
+			 PtConnectionArray(mAlloc, con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstConnectionVec& con_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name,
+			  PtConnectionArray(mAlloc, con_list));
 }
 
 // module instance/UDP instance の要素を生成する．
@@ -383,19 +467,36 @@ PtFactory::new_Inst(
   const AstConnectionVec& con_list
 )
 {
-  if ( name == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInst));
-    return new (p) CptInst(file_region,
-			   PtConnectionArray(mAlloc, con_list));
-  }
-  if ( range == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInstN));
-    return new (p) CptInstN(file_region, name,
-			    PtConnectionArray(mAlloc, con_list));
-  }
   void* p = mAlloc.get_memory(sizeof(CptInstR));
   return new (p) CptInstR(file_region, name, range,
 			  PtConnectionArray(mAlloc, con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstExpr* expr1
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  PtConnectionArray con_list(mAlloc, AstConnectionVec{con1});
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region, std::move(con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* expr1
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  PtConnectionArray con_list(mAlloc, AstConnectionVec{con1});
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, std::move(con_list));
 }
 
 // module instance/UDP instance の要素を生成する．
@@ -409,16 +510,39 @@ PtFactory::new_Inst(
 {
   auto con1 = new_OrderedCon(expr1);
   PtConnectionArray con_list(mAlloc, AstConnectionVec{con1});
-  if ( name == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInst));
-    return new (p) CptInst(file_region, std::move(con_list));
-  }
-  if ( range == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInstN));
-    return new (p) CptInstN(file_region, name, std::move(con_list));
-  }
   void* p = mAlloc.get_memory(sizeof(CptInstR));
   return new (p) CptInstR(file_region, name, range, std::move(con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstExpr* expr1,
+  const AstExpr* expr2
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2});
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region, std::move(con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* expr1,
+  const AstExpr* expr2
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2});
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, std::move(con_list));
 }
 
 // module instance/UDP instance の要素を生成する．
@@ -434,16 +558,43 @@ PtFactory::new_Inst(
   auto con1 = new_OrderedCon(expr1);
   auto con2 = new_OrderedCon(expr2);
   PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2});
-  if ( name == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInst));
-    return new (p) CptInst(file_region, std::move(con_list));
-  }
-  if ( range == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInstN));
-    return new (p) CptInstN(file_region, name, std::move(con_list));
-  }
   void* p = mAlloc.get_memory(sizeof(CptInstR));
   return new (p) CptInstR(file_region, name, range, std::move(con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2, con3});
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region, std::move(con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2, con3});
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, std::move(con_list));
 }
 
 // module instance/UDP instance の要素を生成する．
@@ -461,16 +612,47 @@ PtFactory::new_Inst(
   auto con2 = new_OrderedCon(expr2);
   auto con3 = new_OrderedCon(expr3);
   PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2, con3});
-  if ( name == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInst));
-    return new (p) CptInst(file_region, std::move(con_list));
-  }
-  if ( range == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInstN));
-    return new (p) CptInstN(file_region, name, std::move(con_list));
-  }
   void* p = mAlloc.get_memory(sizeof(CptInstR));
   return new (p) CptInstR(file_region, name, range, std::move(con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3,
+  const AstExpr* expr4
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  auto con4 = new_OrderedCon(expr4);
+  PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2, con3, con4});
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region, std::move(con_list));
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3,
+  const AstExpr* expr4
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  auto con4 = new_OrderedCon(expr4);
+  PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2, con3, con4});
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, std::move(con_list));
 }
 
 // module instance/UDP instance の要素を生成する．
@@ -490,14 +672,6 @@ PtFactory::new_Inst(
   auto con3 = new_OrderedCon(expr3);
   auto con4 = new_OrderedCon(expr4);
   PtConnectionArray con_list(mAlloc, AstConnectionVec{con1, con2, con3, con4});
-  if ( name == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInst));
-    return new (p) CptInst(file_region, std::move(con_list));
-  }
-  if ( range == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptInstN));
-    return new (p) CptInstN(file_region, name, std::move(con_list));
-  }
   void* p = mAlloc.get_memory(sizeof(CptInstR));
   return new (p) CptInstR(file_region, name, range, std::move(con_list));
 }

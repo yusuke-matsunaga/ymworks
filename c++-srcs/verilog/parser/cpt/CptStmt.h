@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "parser/PtStmt.h"
-#include "parser/PtHierName.h"
+#include "parser/PtArray.h"
 #include "ym/FileRegion.h"
 
 
@@ -48,11 +48,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -238,15 +236,21 @@ public:
   Type
   type() const override;
 
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtDisable の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
   /// @brief 末尾の名前を返す．
   const char*
   name() const override;
+
+  /// @brief 階層ブランチの要素数の取得
+  SizeType
+  namebranch_num() const override;
+
+  /// @brief 先頭の階層ブランチを返す．
+  const AstNameBranch*
+  namebranch_top() const override;
+
+  /// @brief 階層ブランチのリストを返す．
+  AstNameBranchVec
+  namebranch_list() const override;
 
 
 private:
@@ -271,10 +275,9 @@ public:
   /// @brief コンストラクタ
   CptDisableH(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_list,
-    const char* tail_name
-  ) : CptDisable(file_region, tail_name),
-      mNbList{std::move(nb_list)}
+    const PtHierName& hname
+  ) : CptDisable(file_region, hname.tail_name),
+      mNbTop{hname.nb_top->reverse()}
   {
   }
 
@@ -291,11 +294,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -307,8 +308,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbList;
+  // 階層ブランチの先頭
+  const AstNameBranch* mNbTop;
 
 };
 
@@ -403,12 +404,24 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtStmt の派生クラスのための仮想関数
+  // AstStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
   Type
   type() const override;
+
+  /// @brief 階層ブランチの要素数の取得
+  SizeType
+  namebranch_num() const override;
+
+  /// @brief 先頭の階層ブランチを返す．
+  const AstNameBranch*
+  namebranch_top() const override;
+
+  /// @brief 階層ブランチのリストを返す．
+  AstNameBranchVec
+  namebranch_list() const override;
 
 };
 
@@ -424,11 +437,10 @@ public:
   /// @brief コンストラクタ
   CptEnableH(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_list,
-    const char* tail_name,
+    const PtHierName& hname,
     const AstExprList* arg_list
-  ) : CptEnable(file_region, tail_name, arg_list),
-      mNbList{std::move(nb_list)}
+  ) : CptEnable(file_region, hname.tail_name, arg_list),
+      mNbTop{hname.nb_top->reverse()}
   {
   }
 
@@ -438,18 +450,16 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtStmt の仮想関数
+  // AstStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 階層ブランチの要素数の取得
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -461,8 +471,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbList;
+  // 階層ブランチのトップ
+  const AstNameBranch* mNbTop;
 
 };
 

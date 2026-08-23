@@ -183,7 +183,7 @@ CptGenIf::then_item_list() const
 SizeType
 CptGenIf::else_declhead_num() const
 {
-  return mElseBody.declhead_num();
+  return 0;
 }
 
 // @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
@@ -192,21 +192,21 @@ CptGenIf::else_declhead(
   SizeType index
 ) const
 {
-  return mElseBody.declhead(index);
+  throw std::out_of_range{"else_declhead(index): index is out of range"};
 }
 
 // @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
 AstDeclHeadVec
 CptGenIf::else_declhead_list() const
 {
-  return mElseBody.declhead_list();
+  return {};
 }
 
 // @brief 条件が成り立たなかったときに生成される要素数の取得
 SizeType
 CptGenIf::else_item_num() const
 {
-  return mElseBody.item_num();
+  return 0;
 }
 
 // @brief 条件が成り立たなかった時に生成される要素の取得
@@ -215,12 +215,63 @@ CptGenIf::else_item(
   SizeType index
 ) const
 {
-  return mElseBody.item(index);
+  throw std::out_of_range{"else_item(index): index is out of range"};
 }
 
 // @brief 条件が成り立たなかった時に生成されるitemリストの取得
 AstItemVec
 CptGenIf::else_item_list() const
+{
+  return {};
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// ELSE 付き gen_if 文 を表すクラス
+//////////////////////////////////////////////////////////////////////
+
+// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
+SizeType
+CptGenIfElse::else_declhead_num() const
+{
+  return mElseBody.declhead_num();
+}
+
+// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
+const AstDeclHead*
+CptGenIfElse::else_declhead(
+  SizeType index
+) const
+{
+  return mElseBody.declhead(index);
+}
+
+// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
+AstDeclHeadVec
+CptGenIfElse::else_declhead_list() const
+{
+  return mElseBody.declhead_list();
+}
+
+// @brief 条件が成り立たなかったときに生成される要素数の取得
+SizeType
+CptGenIfElse::else_item_num() const
+{
+  return mElseBody.item_num();
+}
+
+// @brief 条件が成り立たなかった時に生成される要素の取得
+const AstItem*
+CptGenIfElse::else_item(
+  SizeType index
+) const
+{
+  return mElseBody.item(index);
+}
+
+// @brief 条件が成り立たなかった時に生成されるitemリストの取得
+AstItemVec
+CptGenIfElse::else_item_list() const
 {
   return mElseBody.item_list();
 }
@@ -457,17 +508,32 @@ PtFactory::new_GenIf(
   const FileRegion& file_region,
   const AstExpr* cond,
   const std::vector<PtDeclHead*>& then_declhead_list,
-  const AstItemVec& then_item_list,
-  const std::vector<PtDeclHead*>& else_declhead_list,
-  const AstItemVec& else_item_list
+  const AstItemVec& then_item_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenIf));
   return new (p) CptGenIf(file_region, cond,
 			  PtDeclHeadArray(mAlloc, then_declhead_list),
-			  PtItemArray(mAlloc, then_item_list),
-			  PtDeclHeadArray(mAlloc, else_declhead_list),
-			  PtItemArray(mAlloc, else_item_list));
+			  PtItemArray(mAlloc, then_item_list));
+}
+
+// generate if 文を生成する．
+PtItem*
+PtFactory::new_GenIfElse(
+  const FileRegion& file_region,
+  const AstExpr* cond,
+  const std::vector<PtDeclHead*>& then_declhead_list,
+  const AstItemVec& then_item_list,
+  const std::vector<PtDeclHead*>& else_declhead_list,
+  const AstItemVec& else_item_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptGenIfElse));
+  return new (p) CptGenIfElse(file_region, cond,
+			      PtDeclHeadArray(mAlloc, then_declhead_list),
+			      PtItemArray(mAlloc, then_item_list),
+			      PtDeclHeadArray(mAlloc, else_declhead_list),
+			      PtItemArray(mAlloc, else_item_list));
 }
 
 // generate case 文を生成する．

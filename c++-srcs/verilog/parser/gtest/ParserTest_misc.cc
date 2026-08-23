@@ -16,8 +16,8 @@ TEST_F(ParserTest, DelayControl)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto expr = parser.new_IntConst(fr1, 1U);
-  auto control = parser.new_DelayControl(fr, expr);
+  auto expr = parser.factory().new_IntConst(fr1, 1U);
+  auto control = parser.factory().new_DelayControl(fr, expr);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( FileRegion(fr, fr1), control->file_region() );
@@ -34,7 +34,7 @@ TEST_F(ParserTest, DelayControl)
 TEST_F(ParserTest, EventControl1)
 {
   auto fr = make_file_region(1, 2, 1, 4);
-  auto control = parser.new_EventControl(fr);
+  auto control = parser.factory().new_EventControl(fr);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
@@ -53,7 +53,8 @@ TEST_F(ParserTest, EventControl2)
   auto fr = make_file_region(1, 2, 1, 4);
   auto name_fr = make_file_region(1, 5, 1, 10);
   auto name = "event1";
-  auto control = parser.new_EventControl(fr, name, name_fr);
+  auto event = parser.factory().new_Primary(name_fr, name);
+  auto control = parser.factory().new_EventControl(fr, event);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
@@ -77,7 +78,8 @@ TEST_F(ParserTest, EventControl3)
   auto head = "head1";
   auto name = "event1";
   auto hname = parser.new_HierName(head, name);
-  auto control = parser.new_EventControl(fr, hname, name_fr);
+  auto event = parser.factory().new_Primary(name_fr, hname);
+  auto control = parser.factory().new_EventControl(fr, event);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
@@ -102,17 +104,17 @@ TEST_F(ParserTest, EventControl4)
   auto fr = make_file_region(1, 2, 1, 4);
   auto fr1 = make_file_region(1, 5, 1, 10);
   auto name1 = "event1";
-  auto expr1 = parser.new_Primary(fr1, name1);
+  auto expr1 = parser.factory().new_Primary(fr1, name1);
   auto fr2 = make_file_region(1, 20, 1, 30);
   auto head = "head2";
   auto name2 = "event2";
   auto hname = parser.new_HierName(head, name2);
-  auto expr2 = parser.new_Primary(fr2, hname);
+  auto expr2 = parser.factory().new_Primary(fr2, hname);
   parser.init_expr_list();
   parser.add_expr(expr1);
   parser.add_expr(expr2);
   auto event_list = parser.end_expr_list();
-  auto control = parser.new_EventControl(fr, event_list);
+  auto control = parser.factory().new_EventControl(fr, event_list);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
@@ -132,8 +134,8 @@ TEST_F(ParserTest, RepeatControl1)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto fr1 = make_file_region(1, 10, 1, 19);
-  auto rep = parser.new_IntConst(fr1, 1U);
-  auto control = parser.new_RepeatControl(fr, rep);
+  auto rep = parser.factory().new_IntConst(fr1, 1U);
+  auto control = parser.factory().new_RepeatControl(fr, rep);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
@@ -150,10 +152,11 @@ TEST_F(ParserTest, RepeatControl2)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto rep_fr = make_file_region(1, 10, 1, 19);
-  auto rep = parser.new_IntConst(rep_fr, 1U);
+  auto rep = parser.factory().new_IntConst(rep_fr, 1U);
   auto name_fr = make_file_region(1, 20, 1, 29);
   auto name = "event1";
-  auto control = parser.new_RepeatControl(fr, rep, name, name_fr);
+  auto event = parser.factory().new_Primary(name_fr, name);
+  auto control = parser.factory().new_RepeatControl(fr, rep, event);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
@@ -173,12 +176,13 @@ TEST_F(ParserTest, RepatControl3)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto rep_fr = make_file_region(1, 10, 1, 19);
-  auto rep = parser.new_IntConst(rep_fr, 1U);
+  auto rep = parser.factory().new_IntConst(rep_fr, 1U);
   auto name_fr = make_file_region(1, 20, 1, 29);
   auto head = "head1";
   auto name = "event1";
   auto hname = parser.new_HierName(head, name);
-  auto control = parser.new_RepeatControl(fr, rep, hname, name_fr);
+  auto event = parser.factory().new_Primary(name_fr, hname);
+  auto control = parser.factory().new_RepeatControl(fr, rep, event);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
@@ -201,20 +205,20 @@ TEST_F(ParserTest, RepeatControl4)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto rep_fr = make_file_region(1, 10, 1, 19);
-  auto rep = parser.new_IntConst(rep_fr, 1U);
+  auto rep = parser.factory().new_IntConst(rep_fr, 1U);
   auto fr1 = make_file_region(1, 20, 1, 29);
   auto name1 = "event1";
-  auto expr1 = parser.new_Primary(fr1, name1);
+  auto expr1 = parser.factory().new_Primary(fr1, name1);
   auto fr2 = make_file_region(1, 30, 1, 39);
   auto head = "head2";
   auto name2 = "event2";
   auto hname = parser.new_HierName(head, name2);
-  auto expr2 = parser.new_Primary(fr2, hname);
+  auto expr2 = parser.factory().new_Primary(fr2, hname);
   parser.init_expr_list();
   parser.add_expr(expr1);
   parser.add_expr(expr2);
   auto event_list = parser.end_expr_list();
-  auto control = parser.new_RepeatControl(fr, rep, event_list);
+  auto control = parser.factory().new_RepeatControl(fr, rep, event_list);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
@@ -230,30 +234,8 @@ TEST_F(ParserTest, RepeatControl4)
 TEST_F(ParserTest, OrderedCon1)
 {
   auto fr = make_file_region(1, 1, 1, 9);
-  auto expr = parser.new_IntConst(fr, 1U);
-  auto con = parser.new_OrderedCon(expr);
-
-  ASSERT_TRUE( con != nullptr );
-  EXPECT_EQ( nullptr, con->name() );
-  EXPECT_EQ( expr, con->expr() );
-}
-
-TEST_F(ParserTest, OrderedCon2)
-{
-  auto fr = make_file_region(1, 1, 1, 9);
-  auto expr = parser.new_IntConst(fr, 1U);
-  auto attr_name = "attr1";
-  auto fr1 = make_file_region(1, 2, 3, 4);
-  auto attr_val = parser.new_IntConst(fr1, 2);
-  auto as = parser.new_AttrSpec(fr1, attr_name, attr_val);
-  parser.init_attrspec_list();
-  parser.add_attrspec(as);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto ai = parser.new_AttrInst(fr2);
-  parser.init_attrinst_list();
-  parser.add_attrinst(ai);
-  auto ai_list = parser.new_AttrInstList();
-  auto con = parser.new_OrderedCon(fr, expr, ai_list);
+  auto expr = parser.factory().new_IntConst(fr, 1U);
+  auto con = parser.factory().new_OrderedCon(expr);
 
   ASSERT_TRUE( con != nullptr );
   EXPECT_EQ( nullptr, con->name() );
@@ -265,8 +247,8 @@ TEST_F(ParserTest, NamedCon1)
   auto fr1 = make_file_region(1, 1, 1, 9);
   auto name = "name1";
   auto fr2 = make_file_region(1, 10, 1, 19);
-  auto expr = parser.new_IntConst(fr2, 1U);
-  auto con = parser.new_NamedCon(FileRegion(fr1, fr2), name, expr);
+  auto expr = parser.factory().new_IntConst(fr2, 1U);
+  auto con = parser.factory().new_NamedCon(FileRegion(fr1, fr2), name, expr);
 
   ASSERT_TRUE( con != nullptr );
   EXPECT_STREQ( name, con->name() );
@@ -278,7 +260,7 @@ TEST_F(ParserTest, Strength1)
   auto fr = make_file_region(1, 2, 3, 4);
   auto val0 = VpiStrength::SupplyDrive;
   auto val1 = VpiStrength::PullDrive;
-  auto str = parser.new_Strength(fr, val0, val1);
+  auto str = parser.factory().new_Strength(fr, val0, val1);
 
   ASSERT_TRUE( str != nullptr );
   EXPECT_EQ( fr, str->file_region() );
@@ -291,7 +273,7 @@ TEST_F(ParserTest, Strength2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto val0 = VpiStrength::WeakDrive;
-  auto str = parser.new_Strength(fr, val0);
+  auto str = parser.factory().new_Strength(fr, val0);
 
   ASSERT_TRUE( str != nullptr );
   EXPECT_EQ( fr, str->file_region() );
@@ -304,8 +286,8 @@ TEST_F(ParserTest, Delay1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
-  auto expr1 = parser.new_IntConst(fr1, 1);
-  auto delay = parser.new_Delay(fr, expr1);
+  auto expr1 = parser.factory().new_IntConst(fr1, 1);
+  auto delay = parser.factory().new_Delay(fr, expr1);
 
   ASSERT_TRUE( delay != nullptr );
   EXPECT_EQ( fr, delay->file_region() );
@@ -318,10 +300,10 @@ TEST_F(ParserTest, Delay2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
-  auto expr1 = parser.new_IntConst(fr1, 1);
+  auto expr1 = parser.factory().new_IntConst(fr1, 1);
   auto fr2 = make_file_region(1, 10, 1, 19);
-  auto expr2 = parser.new_IntConst(fr2, 2);
-  auto delay = parser.new_Delay(fr, expr1, expr2);
+  auto expr2 = parser.factory().new_IntConst(fr2, 2);
+  auto delay = parser.factory().new_Delay(fr, expr1, expr2);
 
   ASSERT_TRUE( delay != nullptr );
   EXPECT_EQ( fr, delay->file_region() );
@@ -334,12 +316,12 @@ TEST_F(ParserTest, Delay3)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
-  auto expr1 = parser.new_IntConst(fr1, 1);
+  auto expr1 = parser.factory().new_IntConst(fr1, 1);
   auto fr2 = make_file_region(1, 10, 1, 19);
-  auto expr2 = parser.new_IntConst(fr2, 2);
+  auto expr2 = parser.factory().new_IntConst(fr2, 2);
   auto fr3 = make_file_region(1, 20, 1, 29);
-  auto expr3 = parser.new_IntConst(fr3, 3);
-  auto delay = parser.new_Delay(fr, expr1, expr2, expr3);
+  auto expr3 = parser.factory().new_IntConst(fr3, 3);
+  auto delay = parser.factory().new_Delay(fr, expr1, expr2, expr3);
 
   ASSERT_TRUE( delay != nullptr );
   EXPECT_EQ( fr, delay->file_region() );
@@ -442,10 +424,10 @@ TEST_F(ParserTest, Part1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
-  auto expr1 = parser.new_IntConst(fr1, 3);
+  auto expr1 = parser.factory().new_IntConst(fr1, 3);
   auto fr2 = make_file_region(1, 10, 1, 19);
-  auto expr2 = parser.new_IntConst(fr2, 2);
-  auto part = parser.new_Part(fr, VpiRangeMode::Const, expr1, expr2);
+  auto expr2 = parser.factory().new_IntConst(fr2, 2);
+  auto part = parser.factory().new_Part(fr, VpiRangeMode::Const, expr1, expr2);
 
   ASSERT_TRUE( part != nullptr );
   EXPECT_EQ( fr, part->file_region() );
@@ -458,10 +440,10 @@ TEST_F(ParserTest, Part2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
-  auto expr1 = parser.new_IntConst(fr1, 3);
+  auto expr1 = parser.factory().new_IntConst(fr1, 3);
   auto fr2 = make_file_region(1, 10, 1, 19);
-  auto expr2 = parser.new_IntConst(fr2, 2);
-  auto part = parser.new_Part(fr, VpiRangeMode::Plus, expr1, expr2);
+  auto expr2 = parser.factory().new_IntConst(fr2, 2);
+  auto part = parser.factory().new_Part(fr, VpiRangeMode::Plus, expr1, expr2);
 
   ASSERT_TRUE( part != nullptr );
   EXPECT_EQ( fr, part->file_region() );
@@ -474,10 +456,10 @@ TEST_F(ParserTest, Part3)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
-  auto expr1 = parser.new_IntConst(fr1, 3);
+  auto expr1 = parser.factory().new_IntConst(fr1, 3);
   auto fr2 = make_file_region(1, 10, 1, 19);
-  auto expr2 = parser.new_IntConst(fr2, 2);
-  auto part = parser.new_Part(fr, VpiRangeMode::Minus, expr1, expr2);
+  auto expr2 = parser.factory().new_IntConst(fr2, 2);
+  auto part = parser.factory().new_Part(fr, VpiRangeMode::Minus, expr1, expr2);
 
   ASSERT_TRUE( part != nullptr );
   EXPECT_EQ( fr, part->file_region() );
@@ -491,8 +473,8 @@ TEST_F(ParserTest, AttrSpec)
   auto fr = make_file_region(1, 2, 3, 4);
   auto name1 = "attr1";
   auto fr1 = make_file_region(1, 1, 1, 9);
-  auto expr1 = parser.new_IntConst(fr1, 1);
-  auto as = parser.new_AttrSpec(fr, name1, expr1);
+  auto expr1 = parser.factory().new_IntConst(fr1, 1);
+  auto as = parser.factory().new_AttrSpec(fr, name1, expr1);
 
   ASSERT_TRUE( as != nullptr );
   EXPECT_EQ( fr, as->file_region() );
@@ -507,11 +489,10 @@ TEST_F(ParserTest, AttrInst)
   auto fr1 = make_file_region(1, 10, 1, 19);
   auto name1 = "attr1";
   auto fr2 = make_file_region(1, 20, 1, 29);
-  auto expr1 = parser.new_IntConst(fr2, 1);
-  auto as = parser.new_AttrSpec(fr1, name1, expr1);
+  auto expr1 = parser.factory().new_IntConst(fr2, 1);
+  auto as = parser.factory().new_AttrSpec(fr1, name1, expr1);
   parser.add_attrspec(as);
-  parser.init_attrinst_list();
-  auto ai = parser.new_AttrInst(fr);
+  auto ai = parser.factory().new_AttrInst(fr, parser.attrspec_list());
 
   ASSERT_TRUE( ai != nullptr );
   EXPECT_EQ( fr, ai->file_region() );

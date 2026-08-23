@@ -3,7 +3,7 @@
 /// @brief CptPrimary の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "CptPrimary.h"
@@ -51,26 +51,57 @@ CptPrimary::file_region() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス CptPrimaryI
+// クラス CptPrimaryI1
 //////////////////////////////////////////////////////////////////////
-
-// ファイル位置を返す．
-FileRegion
-CptPrimaryI::file_region() const
-{
-  return mFileRegion;
-}
 
 // @brief インデックスリストのサイズの取得
 SizeType
-CptPrimaryI::index_num() const
+CptPrimaryI1::index_num() const
+{
+  return 1;
+}
+
+// @brief インデックスの取得
+const AstExpr*
+CptPrimaryI1::index(
+  SizeType i
+) const
+{
+  if ( i > 0 ) {
+    throw std::out_of_range{"index(i): i is out of range"};
+  }
+  return mIndex;
+}
+
+// @brief インデックスリストの取得
+AstExprVec
+CptPrimaryI1::index_list() const
+{
+  return {mIndex};
+}
+
+// index_list も range も持たないとき true を返す．
+bool
+CptPrimaryI1::is_simple() const
+{
+  return false;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPrimaryI2
+//////////////////////////////////////////////////////////////////////
+
+// @brief インデックスリストのサイズの取得
+SizeType
+CptPrimaryI2::index_num() const
 {
   return mIndexList->size();
 }
 
 // @brief インデックスの取得
 const AstExpr*
-CptPrimaryI::index(
+CptPrimaryI2::index(
   SizeType i
 ) const
 {
@@ -79,14 +110,14 @@ CptPrimaryI::index(
 
 // @brief インデックスリストの取得
 AstExprVec
-CptPrimaryI::index_list() const
+CptPrimaryI2::index_list() const
 {
   return mIndexList->to_vector();
 }
 
 // index_list も range も持たないとき true を返す．
 bool
-CptPrimaryI::is_simple() const
+CptPrimaryI2::is_simple() const
 {
   return false;
 }
@@ -170,23 +201,21 @@ CptPrimaryH::file_region() const
 SizeType
 CptPrimaryH::namebranch_num() const
 {
-  return mNbList.size();
+  return mNbTop->count_num();
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptPrimaryH::namebranch(
-  SizeType index
-) const
+CptPrimaryH::namebranch_top() const
 {
-  return mNbList[index];
+  return mNbTop;
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptPrimaryH::namebranch_list() const
 {
-  return mNbList.to_vector();
+  return mNbTop->to_vector();
 }
 
 
@@ -198,23 +227,21 @@ CptPrimaryH::namebranch_list() const
 SizeType
 CptPrimaryHI::namebranch_num() const
 {
-  return mNbList.size();
+  return mNbTop->count_num();
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptPrimaryHI::namebranch(
-  SizeType index
-) const
+CptPrimaryHI::namebranch_top() const
 {
-  return mNbList[index];
+  return mNbTop;
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptPrimaryHI::namebranch_list() const
 {
-  return mNbList.to_vector();
+  return mNbTop->to_vector();
 }
 
 
@@ -238,23 +265,21 @@ CptPrimaryHCI::is_const_index() const
 SizeType
 CptPrimaryHR::namebranch_num() const
 {
-  return mNbList.size();
+  return mNbTop->count_num();
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptPrimaryHR::namebranch(
-  SizeType index
-) const
+CptPrimaryHR::namebranch_top() const
 {
-  return mNbList[index];
+  return mNbTop;
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptPrimaryHR::namebranch_list() const
 {
-  return mNbList.to_vector();
+  return mNbTop->to_vector();
 }
 
 
@@ -266,23 +291,21 @@ CptPrimaryHR::namebranch_list() const
 SizeType
 CptPrimaryHIR::namebranch_num() const
 {
-  return mNbList.size();
+  return mNbTop->count_num();
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptPrimaryHIR::namebranch(
-  SizeType index
-) const
+CptPrimaryHIR::namebranch_top() const
 {
-  return mNbList[index];
+  return mNbTop;
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptPrimaryHIR::namebranch_list() const
 {
-  return mNbList.to_vector();
+  return mNbTop->to_vector();
 }
 
 
@@ -306,11 +329,23 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
+  const AstExpr* index
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptPrimaryI1));
+  return new (p) CptPrimaryI1(file_region, name, index);
+}
+
+// primary を生成する．
+PtExpr*
+PtFactory::new_Primary(
+  const FileRegion& file_region,
+  const char* name,
   const AstExprList* index_list
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptPrimaryI));
-  return new (p) CptPrimaryI(file_region, name, index_list);
+  void* p = mAlloc.get_memory(sizeof(CptPrimaryI2));
+  return new (p) CptPrimaryI2(file_region, name, index_list);
 }
 
 // primary を生成する．
@@ -343,59 +378,62 @@ PtFactory::new_Primary(
 PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
-  PtHierName* hname
+  const PtHierName& hname
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryH));
-  return new (p) CptPrimaryH(file_region,
-			     hname->nb_list()->to_array(mAlloc),
-			     hname->tail_name());
+  return new (p) CptPrimaryH(file_region, hname);
 }
 
 // primary を生成する．
 PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* index_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHI));
-  return new (p) CptPrimaryHI(file_region,
-			      hname->nb_list()->to_array(mAlloc),
-			      hname->tail_name(),
-			      index_list);
+  return new (p) CptPrimaryHI(file_region, hname, index_list);
 }
 
 // primary を生成する．
 PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstPart* part
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHR));
-  return new (p) CptPrimaryHR(file_region,
-			      hname->nb_list()->to_array(mAlloc),
-			      hname->tail_name(),
-			      part);
+  return new (p) CptPrimaryHR(file_region, hname, part);
 }
 
 // primary を生成する．
 PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* index_list,
   const AstPart* part
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHIR));
-  return new (p) CptPrimaryHIR(file_region,
-			       hname->nb_list()->to_array(mAlloc),
-			       hname->tail_name(),
+  return new (p) CptPrimaryHIR(file_region, hname,
 			       index_list, part);
+}
+
+// primary を生成する．
+PtExpr*
+PtFactory::new_CPrimary(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* index
+)
+{
+  auto index_list = new_ExprList({index});
+  void* p = mAlloc.get_memory(sizeof(CptPrimaryCI));
+  return new (p) CptPrimaryCI(file_region, name, index_list);
 }
 
 // primary を生成する．
@@ -407,8 +445,7 @@ PtFactory::new_CPrimary(
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCI));
-  return new (p) CptPrimaryCI(file_region, name,
-			      index_list);
+  return new (p) CptPrimaryCI(file_region, name, index_list);
 }
 
 // primary を生成する．
@@ -427,15 +464,12 @@ PtFactory::new_CPrimary(
 PtExpr*
 PtFactory::new_CPrimary(
   const FileRegion& file_region,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* index_list
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHCI));
-  return new (p) CptPrimaryHCI(file_region,
-			       hname->nb_list()->to_array(mAlloc),
-			       hname->tail_name(),
-			       index_list);
+  return new (p) CptPrimaryHCI(file_region, hname, index_list);
 }
 
 END_NAMESPACE_YM_VERILOG

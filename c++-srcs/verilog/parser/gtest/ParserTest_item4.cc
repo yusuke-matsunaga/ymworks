@@ -145,7 +145,7 @@ TEST_F(ParserTest, GenIf)
   parser.add_decl_head(net_decl, nullptr);
   parser.end_genif();
   auto fr3 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr3, 1U);
+  auto expr = parser.factory().new_IntConst(fr3, 1U);
   auto fr0 = make_file_region(1, 2, 3, 4);
   parser.new_GenIf(fr0, expr);
   parser.end_generate();
@@ -267,7 +267,7 @@ TEST_F(ParserTest, GenIfElse)
   parser.add_decl_head(net_decl2, nullptr);
   parser.end_genelse();
   auto fr5 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr5, 1U);
+  auto expr = parser.factory().new_IntConst(fr5, 1U);
   auto fr0 = make_file_region(1, 2, 3, 4);
   parser.new_GenIfElse(fr0, expr);
   parser.end_generate();
@@ -384,7 +384,7 @@ TEST_F(ParserTest, GenCase)
   parser.add_decl_head(net_decl, nullptr);
   parser.end_generate(); // for gen caseitem
   auto fr3 = make_file_region(1, 1, 1, 1);
-  auto expr = parser.new_IntConst(fr3, 1U);
+  auto expr = parser.factory().new_IntConst(fr3, 1U);
   auto expr_list = parser.new_expr_list();
   expr_list->push_back(astmgr.alloc(), expr);
   auto fr0 = make_file_region(1, 2, 3, 4);
@@ -399,7 +399,7 @@ TEST_F(ParserTest, GenCase)
   auto caseitem1 = parser.new_GenCaseItem(fr4, null_list);
   caseitem_list->push_back(astmgr.alloc(), caseitem1);
   auto fr5 = make_file_region(5, 5, 5, 5);
-  auto case_expr = parser.new_IntConst(fr5, 123U);
+  auto case_expr = parser.factory().new_IntConst(fr5, 123U);
   auto fr6 = make_file_region(6, 6, 6, 6);
   parser.new_GenCase(fr6, case_expr, caseitem_list);
   parser.end_generate();
@@ -514,11 +514,11 @@ TEST_F(ParserTest, GenFor)
   parser.add_decl_head(net_decl, nullptr);
   parser.end_generate(); // for gen for
   auto fr3 = make_file_region(1, 1, 1, 1);
-  auto init_expr = parser.new_IntConst(fr3, 1U);
+  auto init_expr = parser.factory().new_IntConst(fr3, 1U);
   auto fr4 = make_file_region(4, 4, 4, 4);
-  auto cond_expr = parser.new_IntConst(fr4, 2U);
+  auto cond_expr = parser.factory().new_IntConst(fr4, 2U);
   auto fr5 = make_file_region(5, 5, 5, 5);
-  auto next_expr = parser.new_IntConst(fr5, 3U);
+  auto next_expr = parser.factory().new_IntConst(fr5, 3U);
   auto varname = "i";
   auto blockname = "block1";
   auto fr0 = make_file_region(1, 2, 3, 4);
@@ -635,11 +635,11 @@ TEST_F(ParserTest, GenFor_bad)
   parser.add_decl_head(net_decl, nullptr);
   parser.end_generate(); // for gen for
   auto fr3 = make_file_region(1, 1, 1, 1);
-  auto init_expr = parser.new_IntConst(fr3, 1U);
+  auto init_expr = parser.factory().new_IntConst(fr3, 1U);
   auto fr4 = make_file_region(4, 4, 4, 4);
-  auto cond_expr = parser.new_IntConst(fr4, 2U);
+  auto cond_expr = parser.factory().new_IntConst(fr4, 2U);
   auto fr5 = make_file_region(5, 5, 5, 5);
-  auto next_expr = parser.new_IntConst(fr5, 3U);
+  auto next_expr = parser.factory().new_IntConst(fr5, 3U);
   auto varname = "i";
   auto nextname = "j";
   auto blockname = "block1";

@@ -16,11 +16,7 @@ TEST_F(ParserTest, UdpValue1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   for ( auto sym1: { '0', '1', 'x', 'b', '?', 'r', 'f', 'p', 'n', '-', '*' } ) {
-    parser.init_udp_value_list();
-    parser.new_UdpValue(fr, sym1);
-    auto& udp_value_list = parser._udp_value_list();
-    ASSERT_EQ( 1, udp_value_list.size() );
-    auto uv = udp_value_list.front();
+    auto uv = parser.factory().new_UdpValue(fr, sym1);
 
     ASSERT_TRUE( uv != nullptr );
     EXPECT_EQ( fr, uv->file_region() );
@@ -33,11 +29,7 @@ TEST_F(ParserTest, UdpValue2)
   auto fr = make_file_region(1, 2, 3, 4);
   for ( auto sym1: { '0', '1', 'x', 'b', '?' } ) {
     for ( auto sym2: { '0', '1', 'x', 'b', '?' } ) {
-      parser.init_udp_value_list();
-      parser.new_UdpValue(fr, sym1, sym2);
-      auto& udp_value_list = parser._udp_value_list();
-      ASSERT_EQ( 1, udp_value_list.size() );
-      auto uv = udp_value_list.front();
+      auto uv = parser.factory().new_UdpValue(fr, sym1, sym2);
 
       ASSERT_TRUE( uv != nullptr );
       EXPECT_EQ( fr, uv->file_region() );
@@ -50,17 +42,17 @@ TEST_F(ParserTest, UdpEntry1)
 {
   parser.init_udp();
   auto fr = make_file_region(1, 2, 3, 4);
-  parser.init_udp_value_list();
+  parser.init_udpvalue_list();
   auto fr1 = make_file_region(1, 1, 1, 9);
   auto isym1 = '0';
-  parser.new_UdpValue(fr1, isym1);
-  auto val1 = parser._udp_value_list().front();
+  auto val1 = parser.factory().new_UdpValue(fr1, isym1);
+  parser.add_udpvalue(val1);
   auto fr2 = make_file_region(1, 10, 1, 19);
   auto osym1 = '1';
-  parser.new_UdpEntry(fr1, fr2, osym1);
-  auto& udp_entry_list = parser._udp_entry_list();
-  ASSERT_EQ( 1, udp_entry_list.size() );
-  auto ue = udp_entry_list.front();
+  auto oval = parser.factory().new_UdpValue(fr2, osym1);
+  auto ue = parser.factory().new_UdpEntry(fr1,
+					  parser.udpvalue_list(),
+					  oval);
 
   ASSERT_TRUE( ue != nullptr );
   EXPECT_EQ( 1, ue->input_num() );
@@ -69,27 +61,27 @@ TEST_F(ParserTest, UdpEntry1)
 
   EXPECT_EQ( VlUdpVal(isym1), val1->symbol() );
   EXPECT_EQ( nullptr, ue->current() );
-  auto oval = ue->output();
-  EXPECT_EQ( VlUdpVal(osym1), oval->symbol() );
+  EXPECT_EQ( oval, ue->output() );
 }
 
 TEST_F(ParserTest, UdpEntry2)
 {
   parser.init_udp();
   auto fr = make_file_region(1, 2, 3, 4);
-  parser.init_udp_value_list();
+  parser.init_udpvalue_list();
   auto fr1 = make_file_region(1, 1, 1, 9);
   auto isym1 = '0';
-  parser.new_UdpValue(fr1, isym1);
-  auto val1 = parser._udp_value_list().front();
+  auto val1 = parser.factory().new_UdpValue(fr1, isym1);
+  parser.add_udpvalue(val1);
   auto fr2 = make_file_region(1, 10, 1, 19);
   auto csym1 = 'x';
+  auto cval = parser.factory().new_UdpValue(fr2, csym1);
   auto fr3 = make_file_region(1, 20, 1, 29);
   auto osym1 = '1';
-  parser.new_UdpEntry(fr1, fr2, csym1, fr3, osym1);
-  auto& udp_entry_list = parser._udp_entry_list();
-  ASSERT_EQ( 1, udp_entry_list.size() );
-  auto ue = udp_entry_list.front();
+  auto oval = parser.factory().new_UdpValue(fr3, osym1);
+  auto ue = parser.factory().new_UdpEntry(fr1,
+					  parser.udpvalue_list(),
+					  cval, oval);
 
   ASSERT_TRUE( ue != nullptr );
   EXPECT_EQ( 1, ue->input_num() );
@@ -97,9 +89,9 @@ TEST_F(ParserTest, UdpEntry2)
 	     ue->input_list() );
 
   EXPECT_EQ( VlUdpVal(isym1), val1->symbol() );
-  auto cval = ue->current();
+  EXPECT_EQ( cval, ue->current() );
   EXPECT_EQ( VlUdpVal(csym1), cval->symbol() );
-  auto oval = ue->output();
+  EXPECT_EQ( oval, ue->output() );
   EXPECT_EQ( VlUdpVal(osym1), oval->symbol() );
 }
 
@@ -108,20 +100,24 @@ TEST_F(ParserTest, Udp1995)
   parser.init_udp();
   {
     auto fr = make_file_region(1, 2, 3, 4);
-    parser.init_udp_value_list();
+    parser.init_udpvalue_list();
     auto fr1 = make_file_region(1, 1, 1, 9);
     auto isym1 = '0';
-    parser.new_UdpValue(fr1, isym1);
+    auto val1 = parser.factory().new_UdpValue(fr1, isym1);
+    parser.add_udpvalue(val1);
     auto fr2 = make_file_region(1, 10, 1, 19);
     auto osym1 = '1';
-    parser.new_UdpEntry(fr1, fr2, osym1);
+    auto oval = parser.factory().new_UdpValue(fr2, osym1);
+    auto entry = parser.factory().new_UdpEntry(fr1,
+					       parser.udpvalue_list(),
+					       oval);
   }
   auto fr = make_file_region(1, 1, 10, 10);
   auto name = "udp1";
   auto init_name = "var1";
   auto init_loc = make_file_region(2, 2, 2, 2);
   auto fr1 = make_file_region(3, 3, 3, 3);
-  auto init_value = parser.new_IntConst(fr1, 1);
+  auto init_value = parser.factory().new_IntConst(fr1, 1);
   parser.new_Udp1995(fr, name, init_name, init_loc, init_value, nullptr);
 }
 

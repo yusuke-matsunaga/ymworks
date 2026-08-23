@@ -30,6 +30,20 @@ CptContAssignH::type() const
   return ContAssign;
 }
 
+// @brief strength の取得
+const AstStrength*
+CptContAssignH::strength() const
+{
+  return nullptr;
+}
+
+// @brief delay の取得
+const AstDelay*
+CptContAssignH::delay() const
+{
+  return nullptr;
+}
+
 // @brief continuous assign の要素数の取得
 SizeType
 CptContAssignH::contassign_num() const
@@ -131,26 +145,49 @@ CptContAssign::rhs() const
 PtItem*
 PtFactory::new_ContAssignH(
   const FileRegion& file_region,
+  const AstContAssignVec& elem_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptContAssignH));
+  return new (p) CptContAssignH(file_region,
+				PtContAssignArray(mAlloc, elem_list));
+}
+
+// continuous assign 文のヘッダを生成する．
+PtItem*
+PtFactory::new_ContAssignH(
+  const FileRegion& file_region,
+  const AstDelay* delay,
+  const AstContAssignVec& elem_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptContAssignHD));
+  return new (p) CptContAssignHD(file_region, delay,
+				 PtContAssignArray(mAlloc, elem_list));
+}
+
+// continuous assign 文のヘッダを生成する．
+PtItem*
+PtFactory::new_ContAssignH(
+  const FileRegion& file_region,
+  const AstStrength* strength,
+  const AstContAssignVec& elem_list
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptContAssignHS));
+  return new (p) CptContAssignHS(file_region, strength,
+				 PtContAssignArray(mAlloc, elem_list));
+}
+
+// continuous assign 文のヘッダを生成する．
+PtItem*
+PtFactory::new_ContAssignH(
+  const FileRegion& file_region,
   const AstStrength* strength,
   const AstDelay* delay,
   const AstContAssignVec& elem_list
 )
 {
-  if ( strength == nullptr ) {
-    if ( delay == nullptr ) {
-      void* p = mAlloc.get_memory(sizeof(CptContAssignH));
-      return new (p) CptContAssignH(file_region,
-				    PtContAssignArray(mAlloc, elem_list));
-    }
-    void* p = mAlloc.get_memory(sizeof(CptContAssignHD));
-    return new (p) CptContAssignHD(file_region, delay,
-				   PtContAssignArray(mAlloc, elem_list));
-  }
-  if ( delay == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptContAssignHS));
-    return new (p) CptContAssignHS(file_region, strength,
-				   PtContAssignArray(mAlloc, elem_list));
-  }
   void* p = mAlloc.get_memory(sizeof(CptContAssignHSD));
   return new (p) CptContAssignHSD(file_region, strength, delay,
 				  PtContAssignArray(mAlloc, elem_list));

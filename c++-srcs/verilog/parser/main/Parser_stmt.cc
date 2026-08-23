@@ -27,7 +27,7 @@ Parser::new_Disable(
 PtStmt*
 Parser::new_Disable(
   const FileRegion& fr,
-  PtHierName* hname
+  const PtHierName& hname
 )
 {
   return mFactory.new_Disable(fr, hname);
@@ -48,7 +48,7 @@ Parser::new_Enable(
 PtStmt*
 Parser::new_Enable(
   const FileRegion& fr,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* arg_list
 )
 {

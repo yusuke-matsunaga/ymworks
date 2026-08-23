@@ -14,79 +14,6 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// PtiPort の生成
-//////////////////////////////////////////////////////////////////////
-
-// @brief 空のポートの生成
-void
-Parser::new_Port()
-{
-  auto port = mFactory.new_Port(FileRegion());
-  mPortList.push_back(port);
-}
-
-// @brief ポートの生成 (内側の式のみ指定するタイプ)
-void
-Parser::new_Port1(
-  const FileRegion& file_region
-)
-{
-  // 明示的に外の名前がついていなくても内側の名前が1つで
-  // 範囲指定が無いときには内側の名前を外側の名前とする．
-  if ( mPortRefList.size() == 1 ) {
-    auto portref = mPortRefList.front();
-    const char* name = nullptr;
-    if ( portref->index_num() == 0 && portref->part() == nullptr ) {
-      name = portref->name();
-    }
-    mPortRefList.clear();
-    auto port = mFactory.new_Port(file_region, name, portref);
-    mPortList.push_back(port);
-  }
-  else {
-    auto expr_list = new_ExprList(mPortRefList);
-    auto expr = new_Concat(file_region, expr_list);
-    auto port = mFactory.new_Port(file_region, nullptr, expr,
-				  expr_list);
-    mPortList.push_back(port);
-  }
-}
-
-// @brief ポートの生成 (外側の名前のみ指定するタイプ)
-void
-Parser::new_Port2(
-  const FileRegion& file_region,
-  const char* name
-)
-{
-  auto port = mFactory.new_Port(file_region, name);
-  mPortList.push_back(port);
-}
-
-// @brief ポートの生成 (外側の名前と内側の式を指定するタイプ)
-void
-Parser::new_Port3(
-  const FileRegion& file_region,
-  const char* name
-)
-{
-  if ( mPortRefList.size() == 1 ) {
-    auto port = mFactory.new_Port(file_region, name,
-				  mPortRefList.front());
-    mPortList.push_back(port);
-    mPortRefList.clear();
-  }
-  else {
-    auto expr_list = new_ExprList(mPortRefList);
-    auto expr = new_Concat(file_region, expr_list);
-    auto port = mFactory.new_Port(file_region, name, expr,
-				  expr_list);
-    mPortList.push_back(port);
-  }
-}
-
-
-//////////////////////////////////////////////////////////////////////
 // PtiPortArray の生成
 //////////////////////////////////////////////////////////////////////
 
@@ -143,45 +70,72 @@ Parser::new_PortArray(
   return vec;
 }
 
-
-//////////////////////////////////////////////////////////////////////
-// portref の生成
-//////////////////////////////////////////////////////////////////////
-
-// @brief ポート参照式の生成
+// @brief 空のポートの生成
 void
-Parser::new_PortRef(
-  const FileRegion& fr,
+Parser::new_Port()
+{
+  auto port = mFactory.new_Port(FileRegion());
+  mPortList.push_back(port);
+}
+
+// @brief ポートの生成 (内側の式のみ指定するタイプ)
+void
+Parser::new_Port1(
+  const FileRegion& file_region
+)
+{
+  // 明示的に外の名前がついていなくても内側の名前が1つで
+  // 範囲指定が無いときには内側の名前を外側の名前とする．
+  if ( mPortRefList.size() == 1 ) {
+    auto portref = mPortRefList.front();
+    const char* name = nullptr;
+    if ( portref->index_num() == 0 && portref->part() == nullptr ) {
+      name = portref->name();
+    }
+    mPortRefList.clear();
+    auto port = mFactory.new_Port(file_region, name, portref);
+    mPortList.push_back(port);
+  }
+  else {
+    auto expr_list = mFactory.new_ExprList(mPortRefList);
+    auto expr = mFactory.new_Concat(file_region, expr_list);
+    auto port = mFactory.new_Port(file_region, nullptr, expr,
+				  expr_list);
+    mPortList.push_back(port);
+  }
+}
+
+// @brief ポートの生成 (外側の名前のみ指定するタイプ)
+void
+Parser::new_Port2(
+  const FileRegion& file_region,
   const char* name
 )
 {
-  auto primary = mFactory.new_Primary(fr, name);
-  mPortRefList.push_back(primary);
+  auto port = mFactory.new_Port(file_region, name);
+  mPortList.push_back(port);
 }
 
-// @brief ビット指定つきポート参照式の生成
+// @brief ポートの生成 (外側の名前と内側の式を指定するタイプ)
 void
-Parser::new_PortRef(
-  const FileRegion& fr,
-  const char* name,
-  const AstExpr* index
+Parser::new_Port3(
+  const FileRegion& file_region,
+  const char* name
 )
 {
-  auto index_list = new_ExprList({index});
-  auto primary = mFactory.new_Primary(fr, name, index_list);
-  mPortRefList.push_back(primary);
-}
-
-// @brief 範囲指定付きポート参照式の生成
-void
-Parser::new_PortRef(
-  const FileRegion& fr,
-  const char* name,
-  const AstPart* part
-)
-{
-  auto primary = mFactory.new_Primary(fr, name, part);
-  mPortRefList.push_back(primary);
+  if ( mPortRefList.size() == 1 ) {
+    auto port = mFactory.new_Port(file_region, name,
+				  mPortRefList.front());
+    mPortList.push_back(port);
+    mPortRefList.clear();
+  }
+  else {
+    auto expr_list = mFactory.new_ExprList(mPortRefList);
+    auto expr = mFactory.new_Concat(file_region, expr_list);
+    auto port = mFactory.new_Port(file_region, name, expr,
+				  expr_list);
+    mPortList.push_back(port);
+  }
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -65,6 +65,7 @@ class AstDelay;
 class AstControl;
 class AstConnection;
 class AstNameBranch;
+class AstAttrInstList;
 class AstAttrInst;
 class AstAttrSpec;
 
@@ -163,12 +164,12 @@ public:
   SizeType
   namebranch_num() const = 0;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
+  ///
+  /// 階層ブランチを持たない時は nullptr を返す．
   virtual
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const = 0;
+  namebranch_top() const = 0;
 
   /// @brief 階層ブランチのリストを返す．
   virtual

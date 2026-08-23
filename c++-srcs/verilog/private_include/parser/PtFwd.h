@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
+#include "parser/PtHierName.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -34,9 +35,6 @@ class PtRange;
 class PtExpr;
 class PtExprList;
 class PtPart;
-
-// in PtHierName.h
-class PtHierName;
 
 // in PtItem.h
 class PtItem;

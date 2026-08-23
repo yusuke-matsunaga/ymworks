@@ -79,15 +79,4 @@ PtFactory::new_OrderedConArray(
   return PtConnectionArray(mAlloc, con1, con2, con3, con4);
 }
 
-// @brief 階層名の生成
-PtHierName*
-PtFactory::new_HierName(
-  const AstNameBranch* nb,
-  const char* name
-)
-{
-  void* p = mAlloc.get_memory(sizeof(PtHierName));
-  return new (p) PtHierName(mAlloc, nb, name);
-}
-
 END_NAMESPACE_YM_VERILOG

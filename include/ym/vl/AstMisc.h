@@ -269,6 +269,34 @@ public:
   int
   index() const = 0;
 
+  /// @brief 次の要素の取得
+  virtual
+  const AstNameBranch*
+  link() const = 0;
+
+  /// @brief 自身を含めたリンクトリストの要素数を返す．
+  SizeType
+  count_num() const
+  {
+    if ( link() == nullptr ) {
+      return 1;
+    }
+    return link()->count_num() + 1;
+  }
+
+  /// @brief リンクトリストの内容を std::vector<> に変換する．
+  AstNameBranchVec
+  to_vector() const
+  {
+    auto n = count_num();
+    AstNameBranchVec vec;
+    vec.reserve(n);
+    for ( auto nb = this; nb != nullptr; nb = nb->link() ) {
+      vec.push_back(nb);
+    }
+    return vec;
+  }
+
   /// @brief インデックスを含めた名前を返す．
   std::string
   decompile() const

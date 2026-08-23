@@ -41,10 +41,14 @@ public:
   void
   check_item_ContAssign(
     const AstItem* item,
+    const AstStrength* strength,
+    const AstDelay* delay,
     const std::vector<const AstContAssign*>& ca_list
   )
   {
     check_item_common(item, AstItem::ContAssign);
+    EXPECT_EQ( strength, item->strength() );
+    EXPECT_EQ( delay, item->delay() );
     EXPECT_EQ( ca_list.size(), item->contassign_num() );
     EXPECT_EQ( ca_list, item->contassign_list() );
   }
@@ -297,6 +301,10 @@ public:
 	 type != AstItem::GenFor ) {
       check_item_no_container(item);
     }
+    if ( type != AstItem::ContAssign &&
+	 type != AstItem::GateInst ) {
+      check_item_no_strength_delay(item);
+    }
     if ( type != AstItem::DefParam ) {
       check_item_no_DefParam(item);
     }
@@ -362,6 +370,18 @@ public:
 		  std::logic_error );
   }
 
+  // strength/delay を持たない時のテスト
+  void
+  check_item_no_strength_delay(
+    const AstItem* item
+  )
+  {
+    EXPECT_THROW( item->strength(),
+		  std::logic_error );
+    EXPECT_THROW( item->delay(),
+		  std::logic_error );
+  }
+
   // DefParam 型でない場合のテスト
   void
   check_item_no_DefParam(
@@ -417,10 +437,6 @@ public:
   )
   {
     EXPECT_THROW( item->prim_type(),
-		  std::logic_error );
-    EXPECT_THROW( item->strength(),
-		  std::logic_error );
-    EXPECT_THROW( item->delay(),
 		  std::logic_error );
   }
 

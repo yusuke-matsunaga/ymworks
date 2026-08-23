@@ -5,7 +5,7 @@
 /// @brief CptNameBranch のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "parser/PtMisc.h"
@@ -36,7 +36,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtNameBranch の仮想関数
+  // AstNameBranch の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 名前を取り出す．
@@ -54,6 +54,31 @@ public:
   int
   index() const override;
 
+  /// @brief 次の要素の取得
+  const AstNameBranch*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtNameBranch の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief link を設定する．
+  void
+  set_link(
+    PtNameBranch* link
+  ) override;
+
+  /// @brief PtNameBranch* 型のリンクを返す．
+  PtNameBranch*
+  _link() const override;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  PtNameBranch*
+  reverse() override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -62,6 +87,9 @@ private:
 
   // 名前
   const char* mName;
+
+  // 次の要素を指すリンク
+  PtNameBranch* mLink{nullptr};
 
 };
 

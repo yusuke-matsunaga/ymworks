@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -47,6 +48,16 @@ public:
   /// @brief 型を返す．
   Type
   type() const override;
+
+  /// @brief strength の取得
+  /// @return 信号強度
+  const AstStrength*
+  strength() const override;
+
+  /// @brief delay の取得
+  /// @return 遅延
+  const AstDelay*
+  delay() const override;
 
   /// @brief continuous assign の要素数の取得
   SizeType

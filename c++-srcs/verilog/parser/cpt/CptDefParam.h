@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtHierName.h"
+#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -119,11 +119,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -169,11 +167,11 @@ public:
   /// @brief コンストラクタ
   CptDefParam2(
     const FileRegion& file_region,
-    PtNameBranchArray&& nb_array,
+    const AstNameBranch* nb_top,
     const char* tail_name,
     const AstExpr* value
   ) : CptDefParam(file_region, tail_name, value),
-      mNbList{std::move(nb_array)}
+      mNbTop{nb_top}
   {
   }
 
@@ -190,11 +188,9 @@ public:
   SizeType
   namebranch_num() const override;
 
-  /// @brief 階層ブランチを返す．
+  /// @brief 先頭の階層ブランチを返す．
   const AstNameBranch*
-  namebranch(
-    SizeType index ///< [in] インデックス ( 0 <= index < namebranch_num() )
-  ) const override;
+  namebranch_top() const override;
 
   /// @brief 階層ブランチのリストを返す．
   AstNameBranchVec
@@ -206,8 +202,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 階層ブランチのリスト
-  PtNameBranchArray mNbList;
+  // 先頭の階層ブランチ
+  const AstNameBranch* mNbTop;
 
 };
 

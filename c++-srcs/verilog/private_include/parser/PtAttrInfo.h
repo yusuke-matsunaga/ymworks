@@ -10,7 +10,6 @@
 
 #include "ym/verilog.h"
 #include "ym/vl/AstBase.h"
-#include "parser/PtList.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

@@ -10,7 +10,6 @@
 
 #include "ym/vl/AstBase.h"
 #include "alloc/Alloc.h"
-#include "parser/PtList.h"
 #include "PtAttrInfo.h"
 
 

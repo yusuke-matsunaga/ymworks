@@ -102,33 +102,33 @@ CptSpecPath::path_decl() const
 
 
 //////////////////////////////////////////////////////////////////////
-// path_decl を表すクラス
+// クラス CptPathDeclBase
 //////////////////////////////////////////////////////////////////////
 
 // ファイル位置を返す．
 FileRegion
-CptPathDecl::file_region() const
+CptPathDeclBase::file_region() const
 {
   return mFileRegion;
 }
 
 // edge_descriptor を取り出す．
 int
-CptPathDecl::edge() const
+CptPathDeclBase::edge() const
 {
   return mEdge;
 }
 
 // @brief 入力のリストの要素数の取得
 SizeType
-CptPathDecl::input_num() const
+CptPathDeclBase::input_num() const
 {
   return mInputList->size();
 }
 
 // @brief 入力の取得
 const AstExpr*
-CptPathDecl::input(
+CptPathDeclBase::input(
   SizeType index
 ) const
 {
@@ -137,35 +137,92 @@ CptPathDecl::input(
 
 // @brief 入力のリストの取得
 AstExprVec
-CptPathDecl::input_list() const
+CptPathDeclBase::input_list() const
 {
   return mInputList->to_vector();
 }
 
 // 入力の極性を取り出す．
 int
-CptPathDecl::input_pol() const
+CptPathDeclBase::input_pol() const
 {
   return mInputPol;
 }
 
 // パス記述子(?)を得る．vpiParallel か vpiFull
 VpiPathType
-CptPathDecl::op() const
+CptPathDeclBase::op() const
 {
   return mOp;
 }
 
+// 出力の極性を取り出す．
+int
+CptPathDeclBase::output_pol() const
+{
+  return mOutputPol;
+}
+
+// 式を取り出す．
+const AstExpr*
+CptPathDeclBase::expr() const
+{
+  return mExpr;
+}
+
+// path_delay_value を取り出す．
+const AstPathDelay*
+CptPathDeclBase::path_delay() const
+{
+  return mPathDelay;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPathDecl1
+//////////////////////////////////////////////////////////////////////
+
 // @brief 出力のリストの要素数の取得
 SizeType
-CptPathDecl::output_num() const
+CptPathDecl1::output_num() const
+{
+  return 1;
+}
+
+// @brief 出力の取得
+const AstExpr*
+CptPathDecl1::output(
+  SizeType index
+) const
+{
+  if ( index > 0 ) {
+    throw std::out_of_range{"output(index): index is out of range"};
+  }
+  return mOutput;
+}
+
+// @brief 出力リストの取得
+AstExprVec
+CptPathDecl1::output_list() const
+{
+  return {mOutput};
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPatHDecl2
+//////////////////////////////////////////////////////////////////////
+
+// @brief 出力のリストの要素数の取得
+SizeType
+CptPathDecl2::output_num() const
 {
   return mOutputList->size();
 }
 
 // @brief 出力の取得
 const AstExpr*
-CptPathDecl::output(
+CptPathDecl2::output(
   SizeType index
 ) const
 {
@@ -174,30 +231,9 @@ CptPathDecl::output(
 
 // @brief 出力リストの取得
 AstExprVec
-CptPathDecl::output_list() const
+CptPathDecl2::output_list() const
 {
   return mOutputList->to_vector();
-}
-
-// 出力の極性を取り出す．
-int
-CptPathDecl::output_pol() const
-{
-  return mOutputPol;
-}
-
-// 式を取り出す．
-const AstExpr*
-CptPathDecl::expr() const
-{
-  return mExpr;
-}
-
-// path_delay_value を取り出す．
-const AstPathDelay*
-CptPathDecl::path_delay() const
-{
-  return mPathDelay;
 }
 
 
@@ -342,18 +378,40 @@ PtFactory::new_PathDecl(
   const AstExprList* input_list,
   int input_pol,
   VpiPathType op,
+  const AstExpr* output,
+  int output_pol,
+  const AstExpr* expr,
+  const AstPathDelay* path_delay
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptPathDecl1));
+  return new (p) CptPathDecl1(file_region, edge,
+			      input_list, input_pol,
+			      op,
+			      output, output_pol,
+			      expr, path_delay);
+}
+
+// path 記述を生成する．
+PtPathDecl*
+PtFactory::new_PathDecl(
+  const FileRegion& file_region,
+  int edge,
+  const AstExprList* input_list,
+  int input_pol,
+  VpiPathType op,
   const AstExprList* output_list,
   int output_pol,
   const AstExpr* expr,
   const AstPathDelay* path_delay
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptPathDecl));
-  return new (p) CptPathDecl(file_region, edge,
-			     input_list, input_pol,
-			     op,
-			     output_list, output_pol,
-			     expr, path_delay);
+  void* p = mAlloc.get_memory(sizeof(CptPathDecl2));
+  return new (p) CptPathDecl2(file_region, edge,
+			      input_list, input_pol,
+			      op,
+			      output_list, output_pol,
+			      expr, path_delay);
 }
 
 // path delay value を生成する．

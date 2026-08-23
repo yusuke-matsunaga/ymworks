@@ -145,8 +145,46 @@ CptNetHVSD::delay() const
 
 
 //////////////////////////////////////////////////////////////////////
-// その他の宣言関係
+// クラス PtFactory
 //////////////////////////////////////////////////////////////////////
+
+// net 宣言のヘッダを生成する．
+PtDeclHead*
+PtFactory::new_NetH(
+  const FileRegion& file_region,
+  VpiNetType type
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptNetH));
+  return new (p) CptNetH(file_region, type, false);
+}
+
+// net 宣言のヘッダを生成する．
+PtDeclHead*
+PtFactory::new_NetH(
+  const FileRegion& file_region,
+  VpiNetType type,
+  VpiVsType vstype,
+  bool sign,
+  const AstRange* range
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptNetHV));
+  return new (p) CptNetHV(file_region, type, vstype,
+			      sign, range);
+}
+
+// net 宣言のヘッダを生成する．
+PtDeclHead*
+PtFactory::new_NetH(
+  const FileRegion& file_region,
+  VpiNetType type,
+   const AstDelay* delay
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptNetHD));
+  return new (p) CptNetHD(file_region, type, false, delay);
+}
 
 // net 宣言のヘッダを生成する．
 PtDeclHead*
@@ -156,45 +194,72 @@ PtFactory::new_NetH(
   VpiVsType vstype,
   bool sign,
   const AstRange* range,
+  const AstDelay* delay
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptNetHVD));
+  return new (p) CptNetHVD(file_region, type, vstype,
+			   sign, range, delay);
+}
+
+// net 宣言のヘッダを生成する．
+PtDeclHead*
+PtFactory::new_NetH(
+  const FileRegion& file_region,
+  VpiNetType type,
+  const AstStrength* strength
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptNetHS));
+  return new (p) CptNetHS(file_region, type, false, strength);
+}
+
+// net 宣言のヘッダを生成する．
+PtDeclHead*
+PtFactory::new_NetH(
+  const FileRegion& file_region,
+  VpiNetType type,
+  const AstStrength* strength,
+  VpiVsType vstype,
+  bool sign,
+  const AstRange* range
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptNetHVS));
+  return new (p) CptNetHVS(file_region, type, vstype,
+			   sign, range, strength);
+}
+
+// net 宣言のヘッダを生成する．
+PtDeclHead*
+PtFactory::new_NetH(
+  const FileRegion& file_region,
+  VpiNetType type,
   const AstStrength* strength,
   const AstDelay* delay
 )
 {
-  if ( range == nullptr ) {
-    if ( strength == nullptr ) {
-      if ( delay == nullptr ) {
-	void* p = mAlloc.get_memory(sizeof(CptNetH));
-	return new (p) CptNetH(file_region, type, sign);
-      }
-      void* p = mAlloc.get_memory(sizeof(CptNetHD));
-      return new (p) CptNetHD(file_region, type, sign, delay);
-    }
-    if ( delay == nullptr ) {
-      void* p = mAlloc.get_memory(sizeof(CptNetHS));
-      return new (p) CptNetHS(file_region, type, sign, strength);
-    }
-    void* p = mAlloc.get_memory(sizeof(CptNetHSD));
-    return new (p) CptNetHSD(file_region, type, sign,
-			     strength, delay);
-  }
-  if ( strength == nullptr ) {
-    if ( delay == nullptr ) {
-      void* p = mAlloc.get_memory(sizeof(CptNetHV));
-      return new (p) CptNetHV(file_region, type, vstype,
-			      sign, range);
-    }
-    void* p = mAlloc.get_memory(sizeof(CptNetHVD));
-    return new (p) CptNetHVD(file_region, type, vstype,
-			     sign, range, delay);
-  }
-  if ( delay == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptNetHVS));
-    return new (p) CptNetHVS(file_region, type, vstype,
-			     sign, range, strength);
-  }
+  void* p = mAlloc.get_memory(sizeof(CptNetHSD));
+  return new (p) CptNetHSD(file_region, type, false,
+			   strength, delay);
+}
+
+// net 宣言のヘッダを生成する．
+PtDeclHead*
+PtFactory::new_NetH(
+  const FileRegion& file_region,
+  VpiNetType type,
+  const AstStrength* strength,
+  VpiVsType vstype,
+  bool sign,
+  const AstRange* range,
+  const AstDelay* delay
+)
+{
   void* p = mAlloc.get_memory(sizeof(CptNetHVSD));
-  return new (p) CptNetHVSD(file_region, type, vstype,
-			    sign, range, strength, delay);
+  return new (p) CptNetHVSD(file_region, type,
+			    vstype, sign, range,
+			    strength, delay);
 }
 
 END_NAMESPACE_YM_VERILOG

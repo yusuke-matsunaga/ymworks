@@ -138,44 +138,53 @@ Parser::new_Primary(
 PtExpr*
 Parser::new_Primary(
   const FileRegion& fr,
-  PtHierName* hname
+  const PtHierName& hname
 )
 {
-  return mFactory.new_Primary(fr, hname);
+  auto nb_top = hname.nb_top->reverse();
+  auto tail_name = hname.tail_name;
+  return mFactory.new_Primary(fr, nb_top, tail_name);
 }
 
 // @brief インデックス付き primary の生成 (階層付き)
 PtExpr*
 Parser::new_Primary(
   const FileRegion& fr,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* index_list
 )
 {
-  return mFactory.new_Primary(fr, hname, index_list);
+  auto nb_top = hname.nb_top->reverse();
+  auto tail_name = hname.tail_name;
+  return mFactory.new_Primary(fr, nb_top, tail_name, index_list);
 }
 
 // @brief 範囲指定付き primary の生成 (階層付き)
 PtExpr*
 Parser::new_Primary(
   const FileRegion& fr,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstPart* part
 )
 {
-  return mFactory.new_Primary(fr, hname, part);
+  auto nb_top = hname.nb_top->reverse();
+  auto tail_name = hname.tail_name;
+  return mFactory.new_Primary(fr, nb_top, tail_name, part);
 }
 
 // @brief インデックスと範囲指定付き primary の生成 (階層付き)
 PtExpr*
 Parser::new_Primary(
   const FileRegion& fr,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* index_list,
   const AstPart* part
 )
 {
-  return mFactory.new_Primary(fr, hname, index_list, part);
+  auto nb_top = hname.nb_top->reverse();
+  auto tail_name = hname.tail_name;
+  return mFactory.new_Primary(fr, nb_top, tail_name,
+			      index_list, part);
 }
 
 // @brief constant primary の生成
@@ -216,11 +225,13 @@ Parser::new_CPrimary(
 PtExpr*
 Parser::new_CPrimary(
   const FileRegion& fr,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* index_list
 )
 {
-  return mFactory.new_CPrimary(fr, hname, index_list);
+  auto nb_top = hname.nb_top->reverse();
+  auto tail_name = hname.tail_name;
+  return mFactory.new_CPrimary(fr, nb_top, tail_name, index_list);
 }
 
 // @brief function call の生成
@@ -241,12 +252,14 @@ Parser::new_FuncCall(
 PtExpr*
 Parser::new_FuncCall(
   const FileRegion& fr,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExprList* arg_list,
   const AstAttrInstList* ai_list
 )
 {
-  auto expr = mFactory.new_FuncCall(fr, hname, arg_list);
+  auto nb_top = hname.nb_top->reverse();
+  auto tail_name = hname.tail_name;
+  auto expr = mFactory.new_FuncCall(fr, nb_top, tail_name, arg_list);
   reg_attrinst(expr, ai_list);
   return expr;
 }
@@ -323,18 +336,6 @@ Parser::new_StringConst(
 )
 {
   return mFactory.new_StringConst(fr, value);
-}
-
-// @brief 範囲指定の生成
-PtPart*
-Parser::new_Part(
-  const FileRegion& fr,
-  VpiRangeMode mode,
-  const AstExpr* expr1,
-  const AstExpr* expr2
-)
-{
-  return mFactory.new_Part(fr, mode, expr1, expr2);
 }
 
 END_NAMESPACE_YM_VERILOG

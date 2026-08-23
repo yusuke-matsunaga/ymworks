@@ -67,9 +67,9 @@ public:
     SizeType right_val
   )
   {
-    auto left = parser.new_IntConst(left_fr, left_val);
-    auto right = parser.new_IntConst(right_fr, right_val);
-    return parser.new_Range(FileRegion(left_fr, right_fr), left, right);
+    auto left = parser.factory().new_IntConst(left_fr, left_val);
+    auto right = parser.factory().new_IntConst(right_fr, right_val);
+    return parser.factory().new_Range(FileRegion(left_fr, right_fr), left, right);
   }
 
   // Part を作る．
@@ -82,10 +82,10 @@ public:
     VpiRangeMode mode
   )
   {
-    auto left = parser.new_IntConst(left_fr, left_val);
-    auto right = parser.new_IntConst(right_fr, right_val);
-    return parser.new_Part(FileRegion(left_fr, right_fr),
-			   mode, left, right);
+    auto left = parser.factory().new_IntConst(left_fr, left_val);
+    auto right = parser.factory().new_IntConst(right_fr, right_val);
+    return parser.factory().new_Part(FileRegion(left_fr, right_fr),
+				     mode, left, right);
   }
 
 
@@ -130,14 +130,15 @@ public:
     EXPECT_EQ( nb_vec.size(), obj->namebranch_num() );
     EXPECT_EQ( nb_vec, obj->namebranch_list() );
     std::string exp_name;
-    SizeType n = obj->namebranch_num();
-    for ( SizeType index = 0; index < n; ++ index ) {
-      auto nb = obj->namebranch(index);
+    EXPECT_EQ( nb_vec.size(), obj->namebranch_num() );
+    EXPECT_EQ( nb_vec, obj->namebranch_list() );
+    SizeType index = 0;
+    for ( auto nb = obj->namebranch_top(); nb != nullptr; nb = nb->link() ) {
       EXPECT_EQ( nb_vec[index], nb );
+      ++ index;
     }
     if ( obj->name() != nullptr ) {
-      for ( SizeType index = 0; index < n; ++ index ) {
-	auto nb = obj->namebranch(index);
+      for ( auto nb = obj->namebranch_top(); nb != nullptr; nb = nb->link() ) {
 	exp_name += nb->decompile();
 	exp_name += ".";
       }

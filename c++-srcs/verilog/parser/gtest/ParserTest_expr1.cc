@@ -19,7 +19,7 @@ TEST_F(ParserTest, Opr1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   for ( auto type: { VpiOpType::Minus, VpiOpType::Plus,
 		     VpiOpType::Not, VpiOpType::BitNeg,
 		     VpiOpType::UnaryAnd, VpiOpType::UnaryNand,
@@ -86,9 +86,9 @@ TEST_F(ParserTest, Opr2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.new_IntConst(fr1, 123U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr2 = parser.new_IntConst(fr2, 4U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 4U);
   for ( auto type: { VpiOpType::Sub,
 		     VpiOpType::Div, VpiOpType::Mod,
 		     VpiOpType::Eq, VpiOpType::Neq,
@@ -172,11 +172,11 @@ TEST_F(ParserTest, Opr3)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.new_IntConst(fr1, 1U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr2 = parser.new_IntConst(fr2, 2U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 2U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto expr3 = parser.new_IntConst(fr3, 3U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 3U);
   auto type = VpiOpType::Condition;
   auto expr = parser.new_Opr(fr, type, expr1, expr2, expr3, nullptr);
 
@@ -196,13 +196,13 @@ TEST_F(ParserTest, Concat)
   auto fr = make_file_region(1, 2, 3, 4);
   auto expr_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.new_IntConst(fr1, 1U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 1U);
   expr_list->push_back(astmgr.alloc(), expr1);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr2 = parser.new_IntConst(fr2, 2U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 2U);
   expr_list->push_back(astmgr.alloc(), expr2);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto expr3 = parser.new_IntConst(fr3, 3U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 3U);
   expr_list->push_back(astmgr.alloc(), expr3);
   auto expr = parser.new_Concat(fr, expr_list);
 
@@ -221,16 +221,16 @@ TEST_F(ParserTest, MultiConcat)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto rep = parser.new_IntConst(fr1, 4U);
+  auto rep = parser.factory().new_IntConst(fr1, 4U);
   auto expr_list = parser.new_expr_list();
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr1 = parser.new_IntConst(fr2, 1U);
+  auto expr1 = parser.factory().new_IntConst(fr2, 1U);
   expr_list->push_back(astmgr.alloc(), expr1);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto expr2 = parser.new_IntConst(fr3, 2U);
+  auto expr2 = parser.factory().new_IntConst(fr3, 2U);
   expr_list->push_back(astmgr.alloc(), expr2);
   auto fr4 = make_file_region(4, 4, 4, 4);
-  auto expr3 = parser.new_IntConst(fr4, 3U);
+  auto expr3 = parser.factory().new_IntConst(fr4, 3U);
   expr_list->push_back(astmgr.alloc(), expr3);
   auto expr = parser.new_MultiConcat(fr, rep, expr_list);
 
@@ -249,11 +249,11 @@ TEST_F(ParserTest, MinTypMax)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.new_IntConst(fr1, 1U);
+  auto expr1 = parser.factory().new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr2 = parser.new_IntConst(fr2, 2U);
+  auto expr2 = parser.factory().new_IntConst(fr2, 2U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto expr3 = parser.new_IntConst(fr3, 3U);
+  auto expr3 = parser.factory().new_IntConst(fr3, 3U);
   auto expr = parser.new_MinTypMax(fr, expr1, expr2, expr3);
 
   ASSERT_TRUE( expr != nullptr );

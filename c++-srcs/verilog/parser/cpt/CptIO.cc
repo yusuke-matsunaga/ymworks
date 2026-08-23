@@ -160,6 +160,19 @@ CptIOItemI::init_value() const
 // クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
+// @brief 1ビットの IO 宣言のヘッダの生成
+PtIOHead*
+PtFactory::new_IOHead(
+  const FileRegion& file_region,
+  VpiDir dir,
+  bool sign
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptIOH));
+  return new (p) CptIOH(file_region, dir, VpiAuxType::None,
+			VpiNetType::None, VpiVarType::None, sign);
+}
+
 // @brief 範囲付きの IO 宣言のヘッダの生成
 PtIOHead*
 PtFactory::new_IOHead(
@@ -169,14 +182,22 @@ PtFactory::new_IOHead(
   const AstRange* range
 )
 {
-  if ( range == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptIOH));
-    return new (p) CptIOH(file_region, dir, VpiAuxType::None,
-			  VpiNetType::None, VpiVarType::None, sign);
-  }
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
   return new (p) CptIOHV(file_region, dir, VpiAuxType::None,
 			 VpiNetType::None, sign, range);
+}
+
+// @brief 1ビットの IO 宣言のヘッダの生成 (reg 型)
+PtIOHead*
+PtFactory::new_RegIOHead(
+  const FileRegion& file_region,
+  VpiDir dir,
+  bool sign
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptIOH));
+  return new (p) CptIOH(file_region, dir, VpiAuxType::Reg,
+			VpiNetType::None, VpiVarType::None, sign);
 }
 
 // @brief 範囲付きの IO 宣言のヘッダの生成 (reg 型)
@@ -188,14 +209,23 @@ PtFactory::new_RegIOHead(
   const AstRange* range
 )
 {
-  if ( range == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptIOH));
-    return new (p) CptIOH(file_region, dir, VpiAuxType::Reg,
-			  VpiNetType::None, VpiVarType::None, sign);
-  }
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
   return new (p) CptIOHV(file_region, dir, VpiAuxType::Reg,
 			 VpiNetType::None, sign, range);
+}
+
+// @brief 1ビットの IO 宣言のヘッダの生成 (ネット型)
+PtIOHead*
+PtFactory::new_NetIOHead(
+  const FileRegion& file_region,
+  VpiDir dir,
+  VpiNetType net_type,
+  bool sign
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptIOH));
+  return new (p) CptIOH(file_region, dir, VpiAuxType::Net,
+			net_type, VpiVarType::None, sign);
 }
 
 // @brief 範囲付きの IO 宣言のヘッダの生成 (ネット型)
@@ -208,11 +238,6 @@ PtFactory::new_NetIOHead(
   const AstRange* range
 )
 {
-  if ( range == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptIOH));
-    return new (p) CptIOH(file_region, dir, VpiAuxType::Net,
-			  net_type, VpiVarType::None, sign);
-  }
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
   return new (p) CptIOHV(file_region, dir, VpiAuxType::Net,
 			 net_type, sign, range);
@@ -235,14 +260,21 @@ PtFactory::new_VarIOHead(
 PtIOItem*
 PtFactory::new_IOItem(
   const FileRegion& file_region,
+  const char* name
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptIOItem));
+  return new (p) CptIOItem(file_region, name);
+}
+
+// @brief 初期値付き IO 宣言の要素の生成
+PtIOItem*
+PtFactory::new_IOItem(
+  const FileRegion& file_region,
   const char* name,
   const AstExpr* init_value
 )
 {
-  if ( init_value == nullptr ) {
-    void* p = mAlloc.get_memory(sizeof(CptIOItem));
-    return new (p) CptIOItem(file_region, name);
-  }
   void* p = mAlloc.get_memory(sizeof(CptIOItemI));
   return new (p) CptIOItemI(file_region, name, init_value);
 }

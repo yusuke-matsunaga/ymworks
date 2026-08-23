@@ -44,10 +44,8 @@
 
 set ( parser_main_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/Parser.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/Parser_expr.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Parser_module.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Parser_port.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/Parser_stmt.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Parser_udp.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/PtFactory.cc
   PARENT_SCOPE

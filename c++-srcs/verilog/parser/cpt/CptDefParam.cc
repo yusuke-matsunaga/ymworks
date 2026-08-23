@@ -8,7 +8,6 @@
 
 #include "CptDefParam.h"
 #include "parser/PtFactory.h"
-#include "parser/PtHierName.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -73,17 +72,15 @@ CptDefParam::namebranch_num() const
   return 0;
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptDefParam::namebranch(
-  SizeType index
-) const
+CptDefParam::namebranch_top() const
 {
-  throw std::out_of_range{"index is out of range"};
+  return nullptr;
 }
 
 // @brief 階層ブランチのリストを返す．
-std::vector<const AstNameBranch*>
+AstNameBranchVec
 CptDefParam::namebranch_list() const
 {
   return {};
@@ -112,23 +109,21 @@ CptDefParam::expr() const
 SizeType
 CptDefParam2::namebranch_num() const
 {
-  return mNbList.size();
+  return mNbTop->count_num();
 }
 
-// @brief 階層ブランチを返す．
+// @brief 先頭の階層ブランチを返す．
 const AstNameBranch*
-CptDefParam2::namebranch(
-  SizeType index
-) const
+CptDefParam2::namebranch_top() const
 {
-  return mNbList[index];
+  return mNbTop;
 }
 
 // @brief 階層ブランチのリストを返す．
 AstNameBranchVec
 CptDefParam2::namebranch_list() const
 {
-  return mNbList.to_vector();
+  return mNbTop->to_vector();
 }
 
 
@@ -163,14 +158,16 @@ PtFactory::new_DefParam(
 PtDefParam*
 PtFactory::new_DefParam(
   const FileRegion& file_region,
-  PtHierName* hname,
+  const PtHierName& hname,
   const AstExpr* value
 )
 {
+  auto nb_top = hname.nb_top->reverse();
+  auto tail_name = hname.tail_name;
   void* p = mAlloc.get_memory(sizeof(CptDefParam2));
   return new (p) CptDefParam2(file_region,
-			      hname->nb_list()->to_array(mAlloc),
-			      hname->tail_name(), value);
+			      nb_top, tail_name,
+			      value);
 }
 
 END_NAMESPACE_YM_VERILOG
