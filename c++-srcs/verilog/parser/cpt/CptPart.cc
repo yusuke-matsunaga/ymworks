@@ -81,26 +81,38 @@ CptPartM::mode() const
 
 // @brief 範囲指定の生成
 PtPart*
-PtFactory::new_Part(
+PtFactory::new_PartConst(
   const FileRegion& fr,
-  VpiRangeMode mode,
   const AstExpr* expr1,
   const AstExpr* expr2
 )
 {
-  if ( mode == VpiRangeMode::Const ) {
-    auto p = mAlloc.get_memory(sizeof(CptPartC));
-    return new (p) CptPartC(fr, expr1, expr2);
-  }
-  if ( mode == VpiRangeMode::Plus ) {
-    auto p = mAlloc.get_memory(sizeof(CptPartP));
-    return new (p) CptPartP(fr, expr1, expr2);
-  }
-  if ( mode == VpiRangeMode::Minus ) {
-    auto p = mAlloc.get_memory(sizeof(CptPartM));
-    return new (p) CptPartM(fr, expr1, expr2);
-  }
-  throw std::logic_error{"Should not be reached"};
+  auto p = mAlloc.get_memory(sizeof(CptPartC));
+  return new (p) CptPartC(fr, expr1, expr2);
+}
+
+// @brief 範囲指定の生成
+PtPart*
+PtFactory::new_PartPlus(
+  const FileRegion& fr,
+  const AstExpr* expr1,
+  const AstExpr* expr2
+)
+{
+  auto p = mAlloc.get_memory(sizeof(CptPartP));
+  return new (p) CptPartP(fr, expr1, expr2);
+}
+
+// @brief 範囲指定の生成
+PtPart*
+PtFactory::new_PartMinus(
+  const FileRegion& fr,
+  const AstExpr* expr1,
+  const AstExpr* expr2
+)
+{
+  auto p = mAlloc.get_memory(sizeof(CptPartM));
+  return new (p) CptPartM(fr, expr1, expr2);
 }
 
 END_NAMESPACE_YM_VERILOG

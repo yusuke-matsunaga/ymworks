@@ -238,107 +238,113 @@ CptPathDecl2::output_list() const
 
 
 //////////////////////////////////////////////////////////////////////
-// path_delay_value を表すクラス
+// クラス CptPathDelayBase
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-CptPathDelay::CptPathDelay(
-  const FileRegion& file_region,
-  const AstExpr* value
-) : mFileRegion{file_region},
-    mValues{value,   nullptr, nullptr,
-	    nullptr, nullptr, nullptr,
-	    nullptr, nullptr, nullptr,
-	    nullptr, nullptr, nullptr}
-{
-}
-
-CptPathDelay::CptPathDelay(
-  const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2
-) : mFileRegion{file_region},
-    mValues{value1,  value2,  nullptr,
-	    nullptr, nullptr, nullptr,
-	    nullptr, nullptr, nullptr,
-	    nullptr, nullptr, nullptr}
-
-{
-}
-CptPathDelay::CptPathDelay(
-  const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2,
-  const AstExpr* value3
-) : mFileRegion{file_region},
-    mValues{value1,  value2,  value3,
-	    nullptr, nullptr, nullptr,
-	    nullptr, nullptr, nullptr,
-	    nullptr, nullptr, nullptr}
-{
-}
-
-CptPathDelay::CptPathDelay(
-  const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2,
-  const AstExpr* value3,
-  const AstExpr* value4,
-  const AstExpr* value5,
-  const AstExpr* value6
-) : mFileRegion{file_region},
-    mValues{value1, value2, value3,
-	    value4, value5, value6,
-	    nullptr, nullptr, nullptr,
-	    nullptr, nullptr, nullptr}
-{
-}
-
-CptPathDelay::CptPathDelay(
-  const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2,
-  const AstExpr* value3,
-  const AstExpr* value4,
-  const AstExpr* value5,
-  const AstExpr* value6,
-  const AstExpr* value7,
-  const AstExpr* value8,
-  const AstExpr* value9,
-  const AstExpr* value10,
-  const AstExpr* value11,
-  const AstExpr* value12
-) : mFileRegion{file_region},
-    mValues{value1,  value2,  value3,
-	    value4,  value5,  value6,
-	    value7,  value8,  value9,
-	    value10, value11, value12}
-{
-}
-
-// デストラクタ
-CptPathDelay::~CptPathDelay()
-{
-}
 
 // ファイル位置を返す．
 FileRegion
-CptPathDelay::file_region() const
+CptPathDelayBase::file_region() const
 {
   return mFileRegion;
 }
 
 // 値を取り出す．
 const AstExpr*
-CptPathDelay::value(
-  SizeType pos
+CptPathDelayBase::value(
+  SizeType index
 ) const
 {
-  if ( pos >= 12 ) {
-    throw std::out_of_range{"pos is out of range"};
+  if ( index >= 12 ) {
+    throw std::out_of_range{"value(index): index is out of range"};
   }
-  return mValues[pos];
+  return nullptr;
 }
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPathDelay1
+//////////////////////////////////////////////////////////////////////
+
+// 値を取り出す．
+const AstExpr*
+CptPathDelay1::value(
+  SizeType index
+) const
+{
+  if ( index == 0 ) {
+    return mValue;
+  }
+  return CptPathDelayBase::value(index);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPathDelay2
+//////////////////////////////////////////////////////////////////////
+
+// 値を取り出す．
+const AstExpr*
+CptPathDelay2::value(
+  SizeType index
+) const
+{
+  if ( index < 2 ) {
+    return mValues[index];
+  }
+  return CptPathDelayBase::value(index);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPathDelay3
+//////////////////////////////////////////////////////////////////////
+
+// 値を取り出す．
+const AstExpr*
+CptPathDelay3::value(
+  SizeType index
+) const
+{
+  if ( index < 3 ) {
+    return mValues[index];
+  }
+  return CptPathDelayBase::value(index);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPathDelay6
+//////////////////////////////////////////////////////////////////////
+
+// 値を取り出す．
+const AstExpr*
+CptPathDelay6::value(
+  SizeType index
+) const
+{
+  if ( index < 6 ) {
+    return mValues[index];
+  }
+  return CptPathDelayBase::value(index);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptPathDelay12
+//////////////////////////////////////////////////////////////////////
+
+// 値を取り出す．
+const AstExpr*
+CptPathDelay12::value(
+  SizeType index
+) const
+{
+  if ( index < 12 ) {
+    return mValues[index];
+  }
+  return CptPathDelayBase::value(index);
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
@@ -421,8 +427,8 @@ PtFactory::new_PathDelay(
   const AstExpr* value
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptPathDelay));
-  return new (p) CptPathDelay(file_region, value);
+  void* p = mAlloc.get_memory(sizeof(CptPathDelay1));
+  return new (p) CptPathDelay1(file_region, value);
 }
 
 // path delay value を生成する．
@@ -433,8 +439,8 @@ PtFactory::new_PathDelay(
   const AstExpr* value2
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptPathDelay));
-  return new (p) CptPathDelay(file_region, value1, value2);
+  void* p = mAlloc.get_memory(sizeof(CptPathDelay2));
+  return new (p) CptPathDelay2(file_region, value1, value2);
 }
 
 // path delay value を生成する．
@@ -446,8 +452,8 @@ PtFactory::new_PathDelay(
   const AstExpr* value3
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptPathDelay));
-  return new (p) CptPathDelay(file_region, value1, value2, value3);
+  void* p = mAlloc.get_memory(sizeof(CptPathDelay3));
+  return new (p) CptPathDelay3(file_region, value1, value2, value3);
 }
 
 // path delay value を生成する．
@@ -462,10 +468,10 @@ PtFactory::new_PathDelay(
   const AstExpr* value6
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptPathDelay));
-  return new (p) CptPathDelay(file_region,
-			      value1, value2, value3,
-			      value4, value5, value6);
+  void* p = mAlloc.get_memory(sizeof(CptPathDelay6));
+  return new (p) CptPathDelay6(file_region,
+			       value1, value2, value3,
+			       value4, value5, value6);
 }
 
 // path delay value を生成する．
@@ -486,12 +492,12 @@ PtFactory::new_PathDelay(
   const AstExpr* value12
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptPathDelay));
-  return new (p) CptPathDelay(file_region,
-			      value1, value2, value3,
-			      value4, value5, value6,
-			      value7, value8, value9,
-			      value10, value11, value12);
+  void* p = mAlloc.get_memory(sizeof(CptPathDelay12));
+  return new (p) CptPathDelay12(file_region,
+				value1, value2, value3,
+				value4, value5, value6,
+				value7, value8, value9,
+				value10, value11, value12);
 }
 
 END_NAMESPACE_YM_VERILOG

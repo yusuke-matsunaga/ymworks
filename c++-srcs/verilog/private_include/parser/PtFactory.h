@@ -1821,9 +1821,24 @@ public:
 
   /// @brief 範囲指定の生成
   PtPart*
-  new_Part(
+  new_PartConst(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    VpiRangeMode mode,    ///< [in] 範囲指定のモード
+    const AstExpr* expr1, ///< [in] 1番目の式
+    const AstExpr* expr2  ///< [in] 2番目の式
+  );
+
+  /// @brief 範囲指定の生成
+  PtPart*
+  new_PartPlus(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const AstExpr* expr1, ///< [in] 1番目の式
+    const AstExpr* expr2  ///< [in] 2番目の式
+  );
+
+  /// @brief 範囲指定の生成
+  PtPart*
+  new_PartMinus(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* expr1, ///< [in] 1番目の式
     const AstExpr* expr2  ///< [in] 2番目の式
   );

@@ -206,21 +206,33 @@ public:
   /// - port list の初期化
   /// - paramport list の初期化
   /// - iohead list の初期化
-  /// - paramhead list の初期化
-  /// - localparamhead list の初期化
   /// - declhead list の初期化
   /// - item list の初期化
   /// を行う．
   ///
   /// 'module' キーワードに連動して呼ばれることを想定している．
   void
-  init_module();
+  init_module()
+  {
+    mPortList.clear();
+    mParamPortHeadList.clear();
+    mModuleIOHeadList.clear();
+    push_declhead_list();
+    push_item_list();
+
+    mIOItemList.clear();
+    mDeclItemList.clear();
+  }
 
   /// @brief モジュール定義の終了
   ///
   /// 'endmodule' キーワードに連動して呼ばれることを想定している．
   void
-  end_module();
+  end_module()
+  {
+    mCurDeclList = pop_declhead_list();
+    mCurItemList = pop_item_list();
+  }
 
   /// @brief モジュール用のIOヘッダリストに追加する．
   void
@@ -228,9 +240,6 @@ public:
     PtIOHead* head
   )
   {
-    if ( head == nullptr ) {
-      return;
-    }
     mModuleIOHeadList.push_back(head);
   }
 
@@ -242,9 +251,6 @@ public:
     PtIOHead* head
   )
   {
-    if ( head == nullptr ) {
-      return;
-    }
     add_module_ioport_head(head);
     flush_module_ioitem();
   }
@@ -1118,16 +1124,10 @@ public:
   /// @brief parameter port 宣言ヘッダを追加する．
   void
   add_paramport_head(
-    PtDeclHead* head,
-    const AstAttrInstList* attr_list
+    PtDeclHead* head
   )
   {
-    if ( head == nullptr ) {
-      // 構文エラーの場合は無視する．
-      return;
-    }
     mParamPortHeadList.push_back(head);
-    reg_attrinst(head, attr_list);
   }
 
   /// @brief parameter port 宣言の終わり
@@ -1148,34 +1148,22 @@ public:
 
   /// @brief 宣言リストに宣言ヘッダを追加する．
   void
-  add_decl_head(
-    PtDeclHead* head,
-    const AstAttrInstList* attr_list = nullptr
+  add_declhead(
+    PtDeclHead* head
   )
   {
-    if ( head == nullptr ) {
-      // 構文エラーの場合は無視する．
-      return;
-    }
     cur_declhead_list().push_back(head);
     head->set_elem(PtDeclItemArray(mAlloc, mDeclItemList));
     mDeclItemList.clear();
-    reg_attrinst(head, attr_list);
   }
 
   /// @brief item リストに要素を追加する．
   void
   add_item(
-    PtItem* item,
-    const AstAttrInstList* attr_list = nullptr
+    PtItem* item
   )
   {
-    if ( item == nullptr ) {
-      // 構文エラーの場合は無視する．
-      return;
-    }
     cur_item_list().push_back(item);
-    reg_attrinst(item, attr_list);
   }
 
 

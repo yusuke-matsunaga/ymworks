@@ -193,7 +193,7 @@ TEST_F(ParserTest_Decl, ParamH)
   parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.factory().new_ParamH(fr);
-  parser.add_decl_head(head);
+  parser.add_declhead(head);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Param,
@@ -216,7 +216,7 @@ TEST_F(ParserTest_Decl, ParamH2)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_ParamH(fr, sign, range);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Param,
@@ -238,7 +238,7 @@ TEST_F(ParserTest_Decl, ParamH3)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_ParamH(fr, var);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Param,
@@ -258,7 +258,7 @@ TEST_F(ParserTest_Decl, LocalParamH)
   parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.factory().new_LocalParamH(fr);
-  parser.add_decl_head(head);
+  parser.add_declhead(head);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::LocalParam,
@@ -281,7 +281,7 @@ TEST_F(ParserTest_Decl, LocalParamH2)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_LocalParamH(fr, sign, range);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::LocalParam,
@@ -303,7 +303,7 @@ TEST_F(ParserTest_Decl, LocalParamH3)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_LocalParamH(fr, var);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     auto sign = (var == VpiVarType::Time) ? false : true;
     check_DeclHead(head, fr,
@@ -324,7 +324,7 @@ TEST_F(ParserTest_Decl, SpecParamH)
   parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.factory().new_SpecParamH(fr);
-  parser.add_decl_head(head);
+  parser.add_declhead(head);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::SpecParam,
@@ -346,7 +346,7 @@ TEST_F(ParserTest_Decl, SpecParamH2)
   auto range = new_range(fr1, 31, fr2, 0);
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.factory().new_SpecParamH(fr, range);
-  parser.add_decl_head(head);
+  parser.add_declhead(head);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::SpecParam,
@@ -365,7 +365,7 @@ TEST_F(ParserTest_Decl, EventH)
   parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.factory().new_EventH(fr);
-  parser.add_decl_head(head);
+  parser.add_declhead(head);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Event,
@@ -384,7 +384,7 @@ TEST_F(ParserTest_Decl, GenvarH)
   parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.factory().new_GenvarH(fr);
-  parser.add_decl_head(head);
+  parser.add_declhead(head);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Genvar,
@@ -405,7 +405,7 @@ TEST_F(ParserTest_Decl, VarH)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_VarH(fr, var);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     auto sign = (var == VpiVarType::Time) ? false : true;
     check_DeclHead(head, fr,
@@ -426,7 +426,7 @@ TEST_F(ParserTest_Decl, RegH)
   parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = parser.factory().new_RegH(fr);
-  parser.add_decl_head(head);
+  parser.add_declhead(head);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Reg,
@@ -449,7 +449,7 @@ TEST_F(ParserTest_Decl, RegH2)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_RegH(fr, sign, range);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Reg,
@@ -473,7 +473,7 @@ TEST_F(ParserTest_Decl, NetH)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_NetH(fr, net);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -501,7 +501,7 @@ TEST_F(ParserTest_Decl, NetHS)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_NetH(fr, net, str);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -529,7 +529,7 @@ TEST_F(ParserTest_Decl, NetHD)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_NetH(fr, net, delay);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -561,7 +561,7 @@ TEST_F(ParserTest_Decl, NetHSD)
     parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = parser.factory().new_NetH(fr, net, str, delay);
-    parser.add_decl_head(head);
+    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -590,7 +590,7 @@ TEST_F(ParserTest_Decl, NetH2)
 	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.factory().new_NetH(fr, net, vs, sign, range);
-	parser.add_decl_head(head);
+	parser.add_declhead(head);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -625,7 +625,7 @@ TEST_F(ParserTest_Decl, NetHS2)
 	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.factory().new_NetH(fr, net, str, vs, sign, range);
-	parser.add_decl_head(head);
+	parser.add_declhead(head);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -660,7 +660,7 @@ TEST_F(ParserTest_Decl, NetHD2)
 	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.factory().new_NetH(fr, net, vs, sign, range, delay);
-	parser.add_decl_head(head);
+	parser.add_declhead(head);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -699,7 +699,7 @@ TEST_F(ParserTest_Decl, NetHSD2)
 	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = parser.factory().new_NetH(fr, net, str, vs, sign, range, delay);
-	parser.add_decl_head(head);
+	parser.add_declhead(head);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,

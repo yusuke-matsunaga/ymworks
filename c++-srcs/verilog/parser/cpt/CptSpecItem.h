@@ -379,64 +379,22 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @brief path_delay_value を表すクラス
+/// @brief path_delay_value を表す基底クラス
 //////////////////////////////////////////////////////////////////////
-class CptPathDelay :
+class CptPathDelayBase :
   public PtPathDelay
 {
 public:
 
   /// @brief コンストラクタ
-  CptPathDelay(
-    const FileRegion& file_region,
-    const AstExpr* value1
-  );
-
-  /// @brief コンストラクタ
-  CptPathDelay(
-    const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2
-  );
-
-  /// @brief コンストラクタ
-  CptPathDelay(
-    const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2,
-    const AstExpr* value3
-  );
-
-  /// @brief コンストラクタ
-  CptPathDelay(
-    const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2,
-    const AstExpr* value3,
-    const AstExpr* value4,
-    const AstExpr* value5,
-    const AstExpr* value6
-  );
-
-  /// @brief コンストラクタ
-  CptPathDelay(
-    const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2,
-    const AstExpr* value3,
-    const AstExpr* value4,
-    const AstExpr* value5,
-    const AstExpr* value6,
-    const AstExpr* value7,
-    const AstExpr* value8,
-    const AstExpr* value9,
-    const AstExpr* value10,
-    const AstExpr* value11,
-    const AstExpr* value12
-  );
+  CptPathDelayBase(
+    const FileRegion& file_region
+  ) : mFileRegion{file_region}
+  {
+  }
 
   /// @brief デストラクタ
-  ~CptPathDelay();
+  ~CptPathDelayBase() { }
 
 
 public:
@@ -462,6 +420,246 @@ private:
 
   // ファイル位置
   FileRegion mFileRegion;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 値を１つ持つ CptPathDelay
+//////////////////////////////////////////////////////////////////////
+class CptPathDelay1 :
+  public CptPathDelayBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPathDelay1(
+    const FileRegion& file_region,
+    const AstExpr* value1
+  ) : CptPathDelayBase(file_region),
+      mValue{value1}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPathDelay1() { }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AtPathDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value(
+    SizeType pos
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ディレイ値
+  const AstExpr* mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 値を2つ持つ CptPathDelay
+//////////////////////////////////////////////////////////////////////
+class CptPathDelay2 :
+  public CptPathDelayBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPathDelay2(
+    const FileRegion& file_region,
+    const AstExpr* value1,
+    const AstExpr* value2
+  ) : CptPathDelayBase(file_region),
+      mValues{value1, value2}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPathDelay2() { }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AtPathDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value(
+    SizeType pos
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ディレイ値
+  const AstExpr* mValues[2];
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 値を3つ持つ CptPathDelay
+//////////////////////////////////////////////////////////////////////
+class CptPathDelay3 :
+  public CptPathDelayBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPathDelay3(
+    const FileRegion& file_region,
+    const AstExpr* value1,
+    const AstExpr* value2,
+    const AstExpr* value3
+  ) : CptPathDelayBase(file_region),
+      mValues{value1, value2, value3}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPathDelay3() { }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AtPathDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value(
+    SizeType pos
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ディレイ値
+  const AstExpr* mValues[3];
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 値を6つ持つ CptPathDelay
+//////////////////////////////////////////////////////////////////////
+class CptPathDelay6 :
+  public CptPathDelayBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPathDelay6(
+    const FileRegion& file_region,
+    const AstExpr* value1,
+    const AstExpr* value2,
+    const AstExpr* value3,
+    const AstExpr* value4,
+    const AstExpr* value5,
+    const AstExpr* value6
+  ) : CptPathDelayBase(file_region),
+      mValues{value1, value2, value3,
+	      value4, value5, value6}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPathDelay6() { }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AtPathDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value(
+    SizeType pos
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ディレイ値
+  const AstExpr* mValues[6];
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 値を12個持つ CptPathDelay
+//////////////////////////////////////////////////////////////////////
+class CptPathDelay12 :
+  public CptPathDelayBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPathDelay12(
+    const FileRegion& file_region,
+    const AstExpr* value1,
+    const AstExpr* value2,
+    const AstExpr* value3,
+    const AstExpr* value4,
+    const AstExpr* value5,
+    const AstExpr* value6,
+    const AstExpr* value7,
+    const AstExpr* value8,
+    const AstExpr* value9,
+    const AstExpr* value10,
+    const AstExpr* value11,
+    const AstExpr* value12
+  ) : CptPathDelayBase(file_region),
+      mValues{value1, value2, value3,
+	      value4, value5, value6,
+	      value7, value8, value9,
+	      value10, value11, value12}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptPathDelay12() { }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AtPathDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value(
+    SizeType pos
+  ) const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
 
   // ディレイ値
   const AstExpr* mValues[12];

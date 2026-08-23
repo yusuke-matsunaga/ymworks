@@ -128,7 +128,7 @@ AstMgr::reg_attrinst(
   bool def
 )
 {
-  if ( ai_list ) {
+  if ( obj != nullptr && ai_list != nullptr ) {
     mAttrDict.emplace(PtAttrInfo(obj, ai_list, def));
   }
 }

@@ -427,7 +427,7 @@ TEST_F(ParserTest, Part1)
   auto expr1 = parser.factory().new_IntConst(fr1, 3);
   auto fr2 = make_file_region(1, 10, 1, 19);
   auto expr2 = parser.factory().new_IntConst(fr2, 2);
-  auto part = parser.factory().new_Part(fr, VpiRangeMode::Const, expr1, expr2);
+  auto part = parser.factory().new_PartConst(fr, expr1, expr2);
 
   ASSERT_TRUE( part != nullptr );
   EXPECT_EQ( fr, part->file_region() );
@@ -443,7 +443,7 @@ TEST_F(ParserTest, Part2)
   auto expr1 = parser.factory().new_IntConst(fr1, 3);
   auto fr2 = make_file_region(1, 10, 1, 19);
   auto expr2 = parser.factory().new_IntConst(fr2, 2);
-  auto part = parser.factory().new_Part(fr, VpiRangeMode::Plus, expr1, expr2);
+  auto part = parser.factory().new_PartPlus(fr, expr1, expr2);
 
   ASSERT_TRUE( part != nullptr );
   EXPECT_EQ( fr, part->file_region() );
@@ -459,7 +459,7 @@ TEST_F(ParserTest, Part3)
   auto expr1 = parser.factory().new_IntConst(fr1, 3);
   auto fr2 = make_file_region(1, 10, 1, 19);
   auto expr2 = parser.factory().new_IntConst(fr2, 2);
-  auto part = parser.factory().new_Part(fr, VpiRangeMode::Minus, expr1, expr2);
+  auto part = parser.factory().new_PartMinus(fr, expr1, expr2);
 
   ASSERT_TRUE( part != nullptr );
   EXPECT_EQ( fr, part->file_region() );

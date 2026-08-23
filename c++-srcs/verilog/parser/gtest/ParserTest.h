@@ -84,8 +84,20 @@ public:
   {
     auto left = parser.factory().new_IntConst(left_fr, left_val);
     auto right = parser.factory().new_IntConst(right_fr, right_val);
-    return parser.factory().new_Part(FileRegion(left_fr, right_fr),
-				     mode, left, right);
+    switch ( mode ) {
+    case VpiRangeMode::Const:
+      return parser.factory().new_PartConst(FileRegion(left_fr, right_fr),
+					    left, right);
+    case VpiRangeMode::Plus:
+      return parser.factory().new_PartPlus(FileRegion(left_fr, right_fr),
+					   left, right);
+    case VpiRangeMode::Minus:
+      return parser.factory().new_PartMinus(FileRegion(left_fr, right_fr),
+					    left, right);
+    default:
+      break;
+    }
+    throw std::logic_error{"never be reached"};
   }
 
 

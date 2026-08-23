@@ -111,6 +111,8 @@ fr_merge(
   VpiVsType vstype;
   char udpsymbol;
 
+  AstBase* obj;
+
   PtHierName hiername;
 
   PtIOHead* iohead;
@@ -384,49 +386,80 @@ fr_merge(
 
 %type <strtype> mu_head
 
+%type <obj> module_item_body module_item2_body
+
 %type <iohead> portdecl_head
 %type <iohead> inout_declaration
 %type <iohead> input_declaration
-%type <iohead> output_declaration output_declhead1 output_declhead2
+%type <iohead> output_declaration
+%type <iohead> output_declhead1
+%type <iohead> output_declhead2
 %type <iohead> io_declaration
 %type <iohead> tf_inout_declhead
 %type <iohead> tf_input_declhead
 %type <iohead> tf_output_declhead
-%type <iohead> udp_input_declaration udp_input_declhead
-%type <iohead> udp_output_declaration udp_output_declhead1 udp_output_declhead2
+%type <obj> udp_port_decl_body
+%type <iohead> udp_input_declaration
+%type <iohead> udp_input_declhead
+%type <iohead> udp_output_declaration
+%type <iohead> udp_output_declhead1
+%type <iohead> udp_output_declhead2
 
 %type <declhead> paramport_head
 %type <declhead> module_or_generate_decl
 %type <declhead> bitem_decl_body
-%type <declhead> event_declaration event_declhead
-%type <declhead> genvar_declaration genvar_declhead
-%type <declhead> integer_declaration integer_declhead
-%type <declhead> real_declaration real_declhead
-%type <declhead> realtime_declaration realtime_declhead
-%type <declhead> time_declaration time_declhead
-%type <declhead> net_declaration net_declhead1 net_declhead2 net_declhead3
-%type <declhead> reg_declaration block_reg_declaration reg_declhead
-%type <declhead> parameter_declaration parameter_declhead
-%type <declhead> specparam_declaration specparam_declhead
+%type <declhead> event_declaration
+%type <declhead> event_declhead
+%type <declhead> genvar_declaration
+%type <declhead> genvar_declhead
+%type <declhead> integer_declaration
+%type <declhead> integer_declhead
+%type <declhead> real_declaration
+%type <declhead> real_declhead
+%type <declhead> realtime_declaration
+%type <declhead> realtime_declhead
+%type <declhead> time_declaration
+%type <declhead> time_declhead
+%type <declhead> net_declaration
+%type <declhead> net_declhead1
+%type <declhead> net_declhead2
+%type <declhead> net_declhead3
+%type <declhead> reg_declaration
+%type <declhead> block_reg_declaration
+%type <declhead> reg_declhead
+%type <declhead> parameter_declaration
+%type <declhead> parameter_declhead
+%type <declhead> specparam_declaration
+%type <declhead> specparam_declhead
 %type <declhead> udp_reg_declaration
 
 %type <item> module_or_generate_item
 %type <item> generated_instantiation
 %type <item> specify_block
-%type <item> task_declaration function_declaration
-%type <item> parameter_override continuous_assign
-%type <item> gate_instantiation module_instantiation
-%type <item> initial_construct always_construct
+%type <item> task_declaration
+%type <item> function_declaration
+%type <item> parameter_override
+%type <item> continuous_assign
+%type <item> gate_instantiation
+%type <item> module_instantiation
+%type <item> initial_construct
+%type <item> always_construct
 
-%type <stmt> blocking_assignment nonblocking_assignment
+%type <stmt> blocking_assignment
+%type <stmt> nonblocking_assignment
 %type <stmt> procedural_continuous_assignments
 %type <stmt> variable_assignment
 %type <stmt> par_block seq_block
-%type <stmt> statement statement_or_null pure_statement
-%type <stmt> disable_statement event_trigger
+%type <stmt> statement statement_or_null
+%type <stmt> pure_statement
+%type <stmt> disable_statement
+%type <stmt> event_trigger
 %type <stmt> procedural_timing_control_statement
-%type <stmt> wait_statement conditional_statement case_statement
-%type <stmt> loop_statement system_task_enable task_enable
+%type <stmt> wait_statement conditional_statement
+%type <stmt> case_statement
+%type <stmt> loop_statement
+%type <stmt> system_task_enable
+%type <stmt> task_enable
 
 %type <exprlist> nzlist_of_expressions
 %type <exprlist> nzlist_of_lvalues
@@ -437,10 +470,16 @@ fr_merge(
 %type <expr> multiple_concatenation
 %type <expr> function_call
 %type <expr> system_function_call
-%type <expr> expression expr1 primary
+%type <expr> expression
+%type <expr> expr1
+%type <expr> primary
 %type <expr> module_path_expression
-%type <expr> net_lvalue variable_lvalue lvalue
-%type <expr> number unumber rnumber
+%type <expr> net_lvalue
+%type <expr> variable_lvalue
+%type <expr> lvalue
+%type <expr> number
+%type <expr> unumber
+%type <expr> rnumber
 %type <expr> argument
 
 %type <expr> index
@@ -456,8 +495,10 @@ fr_merge(
 %type <gencaseitem> genvar_case_item
 %type <exprlist> genvar_case_head
 
-%type <strength> drive_strength charge_strength
-%type <strength> pulldown_strength pullup_strength
+%type <strength> drive_strength
+%type <strength> charge_strength
+%type <strength> pulldown_strength
+%type <strength> pullup_strength
 %type <strengthtype> strength0 strength1
 
 %type <delay> delay3 delay2
@@ -642,12 +683,14 @@ module_parameter_port_list
 list_of_paramport_decl
 : ai_list paramport_head paramport_assignment
 {
-  parser.add_paramport_head($2, $1);
+  parser.add_paramport_head($2);
+  parser.reg_attrinst($2, $1);
 }
 | list_of_paramport_decl ',' { parser.flush_paramport(); }
   ai_list paramport_head paramport_assignment
 {
-  parser.add_paramport_head($5, $4);
+  parser.add_paramport_head($5);
+  parser.reg_attrinst($5, $4);
 }
 | list_of_paramport_decl ',' paramport_assignment
 ;
@@ -926,61 +969,74 @@ list_of_module_items2
 ;
 
 module_item
-: ai_list io_declaration
+: ai_list module_item_body
 {
-  parser.add_module_iohead($2);
   parser.reg_attrinst($2, $1);
 }
-| ai_list module_or_generate_decl
+;
+
+module_item_body
+: io_declaration
 {
-  parser.add_decl_head($2, $1);
+  $$ = $1;
 }
-| ai_list module_or_generate_item
+| module_or_generate_decl
 {
-  parser.add_item($2, $1);
+  $$ = $1;
 }
-| ai_list generated_instantiation
+| module_or_generate_item
 {
-  parser.add_item($2, $1);
+  $$ = $1;
 }
-| ai_list parameter_declaration
+| generated_instantiation
 {
-  parser.add_decl_head($2, $1);
+  $$ = $1;
 }
-| ai_list specify_block
+| parameter_declaration
 {
-  parser.add_item($2, $1);
+  $$ = $1;
 }
-| ai_list specparam_declaration
+| specify_block
 {
-  parser.add_decl_head($2, $1);
+  $$ = $1;
+}
+| specparam_declaration
+{
+  $$ = $1;
 }
 ;
 
 module_item2
-: ai_list module_or_generate_decl
+: ai_list module_item2_body
 {
-  parser.add_decl_head($2, $1);
+  parser.reg_attrinst($2, $1);
 }
-| ai_list module_or_generate_item
+;
+
+module_item2_body
+: module_or_generate_decl
 {
-  parser.add_item($2, $1);
+  $$ = $1;
 }
-| ai_list generated_instantiation
+| module_or_generate_item
 {
-  parser.add_item($2, $1);
+  $$ = $1;
 }
-| ai_list parameter_declaration
+| generated_instantiation
 {
-  parser.add_decl_head($2, $1);
+  $$ = $1;
 }
-| ai_list specify_block
+| parameter_declaration
 {
-  parser.add_item($2, $1);
+  $$ = $1;
 }
-| ai_list specparam_declaration
+| specify_block
 {
-  parser.add_decl_head($2, $1);
+  $$ = $1;
+}
+| specparam_declaration
+{
+  $$ = $1;
 }
 ;
 
@@ -1103,6 +1159,7 @@ parameter_override
 : defparam_head nzlist_of_defparam_assignment ';'
 {
   $$ = parser.factory().new_DefParamH(@$, parser.defparam_list());
+  parser.add_item($$);
 }
 | defparam_head error ';'
 {
@@ -1165,6 +1222,7 @@ parameter_declaration
 : parameter_declhead list_of_param_assignments ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | parameter_declhead error ';'
 {
@@ -1206,6 +1264,7 @@ specparam_declaration
 : specparam_declhead list_of_specparam_assignments ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | specparam_declhead error ';'
 {
@@ -1236,19 +1295,27 @@ specparam_declhead
 inout_declaration
 : INOUT          sign       list_of_port_identifiers ';'
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Inout, $2);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | INOUT net_type sign       list_of_port_identifiers ';'
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | INOUT          sign range list_of_port_identifiers ';'
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | INOUT net_type sign range list_of_port_identifiers ';'
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | INOUT error ';'
 {
@@ -1263,19 +1330,27 @@ inout_declaration
 input_declaration
 : INPUT          sign       list_of_port_identifiers ';'
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Input, $2);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | INPUT net_type sign       list_of_port_identifiers ';'
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | INPUT          sign range list_of_port_identifiers ';'
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | INPUT net_type sign range list_of_port_identifiers ';'
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3, $4);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3, $4);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | INPUT error ';'
 {
@@ -1332,19 +1407,27 @@ output_declaration
 output_declhead1
 : OUTPUT          sign
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Output, $2);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | OUTPUT net_type sign
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | OUTPUT          sign range
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | OUTPUT net_type sign range
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3, $4);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3, $4);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 ;
 
@@ -1366,19 +1449,29 @@ output_declhead1
 output_declhead2
 : OUTPUT REG sign
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | OUTPUT REG sign range
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | OUTPUT INTEGER
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, VpiVarType::Integer);
+  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Output,
+					     VpiVarType::Integer);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 | OUTPUT TIME
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, VpiVarType::Time);
+  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Output,
+					     VpiVarType::Time);
+  parser.add_module_iohead(head);
+  $$ = head;
 }
 
 
@@ -1391,6 +1484,7 @@ event_declaration
 : event_declhead list_of_event_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | event_declhead  error ';'
 {
@@ -1411,6 +1505,7 @@ genvar_declaration
 : genvar_declhead list_of_genvar_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | genvar_declhead error ';'
 {
@@ -1431,6 +1526,7 @@ integer_declaration
 : integer_declhead list_of_variable_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | integer_declhead error ';'
 {
@@ -1475,14 +1571,17 @@ net_declaration
 : net_declhead1 list_of_net_decls ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | net_declhead2 list_of_net_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | net_declhead3 list_of_net_decl_assignments ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | net_declhead1 error ';'
 {
@@ -1690,6 +1789,7 @@ real_declaration
 : real_declhead list_of_real_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | real_declhead error ';'
 {
@@ -1710,6 +1810,7 @@ realtime_declaration
 : realtime_declhead list_of_real_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | realtime_declhead error ';'
 {
@@ -1731,6 +1832,7 @@ reg_declaration
 : reg_declhead list_of_variable_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | reg_declhead error ';'
 {
@@ -1756,6 +1858,7 @@ time_declaration
 : time_declhead list_of_variable_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | time_declhead error ';'
 {
@@ -2063,7 +2166,7 @@ delay_value
 }
 | '(' expression ')'
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Null, $2, nullptr);
+  $$ = parser.factory().new_Opr(@$, VpiOpType::Null, $2);
 }
 ;
 /*
@@ -2326,15 +2429,15 @@ range
 part
 : '[' expression ':' expression ']'
 {
-  $$ = parser.factory().new_Part(@$, VpiRangeMode::Const, $2, $4);
+  $$ = parser.factory().new_PartConst(@$, $2, $4);
 }
 | '[' expression PLUSCOLON expression ']'
 {
-  $$ = parser.factory().new_Part(@$, VpiRangeMode::Plus, $2, $4);
+  $$ = parser.factory().new_PartPlus(@$, $2, $4);
 }
 | '[' expression MINUSCOLON expression ']'
 {
-  $$ = parser.factory().new_Part(@$, VpiRangeMode::Minus, $2, $4);
+  $$ = parser.factory().new_PartMinus(@$, $2, $4);
 }
 ;
 
@@ -2374,6 +2477,7 @@ function_declaration
 				       parser.tf_iohead_list(),
 				       parser.declhead_list(),
 				       $7);
+    parser.add_item($$);
   }
   else {
     $$ = nullptr;
@@ -2390,6 +2494,7 @@ function_declaration
 					parser.tf_iohead_list(),
 					parser.declhead_list(),
 					$8);
+    parser.add_item($$);
   }
   else {
     $$ = nullptr;
@@ -2406,6 +2511,7 @@ function_declaration
 					parser.tf_iohead_list(),
 					parser.declhead_list(),
 					$8);
+    parser.add_item($$);
   }
   else {
     $$ = nullptr;
@@ -2422,6 +2528,7 @@ function_declaration
 				       parser.tf_iohead_list(),
 				       parser.declhead_list(),
 				       $8);
+    parser.add_item($$);
   }
   else {
     $$ = nullptr;
@@ -2439,6 +2546,7 @@ function_declaration
 					parser.tf_iohead_list(),
 					parser.declhead_list(),
 					$9);
+    parser.add_item($$);
   }
   else {
     $$ = nullptr;
@@ -2455,6 +2563,7 @@ function_declaration
 					parser.tf_iohead_list(),
 					parser.declhead_list(),
 					$9);
+    parser.add_item($$);
   }
   else {
     $$ = nullptr;
@@ -2583,6 +2692,7 @@ task_declaration
 				 parser.tf_iohead_list(),
 				 parser.declhead_list(),
 				 $6);
+  parser.add_item($$);
 }
 | task_head opt_auto IDENTIFIER task_port_block ';'
   list_of_bitem_decl
@@ -2593,6 +2703,7 @@ task_declaration
 				 parser.tf_iohead_list(),
 				 parser.declhead_list(),
 				 $7);
+  parser.add_item($$);
 }
 | task_head error task_tail
 {
@@ -2869,7 +2980,7 @@ task_port_type
 block_item_declaration
 : ai_list bitem_decl_body
 {
-  parser.add_decl_head($2, $1);
+  parser.reg_attrinst($2, $1);
 }
 ;
 
@@ -2911,6 +3022,7 @@ block_reg_declaration
 : reg_declhead list_of_block_variable_identifiers ';'
 {
   $$ = $1;
+  parser.add_declhead($$);
 }
 | reg_declhead error ';'
 {
@@ -2979,98 +3091,121 @@ gate_instantiation
 : cmos_switchtype                        nzlist_of_cmos_switch_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
+  parser.add_item($$);
 }
 | cmos_switchtype                 delay3 nzlist_of_cmos_switch_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | enable_gatetype                        nzlist_of_enable_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
+  parser.add_item($$);
 }
 | enable_gatetype                 delay3 nzlist_of_enable_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | enable_gatetype  drive_strength        nzlist_of_enable_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | enable_gatetype  drive_strength delay3 nzlist_of_enable_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, $3, parser.inst_list());
+  parser.add_item($$);
 }
 | mos_switchtype                         nzlist_of_mos_switch_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
+  parser.add_item($$);
 }
 | mos_switchtype                  delay3 nzlist_of_mos_switch_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | n_input_gatetype                       nzlist_of_n_input_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
+  parser.add_item($$);
 }
 | n_input_gatetype                delay2 nzlist_of_n_input_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | n_input_gatetype drive_strength        nzlist_of_n_input_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | n_input_gatetype drive_strength delay2 nzlist_of_n_input_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, $3, parser.inst_list());
+  parser.add_item($$);
 }
 | n_output_gatetype                       nzlist_of_n_output_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
+  parser.add_item($$);
 }
 | n_output_gatetype                delay2 nzlist_of_n_output_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | n_output_gatetype drive_strength        nzlist_of_n_output_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | n_output_gatetype drive_strength delay2 nzlist_of_n_output_gate_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, $3, parser.inst_list());
+  parser.add_item($$);
 }
 | pass_en_switchtype                      nzlist_of_pass_en_switch_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
+  parser.add_item($$);
 }
 | pass_en_switchtype               delay3 nzlist_of_pass_en_switch_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
+  parser.add_item($$);
 }
 | pass_switchtype                         nzlist_of_pass_switch_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
+  parser.add_item($$);
 }
 | PULLDOWN                                nzlist_of_pull_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, VpiPrimType::Pulldown,
 				  parser.inst_list());
+  parser.add_item($$);
 }
 | PULLDOWN pulldown_strength              nzlist_of_pull_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, VpiPrimType::Pulldown, $2,
 				  parser.inst_list());
+  parser.add_item($$);
 }
 | PULLUP                                  nzlist_of_pull_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, VpiPrimType::Pullup,
 				  parser.inst_list());
+  parser.add_item($$);
 }
 | PULLUP pullup_strength                  nzlist_of_pull_inst ';'
 {
   $$ = parser.factory().new_GateH(@$, VpiPrimType::Pullup, $2,
 				  parser.inst_list());
+  parser.add_item($$);
 }
 ;
 
@@ -3592,6 +3727,7 @@ module_instantiation
 {
   $$ = parser.factory().new_MuH(@$, $1,
 				parser.inst_list());
+  parser.add_item($$);
   parser.reg_defname($1);
 }
 | mu_head '#' '(' list_of_ordered_param_assign ')' nzlist_of_mu_inst ';'
@@ -3599,6 +3735,7 @@ module_instantiation
   $$ = parser.factory().new_MuH(@$, $1,
 				parser.paramassign_list(),
 				parser.inst_list());
+  parser.add_item($$);
   parser.reg_defname($1);
 }
 | mu_head '#' '(' list_of_named_param_assign ')'   nzlist_of_mu_inst ';'
@@ -3606,6 +3743,7 @@ module_instantiation
   $$ = parser.factory().new_MuH(@$, $1,
 				parser.paramassign_list(),
 				parser.inst_list());
+  parser.add_item($$);
   parser.reg_defname($1);
 }
 | mu_head '#' unumber                              nzlist_of_mu_inst ';'
@@ -3614,6 +3752,7 @@ module_instantiation
   auto delay = parser.factory().new_Delay(FileRegion(@2, @3), $3);
   $$ = parser.factory().new_MuH(@$, $1, delay,
 				parser.inst_list());
+  parser.add_item($$);
   parser.reg_defname($1);
 }
 | mu_head '#' rnumber                              nzlist_of_mu_inst ';'
@@ -3622,6 +3761,7 @@ module_instantiation
   auto delay = parser.factory().new_Delay(FileRegion(@2, @3), $3);
   $$ = parser.factory().new_MuH(@$, $1, delay,
 				parser.inst_list());
+  parser.add_item($$);
   parser.reg_defname($1);
 }
 | mu_head '#' IDENTIFIER                           nzlist_of_mu_inst ';'
@@ -3631,18 +3771,21 @@ module_instantiation
   auto delay = parser.factory().new_Delay(FileRegion(@2, @3), prim);
   $$ = parser.factory().new_MuH(@$, $1, delay,
 				parser.inst_list());
+  parser.add_item($$);
   parser.reg_defname($1);
 }
 | mu_head drive_strength                           nzlist_of_mu_inst ';'
 {
   $$ = parser.factory().new_MuH(@$, $1, $2,
 				parser.inst_list());
+  parser.add_item($$);
   parser.reg_defname($1);
 }
 | mu_head drive_strength delay2                    nzlist_of_mu_inst ';'
 {
   $$ = parser.factory().new_MuH(@$, $1, $2, $3,
 				parser.inst_list());
+  parser.add_item($$);
   parser.reg_defname($1);
 }
 | mu_head error ';'
@@ -3854,6 +3997,7 @@ generated_instantiation
   $$ = parser.factory().new_Generate(@$,
 				     parser.declhead_list(),
 				     parser.item_list());
+  parser.add_item($$);
 }
 | generate_head error generate_tail
 {
@@ -3992,7 +4136,7 @@ generate_item
 }
 | ai_list module_or_generate_item
 {
-  parser.add_item($2, $1);
+  parser.reg_attrinst($2, $1);
 }
 ;
 
@@ -4203,19 +4347,24 @@ nzlist_of_uport_decl
 //            |udp_input_declaration ';'
 //            |udp_reg_declaration ';'
 udp_port_declaration
-: ai_list udp_output_declaration
+: ai_list udp_port_decl_body
 {
-  parser.add_module_iohead($2);
   parser.reg_attrinst($2, $1);
 }
-| ai_list udp_input_declaration
+;
+
+udp_port_decl_body
+: udp_output_declaration
 {
-  parser.add_module_iohead($2);
-  parser.reg_attrinst($2, $1);
+  $$ = $1;
 }
-| ai_list udp_reg_declaration
+| udp_input_declaration
 {
-  parser.add_decl_head($2, $1);
+  $$ = $1;
+}
+| udp_reg_declaration
+{
+  $$ = $1;
 }
 ;
 
@@ -4229,10 +4378,12 @@ udp_output_declaration
 : udp_output_declhead1 port_identifier_item ';'
 {
   $$ = $1;
+  parser.add_module_iohead($$);
 }
 | udp_output_declhead2 variable_port_identifier_item ';'
 {
   $$ = $1;
+  parser.add_module_iohead($$);
 }
 | udp_output_declhead1 error ';'
 {
@@ -4269,6 +4420,7 @@ udp_input_declaration
 : udp_input_declhead list_of_port_identifiers ';'
 {
   $$ = $1;
+  parser.add_module_iohead($$);
 }
 | udp_input_declhead error ';'
 {
@@ -4312,14 +4464,12 @@ udp_declaration_port_list
 : udp_output_port_declaration ',' { parser.flush_module_ioitem(); }
   ai_list udp_input_declhead port_identifier_item
 {
-  parser.add_module_ioport_head($5);
-  parser.reg_attrinst($5, $4);
+   parser.reg_attrinst($5, $4);
 }
 | udp_declaration_port_list ',' { parser.flush_module_ioitem(); }
   ai_list udp_input_declhead port_identifier_item
 {
-  parser.add_module_ioport_head($5);
-  parser.reg_attrinst($5, $4);
+   parser.reg_attrinst($5, $4);
 }
 | udp_declaration_port_list ',' port_identifier_item
 ;
@@ -4609,18 +4759,22 @@ continuous_assign
 : assign_head                       list_of_net_assignments ';'
 {
   $$ = parser.factory().new_ContAssignH(@$, parser.contassign_list());
+  parser.add_item($$);
 }
 | assign_head                delay3 list_of_net_assignments ';'
 {
   $$ = parser.factory().new_ContAssignH(@$, $2, parser.contassign_list());
+  parser.add_item($$);
 }
 | assign_head drive_strength        list_of_net_assignments ';'
 {
   $$ = parser.factory().new_ContAssignH(@$, $2, parser.contassign_list());
+  parser.add_item($$);
 }
 | assign_head drive_strength delay3 list_of_net_assignments ';'
 {
   $$ = parser.factory().new_ContAssignH(@$, $2, $3, parser.contassign_list());
+  parser.add_item($$);
 }
 | assign_head error ';'
 {
@@ -4661,6 +4815,7 @@ initial_construct
 : INITIAL statement
 {
   $$ = parser.factory().new_Initial(@$, $2);
+  parser.add_item($$);
 }
 ;
 
@@ -4669,6 +4824,7 @@ always_construct
 : ALWAYS statement
 {
   $$ = parser.factory().new_Always(@$, $2);
+  parser.add_item($$);
 }
 ;
 
@@ -5192,11 +5348,11 @@ event_primary
 }
 | POSEDGE expression
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Posedge, $2, nullptr);
+  $$ = parser.factory().new_Opr(@$, VpiOpType::Posedge, $2);
 }
 | NEGEDGE expression
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Negedge, $2, nullptr);
+  $$ = parser.factory().new_Opr(@$, VpiOpType::Negedge, $2);
 }
 ;
 
@@ -5463,6 +5619,7 @@ task_enable
 specify_block
 : SPECIFY specify_items ENDSPECIFY
 {
+  // 今は構文木構造を作っていない．
   $$ = nullptr;
 }
 ;
