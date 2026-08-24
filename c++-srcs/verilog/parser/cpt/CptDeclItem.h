@@ -44,18 +44,8 @@ public:
   const char*
   name() const override;
 
-  /// @brief 範囲のリストの要素数を返す．
-  SizeType
-  range_num() const override;
-
-  /// @brief 範囲を返す．
-  const AstRange*
-  range(
-    SizeType index ///< [in] インデックス ( 0 <= index < range_num() )
-  ) const override;
-
   /// @brief 範囲のリストを返す．
-  std::vector<const AstRange*>
+  const AstRangeList
   range_list() const override;
 
   /// @brief 初期値を取り出す．
@@ -130,10 +120,10 @@ public:
   CptDeclItemR(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name,              ///< [in] 名前
-    PtRangeArray&& range_array     ///< [in] 範囲の配列
+    const AstRange* range_top      ///< [in] 範囲の先頭
   ) : CptDeclItemBase(name),
       mFileRegion{file_region},
-      mRangeList(std::move(range_array))
+      mRangeTop{range_top}
   {
   }
 
@@ -151,18 +141,8 @@ public:
   FileRegion
   file_region() const override;
 
-  /// @brief 範囲のリストの要素数を返す．
-  SizeType
-  range_num() const override;
-
-  /// @brief 範囲を返す．
-  const AstRange*
-  range(
-    SizeType index ///< [in] インデックス ( 0 <= index < range_num() )
-  ) const override;
-
   /// @brief 範囲のリストを返す．
-  std::vector<const AstRange*>
+  const AstRangeList
   range_list() const override;
 
 
@@ -174,8 +154,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 範囲の配列
-  PtRangeArray mRangeList;
+  // 範囲の先頭
+  const AstRange* mRangeTop;
 
 };
 

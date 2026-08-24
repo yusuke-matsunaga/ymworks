@@ -491,10 +491,10 @@ public:
   CptGenCase(
     const FileRegion& file_region,
     const AstExpr* expr,
-    PtGenCaseItemArray&& item_list
+    PtGenCaseItem* item_top
   ) : mFileRegion{file_region},
       mExpr{expr},
-      mCaseItemList{std::move(item_list)}
+      mCaseItemTop{item_top}
   {
   }
 
@@ -525,18 +525,8 @@ public:
   const AstExpr*
   cond_expr() const override;
 
-  /// @brief case item のリストの要素数の取得
-  SizeType
-  caseitem_num() const override;
-
-  /// @brief case item の取得
-  const AstGenCaseItem*
-  caseitem(
-    SizeType index ///< [in] インデックス ( 0 <= index < caseitem_num() )
-  ) const override;
-
   /// @brief case item リストの取得
-  AstGenCaseItemVec
+  AstGenCaseItemList
   caseitem_list() const override;
 
 
@@ -551,8 +541,8 @@ private:
   // 比較式
   const AstExpr* mExpr;
 
-  // case item のリスト
-  PtGenCaseItemArray mCaseItemList;
+  // case item の先頭
+  PtGenCaseItem* mCaseItemTop;
 
 };
 
@@ -633,6 +623,31 @@ public:
   AstItemVec
   item_list() const override;
 
+  /// @brief 次の要素を返す．
+  const AstGenCaseItem*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtGenCaseItem の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  PtGenCaseItem*
+  _link() const override;
+
+  /// @brief link を設定する．
+  void
+  set_link(
+    PtGenCaseItem* link
+  ) override;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  PtGenCaseItem*
+  reverse() override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -647,6 +662,9 @@ private:
 
   // 生成される本体
   CptGenBody mBody;
+
+  // 次の要素
+  PtGenCaseItem* mLink{nullptr};
 
 };
 

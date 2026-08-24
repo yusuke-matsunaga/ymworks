@@ -23,24 +23,22 @@ class CptExpr :
 {
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // AstHierNamedBase の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 先頭の階層ブランチを返す．
-  const AstNameBranch*
-  namebranch_top() const override;
-
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchVec
+  AstNameBranchList
   namebranch_list() const override;
 
   // 末尾の名前を返す．
   const char*
   name() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 演算子の種類の取得
   /// @return 演算子の種類
@@ -366,19 +364,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // AstHierNamedBase の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 先頭の階層ブランチを返す．
-  const AstNameBranch*
-  namebranch_top() const override;
-
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchVec
+  AstNameBranchList
   namebranch_list() const override;
 
 

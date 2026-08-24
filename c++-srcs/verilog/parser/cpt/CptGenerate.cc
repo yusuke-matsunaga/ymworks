@@ -357,6 +357,36 @@ CptGenCaseItem::item_list() const
   return mBody.item_list();
 }
 
+// @brief 次の要素を返す．
+const AstGenCaseItem*
+CptGenCaseItem::link() const
+{
+  return mLink;
+}
+
+// @brief 次の要素を返す．
+PtGenCaseItem*
+CptGenCaseItem::_link() const
+{
+  return mLink;
+}
+
+// @brief link を設定する．
+void
+CptGenCaseItem::set_link(
+  PtGenCaseItem* link
+)
+{
+  mLink = link;
+}
+
+// @brief リンクトリストを逆順にする．
+PtGenCaseItem*
+CptGenCaseItem::reverse()
+{
+  return make_reverse<PtGenCaseItem>(this);
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // case 文 を表すクラス
@@ -383,27 +413,11 @@ CptGenCase::cond_expr() const
   return mExpr;
 }
 
-// @brief case item のリストの要素数の取得
-SizeType
-CptGenCase::caseitem_num() const
-{
-  return mCaseItemList.size();
-}
-
-// @brief case item の取得
-const AstGenCaseItem*
-CptGenCase::caseitem(
-  SizeType index
-) const
-{
-  return mCaseItemList[index];
-}
-
 // @brief case item リストの取得
-AstGenCaseItemVec
+AstGenCaseItemList
 CptGenCase::caseitem_list() const
 {
-  return mCaseItemList.to_vector();
+  return AstGenCaseItemList(mCaseItemTop);
 }
 
 
@@ -541,12 +555,11 @@ PtItem*
 PtFactory::new_GenCase(
   const FileRegion& file_region,
   const AstExpr* expr,
-  const AstGenCaseItemVec& item_list
+  PtGenCaseItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenCase));
-  return new (p) CptGenCase(file_region, expr,
-			    PtGenCaseItemArray(mAlloc, item_list));
+  return new (p) CptGenCase(file_region, expr, item_top->reverse());
 }
 
 // generate case の要素を生成する．

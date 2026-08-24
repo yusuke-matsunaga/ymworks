@@ -65,19 +65,7 @@ CptNameBranch::_link() const
 PtNameBranch*
 CptNameBranch::reverse()
 {
-  auto vec = to_vector();
-  SizeType n = count_num();
-  std::vector<PtNameBranch*> tmp_list;
-  tmp_list.reserve(n);
-  for ( PtNameBranch* nb = this; nb != nullptr; nb = nb->_link() ) {
-    tmp_list.push_back(nb);
-  }
-  PtNameBranch* last = nullptr;
-  for ( auto nb: tmp_list ) {
-    nb->set_link(last);
-    last = nb;
-  }
-  return last;
+  return make_reverse<PtNameBranch>(this);
 }
 
 

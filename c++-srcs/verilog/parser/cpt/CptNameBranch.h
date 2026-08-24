@@ -10,7 +10,6 @@
 
 #include "parser/PtMisc.h"
 #include "ym/FileRegion.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

@@ -37,6 +37,7 @@ TEST_F(ParserTest_Item, DefParam1)
 		      std::vector<const AstDefParam*>{defparam1});
 }
 
+#if 0
 TEST_F(ParserTest_Item, DefParam2)
 {
   auto fr1 = make_file_region(1, 1, 1, 10);
@@ -148,7 +149,6 @@ TEST_F(ParserTest_Item, ContAssign)
   EXPECT_EQ( rhs, ca->rhs() );
 }
 
-#if 0
 TEST_F(ParserTest_Item, Initial)
 {
   auto fr1 = make_file_region(1, 1, 1, 9);

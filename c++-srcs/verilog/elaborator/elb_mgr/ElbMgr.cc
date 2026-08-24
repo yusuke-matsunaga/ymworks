@@ -223,9 +223,10 @@ ElbMgr::find_scope_up(
 	 << base_scope->full_name() << std::endl;
   }
 
-  auto n = ast_obj->namebranch_num();
+  auto ast_nb_list = ast_obj->namebranch_list();
+  auto n = ast_nb_list.size();
   auto cur_scope{base_scope};
-  for ( auto name_branch: ast_obj->namebranch_list() ) {
+  for ( auto name_branch: ast_nb_list ) {
     auto top_name = name_branch->name();
     const VlScope* top_scope{nullptr};
     // まず普通に探す．

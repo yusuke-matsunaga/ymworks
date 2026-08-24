@@ -60,22 +60,8 @@ CptStmt::stmt_name() const
   return "";
 }
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptStmt::namebranch_num() const
-{
-  throw std::logic_error{"namebranch_num(): typemismatch"};
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptStmt::namebranch_top() const
-{
-  throw std::logic_error{"namebranch_top(): typemismatch"};
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptStmt::namebranch_list() const
 {
   throw std::logic_error{"namebranch_list(): typemismatch"};
@@ -263,25 +249,11 @@ CptDisable::name() const
   return mName;
 }
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptDisable::namebranch_num() const
-{
-  return 0;
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptDisable::namebranch_top() const
-{
-  return nullptr;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptDisable::namebranch_list() const
 {
-  return {};
+  return AstNameBranchList();
 }
 
 
@@ -289,25 +261,11 @@ CptDisable::namebranch_list() const
 // クラス CptDisableH
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptDisableH::namebranch_num() const
-{
-  return mNbTop->count_num();
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptDisableH::namebranch_top() const
-{
-  return mNbTop;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptDisableH::namebranch_list() const
 {
-  return mNbTop->to_vector();
+  return AstNameBranchList(mNbTop);
 }
 
 
@@ -357,25 +315,11 @@ CptEnable::type() const
   return Enable;
 }
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptEnable::namebranch_num() const
-{
-  return 0;
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptEnable::namebranch_top() const
-{
-  return nullptr;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptEnable::namebranch_list() const
 {
-  return {};
+  return AstNameBranchList();
 }
 
 
@@ -383,25 +327,11 @@ CptEnable::namebranch_list() const
 // クラス CptEnableH
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptEnableH::namebranch_num() const
-{
-  return mNbTop->count_num();
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptEnableH::namebranch_top() const
-{
-  return mNbTop;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptEnableH::namebranch_list() const
 {
-  return mNbTop->to_vector();
+  return AstNameBranchList(mNbTop);
 }
 
 

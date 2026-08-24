@@ -65,25 +65,11 @@ CptDefParam::file_region() const
   return FileRegion{mTopLoc, mExpr->file_region().end_loc()};
 }
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptDefParam::namebranch_num() const
-{
-  return 0;
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptDefParam::namebranch_top() const
-{
-  return nullptr;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptDefParam::namebranch_list() const
 {
-  return {};
+  return AstNameBranchList();
 }
 
 // 末尾の名前を返す．
@@ -105,25 +91,11 @@ CptDefParam::expr() const
 // クラス CptDefparam2
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptDefParam2::namebranch_num() const
-{
-  return mNbTop->count_num();
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptDefParam2::namebranch_top() const
-{
-  return mNbTop;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptDefParam2::namebranch_list() const
 {
-  return mNbTop->to_vector();
+  return AstNameBranchList(mNbTop);
 }
 
 

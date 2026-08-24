@@ -140,7 +140,6 @@ fr_merge(
   PtControl* control;
   PtConnection* connection;
 
-  PtAttrInstList* ailist;
   PtAttrInst* attrinst;
   PtAttrSpec* attrspec;
 
@@ -493,6 +492,7 @@ fr_merge(
 %type <expr> index
 
 %type <range> range
+%type <range> nzlist_of_dimensions
 
 %type <part> part
 
@@ -500,6 +500,7 @@ fr_merge(
 %type <vstype> vstype
 %type <inttype> sign
 
+%type <gencaseitem> list_of_gencaseitem
 %type <gencaseitem> genvar_case_item
 %type <exprlist> genvar_case_head
 
@@ -559,8 +560,9 @@ fr_merge(
 /* end-of まだできていない */
 
 %type <consttype> numbase
-%type <ailist> ai_list nz_ai_list
+%type <attrinst> ai_list nz_ai_list
 %type <attrinst> attr_inst
+%type <attrspec> nzlist_of_attr_spec
 %type <attrspec> attr_spec
 %type <hiername> hierarchical_identifier
 
@@ -2440,12 +2442,13 @@ specparam_assignment
 nzlist_of_dimensions
 : range
 {
-  parser.init_range_list();
-  parser.add_range($1);
+  $$ = $1;
 }
 | nzlist_of_dimensions range
 {
-  parser.add_range($2);
+  $$ = $2;
+  // 逆順のリンクトリストになる．
+  $1->set_link($1);
 }
 ;
 
@@ -3093,7 +3096,7 @@ identifier_with_range
 }
 | IDENTIFIER nzlist_of_dimensions
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, parser.range_list());
+  auto item = parser.factory().new_DeclItem(@$, $1, $2);
   parser.add_declitem(item);
 }
 ;
@@ -4121,8 +4124,7 @@ generate_item
 }
 | gen_case '(' expression ')' list_of_gencaseitem gen_endcase
 {
-  auto item = parser.factory().new_GenCase(@$, $3,
-					   parser.gencaseitem_list());
+  auto item = parser.factory().new_GenCase(@$, $3, $5);
   parser.add_item(item);
 }
 | gen_case error gen_endcase
@@ -4194,14 +4196,12 @@ gen_else
 gen_case
 : CASE
 {
-  parser.init_gencase();
 }
 ;
 
 gen_endcase
 : ENDCASE
 {
-  parser.end_gencase();
 }
 ;
 
@@ -4224,11 +4224,12 @@ gen_end
 list_of_gencaseitem
 : genvar_case_item
 {
-  parser.add_gencaseitem($1);
+  $$ = $1;
 }
 | list_of_gencaseitem genvar_case_item
 {
-  parser.add_gencaseitem($2);
+  $$ = $2;
+  $2->set_link($1);
 }
 ;
 
@@ -7214,7 +7215,7 @@ ai_list
 }
 | nz_ai_list
 {
-  $$ = parser.factory().new_AttrInstList(parser.attrinst_list());
+  $$ = $1->reverse();
 }
 ;
 
@@ -7222,19 +7223,19 @@ ai_list
 nz_ai_list
 : attr_inst
 {
-  parser.init_attrinst_list();
-  parser.add_attrinst($1);
+  $$ = $1;
 }
 | nz_ai_list attr_inst
 {
-  parser.add_attrinst($2);
+  $$ = $2;
+  $2->set_link($1);
 }
 ;
 
 attr_inst
 : PRSTAR nzlist_of_attr_spec STARPR
 {
-  $$ = parser.factory().new_AttrInst(@$, parser.attrspec_list());
+  $$ = parser.factory().new_AttrInst(@$, $2);
 }
 | PRSTAR error STARPR
 {
@@ -7247,12 +7248,12 @@ attr_inst
 nzlist_of_attr_spec
 : attr_spec
 {
-  parser.init_attrspec_list();
-  parser.add_attrspec($1);
+  $$ = $1;
 }
 | nzlist_of_attr_spec ',' attr_spec
 {
-  parser.add_attrspec($3);
+  $$ = $3;
+  $3->set_link($1);
 }
 ;
 

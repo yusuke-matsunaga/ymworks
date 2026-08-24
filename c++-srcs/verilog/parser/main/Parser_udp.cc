@@ -48,7 +48,7 @@ Parser::new_Udp1995(
   const char* init_name,
   const FileRegion& init_loc,
   const AstExpr* init_value,
-  const AstAttrInstList* ai_list
+  const AstAttrInst* ai_top
 )
 {
   const AstIOItem* out_item = nullptr;
@@ -194,7 +194,7 @@ Parser::new_Udp1995(
 	    init_name,
 	    init_loc,
 	    init_value,
-	    ai_list,
+	    ai_top,
 	    is_seq,
 	    out_item,
 	    mPortList,
@@ -211,7 +211,7 @@ Parser::new_Udp2001(
   const char* init_name,
   const FileRegion& init_loc,
   const AstExpr* init_value,
-  const AstAttrInstList* ai_list
+  const AstAttrInst* ai_top
 )
 {
   bool is_seq = false;
@@ -237,7 +237,7 @@ Parser::new_Udp2001(
 	  init_name,
 	  init_loc,
 	  init_value,
-	  ai_list,
+	  ai_top,
 	  is_seq,
 	  out_item,
 	  port_array,
@@ -253,7 +253,7 @@ Parser::new_Udp(
   const char* init_name,
   const FileRegion& init_loc,
   const AstExpr* init_value,
-  const AstAttrInstList* ai_list,
+  const AstAttrInst* ai_top,
   bool is_seq,
   const AstIOItem* out_item,
   const std::vector<PtPort*>& port_array,
@@ -321,7 +321,7 @@ Parser::new_Udp(
   }
 
   mAstMgr.reg_udp(udp);
-  reg_attrinst(udp, ai_list);
+  reg_attrinst(udp, ai_top);
 }
 
 END_NAMESPACE_YM_VERILOG

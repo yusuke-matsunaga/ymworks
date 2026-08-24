@@ -10,7 +10,6 @@
 
 #include "parser/PtDecl.h"
 #include "ym/FileRegion.h"
-#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -41,7 +40,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtRange の仮想関数
+  // AstRange の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// ファイル位置の取得
@@ -55,6 +54,32 @@ public:
   /// @brief 範囲の LSB を取り出す．
   const AstExpr*
   right() const override;
+
+  /// @brief 次の要素を返す．
+  virtual
+  const AstRange*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtRange の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  PtRange*
+  _link() const override;
+
+  /// @brief link を設定する．
+  void
+  set_link(
+    PtRange* range
+  ) override;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  PtRange*
+  reverse() override;
 
 
 private:
@@ -70,6 +95,9 @@ private:
 
   // LSB
   const AstExpr* mLsb;
+
+  // 次の要素
+  PtRange* mLink{nullptr};
 
 };
 

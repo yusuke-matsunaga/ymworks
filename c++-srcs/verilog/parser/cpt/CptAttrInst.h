@@ -15,7 +15,7 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-
+#if 0
 //////////////////////////////////////////////////////////////////////
 /// @brief AttrInst のリストを表すクラス
 //////////////////////////////////////////////////////////////////////
@@ -64,6 +64,7 @@ private:
   PtAttrInstArray&& mList;
 
 };
+#endif
 
 
 //////////////////////////////////////////////////////////////////////
@@ -77,9 +78,9 @@ public:
   /// @brief コンストラクタ
   CptAttrInst(
     const FileRegion& file_region,
-    PtAttrSpecArray&& as_list
+    PtAttrSpec* as_top
   ) : mFileRegion{file_region},
-      mAttrSpecList{std::move(as_list)}
+      mAttrSpecTop{as_top}
   {
   }
 
@@ -89,26 +90,41 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtAttrInst の仮想関数
+  // AstAttrInst の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
   FileRegion
   file_region() const override;
 
-  /// @brief 要素数の取得
-  SizeType
-  attrspec_num() const override;
-
-  /// @brief 要素の取得
-  const AstAttrSpec*
-  attrspec(
-    SizeType index ///< [in] インデックス ( 0 <= index < attrspec_num() )
-  ) const override;
-
   /// @brief 要素のリストの取得
-  AstAttrSpecVec
+  AstAttrSpecList
   attrspec_list() const override;
+
+  /// @brief PtAttrInst* 型のリンクを返す．
+  const AstAttrInst*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtAttrInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief PtAttrInst* 型のリンクを返す．
+  PtAttrInst*
+  _link() const override;
+
+  /// @brief link を設定する．
+  void
+  set_link(
+    PtAttrInst* link
+  ) override;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  PtAttrInst*
+  reverse() override;
 
 
 private:
@@ -119,8 +135,11 @@ private:
   // ファイル上の位置
   FileRegion mFileRegion;
 
-  // attr spec のリスト
-  PtAttrSpecArray mAttrSpecList;
+  // attr spec の先頭
+  AstAttrSpec* mAttrSpecTop;
+
+  // 次の要素
+  PtAttrInst* mLink{nullptr};
 
 };
 
@@ -150,7 +169,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtAttrSpec の仮想関数
+  // AstAttrSpec の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
@@ -164,6 +183,31 @@ public:
   /// @brief 式を取り出す．nullptr の場合もある．
   const AstExpr*
   expr() const override;
+
+  /// @brief 次の要素を返す．
+  const AstAttrSpec*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtAttrSpec の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief link を設定する．
+  void
+  set_link(
+    PtAttrSpec* link
+  ) override;
+
+  /// @brief PtAttrSpec* 型のリンクを返す．
+  PtAttrSpec*
+  _link() const override;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  PtAttrSpec*
+  reverse() override;
 
 
 private:
@@ -179,6 +223,9 @@ private:
 
   // 式
   const AstExpr* mExpr;
+
+  // 次の世嘘
+  PtAttrSpec* mLink{nullptr};
 
 };
 

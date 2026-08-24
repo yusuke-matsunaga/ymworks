@@ -237,4 +237,32 @@ public:
 
 END_NAMESPACE_YM_VERILOG
 
+BEGIN_NAMESPACE_STD
+
+// AstModule へのポインタをキーにしたハッシュ関数クラスの定義
+template <>
+struct hash<YM_NAMESPACE::nsVerilog::AstModule*>
+{
+  SizeType
+  operator()(YM_NAMESPACE::nsVerilog::AstModule* module) const
+  {
+    auto tmp = reinterpret_cast<PtrIntType>(module)/sizeof(void*);
+    return static_cast<SizeType>(tmp);
+  }
+};
+
+// const AstModule へのポインタをキーにしたハッシュ関数クラスの定義
+template <>
+struct hash<const YM_NAMESPACE::nsVerilog::AstModule*>
+{
+  SizeType
+  operator()(const YM_NAMESPACE::nsVerilog::AstModule* module) const
+  {
+    auto tmp = reinterpret_cast<PtrIntType>(module)/sizeof(void*);
+    return static_cast<SizeType>(tmp);
+  }
+};
+
+END_NAMESPACE_STD
+
 #endif // YM_VL_ASTMODULE_H

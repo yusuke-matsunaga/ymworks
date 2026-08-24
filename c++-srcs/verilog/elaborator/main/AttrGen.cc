@@ -43,7 +43,7 @@ AttrGen::instantiate_attribute(
     auto ast_attr_list = attr_info.attr_list();
     bool def = attr_info.def();
     std::vector<const VlAttribute*> attr_list;
-    for ( auto ast_ai: ast_attr_list->attrinst_list() ) {
+    for ( auto ast_ai: ast_attr_list ) {
       for ( auto ast_as: ast_ai->attrspec_list() ) {
 	auto expr = instantiate_constant_expr(nullptr, ast_as->expr());
 	if ( !expr ) {

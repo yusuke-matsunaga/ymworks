@@ -294,18 +294,8 @@ public:
   AstItemVec
   else_item_list() const override;
 
-  /// @brief case item のリストの要素数の取得
-  SizeType
-  caseitem_num() const override;
-
-  /// @brief case item の取得
-  const AstGenCaseItem*
-  caseitem(
-    SizeType index ///< [in] インデックス ( 0 <= index < caseitem_num() )
-  ) const override;
-
   /// @brief case item リストの取得
-  AstGenCaseItemVec
+  AstGenCaseItemList
   caseitem_list() const override;
 
   /// @brief 繰り返し制御用の変数名の取得

@@ -26,9 +26,9 @@ public:
 
   /// @brief コンストラクタ
   PtAttrInfo(
-    const AstBase* obj,        ///< [in] 元の構文木要素
-    const AstAttrInstList* attr_list, ///< [in] AstAttrInstのリスト
-    bool def = false           ///< [in] 定義側の時 true とするフラグ
+    const AstBase* obj,               ///< [in] 元の構文木要素
+    const AstAttrInstList& attr_list, ///< [in] AstAttrInstのリスト
+    bool def = false                  ///< [in] 定義側の時 true とするフラグ
   ) : mObj{obj},
       mAttrList{attr_list},
       mDef{def}
@@ -52,7 +52,7 @@ public:
   }
 
   /// @brief 属性リストを返す．
-  const AstAttrInstList*
+  const AstAttrInstList&
   attr_list() const
   {
     return mAttrList;
@@ -75,7 +75,7 @@ private:
   const AstBase* mObj;
 
   // 属性リスト
-  const AstAttrInstList* mAttrList;
+  AstAttrInstList mAttrList;
 
   // 定義側のフラグ
   bool mDef;

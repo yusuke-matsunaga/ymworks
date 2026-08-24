@@ -90,8 +90,9 @@ TEST_F(ParserTest, EventControl3)
   auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_STREQ( name, event0->name() );
-  EXPECT_EQ( 1, event0->namebranch_num() );
-  auto nb0 = event0->namebranch_list().front();
+  auto nb_list = event0->namebranch_list().to_vector();
+  EXPECT_EQ( 1, nb_list.size() );
+  auto nb0 = nb_list[0];
   EXPECT_STREQ( head, nb0->name() );
   EXPECT_EQ( std::vector<const AstExpr*>{event0},
 	     control->event_list() );
@@ -193,8 +194,9 @@ TEST_F(ParserTest, RepatControl3)
   auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_STREQ( name, event0->name() );
-  EXPECT_EQ( 1, event0->namebranch_num() );
-  auto nb0 = event0->namebranch_list().front();
+  auto nb_list = event0->namebranch_list().to_vector();
+  EXPECT_EQ( 1, nb_list.size() );
+  auto nb0 = nb_list[0];
   EXPECT_STREQ( head, nb0->name() );
   EXPECT_EQ( std::vector<const AstExpr*>{event0},
 	     control->event_list() );
@@ -485,20 +487,17 @@ TEST_F(ParserTest, AttrSpec)
 TEST_F(ParserTest, AttrInst)
 {
   auto fr = make_file_region(1, 2, 3, 4);
-  parser.init_attrspec_list();
   auto fr1 = make_file_region(1, 10, 1, 19);
   auto name1 = "attr1";
   auto fr2 = make_file_region(1, 20, 1, 29);
   auto expr1 = parser.factory().new_IntConst(fr2, 1);
   auto as = parser.factory().new_AttrSpec(fr1, name1, expr1);
-  parser.add_attrspec(as);
-  auto ai = parser.factory().new_AttrInst(fr, parser.attrspec_list());
+  auto ai = parser.factory().new_AttrInst(fr, as);
 
   ASSERT_TRUE( ai != nullptr );
   EXPECT_EQ( fr, ai->file_region() );
-  EXPECT_EQ( 1, ai->attrspec_num() );
   std::vector<const AstAttrSpec*> as_vec{as};
-  EXPECT_EQ( as_vec, ai->attrspec_list() );
+  EXPECT_EQ( as_vec, ai->attrspec_list().to_vector() );
 }
 
 END_NAMESPACE_YM_VERILOG

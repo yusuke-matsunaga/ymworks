@@ -228,21 +228,9 @@ public:
   // AstDeclItem の継承クラスが実装する仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 範囲のリストの要素数を返す．
-  virtual
-  SizeType
-  range_num() const = 0;
-
-  /// @brief 範囲を返す．
-  virtual
-  const AstRange*
-  range(
-    SizeType index ///< [in] インデックス ( 0 <= index < range_num() )
-  ) const = 0;
-
   /// @brief 範囲のリストを返す．
   virtual
-  AstRangeVec
+  const AstRangeList
   range_list() const = 0;
 
   /// @brief 初期値の取得
@@ -278,6 +266,11 @@ public:
   virtual
   const AstExpr*
   right() const = 0;
+
+  /// @brief 次の要素を返す．
+  virtual
+  const AstRange*
+  link() const = 0;
 
 };
 

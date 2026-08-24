@@ -63,7 +63,7 @@ AstMgr::find_attr_list(
   PtAttrInfo key(obj, {});
   if ( mAttrDict.count(key) > 0 ) {
     const auto& attr_info = mAttrDict.find(key);
-    return attr_info->attr_list()->attrinst_list();
+    return attr_info->attr_list().to_vector();
   }
   return {};
 }
@@ -124,12 +124,12 @@ AstMgr::reg_defname(
 void
 AstMgr::reg_attrinst(
   const AstBase* obj,
-  const AstAttrInstList* ai_list,
+  const AstAttrInst* ai_top,
   bool def
 )
 {
-  if ( obj != nullptr && ai_list != nullptr ) {
-    mAttrDict.emplace(PtAttrInfo(obj, ai_list, def));
+  if ( obj != nullptr && ai_top != nullptr ) {
+    mAttrDict.emplace(PtAttrInfo(obj, ai_top, def));
   }
 }
 

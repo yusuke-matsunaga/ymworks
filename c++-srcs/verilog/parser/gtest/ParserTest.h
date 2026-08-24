@@ -60,7 +60,7 @@ public:
   }
 
   // Range を作る．
-  const PtRange*
+  PtRange*
   new_range(
     const FileRegion& left_fr,
     SizeType left_val,
@@ -140,18 +140,10 @@ public:
   )
   {
     check_NamedBase(obj, fr, name);
-    EXPECT_EQ( nb_vec.size(), obj->namebranch_num() );
-    EXPECT_EQ( nb_vec, obj->namebranch_list() );
+    EXPECT_EQ( nb_vec, obj->namebranch_list().to_vector() );
     std::string exp_name;
-    EXPECT_EQ( nb_vec.size(), obj->namebranch_num() );
-    EXPECT_EQ( nb_vec, obj->namebranch_list() );
-    SizeType index = 0;
-    for ( auto nb = obj->namebranch_top(); nb != nullptr; nb = nb->link() ) {
-      EXPECT_EQ( nb_vec[index], nb );
-      ++ index;
-    }
     if ( obj->name() != nullptr ) {
-      for ( auto nb = obj->namebranch_top(); nb != nullptr; nb = nb->link() ) {
+      for ( auto nb: obj->namebranch_list() ) {
 	exp_name += nb->decompile();
 	exp_name += ".";
       }

@@ -105,6 +105,29 @@ class PtAttrInstList :
 class PtAttrInst :
   public AstAttrInst
 {
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtAttrInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief PtAttrInst* 型のリンクを返す．
+  virtual
+  PtAttrInst*
+  _link() const = 0;
+
+  /// @brief link を設定する．
+  virtual
+  void
+  set_link(
+    PtAttrInst* link
+  ) = 0;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  virtual
+  PtAttrInst*
+  reverse() = 0;
+
 };
 
 
@@ -115,6 +138,29 @@ class PtAttrInst :
 class PtAttrSpec :
   public AstAttrSpec
 {
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtAttrSpec の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief link を設定する．
+  virtual
+  void
+  set_link(
+    PtAttrSpec* link
+  ) = 0;
+
+  /// @brief PtAttrSpec* 型のリンクを返す．
+  virtual
+  PtAttrSpec*
+  _link() const = 0;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  virtual
+  PtAttrSpec*
+  reverse() = 0;
+
 };
 
 END_NAMESPACE_YM_VERILOG

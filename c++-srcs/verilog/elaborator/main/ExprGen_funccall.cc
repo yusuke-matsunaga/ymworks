@@ -83,7 +83,7 @@ ExprGen::instantiate_funccall(
   const VlTaskFunc* child_func{nullptr};
   if ( env.is_constant() ) {
     // 定数関数を探し出す．
-    if ( ast_expr->namebranch_num() > 0 ) {
+    if ( ast_expr->namebranch_list().size() > 0 ) {
       // 階層名は受け付けない．
       ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
     }

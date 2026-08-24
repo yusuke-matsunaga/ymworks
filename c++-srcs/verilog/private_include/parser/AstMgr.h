@@ -113,7 +113,7 @@ public:
   void
   reg_attrinst(
     const AstBase* ast_obj,
-    const AstAttrInstList* ai_list,
+    const AstAttrInst* ai_top,
     bool def = false
   );
 

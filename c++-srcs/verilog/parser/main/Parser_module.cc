@@ -28,7 +28,7 @@ Parser::new_Module1995(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  const AstAttrInstList* ai_list
+  const AstAttrInst* ai_top
 )
 {
   bool is_cell = lex().cell_define();
@@ -102,7 +102,7 @@ Parser::new_Module1995(
 				    mCurDeclList,
 				    mCurItemList);
   mAstMgr.reg_module(module);
-  reg_attrinst(module, ai_list, true);
+  reg_attrinst(module, ai_top, true);
 }
 
 // Verilog2001 タイプのモジュールを生成する．
@@ -111,7 +111,7 @@ Parser::new_Module2001(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  const AstAttrInstList* ai_list
+  const AstAttrInst* ai_top
 )
 {
   bool is_cell = lex().cell_define();
@@ -156,7 +156,7 @@ Parser::new_Module2001(
 				    mCurDeclList,
 				    mCurItemList);
   mAstMgr.reg_module(module);
-  reg_attrinst(module, ai_list, true);
+  reg_attrinst(module, ai_top, true);
 }
 
 // @brief ポート宣言とIO宣言の齟齬をチェックする．

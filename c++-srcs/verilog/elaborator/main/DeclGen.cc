@@ -430,7 +430,8 @@ DeclGen::instantiate_net_head(
     // init_value() が 0 でなければ初期割り当てを持つということ．
     auto ast_init = ast_item->init_value();
 
-    auto dim_size = ast_item->range_num();
+    auto dim_list = ast_item->range_list();
+    auto dim_size = dim_list.size();
     if ( dim_size > 0 ) {
       // 配列
 
@@ -547,7 +548,7 @@ DeclGen::instantiate_reg_head(
 
   for ( auto ast_item: ast_head->item_list() ) {
     auto ast_init = ast_item->init_value();
-    auto dim_size = ast_item->range_num();
+    auto dim_size = ast_item->range_list().size();
     if ( dim_size > 0 ) {
       // 配列の場合
 
@@ -619,7 +620,7 @@ DeclGen::instantiate_var_head(
   auto var_head = mgr().new_DeclHead(scope, ast_head);
   for ( auto ast_item: ast_head->item_list() ) {
     auto ast_init = ast_item->init_value();
-    auto dim_size = ast_item->range_num();
+    auto dim_size = ast_item->range_list().size();
     if ( dim_size > 0 ) {
       // 配列の場合
 
@@ -686,7 +687,7 @@ DeclGen::instantiate_event_head(
 {
   auto event_head = mgr().new_DeclHead(scope, ast_head);
   for ( auto ast_item: ast_head->item_list() ) {
-    auto dim_size = ast_item->range_num();
+    auto dim_size = ast_item->range_list().size();
     if ( dim_size > 0 ) {
       // 配列
 
@@ -761,11 +762,10 @@ DeclGen::instantiate_dimension_list(
   std::vector<ElbRangeSrc>& range_src
 )
 {
-  auto n = ast_item->range_num();
+  auto n = ast_item->range_list().size();
   range_src.reserve(n);
 
-  for ( SizeType i = 0; i < n; ++ i ) {
-    auto ast_range = ast_item->range(i);
+  for ( auto ast_range: ast_item->range_list() ) {
     auto range = evaluate_range(scope, ast_range);
     range_src.push_back(ElbRangeSrc(ast_range,
 				    ast_range->left(), ast_range->right(),

@@ -36,7 +36,7 @@ ExprGen::instantiate_primary(
 )
 {
   // 識別子の階層
-  auto has_hname = (ast_expr->namebranch_num() > 0);
+  auto has_hname = (ast_expr->namebranch_list().size() > 0);
   if ( has_hname ) {
     if ( env.is_constant() ) {
       // 階層つき識別子はだめ

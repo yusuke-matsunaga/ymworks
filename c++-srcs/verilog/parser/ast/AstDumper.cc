@@ -407,8 +407,7 @@ AstDumper::put(
 
     put("mFileRegion", item->file_region());
     put("mName", item->name());
-    for ( SizeType i = 0; i < item->range_num(); ++ i ) {
-      auto range = item->range(i);
+    for ( auto range: item->range_list() ) {
       AstHeader x(*this, "mDimension", "Range");
 
       put("mLeftRange", range->left());
@@ -1002,7 +1001,7 @@ AstDumper::put_decl_item(
 // @brief 階層名の出力
 void
 AstDumper::put(
-  const AstNameBranchVec& nb_list
+  const AstNameBranchList& nb_list
 )
 {
   for ( auto nb: nb_list ) {

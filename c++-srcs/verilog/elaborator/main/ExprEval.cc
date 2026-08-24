@@ -394,7 +394,7 @@ ExprEval::evaluate_primary(
 )
 {
   // 識別子の階層
-  if ( ast_expr->namebranch_num() > 0 ) {
+  if ( ast_expr->has_hierarchical_name() ) {
     // 階層つき識別子はだめ
     ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
   }
@@ -612,7 +612,7 @@ ExprEval::evaluate_funccall(
   const AstExpr* ast_expr
 )
 {
-  if ( ast_expr->namebranch_num() > 0 ) {
+  if ( ast_expr->has_hierarchical_name() ) {
     // 階層名は使えない．
     ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
   }

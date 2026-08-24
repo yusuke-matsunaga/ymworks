@@ -14,34 +14,6 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// クラス CptAttrInstList
-//////////////////////////////////////////////////////////////////////
-
-// @brief 要素数を返す．
-SizeType
-CptAttrInstList::attrinst_num() const
-{
-  return mList.size();
-}
-
-// @brief 要素を返す．
-const AstAttrInst*
-CptAttrInstList::attrinst(
-  SizeType index
-) const
-{
-  return mList[index];
-}
-
-// @brief 要素のリストを返す．
-AstAttrInstVec
-CptAttrInstList::attrinst_list() const
-{
-  return mList.to_vector();
-}
-
-
-//////////////////////////////////////////////////////////////////////
 // クラス CptAttrInst
 //////////////////////////////////////////////////////////////////////
 
@@ -52,27 +24,41 @@ CptAttrInst::file_region() const
   return mFileRegion;
 }
 
-// @brief 要素数の取得
-SizeType
-CptAttrInst::attrspec_num() const
-{
-  return mAttrSpecList.size();
-}
-
-// @brief 要素の取得
-const AstAttrSpec*
-CptAttrInst::attrspec(
-  SizeType index
-) const
-{
-  return mAttrSpecList[index];
-}
-
 // @brief 要素のリストの取得
-AstAttrSpecVec
+AstAttrSpecList
 CptAttrInst::attrspec_list() const
 {
-  return mAttrSpecList.to_vector();
+  return AstAttrSpecList(mAttrSpecTop);
+}
+
+// @brief 次の要素を返す．
+const AstAttrInst*
+CptAttrInst::link() const
+{
+  return mLink;
+}
+
+// @brief PtAttrInst* 型のリンクを返す．
+PtAttrInst*
+CptAttrInst::_link() const
+{
+  return mLink;
+}
+
+// @brief link を設定する．
+void
+CptAttrInst::set_link(
+  PtAttrInst* link
+)
+{
+  mLink = link;
+}
+
+// @brief リンクトリストを逆順にする．
+PtAttrInst*
+CptAttrInst::reverse()
+{
+  return make_reverse<PtAttrInst>(this);
 }
 
 
@@ -101,31 +87,50 @@ CptAttrSpec::expr() const
   return mExpr;
 }
 
+// @brief PtAttrSpec* 型のリンクを返す．
+PtAttrSpec*
+CptAttrSpec::_link() const
+{
+  return mLink;
+}
+
+// @brief 次の要素を返す．
+const AstAttrSpec*
+CptAttrSpec::link() const
+{
+  return mLink;
+}
+
+// @brief link を設定する．
+void
+CptAttrSpec::set_link(
+  PtAttrSpec* link
+)
+{
+  mLink = link;
+}
+
+// @brief リンクトリストを逆順にする．
+PtAttrSpec*
+CptAttrSpec::reverse()
+{
+  return make_reverse<PtAttrSpec>(this);
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
-// @brief AttrInstList の生成
-PtAttrInstList*
-PtFactory::new_AttrInstList(
-  const AstAttrInstVec& ai_list
-)
-{
-  void* p = mAlloc.get_memory(sizeof(CptAttrInstList));
-  return new (p) CptAttrInstList(PtAttrInstArray(mAlloc, ai_list));
-}
-
 // attribute instance を生成する．
 PtAttrInst*
 PtFactory::new_AttrInst(
   const FileRegion& file_region,
-  const AstAttrSpecVec& as_list
+  PtAttrSpec* as_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptAttrInst));
-  return new (p) CptAttrInst(file_region,
-			     PtAttrSpecArray(mAlloc, as_list));
+  return new (p) CptAttrInst(file_region, as_top->reverse());
 }
 
 // attribute spec を生成する．

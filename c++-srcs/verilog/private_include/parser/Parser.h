@@ -116,7 +116,7 @@ public:
     const char* init_name,         ///< [in] 初期値の名前
     const FileRegion& init_loc,    ///< [in] 初期値の位置
     const AstExpr* init_value,     ///< [in] 初期値のパース木
-    const AstAttrInstList* ai_list        ///< [in] 属性リスト
+    const AstAttrInst* ai_top      ///< [in] 属性リスト
   );
 
   /// @brief Verilog2001 タイプのUDP を生成する．
@@ -127,7 +127,7 @@ public:
     const char* init_name,	   ///< [in] 初期値の名前
     const FileRegion& init_loc,	   ///< [in] 初期値の位置
     const AstExpr* init_value,	   ///< [in] 初期値のパース木
-    const AstAttrInstList* ai_list        ///< [in] 属性リスト
+    const AstAttrInst* ai_top      ///< [in] 属性リスト
   );
 
 
@@ -141,7 +141,7 @@ private:
     const char* init_name,
     const FileRegion& init_loc,
     const AstExpr* init_value,
-    const AstAttrInstList* ai_list,
+    const AstAttrInst* ai_top,
     bool is_seq,
     const AstIOItem* out_item,
     const std::vector<PtPort*>& port_list,
@@ -273,7 +273,7 @@ public:
     const FileRegion& file_region,
     bool is_macro,
     const char* name,
-    const AstAttrInstList* ai_list
+    const AstAttrInst* ai_top
   );
 
   /// @brief Verilog2001 タイプのモジュール(のテンプレート)を生成する．
@@ -282,7 +282,7 @@ public:
     const FileRegion& file_region,
     bool is_macro,
     const char* name,
-    const AstAttrInstList* ai_list
+    const AstAttrInst* ai_top
   );
 
 
@@ -357,29 +357,6 @@ public:
   declitem_list() const
   {
     return mDeclItemList;
-  }
-
-  /// @brief 範囲のリストの初期化
-  void
-  init_range_list()
-  {
-    mRangeList.clear();
-  }
-
-  /// @brief 範囲の追加
-  void
-  add_range(
-    const AstRange* range
-  )
-  {
-    mRangeList.push_back(range);
-  }
-
-  /// @brief RangList を取り出す．
-  const AstRangeVec&
-  range_list() const
-  {
-    return mRangeList;
   }
 
 
@@ -724,41 +701,6 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // GenCase の生成
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief generate case の開始
-  void
-  init_gencase()
-  {
-    push_gencaseitem_list();
-  }
-
-  void
-  add_gencaseitem(
-    PtGenCaseItem* item
-  )
-  {
-    mGenCaseItemListStack.back().push_back(item);
-  }
-
-  /// @brief generate case の終了
-  void
-  end_gencase()
-  {
-    pop_gencaseitem_list();
-  }
-
-  /// @brief GenCaseItem リストの取得
-  const AstGenCaseItemVec&
-  gencaseitem_list() const
-  {
-    return mCurGenCaseItemList;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
   // GenFor の生成
   //////////////////////////////////////////////////////////////////////
 
@@ -895,14 +837,14 @@ public:
   /// @return 生成された演算子
   PtExpr*
   new_Opr(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    VpiOpType type,         ///< [in] 演算の種類
-    const AstExpr* opr,     ///< [in] オペランド
-    const AstAttrInstList* ai_list ///< [in] 属性リスト
+    const FileRegion& fr,     ///< [in] ファイル位置の情報
+    VpiOpType type,           ///< [in] 演算の種類
+    const AstExpr* opr,       ///< [in] オペランド
+    const AstAttrInst* ai_top ///< [in] 属性リスト
   )
   {
     auto expr = mFactory.new_Opr(fr, type, opr);
-    reg_attrinst(expr, ai_list);
+    reg_attrinst(expr, ai_top);
     return expr;
   }
 
@@ -910,15 +852,15 @@ public:
   /// @return 生成された演算子
   PtExpr*
   new_Opr(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    VpiOpType type,         ///< [in] 演算の種類
-    const AstExpr* opr1,    ///< [in] オペランド1
-    const AstExpr* opr2,    ///< [in] オペランド2
-    const AstAttrInstList* ai_list ///< [in] 属性リスト
+    const FileRegion& fr,     ///< [in] ファイル位置の情報
+    VpiOpType type,           ///< [in] 演算の種類
+    const AstExpr* opr1,      ///< [in] オペランド1
+    const AstExpr* opr2,      ///< [in] オペランド2
+    const AstAttrInst* ai_top ///< [in] 属性リスト
   )
   {
     auto expr = mFactory.new_Opr(fr, type, opr1, opr2);
-    reg_attrinst(expr, ai_list);
+    reg_attrinst(expr, ai_top);
     return expr;
   }
 
@@ -926,16 +868,16 @@ public:
   /// @return 生成された演算子
   PtExpr*
   new_Opr(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    VpiOpType type,	    ///< [in] 演算の種類
-    const AstExpr* opr1,    ///< [in] オペランド1
-    const AstExpr* opr2,    ///< [in] オペランド2
-    const AstExpr* opr3,    ///< [in] オペランド3
-    const AstAttrInstList* ai_list ///< [in] 属性リスト
+    const FileRegion& fr,     ///< [in] ファイル位置の情報
+    VpiOpType type,	      ///< [in] 演算の種類
+    const AstExpr* opr1,      ///< [in] オペランド1
+    const AstExpr* opr2,      ///< [in] オペランド2
+    const AstExpr* opr3,      ///< [in] オペランド3
+    const AstAttrInst* ai_top ///< [in] 属性リスト
   )
   {
     auto expr = mFactory.new_Opr(fr, type, opr1, opr2, opr3);
-    reg_attrinst(expr, ai_list);
+    reg_attrinst(expr, ai_top);
     return expr;
   }
 
@@ -1028,57 +970,6 @@ public:
     nb->set_link(hname.nb_top);
     hname.nb_top = nb;
     hname.tail_name = name;
-  }
-
-
-  //////////////////////////////////////////////////////////////////////
-  // attribute instance 関係
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief mAttrInstList の初期化
-  void
-  init_attrinst_list()
-  {
-    mAttrInstList.clear();
-  }
-
-  /// @brief AttrInst をリストに追加する．
-  void
-  add_attrinst(
-    PtAttrInst* attrinst
-  )
-  {
-    mAttrInstList.push_back(attrinst);
-  }
-
-  /// @brief AttrInst のリストを返す．
-  const AstAttrInstVec&
-  attrinst_list() const
-  {
-    return mAttrInstList;
-  }
-
-  /// @brief mAttrSpecList の初期化
-  void
-  init_attrspec_list()
-  {
-    mAttrSpecList.clear();
-  }
-
-  /// @brief AttrSpec をリストに追加する．
-  void
-  add_attrspec(
-    PtAttrSpec* attrspec
-  )
-  {
-    mAttrSpecList.push_back(attrspec);
-  }
-
-  /// @brief AttrSpec のリストを返す．
-  const AstAttrSpecVec&
-  attrspec_list() const
-  {
-    return mAttrSpecList;
   }
 
 
@@ -1184,11 +1075,11 @@ public:
   void
   reg_attrinst(
     const AstBase* obj,
-    const AstAttrInstList* attr_list,
+    const AstAttrInst* ai_top,
     bool def = false
   )
   {
-    mAstMgr.reg_attrinst(obj, attr_list, def);
+    mAstMgr.reg_attrinst(obj, ai_top, def);
   }
 
 
@@ -1328,21 +1219,6 @@ private:
     mCaseItemListStack.pop_back();
   }
 
-  /// @brief GenCaseItemList のスタックに空のリストを追加する．
-  void
-  push_gencaseitem_list()
-  {
-    mGenCaseItemListStack.push_back(AstGenCaseItemVec());
-  }
-
-  /// @brief GenCaseItemList のスタックのトップを取り出す．
-  void
-  pop_gencaseitem_list()
-  {
-    mCurGenCaseItemList = mGenCaseItemListStack.back();
-    mGenCaseItemListStack.pop_back();
-  }
-
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -1414,20 +1290,11 @@ public:
   // instance リスト
   AstInstVec mInstList;
 
-  // Range のリスト
-  AstRangeVec mRangeList;
-
   // ParamAssign のリスト
   AstConnectionVec mParamAssignList;
 
   // Connection のリスト
   AstConnectionVec mConnectionList;
-
-  // AttrInst のリスト
-  AstAttrInstVec mAttrInstList;
-
-  // AttrSpec のリスト
-  AstAttrSpecVec mAttrSpecList;
 
 
 private:
@@ -1467,10 +1334,6 @@ private:
   // generate-if の else 節の item リスト
   AstItemVec mGenElseItemList;
 
-  // generate-case の GenCaseItem のリスト
-  // スタックから取り出された最終結果
-  AstGenCaseItemVec mCurGenCaseItemList;
-
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -1488,9 +1351,6 @@ public:
 
   // CaseItemList のスタック
   std::vector<AstCaseItemVec> mCaseItemListStack;
-
-  // GenCaseItemList のスタック
-  std::vector<AstGenCaseItemVec> mGenCaseItemListStack;
 
   // ExprList のスタック
   std::vector<AstExprVec> mExprListStack;

@@ -235,8 +235,7 @@ public:
   )
   {
     check_item_common(item, AstItem::GenCase);
-    EXPECT_EQ( gci_list.size(), item->caseitem_num() );
-    EXPECT_EQ( gci_list, item->caseitem_list() );
+    EXPECT_EQ( gci_list, item->caseitem_list().to_vector() );
     EXPECT_EQ( expr, item->cond_expr() );
   }
 
@@ -525,24 +524,13 @@ public:
   void
   check_Defparam(
     const AstDefParam* defparam,
+    const FileRegion& fr,
     const char* name,
-    const AstExpr* expr,
-    const std::vector<const char*>& nb_list = {}
+    const std::vector<const AstNameBranch*>& nb_vec,
+    const AstExpr* expr
   )
   {
-    EXPECT_STREQ( name, defparam->name() );
-    auto n = nb_list.size();
-    EXPECT_EQ( n, defparam->namebranch_num() );
-    SizeType index = 0;
-    std::string exp_name;
-    for ( auto nb: defparam->namebranch_list() ) {
-      EXPECT_STREQ( nb_list[index], nb->name() );
-      exp_name += nb->name();
-      exp_name += ".";
-      ++ index;
-    }
-    exp_name += defparam->name();
-    EXPECT_EQ( exp_name, defparam->decompile_name() );
+    check_HierNamedBase(defparam, fr, name, nb_vec);
     EXPECT_EQ( expr, defparam->expr() );
   }
 
@@ -555,10 +543,12 @@ public:
   void
   check_ContAssign(
     const AstContAssign* contassign,
+    const FileRegion& fr,
     const AstExpr* lhs,
     const AstExpr* rhs
   )
   {
+    check_Base(contassign, fr);
     EXPECT_EQ( lhs, contassign->lhs() );
     EXPECT_EQ( rhs, contassign->rhs() );
   }
@@ -572,10 +562,12 @@ public:
   void
   check_Inst(
     const AstInst* inst,
+    const FileRegion& fr,
     const AstRange* range,
     const std::vector<const AstConnection*>& con_list
   )
   {
+    check_Base(inst, fr);
     EXPECT_EQ( range, inst->range() );
     EXPECT_EQ( con_list.size(), inst->port_num() );
     EXPECT_EQ( con_list, inst->port_list() );
@@ -590,11 +582,13 @@ public:
   void
   check_GenCaseItem(
     const AstGenCaseItem* item,
+    const FileRegion& fr,
     const std::vector<const AstExpr*>& label_list,
     const std::vector<const AstDeclHead*>& declhead_list,
     const std::vector<const AstItem*>& item_list
   )
   {
+    check_Base(item, fr);
     EXPECT_EQ( label_list.size(), item->label_num() );
     EXPECT_EQ( label_list, item->label_list() );
     EXPECT_EQ( declhead_list.size(), item->declhead_num() );
@@ -612,6 +606,7 @@ public:
   void
   check_PathDecl(
     const AstPathDecl* pathdecl,
+    const FileRegion& fr,
     int edge,
     const std::vector<const AstExpr*>& input_list,
     int input_pol,
@@ -622,6 +617,7 @@ public:
     const AstPathDelay* path_delay
   )
   {
+    check_Base(pathdecl, fr);
     EXPECT_EQ( edge, pathdecl->edge() );
     EXPECT_EQ( input_list.size(), pathdecl->input_num() );
     EXPECT_EQ( input_list, pathdecl->input_list() );

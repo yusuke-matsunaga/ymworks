@@ -473,9 +473,9 @@ public:
   /// @return 生成された要素
   PtDeclItem*
   new_DeclItem(
-    const FileRegion& fr,   ///< [in] ファイル位置の情報
-    const char* name,       ///< [in] 名前
-    const AstRangeVec& range_list ///< [in] 配列の各次元の範囲のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* name,     ///< [in] 名前
+    PtRange* range_tail   ///< [in] 配列の範囲の末尾
   );
 
   /// @brief 範囲の生成
@@ -928,9 +928,9 @@ public:
   /// @return 生成された generate case 文
   PtItem*
   new_GenCase(
-    const FileRegion& fr,              ///< [in] ファイル位置の情報
-    const AstExpr* expr,               ///< [in] 選択式
-    const AstGenCaseItemVec& item_list ///< [in] generate case item のリスト
+    const FileRegion& fr,   ///< [in] ファイル位置の情報
+    const AstExpr* expr,    ///< [in] 選択式
+    PtGenCaseItem* item_top ///< [in] generate case item の先頭
   );
 
   /// @brief generate case の要素の生成
@@ -1847,18 +1847,12 @@ public:
   // attribute instance 関係
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief AttrInstList の生成
-  PtAttrInstList*
-  new_AttrInstList(
-    const AstAttrInstVec& ai_list
-  );
-
   /// @brief attribute instance の生成
   /// @return 生成された attribute instance
   PtAttrInst*
   new_AttrInst(
-    const FileRegion& fr,         ///< [in] ファイル位置の情報
-    const AstAttrSpecVec& as_list ///< [in] attribute spec のリスト
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    PtAttrSpec* as_top    ///< [in] attribute spec の先頭
   );
 
   /// @brief attribute spec の生成

@@ -25,22 +25,8 @@ CptExpr::op_type() const
   throw std::logic_error{"Not an Operation Type"};
 }
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptExpr::namebranch_num() const
-{
-  throw std::logic_error{"namebranch_num(): type mismatch"};
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptExpr::namebranch_top() const
-{
-  throw std::logic_error{"namebranch(): type mismatch"};
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptExpr::namebranch_list() const
 {
   throw std::logic_error{"namebranch_list(): type mismatch"};
@@ -303,25 +289,11 @@ CptFuncCall::type() const
 // 階層つき名前を持つ function call を表すクラス
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptFuncCallH::namebranch_num() const
-{
-  return mNbTop->count_num();
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptFuncCallH::namebranch_top() const
-{
-  return mNbTop;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptFuncCallH::namebranch_list() const
 {
-  return mNbTop->to_vector();
+  return AstNameBranchList(mNbTop);
 }
 
 

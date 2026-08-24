@@ -411,24 +411,8 @@ CptItem::else_item_list() const
   throw std::logic_error{"else_item_list(): Not a GenIf type"};
 }
 
-// @brief case item のリストの要素数の取得
-SizeType
-CptItem::caseitem_num() const
-{
-  throw std::logic_error{"caseitem_num(): Not a GenCase type"};
-}
-
-// @brief case item の取得
-const AstGenCaseItem*
-CptItem::caseitem(
-  SizeType index
-) const
-{
-  throw std::logic_error{"caseitem(): Not a GenCase type"};
-}
-
 // @brief case item リストの取得
-AstGenCaseItemVec
+AstGenCaseItemList
 CptItem::caseitem_list() const
 {
   throw std::logic_error{"caseitem_list(): Not a GenCase type"};

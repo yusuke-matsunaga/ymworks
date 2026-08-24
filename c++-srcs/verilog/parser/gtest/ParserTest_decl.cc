@@ -748,12 +748,28 @@ TEST_F(ParserTest_Decl, DeclItem3)
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
-  parser.init_range_list();
-  parser.add_range(range);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto item = factory.new_DeclItem(fr, name, parser.range_list());
+  auto item = factory.new_DeclItem(fr, name, range);
 
   check_DeclItem(item, fr, name, {range}, nullptr);
+}
+
+TEST_F(ParserTest_Decl, DeclItem4)
+{
+  parser.init_module();
+
+  auto name = "port1";
+  auto fr1 = make_file_region(1, 1, 1, 9);
+  auto fr2 = make_file_region(2, 10, 1, 19);
+  auto range1 = new_range(fr1, 31, fr2, 0);
+  auto fr3 = make_file_region(1, 20, 1, 29);
+  auto fr4 = make_file_region(2, 30, 1, 39);
+  auto range2 = new_range(fr2, 63, fr2, 0);
+  range2->set_link(range1);
+  auto fr = make_file_region(1, 2, 3, 4);
+  auto item = factory.new_DeclItem(fr, name, range2);
+
+  check_DeclItem(item, fr, name, {range1, range2}, nullptr);
 }
 
 TEST_F(ParserTest_Decl, Range)

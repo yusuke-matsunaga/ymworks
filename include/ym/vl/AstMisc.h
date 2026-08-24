@@ -274,29 +274,6 @@ public:
   const AstNameBranch*
   link() const = 0;
 
-  /// @brief 自身を含めたリンクトリストの要素数を返す．
-  SizeType
-  count_num() const
-  {
-    if ( link() == nullptr ) {
-      return 1;
-    }
-    return link()->count_num() + 1;
-  }
-
-  /// @brief リンクトリストの内容を std::vector<> に変換する．
-  AstNameBranchVec
-  to_vector() const
-  {
-    auto n = count_num();
-    AstNameBranchVec vec;
-    vec.reserve(n);
-    for ( auto nb = this; nb != nullptr; nb = nb->link() ) {
-      vec.push_back(nb);
-    }
-    return vec;
-  }
-
   /// @brief インデックスを含めた名前を返す．
   std::string
   decompile() const
@@ -308,37 +285,6 @@ public:
     }
     return buf.str();
   }
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstAttrInstList AstAttrInstList.h "AstAttrInstList.h"
-/// @brief AttrInst のリストを表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstAttrInstList
-{
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 外部インターフェイス
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 要素数を返す．
-  virtual
-  SizeType
-  attrinst_num() const = 0;
-
-  /// @brief 要素を返す．
-  virtual
-  const AstAttrInst*
-  attrinst(
-    SizeType index ///< [in] インデックス ( 0 <= index < attrinst_num() )
-  ) const = 0;
-
-  /// @brief 要素のリストを返す．
-  virtual
-  AstAttrInstVec
-  attrinst_list() const = 0;
 
 };
 
@@ -360,22 +306,15 @@ public:
   // AstAttrInst の継承クラスが実装する仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 要素数の取得
-  virtual
-  SizeType
-  attrspec_num() const = 0;
-
-  /// @brief 要素の取得
-  virtual
-  const AstAttrSpec*
-  attrspec(
-    SizeType index ///< [in] インデックス ( 0 <= index < attrspec_num() )
-  ) const = 0;
-
   /// @brief 要素のリストの取得
   virtual
-  AstAttrSpecVec
+  AstAttrSpecList
   attrspec_list() const = 0;
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstAttrInst*
+  link() const = 0;
 
 };
 
@@ -408,6 +347,11 @@ public:
   virtual
   const AstExpr*
   expr() const = 0;
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstAttrSpec*
+  link() const = 0;
 
 };
 

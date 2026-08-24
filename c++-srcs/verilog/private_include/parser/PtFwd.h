@@ -70,6 +70,30 @@ class PtUdp;
 class PtUdpEntry;
 class PtUdpValue;
 
+/// リンクトリストを逆順にする．
+template <typename T>
+T*
+make_reverse(
+  T* tail
+)
+{
+  SizeType n = 0;
+  for ( T* x = tail; x != nullptr; x = x->_link() ) {
+    ++ n;
+  }
+  std::vector<T*> tmp_list;
+  tmp_list.reserve(n);
+  for ( T* x = tail; x != nullptr; x = x->_link() ) {
+    tmp_list.push_back(x);
+  }
+  T* top = nullptr;
+  for ( auto x: tmp_list ) {
+    x->set_link(top);
+    top = x;
+  }
+  return top;
+}
+
 END_NAMESPACE_YM_VERILOG
 
 #endif // PTIFWD_H

@@ -453,16 +453,8 @@ public:
   FileRegion
   file_region() const override;
 
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 先頭の階層ブランチを返す．
-  const AstNameBranch*
-  namebranch_top() const override;
-
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchVec
+  AstNameBranchList
   namebranch_list() const override;
 
 
@@ -504,19 +496,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
+  // AstPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 先頭の階層ブランチを返す．
-  const AstNameBranch*
-  namebranch_top() const override;
-
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchVec
+  AstNameBranchList
   namebranch_list() const override;
 
 
@@ -588,19 +572,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
+  // AstPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 先頭の階層ブランチを返す．
-  const AstNameBranch*
-  namebranch_top() const override;
-
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchVec
+  AstNameBranchList
   namebranch_list() const override;
 
 
@@ -641,19 +617,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtPrimary の仮想関数
+  // AstPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチの要素数の取得
-  SizeType
-  namebranch_num() const override;
-
-  /// @brief 先頭の階層ブランチを返す．
-  const AstNameBranch*
-  namebranch_top() const override;
-
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchVec
+  AstNameBranchList
   namebranch_list() const override;
 
 

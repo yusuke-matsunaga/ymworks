@@ -24,27 +24,11 @@ CptDeclItemBase::name() const
   return mName;
 }
 
-// @brief 範囲のリストの要素数を返す．
-SizeType
-CptDeclItemBase::range_num() const
-{
-  return 0;
-}
-
-// @brief 範囲を返す．
-const AstRange*
-CptDeclItemBase::range(
-  SizeType index
-) const
-{
-  throw std::out_of_range{"index is out of range"};
-}
-
 // @brief 範囲のリストを返す．
-std::vector<const AstRange*>
+const AstRangeList
 CptDeclItemBase::range_list() const
 {
-  return std::vector<const AstRange*>{};
+  return AstRangeList();
 }
 
 // 初期値の取得
@@ -78,27 +62,11 @@ CptDeclItemR::file_region() const
   return mFileRegion;
 }
 
-// @brief 範囲のリストの要素数を返す．
-SizeType
-CptDeclItemR::range_num() const
-{
-  return mRangeList.size();
-}
-
-// @brief 範囲を返す．
-const AstRange*
-CptDeclItemR::range(
-  SizeType index
-) const
-{
-  return mRangeList[index];
-}
-
 // @brief 範囲のリストを返す．
-std::vector<const AstRange*>
+const AstRangeList
 CptDeclItemR::range_list() const
 {
-  return mRangeList.to_vector();
+  return AstRangeList(mRangeTop);
 }
 
 
@@ -151,12 +119,12 @@ PtDeclItem*
 PtFactory::new_DeclItem(
   const FileRegion& file_region,
   const char* name,
-  const AstRangeVec& range_list
+  PtRange* range_tail
 )
 {
+  auto range_top = range_tail->reverse();
   void* p = mAlloc.get_memory(sizeof(CptDeclItemR));
-  return new (p) CptDeclItemR(file_region, name,
-			      PtRangeArray(mAlloc, range_list));
+  return new (p) CptDeclItemR(file_region, name, range_top);
 }
 
 END_NAMESPACE_YM_VERILOG

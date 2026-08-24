@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
+#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -69,6 +70,13 @@ public:
   virtual
   int
   index_value() const = 0;
+
+  /// @brief 階層名を持っている時 true を返す．
+  bool
+  has_hierarchical_name() const
+  {
+    return namebranch_list().size() > 0;
+  }
 
   /// @brief 式を表す文字列表現の取得
   std::string

@@ -60,6 +60,29 @@ class PtInst :
 class PtGenCaseItem :
   public AstGenCaseItem
 {
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtGenCaseItem の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  virtual
+  PtGenCaseItem*
+  _link() const = 0;
+
+  /// @brief link を設定する．
+  virtual
+  void
+  set_link(
+    PtGenCaseItem* range
+  ) = 0;
+
+  /// @brief リンクトリストを逆順にする．
+  /// @return 新しい先頭を返す．
+  virtual
+  PtGenCaseItem*
+  reverse() = 0;
+
 };
 
 

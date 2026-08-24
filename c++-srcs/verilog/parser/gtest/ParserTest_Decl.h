@@ -103,8 +103,7 @@ public:
   )
   {
     check_NamedBase(declitem, fr, name);
-    EXPECT_EQ( range_vec.size(), declitem->range_num() );
-    EXPECT_EQ( range_vec, declitem->range_list() );
+    EXPECT_EQ( range_vec, declitem->range_list().to_vector() );
     EXPECT_EQ( init_value, declitem->init_value() );
   }
 

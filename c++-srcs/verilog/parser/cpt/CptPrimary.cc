@@ -197,25 +197,11 @@ CptPrimaryH::file_region() const
   return mFileRegion;
 }
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptPrimaryH::namebranch_num() const
-{
-  return mNbTop->count_num();
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptPrimaryH::namebranch_top() const
-{
-  return mNbTop;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptPrimaryH::namebranch_list() const
 {
-  return mNbTop->to_vector();
+  return AstNameBranchList(mNbTop);
 }
 
 
@@ -223,25 +209,11 @@ CptPrimaryH::namebranch_list() const
 // クラス CptPrimaryHI
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptPrimaryHI::namebranch_num() const
-{
-  return mNbTop->count_num();
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptPrimaryHI::namebranch_top() const
-{
-  return mNbTop;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptPrimaryHI::namebranch_list() const
 {
-  return mNbTop->to_vector();
+  return AstNameBranchList(mNbTop);
 }
 
 
@@ -261,25 +233,11 @@ CptPrimaryHCI::is_const_index() const
 // クラス CptPrimaryHR
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptPrimaryHR::namebranch_num() const
-{
-  return mNbTop->count_num();
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptPrimaryHR::namebranch_top() const
-{
-  return mNbTop;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptPrimaryHR::namebranch_list() const
 {
-  return mNbTop->to_vector();
+  return AstNameBranchList(mNbTop);
 }
 
 
@@ -287,25 +245,11 @@ CptPrimaryHR::namebranch_list() const
 // クラス CptPrimaryHIR
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチの要素数の取得
-SizeType
-CptPrimaryHIR::namebranch_num() const
-{
-  return mNbTop->count_num();
-}
-
-// @brief 先頭の階層ブランチを返す．
-const AstNameBranch*
-CptPrimaryHIR::namebranch_top() const
-{
-  return mNbTop;
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchVec
+AstNameBranchList
 CptPrimaryHIR::namebranch_list() const
 {
-  return mNbTop->to_vector();
+  return AstNameBranchList(mNbTop);
 }
 
 

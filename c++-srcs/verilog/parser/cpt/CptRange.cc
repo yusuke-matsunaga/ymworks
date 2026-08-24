@@ -39,6 +39,36 @@ CptRange::right() const
   return mLsb;
 }
 
+// @brief 次の要素を返す．
+const AstRange*
+CptRange::link() const
+{
+  return mLink;
+}
+
+// @brief 次の要素を返す．
+PtRange*
+CptRange::_link() const
+{
+  return mLink;
+}
+
+// @brief link を設定する．
+void
+CptRange::set_link(
+  PtRange* range
+)
+{
+  mLink = range;
+}
+
+// @brief リンクトリストを逆順にする．
+PtRange*
+CptRange::reverse()
+{
+  return make_reverse<PtRange>(this);
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス PtFactory

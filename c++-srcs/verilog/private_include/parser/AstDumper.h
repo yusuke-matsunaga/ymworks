@@ -149,7 +149,7 @@ private:
   /// @brief 階層名の出力
   void
   put(
-    const AstNameBranchVec& nb_list
+    const AstNameBranchList& nb_list
   );
 
   /// @brief ブール型データの出力

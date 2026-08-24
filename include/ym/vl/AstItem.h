@@ -493,21 +493,9 @@ public:
   // GenCase の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief case item のリストの要素数の取得
-  virtual
-  SizeType
-  caseitem_num() const = 0;
-
-  /// @brief case item の取得
-  virtual
-  const AstGenCaseItem*
-  caseitem(
-    SizeType index ///< [in] インデックス ( 0 <= index < caseitem_num() )
-  ) const = 0;
-
   /// @brief case item リストの取得
   virtual
-  AstGenCaseItemVec
+  AstGenCaseItemList
   caseitem_list() const = 0;
 
 
@@ -721,6 +709,11 @@ public:
   virtual
   AstItemVec
   item_list() const = 0;
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstGenCaseItem*
+  link() const = 0;
 
 };
 
