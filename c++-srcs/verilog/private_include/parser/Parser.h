@@ -291,11 +291,20 @@ public:
   // ポート関連の要素の生成関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief ポート参照リストを初期化する．
+  /// @brief Port リストを初期化する．
   void
-  init_portref_list()
+  init_port_list()
   {
-    mPortRefList.clear();
+    mPortList.clear();
+  }
+
+  /// @brief Port リストに追加する．
+  void
+  add_port(
+    PtPort* port
+  )
+  {
+    mPortList.push_back(port);
   }
 
   /// @brief 入出力宣言中の重複チェックを行う．
@@ -309,49 +318,6 @@ public:
   new_PortArray(
     const std::vector<PtIOHead*>& iohead_list
   );
-
-  /// @brief 空のポートの生成
-  ///
-  /// 結果は mPortList に追加される．
-  void
-  new_Port();
-
-  /// @brief ポートの生成 (内側の式のみ指定するタイプ)
-  ///
-  /// - 内側の式は mPortRefList を用いる．
-  /// - 結果は mPortList に追加される．
-  void
-  new_Port1(
-    const FileRegion& file_region ///< [in] file_region ファイル位置
-  );
-
-  /// @brief ポートの生成 (外側の名前のみ指定するタイプ)
-  ///
-  /// 結果は mPortList に追加される．
-  void
-  new_Port2(
-    const FileRegion& file_region, ///< [in] ファイル位置
-    const char* name               ///< [in] 外側の名前
-  );
-
-  /// @brief ポートの生成 (外側の名前と内側の式を指定するタイプ)
-  ///
-  /// - 内側の式は mPortRefList を用いる．
-  /// - 結果は mPortList に追加される．
-  void
-  new_Port3(
-    const FileRegion& file_region, ///< [in] ファイル位置
-    const char* name               ///< [in] 外側の名前
-  );
-
-  /// @brief PortRef リストに追加する．
-  void
-  add_portref(
-    PtExpr* expr
-  )
-  {
-    mPortRefList.push_back(expr);
-  }
 
 
 public:
@@ -1238,13 +1204,6 @@ public:
     return mPortList;
   }
 
-  /// @brief ポート参照リストを得る．
-  const AstExprVec&
-  _poretref_list() const
-  {
-    return mPortRefList;
-  }
-
   /// @brief パラメータポート宣言リストを得る．
   const std::vector<PtDeclHead*>&
   _paramport_list() const
@@ -1285,20 +1244,6 @@ public:
   _udp_entry_list() const
   {
     return mUdpEntryList;
-  }
-
-  /// @brief UDPテーブルの値のリストを得る．
-  const AstUdpValueVec&
-  _udp_value_list() const
-  {
-    return mUdpValueList;
-  }
-
-  /// @brief AttrInst のリストを得る．
-  const AstAttrInstVec&
-  _attrinst_list() const
-  {
-    return mAttrInstList;
   }
 
 
@@ -1438,9 +1383,6 @@ public:
 
   // ポートリスト
   std::vector<PtPort*> mPortList;
-
-  // ポート参照リスト
-  AstExprVec mPortRefList;
 
   // parameter port 宣言ヘッダリスト
   std::vector<PtDeclHead*> mParamPortHeadList;

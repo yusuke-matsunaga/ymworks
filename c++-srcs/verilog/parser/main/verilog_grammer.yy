@@ -115,9 +115,12 @@ fr_merge(
 
   PtHierName hiername;
 
+  PtPort* port;
+
   PtIOHead* iohead;
   PtDeclHead* declhead;
   PtRange* range;
+
 
   PtItem* item;
 
@@ -388,6 +391,10 @@ fr_merge(
 
 %type <obj> module_item_body module_item2_body
 
+%type <port> port
+%type <port> nonnull_port
+%type <port> udp_port
+
 %type <iohead> portdecl_head
 %type <iohead> inout_declaration
 %type <iohead> input_declaration
@@ -466,6 +473,7 @@ fr_merge(
 %type <exprlist> nzlist_of_terminals
 %type <exprlist> nzlist_of_arguments
 
+%type <expr> port_reference
 %type <expr> concatenation
 %type <expr> multiple_concatenation
 %type <expr> function_call
@@ -721,56 +729,87 @@ paramport_assignment
 ;
 
 // [SPEC] list_of_ports ::= '(' port {',' port} ')'
+//
+// 実は port は空にもなりうるが，空ポートが一つのときは
+// '(' ')' となってしまった空リストと区別ができない．
+// '(' ')' は別に処理するので空でないリストのみを対象とする．
+// そのため nonnull_port というトークンを作る．
+// 要素数が２つ以上の時には空ポートがあってもよい．
 list_of_ports
-:                   { parser.init_portref_list(); } nonnull_port
-| list_of_ports ',' { parser.init_portref_list(); } port
+: nonnull_port
+{
+  parser.init_port_list();
+  parser.add_port($1);
+}
+| list_of_ports ',' port
+{
+  parser.add_port($3);
+}
 ;
 
 // [SPEC] port ::=
 //             [port_expression]
 //            |'.' port_identifier '(' [port_expression] ')'
 // [SPEC] port_identifier ::= identifier
+// [SPEC] port_expression ::=
+//            port_reference
+//           |'{' port_reference { ',' port_reference } '}'
 port
 : // 空
 {
   // でも nullptr を返さない．
-  parser.new_Port();
+  $$ = parser.factory().new_Port(FileRegion());
 }
 | nonnull_port
+{
+  $$ = $1;
+}
 ;
 
 // 空でない port
+// port_expression を port_reference と nzlist_of_port_reference
+// に展開する．
 nonnull_port
-: port_expression
+: port_reference
 {
   // 内側の式のみ指定するタイプ
-  parser.new_Port1(@$);
+  $$ = parser.factory().new_Port(@$, nullptr, $1);
+}
+| '{' nzlist_of_port_references '}'
+{
+  auto expr_list = parser.end_expr_list();
+  // 内側の式のみ指定するタイプ
+  $$ = parser.factory().new_Port(@$, nullptr, expr_list);
 }
 | '.' IDENTIFIER '('                 ')'
 {
   // 外側の名前のみ指定するタイプ
-  parser.new_Port2(@$, $2);
+  $$ = parser.factory().new_Port(@$, $2);
 }
-| '.' IDENTIFIER '(' port_expression ')'
+| '.' IDENTIFIER '(' port_reference ')'
 {
   // 外側の名前と内側の式を指定するタイプ
-  parser.new_Port3(@$, $2);
+  $$ = parser.factory().new_Port(@$, $2, $4);
 }
-;
-
-// [SPEC] port_expression ::=
-//            port_reference
-//           |'{' port_reference { ',' port_reference } '}'
-port_expression
-: port_reference
-| '{' nzlist_of_port_references '}'
+| '.' IDENTIFIER '(' '{' nzlist_of_port_references '}' ')'
+{
+  auto expr_list = parser.end_expr_list();
+  // 外側の名前と内側の式を指定するタイプ
+  $$ = parser.factory().new_Port(@$, $2, expr_list);
+}
 ;
 
 // [SPEC*] nzlist_of_port_references ::=
 //              port_reference { ',' port_reference }
 nzlist_of_port_references
 : port_reference
+{
+  parser.init_expr_list();
+}
 | nzlist_of_port_references ',' port_reference
+{
+  parser.add_expr($3);
+}
 ;
 
 
@@ -793,18 +832,15 @@ nzlist_of_port_references
 port_reference
 : IDENTIFIER
 {
-  auto expr = parser.factory().new_Primary(@$, $1);
-  parser.add_portref(expr);
+  $$ = parser.factory().new_Primary(@$, $1);
 }
 | IDENTIFIER index
 {
-  auto expr = parser.factory().new_Primary(@$, $1, $2);
-  parser.add_portref(expr);
+  $$ = parser.factory().new_Primary(@$, $1, $2);
 }
 | IDENTIFIER part
 {
-  auto expr = parser.factory().new_Primary(@$, $1, $2);
-  parser.add_portref(expr);
+  $$ = parser.factory().new_Primary(@$, $1, $2);
 }
 ;
 
@@ -4325,13 +4361,21 @@ udp_portdecl
 // でしょ．
 udp_port_list
 : udp_port      ',' udp_port // 最低2つはある．
+{
+  parser.init_port_list();
+  parser.add_port($1);
+  parser.add_port($3);
+}
 | udp_port_list ',' udp_port
+{
+  parser.add_port($3);
+}
 ;
 
 udp_port
 : IDENTIFIER
 {
-  parser.new_Port2(@1, $1);
+  $$ = parser.factory().new_Port(@1, $1);
 }
 ;
 

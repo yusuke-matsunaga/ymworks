@@ -158,9 +158,9 @@ public:
   /// @return 生成されたポート
   PtPort*
   new_Port(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    const char* ext_name, ///< [in] ポート名 (空文字列の場合もある)
-    const AstExpr* expr   ///< [in] ポートに接続している式 (ポート参照式)
+    const FileRegion& fr,  ///< [in] ファイル位置の情報
+    const char* ext_name,  ///< [in] ポート名 (空文字列の場合もある)
+    const AstExpr* portref ///< [in] ポートに接続している式 (ポート参照式)
   );
 
   /// @brief ポートの生成 (連結型のポート参照式があるポート)
@@ -169,7 +169,6 @@ public:
   new_Port(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     const char* ext_name,  ///< [in] ポート名 (空文字列の場合もある)
-    const AstExpr* expr,   ///< [in] ポートに接続している式 (ポート参照式)
     const AstExprList* portref_list ///< [in] ポートに接続している式 (ポート参照式)のリスト
   );
 

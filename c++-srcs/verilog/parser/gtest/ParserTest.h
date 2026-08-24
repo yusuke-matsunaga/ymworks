@@ -34,6 +34,7 @@ public:
   // コンストラクタ
   ParserTest(
   ) : parser(astmgr),
+      factory(parser.factory()),
       file_info("filename1")
   {
   }
@@ -67,9 +68,9 @@ public:
     SizeType right_val
   )
   {
-    auto left = parser.factory().new_IntConst(left_fr, left_val);
-    auto right = parser.factory().new_IntConst(right_fr, right_val);
-    return parser.factory().new_Range(FileRegion(left_fr, right_fr), left, right);
+    auto left = factory.new_IntConst(left_fr, left_val);
+    auto right = factory.new_IntConst(right_fr, right_val);
+    return factory.new_Range(FileRegion(left_fr, right_fr), left, right);
   }
 
   // Part を作る．
@@ -82,17 +83,17 @@ public:
     VpiRangeMode mode
   )
   {
-    auto left = parser.factory().new_IntConst(left_fr, left_val);
-    auto right = parser.factory().new_IntConst(right_fr, right_val);
+    auto left = factory.new_IntConst(left_fr, left_val);
+    auto right = factory.new_IntConst(right_fr, right_val);
     switch ( mode ) {
     case VpiRangeMode::Const:
-      return parser.factory().new_PartConst(FileRegion(left_fr, right_fr),
+      return factory.new_PartConst(FileRegion(left_fr, right_fr),
 					    left, right);
     case VpiRangeMode::Plus:
-      return parser.factory().new_PartPlus(FileRegion(left_fr, right_fr),
+      return factory.new_PartPlus(FileRegion(left_fr, right_fr),
 					   left, right);
     case VpiRangeMode::Minus:
-      return parser.factory().new_PartMinus(FileRegion(left_fr, right_fr),
+      return factory.new_PartMinus(FileRegion(left_fr, right_fr),
 					    left, right);
     default:
       break;
@@ -122,7 +123,7 @@ public:
   check_NamedBase(
     const AstNamedBase* obj,
     const FileRegion& fr,
-    const char* name
+    const char* name = nullptr
   )
   {
     check_Base(obj, fr);
@@ -134,8 +135,8 @@ public:
   check_HierNamedBase(
     const AstHierNamedBase* obj,
     const FileRegion& fr,
-    const char* name,
-    const std::vector<const AstNameBranch*>& nb_vec
+    const char* name = nullptr,
+    const std::vector<const AstNameBranch*>& nb_vec = {}
   )
   {
     check_NamedBase(obj, fr, name);
@@ -166,7 +167,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   AstMgr astmgr;
+
   Parser parser;
+
+  PtFactory& factory;
+
   FileInfo file_info;
 
 };

@@ -9,6 +9,7 @@
 #include "CptPort.h"
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
+#include "parser/PtExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -215,11 +216,18 @@ PtPort*
 PtFactory::new_Port(
   const FileRegion& file_region,
   const char* ext_name,
-  const AstExpr* expr
+  const AstExpr* portref
 )
 {
+  // 明示的に外の名前がついていなくても内側の名前が1つで
+  // 範囲指定が無いときには内側の名前を外側の名前とする．
+  if ( ext_name == nullptr &&
+       portref->index_num() == 0 &&
+       portref->part() == nullptr ) {
+    ext_name = portref->name();
+  }
   void* p = mAlloc.get_memory(sizeof(CptPort1));
-  return new (p) CptPort1(file_region, ext_name, expr);
+  return new (p) CptPort1(file_region, ext_name, portref);
 }
 
 // ポートの生成
@@ -227,11 +235,15 @@ PtPort*
 PtFactory::new_Port(
   const FileRegion& file_region,
   const char* ext_name,
-  const AstExpr* expr,
   const AstExprList* portref_list
 )
 {
   auto n = portref_list->size();
+  if ( n == 1 ) {
+    auto portref = portref_list->expr(0);
+    return new_Port(file_region, ext_name, portref);
+  }
+  auto expr = new_Concat(file_region, portref_list);
   void* p = mAlloc.get_memory(sizeof(CptPort2));
   auto dir_array = mAlloc.get_array<VpiDir>(n);
   return new (p) CptPort2(file_region, ext_name,
