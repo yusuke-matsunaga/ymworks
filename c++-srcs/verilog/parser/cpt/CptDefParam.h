@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,9 +25,9 @@ public:
   /// @brief コンストラクタ
   CptDefParamH(
     const FileRegion& file_region,
-    PtDefParamArray&& dp_list
+    PtDefParam* dp_top
   ) : mFileRegion{file_region},
-      mList{std::move(dp_list)}
+      mTop{dp_top}
   {
   }
 
@@ -49,18 +48,8 @@ public:
   Type
   type() const override;
 
-  /// @brief defparam の要素数の取得
-  SizeType
-  defparam_num() const override;
-
-  /// @brief defparam の取得
-  const AstDefParam*
-  defparam(
-    SizeType index ///< [in] インデックス ( 0 <= index < defparam_num() )
-  ) const override;
-
   /// @brief defparam リストの取得
-  AstDefParamVec
+  AstDefParamList
   defparam_list() const override;
 
 
@@ -72,8 +61,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 要素の配列
-  PtDefParamArray mList;
+  // 要素の先頭
+  const AstDefParam* mTop;
 
 };
 

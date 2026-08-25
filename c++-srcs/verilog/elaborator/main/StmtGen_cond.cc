@@ -72,7 +72,7 @@ StmtGen::instantiate_case(
   std::vector<ElbExpr*> expr_list;
   SizeType ne{0};
   for ( auto ast_item: ast_stmt->caseitem_list() ) {
-    ne += ast_item->label_num();
+    ne += ast_item->label_list().size();
   }
   expr_list.reserve(ne);
 
@@ -80,11 +80,11 @@ StmtGen::instantiate_case(
   // Parser::check_default_label() で default が高々1個しかないことは確認済み．
   std::vector<const AstCaseItem*> ast_caseitem_list;
   {
-    SizeType nc = ast_stmt->caseitem_num();
+    SizeType nc = ast_stmt->caseitem_list().size();
     ast_caseitem_list.reserve(nc);
     const AstCaseItem* default_caseitem{nullptr};
     for ( auto ast_item: ast_stmt->caseitem_list() ) {
-      if ( ast_item->label_num() > 0 ) {
+      if ( ast_item->label_list().size() > 0 ) {
 	ast_caseitem_list.push_back(ast_item);
       }
       else {
@@ -110,7 +110,7 @@ StmtGen::instantiate_case(
     // ast_body が空の場合はあり．
 
     // ラベルの生成と設定
-    SizeType n = ast_item->label_num();
+    SizeType n = ast_item->label_list().size();
     std::vector<ElbExpr*> label_list;
     label_list.reserve(n);
     for ( auto ast_expr: ast_item->label_list() ) {

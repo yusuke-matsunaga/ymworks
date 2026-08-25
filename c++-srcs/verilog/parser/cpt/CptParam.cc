@@ -170,11 +170,12 @@ CptSpecParamHV::range() const
 // 1ビットのパラメータ宣言のヘッダの生成
 PtDeclHead*
 PtFactory::new_ParamH(
-  const FileRegion& file_region
+  const FileRegion& file_region,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptParamH));
-  return new (p) CptParamH(file_region);
+  return new (p) CptParamH(file_region, item_top);
 }
 
 // 範囲指定型パラメータ宣言のヘッダの生成
@@ -182,25 +183,27 @@ PtDeclHead*
 PtFactory::new_ParamH(
   const FileRegion& file_region,
   bool sign,
-  const AstRange* range
+  const AstRange* range,
+  PtDeclItem* item_top
 )
 {
   if ( sign ) {
     void* p = mAlloc.get_memory(sizeof(CptParamHSV));
-    return new (p) CptParamHSV(file_region, range);
+    return new (p) CptParamHSV(file_region, range, item_top);
   }
   void* p = mAlloc.get_memory(sizeof(CptParamHV));
-  return new (p) CptParamHV(file_region, range);
+  return new (p) CptParamHV(file_region, range, item_top);
 }
 
 // 1ビットのローカルパラメータ宣言のヘッダの生成
 PtDeclHead*
 PtFactory::new_LocalParamH(
-  const FileRegion& file_region
+  const FileRegion& file_region,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptLocalParamH));
-  return new (p) CptLocalParamH(file_region);
+  return new (p) CptLocalParamH(file_region, item_top);
 }
 
 // 範囲指定型ローカルパラメータ宣言のヘッダの生成
@@ -208,58 +211,63 @@ PtDeclHead*
 PtFactory::new_LocalParamH(
   const FileRegion& file_region,
   bool sign,
-  const AstRange* range
+  const AstRange* range,
+  PtDeclItem* item_top
 )
 {
   if ( sign ) {
     void* p = mAlloc.get_memory(sizeof(CptLocalParamHSV));
-    return new (p) CptLocalParamHSV(file_region, range);
+    return new (p) CptLocalParamHSV(file_region, range, item_top);
   }
   void* p = mAlloc.get_memory(sizeof(CptLocalParamHV));
-  return new (p) CptLocalParamHV(file_region, range);
+  return new (p) CptLocalParamHV(file_region, range, item_top);
 }
 
 // 組み込み型パラメータ宣言のヘッダの生成
 PtDeclHead*
 PtFactory::new_ParamH(
   const FileRegion& file_region,
-  VpiVarType var_type
+  VpiVarType var_type,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptParamHT));
-  return new (p) CptParamHT(file_region, var_type);
+  return new (p) CptParamHT(file_region, var_type, item_top);
 }
 
 // 組み込み型ローカルパラメータ宣言のヘッダの生成
 PtDeclHead*
 PtFactory::new_LocalParamH(
   const FileRegion& file_region,
-  VpiVarType var_type
+  VpiVarType var_type,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptLocalParamHT));
-  return new (p) CptLocalParamHT(file_region, var_type);
+  return new (p) CptLocalParamHT(file_region, var_type, item_top);
 }
 
 // 1ビットの specparam 宣言のヘッダを生成する．
 PtDeclHead*
 PtFactory::new_SpecParamH(
-  const FileRegion& file_region
+  const FileRegion& file_region,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecParamH));
-  return new (p) CptSpecParamH(file_region);
+  return new (p) CptSpecParamH(file_region, item_top);
 }
 
 // specparam 宣言のヘッダを生成する．
 PtDeclHead*
 PtFactory::new_SpecParamH(
   const FileRegion& file_region,
-  const AstRange* range
+  const AstRange* range,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecParamHV));
-  return new (p) CptSpecParamHV(file_region, range);
+  return new (p) CptSpecParamHV(file_region, range, item_top);
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -26,7 +26,6 @@ ExprGen::instantiate_opr(
 )
 {
   auto op_type = ast_expr->op_type();
-  SizeType opr_size{ast_expr->operand_num()};
 
   ElbExpr* opr0{nullptr};
   ElbExpr* opr1{nullptr};
@@ -106,6 +105,7 @@ ExprGen::instantiate_opr(
 
   case VpiOpType::Concat:
     {
+      auto opr_size = ast_expr->operand_list().size();
       std::vector<ElbExpr*> opr_list;
       opr_list.reserve(opr_size);
       for ( auto ast_expr1: ast_expr->operand_list() ) {
@@ -126,6 +126,7 @@ ExprGen::instantiate_opr(
       auto ast_rep = ast_expr->rep();
       auto rep_num = evaluate_int(parent, ast_rep);
       auto rep_expr = instantiate_expr(parent, env, ast_rep);
+      auto opr_size = ast_expr->operand_list().size();
       std::vector<ElbExpr*> opr_list;
       opr_list.reserve(opr_size);
       for ( auto ast_expr1: ast_expr->operand_list() ) {

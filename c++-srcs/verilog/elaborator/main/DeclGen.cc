@@ -50,7 +50,7 @@ DeclGen::~DeclGen()
 void
 DeclGen::phase1_decl(
   const VlScope* scope,
-  const AstDeclHeadVec& ast_head_list,
+  const AstDeclHeadList& ast_head_list,
   bool force_to_local
 )
 {
@@ -85,7 +85,7 @@ void
 DeclGen::instantiate_iodecl(
   ElbModule* module,
   ElbTaskFunc* taskfunc,
-  const AstIOHeadVec& ast_head_list
+  const AstIOHeadList& ast_head_list
 )
 {
   auto scope = (const VlScope*){nullptr};
@@ -296,7 +296,7 @@ DeclGen::instantiate_iodecl(
 void
 DeclGen::instantiate_decl(
   const VlScope* scope,
-  const AstDeclHeadVec& ast_head_list
+  const AstDeclHeadList& ast_head_list
 )
 {
   for ( auto ast_head: ast_head_list ) {

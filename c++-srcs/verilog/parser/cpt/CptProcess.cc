@@ -7,6 +7,7 @@
 /// All rights reserved.
 
 #include "CptProcess.h"
+#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 
 

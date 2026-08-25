@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,9 +25,9 @@ public:
   /// @brief コンストラクタ
   CptContAssignH(
     const FileRegion& file_region,
-    PtContAssignArray&& ca_list
+    const AstContAssign* ca_top
   ) : mFileRegion{file_region},
-      mList{std::move(ca_list)}
+      mTop{ca_top}
   {
   }
 
@@ -59,18 +58,8 @@ public:
   const AstDelay*
   delay() const override;
 
-  /// @brief continuous assign の要素数の取得
-  SizeType
-  contassign_num() const override;
-
-  /// @brief continuous assign の取得
-  const AstContAssign*
-  contassign(
-    SizeType index ///< [in] インデックス ( 0 <= index < contassign_num() )
-  ) const override;
-
   /// @brief continuous assign リストの取得
-  AstContAssignVec
+  AstContAssignList
   contassign_list() const override;
 
 
@@ -82,8 +71,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 要素のリスト
-  PtContAssignArray mList;
+  // 要素の先頭
+  const AstContAssign* mTop;
 
 };
 
@@ -101,8 +90,8 @@ public:
   CptContAssignHS(
     const FileRegion& file_region,
     const AstStrength* strength,
-    PtContAssignArray&& ca_list
-  ) : CptContAssignH(file_region, std::move(ca_list)),
+    const AstContAssign* ca_top
+  ) : CptContAssignH(file_region, ca_top),
       mStrength{strength}
   {
   }
@@ -145,8 +134,8 @@ public:
   CptContAssignHD(
     const FileRegion& file_region,
     const AstDelay* delay,
-    PtContAssignArray&& ca_list
-  ) : CptContAssignH(file_region, std::move(ca_list)),
+    const AstContAssign* ca_top
+  ) : CptContAssignH(file_region, ca_top),
       mDelay{delay}
   {
   }
@@ -190,8 +179,8 @@ public:
     const FileRegion& file_region,
     const AstStrength* strength,
     const AstDelay* delay,
-    PtContAssignArray&& ca_list
-  ) : CptContAssignH(file_region, std::move(ca_list)),
+    const AstContAssign* ca_top
+  ) : CptContAssignH(file_region, ca_top),
       mStrength{strength},
       mDelay{delay}
   {

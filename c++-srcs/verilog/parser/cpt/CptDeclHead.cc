@@ -73,36 +73,18 @@ CptDeclHead::delay() const
   return nullptr;
 }
 
-// @brief 要素数の取得
-SizeType
-CptDeclHead::item_num() const
-{
-  return mItemList.size();
-}
-
-// @brief 要素を返す．
-const AstDeclItem*
-CptDeclHead::item(
-  SizeType index
-) const
-{
-  return mItemList[index];
-}
-
 // @brief 要素のリストを返す．
-AstDeclItemVec
+AstDeclItemList
 CptDeclHead::item_list() const
 {
-  return mItemList.to_vector();
+  return AstDeclItemList(mItemTop);
 }
 
-// @brief 要素リストの設定
-void
-CptDeclHead::set_elem(
-  PtDeclItemArray&& elem_list
-)
+// @brief 先頭の要素を返す．
+PtDeclItem*
+CptDeclHead::_item_top() const
 {
-  mItemList = std::move(elem_list);
+  return mItemTop;
 }
 
 
@@ -170,32 +152,35 @@ CptEventH::type() const
 // event 宣言のヘッダを生成する．
 PtDeclHead*
 PtFactory::new_EventH(
-  const FileRegion& file_region
+  const FileRegion& file_region,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEventH));
-  return new (p) CptEventH(file_region);
+  return new (p) CptEventH(file_region, item_top);
 }
 
 // genvar 宣言のヘッダを生成する．
 PtDeclHead*
 PtFactory::new_GenvarH(
-  const FileRegion& file_region
+  const FileRegion& file_region,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenvarH));
-  return new (p) CptGenvarH(file_region);
+  return new (p) CptGenvarH(file_region, item_top);
 }
 
 // 変数宣言のヘッダを生成する．
 PtDeclHead*
 PtFactory::new_VarH(
   const FileRegion& file_region,
-  VpiVarType var_type
+  VpiVarType var_type,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptVarH));
-  return new (p) CptVarH(file_region, var_type);
+  return new (p) CptVarH(file_region, var_type, item_top);
 }
 
 END_NAMESPACE_YM_VERILOG

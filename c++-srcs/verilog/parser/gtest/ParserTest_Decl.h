@@ -46,8 +46,7 @@ public:
     EXPECT_EQ( var_type, iohead->var_type() );
     EXPECT_EQ( is_signed, iohead->is_signed() );
     EXPECT_EQ( range, iohead->range() );
-    EXPECT_EQ( item_vec.size(), iohead->item_num() );
-    EXPECT_EQ( item_vec, iohead->item_list() );
+    EXPECT_EQ( item_vec, iohead->item_list().to_vector() );
   }
 
   /// @brief AstIOItem のテスト
@@ -88,8 +87,7 @@ public:
     EXPECT_EQ( vs_type, declhead->vs_type() );
     EXPECT_EQ( strength, declhead->strength() );
     EXPECT_EQ( delay, declhead->delay() );
-    EXPECT_EQ( item_vec.size(), declhead->item_num() );
-    EXPECT_EQ( item_vec, declhead->item_list() );
+    EXPECT_EQ( item_vec, declhead->item_list().to_vector() );
   }
 
   /// @brief AstDeclItem のテスト

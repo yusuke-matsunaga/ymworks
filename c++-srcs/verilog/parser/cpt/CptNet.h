@@ -25,8 +25,9 @@ public:
   CptNetH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiNetType net_type,           ///< [in] net の型
-    bool sign                      ///< [in] 符号付きのとき true となるフラグ
-  ) : CptDeclHead(file_region)
+    bool sign,                     ///< [in] 符号付きのとき true となるフラグ
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top)
   {
     mFlags = (static_cast<std::uint32_t>(net_type) << 1) |
       static_cast<std::uint32_t>(sign);
@@ -79,9 +80,10 @@ public:
   CptNetHS(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiNetType net_type,	   ///< [in] net の型
-    bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const AstStrength* strength    ///< [in] 信号強度
-  ) : CptNetH(file_region, net_type, sign),
+    bool sign,                     ///< [in] 符号付きのとき true となるフラグ
+    const AstStrength* strength,   ///< [in] 信号強度
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptNetH(file_region, net_type, sign, item_top),
       mStrength{strength}
   {
   }
@@ -125,8 +127,9 @@ public:
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiNetType net_type,	   ///< [in] net の型
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
-    const AstDelay* delay          ///< [in] 遅延
-  ) : CptNetH(file_region, net_type, sign),
+    const AstDelay* delay,         ///< [in] 遅延
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptNetH(file_region, net_type, sign, item_top),
       mDelay{delay}
   {
   }
@@ -171,8 +174,9 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
     const AstStrength* strength,   ///< [in] 信号強度
-    const AstDelay* delay          ///< [in] 遅延
-  ) : CptNetH(file_region, net_type, sign),
+    const AstDelay* delay,         ///< [in] 遅延
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptNetH(file_region, net_type, sign, item_top),
       mStrength{strength},
       mDelay{delay}
   {
@@ -226,8 +230,9 @@ public:
     VpiNetType net_type,	   ///< [in] net の型
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,                     ///< [in] 符号付きのとき true となるフラグ
-    const AstRange* range          ///< [in] パース木の範囲定義
-  ) : CptNetH(file_region, net_type, sign),
+    const AstRange* range,         ///< [in] パース木の範囲定義
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptNetH(file_region, net_type, sign, item_top),
       mRange{range}
   {
     mFlags |= (static_cast<std::uint32_t>(vstype) << 5);
@@ -281,8 +286,9 @@ public:
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range,         ///< [in] パース木の範囲定義
-    const AstStrength* strength    ///< [in] 信号強度
-  ) : CptNetHV(file_region, net_type, vstype, sign, range),
+    const AstStrength* strength,   ///< [in] 信号強度
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptNetHV(file_region, net_type, vstype, sign, range, item_top),
       mStrength{strength}
   {
   }
@@ -328,9 +334,11 @@ public:
     VpiVsType vstype,		   ///< [in] vectored/scalared 属性を表す値
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range,         ///< [in] パース木の範囲定義
-    const AstDelay* delay          ///< [in] 遅延
+    const AstDelay* delay,         ///< [in] 遅延
+    PtDeclItem* item_top           ///< [in] 要素の先頭
   ) : CptNetHV(file_region, net_type,
-	       vstype, sign, range),
+	       vstype, sign, range,
+	       item_top),
       mDelay{delay}
   {
   }
@@ -377,9 +385,11 @@ public:
     bool sign,			   ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range,         ///< [in] パース木の範囲定義
     const AstStrength* strength,   ///< [in] 信号強度
-    const AstDelay* delay          ///< [in] 遅延
+    const AstDelay* delay,         ///< [in] 遅延
+    PtDeclItem* item_top           ///< [in] 要素の先頭
   ) : CptNetHV(file_region, net_type,
-	       vstype, sign, range),
+	       vstype, sign, range,
+	       item_top),
       mStrength{strength},
       mDelay{delay}
   {

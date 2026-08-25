@@ -119,9 +119,6 @@ ExprGen::instantiate_event_expr(
     case VpiOpType::Posedge:
     case VpiOpType::Negedge:
     { // これのみがイベント式の特徴
-      if ( ast_expr->operand_num() != 1 ) {
-	throw std::logic_error{"ast_operand_num() != 1"};
-      }
       auto opr0 = instantiate_expr(parent, env, ast_expr->operand0());
       auto expr = mgr().new_UnaryOp(ast_expr, ast_expr->op_type(), opr0);
 
@@ -202,8 +199,8 @@ ExprGen::instantiate_lhs(
     // 左辺では concatination しか適当でない．
     if ( ast_expr->op_type() == VpiOpType::Concat ) {
       std::vector<ElbExpr*> elem_array;
-      auto opr_size = ast_expr->operand_num();
-      auto ast_opr_list = ast_expr->operand_list();
+      auto ast_opr_list = ast_expr->operand_list().to_vector();
+      auto opr_size = ast_opr_list.size();
       std::vector<ElbExpr*> opr_list(opr_size);
       for ( SizeType i = 0; i < opr_size; ++ i ) {
 	// 現れた順は上位ビットからなので位置が逆になる．
@@ -262,8 +259,8 @@ ExprGen::instantiate_lhs_sub(
   case AstExpr::Opr:
     // 左辺では concatination しか適当でない．
     if ( ast_expr->op_type() == VpiOpType::Concat ) {
-      auto opr_size = ast_expr->operand_num();
-      auto ast_opr_list = ast_expr->operand_list();
+      auto ast_opr_list = ast_expr->operand_list().to_vector();
+      auto opr_size = ast_opr_list.size();
       std::vector<ElbExpr*> opr_list(opr_size);
       for ( SizeType i = 0; i < opr_size; ++ i ) {
 	SizeType pos = opr_size - i - 1;
@@ -356,7 +353,7 @@ ExprGen::instantiate_delay(
     return nullptr;
   }
 
-  auto n = ast_header->paramassign_num();
+  auto n = ast_header->paramassign_list().size();
   if ( n != 1 ) {
     throw std::logic_error{"n != 1"};
   }

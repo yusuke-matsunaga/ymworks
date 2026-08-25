@@ -20,35 +20,18 @@ BEGIN_NAMESPACE_YM_VERILOG
 // UDP 関係
 //////////////////////////////////////////////////////////////////////
 
-// @brief UDP定義の開始
-void
-Parser::init_udp()
-{
-  mModuleIOHeadList.clear();
-  mPortList.clear();
-  push_declhead_list();
-
-  mIOItemList.clear();
-  mDeclItemList.clear();
-  mUdpEntryList.clear();
-}
-
-// @brief UDP 定義の終了
-void
-Parser::end_udp()
-{
-  mCurDeclList = pop_declhead_list();
-}
-
 // UDP を生成する．(Verilog-1995)
-void
+PtUdp*
 Parser::new_Udp1995(
   const FileRegion& file_region,
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
-  const AstExpr* init_value,
-  const AstAttrInst* ai_top
+  PtExpr* init_value,
+  PtPort* port_top,
+  PtIOHead* io_top,
+  PtDeclHead* decl_top,
+  PtUdpEntry* entry_top
 )
 {
   const AstIOItem* out_item = nullptr;
@@ -64,7 +47,7 @@ Parser::new_Udp1995(
   // まず portdecl_list の各要素を名前をキーにした連想配列に格納する．
   // ついでに output の数を数える．
   std::unordered_map<std::string, const AstIOItem*> iomap;
-  for ( auto io: mModuleIOHeadList ) {
+  for ( auto io: AstIOHeadList(io_top) ) {
     auto item_list = io->item_list();
     if ( io->direction() == VpiDir::Output ) {
       if ( out_item ) {
@@ -105,7 +88,7 @@ Parser::new_Udp1995(
 
   // port_list に現れる名前が iolist 中にあるか調べる．
   bool first = true;
-  for ( auto port: mPortList ) {
+  for ( auto port: AstPortList(port_top) ) {
     auto port_name = port->ext_name();
     if ( iomap.count(port_name) == 0 ) {
       std::ostringstream buf;
@@ -155,21 +138,22 @@ Parser::new_Udp1995(
   // 次に decl_list の要素数が1以下であり，
   // さらにその要素が REG で名前が出力名と一致することを確認する．
   // ちなみに YACC の文法から REG 以外の宣言要素はありえない．
-  if ( mCurDeclList.size() > 1 ) {
+  auto decl_list = AstDeclHeadList(decl_top).to_vector();
+  if ( decl_list.size() > 1 ) {
     // 二つ以上の reg 宣言があった．
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    mCurDeclList[1]->file_region(),
+		    decl_list[1]->file_region(),
 		    MsgType::Error,
 		    "PARS",
 		    "More than two 'reg' declarations.");
     sane = false;
   }
-  else if ( mCurDeclList.size() == 1 ) {
-    auto reghead = mCurDeclList[0];
+  else if ( decl_list.size() == 1 ) {
+    auto reghead = decl_list[0];
     if ( reghead ) {
       is_seq = true;
       ASSERT_COND( reghead->type() == AstDeclHead::Reg );
-      ASSERT_COND( reghead->item_num() == 1 );
+      ASSERT_COND( reghead->item_list().size() == 1 );
       auto regitem = reghead->item_list().front();
       ASSERT_COND( regitem );
       if ( strcmp(regitem->name(), out_item->name()) != 0 ) {
@@ -194,34 +178,34 @@ Parser::new_Udp1995(
 	    init_name,
 	    init_loc,
 	    init_value,
-	    ai_top,
 	    is_seq,
 	    out_item,
-	    mPortList,
-	    mModuleIOHeadList);
+	    port_top,
+	    io_top,
+	    entry_top);
   }
-  end_udp();
 }
 
 // UDP を生成する．(Verilog-2001)
-void
+PtUdp*
 Parser::new_Udp2001(
   const FileRegion& file_region,
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
-  const AstExpr* init_value,
-  const AstAttrInst* ai_top
+  PtExpr* init_value,
+  PtIOHead* io_top,
+  PtUdpEntry* entry_top
 )
 {
   bool is_seq = false;
 
   // YACC の文法が正しく書かれていれば最初のヘッダが出力で
   // 要素数が1となっているはず．
-  ASSERT_COND( mModuleIOHeadList.size() > 0 );
-  auto out_head = mModuleIOHeadList[0];
+  ASSERT_COND( AstIOHeadList(io_top).size() > 0 );
+  auto out_head = io_top;
   ASSERT_COND( out_head->direction() == VpiDir::Output );
-  ASSERT_COND( out_head->item_num() == 1 );
+  ASSERT_COND( out_head->item_list().size() == 1 );
   auto out_item = out_head->item_list().front();
 
   if ( out_head->aux_type() == VpiAuxType::Reg ) {
@@ -230,34 +214,33 @@ Parser::new_Udp2001(
   // 残りの要素は入力になっているはず．
 
   // iohead_array から port_array を生成する．
-  auto port_array = new_PortArray(mModuleIOHeadList);
+  auto port_array = new_PortArray(AstIOHeadList(io_top));
 
   new_Udp(file_region,
 	  udp_name,
 	  init_name,
 	  init_loc,
 	  init_value,
-	  ai_top,
 	  is_seq,
 	  out_item,
-	  port_array,
-	  mModuleIOHeadList);
-  end_udp();
+	  nullptr, /*port_top,*/
+	  io_top,
+	  entry_top);
 }
 
 // @brief new_Udp の下請け関数
-void
+PtUdp*
 Parser::new_Udp(
   const FileRegion& file_region,
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
   const AstExpr* init_value,
-  const AstAttrInst* ai_top,
   bool is_seq,
   const AstIOItem* out_item,
-  const std::vector<PtPort*>& port_array,
-  const std::vector<PtIOHead*>& iohead_array
+  PtPort* port_top,
+  PtIOHead* iohead_top,
+  PtUdpEntry* entry_top
 )
 {
   const AstUdp* udp = nullptr;
@@ -277,7 +260,7 @@ Parser::new_Udp(
 			MsgType::Error,
 			"PARS",
 			buf.str());
-	return;
+	return nullptr;
       }
 
       if ( out_item->init_value() ) {
@@ -296,12 +279,12 @@ Parser::new_Udp(
     // このあと elaboration で注意が必要なのは init_value.
     // 場合によってはこれが nullptrで outhead->top()->init_value()
     // が空でない場合がある．
-    udp = mFactory.new_SeqUdp(file_region,
-			      udp_name,
-			      port_array,
-			      iohead_array,
-			      init_value,
-			      mUdpEntryList);
+    return mFactory.new_SeqUdp(file_region,
+			       udp_name,
+			       port_top,
+			       iohead_top,
+			       init_value,
+			       entry_top);
   }
   else {
     if ( init_name ) {
@@ -311,17 +294,14 @@ Parser::new_Udp(
 		      MsgType::Error,
 		      "PARS",
 		      "Combinational primitive can not have the initial value.");
-      return;
+      return nullptr;
     }
-    udp = mFactory.new_CmbUdp(file_region,
-			      udp_name,
-			      port_array,
-			      iohead_array,
-			      mUdpEntryList);
+    return mFactory.new_CmbUdp(file_region,
+			       udp_name,
+			       port_top,
+			       iohead_top,
+			       entry_top);
   }
-
-  mAstMgr.reg_udp(udp);
-  reg_attrinst(udp, ai_top);
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -7,6 +7,7 @@
 /// All rights reserved.
 
 #include "CptContAssign.h"
+#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 
 
@@ -44,27 +45,11 @@ CptContAssignH::delay() const
   return nullptr;
 }
 
-// @brief continuous assign の要素数の取得
-SizeType
-CptContAssignH::contassign_num() const
-{
-  return mList.size();
-}
-
-// @brief continuous assign の取得
-const AstContAssign*
-CptContAssignH::contassign(
-  SizeType index
-) const
-{
-  return mList[index];
-}
-
 // @brief continuous assign リストの取得
-AstContAssignVec
+AstContAssignList
 CptContAssignH::contassign_list() const
 {
-  return mList.to_vector();
+  return AstContAssignList(mTop);
 }
 
 
@@ -145,12 +130,11 @@ CptContAssign::rhs() const
 PtItem*
 PtFactory::new_ContAssignH(
   const FileRegion& file_region,
-  const AstContAssignVec& elem_list
+  PtContAssign* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptContAssignH));
-  return new (p) CptContAssignH(file_region,
-				PtContAssignArray(mAlloc, elem_list));
+  return new (p) CptContAssignH(file_region, elem_top);
 }
 
 // continuous assign 文のヘッダを生成する．
@@ -158,12 +142,11 @@ PtItem*
 PtFactory::new_ContAssignH(
   const FileRegion& file_region,
   const AstDelay* delay,
-  const AstContAssignVec& elem_list
+  PtContAssign* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptContAssignHD));
-  return new (p) CptContAssignHD(file_region, delay,
-				 PtContAssignArray(mAlloc, elem_list));
+  return new (p) CptContAssignHD(file_region, delay, elem_top);
 }
 
 // continuous assign 文のヘッダを生成する．
@@ -171,12 +154,11 @@ PtItem*
 PtFactory::new_ContAssignH(
   const FileRegion& file_region,
   const AstStrength* strength,
-  const AstContAssignVec& elem_list
+  PtContAssign* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptContAssignHS));
-  return new (p) CptContAssignHS(file_region, strength,
-				 PtContAssignArray(mAlloc, elem_list));
+  return new (p) CptContAssignHS(file_region, strength, elem_top);
 }
 
 // continuous assign 文のヘッダを生成する．
@@ -185,12 +167,11 @@ PtFactory::new_ContAssignH(
   const FileRegion& file_region,
   const AstStrength* strength,
   const AstDelay* delay,
-  const AstContAssignVec& elem_list
+  PtContAssign* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptContAssignHSD));
-  return new (p) CptContAssignHSD(file_region, strength, delay,
-				  PtContAssignArray(mAlloc, elem_list));
+  return new (p) CptContAssignHSD(file_region, strength, delay, elem_top);
 }
 
 // continuous assign 文の要素を生成する．

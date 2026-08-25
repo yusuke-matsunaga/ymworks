@@ -185,10 +185,10 @@ ExprEval::evaluate_opr(
 )
 {
   auto op_type = ast_expr->op_type();
-  auto op_size = ast_expr->operand_num();
 
   // オペランドの値の評価を行う．
   std::vector<VlValue> val;
+  auto op_size = ast_expr->operand_list().size();
   val.reserve(op_size);
   for ( auto ast_expr1: ast_expr->operand_list() ) {
     val.push_back(evaluate_expr(parent, ast_expr1));
@@ -399,7 +399,7 @@ ExprEval::evaluate_primary(
     ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
   }
 
-  auto isize = ast_expr->index_num();
+  auto isize = ast_expr->index_list().size();
   auto has_bit_select = (isize == 1);
   auto ast_part = ast_expr->part();
   auto has_range_select = (ast_part != nullptr);
@@ -650,7 +650,7 @@ ExprEval::evaluate_funccall(
   }
 
   // 引数の生成
- auto n = ast_expr->operand_num();
+  auto n = ast_expr->operand_list().size();
   if ( n != child_func->io_num() ) {
     // 引数の数が合わなかった．
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);

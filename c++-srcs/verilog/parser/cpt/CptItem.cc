@@ -23,73 +23,25 @@ CptItem::name() const
   return nullptr;
 }
 
-// @brief パラメータ割り当ての要素数の取得
-SizeType
-CptItem::paramassign_num() const
-{
-  throw std::logic_error{"paramassign_num(): Does not have paramassign_list"};
-}
-
-// @brief パラメータ割り当ての取得
-const AstConnection*
-CptItem::paramassign(
-  SizeType index
-) const
-{
-  throw std::logic_error{"paramassign(): Does not have paramassign_list"};
-}
-
 // @brief パラメータ割り当てのリストの取得
-AstConnectionVec
+AstConnectionList
 CptItem::paramassign_list() const
 {
-  throw std::logic_error{"paramassign_list(): Does not have paramassign_list"};
-}
-
-// @brief defparam の要素数の取得
-SizeType
-CptItem::defparam_num() const
-{
-  throw std::logic_error{"defparam_num(): Does not have defparam_list"};
-}
-
-// @brief defparam の取得
-const AstDefParam*
-CptItem::defparam(
-  SizeType index
-) const
-{
-  throw std::logic_error{"defparam(): Does not have defparam_list"};
+  throw std::logic_error{"paramassign_list(): type mismatch"};
 }
 
 // @brief defparam リストの取得
-AstDefParamVec
+AstDefParamList
 CptItem::defparam_list() const
 {
-  throw std::logic_error{"defparam_list(): Does not have defparam_list"};
-}
-
-// @brief continuous assign の要素数の取得
-SizeType
-CptItem::contassign_num() const
-{
-  throw std::logic_error{"contassign_num(): Does not have contassign_list"};
-}
-
-// @brief continuous assign の取得
-const AstContAssign*
-CptItem::contassign(
-  SizeType index
-) const
-{
-  throw std::logic_error{"contassign(): Does not have contassign_list"};
+  throw std::logic_error{"defparam_list(): type mismatch"};
 }
 
 // @brief continuous assign リストの取得
-AstContAssignVec
+AstContAssignList
 CptItem::contassign_list() const
 {
-  throw std::logic_error{"contassign_list(): Does not have contassign_list"};
+  throw std::logic_error{"contassign_list(): type mismtach"};
 }
 
 // @brief プリミティブタイプの取得
@@ -113,73 +65,25 @@ CptItem::delay() const
   throw std::logic_error{"delay(): Does not have delay attribute"};
 }
 
-// @brief module/UDP/gate instance の要素数の取得
-SizeType
-CptItem::inst_num() const
-{
-  throw std::logic_error{"inst_num(): Does not have inst_list"};
-}
-
 // @brief module/UDP/gate instance リストの取得
-const AstInst*
-CptItem::inst(
-  SizeType index
-) const
-{
-  throw std::logic_error{"inst(): Does not have inst_list"};
-}
-
-// @brief module/UDP/gate instance リストの取得
-AstInstVec
+AstInstList
 CptItem::inst_list() const
 {
-  throw std::logic_error{"inst_list(): Does not have inst_list"};
-}
-
-// @brief 宣言ヘッダの要素数の取得
-SizeType
-CptItem::declhead_num() const
-{
-  throw std::logic_error{"declhead_num(): Does not have declhead_list"};
-}
-
-// @brief 宣言ヘッダの取得
-const AstDeclHead*
-CptItem::declhead(
-  SizeType index
-) const
-{
-  throw std::logic_error{"declhead(): Does not have declhead_list"};
+  throw std::logic_error{"inst_list(): type mismtach"};
 }
 
 // @brief 宣言ヘッダリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptItem::declhead_list() const
 {
-  throw std::logic_error{"declhead_list(): Does not have declhead_list"};
-}
-
-// @brief item の要素数の取得
-SizeType
-CptItem::item_num() const
-{
-  throw std::logic_error{"item_num(): Does not have item_list"};
-}
-
-// @brief item の取得
-const AstItem*
-CptItem::item(
-  SizeType index
-) const
-{
-  throw std::logic_error{"item(): Does not have item_list"};
+  throw std::logic_error{"declhead_list(): type mismatch"};
 }
 
 // @brief item リストの取得
-AstItemVec
+AstItemList
 CptItem::item_list() const
 {
-  throw std::logic_error{"item_list(): Does not have item_list"};
+  throw std::logic_error{"item_list(): type mismatch"};
 }
 
 // @brief 本体のステートメントの取得
@@ -196,34 +100,18 @@ CptItem::automatic() const
   throw std::logic_error{"automatic(): type mismatch"};
 }
 
+// @brief IO宣言ヘッダリストの取得
+AstIOHeadList
+CptItem::iohead_list() const
+{
+  throw std::logic_error{"iohead_list(): type mismatch"};
+}
+
 // @brief IO宣言の要素数の取得
 SizeType
 CptItem::ioitem_num() const
 {
   throw std::logic_error{"ioitem_num(): type mismatch"};
-}
-
-// @brief IO宣言ヘッダリストの要素数の取得
-SizeType
-CptItem::iohead_num() const
-{
-  throw std::logic_error{"iohead_num(): Not a Task/Func type"};
-}
-
-// @brief IO宣言ヘッダの取得
-const AstIOHead*
-CptItem::iohead(
-  SizeType index
-) const
-{
-  throw std::logic_error{"iohead(): Not a Task/Func type"};
-}
-
-// @brief IO宣言ヘッダリストの取得
-AstIOHeadVec
-CptItem::iohead_list() const
-{
-  throw std::logic_error{"iohead_list(): Not a Task/Func type"};
 }
 
 // @brief 符号の取得
@@ -275,27 +163,11 @@ CptItem::specitem_type() const
   throw std::logic_error{"specitem_type(): Not a SpecItem type"};
 }
 
-// @brief ターミナルの要素数の取得
-SizeType
-CptItem::terminal_num() const
-{
-  throw std::logic_error{"terminal_num(): Not a SpecItem type"};
-}
-
-// @brief ターミナルの取得
-const AstExpr*
-CptItem::terminal(
-  SizeType index
-) const
-{
-  throw std::logic_error{"terminal(): Not a SpecItem type"};
-}
-
 // @brief ターミナルリストの取得
-AstExprVec
+AstExprList
 CptItem::terminal_list() const
 {
-  throw std::logic_error{"terminal_list(): Not a SpecItem type"};
+  throw std::logic_error{"terminal_list(): type mismatch"};
 }
 
 // @brief specify block path の種類の取得
@@ -319,96 +191,32 @@ CptItem::path_decl() const
   throw std::logic_error{"Not a SpecPath type"};
 }
 
-// @brief 条件が成り立ったときに生成される宣言ヘッダの要素数の取得
-SizeType
-CptItem::then_declhead_num() const
-{
-  throw std::logic_error{"then_declhead_num(): Not a GenIf type"};
-}
-
-// @brief 条件が成り立った時に生成される宣言ヘッダの取得i
-const AstDeclHead*
-CptItem::then_declhead(
-  SizeType index
-) const
-{
-  throw std::logic_error{"then_declhead(): Not a GenIf type"};
-}
-
 // @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptItem::then_declhead_list() const
 {
-  throw std::logic_error{"then_declhead_list(): Not a GenIf type"};
-}
-
-// @brief 条件が成り立ったときに生成される要素数の取得
-SizeType
-CptItem::then_item_num() const
-{
-  throw std::logic_error{"then_item_num(): Not a GenIf type"};
-}
-
-// @brief 条件が成り立った時に生成される要素の取得
-const AstItem*
-CptItem::then_item(
-  SizeType index
-) const
-{
-  throw std::logic_error{"then_item(): Not a GenIf type"};
+  throw std::logic_error{"then_declhead_list(): type mismatch"};
 }
 
 // @brief 条件が成り立った時に生成される要素リストの取得
-AstItemVec
+AstItemList
 CptItem::then_item_list() const
 {
-  throw std::logic_error{"then_item_list(): Not a GenIf type"};
-}
-
-// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
-SizeType
-CptItem::else_declhead_num() const
-{
-  throw std::logic_error{"else_declhead_num(): Not a GenIf type"};
-}
-
-// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
-const AstDeclHead*
-CptItem::else_declhead(
-  SizeType index
-) const
-{
-  throw std::logic_error{"else_declhead(): Not a GenIf type"};
+  throw std::logic_error{"then_item_list(): type mismatch"};
 }
 
 // @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptItem::else_declhead_list() const
 {
-  throw std::logic_error{"else_declhead_list(): Not a GenIf type"};
-}
-
-// @brief 条件が成り立たなかったときに生成される要素数の取得
-SizeType
-CptItem::else_item_num() const
-{
-  throw std::logic_error{"else_item_num(): Not a GenIf type"};
-}
-
-// @brief 条件が成り立たなかった時に生成される要素の取得
-const AstItem*
-CptItem::else_item(
-  SizeType index
-) const
-{
-  throw std::logic_error{"else_item(): Not a GenIf type"};
+  throw std::logic_error{"else_declhead_list(): type mismatch"};
 }
 
 // @brief 条件が成り立たなかった時に生成されるitemリストの取得
-AstItemVec
+AstItemList
 CptItem::else_item_list() const
 {
-  throw std::logic_error{"else_item_list(): Not a GenIf type"};
+  throw std::logic_error{"else_item_list(): type mismatch"};
 }
 
 // @brief case item リストの取得

@@ -254,7 +254,7 @@ private:
   void
   phase2_namedblock(
     const VlScope* parent,
-    const std::vector<const AstDeclHead*>& ast_head_list
+    const AstDeclHeadList& ast_head_list
   );
 
   /// @brief 名前つき parallel block のインスタンス化を行う．

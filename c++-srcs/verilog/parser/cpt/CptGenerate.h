@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,10 +24,10 @@ public:
 
   /// @brief コンストラクタ
   CptGenBody(
-    PtDeclHeadArray&& declhead_list,
-    PtItemArray&& item_list
-  ) : mDeclHeadList{std::move(declhead_list)},
-      mItemList{std::move(item_list)}
+    const AstDeclHead* declhead_top,
+    const AstItem* item_top
+  ) : mDeclHeadTop{declhead_top},
+      mItemTop{item_top}
   {
   }
 
@@ -38,50 +37,18 @@ public:
 
 public:
 
-  /// @brief 宣言ヘッダの要素数の取得
-  SizeType
-  declhead_num() const
-  {
-    return mDeclHeadList.size();
-  }
-
-  /// @brief 宣言ヘッダの取得
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const
-  {
-    return mDeclHeadList[index];
-  }
-
   /// @brief 宣言ヘッダのリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const
   {
-    return mDeclHeadList.to_vector();
-  }
-
-  /// @brief item リストの要素数の取得
-  SizeType
-  item_num() const
-  {
-    return mItemList.size();
-  }
-
-  /// @brief item の取得
-  const AstItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const
-  {
-    return mItemList[index];
+    return AstDeclHeadList(mDeclHeadTop);
   }
 
   /// @brief item リストの取得
-  AstItemVec
+  AstItemList
   item_list() const
   {
-    return mItemList.to_vector();
+    return AstItemList(mItemTop);
   }
 
 
@@ -90,11 +57,11 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 宣言のリスト
-  PtDeclHeadArray mDeclHeadList;
+  // 宣言の先頭
+  const AstDeclHead* mDeclHeadTop;
 
-  // 要素のリスト
-  PtItemArray mItemList;
+  // 要素の先頭
+  const AstItem* mItemTop;
 
 };
 
@@ -110,11 +77,10 @@ public:
   /// @brief コンストラクタ
   CptGenBase(
     const FileRegion& file_region,
-    PtDeclHeadArray&& declhead_list,
-    PtItemArray&& item_list
+    const AstDeclHead* declhead_top,
+    const AstItem* item_top
   ) : mFileRegion{file_region},
-      mBody(std::move(declhead_list),
-	    std::move(item_list))
+      mBody(declhead_top, item_top)
   {
   }
 
@@ -131,32 +97,12 @@ public:
   FileRegion
   file_region() const override;
 
-  /// @brief 宣言ヘッダの要素数の取得
-  SizeType
-  declhead_num() const override;
-
-  /// @brief 宣言ヘッダの取得
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const override;
-
   /// @brief 宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const override;
 
-  /// @brief item リストの要素数の取得
-  SizeType
-  item_num() const override;
-
-  /// @brief item の取得
-  const AstItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const override;
-
   /// @brief item リストの取得
-  AstItemVec
+  AstItemList
   item_list() const override;
 
 
@@ -185,11 +131,9 @@ public:
   /// @brief コンストラクタ
   CptGenerate(
     const FileRegion& file_region,
-    PtDeclHeadArray&& declhead_list,
-    PtItemArray&& item_list
-  ) : CptGenBase(file_region,
-		 std::move(declhead_list),
-		 std::move(item_list))
+    const AstDeclHead* declhead_top,
+    const AstItem* item_top
+  ) : CptGenBase(file_region, declhead_top, item_top)
   {
   }
 
@@ -220,11 +164,9 @@ public:
   /// @brief コンストラクタ
   CptGenBlock(
     const FileRegion& file_region,
-    PtDeclHeadArray&& declhead_list,
-    PtItemArray&& item_list
-  ) : CptGenBase(file_region,
-		 std::move(declhead_list),
-		 std::move(item_list))
+    const AstDeclHead* declhead_top,
+    const AstItem* item_top
+  ) : CptGenBase(file_region, declhead_top, item_top)
   {
   }
 
@@ -256,11 +198,9 @@ public:
   CptGenBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtDeclHeadArray&& declhead_list,
-    PtItemArray&& item_list
-  ) : CptGenBlock(file_region,
-		  std::move(declhead_list),
-		  std::move(item_list)),
+    const AstDeclHead* declhead_top,
+    const AstItem* item_top
+  ) : CptGenBlock(file_region, declhead_top, item_top),
       mName{name}
   {
   }
@@ -302,12 +242,11 @@ public:
   CptGenIf(
     const FileRegion& file_region,
     const AstExpr* cond,
-    PtDeclHeadArray&& then_declhead_list,
-    PtItemArray&& then_item_list
+    const AstDeclHead* then_declhead_top,
+    const AstItem* then_item_top
   ) : mFileRegion{file_region},
       mCond{cond},
-      mThenBody(std::move(then_declhead_list),
-		std::move(then_item_list))
+      mThenBody(then_declhead_top, then_item_top)
   {
   }
 
@@ -332,60 +271,20 @@ public:
   const AstExpr*
   cond_expr() const override;
 
-  /// @brief 条件が成り立ったときに生成される宣言ヘッダの要素数の取得
-  SizeType
-  then_declhead_num() const override;
-
-  /// @brief 条件が成り立った時に生成される宣言ヘッダの取得
-  const AstDeclHead*
-  then_declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < then_declhead_num() )
-  ) const override;
-
   /// @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   then_declhead_list() const override;
 
-  /// @brief 条件が成り立ったときに生成される要素数の取得
-  SizeType
-  then_item_num() const override;
-
-  /// @brief 条件が成り立った時に生成される要素の取得
-  const AstItem*
-  then_item(
-    SizeType index ///< [in] インデックス ( 0 <= index < then_item_num() )
-  ) const override;
-
   /// @brief 条件が成り立った時に生成される要素リストの取得
-  AstItemVec
+  AstItemList
   then_item_list() const override;
 
-  /// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
-  SizeType
-  else_declhead_num() const override;
-
-  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
-  const AstDeclHead*
-  else_declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < else_declhead_num() )
-  ) const override;
-
   /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   else_declhead_list() const override;
 
-  /// @brief 条件が成り立たなかったときに生成される要素数の取得
-  SizeType
-  else_item_num() const override;
-
-  /// @brief 条件が成り立たなかった時に生成される要素の取得
-  const AstItem*
-  else_item(
-    SizeType index ///< [in] インデックス ( 0 <= index < else_item_num() )
-  ) const override;
-
   /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
-  AstItemVec
+  AstItemList
   else_item_list() const override;
 
 
@@ -418,15 +317,12 @@ public:
   CptGenIfElse(
     const FileRegion& file_region,
     const AstExpr* cond,
-    PtDeclHeadArray&& then_declhead_list,
-    PtItemArray&& then_item_list,
-    PtDeclHeadArray&& else_declhead_list,
-    PtItemArray&& else_item_list
-  ) : CptGenIf(file_region, cond,
-	       std::move(then_declhead_list),
-	       std::move(then_item_list)),
-      mElseBody(std::move(else_declhead_list),
-		std::move(else_item_list))
+    const AstDeclHead* then_declhead_top,
+    const AstItem* then_item_top,
+    const AstDeclHead* else_declhead_top,
+    const AstItem* else_item_top
+  ) : CptGenIf(file_region, cond, then_declhead_top, then_item_top),
+      mElseBody(else_declhead_top, else_item_top)
   {
   }
 
@@ -439,32 +335,12 @@ public:
   // AstItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
-  SizeType
-  else_declhead_num() const override;
-
-  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
-  const AstDeclHead*
-  else_declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < else_declhead_num() )
-  ) const override;
-
   /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   else_declhead_list() const override;
 
-  /// @brief 条件が成り立たなかったときに生成される要素数の取得
-  SizeType
-  else_item_num() const override;
-
-  /// @brief 条件が成り立たなかった時に生成される要素の取得
-  const AstItem*
-  else_item(
-    SizeType index ///< [in] インデックス ( 0 <= index < else_item_num() )
-  ) const override;
-
   /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
-  AstItemVec
+  AstItemList
   else_item_list() const override;
 
 
@@ -558,13 +434,12 @@ public:
   /// @brief コンストラクタ
   CptGenCaseItem(
     const FileRegion& file_region,
-    const AstExprList* label_list,
-    PtDeclHeadArray&& declhead_list,
-    PtItemArray&& item_list
+    const AstExpr* label_top,
+    const AstDeclHead* declhead_top,
+    const AstItem* item_top
   ) : mFileRegion{file_region},
-      mLabelList{std::move(label_list)},
-      mBody(std::move(declhead_list),
-	    std::move(item_list))
+      mLabelTop{label_top},
+      mBody(declhead_top, item_top)
   {
   }
 
@@ -581,72 +456,17 @@ public:
   FileRegion
   file_region() const override;
 
-  /// @brief ラベルの要素数の取得
-  SizeType
-  label_num() const override;
-
-  /// @brief ラベルの取得
-  const AstExpr*
-  label(
-    SizeType index ///< [in] インデックス ( 0 <= index < label_num() )
-  ) const override;
-
   /// @brief ラベルリストの取得
-  AstExprVec
+  AstExprList
   label_list() const override;
 
-  /// @brief 宣言ヘッダの要素数の取得
-  SizeType
-  declhead_num() const override;
-
-  /// @brief 宣言ヘッダの取得
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const override;
-
   /// @brief 宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const override;
 
-  /// @brief item リストの要素数の取得
-  SizeType
-  item_num() const override;
-
-  /// @brief item の取得
-  const AstItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const override;
-
   /// @brief item リストの取得
-  AstItemVec
+  AstItemList
   item_list() const override;
-
-  /// @brief 次の要素を返す．
-  const AstGenCaseItem*
-  link() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtGenCaseItem の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素を返す．
-  PtGenCaseItem*
-  _link() const override;
-
-  /// @brief link を設定する．
-  void
-  set_link(
-    PtGenCaseItem* link
-  ) override;
-
-  /// @brief リンクトリストを逆順にする．
-  /// @return 新しい先頭を返す．
-  PtGenCaseItem*
-  reverse() override;
 
 
 private:
@@ -657,14 +477,11 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // ラベルのリスト
-  const AstExprList* mLabelList;
+  // ラベルの先頭
+  const AstExpr* mLabelTop;
 
   // 生成される本体
   CptGenBody mBody;
-
-  // 次の要素
-  PtGenCaseItem* mLink{nullptr};
 
 };
 
@@ -685,11 +502,9 @@ public:
     const AstExpr* cond,
     const AstExpr* next_expr,
     const char* block_name,
-    PtDeclHeadArray&& declhead_list,
-    PtItemArray&& item_list
-  ) : CptGenBase(file_region,
-		 std::move(declhead_list),
-		 std::move(item_list)),
+    const AstDeclHead* declhead_top,
+    const AstItem* item_top
+  ) : CptGenBase(file_region, declhead_top, item_top),
       mName{block_name},
       mLoopVar{loop_var},
       mInitExpr{init_expr},

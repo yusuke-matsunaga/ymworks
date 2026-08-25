@@ -120,10 +120,10 @@ StmtGen::phase1_stmt(
       else {
 	auto stub = make_stub<StmtGen,
 			      const VlScope*,
-			      const AstDeclHeadVec&>(this,
-						     &StmtGen::phase2_namedblock,
-						     block_scope,
-						     ast_stmt->declhead_list());
+			      const AstDeclHeadList&>(this,
+						      &StmtGen::phase2_namedblock,
+						      block_scope,
+						      ast_stmt->declhead_list());
 	add_phase2stub(stub);
       }
     }
@@ -400,7 +400,7 @@ StmtGen::instantiate_enable(
 
   // 引数を生成する．
   std::vector<ElbExpr*> arg_list;
-  arg_list.reserve(ast_stmt->arg_num());
+  arg_list.reserve(ast_stmt->arg_list().size());
   for ( auto ast_expr: ast_stmt->arg_list() ) {
     auto expr = instantiate_expr(parent, env, ast_expr);
     if ( !expr ) {
@@ -433,7 +433,7 @@ StmtGen::instantiate_sysenable(
   }
 
   // 引数の数のチェック
-  auto n = ast_stmt->arg_num();
+  auto n = ast_stmt->arg_list().size();
   if ( !user_systf->check_n_of_args(n) ) {
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_stmt);
   }
@@ -501,7 +501,7 @@ StmtGen::instantiate_control(
   }
 
   // イベントリストの生成を行う．
-  SizeType event_num = ast_control->event_num();
+  SizeType event_num = ast_control->event_list().size();
   std::vector<ElbExpr*> event_list;
   event_list.reserve(event_num);
   for ( auto ast_expr: ast_control->event_list() ) {

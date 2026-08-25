@@ -33,8 +33,7 @@ public:
   )
   {
     check_item_common(item, AstItem::DefParam);
-    EXPECT_EQ( defparam_list.size(), item->defparam_num() );
-    EXPECT_EQ( defparam_list, item->defparam_list() );
+    EXPECT_EQ( defparam_list, item->defparam_list().to_vector() );
   }
 
   // ContAssign 型のテスト
@@ -49,8 +48,7 @@ public:
     check_item_common(item, AstItem::ContAssign);
     EXPECT_EQ( strength, item->strength() );
     EXPECT_EQ( delay, item->delay() );
-    EXPECT_EQ( ca_list.size(), item->contassign_num() );
-    EXPECT_EQ( ca_list, item->contassign_list() );
+    EXPECT_EQ( ca_list, item->contassign_list().to_vector() );
   }
 
   // Initial のテスト
@@ -90,8 +88,7 @@ public:
     EXPECT_EQ( body, item->body() );
     check_item_container(item, declhead_list, item_list);
     EXPECT_EQ( automatic, item->automatic() );
-    EXPECT_EQ( iohead_list.size(), item->iohead_num() );
-    EXPECT_EQ( iohead_list, item->iohead_list() );
+    EXPECT_EQ( iohead_list, item->iohead_list().to_vector() );
   }
 
   // Func のテスト
@@ -112,8 +109,7 @@ public:
     EXPECT_EQ( body, item->body() );
     check_item_container(item, declhead_list, item_list);
     EXPECT_EQ( automatic, item->automatic() );
-    EXPECT_EQ( iohead_list.size(), item->iohead_num() );
-    EXPECT_EQ( iohead_list, item->iohead_list() );
+    EXPECT_EQ( iohead_list, item->iohead_list().to_vector() );
     EXPECT_EQ( is_signed, item->is_signed() );
     EXPECT_EQ( range, item->range() );
     EXPECT_EQ( data_type, item->data_type() );
@@ -133,8 +129,7 @@ public:
     EXPECT_EQ( prim_type, item->prim_type() );
     EXPECT_EQ( strength, item->strength() );
     EXPECT_EQ( delay, item->delay() );
-    EXPECT_EQ( inst_list.size(), item->inst_num() );
-    EXPECT_EQ( inst_list, item->inst_list() );
+    EXPECT_EQ( inst_list, item->inst_list().to_vector() );
   }
 
   // MuInst のテスト
@@ -146,10 +141,8 @@ public:
   )
   {
     check_item_common(item, AstItem::MuInst);
-    EXPECT_EQ( con_list.size(), item->paramassign_num() );
-    EXPECT_EQ( con_list, item->paramassign_list() );
-    EXPECT_EQ( inst_list.size(), item->inst_num() );
-    EXPECT_EQ( inst_list, item->inst_list() );
+    EXPECT_EQ( con_list, item->paramassign_list().to_vector() );
+    EXPECT_EQ( inst_list, item->inst_list().to_vector() );
   }
 
   // SpecItem のテスト
@@ -162,8 +155,7 @@ public:
   {
     check_item_common(item, AstItem::SpecItem);
     EXPECT_EQ( specitem_type, item->specitem_type() );
-    EXPECT_EQ( terminal_list.size(), item->terminal_num() );
-    EXPECT_EQ( terminal_list, item->terminal_list() );
+    EXPECT_EQ( terminal_list, item->terminal_list().to_vector() );
   }
 
   // SpecPath のテスト
@@ -216,14 +208,10 @@ public:
   )
   {
     check_item_common(item, AstItem::GenIf);
-    EXPECT_EQ( then_declhead_list.size(), item->then_declhead_num() );
-    EXPECT_EQ( then_declhead_list, item->then_declhead_list() );
-    EXPECT_EQ( then_item_list.size(), item->then_item_num() );
-    EXPECT_EQ( then_item_list, item->then_item_list() );
-    EXPECT_EQ( else_declhead_list.size(), item->else_declhead_num() );
-    EXPECT_EQ( else_declhead_list, item->else_declhead_list() );
-    EXPECT_EQ( else_item_list.size(), item->else_item_num() );
-    EXPECT_EQ( else_item_list, item->else_item_list() );
+    EXPECT_EQ( then_declhead_list, item->then_declhead_list().to_vector() );
+    EXPECT_EQ( then_item_list, item->then_item_list().to_vector() );
+    EXPECT_EQ( else_declhead_list, item->else_declhead_list().to_vector() );
+    EXPECT_EQ( else_item_list, item->else_item_list().to_vector() );
   }
 
   // GenCase のテスト
@@ -267,10 +255,8 @@ public:
     const std::vector<const AstItem*>& item_list
   )
   {
-    EXPECT_EQ( declhead_list.size(), item->declhead_num() );
-    EXPECT_EQ( declhead_list, item->declhead_list() );
-    EXPECT_EQ( item_list.size(), item->item_num() );
-    EXPECT_EQ( item_list, item->item_list() );
+    EXPECT_EQ( declhead_list, item->declhead_list().to_vector() );
+    EXPECT_EQ( item_list, item->item_list().to_vector() );
   }
 
   // 共通のテスト
@@ -569,8 +555,7 @@ public:
   {
     check_Base(inst, fr);
     EXPECT_EQ( range, inst->range() );
-    EXPECT_EQ( con_list.size(), inst->port_num() );
-    EXPECT_EQ( con_list, inst->port_list() );
+    EXPECT_EQ( con_list, inst->port_list().to_vector() );
   }
 
 
@@ -589,12 +574,9 @@ public:
   )
   {
     check_Base(item, fr);
-    EXPECT_EQ( label_list.size(), item->label_num() );
-    EXPECT_EQ( label_list, item->label_list() );
-    EXPECT_EQ( declhead_list.size(), item->declhead_num() );
-    EXPECT_EQ( declhead_list, item->declhead_list() );
-    EXPECT_EQ( item_list.size(), item->item_num() );
-    EXPECT_EQ( item_list, item->item_list() );
+    EXPECT_EQ( label_list, item->label_list().to_vector() );
+    EXPECT_EQ( declhead_list, item->declhead_list().to_vector() );
+    EXPECT_EQ( item_list, item->item_list().to_vector() );
   }
 
 
@@ -619,12 +601,10 @@ public:
   {
     check_Base(pathdecl, fr);
     EXPECT_EQ( edge, pathdecl->edge() );
-    EXPECT_EQ( input_list.size(), pathdecl->input_num() );
-    EXPECT_EQ( input_list, pathdecl->input_list() );
+    EXPECT_EQ( input_list, pathdecl->input_list().to_vector() );
     EXPECT_EQ( input_pol, pathdecl->input_pol() );
     EXPECT_EQ( op, pathdecl->op() );
-    EXPECT_EQ( output_list.size(), pathdecl->output_num() );
-    EXPECT_EQ( output_list, pathdecl->output_list() );
+    EXPECT_EQ( output_list, pathdecl->output_list().to_vector() );
     EXPECT_EQ( output_pol, pathdecl->output_pol() );
     EXPECT_EQ( expr, pathdecl->expr() );
     EXPECT_EQ( path_delay, pathdecl->path_delay() );

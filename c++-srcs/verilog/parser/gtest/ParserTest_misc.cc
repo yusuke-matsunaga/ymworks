@@ -23,8 +23,6 @@ TEST_F(ParserTest, DelayControl)
   EXPECT_EQ( FileRegion(fr, fr1), control->file_region() );
   EXPECT_EQ( AstControl::Delay, control->type() );
   EXPECT_EQ( expr, control->delay() );
-  EXPECT_THROW( control->event_num(),
-		std::logic_error );
   EXPECT_THROW( control->event_list(),
 		std::logic_error );
   EXPECT_THROW( control->rep_expr(),
@@ -41,9 +39,8 @@ TEST_F(ParserTest, EventControl1)
   EXPECT_EQ( AstControl::Event, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( 0, control->event_num() );
   EXPECT_EQ( std::vector<const AstExpr*>{},
-	     control->event_list() );
+	     control->event_list().to_vector() );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -61,12 +58,11 @@ TEST_F(ParserTest, EventControl2)
   EXPECT_EQ( AstControl::Event, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( 1, control->event_num() );
   auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_EQ( name, event0->name() );
   EXPECT_EQ( std::vector<const AstExpr*>{event0},
-	     control->event_list() );
+	     control->event_list().to_vector() );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -86,7 +82,6 @@ TEST_F(ParserTest, EventControl3)
   EXPECT_EQ( AstControl::Event, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( 1, control->event_num() );
   auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_STREQ( name, event0->name() );
@@ -95,7 +90,7 @@ TEST_F(ParserTest, EventControl3)
   auto nb0 = nb_list[0];
   EXPECT_STREQ( head, nb0->name() );
   EXPECT_EQ( std::vector<const AstExpr*>{event0},
-	     control->event_list() );
+	     control->event_list().to_vector() );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -111,22 +106,16 @@ TEST_F(ParserTest, EventControl4)
   auto name2 = "event2";
   auto hname = parser.new_HierName(head, name2);
   auto expr2 = parser.factory().new_Primary(fr2, hname);
-  parser.init_expr_list();
-  parser.add_expr(expr1);
-  parser.add_expr(expr2);
-  auto event_list = parser.end_expr_list();
-  auto control = parser.factory().new_EventControl(fr, event_list);
+  expr1->set_link(expr2);
+  auto control = parser.factory().new_EventControl(fr, expr1);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
   EXPECT_EQ( AstControl::Event, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( 2, control->event_num() );
-  EXPECT_EQ( expr1, control->event(0) );
-  EXPECT_EQ( expr2, control->event(1) );
   std::vector<const AstExpr*> expr_list{expr1, expr2};
-  EXPECT_EQ( expr_list, control->event_list() );
+  EXPECT_EQ( expr_list, control->event_list().to_vector() );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -143,9 +132,8 @@ TEST_F(ParserTest, RepeatControl1)
   EXPECT_EQ( AstControl::Repeat, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( 0, control->event_num() );
   EXPECT_EQ( std::vector<const AstExpr*>{},
-	     control->event_list() );
+	     control->event_list().to_vector() );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -164,12 +152,11 @@ TEST_F(ParserTest, RepeatControl2)
   EXPECT_EQ( AstControl::Repeat, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( 1, control->event_num() );
   auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_EQ( name, event0->name() );
   EXPECT_EQ( std::vector<const AstExpr*>{event0},
-	     control->event_list() );
+	     control->event_list().to_vector() );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -190,7 +177,6 @@ TEST_F(ParserTest, RepatControl3)
   EXPECT_EQ( AstControl::Repeat, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( 1, control->event_num() );
   auto event0 = control->event_list().front();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_STREQ( name, event0->name() );
@@ -199,7 +185,7 @@ TEST_F(ParserTest, RepatControl3)
   auto nb0 = nb_list[0];
   EXPECT_STREQ( head, nb0->name() );
   EXPECT_EQ( std::vector<const AstExpr*>{event0},
-	     control->event_list() );
+	     control->event_list().to_vector() );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -216,20 +202,16 @@ TEST_F(ParserTest, RepeatControl4)
   auto name2 = "event2";
   auto hname = parser.new_HierName(head, name2);
   auto expr2 = parser.factory().new_Primary(fr2, hname);
-  parser.init_expr_list();
-  parser.add_expr(expr1);
-  parser.add_expr(expr2);
-  auto event_list = parser.end_expr_list();
-  auto control = parser.factory().new_RepeatControl(fr, rep, event_list);
+  expr1->set_link(expr2);
+  auto control = parser.factory().new_RepeatControl(fr, rep, expr1);
 
   ASSERT_TRUE( control != nullptr );
   EXPECT_EQ( fr, control->file_region() );
   EXPECT_EQ( AstControl::Repeat, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( 2, control->event_num() );
   std::vector<const AstExpr*> expr_list{expr1, expr2};
-  EXPECT_EQ( expr_list, control->event_list() );
+  EXPECT_EQ( expr_list, control->event_list().to_vector() );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 

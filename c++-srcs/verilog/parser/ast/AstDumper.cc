@@ -243,16 +243,18 @@ AstDumper::put(
       put("mExprname", port->ext_name());
     }
 
-    if ( port->portref_size() == 1 ) {
+    auto np = port->portref_list().size();
+    if ( np == 1 ) {
       auto expr = port->expr();
       auto dir = port->portref_dir(0);
       put_portref(expr, dir);
     }
-    else if ( port->portref_size() > 1 ) {
-      for ( SizeType index = 0; index < port->portref_size(); ++ index ) {
-	auto expr = port->portref(index);
+    else if ( np > 1 ) {
+      SizeType index = 0;
+      for ( auto expr: port->portref_list() ) {
 	auto dir = port->portref_dir(index);
 	put_portref(expr, dir);
+	++ index;
       }
     }
   }
@@ -274,11 +276,12 @@ AstDumper::put_portref(
   put("mFileRegion", expr->file_region());
   put("mDir", dir);
   put("mName", expr->name());
-  if ( expr->index_num() == 1 ) {
-    put("mIndex", expr->index_list().front());
+  auto index_list = expr->index_list().to_vector();
+  if ( index_list.size() == 1 ) {
+    put("mIndex", index_list.front());
   }
   else {
-    ASSERT_COND( expr->index_num() == 0 );
+    ASSERT_COND( index_list.empty() );
   }
   if ( expr->part() != nullptr ) {
     auto part = expr->part();
@@ -968,8 +971,8 @@ AstDumper::put_parent_file(
 /// @brief 宣言を出力する．
 void
 AstDumper::put_decls(
-  const AstIOHeadVec& iohead_list,
-  const AstDeclHeadVec& declhead_list
+  const AstIOHeadList& iohead_list,
+  const AstDeclHeadList& declhead_list
 )
 {
   for ( auto io: iohead_list ) {
@@ -984,8 +987,8 @@ AstDumper::put_decls(
 void
 AstDumper::put_decl_item(
   const char* label,
-  const AstDeclHeadVec& decl_list,
-  const AstItemVec& item_list
+  const AstDeclHeadList& decl_list,
+  const AstItemList& item_list
 )
 {
   AstHeader x(*this, label, "GenBlock");

@@ -411,7 +411,7 @@ EiPrimArray::EiPrimArray(
     mArray(mRange.calc_size())
 {
   SizeType n = mRange.calc_size();
-  SizeType port_num = ast_inst->port_num();
+  SizeType port_num = ast_inst->port_list().size();
   for ( SizeType i = 0; i < n; ++ i ) {
     SizeType index = mRange.index(i);
     mArray[i].init(this, index, port_num);
@@ -431,7 +431,7 @@ EiPrimArray::EiPrimArray(
     mArray(mRange.calc_size())
 {
   SizeType n = mRange.calc_size();
-  SizeType port_num = ast_inst->port_num();
+  SizeType port_num = ast_inst->port_list().size();
   for ( SizeType i = 0; i < n; ++ i ) {
     SizeType index = mRange.index(i);
     mArray[i].init(this, index, port_num);
@@ -714,7 +714,7 @@ EiPrimitive::delay() const
 SizeType
 EiPrimitive::port_num() const
 {
-  return ast_inst()->port_num();
+  return ast_inst()->port_list().size();
 }
 
 // @brief ポート端子を得る．
@@ -884,7 +884,7 @@ EiPrimitive2::EiPrimitive2(
 ) : mHead{head},
     mAstInst{ast_inst}
 {
-  init_port(ast_inst->port_num());
+  init_port(ast_inst->port_list().size());
 }
 
 // @brief コンストラクタ
@@ -895,7 +895,7 @@ EiPrimitive2::EiPrimitive2(
 ) : mHead{head},
     mAstInst{ast_inst}
 {
-  init_port(ast_inst->port_num(), cell);
+  init_port(ast_inst->port_list().size(), cell);
 }
 
 // @brief デストラクタ

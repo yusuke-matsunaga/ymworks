@@ -119,10 +119,9 @@ PtDeclItem*
 PtFactory::new_DeclItem(
   const FileRegion& file_region,
   const char* name,
-  PtRange* range_tail
+  PtRange* range_top
 )
 {
-  auto range_top = range_tail->reverse();
   void* p = mAlloc.get_memory(sizeof(CptDeclItemR));
   return new (p) CptDeclItemR(file_region, name, range_top);
 }

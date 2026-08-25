@@ -23,12 +23,16 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 // Verilog1995 タイプのモジュールを生成する．
-void
+PtModule*
 Parser::new_Module1995(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  const AstAttrInst* ai_top
+  PtDeclHead* paramport_top,
+  PtPort* port_top,
+  PtIOHead* iohead_top,
+  PtDeclHead* declhead_top,
+  PtItem* item_top
 )
 {
   bool is_cell = lex().cell_define();
@@ -54,19 +58,19 @@ Parser::new_Module1995(
 
   // ポート宣言とIO宣言のチェックを行う．
   std::unordered_map<std::string, VpiDir> iodecl_dirs;
-  check_IO(mPortList, mModuleIOHeadList, iodecl_dirs);
+  check_IO(port_top, iohead_top, iodecl_dirs);
 
   // 今度はポートリストに現れている信号線が入出力ポート宣言されているか
   // 調べる．
   // 同時に名無しのポートがあるかどうかしらべる．
   bool named_port = true;
-  for ( auto port: mPortList ) {
+  for ( auto port = port_top; port != nullptr; port = port->_link() ) {
     if ( port->ext_name() == nullptr ) {
       // 1つでも名前を持たないポートがあったら名前での結合はできない．
       named_port = false;
     }
-    for ( SizeType index = 0; index < port->portref_size(); ++ index ) {
-      auto expr = port->portref(index);
+    SizeType index = 0;
+    for ( auto expr: port->portref_list() ) {
       auto name = expr->name();
       if ( iodecl_dirs.count(name) == 0 ) {
 	// name は IOH リストに存在しない．
@@ -82,6 +86,7 @@ Parser::new_Module1995(
 	auto dir = iodecl_dirs.at(name);
 	port->set_portref_dir(index, dir);
       }
+      ++ index;
     }
   }
 
@@ -96,22 +101,24 @@ Parser::new_Module1995(
 				    named_port,
 				    portfaults, suppress_faults,
 				    config, library, cell,
-				    mParamPortHeadList,
-				    mPortList,
-				    mModuleIOHeadList,
-				    mCurDeclList,
-				    mCurItemList);
-  mAstMgr.reg_module(module);
-  reg_attrinst(module, ai_top, true);
+				    paramport_top,
+				    port_top,
+				    iohead_top,
+				    declhead_top,
+				    item_top);
+  return module;
 }
 
 // Verilog2001 タイプのモジュールを生成する．
-void
+PtModule*
 Parser::new_Module2001(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  const AstAttrInst* ai_top
+  PtDeclHead* paramport_top,
+  PtIOHead* portdecl_top,
+  PtDeclHead* declhead_top,
+  PtItem* item_top
 )
 {
   bool is_cell = lex().cell_define();
@@ -135,12 +142,12 @@ Parser::new_Module2001(
   std::string library; // ?
   std::string cell;    // ?
 
-  if ( !check_PortArray(mModuleIOHeadList) ) {
-    return;
+  if ( !check_PortArray(AstIOHeadList(portdecl_top)) ) {
+    return nullptr;
   }
 
   // iohead_array からポートの配列を作る．
-  auto port_array = new_PortArray(mModuleIOHeadList);
+  auto port_array = new_PortArray(portdecl_top);
 
   auto module = mFactory.new_Module(file_region,
 				    module_name,
@@ -150,29 +157,27 @@ Parser::new_Module2001(
 				    true,
 				    portfaults, suppress_faults,
 				    config, library, cell,
-				    mParamPortHeadList,
-				    port_array,
-				    mModuleIOHeadList,
-				    mCurDeclList,
-				    mCurItemList);
-  mAstMgr.reg_module(module);
-  reg_attrinst(module, ai_top, true);
+				    paramport_top,
+				    /*port_array,*/nullptr,
+				    portdecl_top,
+				    declhead_top,
+				    item_top);
+  return module;
 }
 
 // @brief ポート宣言とIO宣言の齟齬をチェックする．
 void
 Parser::check_IO(
-  const std::vector<PtPort*>& port_array,
-  const std::vector<PtIOHead*>& iohead_array,
+  PtPort* port_top,
+  PtIOHead* iohead_top,
   std::unordered_map<std::string, VpiDir>& iodecl_dirs
 )
 {
   // port_array をスキャンして中で用いられている名前を portref_dic
   // に登録する．
   std::unordered_set<std::string> portref_dic;
-  for ( auto port: port_array ) {
-    for ( SizeType i = 0; i < port->portref_size(); ++ i ) {
-      auto expr = port->portref(i);
+  for ( auto port: AstPortList(port_top) ) {
+    for ( auto expr: port->portref_list() ) {
       auto name = expr->name();
       portref_dic.insert(name);
     }
@@ -181,7 +186,7 @@ Parser::check_IO(
   // 入出力ポート宣言に現れる名前を iodecl_names に入れる．
   // ポート宣言が型を持つ場合にはモジュール内部の宣言要素を生成する．
   // 持たない場合にはデフォルトタイプのネットを生成する．
-  for ( auto io_head: iohead_array ) {
+  for ( auto io_head: AstIOHeadList(iohead_top) ) {
     // 名前をキーにして方向を記録しておく
     VpiDir dir = io_head->direction();
     for ( auto elem: io_head->item_list() ) {

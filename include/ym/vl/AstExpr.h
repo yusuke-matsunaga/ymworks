@@ -33,6 +33,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 class AstExpr :
   public AstHierNamedBase
 {
+  friend class AstList<const AstExpr>;
+  friend class AstListIter<const AstExpr>;
+
 public:
 
   /// @brief AstExpr の派生クラスを識別するための列挙型
@@ -117,31 +120,12 @@ public:
   const AstExpr*
   operand2() const = 0;
 
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
-  ///   std::logi_error 例外を送出する．
-  virtual
-  SizeType
-  operand_num() const = 0;
-
   /// @brief オペランドのリストの取得
   ///
   /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
   ///   std::logi_error 例外を送出する．
   virtual
-  const AstExpr*
-  operand(
-    SizeType index ///< [in] インデックス ( 0 <= index < operand_num() )
-  ) const = 0;
-
-  /// @brief オペランドのリストの取得
-  ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
-  ///   std::logi_error 例外を送出する．
-  virtual
-  AstExprVec
+  AstExprList
   operand_list() const = 0;
 
   /// @brief multi-concat の繰り返し数
@@ -167,28 +151,11 @@ public:
   bool
   is_const_index() const = 0;
 
-  /// @brief インデックスリストのサイズの取得
-  /// @return インデックスリストのサイズ
-  ///
-  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
-  virtual
-  SizeType
-  index_num() const = 0;
-
-  /// @brief インデックスの取得
-  ///
-  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
-  virtual
-  const AstExpr*
-  index(
-    SizeType i ///< [in] インデックス ( 0 <= i < index_num() )
-  ) const = 0;
-
   /// @brief インデックスリストの取得
   ///
   /// - op_type() != Primary の時 std::logic_error 例外を送出する．
   virtual
-  AstExprVec
+  AstExprList
   index_list() const = 0;
 
   /// @brief 範囲指定を表す構文木を返す．
@@ -257,6 +224,17 @@ public:
   double
   const_real() const = 0;
 
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstExpr*
+  link() const = 0;
+
 };
 
 /// @brief AstExpr::Type のストリーム出力演算子
@@ -276,37 +254,6 @@ operator<<(
   }
   return s;
 }
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstExprList AstExpr.h "ym/vl/AstExpr.h"
-/// @brief AstExpr のリストを表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstExprList
-{
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 外部インターフェイス
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 要素数を返す．
-  virtual
-  SizeType
-  size() const = 0;
-
-  /// @brief 要素を取り出す．
-  virtual
-  const AstExpr*
-  expr(
-    SizeType index ///< [in] インデックス ( 0 <= index < size() )
-  ) const = 0;
-
-  /// @brief ベクタに変換する．
-  virtual
-  AstExprVec
-  to_vector() const = 0;
-
-};
 
 
 //////////////////////////////////////////////////////////////////////

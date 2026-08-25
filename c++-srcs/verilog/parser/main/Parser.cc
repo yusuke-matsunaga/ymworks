@@ -192,11 +192,13 @@ Parser::check_function_statement(
 
 // default ラベルが2つ以上含まれていないかどうかのチェック
 bool
-Parser::check_default_label()
+Parser::check_default_label(
+  const AstCaseItemList& caseitem_list
+)
 {
   SizeType n = 0;
-  for ( auto ci: mCurCaseItemList ) {
-    if ( ci->label_num() == 0 ) {
+  for ( auto ci: caseitem_list ) {
+    if ( ci->label_list().size() == 0 ) {
       ++ n;
       if ( n > 1 ) {
 	MsgMgr::put_msg(__FILE__, __LINE__,

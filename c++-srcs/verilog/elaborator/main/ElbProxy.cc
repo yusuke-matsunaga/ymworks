@@ -83,7 +83,7 @@ ElbProxy::phase1_module_item(
 void
 ElbProxy::phase1_decl(
   const VlScope* parent,
-  const AstDeclHeadVec& ast_head_list,
+  const AstDeclHeadList& ast_head_list,
   bool force_to_local
 )
 {
@@ -94,7 +94,7 @@ ElbProxy::phase1_decl(
 void
 ElbProxy::instantiate_iodecl(
   ElbModule* module,
-  const AstIOHeadVec& ast_head_list
+  const AstIOHeadList& ast_head_list
 )
 {
   mDeclGen->instantiate_iodecl(module, nullptr, ast_head_list);
@@ -104,7 +104,7 @@ ElbProxy::instantiate_iodecl(
 void
 ElbProxy::instantiate_iodecl(
   ElbTaskFunc* taskfunc,
-  const AstIOHeadVec& ast_head_list
+  const AstIOHeadList& ast_head_list
 )
 {
   mDeclGen->instantiate_iodecl(nullptr, taskfunc, ast_head_list);
@@ -114,7 +114,7 @@ ElbProxy::instantiate_iodecl(
 void
 ElbProxy::instantiate_decl(
   const VlScope* parent,
-  const AstDeclHeadVec& ast_head_list
+  const AstDeclHeadList& ast_head_list
 )
 {
   mDeclGen->instantiate_decl(parent, ast_head_list);
@@ -124,7 +124,7 @@ ElbProxy::instantiate_decl(
 void
 ElbProxy::phase1_items(
   const VlScope* parent,
-  const AstItemVec& ast_item_list
+  const AstItemList& ast_item_list
 )
 {
   mItemGen->phase1_items(parent, ast_item_list);

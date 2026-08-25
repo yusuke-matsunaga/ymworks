@@ -23,8 +23,9 @@ public:
 
   /// @brief コンストラクタ
   CptRegH(
-    const FileRegion& file_region ///< [in] ファイル位置の情報
-  ) : CptDeclHead(file_region)
+    const FileRegion& file_region, ///< [in] ファイル位置の情報
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top)
   {
   }
 
@@ -56,8 +57,9 @@ public:
   /// @brief コンストラクタ
   CptRegHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range	   ///< [in] 範囲
-  ) : CptRegH(file_region),
+    const AstRange* range,         ///< [in] 範囲
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptRegH(file_region, item_top),
       mRange{range}
   {
   }
@@ -104,8 +106,9 @@ public:
   /// @brief コンストラクタ
   CptRegHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range           ///< [in] パース木の範囲定義
-  ) : CptRegHV(file_region, range)
+    const AstRange* range,         ///< [in] パース木の範囲定義
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptRegHV(file_region, range, item_top)
   {
   }
 

@@ -56,7 +56,6 @@ class AstCaseItem;
 
 // in AstExpr.h
 class AstExpr;
-class AstExprList;
 class AstPart;
 
 // in AstMisc.h
@@ -93,9 +92,26 @@ using AstUdpValueVec    = std::vector<const AstUdpValue*>;
 
 using AstAttrInstList    = AstList<const AstAttrInst>;
 using AstAttrSpecList    = AstList<const AstAttrSpec>;
+using AstCaseItemList    = AstList<const AstCaseItem>;
+using AstConnectionList  = AstList<const AstConnection>;
+using AstContAssignList  = AstList<const AstContAssign>;
+using AstDeclHeadList    = AstList<const AstDeclHead>;
+using AstDeclItemList    = AstList<const AstDeclItem>;
+using AstDefParamList    = AstList<const AstDefParam>;
+using AstExprList        = AstList<const AstExpr>;
 using AstGenCaseItemList = AstList<const AstGenCaseItem>;
+using AstInstList        = AstList<const AstInst>;
+using AstIOHeadList      = AstList<const AstIOHead>;
+using AstIOItemList      = AstList<const AstIOItem>;
+using AstItemList        = AstList<const AstItem>;
+using AstModuleList      = AstList<const AstModule>;
 using AstNameBranchList  = AstList<const AstNameBranch>;
+using AstPortList        = AstList<const AstPort>;
 using AstRangeList       = AstList<const AstRange>;
+using AstStmtList        = AstList<const AstStmt>;
+using AstUdpList         = AstList<const AstUdp>;
+using AstUdpEntryList    = AstList<const AstUdpEntry>;
+using AstUdpValueList    = AstList<const AstUdpValue>;
 
 END_NAMESPACE_YM_VERILOG
 

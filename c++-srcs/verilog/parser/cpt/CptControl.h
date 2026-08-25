@@ -9,8 +9,8 @@
 /// All rights reserved.
 
 #include "parser/PtMisc.h"
+#include "parser/PtExpr.h"
 #include "ym/FileRegion.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -41,24 +41,10 @@ public:
   const AstExpr*
   delay() const override;
 
-  /// @brief イベントリストの要素数の取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  SizeType
-  event_num() const override;
-
-  /// @brief イベントの取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  event(
-    SizeType index ///< [in] インデックス ( 0 <= index < event_num() )
-  ) const override;
-
   /// @brief イベントリストの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
-  AstExprVec
+  AstExprList
   event_list() const override;
 
   /// @brief 繰り返し数の取得
@@ -160,24 +146,10 @@ public:
   Type
   type() const override;
 
-  /// @brief イベントリストの要素数の取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  SizeType
-  event_num() const override;
-
-  /// @brief イベントの取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  event(
-    SizeType index ///< [in] インデックス ( 0 <= index < event_num() )
-  ) const override;
-
   /// @brief イベントリストの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
-  AstExprVec
+  AstExprList
   event_list() const override;
 
 
@@ -193,7 +165,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @brief 1つのイベントを持つ EventControl
+/// @brief イベントリストを持つ EventControl
 //////////////////////////////////////////////////////////////////////
 class CptEventControl1 :
   public CptEventControl
@@ -203,9 +175,9 @@ public:
   /// @brief コンストラクタ
   CptEventControl1(
     const FileRegion& file_region,
-    const AstExpr* event
+    const AstExpr* event_top
   ) : CptEventControl(file_region),
-      mEvent{event}
+      mEventTop{event_top}
   {
   }
 
@@ -218,24 +190,10 @@ public:
   // PtControl の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief イベントリストの要素数の取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  SizeType
-  event_num() const override;
-
-  /// @brief イベントの取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  event(
-    SizeType index ///< [in] インデックス ( 0 <= index < event_num() )
-  ) const override;
-
   /// @brief イベントリストの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
-  AstExprVec
+  AstExprList
   event_list() const override;
 
 
@@ -244,66 +202,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // イベント
-  const AstExpr* mEvent;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @brief イベントリストを持つ EventControl
-//////////////////////////////////////////////////////////////////////
-class CptEventControl2 :
-  public CptEventControl
-{
-public:
-
-  /// @brief コンストラクタ
-  CptEventControl2(
-    const FileRegion& file_region,
-    const AstExprList* event_list
-  ) : CptEventControl(file_region),
-      mEventList{event_list}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptEventControl2() {}
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtControl の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief イベントリストの要素数の取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  SizeType
-  event_num() const override;
-
-  /// @brief イベントの取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  event(
-    SizeType index ///< [in] インデックス ( 0 <= index < event_num() )
-  ) const override;
-
-  /// @brief イベントリストの取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  AstExprVec
-  event_list() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // イベントのリスト
-  const AstExprList* mEventList;
+  // イベントの先頭
+  const AstExpr* mEventTop;
 
 };
 
@@ -369,8 +269,8 @@ public:
   CptRepeatControl1(
     const FileRegion& file_region,
     const AstExpr* rep,
-    const AstExpr* event
-  ) : CptEventControl1(file_region, event),
+    const AstExpr* event_top
+  ) : CptEventControl1(file_region, event_top),
       mRepExpr{rep}
   {
     if ( rep == nullptr ) {
@@ -380,56 +280,6 @@ public:
 
   /// @brief デストラクタ
   ~CptRepeatControl1() {}
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtControl の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 型を返す．
-  Type
-  type() const override;
-
-  /// @brief 繰り返し数を得る．
-  const AstExpr*
-  rep_expr() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 繰り返し数を表す式
-  const AstExpr* mRepExpr;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @brief repeat 形式の event を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptRepeatControl2 :
-  public CptEventControl2
-{
-public:
-
-  /// @brief コンストラクタ
-  CptRepeatControl2(
-    const FileRegion& file_region,
-    const AstExpr* rep,
-    const AstExprList* event_list
-  ) : CptEventControl2(file_region, event_list),
-      mRepExpr{rep}
-  {
-    if ( rep == nullptr ) {
-      throw std::logic_error{"expr = nullptr"};
-    }
-  }
-
-  /// @brief デストラクタ
-  ~CptRepeatControl2() {}
 
 
 public:

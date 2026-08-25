@@ -29,7 +29,7 @@ END_NONAMESPACE
 void
 StmtGen::phase2_namedblock(
   const VlScope* parent,
-  const AstDeclHeadVec& ast_head_list
+  const AstDeclHeadList& ast_head_list
 )
 {
   if ( debug ) {
@@ -120,7 +120,7 @@ StmtGen::instantiate_stmt_list(
   const AstStmt* ast_stmt
 )
 {
-  SizeType stmt_num = ast_stmt->stmt_num();
+  SizeType stmt_num = ast_stmt->stmt_list().size();
   std::vector<const VlStmt*> stmt_list;
   stmt_list.reserve(stmt_num);
   for ( auto ast_stmt1: ast_stmt->stmt_list() ) {

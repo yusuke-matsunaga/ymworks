@@ -9,6 +9,7 @@
 #include "CptGenerate.h"
 #include "alloc/Alloc.h"
 #include "parser/PtDecl.h"
+#include "parser/PtExpr.h"
 #include "parser/PtFactory.h"
 
 
@@ -25,47 +26,15 @@ CptGenBase::file_region() const
   return mFileRegion;
 }
 
-// @brief 宣言ヘッダの要素数の取得
-SizeType
-CptGenBase::declhead_num() const
-{
-  return mBody.declhead_num();
-}
-
-// @brief 宣言ヘッダの取得
-const AstDeclHead*
-CptGenBase::declhead(
-  SizeType index
-) const
-{
-  return mBody.declhead(index);
-}
-
 // @brief 宣言ヘッダリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptGenBase::declhead_list() const
 {
   return mBody.declhead_list();
 }
 
-// @brief item リストの要素数の取得
-SizeType
-CptGenBase::item_num() const
-{
-  return mBody.item_num();
-}
-
-// @brief item の取得
-const AstItem*
-CptGenBase::item(
-  SizeType index
-) const
-{
-  return mBody.item(index);
-}
-
 // @brief item リストの取得
-AstItemVec
+AstItemList
 CptGenBase::item_list() const
 {
   return mBody.item_list();
@@ -133,96 +102,32 @@ CptGenIf::cond_expr() const
   return mCond;
 }
 
-// @brief 条件が成り立ったときに生成される宣言ヘッダの要素数の取得
-SizeType
-CptGenIf::then_declhead_num() const
-{
-  return mThenBody.declhead_num();
-}
-
-// @brief 条件が成り立った時に生成される宣言ヘッダの取得
-const AstDeclHead*
-CptGenIf::then_declhead(
-  SizeType index
-) const
-{
-  return mThenBody.declhead(index);
-}
-
 // @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptGenIf::then_declhead_list() const
 {
   return mThenBody.declhead_list();
 }
 
-// @brief 条件が成り立ったときに生成される要素数の取得
-SizeType
-CptGenIf::then_item_num() const
-{
-  return mThenBody.item_num();
-}
-
-// @brief 条件が成り立った時に生成される要素の取得
-const AstItem*
-CptGenIf::then_item(
-  SizeType index
-) const
-{
-  return mThenBody.item(index);
-}
-
 // @brief 条件が成り立った時に生成される要素リストの取得
-AstItemVec
+AstItemList
 CptGenIf::then_item_list() const
 {
   return mThenBody.item_list();
 }
 
-// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
-SizeType
-CptGenIf::else_declhead_num() const
-{
-  return 0;
-}
-
-// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
-const AstDeclHead*
-CptGenIf::else_declhead(
-  SizeType index
-) const
-{
-  throw std::out_of_range{"else_declhead(index): index is out of range"};
-}
-
 // @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptGenIf::else_declhead_list() const
 {
-  return {};
-}
-
-// @brief 条件が成り立たなかったときに生成される要素数の取得
-SizeType
-CptGenIf::else_item_num() const
-{
-  return 0;
-}
-
-// @brief 条件が成り立たなかった時に生成される要素の取得
-const AstItem*
-CptGenIf::else_item(
-  SizeType index
-) const
-{
-  throw std::out_of_range{"else_item(index): index is out of range"};
+  return AstDeclHeadList();
 }
 
 // @brief 条件が成り立たなかった時に生成されるitemリストの取得
-AstItemVec
+AstItemList
 CptGenIf::else_item_list() const
 {
-  return {};
+  return AstItemList();
 }
 
 
@@ -230,47 +135,15 @@ CptGenIf::else_item_list() const
 // ELSE 付き gen_if 文 を表すクラス
 //////////////////////////////////////////////////////////////////////
 
-// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
-SizeType
-CptGenIfElse::else_declhead_num() const
-{
-  return mElseBody.declhead_num();
-}
-
-// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
-const AstDeclHead*
-CptGenIfElse::else_declhead(
-  SizeType index
-) const
-{
-  return mElseBody.declhead(index);
-}
-
 // @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptGenIfElse::else_declhead_list() const
 {
   return mElseBody.declhead_list();
 }
 
-// @brief 条件が成り立たなかったときに生成される要素数の取得
-SizeType
-CptGenIfElse::else_item_num() const
-{
-  return mElseBody.item_num();
-}
-
-// @brief 条件が成り立たなかった時に生成される要素の取得
-const AstItem*
-CptGenIfElse::else_item(
-  SizeType index
-) const
-{
-  return mElseBody.item(index);
-}
-
 // @brief 条件が成り立たなかった時に生成されるitemリストの取得
-AstItemVec
+AstItemList
 CptGenIfElse::else_item_list() const
 {
   return mElseBody.item_list();
@@ -288,103 +161,25 @@ CptGenCaseItem::file_region() const
   return mFileRegion;
 }
 
-// @brief ラベルの要素数の取得
-SizeType
-CptGenCaseItem::label_num() const
-{
-  return mLabelList->size();
-}
-
-// @brief ラベルの取得
-const AstExpr*
-CptGenCaseItem::label(
-  SizeType index
-) const
-{
-  return mLabelList->expr(index);
-}
-
 // @brief ラベルリストの取得
-AstExprVec
+AstExprList
 CptGenCaseItem::label_list() const
 {
-  return mLabelList->to_vector();
-}
-
-// @brief 宣言の要素数の取得
-SizeType
-CptGenCaseItem::declhead_num() const
-{
-  return mBody.declhead_num();
-}
-
-// @brief 宣言の取得
-const AstDeclHead*
-CptGenCaseItem::declhead(
-  SizeType index
-) const
-{
-  return mBody.declhead(index);
+  return AstExprList(mLabelTop);
 }
 
 // @brief 宣言リストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptGenCaseItem::declhead_list() const
 {
   return mBody.declhead_list();
 }
 
-// @brief item の要素数の取得
-SizeType
-CptGenCaseItem::item_num() const
-{
-  return mBody.item_num();
-}
-
-// @brief item の取得
-const AstItem*
-CptGenCaseItem::item(
-  SizeType index
-) const
-{
-  return mBody.item(index);
-}
-
 // @brief item リストの取得
-AstItemVec
+AstItemList
 CptGenCaseItem::item_list() const
 {
   return mBody.item_list();
-}
-
-// @brief 次の要素を返す．
-const AstGenCaseItem*
-CptGenCaseItem::link() const
-{
-  return mLink;
-}
-
-// @brief 次の要素を返す．
-PtGenCaseItem*
-CptGenCaseItem::_link() const
-{
-  return mLink;
-}
-
-// @brief link を設定する．
-void
-CptGenCaseItem::set_link(
-  PtGenCaseItem* link
-)
-{
-  mLink = link;
-}
-
-// @brief リンクトリストを逆順にする．
-PtGenCaseItem*
-CptGenCaseItem::reverse()
-{
-  return make_reverse<PtGenCaseItem>(this);
 }
 
 
@@ -476,28 +271,28 @@ CptGenFor::next_expr() const
 PtItem*
 PtFactory::new_Generate(
   const FileRegion& file_region,
-  const std::vector<PtDeclHead*>& declhead_list,
-  const AstItemVec& item_list
+  PtDeclHead* declhead_top,
+  PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenerate));
   return new (p) CptGenerate(file_region,
-			     PtDeclHeadArray(mAlloc, declhead_list),
-			     PtItemArray(mAlloc, item_list));
+			     declhead_top,
+			     item_top);
 }
 
 // generate block 文を生成する．
 PtItem*
 PtFactory::new_GenBlock(
   const FileRegion& file_region,
-  const std::vector<PtDeclHead*>& declhead_list,
-  const AstItemVec& item_list
+  PtDeclHead* declhead_top,
+  PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenBlock));
   return new (p) CptGenBlock(file_region,
-			     PtDeclHeadArray(mAlloc, declhead_list),
-			     PtItemArray(mAlloc, item_list));
+			     declhead_top,
+			     item_top);
 }
 
 // generate block 文を生成する．
@@ -505,15 +300,14 @@ PtItem*
 PtFactory::new_GenBlock(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<PtDeclHead*>& declhead_list,
-  const AstItemVec& item_list
+  PtDeclHead* declhead_top,
+  PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenBlockN));
   return new (p) CptGenBlockN(file_region, name,
-			      PtDeclHeadArray(mAlloc, declhead_list),
-			      PtItemArray(mAlloc, item_list));
-
+			      declhead_top,
+			      item_top);
 }
 
 // generate if 文を生成する．
@@ -521,14 +315,14 @@ PtItem*
 PtFactory::new_GenIf(
   const FileRegion& file_region,
   const AstExpr* cond,
-  const std::vector<PtDeclHead*>& then_declhead_list,
-  const AstItemVec& then_item_list
+  PtDeclHead* declhead_top,
+  PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenIf));
   return new (p) CptGenIf(file_region, cond,
-			  PtDeclHeadArray(mAlloc, then_declhead_list),
-			  PtItemArray(mAlloc, then_item_list));
+			  declhead_top,
+			  item_top);
 }
 
 // generate if 文を生成する．
@@ -536,18 +330,18 @@ PtItem*
 PtFactory::new_GenIfElse(
   const FileRegion& file_region,
   const AstExpr* cond,
-  const std::vector<PtDeclHead*>& then_declhead_list,
-  const AstItemVec& then_item_list,
-  const std::vector<PtDeclHead*>& else_declhead_list,
-  const AstItemVec& else_item_list
+  PtDeclHead* then_declhead_top,
+  PtItem* then_item_top,
+  PtDeclHead* else_declhead_top,
+  PtItem* else_item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenIfElse));
   return new (p) CptGenIfElse(file_region, cond,
-			      PtDeclHeadArray(mAlloc, then_declhead_list),
-			      PtItemArray(mAlloc, then_item_list),
-			      PtDeclHeadArray(mAlloc, else_declhead_list),
-			      PtItemArray(mAlloc, else_item_list));
+			      then_declhead_top,
+			      then_item_top,
+			      else_declhead_top,
+			      else_item_top);
 }
 
 // generate case 文を生成する．
@@ -559,22 +353,23 @@ PtFactory::new_GenCase(
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenCase));
-  return new (p) CptGenCase(file_region, expr, item_top->reverse());
+  return new (p) CptGenCase(file_region, expr, item_top);
 }
 
 // generate case の要素を生成する．
 PtGenCaseItem*
 PtFactory::new_GenCaseItem(
   const FileRegion& file_region,
-  const AstExprList* label_list,
-  const std::vector<PtDeclHead*>& declhead_list,
-  const AstItemVec& item_list
+  PtExpr* label_top,
+  PtDeclHead* declhead_top,
+  PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenCaseItem));
-  return new (p) CptGenCaseItem(file_region, label_list,
-				PtDeclHeadArray(mAlloc, declhead_list),
-				PtItemArray(mAlloc, item_list));
+  return new (p) CptGenCaseItem(file_region,
+				label_top,
+				declhead_top,
+				item_top);
 }
 
 // generate for 文を生成する．
@@ -586,15 +381,15 @@ PtFactory::new_GenFor(
   const AstExpr* cond,
   const AstExpr* next_expr,
   const char* block_name,
-  const std::vector<PtDeclHead*>& declhead_list,
-  const AstItemVec& item_list
+  PtDeclHead* declhead_top,
+  PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenFor));
   return new (p) CptGenFor(file_region, loop_var, init_expr, cond,
 			   next_expr, block_name,
-			   PtDeclHeadArray(mAlloc, declhead_list),
-			   PtItemArray(mAlloc, item_list));
+			   declhead_top,
+			   item_top);
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -25,8 +25,10 @@ protected:
 
   /// @brief コンストラクタ
   CptDeclHead(
-    const FileRegion& file_region ///< [in] ファイル位置の情報
-  ) : mFileRegion{file_region}
+    const FileRegion& file_region, ///< [in] ファイル位置の情報
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : mFileRegion{file_region},
+      mItemTop{item_top}
   {
   }
 
@@ -87,31 +89,19 @@ public:
   const AstDelay*
   delay() const override;
 
-  /// @brief 要素数の取得
-  SizeType
-  item_num() const override;
-
-  /// @brief 要素を返す．
-  const AstDeclItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const override;
-
   /// @brief 要素のリストを返す．
-  AstDeclItemVec
+  AstDeclItemList
   item_list() const override;
 
 
-private:
+public:
   //////////////////////////////////////////////////////////////////////
-  // PtDeclHead の継承クラスが実装する仮想関数
+  // PtDeclHead の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 要素リストの設定
-  void
-  set_elem(
-    PtDeclItemArray&& elem_list ///< [in] 要素の配列
-  ) override;
+  /// @brief 先頭の要素を返す．
+  PtDeclItem*
+  _item_top() const override;
 
 
 private:
@@ -122,8 +112,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 要素のリスト
-  PtDeclItemArray mItemList;
+  // 要素の先頭
+  PtDeclItem* mItemTop{nullptr};
 
 };
 
@@ -139,8 +129,9 @@ public:
   /// @brief コンストラクタ
   CptVarH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    VpiVarType var_type            ///< [in] データ型
-  ) : CptDeclHead(file_region),
+    VpiVarType var_type,           ///< [in] データ型
+    PtDeclItem* item_top = nullptr ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top),
       mVarType{var_type}
   {
   }
@@ -193,8 +184,9 @@ public:
 
   /// @brief コンストラクタ
   CptGenvarH(
-    const FileRegion& file_region ///< [in] ファイル位置の情報
-  ) : CptDeclHead(file_region)
+    const FileRegion& file_region, ///< [in] ファイル位置の情報
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top)
   {
   }
 
@@ -225,8 +217,9 @@ public:
 
   /// @brief コンストラクタ
   CptEventH(
-    const FileRegion& file_region ///< [in] ファイル位置の情報
-  ) : CptDeclHead(file_region)
+    const FileRegion& file_region, ///< [in] ファイル位置の情報
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top)
   {
   }
 

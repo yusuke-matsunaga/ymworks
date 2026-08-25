@@ -7,7 +7,9 @@
 /// All rights reserved.
 
 #include "CptDefParam.h"
+#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
+#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -30,27 +32,11 @@ CptDefParamH::type() const
   return DefParam;
 }
 
-// @brief defparam の要素数の取得
-SizeType
-CptDefParamH::defparam_num() const
-{
-  return mList.size();
-}
-
-// @brief defparam の取得
-const AstDefParam*
-CptDefParamH::defparam(
-  SizeType index
-) const
-{
-  return mList[index];
-}
-
 // @brief defparam リストの取得
-AstDefParamVec
+AstDefParamList
 CptDefParamH::defparam_list() const
 {
-  return mList.to_vector();
+  return AstDefParamList(mTop);
 }
 
 
@@ -107,12 +93,11 @@ CptDefParam2::namebranch_list() const
 PtItem*
 PtFactory::new_DefParamH(
   const FileRegion& file_region,
-  const AstDefParamVec& elem_list
+  PtDefParam* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDefParamH));
-  return new (p) CptDefParamH(file_region,
-			      PtDefParamArray(mAlloc, elem_list));
+  return new (p) CptDefParamH(file_region, elem_top);
 }
 
 // defparam 文の要素を生成する．
@@ -134,11 +119,9 @@ PtFactory::new_DefParam(
   const AstExpr* value
 )
 {
-  auto nb_top = hname.nb_top->reverse();
-  auto tail_name = hname.tail_name;
   void* p = mAlloc.get_memory(sizeof(CptDefParam2));
   return new (p) CptDefParam2(file_region,
-			      nb_top, tail_name,
+			      hname.nb_list.top, hname.tail_name,
 			      value);
 }
 

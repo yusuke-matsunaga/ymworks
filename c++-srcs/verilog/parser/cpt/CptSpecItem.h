@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,10 +26,10 @@ public:
   CptSpecItem(
     const FileRegion& file_region,
     VpiSpecItemType id,
-    const AstExprList* terminal_list
+    const AstExpr* terminal_top
   ) : mFileRegion{file_region},
       mId{id},
-      mTerminalList{terminal_list}
+      mTerminalTop{terminal_top}
   {
   }
 
@@ -53,18 +54,8 @@ public:
   VpiSpecItemType
   specitem_type() const override;
 
-  /// @brief ターミナルの要素数の取得
-  SizeType
-  terminal_num() const override;
-
-  /// @brief ターミナルの取得
-  const AstExpr*
-  terminal(
-    SizeType index ///< [in] インデックス ( 0 <= index < terminal_num() )
-  ) const override;
-
   /// @brief ターミナルリストの取得
-  AstExprVec
+  AstExprList
   terminal_list() const override;
 
 
@@ -80,7 +71,7 @@ private:
   VpiSpecItemType mId;
 
   // ターミナルのリスト
-  const AstExprList* mTerminalList;
+  const AstExpr* mTerminalTop;
 
 };
 
@@ -157,28 +148,30 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @brief path_delay_declaration を表す基底クラス
+/// @brief path_delay_declaration を表すクラス
 //////////////////////////////////////////////////////////////////////
-class CptPathDeclBase :
+class CptPathDecl :
   public PtPathDecl
 {
 public:
 
   /// @brief コンストラクタ
-  CptPathDeclBase(
+  CptPathDecl(
     const FileRegion& file_region,
     int edge,
-    const AstExprList* input_list,
+    PtExpr* input_top,
     int input_pol,
     VpiPathType op,
+    PtExpr* output_top,
     int output_pol,
     const AstExpr* expr,
     const AstPathDelay* path_delay
   ) : mFileRegion{file_region},
       mEdge{edge},
-      mInputList{input_list},
+      mInputTop{input_top},
       mInputPol{input_pol},
       mOp{op},
+      mOutputTop{output_top},
       mOutputPol{output_pol},
       mExpr{expr},
       mPathDelay{path_delay}
@@ -186,7 +179,7 @@ public:
   }
 
   /// @brief デストラクタ
-  ~CptPathDeclBase() {}
+  ~CptPathDecl() {}
 
 
 public:
@@ -202,18 +195,8 @@ public:
   int
   edge() const override;
 
-  /// @brief 入力のリストの要素数の取得
-  SizeType
-  input_num() const override;
-
-  /// @brief 入力の取得
-  const AstExpr*
-  input(
-    SizeType index ///< [in] インデックス ( 0 <= index < input_num() )
-  ) const override;
-
   /// @brief 入力のリストの取得
-  AstExprVec
+  AstExprList
   input_list() const override;
 
   /// @brief 入力の極性を取り出す．
@@ -223,6 +206,10 @@ public:
   /// @brief パス記述子(?)を得る．vpiParallel か vpiFull
   VpiPathType
   op() const override;
+
+  /// @brief 出力リストの取得
+  AstExprList
+  output_list() const override;
 
   /// @brief 出力の極性を取り出す．
   int
@@ -246,134 +233,13 @@ private:
   FileRegion mFileRegion;
 
   int mEdge;
-  const AstExprList* mInputList;
+  const AstExpr* mInputTop;
   int mInputPol;
   VpiPathType mOp;
+  const AstExpr* mOutputTop;
   int mOutputPol;
   const AstExpr* mExpr;
   const AstPathDelay* mPathDelay;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @brief 単一出力の PathDecl
-//////////////////////////////////////////////////////////////////////
-class CptPathDecl1 :
-  public CptPathDeclBase
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPathDecl1(
-    const FileRegion& file_region,
-    int edge,
-    const AstExprList* input_list,
-    int input_pol,
-    VpiPathType op,
-    const AstExpr* output,
-    int output_pol,
-    const AstExpr* expr,
-    const AstPathDelay* path_delay
-  ) : CptPathDeclBase(file_region, edge,
-		      input_list, input_pol,
-		      op, output_pol,
-		      expr, path_delay),
-      mOutput{output}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptPathDecl1() {}
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstPathDecl の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 出力のリストの要素数の取得
-  SizeType
-  output_num() const override;
-
-  /// @brief 出力の取得
-  const AstExpr*
-  output(
-    SizeType index ///< [in] インデックス ( 0 <= index < output_num() )
-  ) const override;
-
-  /// @brief 出力リストの取得
-  AstExprVec
-  output_list() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  const AstExpr* mOutput;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @brief 複数出力の PathDecl
-//////////////////////////////////////////////////////////////////////
-class CptPathDecl2 :
-  public CptPathDeclBase
-{
-public:
-
-  /// @brief コンストラクタ
-  CptPathDecl2(
-    const FileRegion& file_region,
-    int edge,
-    const AstExprList* input_list,
-    int input_pol,
-    VpiPathType op,
-    const AstExprList* output_list,
-    int output_pol,
-    const AstExpr* expr,
-    const AstPathDelay* path_delay
-  ) : CptPathDeclBase(file_region, edge,
-		      input_list, input_pol,
-		      op, output_pol,
-		      expr, path_delay),
-      mOutputList{output_list}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptPathDecl2() {}
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstPathDecl の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 出力のリストの要素数の取得
-  SizeType
-  output_num() const override;
-
-  /// @brief 出力の取得
-  const AstExpr*
-  output(
-    SizeType index ///< [in] インデックス ( 0 <= index < output_num() )
-  ) const override;
-
-  /// @brief 出力リストの取得
-  AstExprVec
-  output_list() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  const AstExprList* mOutputList;
 
 };
 

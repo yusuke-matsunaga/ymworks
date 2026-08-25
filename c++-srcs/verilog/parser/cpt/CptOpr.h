@@ -264,9 +264,9 @@ public:
   // コンストラクタ
   CptConcat(
     const FileRegion& file_region,
-    const AstExprList* expr_list
+    const AstExpr* expr_top
   ) : mFileRegion{file_region},
-      mExprList{expr_list}
+      mExprTop{expr_top}
   {
   }
 
@@ -291,25 +291,8 @@ public:
   VpiOpType
   op_type() const override;
 
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
-  ///   std::logi_error 例外を送出する．
-  SizeType
-  operand_num() const override;
-
   /// @brief オペランドのリストの取得
-  ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
-  ///   std::logi_error 例外を送出する．
-  const AstExpr*
-  operand(
-    SizeType index ///< [in] インデックス ( 0 <= index < operand_num() )
-  ) const override;
-
-  /// @brief オペランドのリストの取得
-  AstExprVec
+  AstExprList
   operand_list() const override;
 
 
@@ -321,8 +304,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 結合する式のリスト
-  const AstExprList* mExprList;
+  // 結合する式の先頭
+  const AstExpr* mExprTop;
 
 };
 
@@ -339,8 +322,8 @@ public:
   CptMultiConcat(
     const FileRegion& file_region,
     const AstExpr* rep,
-    const AstExprList* expr_list
-  ) : CptConcat(file_region, expr_list),
+    const AstExpr* expr_top
+  ) : CptConcat(file_region, expr_top),
       mRep{rep}
   {
   }

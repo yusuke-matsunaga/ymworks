@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
+#include "ym/vl/AstList.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -33,6 +34,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 class AstPort :
   public AstBase
 {
+  friend class AstList<const AstPort>;
+  friend class AstListIter<const AstPort>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstPort の継承クラスが実装しなければならない仮想関数
@@ -54,23 +58,11 @@ public:
   const AstExpr*
   expr() const = 0;
 
-  /// @brief 内部のポート結線リストのサイズの取得
-  virtual
-  SizeType
-  portref_size() const = 0;
-
-  /// @brief 内部のポート結線の取得
-  virtual
-  const AstExpr*
-  portref(
-    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
-  ) const = 0;
-
   /// @brief 内部のポート結線のリストの取得
   ///
   /// portef_size() <= 1 の時は nullptr を返す．
   virtual
-  AstExprVec
+  AstExprList
   portref_list() const = 0;
 
   /// @brief 内部のポート結線の向きの取得
@@ -79,6 +71,17 @@ public:
   portref_dir(
     SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
   ) const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstPort*
+  link() const = 0;
 
 };
 

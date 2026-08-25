@@ -67,46 +67,16 @@ public:
   const AstDelay*
   delay() const override;
 
-  /// @brief パラメータ割り当ての要素数の取得
-  SizeType
-  paramassign_num() const override;
-
-  /// @brief パラメータ割り当ての取得
-  const AstConnection*
-  paramassign(
-    SizeType index ///< [in] インデックス ( 0 <= index < paramassign_num() )
-  ) const override;
-
   /// @brief パラメータ割り当てのリストの取得
-  AstConnectionVec
+  AstConnectionList
   paramassign_list() const override;
 
-  /// @brief defparam の要素数の取得
-  SizeType
-  defparam_num() const override;
-
-  /// @brief defparam の取得
-  const AstDefParam*
-  defparam(
-    SizeType index ///< [in] インデックス ( 0 <= index < defparam_num() )
-  ) const override;
-
   /// @brief defparam リストの取得
-  AstDefParamVec
+  AstDefParamList
   defparam_list() const override;
 
-  /// @brief continuous assign の要素数の取得
-  SizeType
-  contassign_num() const override;
-
-  /// @brief continuous assign の取得
-  const AstContAssign*
-  contassign(
-    SizeType index ///< [in] インデックス ( 0 <= index < contassign_num() )
-  ) const override;
-
   /// @brief continuous assign リストの取得
-  AstContAssignVec
+  AstContAssignList
   contassign_list() const override;
 
   /// @brief プリミティブタイプの取得
@@ -114,46 +84,16 @@ public:
   VpiPrimType
   prim_type() const override;
 
-  /// @brief module/UDP/gate instance の要素数の取得
-  SizeType
-  inst_num() const override;
-
   /// @brief module/UDP/gate instance リストの取得
-  const AstInst*
-  inst(
-    SizeType index ///< [in] インデックス ( 0 <= index < inst_num() )
-  ) const override;
-
-  /// @brief module/UDP/gate instance リストの取得
-  AstInstVec
+  AstInstList
   inst_list() const override;
 
-  /// @brief 宣言ヘッダの要素数の取得
-  SizeType
-  declhead_num() const override;
-
-  /// @brief 宣言ヘッダの取得
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const override;
-
   /// @brief 宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const override;
 
-  /// @brief item の要素数の取得
-  SizeType
-  item_num() const override;
-
-  /// @brief item の取得
-  const AstItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const override;
-
   /// @brief item リストの取得
-  AstItemVec
+  AstItemList
   item_list() const override;
 
   /// @brief automatic 情報の取得
@@ -162,23 +102,13 @@ public:
   bool
   automatic() const override;
 
+  /// @brief IO宣言ヘッダリストの取得
+  AstIOHeadList
+  iohead_list() const override;
+
   /// @brief IO宣言の要素数の取得
   SizeType
   ioitem_num() const override;
-
-  /// @brief IO宣言ヘッダリストの要素数の取得
-  SizeType
-  iohead_num() const override;
-
-  /// @brief IO宣言ヘッダの取得
-  const AstIOHead*
-  iohead(
-    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
-  ) const override;
-
-  /// @brief IO宣言ヘッダリストの取得
-  AstIOHeadVec
-  iohead_list() const override;
 
   /// @brief 符号の取得
   /// @retval true 符号つき
@@ -214,18 +144,8 @@ public:
   VpiSpecItemType
   specitem_type() const override;
 
-  /// @brief ターミナルの要素数の取得
-  SizeType
-  terminal_num() const override;
-
-  /// @brief ターミナルの取得
-  const AstExpr*
-  terminal(
-    SizeType index ///< [in] インデックス ( 0 <= index < terminal_num() )
-  ) const override;
-
   /// @brief ターミナルリストの取得
-  AstExprVec
+  AstExprList
   terminal_list() const override;
 
   /// @brief specify block path の種類の取得
@@ -238,60 +158,20 @@ public:
   const AstPathDecl*
   path_decl() const override;
 
-  /// @brief 条件が成り立ったときに生成される宣言ヘッダの要素数の取得
-  SizeType
-  then_declhead_num() const override;
-
-  /// @brief 条件が成り立った時に生成される宣言ヘッダの取得
-  const AstDeclHead*
-  then_declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < then_declhead_num() )
-  ) const override;
-
   /// @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   then_declhead_list() const override;
 
-  /// @brief 条件が成り立ったときに生成される要素数の取得
-  SizeType
-  then_item_num() const override;
-
-  /// @brief 条件が成り立った時に生成される要素の取得
-  const AstItem*
-  then_item(
-    SizeType index ///< [in] インデックス ( 0 <= index < then_item_num() )
-  ) const override;
-
   /// @brief 条件が成り立った時に生成されるitemリストの取得
-  AstItemVec
+  AstItemList
   then_item_list() const override;
 
-  /// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
-  SizeType
-  else_declhead_num() const override;
-
-  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
-  const AstDeclHead*
-  else_declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < else_declhead_num() )
-  ) const override;
-
   /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   else_declhead_list() const override;
 
-  /// @brief 条件が成り立たなかったときに生成される要素数の取得
-  SizeType
-  else_item_num() const override;
-
-  /// @brief 条件が成り立たなかった時に生成される要素の取得
-  const AstItem*
-  else_item(
-    SizeType index ///< [in] インデックス ( 0 <= index < else_item_num() )
-  ) const override;
-
   /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
-  AstItemVec
+  AstItemList
   else_item_list() const override;
 
   /// @brief case item リストの取得

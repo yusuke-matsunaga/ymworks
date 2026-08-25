@@ -63,27 +63,11 @@ public:
   // event control/repeat control の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief イベントリストの要素数の取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  virtual
-  SizeType
-  event_num() const = 0;
-
-  /// @brief イベントの取得
-  ///
-  /// - type() == Delay の時 std::logic_error 例外を送出する．
-  virtual
-  const AstExpr*
-  event(
-    SizeType index ///< [in] インデックス ( 0 <= index < event_num() )
-  ) const = 0;
-
   /// @brief イベントリストの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
   virtual
-  AstExprVec
+  AstExprList
   event_list() const = 0;
 
 
@@ -128,6 +112,9 @@ operator<<(
 class AstConnection :
   public AstBase
 {
+  friend class AstList<const AstConnection>;
+  friend class AstListIter<const AstConnection>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstConnection の継承クラスが実装する仮想関数
@@ -145,6 +132,17 @@ public:
   virtual
   const AstExpr*
   expr() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstConnection*
+  link() const = 0;
 
 };
 
@@ -239,6 +237,9 @@ public:
 //////////////////////////////////////////////////////////////////////
 class AstNameBranch
 {
+  friend class AstList<const AstNameBranch>;
+  friend class AstListIter<const AstNameBranch>;
+
 public:
 
   /// @brief デストラクタ
@@ -269,11 +270,6 @@ public:
   int
   index() const = 0;
 
-  /// @brief 次の要素の取得
-  virtual
-  const AstNameBranch*
-  link() const = 0;
-
   /// @brief インデックスを含めた名前を返す．
   std::string
   decompile() const
@@ -285,6 +281,17 @@ public:
     }
     return buf.str();
   }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstNameBranch*
+  link() const = 0;
 
 };
 
@@ -301,6 +308,9 @@ public:
 class AstAttrInst :
   public AstBase
 {
+  friend class AstList<const AstAttrInst>;
+  friend class AstListIter<const AstAttrInst>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstAttrInst の継承クラスが実装する仮想関数
@@ -310,6 +320,12 @@ public:
   virtual
   AstAttrSpecList
   attrspec_list() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 次の要素の取得
   virtual
@@ -331,6 +347,9 @@ public:
 class AstAttrSpec :
   public AstBase
 {
+  friend class AstList<const AstAttrSpec>;
+  friend class AstListIter<const AstAttrSpec>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstAttrSpec の継承クラスが実装する仮想関数
@@ -347,6 +366,12 @@ public:
   virtual
   const AstExpr*
   expr() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 次の要素の取得
   virtual

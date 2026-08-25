@@ -133,6 +133,13 @@ public:
     return n;
   }
 
+  /// @brief 先頭の要素を返す．
+  T*
+  front() const
+  {
+    return mTop;
+  }
+
   /// @brief 先頭の反復子を返す．
   const_iterator
   begin() const

@@ -52,7 +52,7 @@ ExprGen::instantiate_primary(
   auto name = ast_expr->name();
 
   // 識別子の添字の次元
-  auto isize = ast_expr->index_num();
+  auto isize = ast_expr->index_list().size();
 
   // 名前に対応したオブジェクトのハンドル
   auto handle = (ObjHandle*){nullptr};
@@ -120,7 +120,8 @@ ExprGen::instantiate_primary(
       }
     }
     else if ( isize == 1 ) {
-      auto ast_expr1 = ast_expr->index_list().front();
+      auto index_list = ast_expr->index_list().to_vector();
+      auto ast_expr1 = index_list[0];
       auto index = evaluate_int(parent, ast_expr1);
       auto scope = handle->array_elem(index);
       if ( scope ) {
@@ -178,7 +179,7 @@ ExprGen::instantiate_primary(
 
   if ( has_bit_select ) {
     // ビット指定付きの場合
-    auto index_vec = ast_expr->index_list();
+    auto index_vec = ast_expr->index_list().to_vector();
     auto ast_expr1 = index_vec[isize - 1];
     bool is_const;
     int index_val = evaluate_int_if_const(parent, ast_expr1, is_const);
@@ -420,7 +421,8 @@ ExprGen::instantiate_genvar(
 )
 {
   auto has_range_select = (ast_expr->part() != nullptr);
-  auto isize = ast_expr->index_num();
+  auto index_list = ast_expr->index_list();
+  auto isize = index_list.size();
   if (  isize > 1 || (isize == 1 && has_range_select) ) {
     // 配列型ではない．
     ErrorGen::dimension_mismatch(__FILE__, __LINE__, ast_expr);
@@ -428,7 +430,7 @@ ExprGen::instantiate_genvar(
 
   auto has_bit_select = (isize == 1);
   if ( has_bit_select ) {
-    auto index1 = evaluate_int(parent, ast_expr->index_list().front());
+    auto index1 = evaluate_int(parent, index_list.front());
     val >>= index1;
     val &= 1;
   }
@@ -459,7 +461,7 @@ ExprGen::instantiate_primary_sub(
   // 配列の次元
   SizeType dsize = 0;
   // プライマリ式の次元 (ビット指定を含んでいる可能性あり)
-  auto isize = ast_expr->index_num();
+  auto isize = ast_expr->index_list().size();
 
   // 範囲指定があるとき true となるフラグ
   has_range_select = (ast_expr->part() != nullptr);
@@ -498,7 +500,7 @@ ExprGen::instantiate_primary_sub(
       SizeType offset = 0;
       SizeType mlt = 1;
       auto const_index = true;
-      auto ast_index_list = ast_expr->index_list();
+      auto ast_index_list = ast_expr->index_list().to_vector();
       for ( SizeType i = 0; i < dsize; ++ i ) {
 	auto j = dsize - i - 1;
 	auto ast_expr1 = ast_index_list[j];

@@ -134,16 +134,16 @@ private:
   /// @brief 宣言を出力する．
   void
   put_decls(
-    const AstIOHeadVec& iohead_list,    ///< [in] IO宣言のリスト
-    const AstDeclHeadVec& declhead_list ///< [in] 宣言のリスト
+    const AstIOHeadList& iohead_list,    ///< [in] IO宣言のリスト
+    const AstDeclHeadList& declhead_list ///< [in] 宣言のリスト
   );
 
   /// @brief 宣言と要素を出力する．
   void
   put_decl_item(
     const char* label,                  ///< [in] ラベル
-    const AstDeclHeadVec& decl_list,    ///< [in] 宣言のリスト
-    const AstItemVec& item_list         ///< [in] 要素のリスト
+    const AstDeclHeadList& decl_list,    ///< [in] 宣言のリスト
+    const AstItemList& item_list         ///< [in] 要素のリスト
   );
 
   /// @brief 階層名の出力

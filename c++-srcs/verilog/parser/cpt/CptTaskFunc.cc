@@ -7,9 +7,9 @@
 /// All rights reserved.
 
 #include "CptTaskFunc.h"
+#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 #include "parser/PtDecl.h"
-#include "parser/PtHierName.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -39,6 +39,13 @@ CptTf::automatic() const
   return mAutomatic;
 }
 
+// @brief IO宣言ヘッダリストの取得
+AstIOHeadList
+CptTf::iohead_list() const
+{
+  return AstIOHeadList(mIOHeadTop);
+}
+
 // @brief IO宣言の要素数の取得
 SizeType
 CptTf::ioitem_num() const
@@ -46,50 +53,11 @@ CptTf::ioitem_num() const
   return mIOItemNum;
 }
 
-// @brief IO宣言ヘッダリストの要素数の取得
-SizeType
-CptTf::iohead_num() const
-{
-  return mIOHeadList.size();
-}
-
-// @brief IO宣言ヘッダの取得
-const AstIOHead*
-CptTf::iohead(
-  SizeType index
-) const
-{
-  return mIOHeadList[index];
-}
-
-// @brief IO宣言ヘッダリストの取得
-AstIOHeadVec
-CptTf::iohead_list() const
-{
-  return mIOHeadList.to_vector();
-}
-
-// @brief 宣言ヘッダの要素数の取得
-SizeType
-CptTf::declhead_num() const
-{
-  return mDeclHeadList.size();
-}
-
-// @brief 宣言ヘッダの取得
-const AstDeclHead*
-CptTf::declhead(
-  SizeType index
-) const
-{
-  return mDeclHeadList[index];
-}
-
 // @brief 宣言ヘッダリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptTf::declhead_list() const
 {
-  return mDeclHeadList.to_vector();
+  return AstDeclHeadList(mDeclHeadTop);
 }
 
 // 本体を取り出す．
@@ -186,15 +154,14 @@ PtFactory::new_Task(
   const FileRegion& file_region,
   const char* name,
   bool automatic,
-  const std::vector<PtIOHead*>& iohead_list,
-  const std::vector<PtDeclHead*>& declhead_list,
+  PtIOHead* iohead_top,
+  PtDeclHead* declhead_top,
   const AstStmt* stmt
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptTask));
   return new (p) CptTask(file_region, name, automatic,
-			 PtIOHeadArray(mAlloc, iohead_list),
-			 PtDeclHeadArray(mAlloc, declhead_list),
+			 iohead_top, declhead_top,
 			 stmt);
 }
 
@@ -205,15 +172,14 @@ PtFactory::new_Function(
   const char* name,
   bool automatic,
   bool sign,
-  const std::vector<PtIOHead*>& iohead_list,
-  const std::vector<PtDeclHead*>& declhead_list,
+  PtIOHead* iohead_top,
+  PtDeclHead* declhead_top,
   const AstStmt* stmt
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptFunction));
   return new (p) CptFunction(file_region, name, automatic, sign,
-			     PtIOHeadArray(mAlloc, iohead_list),
-			     PtDeclHeadArray(mAlloc, declhead_list),
+			     iohead_top, declhead_top,
 			     stmt);
 }
 
@@ -225,8 +191,8 @@ PtFactory::new_SizedFunc(
   bool automatic,
   bool sign,
   const AstRange* range,
-  const std::vector<PtIOHead*>& iohead_list,
-  const std::vector<PtDeclHead*>& declhead_list,
+  PtIOHead* iohead_top,
+  PtDeclHead* declhead_top,
   const AstStmt* stmt
 )
 {
@@ -234,8 +200,7 @@ PtFactory::new_SizedFunc(
   return new (p) CptSizedFunc(file_region,
 			      name, automatic,
 			      sign, range,
-			      PtIOHeadArray(mAlloc, iohead_list),
-			      PtDeclHeadArray(mAlloc, declhead_list),
+			      iohead_top, declhead_top,
 			      stmt);
 }
 
@@ -247,17 +212,15 @@ PtFactory::new_TypedFunc(
   bool automatic,
   bool sign,
   VpiVarType func_type,
-  const std::vector<PtIOHead*>& iohead_list,
-  const std::vector<PtDeclHead*>& declhead_list,
+  PtIOHead* iohead_top,
+  PtDeclHead* declhead_top,
   const AstStmt* stmt
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptTypedFunc));
   return new (p) CptTypedFunc(file_region, name,
-			      automatic, sign,
-			      func_type,
-			      PtIOHeadArray(mAlloc, iohead_list),
-			      PtDeclHeadArray(mAlloc, declhead_list),
+			      automatic, sign, func_type,
+			      iohead_top, declhead_top,
 			      stmt);
 }
 

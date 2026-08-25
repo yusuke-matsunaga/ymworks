@@ -7,6 +7,7 @@
 /// All rights reserved.
 
 #include "CptStmt.h"
+#include "alloc/Alloc.h"
 #include "parser/PtDecl.h"
 #include "parser/PtFactory.h"
 #include "parser/PtHierName.h"
@@ -74,24 +75,8 @@ CptStmt::name() const
   throw std::logic_error{"name(): typemismatch"};
 }
 
-// @brief 引数の数の取得
-SizeType
-CptStmt::arg_num() const
-{
-  throw std::logic_error{"arg_num(): type mismatch"};
-}
-
-// @brief 引数の取得
-const AstExpr*
-CptStmt::arg(
-  SizeType index
-) const
-{
-  throw std::logic_error{"arg(): type mismatch"};
-}
-
 // @brief 引数のリストの取得
-AstExprVec
+AstExprList
 CptStmt::arg_list() const
 {
   throw std::logic_error{"arg_list(): type mismatch"};
@@ -146,24 +131,8 @@ CptStmt::else_body() const
   throw std::logic_error{"else_body(): type mismatch"};
 }
 
-// @brief case item のリストの要素数の取得
-SizeType
-CptStmt::caseitem_num() const
-{
-  throw std::logic_error{"caseitem_num(): type mismatch"};
-}
-
-// @brief case item の取得
-const AstCaseItem*
-CptStmt::caseitem(
-  SizeType index
-) const
-{
-  throw std::logic_error{"caseitem(): type mismatch"};
-}
-
 // @brief case item のリストの取得
-AstCaseItemVec
+AstCaseItemList
 CptStmt::caseitem_list() const
 {
   throw std::logic_error{"caseitem_list(): type mismatch"};
@@ -184,47 +153,15 @@ CptStmt::next_stmt() const
   return nullptr;
 }
 
-// @brief 宣言ヘッダ配列の要素数の取得
-SizeType
-CptStmt::declhead_num() const
-{
-  throw std::logic_error{"declhead_num(): type mismatch"};
-}
-
-// @brief 宣言ヘッダの取得
-const AstDeclHead*
-CptStmt::declhead(
-  SizeType index
-) const
-{
-  throw std::logic_error{"declhead(): type mismatch"};
-}
-
 // @brief 宣言ヘッダのリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptStmt::declhead_list() const
 {
   throw std::logic_error{"declhead_list(): type mismatch"};
 }
 
-// @brief 子供のステートメントリストの要素数の取得
-SizeType
-CptStmt::stmt_num() const
-{
-  throw std::logic_error{"stmt_num(): type mismatch"};
-}
-
-// @brief 子供のステートメントの取得
-const AstStmt*
-CptStmt::stmt(
-  SizeType index
-) const
-{
-  throw std::logic_error{"stmt(): type mismatch"};
-}
-
 // @brief 子供のステートメントのリストの取得
-AstStmtVec
+AstStmtList
 CptStmt::stmt_list() const
 {
   throw std::logic_error{"stmt_list(): type mismatch"};
@@ -280,27 +217,11 @@ CptEnableBase::name() const
   return mName;
 }
 
-// @brief 引数の数の取得
-SizeType
-CptEnableBase::arg_num() const
-{
-  return mArgList->size();
-}
-
-// @brief 引数の取得
-const AstExpr*
-CptEnableBase::arg(
-  SizeType index
-) const
-{
-  return mArgList->expr(index);
-}
-
 // @brief 引数のリストの取得
-AstExprVec
+AstExprList
 CptEnableBase::arg_list() const
 {
-  return mArgList->to_vector();
+  return AstExprList(mArgTop);
 }
 
 
@@ -625,27 +546,11 @@ CptCase::expr() const
   return mExpr;
 }
 
-// @brief case item のリストの要素数の取得
-SizeType
-CptCase::caseitem_num() const
-{
-  return mCaseItemList.size();
-}
-
-// @brief case item の取得
-const AstCaseItem*
-CptCase::caseitem(
-  SizeType index
-) const
-{
-  return mCaseItemList[index];
-}
-
 // @brief case item のリストの取得
-AstCaseItemVec
+AstCaseItemList
 CptCase::caseitem_list() const
 {
-  return mCaseItemList.to_vector();
+  return AstCaseItemList(mCaseItemTop);
 }
 
 
@@ -684,27 +589,11 @@ CptCaseItem::file_region() const
   return mFileRegion;
 }
 
-// @brief ラベルのリストの要素数の取得
-SizeType
-CptCaseItem::label_num() const
-{
-  return mLabelList->size();
-}
-
-// @brief ラベルの取得
-const AstExpr*
-CptCaseItem::label(
-  SizeType index
-) const
-{
-  return mLabelList->expr(index);
-}
-
 // @brief ラベルリストの取得
-AstExprVec
+AstExprList
 CptCaseItem::label_list() const
 {
-  return mLabelList->to_vector();
+  return AstExprList(mLabelTop);
 }
 
 // 本体のステートメント得る．
@@ -800,27 +689,11 @@ CptFor::next_stmt() const
 // クラス CptStmtBlock
 //////////////////////////////////////////////////////////////////////
 
-// @brief 子供のステートメントリストの要素数の取得
-SizeType
-CptStmtBlock::stmt_num() const
-{
-  return mStmtList.size();
-}
-
-// @brief 子供のステートメントの取得
-const AstStmt*
-CptStmtBlock::stmt(
-  SizeType index
-) const
-{
-  return mStmtList[index];
-}
-
 // @brief 子供のステートメントのリストの取得
-AstStmtVec
+AstStmtList
 CptStmtBlock::stmt_list() const
 {
-  return mStmtList.to_vector();
+  return AstStmtList(mStmtTop);
 }
 
 
@@ -835,27 +708,11 @@ CptStmtBlockN::name() const
   return mName;
 }
 
-// @brief 宣言ヘッダ配列の要素数の取得
-SizeType
-CptStmtBlockN::declhead_num() const
-{
-  return mDeclHeadList.size();
-}
-
-// @brief 宣言ヘッダの取得
-const AstDeclHead*
-CptStmtBlockN::declhead(
-  SizeType index
-) const
-{
-  return mDeclHeadList[index];
-}
-
 // @brief 宣言ヘッダのリストの取得
-AstDeclHeadVec
+AstDeclHeadList
 CptStmtBlockN::declhead_list() const
 {
-  return mDeclHeadList.to_vector();
+  return AstDeclHeadList(mDeclHeadTop);
 }
 
 
@@ -937,22 +794,22 @@ PtStmt*
 PtFactory::new_Enable(
   const FileRegion& file_region,
   const char* name,
-  const AstExprList* arg_list
+  PtExpr* arg_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEnable));
-  return new (p) CptEnable(file_region, name, arg_list);
+  return new (p) CptEnable(file_region, name, arg_top);
 }
 
 PtStmt*
 PtFactory::new_Enable(
   const FileRegion& file_region,
   const PtHierName& hname,
-  const AstExprList* arg_list
+  PtExpr* arg_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEnableH));
-  return new (p) CptEnableH(file_region, hname, arg_list);
+  return new (p) CptEnableH(file_region, hname, arg_top);
 
 }
 
@@ -961,11 +818,11 @@ PtStmt*
 PtFactory::new_SysEnable(
   const FileRegion& file_region,
   const char* task_name,
-  const AstExprList* arg_list
+  PtExpr* arg_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSysEnable));
-  return new (p) CptSysEnable(file_region, task_name, arg_list);
+  return new (p) CptSysEnable(file_region, task_name, arg_top);
 }
 
 // delay control 文を生成する．
@@ -1106,12 +963,11 @@ PtStmt*
 PtFactory::new_Case(
   const FileRegion& file_region,
   const AstExpr* expr,
-  const AstCaseItemVec& caseitem_list
+  PtCaseItem* caseitem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCase));
-  return new (p) CptCase(file_region, expr,
-			 PtCaseItemArray(mAlloc, caseitem_list));
+  return new (p) CptCase(file_region, expr, caseitem_top);
 }
 
 // casex 文を生成する．
@@ -1119,12 +975,11 @@ PtStmt*
 PtFactory::new_CaseX(
   const FileRegion& file_region,
   const AstExpr* expr,
-  const AstCaseItemVec& caseitem_list
+  PtCaseItem* caseitem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCaseX));
-  return new (p) CptCaseX(file_region, expr,
-			  PtCaseItemArray(mAlloc, caseitem_list));
+  return new (p) CptCaseX(file_region, expr, caseitem_top);
 }
 
 // casez 文を生成する．
@@ -1132,24 +987,23 @@ PtStmt*
 PtFactory::new_CaseZ(
   const FileRegion& file_region,
   const AstExpr* expr,
-  const AstCaseItemVec& caseitem_list
+  PtCaseItem* caseitem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCaseZ));
-  return new (p) CptCaseZ(file_region, expr,
-			  PtCaseItemArray(mAlloc, caseitem_list));
+  return new (p) CptCaseZ(file_region, expr, caseitem_top);
 }
 
 // case item を生成する．
 PtCaseItem*
 PtFactory::new_CaseItem(
   const FileRegion& file_region,
-  const AstExprList* label_list,
+  PtExpr* label_top,
   const AstStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCaseItem));
-  return new (p) CptCaseItem(file_region, label_list, body);
+  return new (p) CptCaseItem(file_region, label_top, body);
 }
 
 // forever 文を生成する．
@@ -1251,12 +1105,11 @@ PtFactory::new_Release(
 PtStmt*
 PtFactory::new_ParBlock(
   const FileRegion& file_region,
-  const AstStmtVec& stmt_list
+  PtStmt* stmt_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptParBlock));
-  return new (p) CptParBlock(file_region,
-			     PtStmtArray(mAlloc, stmt_list));
+  return new (p) CptParBlock(file_region, stmt_top);
 }
 
 // par block を生成する．
@@ -1264,26 +1117,24 @@ PtStmt*
 PtFactory::new_NamedParBlock(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<PtDeclHead*>& declhead_list,
-  const AstStmtVec& stmt_list
+  PtDeclHead* declhead_top,
+  PtStmt* stmt_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptParBlockN));
   return new (p) CptParBlockN(file_region, name,
-			      PtDeclHeadArray(mAlloc, declhead_list),
-			      PtStmtArray(mAlloc, stmt_list));
+			      declhead_top, stmt_top);
 }
 
 // seq block を生成する．
 PtStmt*
 PtFactory::new_SeqBlock(
   const FileRegion& file_region,
-  const AstStmtVec& stmt_list
+  PtStmt* stmt_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSeqBlock));
-  return new (p) CptSeqBlock(file_region,
-			     PtStmtArray(mAlloc, stmt_list));
+  return new (p) CptSeqBlock(file_region, stmt_top);
 }
 
 // seq block を生成する．
@@ -1291,14 +1142,14 @@ PtStmt*
 PtFactory::new_NamedSeqBlock(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<PtDeclHead*>& declhead_list,
-  const AstStmtVec& stmt_list
+  PtDeclHead* declhead_top,
+  PtStmt* stmt_top
+
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSeqBlockN));
   return new (p) CptSeqBlockN(file_region, name,
-			      PtDeclHeadArray(mAlloc, declhead_list),
-			      PtStmtArray(mAlloc, stmt_list));
+			      declhead_top, stmt_top);
 }
 
 END_NAMESPACE_YM_VERILOG

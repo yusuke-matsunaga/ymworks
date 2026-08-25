@@ -10,62 +10,9 @@
 
 #include "parser/PtMisc.h"
 #include "ym/FileRegion.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
-
-#if 0
-//////////////////////////////////////////////////////////////////////
-/// @brief AttrInst のリストを表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptAttrInstList :
-  public PtAttrInstList
-{
-public:
-
-  /// @brief コンストラクタ
-  CptAttrInstList(
-    PtAttrInstArray&& ai_list
-  ) : mList{std::move(ai_list)}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptAttrInstList() { }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstAttrInstList の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 要素数を返す．
-  SizeType
-  attrinst_num() const override;
-
-  /// @brief 要素を返す．
-  const AstAttrInst*
-  attrinst(
-    SizeType index ///< [in] インデックス ( 0 <= index < attrinst_num() )
-  ) const override;
-
-  /// @brief 要素のリストを返す．
-  AstAttrInstVec
-  attrinst_list() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 要素のリスト
-  PtAttrInstArray&& mList;
-
-};
-#endif
-
 
 //////////////////////////////////////////////////////////////////////
 /// @brief attribute_instance を表すクラス
@@ -101,31 +48,6 @@ public:
   AstAttrSpecList
   attrspec_list() const override;
 
-  /// @brief PtAttrInst* 型のリンクを返す．
-  const AstAttrInst*
-  link() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtAttrInst の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief PtAttrInst* 型のリンクを返す．
-  PtAttrInst*
-  _link() const override;
-
-  /// @brief link を設定する．
-  void
-  set_link(
-    PtAttrInst* link
-  ) override;
-
-  /// @brief リンクトリストを逆順にする．
-  /// @return 新しい先頭を返す．
-  PtAttrInst*
-  reverse() override;
-
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -137,9 +59,6 @@ private:
 
   // attr spec の先頭
   AstAttrSpec* mAttrSpecTop;
-
-  // 次の要素
-  PtAttrInst* mLink{nullptr};
 
 };
 
@@ -184,31 +103,6 @@ public:
   const AstExpr*
   expr() const override;
 
-  /// @brief 次の要素を返す．
-  const AstAttrSpec*
-  link() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtAttrSpec の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief link を設定する．
-  void
-  set_link(
-    PtAttrSpec* link
-  ) override;
-
-  /// @brief PtAttrSpec* 型のリンクを返す．
-  PtAttrSpec*
-  _link() const override;
-
-  /// @brief リンクトリストを逆順にする．
-  /// @return 新しい先頭を返す．
-  PtAttrSpec*
-  reverse() override;
-
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -223,9 +117,6 @@ private:
 
   // 式
   const AstExpr* mExpr;
-
-  // 次の世嘘
-  PtAttrSpec* mLink{nullptr};
 
 };
 

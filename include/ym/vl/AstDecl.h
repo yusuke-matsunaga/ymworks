@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
+#include "ym/vl/AstList.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,6 +23,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 class AstIOHead :
   public AstBase
 {
+  friend class AstList<const AstIOHead>;
+  friend class AstListIter<const AstIOHead>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstIOH の継承クラスが実装する仮想関数
@@ -65,22 +69,21 @@ public:
   const AstRange*
   range() const = 0;
 
-  /// @brief 要素数の取得
-  virtual
-  SizeType
-  item_num() const = 0;
-
-  /// @brief 要素を返す．
-  virtual
-  const AstIOItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const = 0;
-
   /// @brief 要素のリストを返す．
   virtual
-  AstIOItemVec
+  AstIOItemList
   item_list() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstIOHead*
+  link() const = 0;
 
 };
 
@@ -94,6 +97,9 @@ public:
 class AstIOItem :
   public AstNamedBase
 {
+  friend class AstList<const AstIOItem>;
+  friend class AstListIter<const AstIOItem>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstIOItem の継承クラスが実装する仮想関数
@@ -105,6 +111,17 @@ public:
   virtual
   const AstExpr*
   init_value() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstIOItem*
+  link() const = 0;
 
 };
 
@@ -118,6 +135,9 @@ public:
 class AstDeclHead :
   public AstBase
 {
+  friend class AstList<const AstDeclHead>;
+  friend class AstListIter<const AstDeclHead>;
+
 public:
 
   /// @brief AstDeclH の派生クラスを区別するための列挙型
@@ -194,22 +214,21 @@ public:
   const AstDelay*
   delay() const = 0;
 
-  /// @brief 要素数の取得
-  virtual
-  SizeType
-  item_num() const = 0;
-
-  /// @brief 要素を返す．
-  virtual
-  const AstDeclItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const = 0;
-
   /// @brief 要素のリストを返す．
   virtual
-  AstDeclItemVec
+  AstDeclItemList
   item_list() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstDeclHead*
+  link() const = 0;
 
 };
 
@@ -223,6 +242,9 @@ public:
 class AstDeclItem :
   public AstNamedBase
 {
+  friend class AstList<const AstDeclItem>;
+  friend class AstListIter<const AstDeclItem>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstDeclItem の継承クラスが実装する仮想関数
@@ -240,6 +262,17 @@ public:
   const AstExpr*
   init_value() const = 0;
 
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  virtual
+  const AstDeclItem*
+  link() const = 0;
+
 };
 
 
@@ -252,6 +285,9 @@ public:
 class AstRange :
   public AstBase
 {
+  friend class AstList<const AstRange>;
+  friend class AstListIter<const AstRange>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstRange の継承クラスが実装する仮想関数
@@ -266,6 +302,12 @@ public:
   virtual
   const AstExpr*
   right() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 次の要素を返す．
   virtual

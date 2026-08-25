@@ -64,7 +64,7 @@ ItemGen::instantiate_gateheader(
 
   for ( auto ast_inst: ast_head->inst_list() ) {
     const auto& fr = ast_inst->file_region();
-    SizeType port_num = ast_inst->port_num();
+    SizeType port_num = ast_inst->port_list().size();
     SizeType output_num;
     SizeType inout_num;
     SizeType input_num;
@@ -139,7 +139,7 @@ ItemGen::instantiate_udpheader(
   const VlUdpDefn* udpdefn
 )
 {
-  SizeType param_size = ast_head->paramassign_num();
+  SizeType param_size = ast_head->paramassign_list().size();
   auto ast_delay = ast_head->delay();
   bool has_delay = ( ast_delay || param_size == 1 );
   auto prim_head = mgr().new_UdpHead(parent,
@@ -152,7 +152,7 @@ ItemGen::instantiate_udpheader(
   }
 
   for ( auto ast_inst: ast_head->inst_list() ) {
-    auto port_num = ast_inst->port_num();
+    auto port_num = ast_inst->port_list().size();
     if ( port_num > 0 && ast_inst->port_list().front()->name() != nullptr ) {
       ErrorGen::named_port_in_udp_instance(__FILE__, __LINE__, ast_inst);
     }
@@ -200,7 +200,7 @@ ItemGen::instantiate_cell(
   auto prim_head = mgr().new_CellHead(parent, ast_head, cell);
   for ( auto ast_inst: ast_head->inst_list() ) {
     // ポート数のチェックを行う．
-    SizeType port_num = ast_inst->port_num();
+    SizeType port_num = ast_inst->port_list().size();
     if ( port_num > 0 && ast_inst->port_list().front()->name() != nullptr ) {
       // 名前による結合
       for ( auto ast_con: ast_inst->port_list() ) {
@@ -266,7 +266,7 @@ ItemGen::link_udp_delay(
 )
 {
   auto parent = prim_head->parent_scope();
-  SizeType param_size = ast_head->paramassign_num();
+  SizeType param_size = ast_head->paramassign_list().size();
   auto ast_delay = ast_head->delay();
   auto delay = instantiate_delay(parent, ast_delay);
   if ( delay == nullptr && param_size == 1 ) {

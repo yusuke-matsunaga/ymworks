@@ -26,6 +26,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 class AstStmt :
   public AstHierNamedBase
 {
+  friend class AstList<const AstStmt>;
+  friend class AstListIter<const AstStmt>;
+
 public:
 
   /// @brief AstStmt の派生クラスの型を表す列挙型
@@ -106,27 +109,11 @@ public:
   // Enable の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 引数の数の取得
-  ///
-  /// - type() != Enable の時 std::logic_error 例外を送出する．
-  virtual
-  SizeType
-  arg_num() const = 0;
-
-  /// @brief 引数の取得
-  ///
-  /// - type() != Enable の時 std::logic_error 例外を送出する．
-  virtual
-  const AstExpr*
-  arg(
-    SizeType index ///< [in] インデックス ( 0 <= index < arg_num() )
-  ) const = 0;
-
   /// @brief 引数のリストの取得
   ///
   /// - type() != Enable の時 std::logic_error 例外を送出する．
   virtual
-  AstExprVec
+  AstExprList
   arg_list() const = 0;
 
 
@@ -201,27 +188,11 @@ public:
   // Case 系の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief case item のリストの要素数の取得
-  ///
-  /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  virtual
-  SizeType
-  caseitem_num() const = 0;
-
-  /// @brief case item の取得
-  ///
-  /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  virtual
-  const AstCaseItem*
-  caseitem(
-    SizeType index ///< [in] インデックス ( 0 <= index < caseitem_num() )
-  ) const = 0;
-
   /// @brief case item のリストの取得
   ///
   /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
   virtual
-  AstCaseItemVec
+  AstCaseItemList
   caseitem_list() const = 0;
 
 
@@ -252,54 +223,31 @@ public:
   // Block Stmt 系の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 宣言ヘッダ配列の要素数の取得
-  ///
-  /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  virtual
-  SizeType
-  declhead_num() const = 0;
-
-  /// @brief 宣言ヘッダの取得
-  ///
-  /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  virtual
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const = 0;
-
   /// @brief 宣言ヘッダのリストの取得
   ///
   /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
   virtual
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const = 0;
-
-  /// @brief 子供のステートメントリストの要素数の取得
-  ///
-  /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
-  ///   std::logic_error 例外を送出する．
-  virtual
-  SizeType
-  stmt_num() const = 0;
-
-  /// @brief 子供のステートメントの取得
-  ///
-  /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
-  ///   std::logic_error 例外を送出する．
-  virtual
-  const AstStmt*
-  stmt(
-    SizeType index ///< [in] インデックス ( 0 <= index < stmt_num() )
-  ) const = 0;
 
   /// @brief 子供のステートメントのリストの取得
   ///
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
   virtual
-  AstStmtVec
+  AstStmtList
   stmt_list() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstStmt*
+  link() const = 0;
 
 };
 
@@ -313,26 +261,17 @@ public:
 class AstCaseItem :
   public AstBase
 {
+  friend class AstList<const AstCaseItem>;
+  friend class AstListIter<const AstCaseItem>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstCaseItem の継承クラスが実装する仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief ラベルのリストの要素数の取得
-  virtual
-  SizeType
-  label_num() const = 0;
-
-  /// @brief ラベルの取得
-  virtual
-  const AstExpr*
-  label(
-    SizeType index ///< [in] インデックス ( 0 <= index < label_num() )
-  ) const = 0;
-
   /// @brief ラベルリストの取得
   virtual
-  AstExprVec
+  AstExprList
   label_list() const = 0;
 
   /// @brief 本体のステートメントの取得
@@ -340,6 +279,17 @@ public:
   virtual
   const AstStmt*
   body() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstCaseItem*
+  link() const = 0;
 
 };
 

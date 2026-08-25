@@ -9,9 +9,10 @@
 /// All rights reserved.
 
 #include "parser/PtUdp.h"
+#include "parser/PtPort.h"
+#include "parser/PtDecl.h"
 #include "ym/vl/VlUdpVal.h"
 #include "ym/FileRegion.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -28,18 +29,18 @@ public:
   CptUdp(
     const FileRegion& file_region,
     const char* name,
-    PtPortArray&& port_list,
-    PtIOHeadArray&& iohead_list,
+    PtPort* port_top,
+    PtIOHead* iohead_top,
     bool is_seq,
     const AstExpr* init_value,
-    PtUdpEntryArray&& entry_list
+    PtUdpEntry* entry_top
   ) : mFileRegion{file_region},
       mName{name},
-      mPortList{std::move(port_list)},
-      mIOHeadList{std::move(iohead_list)},
+      mPortTop{port_top},
+      mIOHeadTop{iohead_top},
       mSeq{is_seq},
       mInitValue{init_value},
-      mTableList{std::move(entry_list)}
+      mTableTop{entry_top}
   {
   }
 
@@ -64,50 +65,20 @@ public:
   const char*
   name() const override;
 
-  /// @brief ポート数を取り出す．
-  SizeType
-  port_num() const override;
-
-  /// @brief ポートを取り出す．
-  const AstPort*
-  port(
-    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
-  ) const override;
-
   /// @brief ポートのリストを取り出す．
-  AstPortVec
+  AstPortList
   port_list() const override;
 
-  /// @brief 入出力宣言ヘッダ配列の要素数の取得
-  SizeType
-  iohead_num() const override;
-
-  /// @brief 入出力宣言ヘッダの取得
-  const AstIOHead*
-  iohead(
-    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
-  ) const override;
-
   /// @brief 入出力宣言ヘッダのリストの取得
-  AstIOHeadVec
+  AstIOHeadList
   iohead_list() const override;
 
   /// @brief 初期値を取出す．
   const AstExpr*
   init_value() const override;
 
-  /// @brief テーブルの要素数を取り出す．
-  SizeType
-  table_num() const override;
-
-  /// @brief テーブルを返す．
-  const AstUdpEntry*
-  table(
-    SizeType index ///< [in] インデックス ( 0 <= index < table_num() )
-  ) const override;
-
   /// @brief テーブルのリストを返す．
-  AstUdpEntryVec
+  AstUdpEntryList
   table_list() const override;
 
 
@@ -122,11 +93,11 @@ private:
   // プリミティブ名
   const char* mName;
 
-  // ポートのリスト
-  PtPortArray mPortList;
+  // ポートの先頭
+  PtPort* mPortTop;
 
-  // 入出力宣言のリスト
-  PtIOHeadArray mIOHeadList;
+  // 入出力宣言の先頭
+  PtIOHead* mIOHeadTop;
 
   // sequential primitive の時 true
   bool mSeq;
@@ -134,8 +105,8 @@ private:
   // 初期値
   const AstExpr* mInitValue;
 
-  // テーブル要素のリスト
-  PtUdpEntryArray mTableList;
+  // テーブル要素の先頭
+  PtUdpEntry* mTableTop;
 
 };
 
@@ -151,10 +122,10 @@ public:
   /// @brief コンストラクタ
   CptUdpEntry(
     const FileRegion& file_region,
-    PtUdpValueArray&& input_list,
+    PtUdpValue* input_top,
     const AstUdpValue* output
   ) : mFileRegion{file_region},
-      mInputList{std::move(input_list)},
+      mInputTop{input_top},
       mOutput{output}
   {
   }
@@ -172,18 +143,8 @@ public:
   FileRegion
   file_region() const override;
 
-  /// @brief 入力値の配列の要素数を取り出す．
-  SizeType
-  input_num() const override;
-
-  /// @brief 入力値を取り出す．
-  const AstUdpValue*
-  input(
-    SizeType index ///< [in] インデックス ( 0 <= index < input_num() )
-  ) const override;
-
   /// @brief 入力値のリストを取り出す．
-  AstUdpValueVec
+  AstUdpValueList
   input_list() const override;
 
   /// @brief 現状態の値を取り出す．
@@ -203,8 +164,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // 入力パタンのリスト
-  PtUdpValueArray mInputList;
+  // 入力パタンの先頭
+  PtUdpValue* mInputTop;
 
   // 出力のパタン
   const AstUdpValue* mOutput;
@@ -223,12 +184,10 @@ public:
   /// @brief コンストラクタ
   CptUdpEntryS(
     const FileRegion& file_region,
-    PtUdpValueArray&& input_list,
+    PtUdpValue* input_top,
     const AstUdpValue* current,
     const AstUdpValue* output
-  ) : CptUdpEntry(file_region,
-		  std::move(input_list),
-		  output),
+  ) : CptUdpEntry(file_region, input_top, output),
       mCurrent{current}
   {
   }

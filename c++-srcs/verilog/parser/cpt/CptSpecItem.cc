@@ -7,6 +7,7 @@
 /// All rights reserved.
 
 #include "CptSpecItem.h"
+#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 
 
@@ -37,27 +38,11 @@ CptSpecItem::specitem_type() const
   return mId;
 }
 
-// @brief ターミナルの要素数の取得
-SizeType
-CptSpecItem::terminal_num() const
-{
-  return mTerminalList->size();
-}
-
-// @brief ターミナルの取得
-const AstExpr*
-CptSpecItem::terminal(
-  SizeType index
-) const
-{
-  return mTerminalList->expr(index);
-}
-
 // @brief ターミナルリストの取得
-AstExprVec
+AstExprList
 CptSpecItem::terminal_list() const
 {
-  return mTerminalList->to_vector();
+  return AstExprList(mTerminalTop);
 }
 
 
@@ -102,138 +87,70 @@ CptSpecPath::path_decl() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス CptPathDeclBase
+// クラス CptPathDecl
 //////////////////////////////////////////////////////////////////////
 
 // ファイル位置を返す．
 FileRegion
-CptPathDeclBase::file_region() const
+CptPathDecl::file_region() const
 {
   return mFileRegion;
 }
 
 // edge_descriptor を取り出す．
 int
-CptPathDeclBase::edge() const
+CptPathDecl::edge() const
 {
   return mEdge;
 }
 
-// @brief 入力のリストの要素数の取得
-SizeType
-CptPathDeclBase::input_num() const
-{
-  return mInputList->size();
-}
-
-// @brief 入力の取得
-const AstExpr*
-CptPathDeclBase::input(
-  SizeType index
-) const
-{
-  return mInputList->expr(index);
-}
-
 // @brief 入力のリストの取得
-AstExprVec
-CptPathDeclBase::input_list() const
+AstExprList
+CptPathDecl::input_list() const
 {
-  return mInputList->to_vector();
+  return AstExprList(mInputTop);
 }
 
 // 入力の極性を取り出す．
 int
-CptPathDeclBase::input_pol() const
+CptPathDecl::input_pol() const
 {
   return mInputPol;
 }
 
 // パス記述子(?)を得る．vpiParallel か vpiFull
 VpiPathType
-CptPathDeclBase::op() const
+CptPathDecl::op() const
 {
   return mOp;
 }
 
+// @brief 出力リストの取得
+AstExprList
+CptPathDecl::output_list() const
+{
+  return AstExprList(mOutputTop);
+}
+
 // 出力の極性を取り出す．
 int
-CptPathDeclBase::output_pol() const
+CptPathDecl::output_pol() const
 {
   return mOutputPol;
 }
 
 // 式を取り出す．
 const AstExpr*
-CptPathDeclBase::expr() const
+CptPathDecl::expr() const
 {
   return mExpr;
 }
 
 // path_delay_value を取り出す．
 const AstPathDelay*
-CptPathDeclBase::path_delay() const
+CptPathDecl::path_delay() const
 {
   return mPathDelay;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス CptPathDecl1
-//////////////////////////////////////////////////////////////////////
-
-// @brief 出力のリストの要素数の取得
-SizeType
-CptPathDecl1::output_num() const
-{
-  return 1;
-}
-
-// @brief 出力の取得
-const AstExpr*
-CptPathDecl1::output(
-  SizeType index
-) const
-{
-  if ( index > 0 ) {
-    throw std::out_of_range{"output(index): index is out of range"};
-  }
-  return mOutput;
-}
-
-// @brief 出力リストの取得
-AstExprVec
-CptPathDecl1::output_list() const
-{
-  return {mOutput};
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス CptPatHDecl2
-//////////////////////////////////////////////////////////////////////
-
-// @brief 出力のリストの要素数の取得
-SizeType
-CptPathDecl2::output_num() const
-{
-  return mOutputList->size();
-}
-
-// @brief 出力の取得
-const AstExpr*
-CptPathDecl2::output(
-  SizeType index
-) const
-{
-  return mOutputList->expr(index);
-}
-
-// @brief 出力リストの取得
-AstExprVec
-CptPathDecl2::output_list() const
-{
-  return mOutputList->to_vector();
 }
 
 
@@ -356,11 +273,11 @@ PtItem*
 PtFactory::new_SpecItem(
   const FileRegion& file_region,
   VpiSpecItemType id,
-  const AstExprList* terminal_list
+  PtExpr* terminal_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecItem));
-  return new (p) CptSpecItem(file_region, id, terminal_list);
+  return new (p) CptSpecItem(file_region, id, terminal_top);
 }
 
 // path 仕様を生成する．
@@ -381,43 +298,21 @@ PtPathDecl*
 PtFactory::new_PathDecl(
   const FileRegion& file_region,
   int edge,
-  const AstExprList* input_list,
+  PtExpr* input_top,
   int input_pol,
   VpiPathType op,
-  const AstExpr* output,
+  PtExpr* output_top,
   int output_pol,
   const AstExpr* expr,
   const AstPathDelay* path_delay
 )
 {
-  void* p = mAlloc.get_memory(sizeof(CptPathDecl1));
-  return new (p) CptPathDecl1(file_region, edge,
-			      input_list, input_pol,
-			      op,
-			      output, output_pol,
-			      expr, path_delay);
-}
-
-// path 記述を生成する．
-PtPathDecl*
-PtFactory::new_PathDecl(
-  const FileRegion& file_region,
-  int edge,
-  const AstExprList* input_list,
-  int input_pol,
-  VpiPathType op,
-  const AstExprList* output_list,
-  int output_pol,
-  const AstExpr* expr,
-  const AstPathDelay* path_delay
-)
-{
-  void* p = mAlloc.get_memory(sizeof(CptPathDecl2));
-  return new (p) CptPathDecl2(file_region, edge,
-			      input_list, input_pol,
-			      op,
-			      output_list, output_pol,
-			      expr, path_delay);
+  void* p = mAlloc.get_memory(sizeof(CptPathDecl));
+  return new (p) CptPathDecl(file_region, edge,
+			     input_top, input_pol,
+			     op,
+			     output_top, output_pol,
+			     expr, path_delay);
 }
 
 // path delay value を生成する．

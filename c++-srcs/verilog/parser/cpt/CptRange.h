@@ -55,32 +55,6 @@ public:
   const AstExpr*
   right() const override;
 
-  /// @brief 次の要素を返す．
-  virtual
-  const AstRange*
-  link() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtRange の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素を返す．
-  PtRange*
-  _link() const override;
-
-  /// @brief link を設定する．
-  void
-  set_link(
-    PtRange* range
-  ) override;
-
-  /// @brief リンクトリストを逆順にする．
-  /// @return 新しい先頭を返す．
-  PtRange*
-  reverse() override;
-
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -95,9 +69,6 @@ private:
 
   // LSB
   const AstExpr* mLsb;
-
-  // 次の要素
-  PtRange* mLink{nullptr};
 
 };
 

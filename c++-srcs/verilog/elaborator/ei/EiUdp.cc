@@ -29,8 +29,8 @@ EiFactory::new_UdpDefn(
   bool is_protected
 )
 {
-  auto port_num = ast_udp->port_num();
-  auto table_size = ast_udp->table_num();
+  auto port_num = ast_udp->port_list().size();
+  auto table_size = ast_udp->table_list().size();
   return new EiUdpDefn(ast_udp, is_protected,
 		       port_num, table_size);
 }

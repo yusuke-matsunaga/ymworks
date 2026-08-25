@@ -39,27 +39,11 @@ CptPort::expr() const
   return nullptr;
 }
 
-// @brief 内部のポート結線リストのサイズの取得
-SizeType
-CptPort::portref_size() const
-{
-  return 0;
-}
-
-// @brief 内部のポート結線の取得
-const AstExpr*
-CptPort::portref(
-  SizeType index
-) const
-{
-  throw std::out_of_range{"index is out of range"};
-}
-
 // @brief 内部のポート結線のリストの取得
-AstExprVec
+AstExprList
 CptPort::portref_list() const
 {
-  return {};
+  return AstExprList();
 }
 
 // @brief 内部のポート結線の向きの取得
@@ -93,28 +77,11 @@ CptPort1::expr() const
   return mExpr;
 }
 
-// @brief 内部のポート結線リストのサイズの取得
-SizeType
-CptPort1::portref_size() const
-{
-  return 1;
-}
-
-// @brief 内部のポート結線の取得
-const AstExpr*
-CptPort1::portref(
-  SizeType index
-) const
-{
-  _check_index(index);
-  return mExpr;
-}
-
 // @brief 内部のポート結線のリストの取得
-AstExprVec
+AstExprList
 CptPort1::portref_list() const
 {
-  return {mExpr};
+  return AstExprList(mExpr);
 }
 
 // @brief 内部のポート結線の向きの取得
@@ -134,7 +101,6 @@ CptPort1::set_portref_dir(
   VpiDir dir
 )
 {
-  _check_index(index);
   mDir = dir;
 }
 
@@ -150,27 +116,11 @@ CptPort2::expr() const
   return mExpr;
 }
 
-// @brief 内部のポート結線リストのサイズの取得
-SizeType
-CptPort2::portref_size() const
-{
-  return mPortRefList->size();
-}
-
-// @brief 内部のポート結線の取得
-const AstExpr*
-CptPort2::portref(
-  SizeType index
-) const
-{
-  return mPortRefList->expr(index);
-}
-
 // @brief 内部のポート結線のリストの取得
-AstExprVec
+AstExprList
 CptPort2::portref_list() const
 {
-  return mPortRefList->to_vector();
+  return AstExprList(mPortRefTop);
 }
 
 // @brief 内部のポート結線の向きの取得
@@ -179,7 +129,6 @@ CptPort2::portref_dir(
   SizeType index
 ) const
 {
-  _check_index(index);
   return mDirArray[index];
 }
 
@@ -190,10 +139,8 @@ CptPort2::set_portref_dir(
   VpiDir dir
 )
 {
-  _check_index(index);
   mDirArray[index] = dir;
 }
-
 
 
 //////////////////////////////////////////////////////////////////////
@@ -216,39 +163,26 @@ PtPort*
 PtFactory::new_Port(
   const FileRegion& file_region,
   const char* ext_name,
-  const AstExpr* portref
+  PtExpr* portref_top
 )
 {
-  // 明示的に外の名前がついていなくても内側の名前が1つで
-  // 範囲指定が無いときには内側の名前を外側の名前とする．
-  if ( ext_name == nullptr &&
-       portref->index_num() == 0 &&
-       portref->part() == nullptr ) {
-    ext_name = portref->name();
-  }
-  void* p = mAlloc.get_memory(sizeof(CptPort1));
-  return new (p) CptPort1(file_region, ext_name, portref);
-}
-
-// ポートの生成
-PtPort*
-PtFactory::new_Port(
-  const FileRegion& file_region,
-  const char* ext_name,
-  const AstExprList* portref_list
-)
-{
-  auto n = portref_list->size();
+  auto n = AstExprList(portref_top).size();
   if ( n == 1 ) {
-    auto portref = portref_list->expr(0);
-    return new_Port(file_region, ext_name, portref);
+    // 明示的に外の名前がついていなくても内側の名前が1つで
+    // 範囲指定が無いときには内側の名前を外側の名前とする．
+    if ( ext_name == nullptr &&
+	 portref_top->index_list().size() == 0 &&
+	 portref_top->part() == nullptr ) {
+      ext_name = portref_top->name();
+    }
+    void* p = mAlloc.get_memory(sizeof(CptPort1));
+    return new (p) CptPort1(file_region, ext_name, portref_top);
   }
-  auto expr = new_Concat(file_region, portref_list);
+  auto expr = new_Concat(file_region, portref_top);
   void* p = mAlloc.get_memory(sizeof(CptPort2));
   auto dir_array = mAlloc.get_array<VpiDir>(n);
   return new (p) CptPort2(file_region, ext_name,
-			  expr,
-			  portref_list,
+			  expr, portref_top,
 			  dir_array);
 }
 

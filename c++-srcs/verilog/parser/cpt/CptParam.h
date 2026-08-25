@@ -24,8 +24,9 @@ public:
 
   /// @brief コンストラクタ
   CptParamH(
-    const FileRegion& file_region ///< [in] ファイル位置の情報
-  ) : CptDeclHead(file_region)
+    const FileRegion& file_region, ///< [in] ファイル位置の情報
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top)
   {
   }
 
@@ -56,8 +57,9 @@ public:
 
   /// @brief コンストラクタ
   CptLocalParamH(
-    const FileRegion& file_region ///< [in] ファイル位置の情報
-  ) : CptDeclHead(file_region)
+    const FileRegion& file_region, ///< [in] ファイル位置の情報
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top)
   {
   }
 
@@ -89,8 +91,9 @@ public:
   /// @brief コンストラクタ
   CptParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range           ///< [in] 範囲
-  ) : CptParamH(file_region),
+    const AstRange* range,         ///< [in] 範囲
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptParamH(file_region, item_top),
       mRange{range}
   {
   }
@@ -138,8 +141,9 @@ public:
   /// @brief コンストラクタ
   CptParamHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range           ///< [in] 範囲
-  ) : CptParamHV(file_region, range)
+    const AstRange* range,         ///< [in] 範囲
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptParamHV(file_region, range, item_top)
   {
   }
 
@@ -172,8 +176,9 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range	   ///< [in] 範囲
-  ) : CptParamHV(file_region, range)
+    const AstRange* range,         ///< [in] 範囲
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptParamHV(file_region, range, item_top)
   {
   }
 
@@ -205,8 +210,9 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range	   ///< [in] 範囲
-  ) : CptParamHSV(file_region, range)
+    const AstRange* range,	   ///< [in] 範囲
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptParamHSV(file_region, range, item_top)
   {
   }
 
@@ -238,8 +244,9 @@ public:
   /// @brief コンストラクタ
   CptParamHT(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    VpiVarType var_type            ///< [in] データ型
-  ) : CptDeclHead(file_region),
+    VpiVarType var_type,           ///< [in] データ型
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top),
       mVarType{var_type}
   {
   }
@@ -293,8 +300,9 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHT(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    VpiVarType var_type            ///< [in] データ型
-  ) : CptParamHT(file_region, var_type)
+    VpiVarType var_type,           ///< [in] データ型
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptParamHT(file_region, var_type, item_top)
   {
   }
 
@@ -325,8 +333,9 @@ public:
 
   /// @brief コンストラクタ
   CptSpecParamH(
-    const FileRegion& file_region ///< [in] ファイル位置の情報
-  ) : CptDeclHead(file_region)
+    const FileRegion& file_region, ///< [in] ファイル位置の情報
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptDeclHead(file_region, item_top)
   {
   }
 
@@ -358,8 +367,9 @@ public:
   /// @brief コンストラクタ
   CptSpecParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range          ///< [in] パース木の範囲定義
-  ) : CptSpecParamH(file_region),
+    const AstRange* range,         ///< [in] パース木の範囲定義
+    PtDeclItem* item_top           ///< [in] 要素の先頭
+  ) : CptSpecParamH(file_region, item_top),
       mRange{range}
   {
   }

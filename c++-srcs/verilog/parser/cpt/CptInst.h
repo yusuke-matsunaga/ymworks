@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,10 +25,10 @@ public:
   CptGateH(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    PtInstArray&& inst_list
+    PtInst* inst_top
   ) : mFileRegion{file_region},
       mPrimType{prim_type},
-      mInstList{std::move(inst_list)}
+      mInstTop{inst_top}
   {
   }
 
@@ -54,18 +53,8 @@ public:
   VpiPrimType
   prim_type() const override;
 
-  /// @brief module/UDP/gate instance の要素数の取得
-  SizeType
-  inst_num() const override;
-
   /// @brief module/UDP/gate instance リストの取得
-  const AstInst*
-  inst(
-    SizeType index ///< [in] インデックス ( 0 <= index < inst_num() )
-  ) const override;
-
-  /// @brief module/UDP/gate instance リストの取得
-  AstInstVec
+  AstInstList
   inst_list() const override;
 
 
@@ -80,8 +69,8 @@ private:
   // プリミティブタイプ
   VpiPrimType mPrimType;
 
-  // 要素の配列
-  PtInstArray mInstList;
+  // 要素の先頭
+  const AstInst* mInstTop;
 
 };
 
@@ -99,8 +88,8 @@ public:
     const FileRegion& file_region,
     VpiPrimType prim_type,
     const AstStrength* strength,
-    PtInstArray&& inst_list
-  ) : CptGateH(file_region, prim_type, std::move(inst_list)),
+    PtInst* inst_top
+  ) : CptGateH(file_region, prim_type, inst_top),
       mStrength{strength}
   {
   }
@@ -143,8 +132,8 @@ public:
     const FileRegion& file_region,
     VpiPrimType prim_type,
     const AstDelay* delay,
-    PtInstArray&& inst_list
-  ) : CptGateH(file_region, prim_type, std::move(inst_list)),
+    PtInst* inst_top
+  ) : CptGateH(file_region, prim_type, inst_top),
       mDelay{delay}
   {
   }
@@ -188,8 +177,8 @@ public:
     VpiPrimType prim_type,
     const AstStrength* strength,
     const AstDelay* delay,
-    PtInstArray&& inst_list
-  ) : CptGateH(file_region, prim_type, std::move(inst_list)),
+    PtInst* inst_top
+  ) : CptGateH(file_region, prim_type, inst_top),
       mStrength{strength},
       mDelay{delay}
   {
@@ -239,10 +228,10 @@ public:
   CptMuH(
     const FileRegion& file_region,
     const char* def_name,
-    PtInstArray&& inst_list
+    PtInst* inst_top
   ) : mFileRegion{file_region},
       mName{def_name},
-      mInstList{std::move(inst_list)}
+      mInstTop{inst_top}
   {
   }
 
@@ -267,18 +256,8 @@ public:
   const char*
   name() const override;
 
-  /// @brief module/UDP/gate instance の要素数の取得
-  SizeType
-  inst_num() const override;
-
   /// @brief module/UDP/gate instance リストの取得
-  const AstInst*
-  inst(
-    SizeType index ///< [in] インデックス ( 0 <= index < inst_num() )
-  ) const override;
-
-  /// @brief module/UDP/gate instance リストの取得
-  AstInstVec
+  AstInstList
   inst_list() const override;
 
 
@@ -293,8 +272,8 @@ private:
   // 定義名
   const char* mName;
 
-  // 要素の配列
-  PtInstArray mInstList;
+  // 要素の先頭
+  const AstInst* mInstTop;
 
 };
 
@@ -311,10 +290,10 @@ public:
   CptMuHP(
     const FileRegion& file_region,
     const char* def_name,
-    PtConnectionArray&& con_list,
-    PtInstArray&& inst_list
-  ) : CptMuH(file_region, def_name, std::move(inst_list)),
-      mParamAssignList{std::move(con_list)}
+    PtConnection* con_top,
+    PtInst* inst_top
+  ) : CptMuH(file_region, def_name, inst_top),
+      mParamAssignTop{con_top}
   {
   }
 
@@ -327,18 +306,8 @@ public:
   // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief パラメータ割り当ての要素数の取得
-  SizeType
-  paramassign_num() const override;
-
-  /// @brief パラメータ割り当ての取得
-  const AstConnection*
-  paramassign(
-    SizeType index ///< [in] インデックス ( 0 <= index < paramassign_num() )
-  ) const override;
-
   /// @brief パラメータ割り当てのリストの取得
-  AstConnectionVec
+  AstConnectionList
   paramassign_list() const override;
 
 
@@ -347,8 +316,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // パラメータ割り当てのリスト
-  PtConnectionArray mParamAssignList;
+  // パラメータ割り当ての先頭
+  PtConnection* mParamAssignTop;
 
 };
 
@@ -366,8 +335,8 @@ public:
     const FileRegion& file_region,
     const char* def_name,
     const AstStrength* strength,
-    PtInstArray&& inst_list
-  ) : CptMuH(file_region, def_name, std::move(inst_list)),
+    PtInst* inst_top
+  ) : CptMuH(file_region, def_name, inst_top),
       mStrength{strength}
   {
   }
@@ -410,8 +379,8 @@ public:
     const FileRegion& file_region,
     const char* def_name,
     const AstDelay* delay,
-    PtInstArray&& inst_list
-  ) : CptMuH(file_region, def_name, std::move(inst_list)),
+    PtInst* inst_top
+  ) : CptMuH(file_region, def_name, inst_top),
       mDelay{delay}
   {
   }
@@ -455,8 +424,8 @@ public:
     const char* def_name,
     const AstStrength* strength,
     const AstDelay* delay,
-    PtInstArray&& inst_list
-  ) : CptMuH(file_region, def_name, std::move(inst_list)),
+    PtInst* inst_top
+  ) : CptMuH(file_region, def_name, inst_top),
       mStrength{strength},
       mDelay{delay}
   {
@@ -505,9 +474,9 @@ public:
   /// @brief コンストラクタ
   CptInst(
     const FileRegion& file_region,
-    PtConnectionArray&& con_list
+    PtConnection* con_top
   ) : mFileRegion{file_region},
-      mPortList{std::move(con_list)}
+      mPortTop{con_top}
   {
   }
 
@@ -534,18 +503,8 @@ public:
   const AstRange*
   range() const override;
 
-  /// @brief ポートの要素数の取得
-  SizeType
-  port_num() const override;
-
-  /// @brief ポート接続の取得
-  const AstConnection*
-  port(
-    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
-  ) const override;
-
   /// @brief ポートリストの取得
-  AstConnectionVec
+  AstConnectionList
   port_list() const override;
 
 
@@ -557,8 +516,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // ポート割り当ての配列
-  PtConnectionArray mPortList;
+  // ポート割り当ての先頭
+  PtConnection* mPortTop;
 
 };
 
@@ -575,8 +534,8 @@ public:
   CptInstN(
     const FileRegion& file_region,
     const char* name,
-    PtConnectionArray&& con_list
-  ) : CptInst(file_region, std::move(con_list)),
+    PtConnection* con_top
+  ) : CptInst(file_region, con_top),
       mName{name}
   {
   }
@@ -619,8 +578,8 @@ public:
     const FileRegion& file_region,
     const char* name,
     const AstRange* range,
-    PtConnectionArray&& con_list
-  ) : CptInstN(file_region, name, std::move(con_list)),
+    PtConnection* con_top
+  ) : CptInstN(file_region, name, con_top),
       mRange{range}
   {
   }

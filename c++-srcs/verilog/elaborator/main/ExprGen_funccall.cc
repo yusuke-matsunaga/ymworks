@@ -136,7 +136,7 @@ ExprGen::instantiate_funccall(
   }
 
   // 引数の生成
-  SizeType n{ast_expr->operand_num()};
+  auto n = ast_expr->operand_list().size();
   if ( n != child_func->io_num() ) {
     // 引数の数が合わなかった．
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
@@ -189,7 +189,7 @@ ExprGen::instantiate_sysfunccall(
   }
 
   // 引数の数のチェック
-  auto n = ast_expr->operand_num();
+  auto n = ast_expr->operand_list().size();
   if ( !user_systf->check_n_of_args(n) ) {
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
   }

@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
+#include "ym/vl/AstDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -65,7 +66,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ///   * Generate/GenBlock
 ///   * GenFor
 ///
-/// - automatic(), ioitem_num(), iohead_list()
+/// - automatic(), iohead_list()
 ///   * Task
 ///   * Func
 ///
@@ -88,6 +89,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 class AstItem :
   public AstNamedBase
 {
+  friend class AstList<const AstItem>;
+  friend class AstListIter<const AstItem>;
+
 public:
 
   /// @brief AstItem の派生クラスの型を表す列挙型
@@ -157,38 +161,9 @@ public:
   // DefParam 型の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief パラメータ割り当ての要素数の取得
-  virtual
-  SizeType
-  paramassign_num() const = 0;
-
-  /// @brief パラメータ割り当ての取得
-  virtual
-  const AstConnection*
-  paramassign(
-    SizeType index ///< [in] インデックス ( 0 <= index < paramassign_num() )
-  ) const = 0;
-
-  /// @brief パラメータ割り当てのリストの取得
-  virtual
-  AstConnectionVec
-  paramassign_list() const = 0;
-
-  /// @brief defparam の要素数の取得
-  virtual
-  SizeType
-  defparam_num() const = 0;
-
-  /// @brief defparam の取得
-  virtual
-  const AstDefParam*
-  defparam(
-    SizeType index ///< [in] インデックス ( 0 <= index < defparam_num() )
-  ) const = 0;
-
   /// @brief defparam リストの取得
   virtual
-  AstDefParamVec
+  AstDefParamList
   defparam_list() const = 0;
 
 
@@ -197,21 +172,9 @@ public:
   // ContAssign の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief continuous assign の要素数の取得
-  virtual
-  SizeType
-  contassign_num() const = 0;
-
-  /// @brief continuous assign の取得
-  virtual
-  const AstContAssign*
-  contassign(
-    SizeType index ///< [in] インデックス ( 0 <= index < contassign_num() )
-  ) const = 0;
-
   /// @brief continuous assign リストの取得
   virtual
-  AstContAssignVec
+  AstContAssignList
   contassign_list() const = 0;
 
 
@@ -229,24 +192,23 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
+  // MuInst の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief パラメータ割り当てのリストの取得
+  virtual
+  AstConnectionList
+  paramassign_list() const = 0;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
   // GateInst/MuInst の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief module/UDP/gate instance の要素数の取得
-  virtual
-  SizeType
-  inst_num() const = 0;
-
   /// @brief module/UDP/gate instance リストの取得
   virtual
-  const AstInst*
-  inst(
-    SizeType index ///< [in] インデックス ( 0 <= index < inst_num() )
-  ) const = 0;
-
-  /// @brief module/UDP/gate instance リストの取得
-  virtual
-  AstInstVec
+  AstInstList
   inst_list() const = 0;
 
 
@@ -256,38 +218,14 @@ public:
   // Task/Function/Generate系
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 宣言ヘッダの要素数の取得
-  virtual
-  SizeType
-  declhead_num() const = 0;
-
-  /// @brief 宣言ヘッダの取得
-  virtual
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const = 0;
-
   /// @brief 宣言ヘッダリストの取得
   virtual
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const = 0;
-
-  /// @brief item リストの要素数の取得
-  virtual
-  SizeType
-  item_num() const = 0;
-
-  /// @brief item の取得
-  virtual
-  const AstItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const = 0;
 
   /// @brief item リストの取得
   virtual
-  AstItemVec
+  AstItemList
   item_list() const = 0;
 
 
@@ -303,27 +241,15 @@ public:
   bool
   automatic() const = 0;
 
-  /// @brief IO宣言の要素数の取得
+  /// @brief IO宣言ヘッダリストの取得
+  virtual
+  AstIOHeadList
+  iohead_list() const = 0;
+
+  /// @brief IO要素の数
   virtual
   SizeType
   ioitem_num() const = 0;
-
-  /// @brief IO宣言ヘッダリストの要素数の取得
-  virtual
-  SizeType
-  iohead_num() const = 0;
-
-  /// @brief IO宣言ヘッダの取得
-  virtual
-  const AstIOHead*
-  iohead(
-    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
-  ) const = 0;
-
-  /// @brief IO宣言ヘッダリストの取得
-  virtual
-  AstIOHeadVec
-  iohead_list() const = 0;
 
 
 public:
@@ -378,21 +304,9 @@ public:
   VpiSpecItemType
   specitem_type() const = 0;
 
-  /// @brief ターミナルの要素数の取得
-  virtual
-  SizeType
-  terminal_num() const = 0;
-
-  /// @brief ターミナルの取得
-  virtual
-  const AstExpr*
-  terminal(
-    SizeType index ///< [in] インデックス ( 0 <= index < terminal_num() )
-  ) const = 0;
-
   /// @brief ターミナルリストの取得
   virtual
-  AstExprVec
+  AstExprList
   terminal_list() const = 0;
 
 
@@ -419,72 +333,24 @@ public:
   // GenIf の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 条件が成り立ったときに生成される宣言ヘッダの要素数の取得
-  virtual
-  SizeType
-  then_declhead_num() const = 0;
-
-  /// @brief 条件が成り立った時に生成される宣言ヘッダの取得
-  virtual
-  const AstDeclHead*
-  then_declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < then_declhead_num() )
-  ) const = 0;
-
   /// @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
   virtual
-  AstDeclHeadVec
+  AstDeclHeadList
   then_declhead_list() const = 0;
-
-  /// @brief 条件が成り立ったときに生成される要素数の取得
-  virtual
-  SizeType
-  then_item_num() const = 0;
-
-  /// @brief 条件が成り立った時に生成される要素の取得
-  virtual
-  const AstItem*
-  then_item(
-    SizeType index ///< [in] インデックス ( 0 <= index < then_item_num() )
-  ) const = 0;
 
   /// @brief 条件が成り立った時に生成される要素リストの取得
   virtual
-  AstItemVec
+  AstItemList
   then_item_list() const = 0;
-
-  /// @brief 条件が成り立たなかったときに生成される宣言ヘッダ配列の要素数の取得
-  virtual
-  SizeType
-  else_declhead_num() const = 0;
-
-  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダの取得
-  virtual
-  const AstDeclHead*
-  else_declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < else_declhead_num() )
-  ) const = 0;
 
   /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
   virtual
-  AstDeclHeadVec
+  AstDeclHeadList
   else_declhead_list() const = 0;
-
-  /// @brief 条件が成り立たなかったときに生成される要素数の取得
-  virtual
-  SizeType
-  else_item_num() const = 0;
-
-  /// @brief 条件が成り立たなかった時に生成される要素の取得
-  virtual
-  const AstItem*
-  else_item(
-    SizeType index ///< [in] インデックス ( 0 <= index < else_item_num() )
-  ) const = 0;
 
   /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
   virtual
-  AstItemVec
+  AstItemList
   else_item_list() const = 0;
 
 
@@ -521,6 +387,17 @@ public:
   virtual
   const AstExpr*
   next_expr() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstItem*
+  link() const = 0;
 
 };
 
@@ -562,6 +439,9 @@ operator<<(
 class AstDefParam :
   public AstHierNamedBase
 {
+  friend class AstList<const AstDefParam>;
+  friend class AstListIter<const AstDefParam>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstDefParam の継承クラスが実装する仮想関数
@@ -572,6 +452,17 @@ public:
   virtual
   const AstExpr*
   expr() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstDefParam*
+  link() const = 0;
 
 };
 
@@ -585,6 +476,9 @@ public:
 class AstContAssign :
   public AstBase
 {
+  friend class AstList<const AstContAssign>;
+  friend class AstListIter<const AstContAssign>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstContAssign の継承クラスが実装する仮想関数
@@ -602,6 +496,17 @@ public:
   const AstExpr*
   rhs() const = 0;
 
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstContAssign*
+  link() const = 0;
+
 };
 
 
@@ -614,6 +519,9 @@ public:
 class AstInst :
   public AstNamedBase
 {
+  friend class AstList<const AstInst>;
+  friend class AstListIter<const AstInst>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstInst の継承クラスが実装する仮想関数
@@ -625,22 +533,21 @@ public:
   const AstRange*
   range() const = 0;
 
-  /// @brief ポートの要素数の取得
-  virtual
-  SizeType
-  port_num() const = 0;
-
-  /// @brief ポート接続の取得
-  virtual
-  const AstConnection*
-  port(
-    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
-  ) const = 0;
-
   /// @brief ポートリストの取得
   virtual
-  AstConnectionVec
+  AstConnectionList
   port_list() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstInst*
+  link() const = 0;
 
 };
 
@@ -654,61 +561,34 @@ public:
 class AstGenCaseItem :
   public AstBase
 {
+  friend class AstList<const AstGenCaseItem>;
+  friend class AstListIter<const AstGenCaseItem>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstGenCaseItem の継承クラスが実装する仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief ラベルの要素数の取得
-  virtual
-  SizeType
-  label_num() const = 0;
-
-  /// @brief ラベルの取得
-  virtual
-  const AstExpr*
-  label(
-    SizeType index ///< [in] インデックス ( 0 <= index < label_num() )
-  ) const = 0;
-
   /// @brief ラベルリストの取得
   virtual
-  AstExprVec
+  AstExprList
   label_list() const = 0;
-
-  /// @brief 宣言の要素数の取得
-  virtual
-  SizeType
-  declhead_num() const = 0;
-
-  /// @brief 宣言の取得
-  virtual
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const = 0;
 
   /// @brief 宣言リストの取得
   virtual
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const = 0;
-
-  /// @brief item の要素数の取得
-  virtual
-  SizeType
-  item_num() const = 0;
-
-  /// @brief item の取得
-  virtual
-  const AstItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const = 0;
 
   /// @brief item リストの取得
   virtual
-  AstItemVec
+  AstItemList
   item_list() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 次の要素の取得
   virtual
@@ -740,21 +620,9 @@ public:
   int
   edge() const = 0;
 
-  /// @brief 入力のリストの要素数の取得
-  virtual
-  SizeType
-  input_num() const = 0;
-
-  /// @brief 入力の取得
-  virtual
-  const AstExpr*
-  input(
-    SizeType index ///< [in] インデックス ( 0 <= index < input_num() )
-  ) const = 0;
-
   /// @brief 入力のリストの取得
   virtual
-  AstExprVec
+  AstExprList
   input_list() const = 0;
 
   /// @brief 入力の極性の取得
@@ -770,21 +638,9 @@ public:
   VpiPathType
   op() const = 0;
 
-  /// @brief 出力のリストの要素数の取得
-  virtual
-  SizeType
-  output_num() const = 0;
-
-  /// @brief 出力の取得
-  virtual
-  const AstExpr*
-  output(
-    SizeType index ///< [in] インデックス ( 0 <= index < output_num() )
-  ) const = 0;
-
   /// @brief 出力リストの取得
   virtual
-  AstExprVec
+  AstExprList
   output_list() const = 0;
 
   /// @brief 出力の極性の取得

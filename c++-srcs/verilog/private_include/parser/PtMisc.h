@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/AstMisc.h"
+#include "parser/PtList.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -30,7 +31,50 @@ class PtControl :
 class PtConnection :
   public AstConnection
 {
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstConnection の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  const AstConnection*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtConnection の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  PtConnection*
+  _link() const
+  {
+    return mLink;
+  }
+
+  /// @brief link を設定する．
+  void
+  set_link(
+    PtConnection* link
+  )
+  {
+    mLink = link;
+  }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 次の要素
+  PtConnection* mLink{nullptr};
+
 };
+
+/// @brief PtConnection のリスト
+using PtConnectionList = PtList<PtConnection>;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -62,40 +106,48 @@ class PtNameBranch :
 {
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtNameBranch の仮想関数
+  // AstNameBranch の仮想関数
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief PtNameBranch* 型のリンクを返す．
+  const AstNameBranch*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtNameBranch の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief PtNameBranch* 型のリンクを返す．
+  PtNameBranch*
+  _link() const
+  {
+    return mLink;
+  }
+
   /// @brief link を設定する．
-  virtual
   void
   set_link(
     PtNameBranch* link
-  ) = 0;
+  )
+  {
+    mLink = link;
+  }
 
-  /// @brief PtNameBranch* 型のリンクを返す．
-  virtual
-  PtNameBranch*
-  _link() const = 0;
 
-  /// @brief リンクトリストを逆順にする．
-  /// @return 新しい先頭を返す．
-  virtual
-  PtNameBranch*
-  reverse() = 0;
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 次の要素
+  PtNameBranch* mLink{nullptr};
 
 };
 
-
-//////////////////////////////////////////////////////////////////////
-/// @class PtAttrInstList PtMisc.h "parser/PtMisc.h"
-/// @brief AstAttrInstList の実装クラス
-///
-/// PtList<> ではないので注意
-//////////////////////////////////////////////////////////////////////
-class PtAttrInstList :
-  public AstAttrInstList
-{
-};
+/// @brief PtNameBranch のリスト
+using PtNameBranchList = PtList<PtNameBranch>;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -107,28 +159,48 @@ class PtAttrInst :
 {
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtAttrInst の仮想関数
+  // AstAttrInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  const AstAttrInst*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtAttrInst の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief PtAttrInst* 型のリンクを返す．
-  virtual
   PtAttrInst*
-  _link() const = 0;
+  _link() const
+  {
+    return mLink;
+  }
 
   /// @brief link を設定する．
-  virtual
   void
   set_link(
     PtAttrInst* link
-  ) = 0;
+  )
+  {
+    mLink = link;
+  }
 
-  /// @brief リンクトリストを逆順にする．
-  /// @return 新しい先頭を返す．
-  virtual
-  PtAttrInst*
-  reverse() = 0;
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 次の要素
+  PtAttrInst* mLink{nullptr};
 
 };
+
+/// @brief PtAttrInst のリスト
+using PtAttrInstList = PtList<PtAttrInst>;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -140,28 +212,48 @@ class PtAttrSpec :
 {
 public:
   //////////////////////////////////////////////////////////////////////
-  // PtAttrSpec の仮想関数
+  // AstAttrSpec の仮想関数
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 次の要素を返す．
+  const AstAttrSpec*
+  link() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtAttrSpec の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief PtAttrSpec* 型のリンクを返す．
+  PtAttrSpec*
+  _link() const
+  {
+    return mLink;
+  }
+
   /// @brief link を設定する．
-  virtual
   void
   set_link(
     PtAttrSpec* link
-  ) = 0;
+  )
+  {
+    mLink = link;
+  }
 
-  /// @brief PtAttrSpec* 型のリンクを返す．
-  virtual
-  PtAttrSpec*
-  _link() const = 0;
 
-  /// @brief リンクトリストを逆順にする．
-  /// @return 新しい先頭を返す．
-  virtual
-  PtAttrSpec*
-  reverse() = 0;
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 次の要素
+  PtAttrSpec* mLink{nullptr};
 
 };
+
+/// @brief PtAttrSepc のリスト
+using PtAttrSpecList = PtList<PtAttrSpec>;
 
 END_NAMESPACE_YM_VERILOG
 

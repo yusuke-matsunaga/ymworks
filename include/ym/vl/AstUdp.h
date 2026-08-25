@@ -9,6 +9,8 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
+#include "ym/vl/AstPort.h"
+#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,6 +24,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 class AstUdp :
   public AstNamedBase
 {
+  friend class AstList<const AstUdp>;
+  friend class AstListIter<const AstUdp>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstUdp の継承クラスが実装しなければならない仮想関数
@@ -32,38 +37,14 @@ public:
   VpiPrimType
   prim_type() const = 0;
 
-  /// @brief ポート数を取り出す．
-  virtual
-  SizeType
-  port_num() const = 0;
-
-  /// @brief ポートを取り出す．
-  virtual
-  const AstPort*
-  port(
-    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
-  ) const = 0;
-
   /// @brief ポートのリストを取り出す．
   virtual
-  AstPortVec
+  AstPortList
   port_list() const = 0;
-
-  /// @brief 入出力宣言ヘッダ配列の要素数の取得
-  virtual
-  SizeType
-  iohead_num() const = 0;
-
-  /// @brief 入出力宣言ヘッダの取得
-  virtual
-  const AstIOHead*
-  iohead(
-    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
-  ) const = 0;
 
   /// @brief 入出力宣言ヘッダのリストの取得
   virtual
-  AstIOHeadVec
+  AstIOHeadList
   iohead_list() const = 0;
 
   /// @brief 初期値を取出す．
@@ -71,22 +52,21 @@ public:
   const AstExpr*
   init_value() const = 0;
 
-  /// @brief テーブルの要素数を取り出す．
-  virtual
-  SizeType
-  table_num() const = 0;
-
-  /// @brief テーブルを返す．
-  virtual
-  const AstUdpEntry*
-  table(
-    SizeType index ///< [in] インデックス ( 0 <= index < table_num() )
-  ) const = 0;
-
   /// @brief テーブルのリストを返す．
   virtual
-  AstUdpEntryVec
+  AstUdpEntryList
   table_list() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstUdp*
+  link() const = 0;
 
 };
 
@@ -100,26 +80,17 @@ public:
 class AstUdpEntry :
   public AstBase
 {
+  friend class AstList<const AstUdpEntry>;
+  friend class AstListIter<const AstUdpEntry>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstUdpEntry の継承クラスが実装しなければならない仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 入力値の配列の要素数を取り出す．
-  virtual
-  SizeType
-  input_num() const = 0;
-
-  /// @brief 入力値を取り出す．
-  virtual
-  const AstUdpValue*
-  input(
-    SizeType index ///< [in] インデックス ( 0 <= index < input_num() )
-  ) const = 0;
-
   /// @brief 入力値のリストを取り出す．
   virtual
-  AstUdpValueVec
+  AstUdpValueList
   input_list() const = 0;
 
   /// @brief 現状態の値を取り出す．
@@ -131,6 +102,17 @@ public:
   virtual
   const AstUdpValue*
   output() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstUdpEntry*
+  link() const = 0;
 
 };
 
@@ -144,6 +126,9 @@ public:
 class AstUdpValue :
   public AstBase
 {
+  friend class AstList<const AstUdpValue>;
+  friend class AstListIter<const AstUdpValue>;
+
 public:
   //////////////////////////////////////////////////////////////////////
   // AstUdpValue の継承クラスが実装しなければならない仮想関数
@@ -153,6 +138,17 @@ public:
   virtual
   VlUdpVal
   symbol() const = 0;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素の取得
+  virtual
+  const AstUdpValue*
+  link() const = 0;
 
 };
 

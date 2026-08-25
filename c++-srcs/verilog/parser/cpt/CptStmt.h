@@ -9,7 +9,9 @@
 /// All rights reserved.
 
 #include "parser/PtStmt.h"
-#include "parser/PtArray.h"
+#include "parser/PtDecl.h"
+#include "parser/PtExpr.h"
+#include "parser/PtHierName.h"
 #include "ym/FileRegion.h"
 
 
@@ -58,24 +60,10 @@ public:
   const char*
   stmt_name() const override;
 
-  /// @brief 引数の数の取得
-  ///
-  /// - type() != Enable の時 std::logic_error 例外を送出する．
-  SizeType
-  arg_num() const override;
-
-  /// @brief 引数の取得
-  ///
-  /// - type() != Enable の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  arg(
-    SizeType index ///< [in] インデックス ( 0 <= index < arg_num() )
-  ) const override;
-
   /// @brief 引数のリストの取得
   ///
   /// - type() != Enable の時 std::logic_error 例外を送出する．
-  AstExprVec
+  AstExprList
   arg_list() const override;
 
   /// @brief コントロールの取得
@@ -113,24 +101,10 @@ public:
   const AstStmt*
   else_body() const override;
 
-  /// @brief case item のリストの要素数の取得
-  ///
-  /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  SizeType
-  caseitem_num() const override;
-
-  /// @brief case item の取得
-  ///
-  /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  const AstCaseItem*
-  caseitem(
-    SizeType index ///< [in] インデックス ( 0 <= index < caseitem_num() )
-  ) const override;
-
   /// @brief case item のリストの取得
   ///
   /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  AstCaseItemVec
+  AstCaseItemList
   caseitem_list() const override;
 
   /// @brief 初期化代入文の取得
@@ -143,47 +117,17 @@ public:
   const AstStmt*
   next_stmt() const override;
 
-  /// @brief 宣言ヘッダ配列の要素数の取得
-  ///
-  /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  SizeType
-  declhead_num() const override;
-
-  /// @brief 宣言ヘッダの取得
-  ///
-  /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const override;
-
   /// @brief 宣言ヘッダのリストの取得
   ///
   /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const override;
-
-  /// @brief 子供のステートメントリストの要素数の取得
-  ///
-  /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
-  ///   std::logic_error 例外を送出する．
-  SizeType
-  stmt_num() const override;
-
-  /// @brief 子供のステートメントの取得
-  ///
-  /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
-  ///   std::logic_error 例外を送出する．
-  const AstStmt*
-  stmt(
-    SizeType index ///< [in] インデックス ( 0 <= index < stmt_num() )
-  ) const override;
 
   /// @brief 子供のステートメントのリストの取得
   ///
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
-  AstStmtVec
+  AstStmtList
   stmt_list() const override;
 
 
@@ -261,7 +205,7 @@ public:
     const FileRegion& file_region,
     const PtHierName& hname
   ) : CptDisable(file_region, hname.tail_name),
-      mNbTop{hname.nb_top->reverse()}
+      mNbTop{hname.nb_list.top}
   {
   }
 
@@ -302,10 +246,10 @@ protected:
   CptEnableBase(
     const FileRegion& file_region,
     const char* name,
-    const AstExprList* arg_list
+    PtExpr* arg_top
   ) : CptStmt(file_region),
       mName{name},
-      mArgList{arg_list}
+      mArgTop{arg_top}
   {
   }
 
@@ -322,24 +266,10 @@ public:
   const char*
   name() const override;
 
-  /// @brief 引数の数の取得
-  ///
-  /// - type() != Enable の時 std::logic_error 例外を送出する．
-  SizeType
-  arg_num() const override;
-
-  /// @brief 引数の取得
-  ///
-  /// - type() != Enable の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  arg(
-    SizeType index ///< [in] インデックス ( 0 <= index < arg_num() )
-  ) const override;
-
   /// @brief 引数のリストの取得
   ///
   /// - type() != Enable の時 std::logic_error 例外を送出する．
-  AstExprVec
+  AstExprList
   arg_list() const override;
 
 
@@ -352,7 +282,7 @@ private:
   const char* mName;
 
   // 引数のリスト
-  const AstExprList* mArgList;
+  const AstExpr* mArgTop;
 
 };
 
@@ -369,8 +299,8 @@ public:
   CptEnable(
     const FileRegion& file_region,
     const char* name,
-    const AstExprList* arg_list
-  ) : CptEnableBase(file_region, name, arg_list)
+    PtExpr* arg_top
+  ) : CptEnableBase(file_region, name, arg_top)
   {
   }
 
@@ -406,9 +336,9 @@ public:
   CptEnableH(
     const FileRegion& file_region,
     const PtHierName& hname,
-    const AstExprList* arg_list
-  ) : CptEnable(file_region, hname.tail_name, arg_list),
-      mNbTop{hname.nb_top->reverse()}
+    PtExpr* arg_top
+  ) : CptEnable(file_region, hname.tail_name, arg_top),
+      mNbTop{hname.nb_list.top}
   {
   }
 
@@ -449,8 +379,8 @@ public:
   CptSysEnable(
     const FileRegion& file_region,
     const char* task_name,
-    const AstExprList* arg_list
-  ) : CptEnableBase(file_region, task_name, arg_list)
+    PtExpr* arg_top
+  ) : CptEnableBase(file_region, task_name, arg_top)
   {
   }
 
@@ -1207,10 +1137,10 @@ public:
   CptCase(
     const FileRegion& file_region,
     const AstExpr* expr,
-    PtCaseItemArray&& caseitem_list
+    PtCaseItem* caseitem_top
   ) : CptStmt(file_region),
       mExpr{expr},
-      mCaseItemList{std::move(caseitem_list)}
+      mCaseItemTop{caseitem_top}
   {
     if ( expr == nullptr ) {
       throw std::logic_error{"expr = nullptr"};
@@ -1234,24 +1164,10 @@ public:
   const AstExpr*
   expr() const override;
 
-  /// @brief case item のリストの要素数の取得
-  ///
-  /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  SizeType
-  caseitem_num() const override;
-
-  /// @brief case item の取得
-  ///
-  /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  const AstCaseItem*
-  caseitem(
-    SizeType index ///< [in] インデックス ( 0 <= index < caseitem_num() )
-  ) const override;
-
   /// @brief case item のリストの取得
   ///
   /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  AstCaseItemVec
+  AstCaseItemList
   caseitem_list() const override;
 
 
@@ -1263,8 +1179,8 @@ private:
   // 比較される式
   const AstExpr* mExpr;
 
-  // case item のリスト
-  PtCaseItemArray mCaseItemList;
+  // case item の先頭
+  PtCaseItem* mCaseItemTop;
 
 };
 
@@ -1281,9 +1197,8 @@ public:
   CptCaseX(
     const FileRegion& file_region,
     const AstExpr* expr,
-    PtCaseItemArray&& caseitem_list
-  ) : CptCase(file_region, expr,
-	      std::move(caseitem_list))
+    PtCaseItem* caseitem_top
+  ) : CptCase(file_region, expr, caseitem_top)
   {
   }
 
@@ -1315,9 +1230,8 @@ public:
   CptCaseZ(
     const FileRegion& file_region,
     const AstExpr* expr,
-    PtCaseItemArray&& caseitem_list
-  ) : CptCase(file_region, expr,
-	      std::move(caseitem_list))
+    PtCaseItem* caseitem_top
+  ) : CptCase(file_region, expr, caseitem_top)
   {
   }
 
@@ -1348,10 +1262,10 @@ public:
   /// @brief コンストラクタ
   CptCaseItem(
     const FileRegion& file_region,
-    const AstExprList* label_list,
+    PtExpr* label_top,
     const AstStmt* body
   ) : mFileRegion{file_region},
-      mLabelList{label_list},
+      mLabelTop{label_top},
       mBody{body}
   {
     if ( body == nullptr ) {
@@ -1372,18 +1286,8 @@ public:
   FileRegion
   file_region() const override;
 
-  /// @brief ラベルのリストの要素数の取得
-  SizeType
-  label_num() const override;
-
-  /// @brief ラベルの取得
-  const AstExpr*
-  label(
-    SizeType index ///< [in] インデックス ( 0 <= index < label_num() )
-  ) const override;
-
   /// @brief ラベルリストの取得
-  AstExprVec
+  AstExprList
   label_list() const override;
 
   /// @brief 本体のステートメント得る．
@@ -1399,8 +1303,8 @@ private:
   // ファイル位置
   FileRegion mFileRegion;
 
-  // ラベルのリスト
-  const AstExprList* mLabelList;
+  // ラベルの先頭
+  const AstExpr* mLabelTop;
 
   // ラベルが一致したときに実行されるステートメント
   const AstStmt* mBody;
@@ -1642,9 +1546,9 @@ protected:
   /// @brief コンストラクタ
   CptStmtBlock(
     const FileRegion& file_region,
-    PtStmtArray&& stmt_list
+    PtStmt* stmt_top
   ) : CptStmt(file_region),
-      mStmtList{std::move(stmt_list)}
+      mStmtTop{stmt_top}
   {
   }
 
@@ -1657,27 +1561,11 @@ public:
   // PtStmtBlock の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 子供のステートメントリストの要素数の取得
-  ///
-  /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
-  ///   std::logic_error 例外を送出する．
-  SizeType
-  stmt_num() const override;
-
-  /// @brief 子供のステートメントの取得
-  ///
-  /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
-  ///   std::logic_error 例外を送出する．
-  const AstStmt*
-  stmt(
-    SizeType index ///< [in] インデックス ( 0 <= index < stmt_num() )
-  ) const override;
-
   /// @brief 子供のステートメントのリストの取得
   ///
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
-  AstStmtVec
+  AstStmtList
   stmt_list() const override;
 
 
@@ -1686,8 +1574,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // ステートメントのリスト
-  PtStmtArray mStmtList;
+  // ステートメントの先頭
+  const AstStmt* mStmtTop;
 
 };
 
@@ -1704,11 +1592,11 @@ public:
   CptStmtBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtDeclHeadArray&& declhead_list,
-    PtStmtArray&& stmt_list
-  ) : CptStmtBlock(file_region, std::move(stmt_list)),
+    PtDeclHead* declhead_top,
+    PtStmt* stmt_top
+  ) : CptStmtBlock(file_region, stmt_top),
       mName{name},
-      mDeclHeadList{std::move(declhead_list)}
+      mDeclHeadTop{declhead_top}
   {
   }
 
@@ -1725,24 +1613,10 @@ public:
   const char*
   name() const override;
 
-  /// @brief 宣言ヘッダ配列の要素数の取得
-  ///
-  /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  SizeType
-  declhead_num() const override;
-
-  /// @brief 宣言ヘッダの取得
-  ///
-  /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const override;
-
   /// @brief 宣言ヘッダのリストの取得
   ///
   /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const override;
 
 
@@ -1754,8 +1628,8 @@ private:
   // 名前
   const char* mName;
 
-  // 宣言のリスト
-  PtDeclHeadArray mDeclHeadList;
+  // 宣言の先頭
+  PtDeclHead* mDeclHeadTop;
 
 };
 
@@ -1771,9 +1645,8 @@ public:
   /// @brief コンストラクタ
   CptParBlock(
     const FileRegion& file_region,
-    PtStmtArray&& stmt_list
-  ) : CptStmtBlock(file_region,
-		   std::move(stmt_list))
+    PtStmt* stmt_top
+  ) : CptStmtBlock(file_region, stmt_top)
   {
   }
 
@@ -1805,11 +1678,9 @@ public:
   CptParBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtDeclHeadArray&& declhead_list,
-    PtStmtArray&& stmt_list
-  ) : CptStmtBlockN(file_region, name,
-		    std::move(declhead_list),
-		    std::move(stmt_list))
+    PtDeclHead* declhead_top,
+    PtStmt* stmt_top
+  ) : CptStmtBlockN(file_region, name, declhead_top, stmt_top)
   {
   }
 
@@ -1840,9 +1711,8 @@ public:
   /// @brief コンストラクタ
   CptSeqBlock(
     const FileRegion& file_region,
-    PtStmtArray&& stmt_list
-  ) : CptStmtBlock(file_region,
-		   std::move(stmt_list))
+    PtStmt* stmt_top
+  ) : CptStmtBlock(file_region, stmt_top)
   {
   }
 
@@ -1874,11 +1744,9 @@ public:
   CptSeqBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtDeclHeadArray&& declhead_list,
-    PtStmtArray&& stmt_list
-  ) : CptStmtBlockN(file_region, name,
-		    std::move(declhead_list),
-		    std::move(stmt_list))
+    PtDeclHead* declhead_top,
+    PtStmt* stmt_top
+  ) : CptStmtBlockN(file_region, name, declhead_top, stmt_top)
   {
   }
 

@@ -113,17 +113,42 @@ fr_merge(
 
   AstBase* obj;
 
+  PtAttrInstList attrinstlist;
+  PtAttrSpecList attrspeclist;
   PtHierName hiername;
+  PtHeadList headlist;
+  PtPortList portlist;
+  PtIOPortList ioportlist;
+  PtIOHeadList ioheadlist;
+  PtIOItemList ioitemlist;
+  PtDeclPortList declportlist;
+  PtDeclHeadList declheadlist;
+  PtDeclItemList declitemlist;
+  PtItemList itemlist;
+  PtDefParamList defparamlist;
+  PtContAssignList contassignlist;
+  PtInstList instlist;
+  PtConnectionList connectionlist;
+  PtGenCaseItemList gencaseitemlist;
+  PtStmtList stmtlist;
+  PtCaseItemList caseitemlist;
+  PtExprList exprlist;
+  PtRangeList rangelist;
+  PtUdpEntryList udpentrylist;
+  PtUdpValueList udpvaluelist;
 
   PtPort* port;
 
   PtIOHead* iohead;
+  PtIOItem* ioitem;
   PtDeclHead* declhead;
+  PtDeclItem* declitem;
   PtRange* range;
 
-
   PtItem* item;
-
+  PtDefParam* defparam;
+  PtContAssign* contassign;
+  PtInst* inst;
   PtGenCaseItem* gencaseitem;
   PtPathDecl* pathdecl;
   PtPathDelay* pathdelay;
@@ -132,13 +157,15 @@ fr_merge(
   PtCaseItem* caseitem;
 
   PtExpr* expr;
-  PtExprList* exprlist;
   PtPart* part;
 
   PtStrength* strength;
   PtDelay* delay;
   PtControl* control;
   PtConnection* connection;
+
+  PtUdpEntry* udpentry;
+  PtUdpValue* udpvalue;
 
   PtAttrInst* attrinst;
   PtAttrSpec* attrspec;
@@ -386,59 +413,112 @@ fr_merge(
 
 %type <inttype> opt_auto
 
-%type <strtype> mu_head
+%type <udpentrylist> list_of_udp_entries
+%type <udpentry> udp_entry
 
-%type <obj> module_item_body module_item2_body
+%type <udpvaluelist> seq_input_list
+%type <udpvalue> level_symbol_value
+%type <udpvalue> edge_indicator
 
+%type <headlist> list_of_module_items
+%type <headlist> list_of_module_items2
+%type <headlist> nzlist_of_fitem_decl
+%type <headlist> list_of_titem_decl
+%type <headlist> list_of_generate_items
+%type <headlist> generate_item_or_null
+
+%type <portlist> list_of_ports
 %type <port> port
 %type <port> nonnull_port
+%type <portlist> udp_port_list
 %type <port> udp_port
 
+%type <ioportlist> udp_declaration_port_list
+%type <ioportlist> module_portdecl_list
+%type <ioportlist> function_port_list
+%type <ioportlist> task_port_list
+%type <ioportlist> list_of_port_declarations
 %type <iohead> portdecl_head
+%type <iohead> udp_output_port_declaration
+
+%type <iohead> io_declaration
 %type <iohead> inout_declaration
 %type <iohead> input_declaration
 %type <iohead> output_declaration
-%type <iohead> output_declhead1
-%type <iohead> output_declhead2
-%type <iohead> io_declaration
+
 %type <iohead> tf_inout_declhead
 %type <iohead> tf_input_declhead
 %type <iohead> tf_output_declhead
-%type <obj> udp_port_decl_body
-%type <iohead> udp_input_declaration
-%type <iohead> udp_input_declhead
-%type <iohead> udp_output_declaration
-%type <iohead> udp_output_declhead1
-%type <iohead> udp_output_declhead2
 
-%type <declhead> paramport_head
-%type <declhead> module_or_generate_decl
-%type <declhead> bitem_decl_body
-%type <declhead> event_declaration
-%type <declhead> event_declhead
-%type <declhead> genvar_declaration
-%type <declhead> genvar_declhead
-%type <declhead> integer_declaration
-%type <declhead> integer_declhead
-%type <declhead> real_declaration
-%type <declhead> real_declhead
-%type <declhead> realtime_declaration
-%type <declhead> realtime_declhead
-%type <declhead> time_declaration
-%type <declhead> time_declhead
-%type <declhead> net_declaration
-%type <declhead> net_declhead1
-%type <declhead> net_declhead2
-%type <declhead> net_declhead3
-%type <declhead> reg_declaration
-%type <declhead> block_reg_declaration
-%type <declhead> reg_declhead
-%type <declhead> parameter_declaration
-%type <declhead> parameter_declhead
-%type <declhead> specparam_declaration
-%type <declhead> specparam_declhead
+%type <iohead> tf_io_declaration
+%type <iohead> tf_input_declaration
+%type <iohead> tf_inout_declaration
+%type <iohead> tf_output_declaration
+
+%type <ioitemlist> list_of_port_identifiers
+%type <ioitem> port_identifier_item
+%type <ioitemlist> list_of_variable_port_identifiers
+%type <ioitem> variable_port_identifier_item
+%type <headlist> nzlist_of_uport_decl
+%type <iohead> udp_input_declaration
+%type <iohead> udp_output_declaration
 %type <declhead> udp_reg_declaration
 
+%type <declportlist> module_parameter_port_list
+%type <declportlist> list_of_paramport_decl
+%type <declhead> paramport_head
+%type <declitem> paramport_assignment
+%type <declitemlist> list_of_param_assignments
+%type <declitem> param_assignment
+
+%type <declitemlist> list_of_specparam_assignments
+%type <declitem> specparam_assignment
+
+%type <declhead> module_or_generate_decl
+%type <declhead> module_decl
+%type <declhead> module_decl_body
+%type <declhead> bitem_decl_body
+
+%type <declhead> event_declaration
+%type <declitemlist> list_of_event_identifiers
+
+%type <declhead> genvar_declaration
+%type <declitemlist> list_of_genvar_identifiers
+
+%type <declhead> integer_declaration
+%type <declitemlist> list_of_variable_identifiers
+
+%type <declhead> real_declaration
+%type <declitemlist> list_of_real_identifiers
+
+%type <declhead> realtime_declaration
+
+%type <declhead> time_declaration
+
+%type <declhead> net_declaration
+%type <declitemlist> list_of_net_decls
+%type <declitemlist> list_of_net_identifiers
+%type <declitemlist> list_of_net_decl_assignments
+%type <declitem> net_decl_assignment
+
+%type <declhead> reg_declaration
+%type <declhead> block_reg_declaration
+
+%type <declhead> parameter_declaration
+
+%type <declhead> specparam_declaration
+
+%type <headlist> list_of_bitem_decl
+%type <declhead> block_item_declaration
+
+%type <declitem> identifier_with_range
+%type <declitem> variable_type
+%type <declitemlist> list_of_block_variable_identifiers
+%type <declitem> block_variable_type
+%type <declitem> real_type
+
+%type <item> module_item
+%type <item> module_item_body
 %type <item> module_or_generate_item
 %type <item> generated_instantiation
 %type <item> specify_block
@@ -448,8 +528,46 @@ fr_merge(
 %type <item> continuous_assign
 %type <item> gate_instantiation
 %type <item> module_instantiation
+%type <item> generate_item
 %type <item> initial_construct
 %type <item> always_construct
+ //%type <item> specify_item
+
+%type <defparamlist> nzlist_of_defparam_assignment
+%type <defparam> defparam_assignment
+
+%type <contassignlist> list_of_net_assignments
+%type <contassign> net_assignment
+
+%type <instlist> nzlist_of_cmos_switch_inst
+%type <inst> cmos_switch_instance
+%type <instlist> nzlist_of_enable_gate_inst
+%type <inst> enable_gate_instance
+%type <instlist> nzlist_of_mos_switch_inst
+%type <inst> mos_switch_instance
+%type <instlist> nzlist_of_n_input_gate_inst
+%type <inst> n_input_gate_instance
+%type <instlist> nzlist_of_n_output_gate_inst
+%type <inst> n_output_gate_instance
+%type <instlist> nzlist_of_pass_en_switch_inst
+%type <inst> pass_enable_switch_instance
+%type <instlist> nzlist_of_pass_switch_inst
+%type <inst> pass_switch_instance
+%type <instlist> nzlist_of_pull_inst
+%type <inst> pull_gate_instance
+
+%type <instlist> nzlist_of_mu_inst
+%type <inst> mu_instance
+
+%type <connectionlist> n_input_gate_terminals
+%type <connectionlist> n_output_gate_terminals
+
+%type <connectionlist> list_of_ordered_param_assign
+%type <connectionlist> list_of_named_param_assign
+%type <connectionlist> list_of_ordered_port_connections
+%type <connection> ordered_port_connection
+%type <connectionlist> list_of_named_port_connections
+%type <connection> named_port_connection
 
 %type <stmt> blocking_assignment
 %type <stmt> nonblocking_assignment
@@ -467,10 +585,17 @@ fr_merge(
 %type <stmt> system_task_enable
 %type <stmt> task_enable
 
+%type <stmtlist> nzlist_of_stmt
+
 %type <exprlist> nzlist_of_expressions
 %type <exprlist> nzlist_of_lvalues
 %type <exprlist> nzlist_of_terminals
 %type <exprlist> nzlist_of_arguments
+%type <exprlist> nzlist_of_port_references
+%type <exprlist> nzlist_of_index
+%type <exprlist> case_item_label
+%type <exprlist> eve_list
+%type <exprlist> event_expression
 
 %type <expr> port_reference
 %type <expr> concatenation
@@ -492,7 +617,7 @@ fr_merge(
 %type <expr> index
 
 %type <range> range
-%type <range> nzlist_of_dimensions
+%type <rangelist> nzlist_of_dimensions
 
 %type <part> part
 
@@ -500,7 +625,7 @@ fr_merge(
 %type <vstype> vstype
 %type <inttype> sign
 
-%type <gencaseitem> list_of_gencaseitem
+%type <gencaseitemlist> list_of_gencaseitem
 %type <gencaseitem> genvar_case_item
 %type <exprlist> genvar_case_head
 
@@ -522,8 +647,6 @@ fr_merge(
 %type <primtype> pass_switchtype
 
 %type <connection> named_parameter_assignment
-%type <connection> named_port_connection
-%type <connection> ordered_port_connection
 
 %type <expr> init_val
 
@@ -532,11 +655,11 @@ fr_merge(
 %type <control> delay_control
 %type <control> event_control
 %type <control> repeat_control
-%type <exprlist> event_expression
 %type <expr> event_primary
-%type <cilist> list_of_case_items
+
+%type <caseitemlist> list_of_case_items
 %type <caseitem> case_item
-%type <exprlist> case_item_label
+
 %type <pathdecl> path_declaration simple_path_declaration
                  edge_sensitive_path_declaration
 %type <expr> specify_terminal
@@ -560,9 +683,10 @@ fr_merge(
 /* end-of まだできていない */
 
 %type <consttype> numbase
-%type <attrinst> ai_list nz_ai_list
+%type <attrinst> ai_list
+%type <attrinstlist> nz_ai_list
 %type <attrinst> attr_inst
-%type <attrspec> nzlist_of_attr_spec
+%type <attrspeclist> nzlist_of_attr_spec
 %type <attrspec> attr_spec
 %type <hiername> hierarchical_identifier
 
@@ -613,26 +737,46 @@ module_declaration
   module_parameter_port_list
   '(' list_of_ports ')' ';'
   list_of_module_items
-  endmodule
+  ENDMODULE
 {
-  parser.new_Module1995(@$, $2, $3, $1);
+  auto m = parser.new_Module1995(@$, $2, $3,
+				 $4.head_list.top,
+				 $6.top,
+				 $9.iohead_list.top,
+				 $9.declhead_list.top,
+				 $9.item_list.top);
+  parser.reg_attrinst(m, $1);
+  parser.reg_module(m);
 }
 | ai_list module_keyword IDENTIFIER
   module_parameter_port_list module_portdecl_list ';'
   list_of_module_items2
-  endmodule
+  ENDMODULE
 {
-  parser.new_Module2001(@$, $2, $3, $1);
+  auto m = parser.new_Module2001(@$, $2, $3,
+				 $4.head_list.top,
+				 $5.head_list.top,
+				 $7.declhead_list.top,
+				 $7.item_list.top);
+  parser.reg_attrinst(m, $1);
+  parser.reg_module(m);
 }
 | ai_list module_keyword IDENTIFIER
   module_parameter_port_list
   '(' ')' ';'
   list_of_module_items
-  endmodule
+  ENDMODULE
 { // list_of_ports が空の場合
-  parser.new_Module1995(@$, $2, $3, $1);
+  auto m = parser.new_Module1995(@$, $2, $3,
+				 $4.head_list.top,
+				 nullptr,
+				 $8.iohead_list.top,
+				 $8.declhead_list.top,
+				 $8.item_list.top);
+  parser.reg_attrinst(m, $1);
+  parser.reg_module(m);
 }
-| ai_list module_keyword error endmodule
+| ai_list module_keyword error ENDMODULE
 {
   yyerrok;
 }
@@ -643,29 +787,24 @@ module_keyword
 : MODULE
 {
   // ちょっとした hack!
-  parser.init_module();
   $$ = false;
 }
 | MACROMODULE
 {
   // ちょっとした hack!
-  parser.init_module();
   $$ = true;
-}
-;
-
-endmodule
-: ENDMODULE
-{
-  parser.end_module();
 }
 ;
 
 module_portdecl_list
 : // 空もあり
+{
+  $$ = PtIOPortList();
+  $$.init();
+}
 | '(' list_of_port_declarations ')'
 {
-  parser.flush_module_ioitem();
+  $$ = $2;
 }
 ;
 
@@ -682,41 +821,50 @@ module_portdecl_list
 // なんですけど,,,,,
 module_parameter_port_list
 : // 空
+{
+  $$ = PtDeclPortList();
+  $$.init();
+}
 | '#' '(' list_of_paramport_decl ')'
 {
-  parser.flush_paramport();
+  $$ = $3;
 }
 ;
 
 // [SPEC*] list_of_param_decl ::=
 //           parameter_declaration { ',' parameter_declaration }
 list_of_paramport_decl
-: ai_list paramport_head paramport_assignment
+: ai_list paramport_head
 {
-  parser.add_paramport_head($2);
+  $$ = PtDeclPortList();
+  $$.init($2);
   parser.reg_attrinst($2, $1);
 }
-| list_of_paramport_decl ',' { parser.flush_paramport(); }
-  ai_list paramport_head paramport_assignment
+| list_of_paramport_decl ',' ai_list paramport_head
 {
-  parser.add_paramport_head($5);
-  parser.reg_attrinst($5, $4);
+  $$ = $1;
+  $$.add_head($4);
+  parser.reg_attrinst($4, $3);
 }
 | list_of_paramport_decl ',' paramport_assignment
+{
+  $$ = $1;
+  $1.add_item($3);
+}
 ;
 
 paramport_head
-: PARAMETER
-{
-  $$ = parser.factory().new_ParamH(@$);
-}
-| PARAMETER sign range
-{
-  $$ = parser.factory().new_ParamH(@$, $2, $3);
-}
-| PARAMETER data_type
+: PARAMETER paramport_assignment
 {
   $$ = parser.factory().new_ParamH(@$, $2);
+}
+| PARAMETER sign range paramport_assignment
+{
+  $$ = parser.factory().new_ParamH(@$, $2, $3, $4);
+}
+| PARAMETER data_type paramport_assignment
+{
+  $$ = parser.factory().new_ParamH(@$, $2, $3);
 }
 ;
 
@@ -725,8 +873,7 @@ paramport_head
 paramport_assignment
 : IDENTIFIER '=' expression
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, $3);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@$, $1, $3);
 }
 ;
 
@@ -740,12 +887,13 @@ paramport_assignment
 list_of_ports
 : nonnull_port
 {
-  parser.init_port_list();
-  parser.add_port($1);
+  $$ = PtPortList();
+  $$.init($1);
 }
 | list_of_ports ',' port
 {
-  parser.add_port($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -779,9 +927,8 @@ nonnull_port
 }
 | '{' nzlist_of_port_references '}'
 {
-  auto expr_list = parser.end_expr_list();
   // 内側の式のみ指定するタイプ
-  $$ = parser.factory().new_Port(@$, nullptr, expr_list);
+  $$ = parser.factory().new_Port(@$, nullptr, $2.top);
 }
 | '.' IDENTIFIER '('                 ')'
 {
@@ -795,9 +942,8 @@ nonnull_port
 }
 | '.' IDENTIFIER '(' '{' nzlist_of_port_references '}' ')'
 {
-  auto expr_list = parser.end_expr_list();
   // 外側の名前と内側の式を指定するタイプ
-  $$ = parser.factory().new_Port(@$, $2, expr_list);
+  $$ = parser.factory().new_Port(@$, $2, $5.top);
 }
 ;
 
@@ -806,11 +952,13 @@ nonnull_port
 nzlist_of_port_references
 : port_reference
 {
-  parser.init_expr_list();
+  $$ = PtExprList();
+  $$.init($1);
 }
 | nzlist_of_port_references ',' port_reference
 {
-  parser.add_expr($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -863,18 +1011,23 @@ port_reference
 // 変更した．何にも考えていない IEEE1364-2001 の拡張の仕方が悪い．
 // 詳細は A.2.1.2 Port declarations を参照のこと．
 list_of_port_declarations
-: ai_list portdecl_head variable_port_identifier_item
+: ai_list portdecl_head
 {
-  parser.add_module_ioport_head($2);
+  $$ = PtIOPortList();
+  $$.init($2);
   parser.reg_attrinst($2, $1);
 }
-| list_of_port_declarations ',' { parser.flush_module_ioitem(); }
-  ai_list portdecl_head variable_port_identifier_item
+| list_of_port_declarations ',' ai_list portdecl_head
 {
-  parser.add_module_ioport_head($5);
-  parser.reg_attrinst($5, $4);
+  $$ = $1;
+  $1.add_head($4);
+  parser.reg_attrinst($4, $3);
 }
 | list_of_port_declarations ',' variable_port_identifier_item
+{
+  $$ = $1;
+  $1.add_item($3);
+}
 ;
 
 // [SPEC*] portdecl_head ::=
@@ -886,69 +1039,76 @@ list_of_port_declarations
 //           |"output" output_variable_type
 //           |"output" output_variable_type
 portdecl_head
-: INOUT          sign
+: INOUT          sign variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2);
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $3);
 }
-| INOUT net_type sign
+| INOUT net_type sign variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3);
+  // sign は無視
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $4);
 }
-| INOUT          sign range
+| INOUT          sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3);
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3, $4);
 }
-| INOUT net_type sign range
+| INOUT net_type sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4);
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4, $5);
 }
-| INPUT          sign
+| INPUT          sign variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2);
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $3);
 }
-| INPUT net_type sign
+| INPUT net_type sign variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3);
+  // sign は無視
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $4);
 }
-| INPUT          sign range
+| INPUT          sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3);
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3, $4);
 }
-| INPUT net_type sign range
+| INPUT net_type sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3, $4);
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3, $4, $5);
 }
-| OUTPUT          sign
+| OUTPUT          sign variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2);
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $3);
 }
-| OUTPUT net_type sign
+| OUTPUT net_type sign variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3);
+  // sign は無視
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $4);
 }
-| OUTPUT          sign range
+| OUTPUT          sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3);
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3, $4);
 }
-| OUTPUT net_type sign range
+| OUTPUT net_type sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3, $4);
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3, $4, $5);
 }
-| OUTPUT REG sign
+| OUTPUT REG sign variable_port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3);
+  // sign は無視
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $4);
 }
-| OUTPUT REG sign range
+| OUTPUT REG sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4);
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4, $5);
 }
-| OUTPUT INTEGER
+| OUTPUT INTEGER variable_port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, VpiVarType::Integer);
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, VpiVarType::Integer, $3);
 }
-| OUTPUT TIME
+| OUTPUT TIME variable_port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, VpiVarType::Time);
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, VpiVarType::Time, $3);
 }
 ;
 
@@ -995,80 +1155,63 @@ portdecl_head
 // 各要素の先頭の { attribute_instance } はここで処理する．
 list_of_module_items
 : // 空もありうる．
+{
+  $$ = PtHeadList();
+}
+| list_of_module_items ai_list io_declaration
+{
+  $$ = $1;
+  $1.iohead_list.add($3);
+}
+| list_of_module_items ai_list module_decl_body
+{
+  $$ = $1;
+  $1.declhead_list.add($3);
+  parser.reg_attrinst($3, $2);
+}
 | list_of_module_items module_item
+{
+  $$ = $1;
+  $1.item_list.add($2);
+}
 ;
 
 // [SPEC*] list_of_module_items ::= { module_item }
 // 各要素の先頭の { attribute_instance } はここで処理する．
-// こちらは port_declaration を含まない．
+// こちらは io_declaration を含まない．
 list_of_module_items2
 : // 空もありうる．
-| list_of_module_items2 module_item2
+{
+  $$ = PtHeadList();
+}
+| list_of_module_items2 module_decl
+{
+  $$ = $1;
+  $1.declhead_list.add($2);
+}
+| list_of_module_items2 module_item
+{
+  $$ = $1;
+  $1.item_list.add($2);
+}
 ;
 
-module_item
-: ai_list module_item_body
+// ai_list の処理を一つにまとめるため module_decl_body という
+// 非終端節点を追加している．
+module_decl
+: ai_list module_decl_body
 {
+  $$ = $2;
   parser.reg_attrinst($2, $1);
 }
 ;
 
-module_item_body
-: io_declaration
-{
-  $$ = $1;
-}
-| module_or_generate_decl
-{
-  $$ = $1;
-}
-| module_or_generate_item
-{
-  $$ = $1;
-}
-| generated_instantiation
-{
-  $$ = $1;
-}
-| parameter_declaration
-{
-  $$ = $1;
-}
-| specify_block
-{
-  $$ = $1;
-}
-| specparam_declaration
-{
-  $$ = $1;
-}
-;
-
-module_item2
-: ai_list module_item2_body
-{
-  parser.reg_attrinst($2, $1);
-}
-;
-
-module_item2_body
+module_decl_body
 : module_or_generate_decl
 {
   $$ = $1;
 }
-| module_or_generate_item
-{
-  $$ = $1;
-}
-| generated_instantiation
-{
-  $$ = $1;
-}
 | parameter_declaration
-{
-  $$ = $1;
-}
-| specify_block
 {
   $$ = $1;
 }
@@ -1088,6 +1231,31 @@ io_declaration
   $$ = $1;
 }
 | output_declaration
+{
+  $$ = $1;
+}
+;
+
+// ai_list の処理を一つにまとめるため module_item_body という
+// 非終端節点を追加している．
+module_item
+: ai_list module_item_body
+{
+  $$ = $2;
+  parser.reg_attrinst($2, $1);
+}
+;
+
+module_item_body
+: module_or_generate_item
+{
+  $$ = $1;
+}
+| generated_instantiation
+{
+  $$ = $1;
+}
+| specify_block
 {
   $$ = $1;
 }
@@ -1194,29 +1362,30 @@ module_or_generate_item
 // 階層付きの名前を使ってこそ意味があるのでこれは仕様の明らかな誤り
 // そのため defparam_assignment という非終端節点を用意している．
 parameter_override
-: defparam_head nzlist_of_defparam_assignment ';'
+: DEFPARAM nzlist_of_defparam_assignment ';'
 {
-  $$ = parser.factory().new_DefParamH(@$, parser.defparam_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_DefParamH(@$, $2.top);
 }
-| defparam_head error ';'
+| DEFPARAM error ';'
 {
   $$ = nullptr;
   yyerrok;
 }
 ;
 
-defparam_head
-: DEFPARAM
-{
-  parser.init_defparam_list();
-}
-
 // [SPEC*] nzlist_of_defparam_assignment ::=
 //             defparam_assignment { ',' defparam_assignment }
 nzlist_of_defparam_assignment
 : defparam_assignment
+{
+  $$ = PtDefParamList();
+  $$.init($1);
+}
 | nzlist_of_defparam_assignment ',' defparam_assignment
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] defparam_assignment ::=
@@ -1224,13 +1393,11 @@ nzlist_of_defparam_assignment
 defparam_assignment
 : hierarchical_identifier '=' expression
 {
-  auto defparam = parser.factory().new_DefParam(@$, $1, $3);
-  parser.add_defparam(defparam);
+  $$ = parser.factory().new_DefParam(@$, $1, $3);
 }
 | IDENTIFIER '=' expression
 {
-  auto defparam = parser.factory().new_DefParam(@$, $1, $3);
-  parser.add_defparam(defparam);
+  $$ = parser.factory().new_DefParam(@$, $1, $3);
 }
 ;
 
@@ -1257,68 +1424,57 @@ defparam_assignment
 //            |"parameter" "time"             list_of_param_assignments ';'
 // この2つは区別しない．
 parameter_declaration
-: parameter_declhead list_of_param_assignments ';'
+: PARAMETER            list_of_param_assignments ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  $$ = parser.factory().new_ParamH(@$, $2.top);
 }
-| parameter_declhead error ';'
+| PARAMETER sign range list_of_param_assignments ';'
+{
+  $$ = parser.factory().new_ParamH(@$, $2, $3, $4.top);
+}
+| PARAMETER data_type list_of_param_assignments ';'
+{
+  $$ = parser.factory().new_ParamH(@$, $2, $3.top);
+}
+| LOCALPARAM          list_of_param_assignments ';'
+{
+  $$ = parser.factory().new_LocalParamH(@$, $2.top);
+}
+| LOCALPARAM sign range list_of_param_assignments ';'
+{
+  $$ = parser.factory().new_LocalParamH(@$, $2, $3, $4.top);
+}
+| LOCALPARAM data_type list_of_param_assignments ';'
+{
+  $$ = parser.factory().new_LocalParamH(@$, $2, $3.top);
+}
+| PARAMETER error ';'
 {
   $$ = nullptr;
   yyerrok;
 }
-;
-
-parameter_declhead
-: PARAMETER
+| LOCALPARAM error ';'
 {
-  $$ = parser.factory().new_ParamH(@$);
-}
-| PARAMETER sign range
-{
-  $$ = parser.factory().new_ParamH(@$, $2, $3);
-}
-| PARAMETER data_type
-{
-  $$ = parser.factory().new_ParamH(@$, $2);
-}
-| LOCALPARAM
-{
-  $$ = parser.factory().new_LocalParamH(@$);
-}
-| LOCALPARAM sign range
-{
-  $$ = parser.factory().new_LocalParamH(@$, $2, $3);
-}
-| LOCALPARAM data_type
-{
-  $$ = parser.factory().new_LocalParamH(@$, $2);
+  $$ = nullptr;
+  yyerrok;
 }
 ;
 
 // [SPEC] specparam_declaration ::= specparam ["range"]
 //             list_of_specparam_assignments ';'
 specparam_declaration
-: specparam_declhead list_of_specparam_assignments ';'
+: SPECPARAM        list_of_specparam_assignments ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  $$ = parser.factory().new_SpecParamH(@$, $2.top);
 }
-| specparam_declhead error ';'
+| SPECPARAM range list_of_specparam_assignments ';'
+{
+  $$ = parser.factory().new_SpecParamH(@$, $2, $3.top);
+}
+| SPECPARAM error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-specparam_declhead
-: SPECPARAM
-{
-  $$ = parser.factory().new_SpecParamH(@$);
-}
-| SPECPARAM range
-{
-  $$ = parser.factory().new_SpecParamH(@$, $2);
 }
 ;
 
@@ -1333,27 +1489,21 @@ specparam_declhead
 inout_declaration
 : INOUT          sign       list_of_port_identifiers ';'
 {
-  auto head = parser.factory().new_IOHead(@$, VpiDir::Inout, $2);
-  parser.add_module_iohead(head);
-  $$ = head;
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $3.top);
 }
 | INOUT net_type sign       list_of_port_identifiers ';'
 {
-  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3);
-  parser.add_module_iohead(head);
-  $$ = head;
+  // sign は無視
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $4.top);
 }
 | INOUT          sign range list_of_port_identifiers ';'
 {
-  auto head = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3);
-  parser.add_module_iohead(head);
-  $$ = head;
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3, $4.top);
 }
 | INOUT net_type sign range list_of_port_identifiers ';'
 {
-  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4);
-  parser.add_module_iohead(head);
-  $$ = head;
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4, $5.top);
 }
 | INOUT error ';'
 {
@@ -1368,27 +1518,21 @@ inout_declaration
 input_declaration
 : INPUT          sign       list_of_port_identifiers ';'
 {
-  auto head = parser.factory().new_IOHead(@$, VpiDir::Input, $2);
-  parser.add_module_iohead(head);
-  $$ = head;
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $3.top);
 }
 | INPUT net_type sign       list_of_port_identifiers ';'
 {
-  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3);
-  parser.add_module_iohead(head);
-  $$ = head;
+  // sign は無視
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $4.top);
 }
 | INPUT          sign range list_of_port_identifiers ';'
 {
-  auto head = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3);
-  parser.add_module_iohead(head);
-  $$ = head;
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3, $4.top);
 }
 | INPUT net_type sign range list_of_port_identifiers ';'
 {
-  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3, $4);
-  parser.add_module_iohead(head);
-  $$ = head;
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3, $4, $5.top);
 }
 | INPUT error ';'
 {
@@ -1419,98 +1563,51 @@ input_declaration
 // わかる．そのため，list_of_port_identifiers のみをとる形式と両方をとる形式
 // にわける．
 output_declaration
-: output_declhead1 list_of_port_identifiers ';'
+: OUTPUT          sign       list_of_port_identifiers ';'
 {
-  $$ = $1;
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $3.top);
 }
-| output_declhead2 list_of_variable_port_identifiers ';'
+| OUTPUT net_type sign       list_of_port_identifiers ';'
 {
-  $$ = $1;
+  // sign は無視
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $4.top);
 }
-| output_declhead1 error ';'
+| OUTPUT          sign range list_of_port_identifiers ';'
 {
-  $$ = nullptr;
-  yyerrok;
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3, $4.top);
 }
-| output_declhead2 error ';'
+| OUTPUT net_type sign range list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3, $4, $5.top);
+}
+| OUTPUT REG sign       list_of_variable_port_identifiers ';'
+{
+  // sign は無視
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $4.top);
+}
+| OUTPUT REG sign range list_of_variable_port_identifiers ';'
+{
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4, $5.top);
+}
+| OUTPUT INTEGER        list_of_variable_port_identifiers ';'
+{
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output,
+				      VpiVarType::Integer,
+				      $3.top);
+}
+| OUTPUT TIME          list_of_variable_port_identifiers ';'
+{
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output,
+				      VpiVarType::Time,
+				      $3.top);
+}
+| OUTPUT error ';'
 {
   $$ = nullptr;
   yyerrok;
 }
 ;
-
-// [SPEC*] output_declhead1 ::=
-//    "output" [nettype]["signed"][range]
-// 末尾のセミコロンは IEEE1364-2001 の仕様書にはない．
-output_declhead1
-: OUTPUT          sign
-{
-  auto head = parser.factory().new_IOHead(@$, VpiDir::Output, $2);
-  parser.add_module_iohead(head);
-  $$ = head;
-}
-| OUTPUT net_type sign
-{
-  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3);
-  parser.add_module_iohead(head);
-  $$ = head;
-}
-| OUTPUT          sign range
-{
-  auto head = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3);
-  parser.add_module_iohead(head);
-  $$ = head;
-}
-| OUTPUT net_type sign range
-{
-  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3, $4);
-  parser.add_module_iohead(head);
-  $$ = head;
-}
-;
-
-// [SPEC] output_declaration2 ::=
-//    "output" "reg"  ["signed"][range] list_of_port_identifiers
-//   |"output" "reg"  ["signed"][range] list_of_variable_port_identifiers
-//   |"output" output_variable_type     list_of_port_identifiers
-//   |"output" output_variable_type     list_of_variable_port_identifiers
-// [SPEC] list_of_port_identifiers ::= port_identifier {',' port_identifier}
-// [SPEC] output_variable_type ::= "integer"|"time"
-// [SPEC] list_of_variable_port_identifiers ::=
-//    port_identifier ['=' constant_expression]
-//    {',' port_identifier ['=' constant_expression]}
-// [SPEC] port_identifier ::= identifier
-// これを見ると list_of_port_identifiers と list_of_variable_port_identifiers
-// を区別しなければいけないように見えるが実は前者は後者に含まれているので
-// 実は一種類のリストを用意すれば良い．
-// 末尾のセミコロンは IEEE1364-2001 の仕様書にはない．
-output_declhead2
-: OUTPUT REG sign
-{
-  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3);
-  parser.add_module_iohead(head);
-  $$ = head;
-}
-| OUTPUT REG sign range
-{
-  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4);
-  parser.add_module_iohead(head);
-  $$ = head;
-}
-| OUTPUT INTEGER
-{
-  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Output,
-					     VpiVarType::Integer);
-  parser.add_module_iohead(head);
-  $$ = head;
-}
-| OUTPUT TIME
-{
-  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Output,
-					     VpiVarType::Time);
-  parser.add_module_iohead(head);
-  $$ = head;
-}
 
 
 //////////////////////////////////////////////////////////////////////
@@ -1519,64 +1616,40 @@ output_declhead2
 
 // [SPEC] event_declaration ::= "event" list_of_event_identifiers ';'
 event_declaration
-: event_declhead list_of_event_identifiers ';'
+: EVENT list_of_event_identifiers ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  $$ = parser.factory().new_EventH(@$, $2.top);
 }
-| event_declhead  error ';'
+| EVENT error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-event_declhead
-: EVENT
-{
-  $$ = parser.factory().new_EventH(@$);
 }
 ;
 
 // [SPEC] genvar_declaration ::= "genvar" list_of_genvar_identifiers ';'
 genvar_declaration
-: genvar_declhead list_of_genvar_identifiers ';'
+: GENVAR list_of_genvar_identifiers ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  $$ = parser.factory().new_GenvarH(@$, $2.top);
 }
-| genvar_declhead error ';'
+| GENVAR error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-genvar_declhead
-: GENVAR
-{
-  $$ = parser.factory().new_GenvarH(@$);
 }
 ;
 
 // [SPEC] integer_declaration ::= "integer" list_of_variable_identifiers ';'
 integer_declaration
-: integer_declhead list_of_variable_identifiers ';'
+: INTEGER list_of_variable_identifiers ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  $$ = parser.factory().new_VarH(@$, VpiVarType::Integer, $2.top);
 }
-| integer_declhead error ';'
+| INTEGER error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-integer_declhead
-: INTEGER
-{
-  $$ = parser.factory().new_VarH(@$, VpiVarType::Integer);
 }
 ;
 
@@ -1606,309 +1679,242 @@ integer_declhead
 // がありうるパタンを net_declaration2 とし，list_of_net_decl_assignments
 // のみがありうるパタンを net_declaration3 とする．
 net_declaration
-: net_declhead1 list_of_net_decls ';'
-{
-  $$ = $1;
-  parser.add_declhead($$);
-}
-| net_declhead2 list_of_net_identifiers ';'
-{
-  $$ = $1;
-  parser.add_declhead($$);
-}
-| net_declhead3 list_of_net_decl_assignments ';'
-{
-  $$ = $1;
-  parser.add_declhead($$);
-}
-| net_declhead1 error ';'
-{
-  $$ = nullptr;
-  yyerrok;
-}
-| net_declhead2 error ';'
-{
-  $$ = nullptr;
-  yyerrok;
-}
-| net_declhead3 error ';'
-{
-  $$ = nullptr;
-  yyerrok;
-}
-;
-
-// [SPEC*] net_declaration1_head ::=
-//    net_type                         ["signed"]       [delay3]
-//   |net_type ["vectored"|"scalared"] ["signed"] range [delay3]
-//   |"trireg"                         ["signed"]       [delay3]
-//   |"trireg" ["vectored"|"scalared"] ["signed"] range [delay3]
-net_declhead1
-: net_type sign
+: net_type sign                      list_of_net_decls ';'
 {
   // net のデフォルトは1ビット
   // sign は無視
-  $$ = parser.factory().new_NetH(@$, $1);
+  $$ = parser.factory().new_NetH(@$, $1, $3.top);
 }
-| net_type        sign        delay3
+| net_type        sign        delay3 list_of_net_decls ';'
 {
   // net のデフォルトは1ビット
   // sign は無視
-  $$ = parser.factory().new_NetH(@$, $1, $3);
+  $$ = parser.factory().new_NetH(@$, $1, $3, $4.top);
 }
-| net_type        sign range
+| net_type        sign range         list_of_net_decls ';'
 {
   $$ = parser.factory().new_NetH(@$, $1, VpiVsType::None,
-				 $2, $3);
+				 $2, $3, $4.top);
 }
-| net_type vstype sign range
+| net_type vstype sign range         list_of_net_decls ';'
 {
   $$ = parser.factory().new_NetH(@$, $1, $2,
-				 $3, $4);
+				 $3, $4, $5.top);
 }
-| net_type        sign range delay3
+| net_type        sign range delay3 list_of_net_decls ';'
 {
   $$ = parser.factory().new_NetH(@$, $1, VpiVsType::None,
-				 $2, $3, $4);
+				 $2, $3, $4, $5.top);
 }
-| net_type vstype sign range delay3
+| net_type vstype sign range delay3 list_of_net_decls ';'
 {
-  $$ = parser.factory().new_NetH(@$, $1, $2, $3, $4, $5);
+  $$ = parser.factory().new_NetH(@$, $1, $2, $3, $4, $5, $6.top);
 }
-| TRIREG sign
-{
-  // 1ビット
-  // sign は無視
-  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg);
-}
-| TRIREG sign        delay3
-{
-  // 1ビット
-  // sign は無視
-  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg, $3);
-}
-| TRIREG        sign range
-{
-  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 VpiVsType::None, $2, $3);
-}
-| TRIREG vstype sign range
-{
-  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, $3, $4);
-}
-| TRIREG        sign range delay3
-{
-  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 VpiVsType::None, $2, $3, $4);
-}
-| TRIREG vstype sign range delay3
-{
-  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, $3, $4, $5);
-}
-;
-
-// [SPEC*] net_declaration2_head ::=
-//  |"trireg" charge_strength                         ["signed"]       [delay3]
-//  |"trireg" charge_strength ["vectored"|"scalared"] ["signed"] range [delay3]
-net_declhead2
-: TRIREG charge_strength sign
+| TRIREG sign                       list_of_net_decls ';'
 {
   // 1ビット
   // sign は無視
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2);
+				 $3.top);
 }
-| TRIREG charge_strength sign         delay3
+| TRIREG sign        delay3         list_of_net_decls ';'
 {
   // 1ビット
   // sign は無視
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, $4);
+				 $3, $4.top);
 }
-| TRIREG charge_strength        sign range
+| TRIREG        sign range         list_of_net_decls ';'
 {
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, VpiVsType::None, $3, $4);
+				 VpiVsType::None,
+				 $2, $3, $4.top);
 }
-| TRIREG charge_strength vstype sign range
+| TRIREG vstype sign range         list_of_net_decls ';'
 {
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, $3, $4, $5);
+				 $2, $3, $4, $5.top);
 }
-| TRIREG charge_strength        sign range delay3
+| TRIREG        sign range delay3 list_of_net_decls ';'
 {
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, VpiVsType::None, $3, $4, $5);
+				 VpiVsType::None,
+				 $2, $3, $4, $5.top);
 }
-| TRIREG charge_strength vstype sign range delay3
+| TRIREG vstype sign range delay3 list_of_net_decls ';'
 {
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, $3, $4, $5, $6);
+				 $2, $3, $4, $5, $6.top);
 }
-;
-
-// [SPEC*] net_declaration3_head ::=
-//  |net_type drive_strength                          ["signed"]       [delay3]
-//  |net_type drive_strength  ["vectored"|"scalared"] ["signed"] range [delay3]
-//  |"trireg" drive_strength                          ["signed"]       [delay3]
-//  |"trireg" drive_strength  ["vectored"|"scalared"] ["signed"] range [delay3]
-net_declhead3
-: net_type drive_strength sign
+| TRIREG charge_strength sign                list_of_net_identifiers ';'
 {
   // 1ビット
   // sign は無視
-  $$ = parser.factory().new_NetH(@$, $1, $2);
+  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
+				 $2, $4.top);
 }
-| net_type drive_strength sign        delay3
+| TRIREG charge_strength sign         delay3 list_of_net_identifiers ';'
 {
   // 1ビット
   // sign は無視
-  $$ = parser.factory().new_NetH(@$, $1, $2, $4);
+  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
+				 $2, $4, $5.top);
 }
-| net_type drive_strength        sign range
+| TRIREG charge_strength        sign range list_of_net_identifiers ';'
+{
+  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
+				 $2, VpiVsType::None,
+				 $3, $4, $5.top);
+}
+| TRIREG charge_strength vstype sign range list_of_net_identifiers ';'
+{
+  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
+				 $2, $3, $4, $5, $6.top);
+}
+| TRIREG charge_strength        sign range delay3 list_of_net_identifiers ';'
+{
+  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
+				 $2, VpiVsType::None, $3, $4, $5, $6.top);
+}
+| TRIREG charge_strength vstype sign range delay3 list_of_net_identifiers ';'
+{
+  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
+				 $2, $3, $4, $5, $6, $7.top);
+}
+| net_type drive_strength sign list_of_net_decl_assignments ';'
+{
+  // 1ビット
+  // sign は無視
+  $$ = parser.factory().new_NetH(@$, $1, $2, $4.top);
+}
+| net_type drive_strength sign        delay3 list_of_net_decl_assignments ';'
+{
+  // 1ビット
+  // sign は無視
+  $$ = parser.factory().new_NetH(@$, $1, $2, $4, $5.top);
+}
+| net_type drive_strength        sign range list_of_net_decl_assignments ';'
 {
   $$ = parser.factory().new_NetH(@$, $1, $2,
-				 VpiVsType::None, $3, $4);
+				 VpiVsType::None, $3, $4, $5.top);
 }
-| net_type drive_strength vstype sign range
+| net_type drive_strength vstype sign range list_of_net_decl_assignments ';'
 {
-  $$ = parser.factory().new_NetH(@$, $1, $2, $3, $4, $5);
+  $$ = parser.factory().new_NetH(@$, $1, $2, $3, $4, $5, $6.top);
 }
-| net_type drive_strength        sign range delay3
+| net_type drive_strength        sign range delay3 list_of_net_decl_assignments ';'
 {
   $$ = parser.factory().new_NetH(@$, $1, $2,
-				 VpiVsType::None, $3, $4, $5);
+				 VpiVsType::None,
+				 $3, $4, $5, $6.top);
 }
-| net_type drive_strength vstype sign range delay3
+| net_type drive_strength vstype sign range delay3 list_of_net_decl_assignments ';'
 {
-  $$ = parser.factory().new_NetH(@$, $1, $2, $3, $4, $5, $6);
+  $$ = parser.factory().new_NetH(@$, $1, $2, $3, $4, $5, $6, $7.top);
 }
-
-| TRIREG drive_strength sign
-{
-  // 1ビット
-  // sign は無視
-  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2);
-}
-| TRIREG drive_strength sign        delay3
+| TRIREG drive_strength sign list_of_net_decl_assignments ';'
 {
   // 1ビット
   // sign は無視
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, $4);
+				 $2, $4.top);
 }
-| TRIREG drive_strength        sign range
+| TRIREG drive_strength sign        delay3 list_of_net_decl_assignments ';'
+{
+  // 1ビット
+  // sign は無視
+  $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
+				 $2, $4, $5.top);
+}
+| TRIREG drive_strength        sign range list_of_net_decl_assignments ';'
 {
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, VpiVsType::None, $3, $4);
+				 $2, VpiVsType::None,
+				 $3, $4, $5.top);
 }
-| TRIREG drive_strength vstype sign range
+| TRIREG drive_strength vstype sign range list_of_net_decl_assignments ';'
 {
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, $3, $4, $5);
+				 $2, $3, $4, $5, $6.top);
 }
-| TRIREG drive_strength        sign range delay3
+| TRIREG drive_strength        sign range delay3 list_of_net_decl_assignments ';'
 {
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, VpiVsType::None, $3, $4, $5);
+				 $2, VpiVsType::None,
+				 $3, $4, $5, $6.top);
 }
-| TRIREG drive_strength vstype sign range delay3
+| TRIREG drive_strength vstype sign range delay3 list_of_net_decl_assignments ';'
 {
   $$ = parser.factory().new_NetH(@$, VpiNetType::TriReg,
-				 $2, $3, $4, $5, $6);
+				 $2, $3, $4, $5, $6, $7.top);
+}
+| net_type error ';'
+{
+  $$ = nullptr;
+  yyerrok;
+}
+| TRIREG error ';'
+{
+  $$ = nullptr;
+  yyerrok;
 }
 ;
 
 // [SPEC] real_declaration ::= "real" list_of_real_identifiers ';'
 real_declaration
-: real_declhead list_of_real_identifiers ';'
+: REAL list_of_real_identifiers ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  $$ = parser.factory().new_VarH(@$, VpiVarType::Real, $2.top);
 }
-| real_declhead error ';'
+| REAL error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-real_declhead
-: REAL
-{
-  $$ = parser.factory().new_VarH(@$, VpiVarType::Real);
 }
 ;
 
 // [SPEC] realtime_declaration ::= "realtime" list_of_real_identifiers ';'
 realtime_declaration
-: realtime_declhead list_of_real_identifiers ';'
+: REALTIME list_of_real_identifiers ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  $$ = parser.factory().new_VarH(@$, VpiVarType::Realtime, $2.top);
 }
-| realtime_declhead error ';'
+| REALTIME error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-realtime_declhead
-: REALTIME
-{
-  $$ = parser.factory().new_VarH(@$, VpiVarType::Realtime);
 }
 ;
 
 // [SPEC] reg_declaration ::= "reg" ["signed"] [range]
 //             list_of_variable_identifiers ';'
 reg_declaration
-: reg_declhead list_of_variable_identifiers ';'
+: REG sign list_of_variable_identifiers ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  // sign は無視
+  $$ = parser.factory().new_RegH(@$, $3.top);
 }
-| reg_declhead error ';'
+| REG sign range list_of_variable_identifiers ';'
+{
+  $$ = parser.factory().new_RegH(@$, $2, $3, $4.top);
+}
+| REG error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-reg_declhead
-: REG sign
-{
-  // sign は無視
-  $$ = parser.factory().new_RegH(@$);
-}
-| REG sign range
-{
-  $$ = parser.factory().new_RegH(@$, $2, $3);
 }
 ;
 
 // [SPEC] time_declaration ::= "time" list_of_variable_identifiers ';'
 time_declaration
-: time_declhead list_of_variable_identifiers ';'
+: TIME list_of_variable_identifiers ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  $$ = parser.factory().new_VarH(@$, VpiVarType::Time, $2.top);
 }
-| time_declhead error ';'
+| TIME error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-time_declhead
-: TIME
-{
-  $$ = parser.factory().new_VarH(@$, VpiVarType::Time);
 }
 ;
 
@@ -2002,10 +2008,12 @@ vstype
 real_type
 : IDENTIFIER '=' expression
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, $3);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@$, $1, $3);
 }
 | identifier_with_range
+{
+  $$ = $1;
+}
 ;
 
 // [SPEC] variable_type ::=
@@ -2018,10 +2026,12 @@ real_type
 variable_type
 : IDENTIFIER '=' expression
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, $3);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@$, $1, $3);
 }
 | identifier_with_range
+{
+  $$ = $1;
+}
 ;
 
 
@@ -2242,7 +2252,15 @@ delay_value_x
 // これも Verilog1995 -> Verilog2001 の修正が不十分な証拠
 list_of_event_identifiers
 : identifier_with_range
+{
+  $$ = PtDeclItemList();
+  $$.init($1);
+}
 | list_of_event_identifiers ','identifier_with_range
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] list_of_genvar_identifiers ::=
@@ -2251,12 +2269,14 @@ list_of_genvar_identifiers
 : IDENTIFIER
 {
   auto item = parser.factory().new_DeclItem(@1, $1);
-  parser.add_declitem(item);
+  $$ = PtDeclItemList();
+  $$.init(item);
 }
 | list_of_genvar_identifiers ',' IDENTIFIER
 {
   auto item = parser.factory().new_DeclItem(@3, $3);
-  parser.add_declitem(item);
+  $$ = $1;
+  $$.add(item);
 }
 ;
 
@@ -2264,14 +2284,28 @@ list_of_genvar_identifiers
 //             list_of_net_identifiers|list_of_net_decl_assignments
 list_of_net_decls
 : list_of_net_identifiers
+{
+  $$ = $1;
+}
 | list_of_net_decl_assignments
+{
+  $$ = $1;
+}
 ;
 
 // [SPEC] list_of_net_decl_assignments ::=
 //             net_decl_assignment {',' net_decl_assignment}
 list_of_net_decl_assignments
 : net_decl_assignment
+{
+  $$ = PtDeclItemList();
+  $$.init($1);
+}
 | list_of_net_decl_assignments ',' net_decl_assignment
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] list_of_net_identifiers ::=
@@ -2284,40 +2318,88 @@ list_of_net_decl_assignments
 // これも Verilog1995 -> Verilog2001 の修正が不十分な証拠
 list_of_net_identifiers
 : identifier_with_range
+{
+  $$ = PtDeclItemList();
+  $$.init($1);
+}
 | list_of_net_identifiers ',' identifier_with_range
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] list_of_param_assignments ::= param_assignment {',' param_assignment}
 list_of_param_assignments
 : param_assignment
+{
+  $$ = PtDeclItemList();
+  $$.init($1);
+}
 | list_of_param_assignments ',' param_assignment
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] list_of_port_identifiers ::= port_identifier {',' port_identifier}
 // [SPEC] port_identifier ::= identifier
 list_of_port_identifiers
 : port_identifier_item
+{
+  $$ = PtIOItemList();
+  $$.init($1);
+}
 | list_of_port_identifiers ',' port_identifier_item
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] list_of_real_identifiers ::= real_type {',' real_type}
 list_of_real_identifiers
 : real_type
+{
+  $$ = PtDeclItemList();
+  $$.init($1);
+}
 | list_of_real_identifiers ',' real_type
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] list_of_specparam_assignments ::=
 //             specparam_assignment {',' specparam_assignment}
 list_of_specparam_assignments
 : specparam_assignment
+{
+  $$ = PtDeclItemList();
+  $$.init($1);
+}
 | list_of_specparam_assignments ',' specparam_assignment
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] list_of_variable_identifiers ::=
 //             variable_type {',' variable_type}
 list_of_variable_identifiers
 : variable_type
+{
+  $$ = PtDeclItemList();
+  $$.init($1);
+}
 | list_of_variable_identifiers ',' variable_type
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] list_of_variable_port_identifiers ::=
@@ -2325,7 +2407,15 @@ list_of_variable_identifiers
 //                 {',' port_identifier ['=' constant_expression]}
 list_of_variable_port_identifiers
 : variable_port_identifier_item
+{
+  $$ = PtIOItemList();
+  $$.init($1);
+}
 | list_of_variable_port_identifiers ',' variable_port_identifier_item
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] port_identifier_item ::= port_identifier
@@ -2334,8 +2424,7 @@ list_of_variable_port_identifiers
 port_identifier_item
 : IDENTIFIER
 {
-  auto item = parser.factory().new_IOItem(@1, $1);
-  parser.add_ioitem(item);
+  $$ = parser.factory().new_IOItem(@1, $1);
 }
 ;
 
@@ -2345,13 +2434,11 @@ port_identifier_item
 variable_port_identifier_item
 : IDENTIFIER
 {
-  auto item = parser.factory().new_IOItem(@1, $1);
-  parser.add_ioitem(item);
+  $$ = parser.factory().new_IOItem(@1, $1);
 }
 | IDENTIFIER '=' expression
 {
-  auto item = parser.factory().new_IOItem(@1, $1, $3);
-  parser.add_ioitem(item);
+  $$ = parser.factory().new_IOItem(@1, $1, $3);
 }
 ;
 
@@ -2365,8 +2452,7 @@ variable_port_identifier_item
 net_decl_assignment
 : IDENTIFIER '=' expression
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, $3);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@$, $1, $3);
 }
 ;
 
@@ -2375,8 +2461,7 @@ net_decl_assignment
 param_assignment
 : IDENTIFIER '=' expression
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, $3);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@$, $1, $3);
 }
 ;
 
@@ -2398,33 +2483,35 @@ param_assignment
 specparam_assignment
 : IDENTIFIER '=' expression
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, $3);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@$, $1, $3);
 }
 | IDENTIFIER '=' mintypmax_expression
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, $3);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@$, $1, $3);
 }
 | PATHPULSE '=' '(' mintypmax_expression ')'
 {
   // $$ = parser.new_specparam(@$, nullptr, nullptr, $4, nullptr);
+  $$ = nullptr;
 }
 | PATHPULSE '=' '(' mintypmax_expression ','
                     mintypmax_expression ')'
 {
   // $$ = parser.new_specparam(@$, nullptr, nullptr, $4, $6);
+  $$ = nullptr;
 }
 | PATHPULSE specify_terminal '$' specify_terminal '='
                 '(' mintypmax_expression ')'
 {
   // $$ = parser.new_specparam(@$, $2, $4, $7, nullptr);
+  $$ = nullptr;
 }
 | PATHPULSE specify_terminal '$' specify_terminal '='
                 '(' mintypmax_expression ','
                     mintypmax_expression ')'
 {
   // $$ = parser.new_specparam(@$, $2, $4, $7, $9);
+  $$ = nullptr;
 }
 ;
 
@@ -2442,13 +2529,13 @@ specparam_assignment
 nzlist_of_dimensions
 : range
 {
-  $$ = $1;
+  $$ = PtRangeList();
+  $$.init($1);
 }
 | nzlist_of_dimensions range
 {
-  $$ = $2;
-  // 逆順のリンクトリストになる．
-  $1->set_link($1);
+  $$ = $1;
+  $$.add($2);
 }
 ;
 
@@ -2505,133 +2592,116 @@ part
 // function_statement は statement で代用する．
 // 読み込んだあとでチェックする．
 function_declaration
-: function_head opt_auto sign IDENTIFIER ';'
+: FUNCTION opt_auto sign IDENTIFIER ';'
   nzlist_of_fitem_decl
   statement
-  function_tail
+  ENDFUNCTION
 {
   // 関数内で使用できないステートメントが含まれていないかチェック
   if ( parser.check_function_statement($7) ) {
     $$ = parser.factory().new_Function(@$, $4, $2, $3,
-				       parser.tf_iohead_list(),
-				       parser.declhead_list(),
+				       $6.iohead_list.top,
+				       $6.declhead_list.top,
 				       $7);
-    parser.add_item($$);
   }
   else {
     $$ = nullptr;
   }
 }
-| function_head opt_auto sign range IDENTIFIER ';'
+| FUNCTION opt_auto sign range IDENTIFIER ';'
   nzlist_of_fitem_decl
   statement
-  function_tail
+  ENDFUNCTION
 {
   // 関数内で使用できないステートメントが含まれていないかチェック
   if ( parser.check_function_statement($8) ) {
     $$ = parser.factory().new_SizedFunc(@$, $5, $2, $3, $4,
-					parser.tf_iohead_list(),
-					parser.declhead_list(),
+					$7.iohead_list.top,
+					$7.declhead_list.top,
 					$8);
-    parser.add_item($$);
   }
   else {
     $$ = nullptr;
   }
 }
-| function_head opt_auto sign data_type IDENTIFIER ';'
+| FUNCTION opt_auto sign data_type IDENTIFIER ';'
   nzlist_of_fitem_decl
   statement
-  function_tail
+  ENDFUNCTION
 {
   // 関数内で使用できないステートメントが含まれていないかチェック
   if ( parser.check_function_statement($8) ) {
     $$ = parser.factory().new_TypedFunc(@$, $5, $2, $3, $4,
-					parser.tf_iohead_list(),
-					parser.declhead_list(),
+					$7.iohead_list.top,
+					$7.declhead_list.top,
 					$8);
-    parser.add_item($$);
   }
   else {
     $$ = nullptr;
   }
 }
-| function_head opt_auto sign IDENTIFIER function_port_block ';'
+| FUNCTION opt_auto sign IDENTIFIER '(' function_port_list ')' ';'
   list_of_bitem_decl
   statement
-  function_tail
+  ENDFUNCTION
 {
+  // Verilog2001 style
+  // list_of_bitem_decl には IOHead は含まれない．
+
   // 関数内で使用できないステートメントが含まれていないかチェック
-  if ( parser.check_function_statement($8) ) {
+  if ( parser.check_function_statement($10) ) {
     $$ = parser.factory().new_Function(@$, $4, $2, $3,
-				       parser.tf_iohead_list(),
-				       parser.declhead_list(),
-				       $8);
-    parser.add_item($$);
+				       $6.head_list.top,
+				       $9.declhead_list.top,
+				       $10);
   }
   else {
     $$ = nullptr;
   }
 }
-| function_head opt_auto sign range
-  IDENTIFIER function_port_block ';'
+| FUNCTION opt_auto sign range
+  IDENTIFIER '(' function_port_list ')' ';'
   list_of_bitem_decl
   statement
-  function_tail
+  ENDFUNCTION
 {
+  // Verilog2001 style
+  // list_of_bitem_decl には IOHead は含まれない．
+
   // 関数内で使用できないステートメントが含まれていないかチェック
-  if ( parser.check_function_statement($9) ) {
+  if ( parser.check_function_statement($11) ) {
     $$ = parser.factory().new_SizedFunc(@$, $5, $2, $3, $4,
-					parser.tf_iohead_list(),
-					parser.declhead_list(),
-					$9);
-    parser.add_item($$);
+					$7.head_list.top,
+					$10.declhead_list.top,
+					$11);
   }
   else {
     $$ = nullptr;
   }
 }
-| function_head opt_auto sign data_type IDENTIFIER function_port_block ';'
+| FUNCTION opt_auto sign data_type IDENTIFIER '(' function_port_list ')' ';'
   list_of_bitem_decl
   statement
-  function_tail
+  ENDFUNCTION
 {
+  // Verilog2001 style
+  // list_of_bitem_decl には IOHead は含まれない．
+
   // 関数内で使用できないステートメントが含まれていないかチェック
-  if ( parser.check_function_statement($9) ) {
+  if ( parser.check_function_statement($11) ) {
     $$ = parser.factory().new_TypedFunc(@$, $5, $2, $3, $4,
-					parser.tf_iohead_list(),
-					parser.declhead_list(),
-					$9);
-    parser.add_item($$);
+					$7.head_list.top,
+					$10.declhead_list.top,
+					$11);
   }
   else {
     $$ = nullptr;
   }
 }
-| function_head error function_tail
+| FUNCTION error ENDFUNCTION
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-function_head
-: FUNCTION
-{
-  parser.init_tf();
-}
-;
-
-function_tail
-: ENDFUNCTION
-{
-}
-;
-
-function_port_block
-: '(' function_port_list ')'
-{
-  parser.flush_tf_ioitem();
 }
 ;
 
@@ -2646,15 +2716,38 @@ function_port_block
 // セミコロンは tf_input_declaration 中で処理する．
 nzlist_of_fitem_decl
 : block_item_declaration
+{
+  $$ = PtHeadList();
+  $$.declhead_list.add($1);
+}
 | tf_input_declaration
+{
+  $$ = PtHeadList();
+  $$.iohead_list.add($1);
+}
 | nzlist_of_fitem_decl block_item_declaration
+{
+  $$ = $1;
+  $1.declhead_list.add($2);
+}
 | nzlist_of_fitem_decl tf_input_declaration
+{
+  $$ = $1;
+  $1.iohead_list.add($2);
+}
 ;
 
 // [SPEC*] list_of_bitem_decl ::= { block_item_declaration }
 list_of_bitem_decl
 : // 空
+{
+  $$ = PtHeadList();
+}
 | list_of_bitem_decl block_item_declaration
+{
+  $$ = $1;
+  $1.declhead_list.add($2);
+}
 ;
 
 // [SPEC] function_item_declaration ::=
@@ -2667,18 +2760,48 @@ list_of_bitem_decl
 //             { attribute_instance } tf_input_declaration
 //                 {',' { attribute_instance } tf_input_declaration }
 function_port_list
-: ai_list tf_input_declhead port_identifier_item
+: ai_list tf_input_declhead
 {
-  parser.add_tf_ioport_head($2);
+  $$ = PtIOPortList();
+  $$.init($2);
   parser.reg_attrinst($2, $1);
 }
-| function_port_list ',' { parser.flush_tf_ioitem(); }
-  ai_list tf_input_declhead port_identifier_item
+| function_port_list ',' ai_list tf_input_declhead
 {
-  parser.add_tf_ioport_head($5);
-  parser.reg_attrinst($5, $4);
+  $$ = $1;
+  $$.add_head($4);
+  parser.reg_attrinst($4, $3);
 }
 | function_port_list ',' port_identifier_item
+{
+  $$ = $1;
+  $1.add_item($3);
+}
+;
+
+tf_input_declhead
+: INPUT     sign port_identifier_item
+{
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $3);
+}
+| INPUT REG sign port_identifier_item
+{
+  // sign は無視
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Input, $4);
+}
+| INPUT     sign range port_identifier_item
+{
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3, $4);
+}
+| INPUT REG sign range port_identifier_item
+{
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Input, $3, $4, $5);
+}
+| INPUT task_port_type port_identifier_item
+{
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Input, $2, $3);
+}
 ;
 
 // [SPEC*] data_type ::=
@@ -2722,53 +2845,30 @@ data_type
 // この statement は statement_or_null でよいそうだ．
 // Verilog-XL もそうなっている．
 task_declaration
-: task_head opt_auto IDENTIFIER ';'
+: TASK opt_auto IDENTIFIER ';'
   list_of_titem_decl
   statement_or_null
-  task_tail
+  ENDTASK
 {
   $$ = parser.factory().new_Task(@$, $3, $2,
-				 parser.tf_iohead_list(),
-				 parser.declhead_list(),
+				 $5.iohead_list.top,
+				 $5.declhead_list.top,
 				 $6);
-  parser.add_item($$);
 }
-| task_head opt_auto IDENTIFIER task_port_block ';'
+| TASK opt_auto IDENTIFIER '(' task_port_list ')' ';'
   list_of_bitem_decl
   statement_or_null
-  task_tail
+  ENDTASK
 {
   $$ = parser.factory().new_Task(@$, $3, $2,
-				 parser.tf_iohead_list(),
-				 parser.declhead_list(),
-				 $7);
-  parser.add_item($$);
+				 $5.head_list.top,
+				 $8.declhead_list.top,
+				 $9);
 }
-| task_head error task_tail
+| TASK error ENDTASK
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-task_head
-: TASK
-{
-  parser.init_tf();
-}
-;
-
-task_tail
-: ENDTASK
-{
-  parser.end_tf();
-}
-;
-
-task_port_block
-: '(' task_port_list ')'
-{
-  parser.flush_tf_ioitem();
 }
 ;
 
@@ -2791,14 +2891,34 @@ opt_auto
 // セミコロンは tf_XXX_declaration 中で処理する．
 list_of_titem_decl
 : // 空
+{
+  $$ = PtHeadList();
+}
 | list_of_titem_decl block_item_declaration
+{
+  $$ = $1;
+  $1.declhead_list.add($2);
+}
 | list_of_titem_decl tf_io_declaration
+{
+  $$ = $1;
+  $1.iohead_list.add($2);
+}
 ;
 
 tf_io_declaration
 : tf_input_declaration
+{
+  $$ = $1;
+}
 | tf_output_declaration
+{
+  $$ = $1;
+}
 | tf_inout_declaration
+{
+  $$ = $1;
+}
 ;
 
 // [SPEC] task_item_declaration ::=
@@ -2815,94 +2935,105 @@ tf_io_declaration
 //            |{ attribute_instance } tf_output_declaration
 //            |{ attribute_instance } tf_inout_declaration
 task_port_list
-: tf_input_declhead port_identifier_item
+: tf_input_declhead
 {
-  parser.add_tf_ioport_head($1);
+  $$ = PtIOPortList();
+  $$.init($1);
 }
-| tf_output_declhead port_identifier_item
+| tf_output_declhead
 {
-  parser.add_tf_ioport_head($1);
+  $$ = PtIOPortList();
+  $$.init($1);
 }
-| tf_inout_declhead port_identifier_item
+| tf_inout_declhead
 {
-  parser.add_tf_ioport_head($1);
+  $$ = PtIOPortList();
+  $$.init($1);
 }
-| task_port_list tf_ioitem_end tf_input_declhead port_identifier_item
+| task_port_list ',' tf_input_declhead
 {
-  parser.add_tf_ioport_head($3);
+  $$ = $1;
+  $$.add_head($3);
 }
-| task_port_list tf_ioitem_end tf_output_declhead port_identifier_item
+| task_port_list ',' tf_output_declhead
 {
-  parser.add_tf_ioport_head($3);
+  $$ = $1;
+  $$.add_head($3);
 }
-| task_port_list tf_ioitem_end tf_inout_declhead port_identifier_item
+| task_port_list ',' tf_inout_declhead
 {
-  parser.add_tf_ioport_head($3);
+  $$ = $1;
+  $$.add_head($3);
 }
 | task_port_list ',' port_identifier_item
-;
-
-tf_ioitem_end
-: ','
 {
-  parser.flush_tf_ioitem();
+  $$ = $1;
+  $1.add_item($3);
 }
 ;
 
 // [SPEC] tf_input_declaration ::=
 //             "input" ["reg"] ["signed"] [range] list_of_port_identifiers
 //            |"input" [task_port_type]           list_of_port_identifiers
-// 実際には tf_input_declhead という非終端節点で処理する．
 tf_input_declaration
-: tf_input_declhead list_of_port_identifiers ';'
+: INPUT     sign list_of_port_identifiers ';'
 {
-  parser.add_tf_iohead($1);
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $3.top);
 }
-| tf_input_declhead error ';'
+| INPUT REG sign list_of_port_identifiers ';'
 {
+  // sign は無視
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Input, $4.top);
+}
+| INPUT     sign range list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3, $4.top);
+}
+| INPUT REG sign range list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Input, $3, $4, $5.top);
+}
+| INPUT task_port_type list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Input, $2, $3.top);
+}
+| INPUT error ';'
+{
+  $$ = nullptr;
   yyerrok;
-}
-;
-
-// [SPEC*] tf_input_declhead ::=
-//              "input" ["reg"] ["signed"] [range]
-//             |"input" [task_port_type]
-// reg, signed, range が省略された場合と task_port_type が省略された
-// 場合の区別がつかないので2番めの形は task_port_type の省略無しとする．
-tf_input_declhead
-: INPUT     sign
-{
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2);
-}
-| INPUT REG sign
-{
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Input, $3);
-}
-| INPUT     sign range
-{
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3);
-}
-| INPUT REG sign range
-{
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Input, $3, $4);
-}
-| INPUT task_port_type
-{
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Input, $2);
 }
 ;
 
 // [SPEC] tf_output_declaration ::=
 //             "output" ["reg"] ["signed"] [range] list_of_port_identifiers
 //            |"output" [task_port_type]           list_of_port_identifiers
-// 実際には tf_output_declhead という非終端節点で処理する．
 tf_output_declaration
-: tf_output_declhead list_of_port_identifiers ';'
+: OUTPUT     sign list_of_port_identifiers ';'
 {
-  parser.add_tf_iohead($1);
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $3.top);
 }
-| tf_output_declhead error ';'
+| OUTPUT REG sign list_of_port_identifiers ';'
 {
+  // sign は無視
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $4.top);
+}
+| OUTPUT     sign range list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3, $4.top);
+}
+| OUTPUT REG sign range list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4, $5.top);
+}
+| OUTPUT task_port_type list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, $2, $3.top);
+}
+| OUTPUT error ';'
+{
+  $$ = nullptr;
   yyerrok;
 }
 ;
@@ -2913,39 +3044,59 @@ tf_output_declaration
 // reg, signed, range が省略された場合と task_port_type が省略された
 // 場合の区別がつかないので2番めの形は task_port_type の省略無しとする．
 tf_output_declhead
-: OUTPUT     sign
+: OUTPUT     sign port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2);
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $3);
 }
-| OUTPUT REG sign
+| OUTPUT REG sign port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3);
+  // sign は無視
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $4);
 }
-| OUTPUT     sign range
+| OUTPUT     sign range port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3);
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3, $4);
 }
-| OUTPUT REG sign range
+| OUTPUT REG sign range port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4);
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4, $5);
 }
-| OUTPUT task_port_type
+| OUTPUT task_port_type port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, $2);
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, $2, $3);
 }
 ;
 
 // [SPEC] tf_inout_declaration ::=
 //             inout ["reg"] ["signed"] [range] list_of_port_identifiers
 //            |inout [task_port_type]           list_of_port_identifiers
-// 実際には tf_inout_declhead という非終端節点で処理する．
 tf_inout_declaration
-: tf_inout_declhead list_of_port_identifiers ';'
+: INOUT     sign list_of_port_identifiers ';'
 {
-  parser.add_tf_iohead($1);
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $3.top);
 }
-| tf_inout_declhead error ';'
+| INOUT REG sign list_of_port_identifiers ';'
 {
+  // sign は無視
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $4.top);
+}
+| INOUT     sign range list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3, $4.top);
+}
+| INOUT REG sign range list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $3, $4, $5.top);
+}
+| INOUT task_port_type list_of_port_identifiers ';'
+{
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Inout, $2, $3.top);
+}
+| INOUT error ';'
+{
+  $$ = nullptr;
   yyerrok;
 }
 ;
@@ -2956,25 +3107,27 @@ tf_inout_declaration
 // reg, signed, range が省略された場合と task_port_type が省略された
 // 場合の区別がつかないので2番めの形は task_port_type の省略無しとする．
 tf_inout_declhead
-: INOUT     sign
+: INOUT     sign port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2);
+  // sign は無視
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $3);
 }
-| INOUT REG sign
+| INOUT REG sign port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $3);
+  // sign は無視
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $4);
 }
-| INOUT     sign range
+| INOUT     sign range port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3);
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3, $4);
 }
-| INOUT REG sign range
+| INOUT REG sign range port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $3, $4);
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $3, $4, $5);
 }
-| INOUT task_port_type
+| INOUT task_port_type port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Inout, $2);
+  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Inout, $2, $3);
 }
 ;
 
@@ -3019,6 +3172,7 @@ task_port_type
 block_item_declaration
 : ai_list bitem_decl_body
 {
+  $$ = $2;
   parser.reg_attrinst($2, $1);
 }
 ;
@@ -3058,12 +3212,16 @@ bitem_decl_body
 //                 list_of_block_variable_identifiers ';'
 // reg_declaration との違いは初期値を持てないこと．
 block_reg_declaration
-: reg_declhead list_of_block_variable_identifiers ';'
+: REG sign list_of_block_variable_identifiers ';'
 {
-  $$ = $1;
-  parser.add_declhead($$);
+  // sign は無視
+  $$ = parser.factory().new_RegH(@$, $3.top);
 }
-| reg_declhead error ';'
+| REG sign range list_of_block_variable_identifiers ';'
+{
+  $$ = parser.factory().new_RegH(@$, $2, $3, $4.top);
+}
+| REG error ';'
 {
   $$ = nullptr;
   yyerrok;
@@ -3074,7 +3232,15 @@ block_reg_declaration
 //             block_variable_type {',' block_variable_type }
 list_of_block_variable_identifiers
 : block_variable_type
+{
+  $$ = PtDeclItemList();
+  $$.init($1);
+}
 | list_of_block_variable_identifiers ',' block_variable_type
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] block_variable_type ::=
@@ -3085,19 +3251,20 @@ list_of_block_variable_identifiers
 // 一通りでよい．
 block_variable_type
 : identifier_with_range
+{
+  $$ = $1;
+}
 ;
 
 // [SPEC*] identifier_with_range ::= identifier {dimension}
 identifier_with_range
 : IDENTIFIER
 {
-  auto item = parser.factory().new_DeclItem(@1, $1);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@1, $1);
 }
 | IDENTIFIER nzlist_of_dimensions
 {
-  auto item = parser.factory().new_DeclItem(@$, $1, $2);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_DeclItem(@$, $1, $2.top);
 }
 ;
 
@@ -3129,122 +3296,95 @@ identifier_with_range
 gate_instantiation
 : cmos_switchtype                        nzlist_of_cmos_switch_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2.top);
 }
 | cmos_switchtype                 delay3 nzlist_of_cmos_switch_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | enable_gatetype                        nzlist_of_enable_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2.top);
 }
 | enable_gatetype                 delay3 nzlist_of_enable_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | enable_gatetype  drive_strength        nzlist_of_enable_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | enable_gatetype  drive_strength delay3 nzlist_of_enable_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, $3, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3, $4.top);
 }
 | mos_switchtype                         nzlist_of_mos_switch_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2.top);
 }
 | mos_switchtype                  delay3 nzlist_of_mos_switch_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | n_input_gatetype                       nzlist_of_n_input_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2.top);
 }
 | n_input_gatetype                delay2 nzlist_of_n_input_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | n_input_gatetype drive_strength        nzlist_of_n_input_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | n_input_gatetype drive_strength delay2 nzlist_of_n_input_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, $3, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3, $4.top);
 }
 | n_output_gatetype                       nzlist_of_n_output_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2.top);
 }
 | n_output_gatetype                delay2 nzlist_of_n_output_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | n_output_gatetype drive_strength        nzlist_of_n_output_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | n_output_gatetype drive_strength delay2 nzlist_of_n_output_gate_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, $3, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3, $4.top);
 }
 | pass_en_switchtype                      nzlist_of_pass_en_switch_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2.top);
 }
 | pass_en_switchtype               delay3 nzlist_of_pass_en_switch_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, $2, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2, $3.top);
 }
 | pass_switchtype                         nzlist_of_pass_switch_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, $1, parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, $1, $2.top);
 }
 | PULLDOWN                                nzlist_of_pull_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, VpiPrimType::Pulldown,
-				  parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, VpiPrimType::Pulldown, $2.top);
 }
 | PULLDOWN pulldown_strength              nzlist_of_pull_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, VpiPrimType::Pulldown, $2,
-				  parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, VpiPrimType::Pulldown, $2, $3.top);
 }
 | PULLUP                                  nzlist_of_pull_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, VpiPrimType::Pullup,
-				  parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, VpiPrimType::Pullup, $2.top);
 }
 | PULLUP pullup_strength                  nzlist_of_pull_inst ';'
 {
-  $$ = parser.factory().new_GateH(@$, VpiPrimType::Pullup, $2,
-				  parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_GateH(@$, VpiPrimType::Pullup, $2, $3.top);
 }
 ;
 
@@ -3252,35 +3392,75 @@ gate_instantiation
 //                  cmos_siwtch_instance {',' cmos_switch_instance}
 nzlist_of_cmos_switch_inst
 : cmos_switch_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_cmos_switch_inst ',' cmos_switch_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] nzlist_of_enable_gate_inst ::=
 //                  enable_gate_instance {',' enble_gate_instance }
 nzlist_of_enable_gate_inst
 : enable_gate_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_enable_gate_inst ',' enable_gate_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] nzlist_of_mos_switch_inst ::=
 //                   mos_switch_instance {',' mos_switch_instance }
 nzlist_of_mos_switch_inst
 : mos_switch_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_mos_switch_inst ',' mos_switch_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] nzlist_of_n_input_gate_inst ::=
 //                  n_input_gate_instance {',' n_input_gate_instance }
 nzlist_of_n_input_gate_inst
 : n_input_gate_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_n_input_gate_inst ',' n_input_gate_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] nzlist_of_n_output_gate_inst ::=
 //                   n_output_gate_instance {',' n_output_gate_instance }
 nzlist_of_n_output_gate_inst
 : n_output_gate_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_n_output_gate_inst ',' n_output_gate_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] nzlist_of_pass_en_switch_inst ::=
@@ -3288,21 +3468,45 @@ nzlist_of_n_output_gate_inst
 //                  {',' pass_enable_switch_instance }
 nzlist_of_pass_en_switch_inst
 : pass_enable_switch_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_pass_en_switch_inst ',' pass_enable_switch_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] nzlist_of_pass_switch_inst ::=
 //                   pass_switch_instance {',' pass_switch_instance }
 nzlist_of_pass_switch_inst
 : pass_switch_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_pass_switch_inst ',' pass_switch_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC*] nzlist_of_pull_inst ::=
 //                  pull_gate_instance {',' pull_gate_instance }
 nzlist_of_pull_inst
 : pull_gate_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_pull_inst ',' pull_gate_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] cmos_switch_instance ::= [name_of_gate_instance]
@@ -3316,20 +3520,17 @@ nzlist_of_pull_inst
 cmos_switch_instance
 : '(' net_lvalue ',' expression ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $2, $4, $6, $8);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2, $4, $6, $8);
 }
 | IDENTIFIER
   '(' net_lvalue ',' expression ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $3, $5, $7, $9);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3, $5, $7, $9);
 }
 | IDENTIFIER range
   '(' net_lvalue ',' expression ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2, $4, $6, $8, $10);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4, $6, $8, $10);
 }
 ;
 
@@ -3343,19 +3544,16 @@ cmos_switch_instance
 enable_gate_instance
 :                  '(' net_lvalue ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $2, $4, $6);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2, $4, $6);
 }
 | IDENTIFIER       '(' net_lvalue ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $3, $5, $7);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3, $5, $7);
 }
 | IDENTIFIER range
   '(' net_lvalue ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2, $4, $6, $8);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4, $6, $8);
 }
 ;
 
@@ -3369,19 +3567,16 @@ enable_gate_instance
 mos_switch_instance
 :                  '(' net_lvalue ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $2, $4, $6);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2, $4, $6);
 }
 | IDENTIFIER       '(' net_lvalue ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $3, $5, $7);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3, $5, $7);
 }
 | IDENTIFIER range
   '(' net_lvalue ',' expression ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2, $4, $6, $8);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4, $6, $8);
 }
 ;
 
@@ -3392,20 +3587,15 @@ mos_switch_instance
 n_input_gate_instance
 :                  '(' n_input_gate_terminals ')'
 {
-  auto inst = parser.factory().new_Inst(@$, parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2.top);
 }
 | IDENTIFIER       '(' n_input_gate_terminals ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1,
-					parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3.top);
 }
 | IDENTIFIER range '(' n_input_gate_terminals ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2,
-					parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4.top);
 }
 ;
 
@@ -3416,13 +3606,17 @@ n_input_gate_instance
 n_input_gate_terminals
 : net_lvalue ',' expression
 {
-  parser.init_connection_list();
-  parser.add_connection($1);
-  parser.add_connection($3);
+  auto con1 = parser.factory().new_OrderedCon($1);
+  auto con2 = parser.factory().new_OrderedCon($3);
+  $$ = PtConnectionList();
+  $$.init(con1);
+  $$.add(con2);
 }
 | n_input_gate_terminals ',' expression
 {
-  parser.add_connection($3);
+  auto con1 = parser.factory().new_OrderedCon($3);
+  $$ = $1;
+  $$.add(con1);
 }
 ;
 
@@ -3436,20 +3630,15 @@ n_input_gate_terminals
 n_output_gate_instance
 :                  '(' n_output_gate_terminals ')'
 {
-  auto inst = parser.factory().new_Inst(@$, parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2.top);
 }
 | IDENTIFIER       '(' n_output_gate_terminals ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1,
-					parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3.top);
 }
 | IDENTIFIER range '(' n_output_gate_terminals ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2,
-					parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4.top);
 }
 ;
 
@@ -3461,13 +3650,17 @@ n_output_gate_instance
 n_output_gate_terminals
 : expression ',' expression
 {
-  parser.init_connection_list();
-  parser.add_connection($1);
-  parser.add_connection($3);
+  auto con1 = parser.factory().new_OrderedCon($1);
+  auto con2 = parser.factory().new_OrderedCon($3);
+  $$ = PtConnectionList();
+  $$.init(con1);
+  $$.add(con2);
 }
 | n_output_gate_terminals ',' expression
 {
-  parser.add_connection($3);
+  auto con1 = parser.factory().new_OrderedCon($3);
+  $$ = $1;
+  $$.add(con1);
 }
 ;
 
@@ -3478,18 +3671,15 @@ n_output_gate_terminals
 pass_switch_instance
 :                  '(' net_lvalue ',' net_lvalue ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $2, $4);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2, $4);
 }
 | IDENTIFIER       '(' net_lvalue ',' net_lvalue ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $3, $5);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3, $5);
 }
 | IDENTIFIER range '(' net_lvalue ',' net_lvalue ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2, $4, $6);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4, $6);
 }
 ;
 
@@ -3502,18 +3692,15 @@ pass_switch_instance
 pass_enable_switch_instance
 :                  '(' net_lvalue ',' net_lvalue ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $2, $4, $6);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2, $4, $6);
 }
 | IDENTIFIER       '(' net_lvalue ',' net_lvalue ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $3, $5, $7);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3, $5, $7);
 }
 | IDENTIFIER range '(' net_lvalue ',' net_lvalue ',' expression ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2, $4, $6, $8);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4, $6, $8);
 }
 ;
 
@@ -3524,18 +3711,15 @@ pass_enable_switch_instance
 pull_gate_instance
 :                  '(' net_lvalue ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $2);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2);
 }
 | IDENTIFIER       '(' net_lvalue ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $3);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3);
 }
 | IDENTIFIER range '(' net_lvalue ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2, $4);
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4);
 }
 ;
 
@@ -3762,83 +3946,57 @@ pass_switchtype
 // なので parameter_value_assignment と重なる．
 // とりあえず delay2 と ordered_parameter_assignment は区別できない．
 module_instantiation
-: mu_head                                          nzlist_of_mu_inst ';'
+: IDENTIFIER                                          nzlist_of_mu_inst ';'
 {
-  $$ = parser.factory().new_MuH(@$, $1,
-				parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_MuH(@$, $1, $2.top);
   parser.reg_defname($1);
 }
-| mu_head '#' '(' list_of_ordered_param_assign ')' nzlist_of_mu_inst ';'
+| IDENTIFIER '#' '(' list_of_ordered_param_assign ')' nzlist_of_mu_inst ';'
 {
-  $$ = parser.factory().new_MuH(@$, $1,
-				parser.paramassign_list(),
-				parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_MuH(@$, $1, $4.top, $6.top);
   parser.reg_defname($1);
 }
-| mu_head '#' '(' list_of_named_param_assign ')'   nzlist_of_mu_inst ';'
+| IDENTIFIER '#' '(' list_of_named_param_assign ')'   nzlist_of_mu_inst ';'
 {
-  $$ = parser.factory().new_MuH(@$, $1,
-				parser.paramassign_list(),
-				parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_MuH(@$, $1, $4.top, $6.top);
   parser.reg_defname($1);
 }
-| mu_head '#' unumber                              nzlist_of_mu_inst ';'
+| IDENTIFIER '#' unumber                              nzlist_of_mu_inst ';'
              // これは delay2 の特殊形
 {
   auto delay = parser.factory().new_Delay(FileRegion(@2, @3), $3);
-  $$ = parser.factory().new_MuH(@$, $1, delay,
-				parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_MuH(@$, $1, delay, $4.top);
   parser.reg_defname($1);
 }
-| mu_head '#' rnumber                              nzlist_of_mu_inst ';'
+| IDENTIFIER '#' rnumber                              nzlist_of_mu_inst ';'
              // これは delay2 の特殊形
 {
   auto delay = parser.factory().new_Delay(FileRegion(@2, @3), $3);
-  $$ = parser.factory().new_MuH(@$, $1, delay,
-				parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_MuH(@$, $1, delay, $4.top);
   parser.reg_defname($1);
 }
-| mu_head '#' IDENTIFIER                           nzlist_of_mu_inst ';'
+| IDENTIFIER '#' IDENTIFIER                           nzlist_of_mu_inst ';'
              // これは delay2 の特殊形
 {
   auto prim = parser.factory().new_Primary(@3, $3);
   auto delay = parser.factory().new_Delay(FileRegion(@2, @3), prim);
-  $$ = parser.factory().new_MuH(@$, $1, delay,
-				parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_MuH(@$, $1, delay, $4.top);
   parser.reg_defname($1);
 }
-| mu_head drive_strength                           nzlist_of_mu_inst ';'
+| IDENTIFIER drive_strength                           nzlist_of_mu_inst ';'
 {
-  $$ = parser.factory().new_MuH(@$, $1, $2,
-				parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_MuH(@$, $1, $2, $3.top);
   parser.reg_defname($1);
 }
-| mu_head drive_strength delay2                    nzlist_of_mu_inst ';'
+| IDENTIFIER drive_strength delay2                    nzlist_of_mu_inst ';'
 {
-  $$ = parser.factory().new_MuH(@$, $1, $2, $3,
-				parser.inst_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_MuH(@$, $1, $2, $3, $4.top);
   parser.reg_defname($1);
 }
-| mu_head error ';'
+| IDENTIFIER error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-mu_head
-: IDENTIFIER
-{
-  $$ = $1;
-  parser.init_inst_list();
 }
 ;
 
@@ -3847,12 +4005,15 @@ mu_head
 list_of_ordered_param_assign
 : expression
 {
-  parser.init_paramassign_list();
-  parser.add_paramassign($1);
+  auto con1 = parser.factory().new_OrderedCon($1);
+  $$ = PtConnectionList();
+  $$.add(con1);
 }
 | list_of_ordered_param_assign ',' expression
 {
-  parser.add_paramassign($3);
+  auto con1 = parser.factory().new_OrderedCon($3);
+  $$ = $1;
+  $$.add(con1);
 }
 ;
 
@@ -3861,12 +4022,13 @@ list_of_ordered_param_assign
 list_of_named_param_assign
 : named_parameter_assignment
 {
-  parser.init_paramassign_list();
-  parser.add_paramassign($1);
+  $$ = PtConnectionList();
+  $$.add($1);
 }
 | list_of_named_param_assign ',' named_parameter_assignment
 {
-  parser.add_paramassign($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -3888,7 +4050,15 @@ named_parameter_assignment
 //             module_instance { ',' module_instance }
 nzlist_of_mu_inst
 : mu_instance
+{
+  $$ = PtInstList();
+  $$.init($1);
+}
 | nzlist_of_mu_inst ',' mu_instance
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] module_instance ::=
@@ -3917,33 +4087,27 @@ nzlist_of_mu_inst
 mu_instance
 :                  '(' list_of_ordered_port_connections ')'
 {
-  auto inst = parser.factory().new_Inst(@$, parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2.top);
 }
 |                  '(' list_of_named_port_connections ')'
 {
-  auto inst = parser.factory().new_Inst(@$, parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $2.top);
 }
 | IDENTIFIER       '(' list_of_ordered_port_connections ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3.top);
 }
 | IDENTIFIER       '(' list_of_named_port_connections ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $3.top);
 }
 | IDENTIFIER range '(' list_of_ordered_port_connections ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2, parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4.top);
 }
 | IDENTIFIER range '(' list_of_named_port_connections ')'
 {
-  auto inst = parser.factory().new_Inst(@$, $1, $2, parser.connection_list());
-  parser.add_inst(inst);
+  $$ = parser.factory().new_Inst(@$, $1, $2, $4.top);
 }
 ;
 
@@ -3953,12 +4117,13 @@ mu_instance
 list_of_ordered_port_connections
 : ordered_port_connection
 {
-  parser.init_connection_list();
-  parser.add_connection($1);
+  $$ = PtConnectionList();
+  $$.init($1);
 }
 | list_of_ordered_port_connections ',' ordered_port_connection
 {
-  parser.add_connection($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -3976,12 +4141,12 @@ ordered_port_connection
 | nz_ai_list
 {
   $$ = parser.factory().new_OrderedCon();
-  parser.reg_attrinst($$, $1);
+  parser.reg_attrinst($$, $1.top);
 }
 | nz_ai_list expression
 {
   $$ = parser.factory().new_OrderedCon($2);
-  parser.reg_attrinst($$, $1);
+  parser.reg_attrinst($$, $1.top);
 }
 ;
 
@@ -3990,12 +4155,13 @@ ordered_port_connection
 list_of_named_port_connections
 : named_port_connection
 {
-  parser.init_connection_list();
-  parser.add_connection($1);
+  $$ = PtConnectionList();
+  $$.init($1);
 }
 | list_of_named_port_connections ',' named_port_connection
 {
-  parser.add_connection($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -4014,12 +4180,12 @@ named_port_connection
 | nz_ai_list '.' IDENTIFIER '(' ')'
 {
   $$ = parser.factory().new_NamedCon(@$, $3);
-  parser.reg_attrinst($$, $1);
+  parser.reg_attrinst($$, $1.top);
 }
 | nz_ai_list '.' IDENTIFIER '(' expression ')'
 {
   $$ = parser.factory().new_NamedCon(@$, $3, $5);
-  parser.reg_attrinst($$, $1);
+  parser.reg_attrinst($$, $1.top);
 }
 ;
 
@@ -4031,14 +4197,13 @@ named_port_connection
 // [SPEC] generated_instantiation ::=
 //             "generate" { generate_item } "endgenerate"
 generated_instantiation
-: generate_head list_of_generate_items generate_tail
+: GENERATE list_of_generate_items ENDGENERATE
 {
   $$ = parser.factory().new_Generate(@$,
-				     parser.declhead_list(),
-				     parser.item_list());
-  parser.add_item($$);
+				     $2.declhead_list.top,
+				     $2.item_list.top);
 }
-| generate_head error generate_tail
+| GENERATE error ENDGENERATE
 {
   $$ = nullptr;
   // generate 中のエラーは endgenerate まで読み飛ばす
@@ -4046,32 +4211,40 @@ generated_instantiation
 }
 ;
 
-generate_head
-: GENERATE
-{
-  parser.init_generate();
-}
-;
-
-generate_tail
-: ENDGENERATE
-{
-  parser.end_generate();
-}
-;
-
 // [SPEC*] list_of_generate_items ::= { generate_item }
 list_of_generate_items
 : // 空
+{
+  $$ = PtHeadList();
+}
 | list_of_generate_items generate_item
+{
+  $$ = $1;
+  $1.item_list.add($2);
+}
 | list_of_generate_items module_or_generate_decl
+{
+  $$ = $1;
+  $1.declhead_list.add($2);
+}
 ;
 
 // [SPEC] generate_item_or_null ::= [ generate_item ]
 generate_item_or_null
 : ';'
+{
+  $$ = PtHeadList();
+}
 | generate_item
+{
+  $$ = PtHeadList();
+  $$.item_list.add($1);
+}
 | module_or_generate_decl
+{
+  $$ = PtHeadList();
+  $$.declhead_list.add($1);
+}
 ;
 
 // [SPEC] generate_item ::=
@@ -4099,123 +4272,82 @@ generate_item_or_null
 // generate_item_or_null の場合実際には module_or_generate_decl の場合が
 // あることを忘れてはならない．
 generate_item
-: gen_if '(' expression ')' generate_item_or_null %prec LOWER_THAN_ELSE
+: IF '(' expression ')' generate_item_or_null %prec LOWER_THAN_ELSE
 {
-  parser.end_genif();
-  auto item = parser.factory().new_GenIf(@$, $3,
-					 parser.genthendecl_list(),
-					 parser.genthenitem_list());
-  parser.add_item(item);
+  $$ = parser.factory().new_GenIf(@$, $3,
+				  $5.declhead_list.top,
+				  $5.item_list.top);
 }
-| gen_if '(' expression ')' generate_item_or_null
-  gen_else generate_item_or_null
+| IF '(' expression ')' generate_item_or_null
+  ELSE generate_item_or_null
 {
-  parser.end_genelse();
-  auto item = parser.factory().new_GenIfElse(@$, $3,
-					     parser.genthendecl_list(),
-					     parser.genthenitem_list(),
-					     parser.genelsedecl_list(),
-					     parser.genelseitem_list());
-  parser.add_item(item);
+  $$ = parser.factory().new_GenIfElse(@$, $3,
+				      $5.declhead_list.top,
+				      $5.item_list.top,
+				      $7.declhead_list.top,
+				      $7.item_list.top);
 }
-| gen_if error gen_else { yyerrok; } generate_item_or_null
+| IF error ELSE { yyerrok; } generate_item_or_null
 {
-  parser.end_genelse();
+  $$ = nullptr;
 }
-| gen_case '(' expression ')' list_of_gencaseitem gen_endcase
+| CASE '(' expression ')' list_of_gencaseitem ENDCASE
 {
-  auto item = parser.factory().new_GenCase(@$, $3, $5);
-  parser.add_item(item);
+  $$ = parser.factory().new_GenCase(@$, $3, $5.top);
 }
-| gen_case error gen_endcase
+| CASE error ENDCASE
 {
+  $$ = nullptr;
   yyerrok;
 }
 | FOR '(' IDENTIFIER '=' expression ';' expression ';'
           IDENTIFIER '=' expression ')'
-  gen_begin ':' IDENTIFIER
+  BEGIN ':' IDENTIFIER
   list_of_generate_items
-  gen_end
+  END
 {
   if ( parser.check_GenFor(@$, $3, $9) ) {
-    auto item = parser.factory().new_GenFor(@$, $3, $5, $7, $11, $15,
-					    parser.declhead_list(),
-					    parser.item_list());
-    parser.add_item(item);
+    $$ = parser.factory().new_GenFor(@$, $3, $5, $7, $11, $15,
+				     $16.declhead_list.top,
+				     $16.item_list.top);
+  }
+  else {
+    $$ = nullptr;
   }
 }
 | FOR '(' IDENTIFIER '=' expression ';' expression ';'
           IDENTIFIER '=' expression ')'
-  gen_begin error gen_end
+  BEGIN error END
 {
+  $$ = nullptr;
   yyerrok;
 }
 | FOR error END
 {
+  $$ = nullptr;
   yyerrok;
 }
-| gen_begin list_of_generate_items gen_end
+| BEGIN list_of_generate_items END
 {
-  auto item = parser.factory().new_GenBlock(@$,
-					    parser.declhead_list(),
-					    parser.item_list());
-  parser.add_item(item);
+  $$ = parser.factory().new_GenBlock(@$,
+				     $2.declhead_list.top,
+				     $2.item_list.top);
 }
-| gen_begin ':' IDENTIFIER list_of_generate_items gen_end
+| BEGIN ':' IDENTIFIER list_of_generate_items END
 {
-  auto item = parser.factory().new_GenBlock(@$, $3,
-					    parser.declhead_list(),
-					    parser.item_list());
-  parser.add_item(item);
+  $$ = parser.factory().new_GenBlock(@$, $3,
+				     $4.declhead_list.top,
+				     $4.item_list.top);
 }
-| gen_begin error gen_end
+| BEGIN error END
 {
+  $$ = nullptr;
   yyerrok;
 }
 | ai_list module_or_generate_item
 {
+  $$ = $2;
   parser.reg_attrinst($2, $1);
-}
-;
-
-gen_if
-: IF
-{
-  parser.init_genif();
-}
-;
-
-gen_else
-: ELSE
-{
-  parser.end_genif();
-  parser.init_genelse();
-}
-;
-
-gen_case
-: CASE
-{
-}
-;
-
-gen_endcase
-: ENDCASE
-{
-}
-;
-
-gen_begin
-: BEGIN
-{
-  parser.init_generate();
-}
-;
-
-gen_end
-: END
-{
-  parser.end_generate();
 }
 ;
 
@@ -4224,12 +4356,13 @@ gen_end
 list_of_gencaseitem
 : genvar_case_item
 {
-  $$ = $1;
+  $$ = PtGenCaseItemList();
+  $$.init($1);
 }
 | list_of_gencaseitem genvar_case_item
 {
-  $$ = $2;
-  $2->set_link($1);
+  $$ = $1;
+  $$.add($2);
 }
 ;
 
@@ -4240,30 +4373,28 @@ list_of_gencaseitem
 genvar_case_item
 : genvar_case_head generate_item_or_null
 {
-  parser.end_generate();
-  $$ = parser.factory().new_GenCaseItem(@$, $1,
-					parser.declhead_list(),
-					parser.item_list());
+  $$ = parser.factory().new_GenCaseItem(@$, $1.top,
+					$2.declhead_list.top,
+					$2.item_list.top);
 }
 ;
 
 genvar_case_head
 : nzlist_of_expressions ':'
 {
-  parser.init_generate();
   $$ = $1;
 }
 | DEFAULT
 {
-  parser.init_generate();
   // 空リスト
-  $$ = parser.factory().new_ExprList({});
+  $$ = PtExprList();
+  $$.init();
 }
 | DEFAULT               ':'
 {
-  parser.init_generate();
   // 空リスト
-  $$ = parser.factory().new_ExprList({});
+  $$ = PtExprList();
+  $$.init();
 }
 ;
 
@@ -4284,67 +4415,69 @@ genvar_case_head
 //             "endprimitive"
 // 実はもとの仕様とかなり違う文法で読み込んでいる．
 udp_declaration
-: ai_list udp_head IDENTIFIER '(' udp_port_list ')' ';'
+: ai_list PRIMITIVE IDENTIFIER '(' udp_port_list ')' ';'
   nzlist_of_uport_decl
   TABLE
   list_of_udp_entries
   ENDTABLE
-  udp_tail
+  ENDPRIMITIVE
 {
-  parser.new_Udp1995(@$, $3, nullptr, FileRegion(), nullptr, $1);
+  auto udp = parser.new_Udp1995(@$, $3,
+				nullptr, FileRegion(), nullptr,
+				$5.top,
+				$8.iohead_list.top,
+				$8.declhead_list.top,
+				$10.top);
+  parser.reg_udp(udp);
+  parser.reg_attrinst(udp, $1);
 }
-| ai_list udp_head IDENTIFIER '(' udp_port_list ')' ';'
+| ai_list PRIMITIVE IDENTIFIER '(' udp_port_list ')' ';'
   nzlist_of_uport_decl
   INITIAL IDENTIFIER '=' init_val ';'
   TABLE
   list_of_udp_entries
   ENDTABLE
-  udp_tail
+  ENDPRIMITIVE
 {
-  parser.new_Udp1995(@$, $3, $10, @10, $12, $1);
+  auto udp = parser.new_Udp1995(@$, $3,
+				$10, @10, $12,
+				$5.top,
+				$8.iohead_list.top,
+				$8.declhead_list.top,
+				$15.top);
+  parser.reg_udp(udp);
+  parser.reg_attrinst(udp, $1);
 }
-| ai_list udp_head IDENTIFIER udp_portdecl ';'
+| ai_list PRIMITIVE IDENTIFIER '(' udp_declaration_port_list ')' ';'
   TABLE
   list_of_udp_entries
   ENDTABLE
-  udp_tail
+  ENDPRIMITIVE
 {
-  parser.new_Udp2001(@$, $3, nullptr, FileRegion(), nullptr, $1);
+  auto udp = parser.new_Udp2001(@$, $3,
+				nullptr, FileRegion(), nullptr,
+				$5.head_list.top,
+				$9.top);
+  parser.reg_udp(udp);
+  parser.reg_attrinst(udp, $1);
 }
-| ai_list udp_head IDENTIFIER udp_portdecl ';'
+| ai_list PRIMITIVE IDENTIFIER '(' udp_declaration_port_list ')' ';'
   INITIAL IDENTIFIER '=' init_val ';'
   TABLE
   list_of_udp_entries
   ENDTABLE
-  udp_tail
+  ENDPRIMITIVE
 {
-  parser.new_Udp2001(@$, $3, $7, @7, $9, $1);
+  auto udp = parser.new_Udp2001(@$, $3,
+				$9, @9, $11,
+				$5.head_list.top,
+				$14.top);
+  parser.reg_udp(udp);
+  parser.reg_attrinst(udp, $1);
 }
-| ai_list udp_head error udp_tail
+| ai_list PRIMITIVE error ENDPRIMITIVE
 {
   yyerrok;
-}
-;
-
-// ちょっとした Hack
-udp_head
-: PRIMITIVE
-{
-  parser.init_udp();
-}
-;
-
-udp_tail
-: ENDPRIMITIVE
-{
-  parser.end_udp();
-}
-;
-
-udp_portdecl
-: '(' udp_declaration_port_list ')'
-{
-  parser.flush_module_ioitem();
 }
 ;
 
@@ -4363,13 +4496,14 @@ udp_portdecl
 udp_port_list
 : udp_port      ',' udp_port // 最低2つはある．
 {
-  parser.init_port_list();
-  parser.add_port($1);
-  parser.add_port($3);
+  $$ = PtPortList();
+  $$.init($1);
+  $$.add($3);
 }
 | udp_port_list ',' udp_port
 {
-  parser.add_port($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -4382,34 +4516,53 @@ udp_port
 
 // [SPEC*] nzlist_of_uport_decl ::=
 //            udp_port_declaration { udp_port_declaration }
-nzlist_of_uport_decl
-: udp_port_declaration
-| nzlist_of_uport_decl udp_port_declaration
-;
-
+//
 // [SPEC] udp_port_declaration ::=
 //             udp_output_declaration ';'
 //            |udp_input_declaration ';'
 //            |udp_reg_declaration ';'
-udp_port_declaration
-: ai_list udp_port_decl_body
+//
+// めんどくさいのは PtIOHead と PtDeclHead が混在していること
+// しょうがないので PtHeadList を使う．
+nzlist_of_uport_decl
+: ai_list udp_output_declaration
 {
+  $$ = PtHeadList();
+  $$.init();
+  $$.iohead_list.add($2);
   parser.reg_attrinst($2, $1);
 }
-;
-
-udp_port_decl_body
-: udp_output_declaration
+| ai_list udp_input_declaration
 {
-  $$ = $1;
+  $$ = PtHeadList();
+  $$.init();
+  $$.iohead_list.add($2);
+  parser.reg_attrinst($2, $1);
 }
-| udp_input_declaration
+| ai_list udp_reg_declaration
 {
-  $$ = $1;
+  $$ = PtHeadList();
+  $$.init();
+  $$.declhead_list.add($2);
+  parser.reg_attrinst($2, $1);
 }
-| udp_reg_declaration
+| nzlist_of_uport_decl ai_list udp_output_declaration
 {
   $$ = $1;
+  $$.iohead_list.add($3);
+  parser.reg_attrinst($3, $2);
+}
+| nzlist_of_uport_decl ai_list udp_input_declaration
+{
+  $$ = $1;
+  $$.iohead_list.add($3);
+  parser.reg_attrinst($3, $2);
+}
+| nzlist_of_uport_decl ai_list udp_reg_declaration
+{
+  $$ = $1;
+  $$.declhead_list.add($3);
+  parser.reg_attrinst($3, $2);
 }
 ;
 
@@ -4420,41 +4573,20 @@ udp_port_decl_body
 // 最後の port_identifier [ '=' constant_expression ] は
 // variable_port_identifier として処理する．
 udp_output_declaration
-: udp_output_declhead1 port_identifier_item ';'
+: OUTPUT port_identifier_item ';'
 {
-  $$ = $1;
-  parser.add_module_iohead($$);
+  // UDP は1ビット符号なしのみ
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2);
 }
-| udp_output_declhead2 variable_port_identifier_item ';'
+| OUTPUT REG variable_port_identifier_item ';'
 {
-  $$ = $1;
-  parser.add_module_iohead($$);
+  // UDP は1ビット符号なしのみ
+  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3);
 }
-| udp_output_declhead1 error ';'
+| OUTPUT error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-| udp_output_declhead2 error ';'
-{
-  $$ = nullptr;
-  yyerrok;
-}
-;
-
-udp_output_declhead1
-: OUTPUT
-{
-  // UDP は1ビット符号なしのみ
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, false);
-}
-;
-
-udp_output_declhead2
-: OUTPUT REG
-{
-  // UDP は1ビット符号なしのみ
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, false);
 }
 ;
 
@@ -4462,24 +4594,15 @@ udp_output_declhead2
 //             { attribute_instance } "input" list_of_port_identifiers
 // [SPEC] list_of_port_identifiers ::= port_identifier {',' port_identifier}
 udp_input_declaration
-: udp_input_declhead list_of_port_identifiers ';'
+: INPUT list_of_port_identifiers ';'
 {
-  $$ = $1;
-  parser.add_module_iohead($$);
+  // UDP は1ビット符号無しのみ
+  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2.top);
 }
-| udp_input_declhead error ';'
+| INPUT error ';'
 {
   $$ = nullptr;
   yyerrok;
-}
-;
-
-// [SPEC*] udp_input_declhead ::= { attribute_instance } "input"
-udp_input_declhead
-: INPUT
-{
-  // UDP は1ビット符号無しのみ
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, false);
 }
 ;
 
@@ -4488,9 +4611,8 @@ udp_input_declhead
 udp_reg_declaration
 : REG IDENTIFIER ';'
 {
-  $$ = parser.factory().new_RegH(@$);
   auto item = parser.factory().new_DeclItem(@2, $2);
-  parser.add_declitem(item);
+  $$ = parser.factory().new_RegH(@$, item);
 }
 | REG error ';'
 {
@@ -4506,30 +4628,40 @@ udp_reg_declaration
 // [SPEC] list_of_port_identifiers ::= port_identifier {',' port_identifier}
 // もういい加減この2重リストの問題はうんざり．
 udp_declaration_port_list
-: udp_output_port_declaration ',' { parser.flush_module_ioitem(); }
-  ai_list udp_input_declhead port_identifier_item
+: udp_output_port_declaration ',' ai_list INPUT port_identifier_item
 {
-   parser.reg_attrinst($5, $4);
+  $$ = PtIOPortList();
+  $$.init($1);
+  auto head = parser.factory().new_IOHead(@4, VpiDir::Input, $5);
+  parser.reg_attrinst(head, $3);
+  $$.add_head(head);
 }
-| udp_declaration_port_list ',' { parser.flush_module_ioitem(); }
-  ai_list udp_input_declhead port_identifier_item
+| udp_declaration_port_list ',' ai_list INPUT port_identifier_item
 {
-   parser.reg_attrinst($5, $4);
+  $$ = $1;
+  auto head = parser.factory().new_IOHead(@4, VpiDir::Input, $5);
+  parser.reg_attrinst(head, $3);
+  $$.add_head(head);
 }
 | udp_declaration_port_list ',' port_identifier_item
+{
+  $$ = $1;
+  $$.add_item($3);
+}
 ;
 
 // udp_output_declaration の ';' なしバージョン
 udp_output_port_declaration
-: ai_list udp_output_declhead1 port_identifier_item
+: ai_list OUTPUT port_identifier_item
 {
-  parser.add_module_ioport_head($2);
-  parser.reg_attrinst($2, $1);
+  $$ = parser.factory().new_IOHead(@2, VpiDir::Output, $3);
+  parser.reg_attrinst($$, $1);
 }
-| ai_list udp_output_declhead2 variable_port_identifier_item
+| ai_list OUTPUT REG variable_port_identifier_item
 {
-  parser.add_module_ioport_head($2);
-  parser.reg_attrinst($2, $1);
+  $$ = parser.factory().new_RegIOHead(FileRegion(@2, @3),
+				      VpiDir::Output, $4);
+  parser.reg_attrinst($$, $1);
 }
 ;
 
@@ -4637,8 +4769,16 @@ wrong_base
 // [SPEC*] list_of_udp_entries ::=
 //             udp_entry { udp_entry }
 list_of_udp_entries
-:                     { parser.init_udpvalue_list(); } udp_entry
-| list_of_udp_entries { parser.init_udpvalue_list(); } udp_entry
+: udp_entry
+{
+  $$ = PtUdpEntryList();
+  $$.init($1);
+}
+| list_of_udp_entries udp_entry
+{
+  $$ = $1;
+  $$.add($2);
+}
 ;
 
 // [SPEC*] udp_entry ::= combinational_entry | sequential_entry
@@ -4651,20 +4791,17 @@ udp_entry
 : seq_input_list ':' output_symbol ';'
 {
   auto output = parser.factory().new_UdpValue(@3, $3);
-  auto entry = parser.factory().new_UdpEntry(@$, parser.udpvalue_list(),
-					     output);
-  parser.add_udpentry(entry);
+  $$ = parser.factory().new_UdpEntry(@$, $1.top, output);
 }
 | seq_input_list ':' level_symbol ':' next_state ';'
 {
   auto current = parser.factory().new_UdpValue(@3, $3);
   auto output = parser.factory().new_UdpValue(@5, $5);
-  auto entry = parser.factory().new_UdpEntry(@$, parser.udpvalue_list(),
-					     current, output);
-  parser.add_udpentry(entry);
+  $$ = parser.factory().new_UdpEntry(@$, $1.top, current, output);
 }
 | error ';'
 {
+  $$ = nullptr;
   yyerrok;
 }
 ;
@@ -4679,22 +4816,36 @@ udp_entry
 // edge_indicator をいくつ含んでいるかのチェックはあとで行う．
 seq_input_list
 : level_symbol_value
+{
+  $$ = PtUdpValueList();
+  $$.init($1);
+}
 | edge_indicator
+{
+  $$ = PtUdpValueList();
+  $$.init($1);
+}
 | seq_input_list level_symbol_value
+{
+  $$ = $1;
+  $$.add($2);
+}
 | seq_input_list edge_indicator
+{
+  $$ = $1;
+  $$.add($2);
+}
 ;
 
 // [SPEC] edge_indicator ::= '(' level_symbol level_symbol ')' | edge_symbol
 edge_indicator
 : '(' level_symbol level_symbol ')'
 {
-  auto val = parser.factory().new_UdpValue(@$, $2, $3);
-  parser.add_udpvalue(val);
+  $$ = parser.factory().new_UdpValue(@$, $2, $3);
 }
 | edge_symbol
 {
-  auto val = parser.factory().new_UdpValue(@1, $1);
-  parser.add_udpvalue(val);
+  $$ = parser.factory().new_UdpValue(@1, $1);
 }
 ;
 
@@ -4702,8 +4853,7 @@ edge_indicator
 level_symbol_value
 : level_symbol
 {
-  auto val = parser.factory().new_UdpValue(@1, $1);
-  parser.add_udpvalue(val);
+  $$ = parser.factory().new_UdpValue(@1, $1);
 }
 ;
 
@@ -4801,52 +4951,48 @@ edge_symbol
 // [SPEC] continuous_assign ::=
 //             "assign" [drive_stregth] [delay3] list_of_net_assignments ';'
 continuous_assign
-: assign_head                       list_of_net_assignments ';'
+: ASSIGN                       list_of_net_assignments ';'
 {
-  $$ = parser.factory().new_ContAssignH(@$, parser.contassign_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_ContAssignH(@$, $2.top);
 }
-| assign_head                delay3 list_of_net_assignments ';'
+| ASSIGN                delay3 list_of_net_assignments ';'
 {
-  $$ = parser.factory().new_ContAssignH(@$, $2, parser.contassign_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_ContAssignH(@$, $2, $3.top);
 }
-| assign_head drive_strength        list_of_net_assignments ';'
+| ASSIGN drive_strength        list_of_net_assignments ';'
 {
-  $$ = parser.factory().new_ContAssignH(@$, $2, parser.contassign_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_ContAssignH(@$, $2, $3.top);
 }
-| assign_head drive_strength delay3 list_of_net_assignments ';'
+| ASSIGN drive_strength delay3 list_of_net_assignments ';'
 {
-  $$ = parser.factory().new_ContAssignH(@$, $2, $3, parser.contassign_list());
-  parser.add_item($$);
+  $$ = parser.factory().new_ContAssignH(@$, $2, $3, $4.top);
 }
-| assign_head error ';'
+| ASSIGN error ';'
 {
   $$ = nullptr;
   yyerrok;
 }
 ;
 
-assign_head
-: ASSIGN
-{
-  parser.init_contassign_list();
-}
-;
-
 // [SPEC] list_of_net_assignments ::= net_assignment {',' net_assignments }
 list_of_net_assignments
 : net_assignment
+{
+  $$ = PtContAssignList();
+  $$.init($1);
+}
 | list_of_net_assignments ',' net_assignment
+{
+  $$ = $1;
+  $$.add($3);
+}
 ;
 
 // [SPEC] net_assignment ::= net_lvalue '=' expression
 net_assignment
 : net_lvalue '=' expression
 {
-  auto contassign = parser.factory().new_ContAssign(@$, $1, $3);
-  parser.add_contassign(contassign);
+  $$ = parser.factory().new_ContAssign(@$, $1, $3);
 }
 ;
 
@@ -4860,7 +5006,6 @@ initial_construct
 : INITIAL statement
 {
   $$ = parser.factory().new_Initial(@$, $2);
-  parser.add_item($$);
 }
 ;
 
@@ -4869,7 +5014,6 @@ always_construct
 : ALWAYS statement
 {
   $$ = parser.factory().new_Always(@$, $2);
-  parser.add_item($$);
 }
 ;
 
@@ -4968,50 +5112,36 @@ procedural_continuous_assignments
 //             "join"
 
 par_block
-: FORK JOIN // これを for join にするとシフト還元エラーになる．
+: FORK JOIN
 {
-  $$ = parser.factory().new_ParBlock(@$, {});
+  $$ = parser.factory().new_ParBlock(@$, nullptr);
 }
-| FORK nzlist_of_stmt JOIN // これを for join にするとシフト還元エラーになる．
+| FORK nzlist_of_stmt JOIN
 {
-  $$ = parser.factory().new_ParBlock(@$, parser.stmt_list());
+  $$ = parser.factory().new_ParBlock(@$, $2.top);
 }
-| fork IDENTIFIER
+| FORK ':' IDENTIFIER
     list_of_bitem_decl
-  join
+  JOIN
 {
-  $$ = parser.factory().new_NamedParBlock(@$, $2,
-					  parser.declhead_list(),
-					  parser.stmt_list());
+  $$ = parser.factory().new_NamedParBlock(@$, $3,
+					  $4.declhead_list.top,
+					  nullptr);
 }
-| fork IDENTIFIER
+| FORK ':' IDENTIFIER
     list_of_bitem_decl
     nzlist_of_stmt
-  join
+  JOIN
 {
-  $$ = parser.factory().new_NamedParBlock(@$, $2,
-					  parser.declhead_list(),
-					  parser.stmt_list());
+  $$ = parser.factory().new_NamedParBlock(@$, $3,
+					  $4.declhead_list.top,
+					  $5.top);
 }
-| fork error join
-{
-  $$ = parser.factory().new_NullStmt(@$);
-  yyerrok;
-}
-;
-
-fork
-: FORK ':'
-{
-  parser.init_block();
-}
-;
-
-join
-: JOIN
-{
-  parser.end_block();
-}
+//| FORK error JOIN
+//{
+//  $$ = parser.factory().new_NullStmt(@$);
+//  yyerrok;
+//}
 ;
 
 // [SPEC] seq_block ::=
@@ -5020,61 +5150,49 @@ join
 //             "end"
 
 seq_block
-: BEGIN END // これを begin end にするとシフト還元エラーになる．
+: BEGIN END
 {
-  $$ = parser.factory().new_SeqBlock(@$, {});
+  $$ = parser.factory().new_SeqBlock(@$, nullptr);
 }
-| BEGIN nzlist_of_stmt END // これを begin end にするとシフト還元エラーになる．
+| BEGIN nzlist_of_stmt END
 {
-  $$ = parser.factory().new_SeqBlock(@$, parser.stmt_list());
+  $$ = parser.factory().new_SeqBlock(@$, $2.top);
 }
-| begin IDENTIFIER
+| BEGIN ':' IDENTIFIER
     list_of_bitem_decl
-  end
+  END
 {
-  $$ = parser.factory().new_NamedSeqBlock(@$, $2,
-					  parser.declhead_list(),
-					  parser.stmt_list());
+  $$ = parser.factory().new_NamedSeqBlock(@$, $3,
+					  $4.declhead_list.top,
+					  nullptr);
 }
-| begin IDENTIFIER
+| BEGIN ':' IDENTIFIER
     list_of_bitem_decl
     nzlist_of_stmt
-  end
+  END
 {
-  $$ = parser.factory().new_NamedSeqBlock(@$, $2,
-					  parser.declhead_list(),
-					  parser.stmt_list());
+  $$ = parser.factory().new_NamedSeqBlock(@$, $3,
+					  $4.declhead_list.top,
+					  $5.top);
 }
-| begin error end
-{
-  $$ = parser.factory().new_NullStmt(@$);
-  yyerrok;
-}
+//| BEGIN error END
+//{
+//  $$ = parser.factory().new_NullStmt(@$);
+//  yyerrok;
+//}
 ;
-
-begin
-: BEGIN ':'
-{
-  parser.init_block();
-}
-;
-
-end
-: END
-{
-  parser.end_block();
-}
 
 // [SPEC*] list_of_stmt ::= { statement }
 nzlist_of_stmt
 : statement
 {
-  parser.init_stmt_list();
-  parser.add_stmt($1);
+  $$ = PtStmtList();
+  $$.init($1);
 }
 | nzlist_of_stmt statement
 {
-  parser.add_stmt($2);
+  $$ = $1;
+  $$.add($2);
 }
 ;
 
@@ -5260,7 +5378,7 @@ repeat_control
 }
 | REPEAT '(' expression ')' '@' '(' event_expression ')'
 {
-  $$ = parser.factory().new_RepeatControl(@$, $3, $7);
+  $$ = parser.factory().new_RepeatControl(@$, $3, $7.top);
 }
 | REPEAT '(' expression ')' any_event
 {
@@ -5305,7 +5423,7 @@ event_control
 }
 | '@' '(' event_expression ')'
 {
-  $$ = parser.factory().new_EventControl(@$, $3);
+  $$ = parser.factory().new_EventControl(@$, $3.top);
 }
 | any_event
 {
@@ -5340,18 +5458,17 @@ event_trigger
 }
 | MINUSGT hierarchical_identifier nzlist_of_index ';'
 {
-  auto index_list = parser.end_expr_list();
-  auto primary = parser.factory().new_Primary(FileRegion(@2, @3), $2, index_list);
+  auto primary = parser.factory().new_Primary(FileRegion(@2, @3),
+					      $2, $3.top);
   $$ = parser.factory().new_EventStmt(@$, primary);
 }
 | MINUSGT IDENTIFIER nzlist_of_index ';'
 {
-  auto index_list = parser.end_expr_list();
-  auto primary = parser.factory().new_Primary(FileRegion(@2, @3), $2, index_list);
+  auto primary = parser.factory().new_Primary(FileRegion(@2, @3),
+					      $2, $3.top);
   $$ = parser.factory().new_EventStmt(@$, primary);
 }
 ;
-
 
 // [SPEC] event_expression ::=
 //             expression
@@ -5366,23 +5483,25 @@ event_trigger
 event_expression
 : eve_list
 {
-  $$ = parser.end_expr_list();
+  $$ = $1;
 }
 ;
 
 eve_list
 : event_primary
 {
-  parser.init_expr_list();
-  parser.add_expr($1);
+  $$ = PtExprList();
+  $$.init($1);
 }
 | eve_list OR event_primary
 {
-  parser.add_expr($3);
+  $$ = $1;
+  $$.add($3);
 }
 | eve_list ',' event_primary
 {
-  parser.add_expr($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -5486,9 +5605,8 @@ case_statement
   list_of_case_items
   ENDCASE
 {
-  parser.end_case();
-  if ( parser.check_default_label() ) {
-    $$ = parser.factory().new_Case(@$, $3, parser.caseitem_list());
+  if ( parser.check_default_label($5.top) ) {
+    $$ = parser.factory().new_Case(@$, $3, $5.top);
   }
   else {
     YYERROR;
@@ -5498,9 +5616,8 @@ case_statement
   list_of_case_items
   ENDCASE
 {
-  parser.end_case();
-  if ( parser.check_default_label() ) {
-    $$ = parser.factory().new_CaseX(@$, $3, parser.caseitem_list());
+  if ( parser.check_default_label($5.top) ) {
+    $$ = parser.factory().new_CaseX(@$, $3, $5.top);
   }
   else {
     YYERROR;
@@ -5510,9 +5627,8 @@ case_statement
   list_of_case_items
   ENDCASE
 {
-  parser.end_case();
-  if ( parser.check_default_label() ) {
-    $$ = parser.factory().new_CaseZ(@$, $3, parser.caseitem_list());
+  if ( parser.check_default_label($5.top) ) {
+    $$ = parser.factory().new_CaseZ(@$, $3, $5.top);
   }
   else {
     YYERROR;
@@ -5524,12 +5640,13 @@ case_statement
 list_of_case_items
 : case_item
 {
-  parser.init_case();
-  parser.add_caseitem($1);
+  $$ = PtCaseItemList();
+  $$.init($1);
 }
 | list_of_case_items case_item
 {
-  parser.add_caseitem($2);
+  $$ = $1;
+  $$.add($2);
 }
 ;
 
@@ -5539,7 +5656,7 @@ list_of_case_items
 case_item
 : case_item_label statement_or_null
 {
-  $$ = parser.factory().new_CaseItem(@$, $1, $2);
+  $$ = parser.factory().new_CaseItem(@$, $1.top, $2);
 }
 ;
 
@@ -5551,12 +5668,14 @@ case_item_label
 | DEFAULT
 {
   // 空リスト
-  $$ = parser.factory().new_ExprList({});
+  $$ = PtExprList();
+  $$.init();
 }
 | DEFAULT               ':'
 {
   // 空リスト
-  $$ = parser.factory().new_ExprList({});
+  $$ = PtExprList();
+  $$.init();
 }
 ;
 
@@ -5626,7 +5745,7 @@ system_task_enable
 }
 | SYS_IDENTIFIER '(' nzlist_of_arguments ')' ';'
 {
-  $$ = parser.factory().new_SysEnable(@$, $1, $3);
+  $$ = parser.factory().new_SysEnable(@$, $1, $3.top);
 }
 ;
 
@@ -5644,11 +5763,11 @@ task_enable
 }
 | hierarchical_identifier '(' nzlist_of_expressions ')' ';'
 {
-  $$ = parser.factory().new_Enable(@$, $1, $3);
+  $$ = parser.factory().new_Enable(@$, $1, $3.top);
 }
 | IDENTIFIER '(' nzlist_of_expressions ')' ';'
 {
-  $$ = parser.factory().new_Enable(@$, $1, $3);
+  $$ = parser.factory().new_Enable(@$, $1, $3.top);
 }
 ;
 
@@ -5706,45 +5825,40 @@ specify_item
 : specparam_declaration
 | PULSESTYLE_ONEVENT  nzlist_of_terminals ';'
 {
-  auto item = parser.factory().new_SpecItem(@$, VpiSpecItemType::PulsestyleOnEvent, $2);
-  parser.add_item(item);
+  //$$ = parser.factory().new_SpecItem(@$, VpiSpecItemType::PulsestyleOnEvent, $2);
 }
 | PULSESTYLE_ONDETECT nzlist_of_terminals ';'
 {
-  auto item = parser.factory().new_SpecItem(@$, VpiSpecItemType::PulsestyleOnDetect, $2);
-  parser.add_item(item);
+  //$$ = parser.factory().new_SpecItem(@$, VpiSpecItemType::PulsestyleOnDetect, $2);
 }
 | SHOWCANCELLED   nzlist_of_terminals ';'
 {
-  auto item = parser.factory().new_SpecItem(@$, VpiSpecItemType::Showcancelled, $2);
-  parser.add_item(item);
+  //$$ = parser.factory().new_SpecItem(@$, VpiSpecItemType::Showcancelled, $2);
 }
 | NOSHOWCANCELLED nzlist_of_terminals ';'
 {
-  auto item = parser.factory().new_SpecItem(@$, VpiSpecItemType::Noshowcancelled, $2);
-  parser.add_item(item);
+  //$$ = parser.factory().new_SpecItem(@$, VpiSpecItemType::Noshowcancelled, $2);
 }
 | path_declaration ';'
 {
-  auto item = parser.factory().new_SpecPath(@$, VpiSpecPathType::Null, nullptr, $1);
-  parser.add_item(item);
+  //$$ = parser.factory().new_SpecPath(@$, VpiSpecPathType::Null, nullptr, $1);
 }
 | IF '(' module_path_expression ')' path_declaration ';'
 {
-  auto item = parser.factory().new_SpecPath(@$, VpiSpecPathType::If, $3, $5);
-  parser.add_item(item);
+  //$$ = parser.factory().new_SpecPath(@$, VpiSpecPathType::If, $3, $5);
 }
 | IFNONE simple_path_declaration ';'
 {
-  auto item = parser.factory().new_SpecPath(@$, VpiSpecPathType::Ifnone, nullptr, $2);
-  parser.add_item(item);
+  //$$ = parser.factory().new_SpecPath(@$, VpiSpecPathType::Ifnone, nullptr, $2);
 }
 | system_timing_check
 {
   // system_timing_check はまともにパーズしていない．
+  //$$ = nullptr;
 }
 | error ';'
 {
+  //$$ = nullptr;
   yyerrok;
 }
 ;
@@ -5799,7 +5913,7 @@ simple_path_declaration
       '=' path_delay_value
 {
   $$ = parser.factory().new_PathDecl(@$, 0,
-				     $2, 0,
+				     $2.top, 0,
 				     VpiPathType::Parallel,
 				     $4, 0,
 				     nullptr, $7);
@@ -5808,7 +5922,7 @@ simple_path_declaration
       '=' path_delay_value
 {
   $$ = parser.factory().new_PathDecl(@$, 0,
-				     $2, $3,
+				     $2.top, $3,
 				     VpiPathType::Parallel,
 				     $5, 0,
 				     nullptr, $8);
@@ -5817,18 +5931,18 @@ simple_path_declaration
       '=' path_delay_value
 {
   $$ = parser.factory().new_PathDecl(@$, 0,
-				     $2, 0,
+				     $2.top, 0,
 				     VpiPathType::Full,
-				     $4, 0,
+				     $4.top, 0,
 				     nullptr, $7);
 }
 | '(' nzlist_of_terminals pol_op STARGT nzlist_of_terminals ')'
       '=' path_delay_value
 {
   $$ = parser.factory().new_PathDecl(@$, 0,
-				     $2, $3,
+				     $2.top, $3,
 				     VpiPathType::Full,
-				     $5, 0,
+				     $5.top, 0,
 				     nullptr, $8);
 }
 ;
@@ -5892,21 +6006,15 @@ specify_terminal
 // [SPEC*] nzlist_of_terminals ::=
 //              specify_terminal {',' specify_terminal}
 nzlist_of_terminals
-: nzlo_term
-{
-  $$ = parser.end_expr_list();
-}
-;
-
-nzlo_term
 : specify_terminal
 {
-  parser.init_expr_list();
-  parser.add_expr($1);
+  $$ = PtExprList();
+  $$.init($1);
 }
-| nzlo_term ',' specify_terminal
+| nzlist_of_terminals ',' specify_terminal
 {
-  parser.add_expr($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -6037,7 +6145,7 @@ edge_sensitive_path_declaration
     '(' specify_terminal           expression ')' ')' '=' path_delay_value
 { // parallel_edge_sensitive_path_description
   $$ = parser.factory().new_PathDecl(@$, 0,
-				     $2, 0,
+				     $2.top, 0,
 				     VpiPathType::Parallel,
 				     $5, 0,
 				     $6, $10);
@@ -6046,7 +6154,7 @@ edge_sensitive_path_declaration
     '(' specify_terminal pol_colon expression ')' ')' '=' path_delay_value
 { // parallel_edge_sensitive_path_description
   $$ = parser.factory().new_PathDecl(@$, 0,
-				     $2, 0,
+				     $2.top, 0,
 				     VpiPathType::Parallel,
 				     $5, $6,
 				     $7, $11);
@@ -6055,7 +6163,7 @@ edge_sensitive_path_declaration
     '(' specify_terminal          expression ')' ')' '=' path_delay_value
 { // parallel_edge_sensitive_path_description
   $$ = parser.factory().new_PathDecl(@$, $2,
-				     $3, 0,
+				     $3.top, 0,
 				     VpiPathType::Parallel,
 				     $6, 0,
 				     $7, $11);
@@ -6064,7 +6172,7 @@ edge_sensitive_path_declaration
     '(' specify_terminal pol_colon expression ')' ')' '=' path_delay_value
 { // parallel_edge_sensitive_path_description
   $$ = parser.factory().new_PathDecl(@$, $2,
-				     $3, 0,
+				     $3.top, 0,
 				     VpiPathType::Parallel,
 				     $6, $7,
 				     $8, $12);
@@ -6073,36 +6181,36 @@ edge_sensitive_path_declaration
      '(' nzlist_of_terminals           expression ')' ')' '=' path_delay_value
 { // full_edge_sensitive_path_description
   $$ = parser.factory().new_PathDecl(@$, 0,
-				     $2, 0,
+				     $2.top, 0,
 				     VpiPathType::Full,
-				     $5, 0,
+				     $5.top, 0,
 				     $6, $10);
 }
 | '('      nzlist_of_terminals STARGT
      '(' nzlist_of_terminals pol_colon expression ')' ')' '=' path_delay_value
 { // full_edge_sensitive_path_description
   $$ = parser.factory().new_PathDecl(@$, 0,
-				     $2, 0,
+				     $2.top, 0,
 				     VpiPathType::Full,
-				     $5, $6,
+				     $5.top, $6,
 				     $7, $11);
 }
 | '(' edge nzlist_of_terminals STARGT
     '(' nzlist_of_terminals           expression ')' ')' '=' path_delay_value
 { // full_edge_sensitive_path_description
   $$ = parser.factory().new_PathDecl(@$, $2,
-				     $3, 0,
+				     $3.top, 0,
 				     VpiPathType::Full,
-				     $6, 0,
+				     $6.top, 0,
 				     $7, $11);
 }
 | '(' edge nzlist_of_terminals STARGT
     '(' nzlist_of_terminals pol_colon expression ')' ')' '=' path_delay_value
 { // full_edge_sensitive_path_description
   $$ = parser.factory().new_PathDecl(@$, $2,
-				     $3, 0,
+				     $3.top, 0,
 				     VpiPathType::Full,
-				     $6, $7,
+				     $6.top, $7,
 				     $8, $12);
 }
 ;
@@ -6400,7 +6508,7 @@ scalar_constant
 concatenation
 : '{' nzlist_of_expressions '}'
 {
-  $$ = parser.factory().new_Concat(@$, $2);
+  $$ = parser.factory().new_Concat(@$, $2.top);
 }
 ;
 
@@ -6427,28 +6535,22 @@ concatenation
 multiple_concatenation
 : '{' expression '{' nzlist_of_expressions '}' '}'
 {
-  $$ = parser.factory().new_MultiConcat(@$, $2, $4);
+  $$ = parser.factory().new_MultiConcat(@$, $2, $4.top);
 }
 ;
 
 // [SPEC*] nzlist_of_expression ::=
 //              expression {',' expression }
 nzlist_of_expressions
-: nzlo_expr
-{
-  $$ = parser.end_expr_list();
-}
-;
-
-nzlo_expr
 : expression
 {
-  parser.init_expr_list();
-  parser.add_expr($1);
+  $$ = PtExprList();
+  $$.init($1);
 }
-| nzlo_expr ',' expression
+| nzlist_of_expressions ',' expression
 {
-  parser.add_expr($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -6500,12 +6602,12 @@ nzlo_expr
 function_call
 : hierarchical_identifier ai_list '(' nzlist_of_expressions ')'
 {
-  $$ = parser.factory().new_FuncCall(@$, $1, $4);
+  $$ = parser.factory().new_FuncCall(@$, $1, $4.top);
   parser.reg_attrinst($$, $2);
 }
 | IDENTIFIER ai_list '(' nzlist_of_expressions ')'
 {
-  $$ = parser.factory().new_FuncCall(@$, $1, $4);
+  $$ = parser.factory().new_FuncCall(@$, $1, $4.top);
   parser.reg_attrinst($$, $2);
 }
 ;
@@ -6526,27 +6628,21 @@ system_function_call
 }
 | SYS_IDENTIFIER '(' nzlist_of_arguments ')'
 {
-  $$ = parser.factory().new_SysFuncCall(@$, $1, $3);
+  $$ = parser.factory().new_SysFuncCall(@$, $1, $3.top);
 }
 ;
 
 // [SPEC*] nzlist_of_arguments ::= argument {',' argument }
 nzlist_of_arguments
-: nzlo_arg
-{
-  $$ = parser.end_expr_list();
-}
-;
-
-nzlo_arg
 : argument
 {
-  parser.init_expr_list();
-  parser.add_expr($1);
+  $$ = PtExprList();
+  $$.init($1);
 }
-| nzlo_arg ',' argument
+| nzlist_of_arguments ',' argument
 {
-  parser.add_expr($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -6890,13 +6986,11 @@ primary
 }
 | hierarchical_identifier nzlist_of_index
 {
-  auto index = parser.end_expr_list();
-  $$ = parser.factory().new_Primary(@$, $1, index);
+  $$ = parser.factory().new_Primary(@$, $1, $2.top);
 }
 | IDENTIFIER nzlist_of_index
 {
-  auto index = parser.end_expr_list();
-  $$ = parser.factory().new_Primary(@$, $1, index);
+  $$ = parser.factory().new_Primary(@$, $1, $2.top);
 }
 | IDENTIFIER                 part
 {
@@ -6908,13 +7002,11 @@ primary
 }
 | hierarchical_identifier nzlist_of_index part
 {
-  auto index = parser.end_expr_list();
-  $$ = parser.factory().new_Primary(@$, $1, index, $3);
+  $$ = parser.factory().new_Primary(@$, $1, $2.top, $3);
 }
 | IDENTIFIER nzlist_of_index part
 {
-  auto index = parser.end_expr_list();
-  $$ = parser.factory().new_Primary(@$, $1, index, $3);
+  $$ = parser.factory().new_Primary(@$, $1, $2.top, $3);
 }
 | concatenation
 {
@@ -7023,13 +7115,11 @@ lvalue
 }
 | hierarchical_identifier nzlist_of_index
 {
-  auto index = parser.end_expr_list();
-  $$ = parser.factory().new_Primary(@$, $1, index);
+  $$ = parser.factory().new_Primary(@$, $1, $2.top);
 }
 | IDENTIFIER nzlist_of_index
 {
-  auto index = parser.end_expr_list();
-  $$ = parser.factory().new_Primary(@$, $1, index);
+  $$ = parser.factory().new_Primary(@$, $1, $2.top);
 }
 | hierarchical_identifier part
 {
@@ -7041,17 +7131,15 @@ lvalue
 }
 | hierarchical_identifier nzlist_of_index part
 {
-  auto index = parser.end_expr_list();
-  $$ = parser.factory().new_Primary(@$, $1, index, $3);
+  $$ = parser.factory().new_Primary(@$, $1, $2.top, $3);
 }
 | IDENTIFIER nzlist_of_index part
 {
-  auto index = parser.end_expr_list();
-  $$ = parser.factory().new_Primary(@$, $1, index, $3);
+  $$ = parser.factory().new_Primary(@$, $1, $2.top, $3);
 }
 | '{' nzlist_of_lvalues '}'
 {
-  $$ = parser.factory().new_Concat(@$, $2);
+  $$ = parser.factory().new_Concat(@$, $2.top);
 }
 ;
 
@@ -7062,12 +7150,13 @@ lvalue
 nzlist_of_index
 : index
 {
-  parser.init_expr_list();
-  parser.add_expr($1);
+  $$ = PtExprList();
+  $$.init($1);
 }
 | nzlist_of_index index
 {
-  parser.add_expr($2);
+  $$ = $1;
+  $$.add($2);
 }
 ;
 
@@ -7081,21 +7170,15 @@ index
 
 // [SPEC*] nzlist_of_lvalues ::= lvalue {',' lvalue }
 nzlist_of_lvalues
-: nzlo_lval
-{
-  $$ = parser.end_expr_list();
-}
-;
-
-nzlo_lval
 : lvalue
 {
-  parser.init_expr_list();
-  parser.add_expr($1);
+  $$ = PtExprList();
+  $$.init($1);
 }
-| nzlo_lval ',' lvalue
+| nzlist_of_lvalues ',' lvalue
 {
-  parser.add_expr($3);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 
@@ -7215,7 +7298,7 @@ ai_list
 }
 | nz_ai_list
 {
-  $$ = $1->reverse();
+  $$ = $1.top;
 }
 ;
 
@@ -7223,19 +7306,20 @@ ai_list
 nz_ai_list
 : attr_inst
 {
-  $$ = $1;
+  $$ = PtAttrInstList();
+  $$.init($1);
 }
 | nz_ai_list attr_inst
 {
-  $$ = $2;
-  $2->set_link($1);
+  $$ = $1;
+  $$.add($2);
 }
 ;
 
 attr_inst
 : PRSTAR nzlist_of_attr_spec STARPR
 {
-  $$ = parser.factory().new_AttrInst(@$, $2);
+  $$ = parser.factory().new_AttrInst(@$, $2.top);
 }
 | PRSTAR error STARPR
 {
@@ -7248,12 +7332,13 @@ attr_inst
 nzlist_of_attr_spec
 : attr_spec
 {
-  $$ = $1;
+  $$ = PtAttrSpecList();
+  $$.init($1);
 }
 | nzlist_of_attr_spec ',' attr_spec
 {
-  $$ = $3;
-  $3->set_link($1);
+  $$ = $1;
+  $$.add($3);
 }
 ;
 

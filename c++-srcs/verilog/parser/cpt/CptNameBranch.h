@@ -53,31 +53,6 @@ public:
   int
   index() const override;
 
-  /// @brief 次の要素の取得
-  const AstNameBranch*
-  link() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtNameBranch の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief link を設定する．
-  void
-  set_link(
-    PtNameBranch* link
-  ) override;
-
-  /// @brief PtNameBranch* 型のリンクを返す．
-  PtNameBranch*
-  _link() const override;
-
-  /// @brief リンクトリストを逆順にする．
-  /// @return 新しい先頭を返す．
-  PtNameBranch*
-  reverse() override;
-
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -86,9 +61,6 @@ private:
 
   // 名前
   const char* mName;
-
-  // 次の要素を指すリンク
-  PtNameBranch* mLink{nullptr};
 
 };
 

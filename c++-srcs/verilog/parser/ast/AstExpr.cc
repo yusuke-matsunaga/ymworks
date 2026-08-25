@@ -325,7 +325,6 @@ decompile_impl(
   case AstExpr::Primary:
     {
       auto ans = expr->decompile_name();
-      auto n = expr->index_num();
       for ( auto index: expr->index_list() ) {
 	ans += "[" + index->decompile() + "]";
       }

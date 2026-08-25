@@ -15,16 +15,14 @@ TEST_F(ParserTest_Decl, IOHead1)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
-      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
-      auto head = factory.new_IOHead(fr, dir, sign);
-      parser.add_module_iohead(head);
+      auto head = factory.new_IOHead(fr, dir);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::None,
 		   VpiNetType::None,
 		   VpiVarType::None,
-		   sign, nullptr,
+		   false, nullptr,
 		   std::vector<const AstIOItem*>{});
     }
   }
@@ -37,10 +35,8 @@ TEST_F(ParserTest_Decl, IOHead2)
   auto range = new_range(fr1, 31, fr2, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
-      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = factory.new_IOHead(fr, dir, sign, range);
-      parser.add_module_iohead(head);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::None,
@@ -56,16 +52,14 @@ TEST_F(ParserTest_Decl, RegIOHead)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
-      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
-      auto head = factory.new_RegIOHead(fr, dir, sign);
-      parser.add_module_iohead(head);
+      auto head = factory.new_RegIOHead(fr, dir);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::Reg,
 		   VpiNetType::None,
 		   VpiVarType::None,
-		   sign, nullptr,
+		   false, nullptr,
 		   std::vector<const AstIOItem*>{});
     }
   }
@@ -78,10 +72,8 @@ TEST_F(ParserTest_Decl, RegIOHead2)
   auto range = new_range(fr1, 31, fr2, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
-      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = factory.new_RegIOHead(fr, dir, sign, range);
-      parser.add_module_iohead(head);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::Reg,
@@ -101,16 +93,14 @@ TEST_F(ParserTest_Decl, NetIOHead)
 		      VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		      VpiNetType::Supply1, VpiNetType::Supply0 } ) {
       for ( bool sign: { true, false } ) {
-	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetIOHead(fr, dir, net, sign);
-	parser.add_module_iohead(head);
+	auto head = factory.new_NetIOHead(fr, dir, net);
 
 	check_IOHead(head, fr, dir,
 		     VpiAuxType::Net,
 		     net,
 		     VpiVarType::None,
-		     sign, nullptr,
+		     false, nullptr,
 		     std::vector<const AstIOItem*>{});
       }
     }
@@ -128,10 +118,8 @@ TEST_F(ParserTest_Decl, NetIOHead2)
 		      VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		      VpiNetType::Supply1, VpiNetType::Supply0 } ) {
       for ( bool sign: { true, false } ) {
-	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
 	auto head = factory.new_NetIOHead(fr, dir, net, sign, range);
-	parser.add_module_iohead(head);
 
 	check_IOHead(head, fr, dir,
 		     VpiAuxType::Net,
@@ -149,10 +137,8 @@ TEST_F(ParserTest_Decl, VarIOHead)
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		      VpiVarType::Time, VpiVarType::Realtime } ) {
-      parser.init_module();
       auto fr = make_file_region(1, 2, 3, 4);
       auto head = factory.new_VarIOHead(fr, dir, var);
-      parser.add_module_iohead(head);
       ASSERT_TRUE( head != nullptr );
 
       check_IOHead(head, fr, dir,
@@ -167,7 +153,6 @@ TEST_F(ParserTest_Decl, VarIOHead)
 
 TEST_F(ParserTest_Decl, IOItem)
 {
-  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "port1";
   auto item = factory.new_IOItem(fr, name);
@@ -177,8 +162,6 @@ TEST_F(ParserTest_Decl, IOItem)
 
 TEST_F(ParserTest_Decl, IOItem2)
 {
-  parser.init_module();
-
   auto fr2 = make_file_region(1, 10, 3, 14);
   auto fr3 = make_file_region(2, 20, 2, 22);
   auto name = "port1";
@@ -190,10 +173,8 @@ TEST_F(ParserTest_Decl, IOItem2)
 
 TEST_F(ParserTest_Decl, ParamH)
 {
-  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
   auto head = factory.new_ParamH(fr);
-  parser.add_declhead(head);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Param,
@@ -213,10 +194,8 @@ TEST_F(ParserTest_Decl, ParamH2)
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   for ( auto sign: { true, false } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = factory.new_ParamH(fr, sign, range);
-    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Param,
@@ -235,10 +214,8 @@ TEST_F(ParserTest_Decl, ParamH3)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
     auto head = factory.new_ParamH(fr, var);
-    parser.add_declhead(head);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Param,
@@ -255,10 +232,8 @@ TEST_F(ParserTest_Decl, ParamH3)
 
 TEST_F(ParserTest_Decl, LocalParamH)
 {
-  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_LocalParamH(fr);
-  parser.add_declhead(head);
+  auto head = factory.new_LocalParamH(fr, nullptr);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::LocalParam,
@@ -278,10 +253,8 @@ TEST_F(ParserTest_Decl, LocalParamH2)
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   for ( auto sign: { true, false } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_LocalParamH(fr, sign, range);
-    parser.add_declhead(head);
+    auto head = factory.new_LocalParamH(fr, sign, range, nullptr);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::LocalParam,
@@ -300,10 +273,8 @@ TEST_F(ParserTest_Decl, LocalParamH3)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_LocalParamH(fr, var);
-    parser.add_declhead(head);
+    auto head = factory.new_LocalParamH(fr, var, nullptr);
 
     auto sign = (var == VpiVarType::Time) ? false : true;
     check_DeclHead(head, fr,
@@ -321,10 +292,8 @@ TEST_F(ParserTest_Decl, LocalParamH3)
 
 TEST_F(ParserTest_Decl, SpecParamH)
 {
-  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_SpecParamH(fr);
-  parser.add_declhead(head);
+  auto head = factory.new_SpecParamH(fr, nullptr);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::SpecParam,
@@ -340,13 +309,11 @@ TEST_F(ParserTest_Decl, SpecParamH)
 
 TEST_F(ParserTest_Decl, SpecParamH2)
 {
-  parser.init_module();
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_SpecParamH(fr, range);
-  parser.add_declhead(head);
+  auto head = factory.new_SpecParamH(fr, range, nullptr);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::SpecParam,
@@ -362,10 +329,8 @@ TEST_F(ParserTest_Decl, SpecParamH2)
 
 TEST_F(ParserTest_Decl, EventH)
 {
-  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_EventH(fr);
-  parser.add_declhead(head);
+  auto head = factory.new_EventH(fr, nullptr);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Event,
@@ -381,10 +346,8 @@ TEST_F(ParserTest_Decl, EventH)
 
 TEST_F(ParserTest_Decl, GenvarH)
 {
-  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_GenvarH(fr);
-  parser.add_declhead(head);
+  auto head = factory.new_GenvarH(fr, nullptr);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Genvar,
@@ -402,10 +365,8 @@ TEST_F(ParserTest_Decl, VarH)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_VarH(fr, var);
-    parser.add_declhead(head);
+    auto head = factory.new_VarH(fr, var, nullptr);
 
     auto sign = (var == VpiVarType::Time) ? false : true;
     check_DeclHead(head, fr,
@@ -423,10 +384,8 @@ TEST_F(ParserTest_Decl, VarH)
 
 TEST_F(ParserTest_Decl, RegH)
 {
-  parser.init_module();
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_RegH(fr);
-  parser.add_declhead(head);
+  auto head = factory.new_RegH(fr, nullptr);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Reg,
@@ -446,10 +405,8 @@ TEST_F(ParserTest_Decl, RegH2)
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto range = new_range(fr1, 31, fr2, 0);
   for ( bool sign: { true, false } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_RegH(fr, sign, range);
-    parser.add_declhead(head);
+    auto head = factory.new_RegH(fr, sign, range, nullptr);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Reg,
@@ -470,10 +427,8 @@ TEST_F(ParserTest_Decl, NetH)
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_NetH(fr, net);
-    parser.add_declhead(head);
+    auto head = factory.new_NetH(fr, net, nullptr);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -492,16 +447,14 @@ TEST_F(ParserTest_Decl, NetHS)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto str = factory.new_Strength(fr1,
-					   VpiStrength::SupplyDrive,
-					   VpiStrength::StrongDrive);
+				  VpiStrength::SupplyDrive,
+				  VpiStrength::StrongDrive);
   for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_NetH(fr, net, str);
-    parser.add_declhead(head);
+    auto head = factory.new_NetH(fr, net, str, nullptr);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -526,10 +479,8 @@ TEST_F(ParserTest_Decl, NetHD)
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_NetH(fr, net, delay);
-    parser.add_declhead(head);
+    auto head = factory.new_NetH(fr, net, delay, nullptr);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -548,8 +499,8 @@ TEST_F(ParserTest_Decl, NetHSD)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto str = factory.new_Strength(fr1,
-					   VpiStrength::SupplyDrive,
-					   VpiStrength::StrongDrive);
+				  VpiStrength::SupplyDrive,
+				  VpiStrength::StrongDrive);
   auto fr2 = make_file_region(2, 2, 2, 2);
   auto val = factory.new_IntConst(fr2, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
@@ -558,10 +509,8 @@ TEST_F(ParserTest_Decl, NetHSD)
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
-    parser.init_module();
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_NetH(fr, net, str, delay);
-    parser.add_declhead(head);
+    auto head = factory.new_NetH(fr, net, str, delay, nullptr);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -587,10 +536,8 @@ TEST_F(ParserTest_Decl, NetH2)
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
-	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetH(fr, net, vs, sign, range);
-	parser.add_declhead(head);
+	auto head = factory.new_NetH(fr, net, vs, sign, range, nullptr);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -622,10 +569,8 @@ TEST_F(ParserTest_Decl, NetHS2)
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
-	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetH(fr, net, str, vs, sign, range);
-	parser.add_declhead(head);
+	auto head = factory.new_NetH(fr, net, str, vs, sign, range, nullptr);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -657,10 +602,8 @@ TEST_F(ParserTest_Decl, NetHD2)
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
-	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetH(fr, net, vs, sign, range, delay);
-	parser.add_declhead(head);
+	auto head = factory.new_NetH(fr, net, vs, sign, range, delay, nullptr);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -684,8 +627,8 @@ TEST_F(ParserTest_Decl, NetHSD2)
   auto range = new_range(fr1, 31, fr2, 0);
   auto fr4 = make_file_region(4, 4, 4, 4);
   auto str = factory.new_Strength(fr4,
-					   VpiStrength::SupplyDrive,
-					   VpiStrength::StrongDrive);
+				  VpiStrength::SupplyDrive,
+				  VpiStrength::StrongDrive);
   auto fr5 = make_file_region(5, 5, 5, 5);
   auto val = factory.new_IntConst(fr5, 1U);
   auto fr6 = make_file_region(6, 6, 6, 6);
@@ -696,10 +639,8 @@ TEST_F(ParserTest_Decl, NetHSD2)
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
-	parser.init_module();
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetH(fr, net, str, vs, sign, range, delay);
-	parser.add_declhead(head);
+	auto head = factory.new_NetH(fr, net, str, vs, sign, range, delay, nullptr);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -718,8 +659,6 @@ TEST_F(ParserTest_Decl, NetHSD2)
 
 TEST_F(ParserTest_Decl, DeclItem)
 {
-  parser.init_module();
-
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "port1";
   auto item = factory.new_DeclItem(fr, name);
@@ -729,8 +668,6 @@ TEST_F(ParserTest_Decl, DeclItem)
 
 TEST_F(ParserTest_Decl, DeclItem2)
 {
-  parser.init_module();
-
   auto fr2 = make_file_region(1, 10, 1, 14);
   auto fr3 = make_file_region(1, 20, 1, 28);
   auto name = "port1";
@@ -742,8 +679,6 @@ TEST_F(ParserTest_Decl, DeclItem2)
 
 TEST_F(ParserTest_Decl, DeclItem3)
 {
-  parser.init_module();
-
   auto name = "port1";
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto fr2 = make_file_region(2, 2, 2, 2);
@@ -756,8 +691,6 @@ TEST_F(ParserTest_Decl, DeclItem3)
 
 TEST_F(ParserTest_Decl, DeclItem4)
 {
-  parser.init_module();
-
   auto name = "port1";
   auto fr1 = make_file_region(1, 1, 1, 9);
   auto fr2 = make_file_region(2, 10, 1, 19);
@@ -765,9 +698,9 @@ TEST_F(ParserTest_Decl, DeclItem4)
   auto fr3 = make_file_region(1, 20, 1, 29);
   auto fr4 = make_file_region(2, 30, 1, 39);
   auto range2 = new_range(fr2, 63, fr2, 0);
-  range2->set_link(range1);
+  range1->set_link(range2);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto item = factory.new_DeclItem(fr, name, range2);
+  auto item = factory.new_DeclItem(fr, name, range1);
 
   check_DeclItem(item, fr, name, {range1, range2}, nullptr);
 }

@@ -26,12 +26,10 @@ TEST_F(ParserTest_Item, DefParam1)
   auto fr2 = make_file_region(1, 14, 1, 20);
   auto fr3 = make_file_region(1, 30, 1, 40);
 
-  parser.init_defparam_list();
   auto val = parser.factory().new_IntConst(fr3, 123U);
   auto name = "param1";
   auto defparam1 = parser.factory().new_DefParam(fr2, name, val);
-  parser.add_defparam(defparam1);
-  auto item = parser.factory().new_DefParamH(fr1, parser.defparam_list());
+  auto item = parser.factory().new_DefParamH(fr1, defparam1);
 
   check_item_DefParam(item,
 		      std::vector<const AstDefParam*>{defparam1});

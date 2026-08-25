@@ -63,11 +63,12 @@ CptRegHSV::is_signed() const
 // reg 宣言のヘッダを生成する．
 PtDeclHead*
 PtFactory::new_RegH(
-  const FileRegion& file_region
+  const FileRegion& file_region,
+  PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptRegH));
-  return new (p) CptRegH(file_region);
+  return new (p) CptRegH(file_region, item_top);
 }
 
 // reg 宣言のヘッダを生成する．
@@ -75,15 +76,16 @@ PtDeclHead*
 PtFactory::new_RegH(
   const FileRegion& file_region,
   bool sign,
-  const AstRange* range
+  const AstRange* range,
+  PtDeclItem* item_top
 )
 {
   if ( sign ) {
     void* p = mAlloc.get_memory(sizeof(CptRegHSV));
-    return new (p) CptRegHSV(file_region, range);
+    return new (p) CptRegHSV(file_region, range, item_top);
   }
   void* p = mAlloc.get_memory(sizeof(CptRegHV));
-  return new (p) CptRegHV(file_region, range);
+  return new (p) CptRegHV(file_region, range, item_top);
 }
 
 END_NAMESPACE_YM_VERILOG

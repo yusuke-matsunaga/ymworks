@@ -9,13 +9,10 @@
 /// All rights reserved.
 
 #include "ym/vl/Ast.h"
-#include "parser/PtFwd.h"
+#include "parser/Parser.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
-
-class Parser;
-class PtHierName;
 
 #include "verilog_grammer.hh"
 

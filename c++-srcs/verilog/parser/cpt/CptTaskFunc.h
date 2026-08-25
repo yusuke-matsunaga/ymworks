@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -28,19 +27,19 @@ protected:
     const FileRegion& file_region,
     const char* name,
     bool automatic,
-    PtIOHeadArray&& iohead_list,
-    PtDeclHeadArray&& declhead_list,
+    const AstIOHead* iohead_top,
+    const AstDeclHead* declhead_top,
     const AstStmt* stmt
   ) : mFileRegion{file_region},
       mName{name},
       mAutomatic{automatic},
-      mIOHeadList{std::move(iohead_list)},
-      mDeclHeadList{std::move(declhead_list)},
+      mIOHeadTop{iohead_top},
+      mDeclHeadTop{declhead_top},
       mBody{stmt}
   {
     int n = 0;
-    for ( auto head: mIOHeadList ) {
-      n += head->item_num();
+    for ( auto head: AstIOHeadList(mIOHeadTop) ) {
+      n += head->item_list().size();
     }
     mIOItemNum = n;
   }
@@ -66,36 +65,16 @@ public:
   bool
   automatic() const override;
 
+  /// @brief IO宣言ヘッダリストの取得
+  AstIOHeadList
+  iohead_list() const override;
+
   /// @brief IO宣言の要素数の取得
   SizeType
   ioitem_num() const override;
 
-  /// @brief IO宣言ヘッダリストの要素数の取得
-  SizeType
-  iohead_num() const override;
-
-  /// @brief IO宣言ヘッダの取得
-  const AstIOHead*
-  iohead(
-    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
-  ) const override;
-
-  /// @brief IO宣言ヘッダリストの取得
-  AstIOHeadVec
-  iohead_list() const override;
-
-  /// @brief 宣言ヘッダの要素数の取得
-  SizeType
-  declhead_num() const override;
-
-  /// @brief 宣言ヘッダの取得
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const override;
-
   /// @brief 宣言ヘッダリストの取得
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const override;
 
   /// @brief 本体を取り出す．
@@ -120,11 +99,11 @@ private:
   // IO宣言の要素数
   int mIOItemNum;
 
-  // IO宣言のリスト
-  PtIOHeadArray mIOHeadList;
+  // IO宣言の先頭
+  const AstIOHead* mIOHeadTop;
 
-  // その他の宣言の配列
-  PtDeclHeadArray mDeclHeadList;
+  // その他の宣言の先頭
+  const AstDeclHead* mDeclHeadTop;
 
   // 本体
   const AstStmt* mBody;
@@ -146,12 +125,11 @@ public:
     const FileRegion& file_region,
     const char* name,
     bool automatic,
-    PtIOHeadArray&& iohead_list,
-    PtDeclHeadArray&& declhead_list,
+    const AstIOHead* iohead_top,
+    const AstDeclHead* declhead_top,
     const AstStmt* stmt
   ) : CptTf(file_region, name, automatic,
-	    std::move(iohead_list),
-	    std::move(declhead_list),
+	    iohead_top, declhead_top,
 	    stmt)
   {
   }
@@ -187,12 +165,11 @@ public:
     const char* name,
     bool automatic,
     bool sign,
-    PtIOHeadArray&& iohead_list,
-    PtDeclHeadArray&& declhead_list,
+    const AstIOHead* iohead_top,
+    const AstDeclHead* declhead_top,
     const AstStmt* stmt
   ) : CptTf(file_region, name, automatic,
-	    std::move(iohead_list),
-	    std::move(declhead_list),
+	    iohead_top, declhead_top,
 	    stmt),
       mSigned{sign}
   {
@@ -265,12 +242,11 @@ public:
     bool automatic,
     bool sign,
     const AstRange* range,
-    PtIOHeadArray&& iohead_list,
-    PtDeclHeadArray&& declhead_list,
+    const AstIOHead* iohead_top,
+    const AstDeclHead* declhead_top,
     const AstStmt* stmt
   ) : CptFunction(file_region, name, automatic, sign,
-		  std::move(iohead_list),
-		  std::move(declhead_list),
+		  iohead_top, declhead_top,
 		  stmt),
       mRange{range}
   {
@@ -317,12 +293,11 @@ public:
     bool automatic,
     bool sign,
     VpiVarType data_type,
-    PtIOHeadArray&& iohead_list,
-    PtDeclHeadArray&& declhead_list,
+    const AstIOHead* iohead_top,
+    const AstDeclHead* declhead_top,
     const AstStmt* stmt
   ) : CptFunction(file_region, name, automatic, sign,
-		  std::move(iohead_list),
-		  std::move(declhead_list),
+		  iohead_top, declhead_top,
 		  stmt),
       mDataType{data_type}
   {

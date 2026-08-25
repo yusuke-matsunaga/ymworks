@@ -102,7 +102,7 @@ ModuleGen::phase1_module_item(
   ast_module->set_in_use();
 
   // パラメータポートを実体化する．
-  bool has_paramportdecl = (ast_module->paramport_num() > 0);
+  bool has_paramportdecl = (ast_module->paramport_list().size() > 0);
   if ( has_paramportdecl ) {
     phase1_decl(module, ast_module->paramport_list(), false);
   }
@@ -210,14 +210,14 @@ ModuleGen::instantiate_port(
 )
 {
   // 内側の接続と向きを作る．
-  auto n = ast_port->portref_size();
+  auto n = ast_port->portref_list().size();
   if ( n == 0 ) {
     // 空のポートの場合
     module->init_port(index, nullptr, nullptr, VpiDir::NoDirection);
   }
   else if ( n == 1 ) {
     // 単一の要素の場合
-    auto ast_expr = ast_port->portref(0);
+    auto ast_expr = ast_port->portref_list().front();
     auto dir = ast_port->portref_dir(0);
     auto low_conn = instantiate_portref(module, ast_expr);
     module->init_port(index, ast_port, low_conn, dir);
@@ -227,8 +227,7 @@ ModuleGen::instantiate_port(
     std::vector<ElbExpr*> expr_list;
     expr_list.reserve(n);
     auto dir = VpiDir::NoDirection;
-    for ( SizeType i = 0; i < ast_port->portref_size(); ++ i ) {
-      auto ast_expr = ast_port->portref(i);
+    for ( auto ast_expr: ast_port->portref_list() ) {
       auto expr = instantiate_portref(module, ast_expr);
       if ( !expr ) {
 	return;
@@ -285,7 +284,7 @@ ModuleGen::instantiate_portref(
 
   // 添字の部分を実体化する．
   const AstExpr* ast_index = nullptr;
-  if ( ast_expr->index_num() > 0 ) {
+  if ( ast_expr->index_list().size() > 0 ) {
     ast_index = ast_expr->index_list().front();
   }
   if ( ast_index ) {

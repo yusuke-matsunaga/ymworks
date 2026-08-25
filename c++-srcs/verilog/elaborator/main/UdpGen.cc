@@ -62,7 +62,7 @@ UdpGen::instantiate_udp(
 		    buf.str());
   }
 
-  SizeType io_size = ast_udp->port_num();
+  SizeType io_size = ast_udp->port_list().size();
 
   SizeType isize = io_size - 1;
   auto ptype = ast_udp->prim_type();
@@ -230,7 +230,7 @@ UdpGen::instantiate_udp(
     SizeType pos = 0;
     for ( auto ast_udp_entry: ast_udp->table_list() ) {
       const auto& tfr = ast_udp_entry->file_region();
-      if ( ast_udp_entry->input_num() != isize ) {
+      if ( ast_udp_entry->input_list().size() != isize ) {
 	// サイズが合わない．
 	MsgMgr::put_msg(__FILE__, __LINE__,
 			tfr,

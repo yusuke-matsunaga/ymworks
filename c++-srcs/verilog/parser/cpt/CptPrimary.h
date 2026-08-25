@@ -133,23 +133,23 @@ private:
 //////////////////////////////////////////////////////////////////////
 // インデックスつきの primary を表すクラス
 //////////////////////////////////////////////////////////////////////
-class CptPrimaryI1 :
+class CptPrimaryI :
   public CptPrimary
 {
 public:
 
   // コンストラクタ
-  CptPrimaryI1(
+  CptPrimaryI(
     const FileRegion& file_region,
     const char* name,
-    const AstExpr* index
+    PtExpr* index_top
   ) : CptPrimary(file_region, name),
-      mIndex{index}
+      mIndexTop{index_top}
   {
   }
 
   // デストラクタ
-  ~CptPrimaryI1() {}
+  ~CptPrimaryI() {}
 
 
 public:
@@ -157,23 +157,8 @@ public:
   // AstPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief インデックスリストのサイズの取得
-  /// @return インデックスリストのサイズ
-  ///
-  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
-  SizeType
-  index_num() const override;
-
-  /// @brief インデックスの取得
-  ///
-  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  index(
-    SizeType i ///< [in] インデックス ( 0 <= i < index_num() )
-  ) const override;
-
   /// @brief インデックスリストの取得
-  AstExprVec
+  AstExprList
   index_list() const override;
 
   // index_list も range も持たないとき true を返す．
@@ -186,73 +171,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // インデックス
-  const AstExpr* mIndex;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-// インデックスリストつきの primary を表すクラス
-//////////////////////////////////////////////////////////////////////
-class CptPrimaryI2 :
-  public CptPrimary
-{
-public:
-
-  // コンストラクタ
-  CptPrimaryI2(
-    const FileRegion& file_region,
-    const char* name,
-    const AstExprList* index_list
-  ) : CptPrimary(file_region, name),
-      mIndexList{index_list}
-  {
-  }
-
-  // デストラクタ
-  ~CptPrimaryI2() {}
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstPrimary の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief インデックスリストのサイズの取得
-  /// @return インデックスリストのサイズ
-  ///
-  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
-  SizeType
-  index_num() const override;
-
-  /// @brief インデックスの取得
-  ///
-  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  index(
-    SizeType i ///< [in] インデックス ( 0 <= i < index_num() )
-  ) const override;
-
-  /// @brief インデックスリストの取得
-  AstExprVec
-  index_list() const override;
-
-  // index_list も range も持たないとき true を返す．
-  bool
-  is_simple() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // ファイル位置
-  FileRegion mFileRegion;
-
-  // インデックスの配列
-  const AstExprList* mIndexList;
+  // インデックスの先頭
+  const AstExpr* mIndexTop;
 
 };
 
@@ -261,7 +181,7 @@ private:
 // 定数インデックスつきの primary を表すクラス
 //////////////////////////////////////////////////////////////////////
 class CptPrimaryCI :
-  public CptPrimaryI2
+  public CptPrimaryI
 {
 public:
 
@@ -269,8 +189,8 @@ public:
   CptPrimaryCI(
     const FileRegion& file_region,
     const char* name,
-    const AstExprList* index_list
-  ) : CptPrimaryI2(file_region, name, index_list)
+    PtExpr* index_top
+  ) : CptPrimaryI(file_region, name, index_top)
   {
   }
 
@@ -382,7 +302,7 @@ public:
 // インデックスと範囲指定つきの primary を表すクラス
 //////////////////////////////////////////////////////////////////////
 class CptPrimaryIR :
-  public CptPrimaryI2
+  public CptPrimaryI
 {
 public:
 
@@ -390,9 +310,9 @@ public:
   CptPrimaryIR(
     const FileRegion& file_region,
     const char* name,
-    const AstExprList* index_list,
+    PtExpr* index_top,
     const AstPart* part
-  ) : CptPrimaryI2(file_region, name, index_list),
+  ) : CptPrimaryI(file_region, name, index_top),
       mPart{part}
   {
   }
@@ -436,7 +356,7 @@ public:
     const PtHierName& hname
   ) : CptPrimaryBase(hname.tail_name),
       mFileRegion{file_region},
-      mNbTop{hname.nb_top->reverse()}
+      mNbTop{hname.nb_list.top}
   {
   }
 
@@ -476,7 +396,7 @@ private:
 // 階層名を持つインデックスつき primary を表すクラス
 //////////////////////////////////////////////////////////////////////
 class CptPrimaryHI :
-  public CptPrimaryI2
+  public CptPrimaryI
 {
 public:
 
@@ -484,9 +404,9 @@ public:
   CptPrimaryHI(
     const FileRegion& file_region,
     const PtHierName& hname,
-    const AstExprList* index_list
-  ) : CptPrimaryI2(file_region, hname.tail_name, index_list),
-      mNbTop{hname.nb_top->reverse()}
+    PtExpr* index_top
+  ) : CptPrimaryI(file_region, hname.tail_name, index_top),
+      mNbTop{hname.nb_list.top}
   {
   }
 
@@ -527,8 +447,8 @@ public:
   CptPrimaryHCI(
     const FileRegion& file_region,
     const PtHierName& hname,
-    const AstExprList* index_list
-  ) : CptPrimaryHI(file_region, hname, index_list)
+    PtExpr* index_top
+  ) : CptPrimaryHI(file_region, hname, index_top)
   {
   }
 
@@ -562,7 +482,7 @@ public:
     const PtHierName& hname,
     const AstPart* part
   ) : CptPrimaryR(file_region, hname.tail_name, part),
-      mNbTop{hname.nb_top->reverse()}
+      mNbTop{hname.nb_list.top}
   {
   }
 
@@ -603,11 +523,11 @@ public:
   CptPrimaryHIR(
     const FileRegion& file_region,
     const PtHierName& hname,
-    const AstExprList* index_list,
+    PtExpr* index_top,
     const AstPart* part
   ) : CptPrimaryIR(file_region, hname.tail_name,
-		   index_list, part),
-      mNbTop{hname.nb_top->reverse()}
+		   index_top, part),
+      mNbTop{hname.nb_list.top}
   {
   }
 

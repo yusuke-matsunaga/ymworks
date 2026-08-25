@@ -43,44 +43,28 @@ CptExpr::name() const
 const AstExpr*
 CptExpr::operand0() const
 {
-  throw std::logic_error{"Does not have operand0"};
+  throw std::logic_error{"operand0(): type mismtach"};
 }
 
 // @brief 1番目のオペランドの取得
 const AstExpr*
 CptExpr::operand1() const
 {
-  throw std::logic_error{"Does not have operand1"};
+  throw std::logic_error{"operand0(): type mismtach"};
 }
 
 // @brief 2番目のオペランドの取得
 const AstExpr*
 CptExpr::operand2() const
 {
-  throw std::logic_error{"Does not have operand2"};
-}
-
-// @brief オペランドの数の取得
-SizeType
-CptExpr::operand_num() const
-{
-  throw std::logic_error{"operand_num(): Does not have operand_list()"};
+  throw std::logic_error{"operand0(): type mismtach"};
 }
 
 // @brief オペランドのリストの取得
-const AstExpr*
-CptExpr::operand(
-  SizeType index
-) const
-{
-  throw std::logic_error{"operand(): Does not have operand_list()"};
-}
-
-// @brief オペランドのリストの取得
-AstExprVec
+AstExprList
 CptExpr::operand_list() const
 {
-  throw std::out_of_range{"operand_list(): Does not have operand_list"};
+  throw std::out_of_range{"operand_list(): type mismatch"};
 }
 
 // @brief multi-concat の繰り返し数
@@ -97,24 +81,8 @@ CptExpr::is_const_index() const
   throw std::logic_error{"is_const_index(): Not a Primary type"};
 }
 
-// @brief インデックスリストのサイズの取得
-SizeType
-CptExpr::index_num() const
-{
-  throw std::logic_error{"index_num(): Not a Primary type"};
-}
-
-// @brief インデックスの取得
-const AstExpr*
-CptExpr::index(
-  SizeType i
-) const
-{
-  throw std::logic_error{"index(): Not a Primary type"};
-}
-
 // @brief インデックスリストの取得
-AstExprVec
+AstExprList
 CptExpr::index_list() const
 {
   throw std::logic_error{"index_list(); Not a Primary type"};
@@ -249,27 +217,11 @@ CptFuncCallBase::name() const
   return mName;
 }
 
-// @brief オペランドの数の取得
-SizeType
-CptFuncCallBase::operand_num() const
-{
-  return mArgList->size();
-}
-
 // @brief オペランドのリストの取得
-const AstExpr*
-CptFuncCallBase::operand(
-  SizeType index
-) const
-{
-  return mArgList->expr(index);
-}
-
-// @brief オペランドのリストの取得
-AstExprVec
+AstExprList
 CptFuncCallBase::operand_list() const
 {
-  return mArgList->to_vector();
+  return AstExprList(mArgTop);
 }
 
 
@@ -310,34 +262,6 @@ CptSysFuncCall::type() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス CptExprList
-//////////////////////////////////////////////////////////////////////
-
-// @brief 要素数を返す．
-SizeType
-CptExprList::size() const
-{
-  return mExprList.size();
-}
-
-// @brief 要素を取り出す．
-const AstExpr*
-CptExprList::expr(
-  SizeType index
-) const
-{
-  return mExprList[index];
-}
-
-// @brief ベクタに変換する．
-AstExprVec
-CptExprList::to_vector() const
-{
-  return mExprList.to_vector();
-}
-
-
-//////////////////////////////////////////////////////////////////////
 // クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
@@ -360,11 +284,11 @@ PtExpr*
 PtFactory::new_FuncCall(
   const FileRegion& file_region,
   const char* name,
-  const AstExprList* arg_list
+  PtExpr* arg_top
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptFuncCall));
-  return new (p) CptFuncCall(file_region, name, arg_list);
+  return new (p) CptFuncCall(file_region, name, arg_top);
 }
 
 // function call を生成する．
@@ -372,15 +296,11 @@ PtExpr*
 PtFactory::new_FuncCall(
   const FileRegion& file_region,
   const PtHierName& hname,
-  const AstExprList* arg_list
+  PtExpr* arg_top
 )
 {
-  auto nb_top = hname.nb_top->reverse();
-  auto tail_name = hname.tail_name;
   auto p = mAlloc.get_memory(sizeof(CptFuncCallH));
-  return new (p) CptFuncCallH(file_region,
-			      nb_top, tail_name,
-			      arg_list);
+  return new (p) CptFuncCallH(file_region, hname, arg_top);
 }
 
 // system function call を生成する．
@@ -399,21 +319,11 @@ PtExpr*
 PtFactory::new_SysFuncCall(
   const FileRegion& file_region,
   const char* name,
-  const AstExprList* arg_list
+  PtExpr* arg_top
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptSysFuncCall));
-  return new CptSysFuncCall(file_region, name, arg_list);
-}
-
-// @brief ExprList の生成
-PtExprList*
-PtFactory::new_ExprList(
-  const AstExprVec& expr_list
-)
-{
-  auto p = mAlloc.get_memory(sizeof(CptExprList));
-  return new (p) CptExprList(PtExprArray(mAlloc, expr_list));
+  return new CptSysFuncCall(file_region, name, arg_top);
 }
 
 END_NAMESPACE_YM_VERILOG

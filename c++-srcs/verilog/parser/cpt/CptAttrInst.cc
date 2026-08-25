@@ -31,36 +31,6 @@ CptAttrInst::attrspec_list() const
   return AstAttrSpecList(mAttrSpecTop);
 }
 
-// @brief 次の要素を返す．
-const AstAttrInst*
-CptAttrInst::link() const
-{
-  return mLink;
-}
-
-// @brief PtAttrInst* 型のリンクを返す．
-PtAttrInst*
-CptAttrInst::_link() const
-{
-  return mLink;
-}
-
-// @brief link を設定する．
-void
-CptAttrInst::set_link(
-  PtAttrInst* link
-)
-{
-  mLink = link;
-}
-
-// @brief リンクトリストを逆順にする．
-PtAttrInst*
-CptAttrInst::reverse()
-{
-  return make_reverse<PtAttrInst>(this);
-}
-
 
 //////////////////////////////////////////////////////////////////////
 // クラス AttrSpec
@@ -87,36 +57,6 @@ CptAttrSpec::expr() const
   return mExpr;
 }
 
-// @brief PtAttrSpec* 型のリンクを返す．
-PtAttrSpec*
-CptAttrSpec::_link() const
-{
-  return mLink;
-}
-
-// @brief 次の要素を返す．
-const AstAttrSpec*
-CptAttrSpec::link() const
-{
-  return mLink;
-}
-
-// @brief link を設定する．
-void
-CptAttrSpec::set_link(
-  PtAttrSpec* link
-)
-{
-  mLink = link;
-}
-
-// @brief リンクトリストを逆順にする．
-PtAttrSpec*
-CptAttrSpec::reverse()
-{
-  return make_reverse<PtAttrSpec>(this);
-}
-
 
 //////////////////////////////////////////////////////////////////////
 // クラス PtFactory
@@ -130,7 +70,7 @@ PtFactory::new_AttrInst(
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptAttrInst));
-  return new (p) CptAttrInst(file_region, as_top->reverse());
+  return new (p) CptAttrInst(file_region, as_top);
 }
 
 // attribute spec を生成する．

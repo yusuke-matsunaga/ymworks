@@ -24,24 +24,8 @@ CptControl::delay() const
   throw std::logic_error{"Not an Delay control type"};
 }
 
-// @brief イベントリストの要素数の取得
-SizeType
-CptControl::event_num() const
-{
-  throw std::logic_error{"Not an Eent|Repeat control type"};
-}
-
-// @brief イベントの取得
-const AstExpr*
-CptControl::event(
-  SizeType index
-) const
-{
-  throw std::logic_error{"Not an Eent|Repeat control type"};
-}
-
 // @brief イベントリストの取得
-AstExprVec
+AstExprList
 CptControl::event_list() const
 {
   throw std::logic_error{"Not an Eent|Repeat control type"};
@@ -99,27 +83,11 @@ CptEventControl::type() const
   return Event;
 }
 
-// @brief イベントリストの要素数の取得
-SizeType
-CptEventControl::event_num() const
-{
-  return 0;
-}
-
-// @brief イベントの取得
-const AstExpr*
-CptEventControl::event(
-  SizeType index
-) const
-{
-  throw std::out_of_range{"event(index): index is out of range"};
-}
-
 // @brief イベントリストの取得
-AstExprVec
+AstExprList
 CptEventControl::event_list() const
 {
-  return {};
+  return AstExprList();
 }
 
 
@@ -127,58 +95,11 @@ CptEventControl::event_list() const
 // クラス CptEventControl1
 //////////////////////////////////////////////////////////////////////
 
-// @brief イベントリストの要素数の取得
-SizeType
-CptEventControl1::event_num() const
-{
-  return 1;
-}
-
-// @brief イベントの取得
-const AstExpr*
-CptEventControl1::event(
-  SizeType index
-) const
-{
-  if ( index >0 ) {
-    throw std::out_of_range{"event(index): index is out of range"};
-  }
-  return mEvent;
-}
-
 // @brief イベントリストの取得
-AstExprVec
+AstExprList
 CptEventControl1::event_list() const
 {
-  return {mEvent};
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス CptEventControl2
-//////////////////////////////////////////////////////////////////////
-
-// @brief イベントリストの要素数の取得
-SizeType
-CptEventControl2::event_num() const
-{
-  return mEventList->size();
-}
-
-// @brief イベントの取得
-const AstExpr*
-CptEventControl2::event(
-  SizeType index
-) const
-{
-  return mEventList->expr(index);
-}
-
-// @brief イベントリストの取得
-AstExprVec
-CptEventControl2::event_list() const
-{
-  return mEventList->to_vector();
+  return AstExprList(mEventTop);
 }
 
 
@@ -221,25 +142,6 @@ CptRepeatControl1::rep_expr() const
 
 
 //////////////////////////////////////////////////////////////////////
-// repeat 形式の event を表すクラス
-//////////////////////////////////////////////////////////////////////
-
-// 型を返す．
-AstControl::Type
-CptRepeatControl2::type() const
-{
-  return Repeat;
-}
-
-// 繰り返し数を得る．
-const AstExpr*
-CptRepeatControl2::rep_expr() const
-{
-  return mRepExpr;
-}
-
-
-//////////////////////////////////////////////////////////////////////
 // クラス PtFactory
 //////////////////////////////////////////////////////////////////////
 
@@ -268,22 +170,11 @@ PtFactory::new_EventControl(
 PtControl*
 PtFactory::new_EventControl(
   const FileRegion& file_region,
-  const AstExpr* event
+  PtExpr* event_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEventControl1));
-  return new (p) CptEventControl1(file_region, event);
-}
-
-// イベントコントロールを生成する．
-PtControl*
-PtFactory::new_EventControl(
-  const FileRegion& file_region,
-  const AstExprList* event_list
-)
-{
-  void* p = mAlloc.get_memory(sizeof(CptEventControl2));
-  return new (p) CptEventControl2(file_region, event_list);
+  return new (p) CptEventControl1(file_region, event_top);
 }
 
 // リピートコントロールを生成する．
@@ -302,23 +193,11 @@ PtControl*
 PtFactory::new_RepeatControl(
   const FileRegion& file_region,
   const AstExpr* rep,
-  const AstExpr* event
+  PtExpr* event_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptRepeatControl1));
-  return new (p) CptRepeatControl1(file_region, rep, event);
-}
-
-// リピートコントロールを生成する．
-PtControl*
-PtFactory::new_RepeatControl(
-  const FileRegion& file_region,
-  const AstExpr* rep,
-  const AstExprList* event_list
-)
-{
-  void* p = mAlloc.get_memory(sizeof(CptRepeatControl2));
-  return new (p) CptRepeatControl2(file_region, rep, event_list);
+  return new (p) CptRepeatControl1(file_region, rep, event_top);
 }
 
 END_NAMESPACE_YM_VERILOG

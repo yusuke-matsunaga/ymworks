@@ -9,7 +9,9 @@
 /// All rights reserved.
 
 #include "parser/PtExpr.h"
-#include "parser/PtArray.h"
+#include "parser/PtExpr.h"
+#include "parser/PtMisc.h"
+#include "parser/PtHierName.h"
 #include "ym/FileRegion.h"
 
 
@@ -46,36 +48,25 @@ public:
   op_type() const override;
 
   /// @brief 0番目のオペランドの取得
+  ///
+  /// - 単項，二項，三項演算以外は std::logic_error 例外を送出する．
   const AstExpr*
   operand0() const override;
 
   /// @brief 1番目のオペランドの取得
+  ///
+  /// - 二項，三項演算以外は std::logic_error 例外を送出する．
   const AstExpr*
   operand1() const override;
 
   /// @brief 2番目のオペランドの取得
+  ///
+  /// - 三項演算以外は std::logic_error 例外を送出する．
   const AstExpr*
   operand2() const override;
 
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
-  ///   std::logi_error 例外を送出する．
-  SizeType
-  operand_num() const override;
-
   /// @brief オペランドのリストの取得
-  ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
-  ///   std::logi_error 例外を送出する．
-  const AstExpr*
-  operand(
-    SizeType index ///< [in] インデックス ( 0 <= index < operand_num() )
-  ) const override;
-
-  /// @brief オペランドのリストの取得
-  AstExprVec
+  AstExprList
   operand_list() const override;
 
   /// @brief multi-concat の繰り返し数
@@ -90,23 +81,8 @@ public:
   bool
   is_const_index() const override;
 
-  /// @brief インデックスリストのサイズの取得
-  /// @return インデックスリストのサイズ
-  ///
-  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
-  SizeType
-  index_num() const override;
-
-  /// @brief インデックスの取得
-  ///
-  /// - op_type() != Primary の時 std::logic_error 例外を送出する．
-  const AstExpr*
-  index(
-    SizeType i ///< [in] インデックス ( 0 <= i < index_num() )
-  ) const override;
-
   /// @brief インデックスリストの取得
-  AstExprVec
+  AstExprList
   index_list() const override;
 
   /// @brief 範囲指定を表す構文木を返す．
@@ -242,10 +218,10 @@ public:
   CptFuncCallBase(
     const FileRegion& file_region,
     const char* name,
-    const AstExprList* arg_list
+    const AstExpr* arg_top
   ) : mFileRegion{file_region},
       mName{name},
-      mArgList{arg_list}
+      mArgTop{arg_top}
   {
   }
 
@@ -266,25 +242,8 @@ public:
   const char*
   name() const override;
 
-  /// @brief オペランドの数の取得
-  /// @return 子供の数
-  ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
-  ///   std::logi_error 例外を送出する．
-  SizeType
-  operand_num() const override;
-
   /// @brief オペランドのリストの取得
-  ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
-  ///   std::logi_error 例外を送出する．
-  const AstExpr*
-  operand(
-    SizeType index ///< [in] インデックス ( 0 <= index < operand_num() )
-  ) const override;
-
-  /// @brief オペランドのリストの取得
-  AstExprVec
+  AstExprList
   operand_list() const override;
 
 
@@ -299,8 +258,8 @@ private:
   // 末尾の名前
   const char* mName;
 
-  // 引数の配列
-  const AstExprList* mArgList;
+  // 引数の先頭
+  const AstExpr* mArgTop;
 
 };
 
@@ -317,8 +276,8 @@ public:
   CptFuncCall(
     const FileRegion& file_region,
     const char* name,
-    const AstExprList* arg_list
-  ) : CptFuncCallBase(file_region, name, arg_list)
+    const AstExpr* arg_top
+  ) : CptFuncCallBase(file_region, name, arg_top)
   {
   }
 
@@ -350,11 +309,10 @@ public:
   // コンストラクタ
   CptFuncCallH(
     const FileRegion& file_region,
-    const AstNameBranch* nb_top,
-    const char* tail_name,
-    const AstExprList* arg_list
-  ) : CptFuncCall(file_region, tail_name, arg_list),
-      mNbTop{nb_top}
+    const PtHierName& hname,
+    const AstExpr* arg_top
+  ) : CptFuncCall(file_region, hname.tail_name, arg_top),
+      mNbTop{hname.nb_list.top}
   {
   }
 
@@ -395,8 +353,8 @@ public:
   CptSysFuncCall(
     const FileRegion& file_region,
     const char* name,
-    const AstExprList* arg_list
-  ) : CptFuncCallBase(file_region, name, arg_list)
+    const AstExpr* arg_top
+  ) : CptFuncCallBase(file_region, name, arg_top)
   {
   }
 
@@ -412,57 +370,6 @@ public:
   // クラスの型を返す．
   Type
   type() const override;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class CptExprList CptExpr.h "CptExpr.h"
-/// @brief
-//////////////////////////////////////////////////////////////////////
-class CptExprList :
-  public PtExprList
-{
-public:
-
-  /// @brief コンストラクタ
-  CptExprList(
-    PtExprArray&& expr_list
-  ) : mExprList{std::move(expr_list)}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~CptExprList() {}
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 外部インターフェイス
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 要素数を返す．
-  SizeType
-  size() const override;
-
-  /// @brief 要素を取り出す．
-  const AstExpr*
-  expr(
-    SizeType index ///< [in] インデックス ( 0 <= index < size() )
-  ) const override;
-
-  /// @brief ベクタに変換する．
-  AstExprVec
-  to_vector() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // Expr のリスト
-  PtExprArray mExprList;
 
 };
 

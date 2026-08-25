@@ -115,55 +115,19 @@ public:
   const std::string&
   cell() const = 0;
 
-  /// @brief パラメータポート宣言配列の要素数の取得
-  virtual
-  SizeType
-  paramport_num() const = 0;
-
-  /// @brief パラメータポート宣言の取得
-  virtual
-  const AstDeclHead*
-  paramport(
-    SizeType index ///< [in] インデックス ( 0 <= index < paramport_num() )
-  ) const = 0;
-
   /// @brief パラメータポート宣言のリストの取得
   virtual
-  AstDeclHeadVec
+  AstDeclHeadList
   paramport_list() const = 0;
-
-  /// @brief ポート数を取り出す．
-  virtual
-  SizeType
-  port_num() const = 0;
-
-  /// @brief ポートを返す．
-  virtual
-  const AstPort*
-  port(
-    SizeType index ///< [in] インデックス ( 0 <= index < port_num() )
-  ) const = 0;
 
   /// @brief ポートのリストを返す．
   virtual
-  AstPortVec
+  AstPortList
   port_list() const = 0;
-
-  /// @brief 入出力宣言ヘッダ配列の要素数の取得
-  virtual
-  SizeType
-  iohead_num() const = 0;
-
-  /// @brief 入出力宣言のヘッダを返す．
-  virtual
-  const AstIOHead*
-  iohead(
-    SizeType index ///< [in] インデックス ( 0 <= index < iohead_num() )
-  ) const = 0;
 
   /// @brief 入出力宣言のヘッダのリストを返す．
   virtual
-  AstIOHeadVec
+  AstIOHeadList
   iohead_list() const = 0;
 
   /// @brief 入出力宣言の要素数の取得
@@ -173,38 +137,14 @@ public:
   SizeType
   iodecl_num() const = 0;
 
-  /// @brief 宣言ヘッダ配列の要素数の取得
-  virtual
-  SizeType
-  declhead_num() const = 0;
-
-  /// @brief 宣言ヘッダを返す．
-  virtual
-  const AstDeclHead*
-  declhead(
-    SizeType index ///< [in] インデックス ( 0 <= index < declhead_num() )
-  ) const = 0;
-
   /// @brief 宣言ヘッダのリストを返す．
   virtual
-  AstDeclHeadVec
+  AstDeclHeadList
   declhead_list() const = 0;
-
-  /// @brief item 配列の要素数の取得
-  virtual
-  SizeType
-  item_num() const = 0;
-
-  /// @brief item を返す．
-  virtual
-  const AstItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const = 0;
 
   /// @brief item のリストを返す．
   virtual
-  AstItemVec
+  AstItemList
   item_list() const = 0;
 
   /// @brief top_module フラグを下ろす

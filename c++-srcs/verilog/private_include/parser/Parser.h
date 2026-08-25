@@ -20,6 +20,9 @@
 #include "parser/PtStmt.h"
 #include "parser/PtMisc.h"
 #include "parser/PtHierName.h"
+#include "parser/PtIOPortList.h"
+#include "parser/PtDeclPortList.h"
+#include "parser/PtHeadList.h"
 #include "parser/AstMgr.h"
 #include "ym/MsgMgr.h"
 
@@ -109,86 +112,48 @@ public:
   end_udp();
 
   /// @brief Verilog1995 タイプのUDP を生成する．
-  void
+  PtUdp*
   new_Udp1995(
     const FileRegion& file_region, ///< [in] ファイル上の位置
     const char* name,              ///< [in] 名前
     const char* init_name,         ///< [in] 初期値の名前
     const FileRegion& init_loc,    ///< [in] 初期値の位置
-    const AstExpr* init_value,     ///< [in] 初期値のパース木
-    const AstAttrInst* ai_top      ///< [in] 属性リスト
+    PtExpr* init_value,     ///< [in] 初期値のパース木
+    PtPort* port_top,   ///< [in] ポートの先頭
+    PtIOHead* io_top,   ///< [in] IO宣言の先頭
+    PtDeclHead* decl_top, ///< [in] Reg 宣言の先頭
+    PtUdpEntry* entry_top ///< [in] テーブルエントリの先頭
   );
 
   /// @brief Verilog2001 タイプのUDP を生成する．
-  void
+  PtUdp*
   new_Udp2001(
     const FileRegion& file_region, ///< [in] ファイル上の位置
     const char* name,		   ///< [in] 名前
     const char* init_name,	   ///< [in] 初期値の名前
     const FileRegion& init_loc,	   ///< [in] 初期値の位置
-    const AstExpr* init_value,	   ///< [in] 初期値のパース木
-    const AstAttrInst* ai_top      ///< [in] 属性リスト
+    PtExpr* init_value,	   ///< [in] 初期値のパース木
+    PtIOHead* io_top,              ///< [in] IO宣言の先頭
+    PtUdpEntry* entry_top          ///< [in] テーブルエントリの先頭
   );
 
 
 private:
 
   /// @brief new_Udp の下請け関数
-  void
+  PtUdp*
   new_Udp(
     const FileRegion& file_region,
     const char* udp_name,
     const char* init_name,
     const FileRegion& init_loc,
     const AstExpr* init_value,
-    const AstAttrInst* ai_top,
     bool is_seq,
     const AstIOItem* out_item,
-    const std::vector<PtPort*>& port_list,
-    const std::vector<PtIOHead*>& iohead_list
+    PtPort* port_top,
+    PtIOHead* iohead_top,
+    PtUdpEntry* entry_top
   );
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // UdpEntry の生成
-  //
-  // 最初に init_udpvalue_list() を呼ぶ．
-  // add_udpvalue() で生成した UdpValue をリストに追加する．
-  // 最後に udpvalue_list() でリストを取得する．
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief Udpentry をリストに追加する．
-  void
-  add_udpentry(
-    PtUdpEntry* entry
-  )
-  {
-    mUdpEntryList.push_back(entry);
-  }
-
-  /// @brief UdpValue のリストを初期化する．
-  void
-  init_udpvalue_list()
-  {
-    mUdpValueList.clear();
-  }
-
-  /// @brief UdpValue をリストに追加する．
-  void
-  add_udpvalue(
-    PtUdpValue* val
-  )
-  {
-    mUdpValueList.push_back(val);
-  }
-
-  /// @brief UdpValue のリストを取得する．
-  const AstUdpValueVec&
-  udpvalue_list() const
-  {
-    return mUdpValueList;
-  }
 
 
 public:
@@ -202,87 +167,29 @@ public:
   // end_module() の間に生成された要素を持つモジュールを生成する．
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief モジュール定義の開始
-  /// - port list の初期化
-  /// - paramport list の初期化
-  /// - iohead list の初期化
-  /// - declhead list の初期化
-  /// - item list の初期化
-  /// を行う．
-  ///
-  /// 'module' キーワードに連動して呼ばれることを想定している．
-  void
-  init_module()
-  {
-    mPortList.clear();
-    mParamPortHeadList.clear();
-    mModuleIOHeadList.clear();
-    push_declhead_list();
-    push_item_list();
-
-    mIOItemList.clear();
-    mDeclItemList.clear();
-  }
-
-  /// @brief モジュール定義の終了
-  ///
-  /// 'endmodule' キーワードに連動して呼ばれることを想定している．
-  void
-  end_module()
-  {
-    mCurDeclList = pop_declhead_list();
-    mCurItemList = pop_item_list();
-  }
-
-  /// @brief モジュール用のIOヘッダリストに追加する．
-  void
-  add_module_ioport_head(
-    PtIOHead* head
-  )
-  {
-    mModuleIOHeadList.push_back(head);
-  }
-
-  /// @brief モジュール用のIOヘッダリストにIO宣言ヘッダを追加する．
-  ///
-  /// こちらは完結しているのですぐに処理する．
-  void
-  add_module_iohead(
-    PtIOHead* head
-  )
-  {
-    add_module_ioport_head(head);
-    flush_module_ioitem();
-  }
-
-  /// @brief モジュール用のIOヘッダリストの処理を行う．
-  void
-  flush_module_ioitem()
-  {
-    if ( mModuleIOHeadList.empty() ) {
-      throw std::logic_error{"mModuleIOHeadList.empty()"};
-    }
-    auto last = mModuleIOHeadList.back();
-    last->set_elem(PtIOItemArray(mAlloc, mIOItemList));
-    mIOItemList.clear();
-  }
-
   /// @brief Verilog1995 タイプのモジュール(のテンプレート)を生成する．
-  void
+  PtModule*
   new_Module1995(
     const FileRegion& file_region,
     bool is_macro,
     const char* name,
-    const AstAttrInst* ai_top
+    PtDeclHead* paramport_top,
+    PtPort* port_top,
+    PtIOHead* iohead_top,
+    PtDeclHead* declhead_top,
+    PtItem* item_top
   );
 
   /// @brief Verilog2001 タイプのモジュール(のテンプレート)を生成する．
-  void
+  PtModule*
   new_Module2001(
     const FileRegion& file_region,
     bool is_macro,
     const char* name,
-    const AstAttrInst* ai_top
+    PtDeclHead* paramport_top,
+    PtIOHead* portdecl_top,
+    PtDeclHead* declhead_top,
+    PtItem* item_top
   );
 
 
@@ -291,412 +198,17 @@ public:
   // ポート関連の要素の生成関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief Port リストを初期化する．
-  void
-  init_port_list()
-  {
-    mPortList.clear();
-  }
-
-  /// @brief Port リストに追加する．
-  void
-  add_port(
-    PtPort* port
-  )
-  {
-    mPortList.push_back(port);
-  }
-
   /// @brief 入出力宣言中の重複チェックを行う．
   bool
   check_PortArray(
-    const std::vector<PtIOHead*>& iohead_list
+    const AstIOHeadList& iohead_list
   );
 
   /// @brief 入出力宣言からポートを作る．
   std::vector<PtPort*>
   new_PortArray(
-    const std::vector<PtIOHead*>& iohead_list
+    const AstIOHeadList& iohead_list
   );
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // IO 宣言関係のリストの操作関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief IOItem をリストに追加する．
-  ///
-  /// mIOItemList は init_module(), init_tf() で初期化され，
-  /// flush_module_ioitem(), flush_tf_ioitem() で最後のヘッダにセットされる．
-  void
-  add_ioitem(
-    PtIOItem* item
-  )
-  {
-    mIOItemList.push_back(item);
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 宣言関連の要素の生成
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief DeclItem をリストに追加する．
-  void
-  add_declitem(
-    PtDeclItem* item
-  )
-  {
-    mDeclItemList.push_back(item);
-  }
-
-  /// @brief DeclItem リストを取り出す．
-  const AstDeclItemVec&
-  declitem_list() const
-  {
-    return mDeclItemList;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // DefParam リスト関連の関数
-  //
-  // 最初に init_defparam_list() を呼ぶ．
-  // その後 add_defparam() で生成した DefParam をリストに追加する．
-  // 最後に defparam_list() でリストの内容を取り出す．
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief DefParam のリストを初期化する．
-  void
-  init_defparam_list()
-  {
-    mDefParamList.clear();
-  }
-
-  /// @brief DefParam をリストに追加する．
-  void
-  add_defparam(
-    PtDefParam* defparam
-  )
-  {
-    mDefParamList.push_back(defparam);
-  }
-
-  /// @brief DefParam のリストを返す．
-  const AstDefParamVec&
-  defparam_list() const
-  {
-    return mDefParamList;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // ContAssign リスト関連の関数
-  //
-  // 最初に init_contassign_list() を呼ぶ．
-  // その後に add_contassign() で生成した ContAssign をリストに追加する．
-  // 最後に contassign_list() でリストの内容を取り出す．
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief ContAssign のリストを初期化する．
-  void
-  init_contassign_list()
-  {
-    mContAssignList.clear();
-  }
-
-  /// @brief ContAssign をリストに追加する．
-  void
-  add_contassign(
-    PtContAssign* contassign
-  )
-  {
-    mContAssignList.push_back(contassign);
-  }
-
-  /// @brief ContAssign のリストを取り出す．
-  const AstContAssignVec&
-  contassign_list() const
-  {
-    return mContAssignList;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // Task/Func の生成
-  //
-  // 最初に init_tf() を呼ぶ．
-  // 宣言要素などの生成を行う．
-  // 最後に new_Task()/new_Function() を呼ぶ．
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief task/function 定義の開始
-  /// - iohead list の初期化
-  /// - paramhead list の初期化
-  /// - localparamhead list の初期化
-  /// - declhead list の初期化
-  /// を行う．
-  void
-  init_tf()
-  {
-    mTfIOHeadList.clear();
-    push_declhead_list();
-
-    mIOItemList.clear();
-    mDeclItemList.clear();
-  }
-
-  /// @brief task/function 定義の終了
-  void
-  end_tf()
-  {
-    mCurDeclList = pop_declhead_list();
-  }
-
-  /// @brief タスク/関数用のIOヘッダリストに追加する．
-  void
-  add_tf_ioport_head(
-    PtIOHead* head
-  )
-  {
-    mTfIOHeadList.push_back(head);
-  }
-
-  /// @brief タスク/関数用のIOヘッダリストにIO宣言ヘッダを追加する．
-  ///
-  /// こちらは完結しているのですぐに処理する．
-  void
-  add_tf_iohead(
-    PtIOHead* head
-  )
-  {
-    add_tf_ioport_head(head);
-    flush_tf_ioitem();
-  }
-
-  /// @brief タスク/関数用のIOヘッダリストの処理を行う．
-  void
-  flush_tf_ioitem()
-  {
-    if ( mTfIOHeadList.empty() ) {
-      throw std::logic_error{"mTfIOHeadList.empty()"};
-    }
-    auto last = mTfIOHeadList.back();
-    last->set_elem(PtIOItemArray(mAlloc, mIOItemList));
-    mIOItemList.clear();
-  }
-
-  /// @brief タスク/関数用のIOヘッダリストを取り出す．
-  const std::vector<PtIOHead*>&
-  tf_iohead_list() const
-  {
-    return mTfIOHeadList;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // GateInst/MuInst リスト関係の関数
-  //
-  // 最初に init_inst_list() を呼ぶ．
-  // add_isnt() で生成した Inst をリストに追加する．
-  // 最後に inst_list() で内容を取り出す．
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief Inst のリストを初期化する．
-  void
-  init_inst_list()
-  {
-    mInstList.clear();
-  }
-
-  /// @brief Inst をリストに追加する．
-  void
-  add_inst(
-    PtInst* inst
-  )
-  {
-    mInstList.push_back(inst);
-  }
-
-  /// @brief Inst のリストを返す．
-  const AstInstVec&
-  inst_list() const
-  {
-    return mInstList;
-  }
-
-  /// @brief ParamAssign のリストを初期化する．
-  void
-  init_paramassign_list()
-  {
-    mParamAssignList.clear();
-  }
-
-  /// @brief ParamAssign のリストに追加する．
-  void
-  add_paramassign(
-    PtConnection* item
-  )
-  {
-    mParamAssignList.push_back(item);
-  }
-
-  /// @brief ParamAssign のリストに追加する．
-  void
-  add_paramassign(
-    PtExpr* expr
-  )
-  {
-    auto con = mFactory.new_OrderedCon(expr);
-    add_paramassign(con);
-  }
-
-  /// @brief ParamAssign のリストを返す．
-  const AstConnectionVec&
-  paramassign_list() const
-  {
-    return mParamAssignList;
-  }
-
-  /// @brief Connection のリストを初期化する．
-  void
-  init_connection_list()
-  {
-    mConnectionList.clear();
-  }
-
-  /// @brief Connection のリストに追加する．
-  void
-  add_connection(
-    PtConnection* item
-  )
-  {
-    mConnectionList.push_back(item);
-  }
-
-  /// @brief Connection のリストに追加する．
-  void
-  add_connection(
-    PtExpr* expr
-  )
-  {
-    auto con = mFactory.new_OrderedCon(expr);
-    add_connection(con);
-  }
-
-  /// @brief Conneciton のリストを返す．
-  const AstConnectionVec&
-  connection_list() const
-  {
-    return mConnectionList;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // Generate 関係の生成
-  //
-  // 最初に init_generate() を呼ぶ．
-  // 宣言要素とItemの生成を行う．
-  // 最後に end_generate() を呼ぶ．
-  // 直後に new_Generate() や new_GenBlock() を呼ぶことで直前の
-  // init_generate() から end_generate() の間に生成された要素を
-  // 持つ Generate ブロックを生成する．
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief generate block の開始
-  void
-  init_generate()
-  {
-    push_declhead_list();
-    push_item_list();
-  }
-
-  /// @brief generate block の終了
-  void
-  end_generate()
-  {
-    mCurDeclList = pop_declhead_list();
-    mCurItemList = pop_item_list();
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // GenIf の生成
-  //
-  // 条件が成り立った時に生成する要素を
-  // init_genif() から end_genif() の間で生成する．
-  // 条件が成り立たなかった時に生成する要素を
-  // init_genelse() からの end_genelse() の間に生成する．
-  // 最後に new_GenIf() か new_GenIfElse() を呼ぶ．
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief generate-if の開始
-  void
-  init_genif()
-  {
-    push_declhead_list();
-    push_item_list();
-  }
-
-  /// @brief generate-if の終了
-  void
-  end_genif()
-  {
-    mGenThenDeclList = pop_declhead_list();
-    mGenThenItemList = pop_item_list();
-  }
-
-  /// @brief generate-if の else 節の開始
-  void
-  init_genelse()
-  {
-    push_declhead_list();
-    push_item_list();
-  }
-
-  /// @brief generate-if の else 節の終了
-  void
-  end_genelse()
-  {
-    mGenElseDeclList = pop_declhead_list();
-    mGenElseItemList = pop_item_list();
-  }
-
-  /// @brief GenThenDeclList の取得
-  const std::vector<PtDeclHead*>&
-  genthendecl_list() const
-  {
-    return mGenThenDeclList;
-  }
-
-  /// @brief GenThenItemList の取得
-  const AstItemVec&
-  genthenitem_list() const
-  {
-    return mGenThenItemList;
-  }
-
-  /// @brief GenElseDeclList の取得
-  const std::vector<PtDeclHead*>&
-  genelsedecl_list() const
-  {
-    return mGenElseDeclList;
-  }
-
-  /// @brief GenElseItemList の取得
-  const AstItemVec&
-  genelseitem_list() const
-  {
-    return mGenElseItemList;
-  }
 
 
 public:
@@ -730,101 +242,6 @@ public:
 		    "PARSER",
 		    buf.str());
     return false;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // ステートメント関連の要素の生成
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief case の開始
-  void
-  init_case()
-  {
-    push_caseitem_list();
-  }
-
-  void
-  add_caseitem(
-    PtCaseItem* item
-  )
-  {
-    mCaseItemListStack.back().push_back(item);
-  }
-
-  /// @brief case の終了
-  void
-  end_case()
-  {
-    pop_caseitem_list();
-  }
-
-  /// @brief CaseItem リストの取得
-  const AstCaseItemVec&
-  caseitem_list() const
-  {
-    return mCurCaseItemList;
-  }
-
-  /// @brief StmtList の初期化
-  void
-  init_stmt_list()
-  {
-    push_stmt_list();
-  }
-
-  /// @brief stmt を追加する．
-  void
-  add_stmt(
-    PtStmt* stmt
-  )
-  {
-    mStmtListStack.back().push_back(stmt);
-  }
-
-  /// @brief StmtList の終了
-  ///
-  /// 結果は mCurStmtList が保持している．
-  void
-  end_stmt_list()
-  {
-    pop_stmt_list();
-  }
-
-  /// @brief StmtList の取得
-  const AstStmtVec&
-  stmt_list() const
-  {
-    return mCurStmtList;
-  }
-
-  /// @brief block-statment の開始
-  void
-  init_block()
-  {
-    push_declhead_list();
-  }
-
-  /// @brief block-statement の終了
-  void
-  end_block()
-  {
-    mCurDeclList = pop_declhead_list();
-  }
-
-  /// @brief CurDeclList の取得
-  const std::vector<PtDeclHead*>&
-  declhead_list() const
-  {
-    return mCurDeclList;
-  }
-
-  /// @brief CurItemList の取得
-  const AstItemVec&
-  item_list() const
-  {
-    return mCurItemList;
   }
 
 
@@ -884,37 +301,6 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // ExprList の生成関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief AstExpr の内部リストを初期化する
-  void
-  init_expr_list()
-  {
-    mExprListStack.push_back(AstExprVec());
-  }
-
-  /// @brief AstExpr の内部リストに追加する．
-  void
-  add_expr(
-    const AstExpr* expr
-  )
-  {
-    mExprListStack.back().push_back(expr);
-  }
-
-  /// @brief AstExpr の内部リストを取り出す．
-  PtExprList*
-  end_expr_list()
-  {
-    auto expr_list = mFactory.new_ExprList(mExprListStack.back());
-    mExprListStack.pop_back();
-    return expr_list;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
   // その他
   //////////////////////////////////////////////////////////////////////
 
@@ -926,7 +312,7 @@ public:
   )
   {
     auto nb = mFactory.new_NameBranch(head_name);
-    return PtHierName{nb, tail_name};
+    return PtHierName{nb, nb, tail_name};
   }
 
   /// @brief 階層名の生成
@@ -938,7 +324,7 @@ public:
   )
   {
     auto nb = mFactory.new_NameBranch(head_name, index);
-    return PtHierName{nb, tail_name};
+    return PtHierName{nb, nb, tail_name};
   }
 
   /// @brief 階層名の追加
@@ -946,13 +332,12 @@ public:
   /// hname の後ろに '.' name を追加する．
   void
   add_HierName(
-    PtHierName& hname, ///< [in] 階層名の上位部分
+    PtHierName& hname, ///< [in] 階層名
     const char* name   ///< [in] 追加する名前
   )
   {
     auto nb = mFactory.new_NameBranch(hname.tail_name);
-    nb->set_link(hname.nb_top);
-    hname.nb_top = nb;
+    hname.nb_list.add(nb);
     hname.tail_name = name;
   }
 
@@ -961,66 +346,14 @@ public:
   /// hname の後ろに '[' index ']' '.' name を追加する．
   void
   add_HierName(
-    PtHierName& hname, ///< [in] 階層名の上位部分
+    PtHierName& hname, ///< [in] 階層名
     int index,         ///< [in] インデックス
     const char* name   ///< [in] 追加する名前
   )
   {
     auto nb = mFactory.new_NameBranch(hname.tail_name, index);
-    nb->set_link(hname.nb_top);
-    hname.nb_top = nb;
+    hname.nb_list.add(nb);
     hname.tail_name = name;
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // Ver2.0 リスト関係
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief parameter port 宣言ヘッダを追加する．
-  void
-  add_paramport_head(
-    PtDeclHead* head
-  )
-  {
-    mParamPortHeadList.push_back(head);
-  }
-
-  /// @brief parameter port 宣言の終わり
-  void
-  flush_paramport()
-  {
-    if ( mDeclItemList.empty() ) {
-      // リストが空なら無視する．
-      return;
-    }
-    if ( mParamPortHeadList.empty() ) {
-      throw std::logic_error{"mParamPortHeadList.empty()"};
-    }
-    auto last = mParamPortHeadList.back();
-    last->set_elem(PtDeclItemArray(mAlloc, mDeclItemList));
-    mDeclItemList.clear();
-  }
-
-  /// @brief 宣言リストに宣言ヘッダを追加する．
-  void
-  add_declhead(
-    PtDeclHead* head
-  )
-  {
-    cur_declhead_list().push_back(head);
-    head->set_elem(PtDeclItemArray(mAlloc, mDeclItemList));
-    mDeclItemList.clear();
-  }
-
-  /// @brief item リストに要素を追加する．
-  void
-  add_item(
-    PtItem* item
-  )
-  {
-    cur_item_list().push_back(item);
   }
 
 
@@ -1057,9 +390,29 @@ public:
     const AstStmt* stmt
   );
 
-  /// @brief default ラベルが2つ以上含まれていないかどうかのチェック
+  /// @briefdefault ラベルが2つ以上含まれていないかどうかのチェック
   bool
-  check_default_label();
+  check_default_label(
+    const AstCaseItemList& caseitem_list
+  );
+
+  /// @brief UDP定義を登録する．
+  void
+  reg_udp(
+    const AstUdp* udp
+  )
+  {
+    mAstMgr.reg_udp(udp);
+  }
+
+  /// @brief モジュール定義を登録する．
+  void
+  reg_module(
+    const AstModule* module
+  )
+  {
+    mAstMgr.reg_module(module);
+  }
 
   /// @brief 使用されているモジュール名を登録する．
   /// @param[in] name 登録する名前
@@ -1085,151 +438,14 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // デバッグ/テスト用の関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief ポートリストを得る．
-  const std::vector<PtPort*>&
-  _port_list() const
-  {
-    return mPortList;
-  }
-
-  /// @brief パラメータポート宣言リストを得る．
-  const std::vector<PtDeclHead*>&
-  _paramport_list() const
-  {
-    return mParamPortHeadList;
-  }
-
-  /// @brief モジュール用IO宣言リストを得る．
-  const std::vector<PtIOHead*>&
-  _module_io_list() const
-  {
-    return mModuleIOHeadList;
-  }
-
-  /// @brief タスク/関数用IO宣言リストを得る．
-  const std::vector<PtIOHead*>&
-  _tf_io_list() const
-  {
-    return mTfIOHeadList;
-  }
-
-  /// @brief IO宣言要素リストを得る．
-  const AstIOItemVec&
-  _ioitem_list() const
-  {
-    return mIOItemList;
-  }
-
-  /// @brief 宣言要素リストを得る．
-  const AstDeclItemVec&
-  _declitem_list() const
-  {
-    return mDeclItemList;
-  }
-
-  /// @brief UDPエントリのリストを得る．
-  const AstUdpEntryVec&
-  _udp_entry_list() const
-  {
-    return mUdpEntryList;
-  }
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 現在の declhead リストをスタックに積む．
-  void
-  push_declhead_list()
-  {
-    mDeclHeadListStack.push_back(std::vector<PtDeclHead*>());
-  }
-
-  /// @brief スタックのトップを取り出す．
-  std::vector<PtDeclHead*>
-  pop_declhead_list()
-  {
-    auto vec = cur_declhead_list();
-    mDeclHeadListStack.pop_back();
-    return vec;
-  }
-
-  /// @brief 現在の item リストをスタックに積む．
-  void
-  push_item_list()
-  {
-    mItemListStack.push_back(AstItemVec());
-  }
-
-  /// @brief スタックのトップを取り出す．
-  AstItemVec
-  pop_item_list()
-  {
-    auto vec = cur_item_list();
-    mItemListStack.pop_back();
-    return vec;
-  }
-
-  /// @brief 現在の宣言ヘッダのリストを返す．
-  std::vector<PtDeclHead*>&
-  cur_declhead_list()
-  {
-    return mDeclHeadListStack.back();
-  }
-
-  /// @brief 現在の item リストを返す．
-  AstItemVec&
-  cur_item_list()
-  {
-    return mItemListStack.back();
-  }
-
-  /// @brief StmtList のスタックに空のリストを追加する．
-  void
-  push_stmt_list()
-  {
-    mStmtListStack.push_back(AstStmtVec());
-  }
-
-  /// @brief StmtList のスタックのトップを取り出す．
-  void
-  pop_stmt_list()
-  {
-    mCurStmtList = mStmtListStack.back();
-    mStmtListStack.pop_back();
-  }
-
-  /// @brief CaseItemList のスタックに空のリストを追加する．
-  void
-  push_caseitem_list()
-  {
-    mCaseItemListStack.push_back(AstCaseItemVec());
-  }
-
-  /// @brief CaseItemList のスタックのトップを取り出す．
-  void
-  pop_caseitem_list()
-  {
-    mCurCaseItemList = mCaseItemListStack.back();
-    mCaseItemListStack.pop_back();
-  }
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
   // チェックを行う関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ポート宣言とIO宣言の齟齬をチェックする．
   void
   check_IO(
-    const std::vector<PtPort*>& port_list,        ///< [in] ポート宣言のリスト
-    const std::vector<PtIOHead*>& iohead_list,           ///< [in] IO宣言のリスト
+    PtPort* port_top,        ///< [in] ポート宣言のリスト
+    PtIOHead* iohead_top,           ///< [in] IO宣言のリスト
     std::unordered_map<std::string, VpiDir>& iodecl_dirs ///< [in] IO宣言名をキーとして向きを保持する辞書
   );
 
@@ -1250,110 +466,6 @@ private:
 
   // 字句解析を行うオブジェクト
   std::unique_ptr<Lex> mLex;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 生成した構文木要素を一時的に保持しておくためのリスト
-  //////////////////////////////////////////////////////////////////////
-
-  // ポートリスト
-  std::vector<PtPort*> mPortList;
-
-  // parameter port 宣言ヘッダリスト
-  std::vector<PtDeclHead*> mParamPortHeadList;
-
-  // モジュール用 IO宣言ヘッダリスト
-  std::vector<PtIOHead*> mModuleIOHeadList;
-
-  // task/function 用 IO宣言ヘッダリスト
-  std::vector<PtIOHead*> mTfIOHeadList;
-
-  // IO宣言要素リスト
-  AstIOItemVec mIOItemList;
-
-  // 宣言要素リスト
-  AstDeclItemVec mDeclItemList;
-
-  // UDP エントリのリスト
-  AstUdpEntryVec mUdpEntryList;
-
-  // UDP のテーブルの値のリスト
-  AstUdpValueVec mUdpValueList;
-
-  // defparam 要素のリスト
-  AstDefParamVec mDefParamList;
-
-  // contassign リスト
-  AstContAssignVec mContAssignList;
-
-  // instance リスト
-  AstInstVec mInstList;
-
-  // ParamAssign のリスト
-  AstConnectionVec mParamAssignList;
-
-  // Connection のリスト
-  AstConnectionVec mConnectionList;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 現在，登録対象となっているリストを指すポインタ
-  //////////////////////////////////////////////////////////////////////
-
-  // 現在の IO宣言ヘッダリスト
-  // 実際には mModuleIOHeadList か mTfIOHeadList を指す．
-  std::vector<PtIOHead*>* mCurIOHeadList;
-
-  // 現在の宣言ヘッダの配列
-  // スタックから取り出された最終結果
-  std::vector<PtDeclHead*> mCurDeclList;
-
-  // 現在の item の配列
-  // スタックから取り出された最終結果
-  AstItemVec mCurItemList;
-
-  // 現在の stmt の配列
-  // スタックから取り出された最終結果
-  AstStmtVec mCurStmtList;
-
-  // 現在の caseitem の配列
-  // スタックから取り出された最終結果
-  AstCaseItemVec mCurCaseItemList;
-
-  // generate-if の then 節の宣言ヘッダリスト
-  std::vector<PtDeclHead*> mGenThenDeclList;
-
-  // generate-if の then 節の item リスト
-  AstItemVec mGenThenItemList;
-
-  // generate-if の else 節の宣言ヘッダリスト
-  std::vector<PtDeclHead*> mGenElseDeclList;
-
-  // generate-if の else 節の item リスト
-  AstItemVec mGenElseItemList;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // mCurXXXList のスタック
-  //////////////////////////////////////////////////////////////////////
-
-  // 宣言ヘッダリストのスタック
-  std::vector<std::vector<PtDeclHead*>> mDeclHeadListStack;
-
-  // item リストのスタック
-  std::vector<AstItemVec> mItemListStack;
-
-  // StmtList のスタック
-  std::vector<AstStmtVec> mStmtListStack;
-
-  // CaseItemList のスタック
-  std::vector<AstCaseItemVec> mCaseItemListStack;
-
-  // ExprList のスタック
-  std::vector<AstExprVec> mExprListStack;
 
 };
 

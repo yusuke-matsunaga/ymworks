@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "parser/PtPort.h"
-#include "parser/PtArray.h"
+#include "parser/PtExpr.h"
 #include "ym/FileRegion.h"
 
 
@@ -56,20 +56,10 @@ public:
   const AstExpr*
   expr() const override;
 
-  /// @brief 内部のポート結線リストのサイズの取得
-  SizeType
-  portref_size() const override;
-
-  /// @brief 内部のポート結線式の取得
-  const AstExpr*
-  portref(
-    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
-  ) const override;
-
   /// @brief 内部のポート結線のリストの取得
   ///
   /// portef_size() <= 1 の時は nullptr を返す．
-  AstExprVec
+  AstExprList
   portref_list() const override;
 
   /// @brief 内部のポート結線の向きの取得
@@ -107,7 +97,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @brief port を表すクラス (portref が1つ)
+/// @brief port を表すクラス (1つのportref)
 //////////////////////////////////////////////////////////////////////
 class CptPort1 :
   public CptPort
@@ -137,20 +127,8 @@ public:
   const AstExpr*
   expr() const override;
 
-  /// @brief 内部のポート結線リストのサイズの取得
-  SizeType
-  portref_size() const override;
-
-  /// @brief 内部のポート結線の取得
-  const AstExpr*
-  portref(
-    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
-  ) const override;
-
   /// @brief 内部のポート結線のリストの取得
-  ///
-  /// portef_size() <= 1 の時は nullptr を返す．
-  AstExprVec
+  AstExprList
   portref_list() const override;
 
   /// @brief 内部のポート結線の向きの取得
@@ -217,11 +195,11 @@ public:
     const FileRegion& file_region,
     const char* ext_name,
     const AstExpr* expr,
-    const AstExprList* portref_list,
+    const AstExpr* portref_top,
     VpiDir* dir_array
   ) : CptPort(file_region, ext_name),
       mExpr{expr},
-      mPortRefList{portref_list},
+      mPortRefTop{portref_top},
       mDirArray{dir_array}
   {
   }
@@ -239,20 +217,8 @@ public:
   const AstExpr*
   expr() const override;
 
-  /// @brief 内部のポート結線リストのサイズの取得
-  SizeType
-  portref_size() const override;
-
-  /// @brief 内部のポート結線の取得
-  const AstExpr*
-  portref(
-    SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
-  ) const override;
-
   /// @brief 内部のポート結線のリストの取得
-  ///
-  /// portef_size() <= 1 の時は nullptr を返す．
-  AstExprVec
+  AstExprList
   portref_list() const override;
 
   /// @brief 内部のポート結線の向きの取得
@@ -280,28 +246,11 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief index をチェックする．
-  void
-  _check_index(
-    SizeType index
-  ) const
-  {
-    if ( index >= portref_size() ) {
-      throw std::out_of_range{"index is out of range"};
-    }
-  }
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
   // 全体を表す式
   const AstExpr* mExpr;
 
-  // ポート参照式のリスト
-  const AstExprList* mPortRefList;
+  // ポート参照式の先頭
+  const AstExpr* mPortRefTop;
 
   // 向きの配列
   VpiDir* mDirArray;

@@ -46,50 +46,18 @@ CptUdp::name() const
   return mName;
 }
 
-// @brief ポート数を取り出す．
-SizeType
-CptUdp::port_num() const
-{
-  return mPortList.size();
-}
-
-// @brief ポートを取り出す．
-const AstPort*
-CptUdp::port(
-  SizeType index
-) const
-{
-  return mPortList[index];
-}
-
 // @brief ポートのリストを取り出す．
-AstPortVec
+AstPortList
 CptUdp::port_list() const
 {
-  return mPortList.to_vector();
-}
-
-// @brief 入出力宣言ヘッダ配列の要素数の取得
-SizeType
-CptUdp::iohead_num() const
-{
-  return mIOHeadList.size();
-}
-
-// @brief 入出力宣言ヘッダの取得
-const AstIOHead*
-CptUdp::iohead(
-  SizeType index
-) const
-{
-  return mIOHeadList[index];
+  return AstPortList(mPortTop);
 }
 
 // @brief 入出力宣言ヘッダのリストの取得
-AstIOHeadVec
+AstIOHeadList
 CptUdp::iohead_list() const
 {
-  return mIOHeadList.to_vector();
+  return AstIOHeadList(mIOHeadTop);
 }
 
 // 初期値を取出す．
@@ -99,27 +67,11 @@ CptUdp::init_value() const
   return mInitValue;
 }
 
-// @brief テーブルの要素数を取り出す．
-SizeType
-CptUdp::table_num() const
-{
-  return mTableList.size();
-}
-
-// @brief テーブルを返す．
-const AstUdpEntry*
-CptUdp::table(
-  SizeType index
-) const
-{
-  return mTableList[index];
-}
-
 // @brief テーブルのリストを返す．
-AstUdpEntryVec
+AstUdpEntryList
 CptUdp::table_list() const
 {
-  return mTableList.to_vector();
+  return AstUdpEntryList(mTableTop);
 }
 
 
@@ -134,27 +86,11 @@ CptUdpEntry::file_region() const
   return mFileRegion;
 }
 
-// @brief 入力値の配列の要素数を取り出す．
-SizeType
-CptUdpEntry::input_num() const
-{
-  return mInputList.size();
-}
-
-// @brief 入力値を取り出す．
-const AstUdpValue*
-CptUdpEntry::input(
-  SizeType index
-) const
-{
-  return mInputList[index];
-}
-
 // @brief 入力値のリストを取り出す．
-AstUdpValueVec
+AstUdpValueList
 CptUdpEntry::input_list() const
 {
-  return mInputList.to_vector();
+  return AstUdpValueList(mInputTop);
 }
 
 // @brief 現状態の値を取り出す．
@@ -212,17 +148,17 @@ PtUdp*
 PtFactory::new_CmbUdp(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<PtPort*>& port_list,
-  const std::vector<PtIOHead*>& iohead_list,
-  const AstUdpEntryVec& entry_list
+  PtPort* port_top,
+  PtIOHead* iohead_top,
+  PtUdpEntry* entry_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptUdp));
   return new (p) CptUdp(file_region, name,
-			PtPortArray(mAlloc, port_list),
-			PtIOHeadArray(mAlloc, iohead_list),
+			port_top,
+			iohead_top,
 			false, nullptr,
-			PtUdpEntryArray(mAlloc, entry_list));
+			entry_top);
 }
 
 // sequential UDP の生成
@@ -230,31 +166,32 @@ PtUdp*
 PtFactory::new_SeqUdp(
   const FileRegion& file_region,
   const char* name,
-  const std::vector<PtPort*>& port_list,
-  const std::vector<PtIOHead*>& iohead_list,
+  PtPort* port_top,
+  PtIOHead* iohead_top,
   const AstExpr* init_value,
-  const AstUdpEntryVec& entry_list
+  PtUdpEntry* entry_top
+
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptUdp));
   return new (p) CptUdp(file_region, name,
-			PtPortArray(mAlloc, port_list),
-			PtIOHeadArray(mAlloc, iohead_list),
+			port_top,
+			iohead_top,
 			true, init_value,
-			PtUdpEntryArray(mAlloc, entry_list));
+			entry_top);
 }
 
 // combinational UDP 用のテーブルエントリの生成
 PtUdpEntry*
 PtFactory::new_UdpEntry(
   const FileRegion& file_region,
-  const AstUdpValueVec& input_list,
+  PtUdpValue* input_top,
   const AstUdpValue* output
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptUdpEntry));
   return new (p) CptUdpEntry(file_region,
-			     PtUdpValueArray(mAlloc, input_list),
+			     input_top,
 			     output);
 }
 
@@ -262,14 +199,14 @@ PtFactory::new_UdpEntry(
 PtUdpEntry*
 PtFactory::new_UdpEntry(
   const FileRegion& file_region,
-  const AstUdpValueVec& input_list,
+  PtUdpValue* input_top,
   const AstUdpValue* current,
   const AstUdpValue* output
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptUdpEntryS));
   return new (p) CptUdpEntryS(file_region,
-			      PtUdpValueArray(mAlloc, input_list),
+			      input_top,
 			      current, output);
 }
 

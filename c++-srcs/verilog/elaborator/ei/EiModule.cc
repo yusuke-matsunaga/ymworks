@@ -124,14 +124,14 @@ EiModuleHead::def_name() const
 SizeType
 EiModuleHead::port_num() const
 {
-  return mAstModule->port_num();
+  return mAstModule->port_list().size();
 }
 
 // @brief 入出力宣言数を返す．
 SizeType
 EiModuleHead::io_num() const
 {
-  return mAstModule->iodecl_num();
+  return mAstModule->iohead_list().size();
 }
 
 // @brief cell instance のチェック
@@ -568,8 +568,8 @@ EiModule2::EiModule2(
   const AstInst* ast_inst
 ) : mHead{parent, ast_module, ast_head, ast_inst}
 {
-  auto port_num = ast_module->port_num();
-  auto io_num = ast_module->iodecl_num();
+  auto port_num = ast_module->port_list().size();
+  auto io_num = ast_module->iohead_list().size();
   init(port_num, io_num);
 }
 
@@ -637,8 +637,8 @@ EiModuleArray::EiModuleArray(
     mRange(ast_range, range),
     mArray(mRange.calc_size())
 {
-  auto port_num = ast_module->port_num();
-  auto io_num = ast_module->iodecl_num();
+  auto port_num = ast_module->port_list().size();
+  auto io_num = ast_module->iohead_list().size();
   auto n = mArray.size();
   for ( SizeType i = 0; i < n; ++ i ) {
     int index = range.index(i);

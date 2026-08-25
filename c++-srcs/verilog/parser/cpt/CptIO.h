@@ -10,7 +10,6 @@
 
 #include "parser/PtDecl.h"
 #include "ym/FileRegion.h"
-#include "parser/PtArray.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -30,8 +29,10 @@ protected:
     VpiAuxType aux_type,           ///< [in] 補助的な型
     VpiNetType net_type,           ///< [in] 補助的なネット型
     VpiVarType var_type,           ///< [in] 補助的な変数型
-    bool sign                      ///< [in] 符号つきの時 true にするフラグ
-  ) : mFileRegion{file_region}
+    bool sign,                     ///< [in] 符号つきの時 true にするフラグ
+    PtIOItem* item_top = nullptr   ///< [in] 要素の先頭
+  ) : mFileRegion{file_region},
+      mItemTop{item_top}
   {
     mAttr =
       static_cast<unsigned int>(sign) |
@@ -82,31 +83,19 @@ public:
   const AstRange*
   range() const override;
 
-  /// @brief 要素数の取得
-  SizeType
-  item_num() const override;
-
-  /// @brief 要素を返す．
-  const AstIOItem*
-  item(
-    SizeType index ///< [in] インデックス ( 0 <= index < item_num() )
-  ) const override;
-
   /// @brief 要素のリストの取得
-  AstIOItemVec
+  AstIOItemList
   item_list() const override;
 
 
-private:
+public:
   //////////////////////////////////////////////////////////////////////
-  // PtiIOHead の継承クラスが実装する仮想関数
+  // PtIOHead の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 要素リストの設定
-  void
-  set_elem(
-    PtIOItemArray&& elem_list ///< [in] 要素のリスト
-  ) override;
+  /// @brief 先頭の要素を返す．
+  PtIOItem*
+  _item_top() const override;
 
 
 private:
@@ -120,8 +109,8 @@ private:
   // type と aux_type と符号を格納するメンバ
   std::uint32_t mAttr;
 
-  // 要素のリスト
-  PtIOItemArray mItemList;
+  // 要素の先頭
+  PtIOItem* mItemTop{nullptr};
 
 };
 
@@ -140,10 +129,10 @@ public:
     VpiDir dir,			   ///< [in] IOの種類
     VpiAuxType aux_type,	   ///< [in] 補助的な型
     VpiNetType net_type,	   ///< [in] 補助的なネット型
-    VpiVarType var_type,	   ///< [in] 補助的な変数型
-    bool sign			   ///< [in] 符号つきの時 true にするフラグ
+    VpiVarType var_type, 	   ///< [in] 補助的な変数型
+    PtIOItem* item_top = nullptr   ///< [in] 要素の先頭
   ) : CptIOHBase(file_region, dir, aux_type,
-		 net_type, var_type, sign)
+		 net_type, var_type, false, item_top)
   {
   }
 
@@ -168,9 +157,10 @@ public:
     VpiAuxType aux_type,	   ///< [in] 補助的な型
     VpiNetType net_type,	   ///< [in] 補助的なネット型
     bool sign,                     ///< [in] 符号つきの時 true にするフラグ
-    const AstRange* range          ///< [in] パース木の範囲定義
+    const AstRange* range,         ///< [in] パース木の範囲定義
+    PtIOItem* item_top = nullptr   ///< [in] 要素の先頭
   ) : CptIOHBase(file_region, dir, aux_type,
-		 net_type, VpiVarType::None, sign),
+		 net_type, VpiVarType::None, sign, item_top),
       mRange{range}
   {
   }

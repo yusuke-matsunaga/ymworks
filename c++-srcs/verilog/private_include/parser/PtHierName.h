@@ -8,6 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
+#include "ym/verilog.h"
 #include "parser/PtMisc.h"
 
 
@@ -18,21 +19,21 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @ingroup VlParser
 /// @brief 階層つき名を表すクラス
 ///
-/// 中身は階層ブランチの先頭と文字列から成る．
-/// 実際にはパーズ中は階層ブランチは逆順のリンクトリストになっている．
-/// 最後に逆転してから構文木に組み込む．
+/// 中身は階層ブランチの先頭と末尾さらに本体の名前の文字列から成る．
+/// 階層を追加する場合には現在の本体の名前が最下位の階層名となる．
 ///
 /// YACC/BISON の YYSTYPE で用いるためコンストラクタ/デストラクタ
 /// を持つことができない．
 /// なので初期化や終了処理が必要のないポインタのみを持つ．
+/// ポインタの初期化は外部の責任で行う必要がある．
 //////////////////////////////////////////////////////////////////////
 struct PtHierName
 {
 
-  // 先頭の階層ブランチ
-  PtNameBranch* nb_top;
+  /// @brief 階層ブランチのリスト
+  PtNameBranchList nb_list;
 
-  // 最下層の名前
+  /// @brief 末尾の名前
   const char* tail_name;
 
 };

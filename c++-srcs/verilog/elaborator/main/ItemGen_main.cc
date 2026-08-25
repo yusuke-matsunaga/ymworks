@@ -51,7 +51,7 @@ ItemGen::~ItemGen()
 void
 ItemGen::phase1_items(
   const VlScope* parent,
-  const std::vector<const AstItem*>& ast_item_list
+  const AstItemList& ast_item_list
 )
 {
   for ( auto ast_item: ast_item_list ) {
@@ -337,7 +337,7 @@ ItemGen::phase1_gencase(
   bool already_matched = false;
   for ( auto ast_caseitem: ast_gencase->caseitem_list() ) {
     // default(ラベルリストが空) なら常にマッチする．
-    SizeType n = ast_caseitem->label_num();
+    SizeType n = ast_caseitem->label_list().size();
     bool match = (n == 0);
     for ( auto ast_expr: ast_caseitem->label_list() ) {
       BitVector label_val{evaluate_bitvector(parent, ast_expr)};
@@ -460,16 +460,16 @@ ItemGen::phase1_genfor(
 void
 ItemGen::phase1_genitem(
   const VlScope* parent,
-  const AstDeclHeadVec& ast_decl_list,
-  const AstItemVec& ast_item_list
+  const AstDeclHeadList& ast_decl_list,
+  const AstItemList& ast_item_list
 )
 {
   phase1_items(parent, ast_item_list);
   auto stub = make_stub<ElbProxy,
 			const VlScope*,
-			const AstDeclHeadVec&>(static_cast<ElbProxy*>(this),
-					       &ElbProxy::instantiate_decl,
-					       parent, ast_decl_list);
+			const AstDeclHeadList&>(static_cast<ElbProxy*>(this),
+						&ElbProxy::instantiate_decl,
+						parent, ast_decl_list);
   add_phase2stub(stub);
 }
 

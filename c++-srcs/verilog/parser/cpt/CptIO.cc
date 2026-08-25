@@ -66,36 +66,18 @@ CptIOHBase::range() const
   return nullptr;
 }
 
-// @brief 要素数の取得
-SizeType
-CptIOHBase::item_num() const
-{
-  return mItemList.size();
-}
-
-// @brief 要素を返す．
-const AstIOItem*
-CptIOHBase::item(
-  SizeType index
-) const
-{
-  return mItemList[index];
-}
-
 // @brief 要素のリストの取得
-AstIOItemVec
+AstIOItemList
 CptIOHBase::item_list() const
 {
-  return mItemList.to_vector();
+  return AstIOItemList(mItemTop);
 }
 
-// @brief 要素リストの設定
-void
-CptIOHBase::set_elem(
-  PtIOItemArray&& elem_list
-)
+// @brief 先頭の要素を返す．
+PtIOItem*
+CptIOHBase::_item_top() const
 {
-  mItemList = std::move(elem_list);
+  return mItemTop;
 }
 
 
@@ -165,12 +147,15 @@ PtIOHead*
 PtFactory::new_IOHead(
   const FileRegion& file_region,
   VpiDir dir,
-  bool sign
+  PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOH));
-  return new (p) CptIOH(file_region, dir, VpiAuxType::None,
-			VpiNetType::None, VpiVarType::None, sign);
+  return new (p) CptIOH(file_region, dir,
+			VpiAuxType::None,
+			VpiNetType::None,
+			VpiVarType::None,
+			item_top);
 }
 
 // @brief 範囲付きの IO 宣言のヘッダの生成
@@ -179,12 +164,14 @@ PtFactory::new_IOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const AstRange* range
+  const AstRange* range,
+  PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
   return new (p) CptIOHV(file_region, dir, VpiAuxType::None,
-			 VpiNetType::None, sign, range);
+			 VpiNetType::None, sign, range,
+			 item_top);
 }
 
 // @brief 1ビットの IO 宣言のヘッダの生成 (reg 型)
@@ -192,12 +179,13 @@ PtIOHead*
 PtFactory::new_RegIOHead(
   const FileRegion& file_region,
   VpiDir dir,
-  bool sign
+  PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOH));
   return new (p) CptIOH(file_region, dir, VpiAuxType::Reg,
-			VpiNetType::None, VpiVarType::None, sign);
+			VpiNetType::None, VpiVarType::None,
+			item_top);
 }
 
 // @brief 範囲付きの IO 宣言のヘッダの生成 (reg 型)
@@ -206,12 +194,14 @@ PtFactory::new_RegIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const AstRange* range
+  const AstRange* range,
+  PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
   return new (p) CptIOHV(file_region, dir, VpiAuxType::Reg,
-			 VpiNetType::None, sign, range);
+			 VpiNetType::None, sign, range,
+			 item_top);
 }
 
 // @brief 1ビットの IO 宣言のヘッダの生成 (ネット型)
@@ -220,12 +210,13 @@ PtFactory::new_NetIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   VpiNetType net_type,
-  bool sign
+  PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOH));
   return new (p) CptIOH(file_region, dir, VpiAuxType::Net,
-			net_type, VpiVarType::None, sign);
+			net_type, VpiVarType::None,
+			item_top);
 }
 
 // @brief 範囲付きの IO 宣言のヘッダの生成 (ネット型)
@@ -235,12 +226,14 @@ PtFactory::new_NetIOHead(
   VpiDir dir,
   VpiNetType net_type,
   bool sign,
-  const AstRange* range
+  const AstRange* range,
+  PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
   return new (p) CptIOHV(file_region, dir, VpiAuxType::Net,
-			 net_type, sign, range);
+			 net_type, sign, range,
+			 item_top);
 }
 
 // @brief IO 宣言のヘッダの生成 (変数型)
@@ -248,12 +241,14 @@ PtIOHead*
 PtFactory::new_VarIOHead(
   const FileRegion& file_region,
   VpiDir dir,
-  VpiVarType var_type
+  VpiVarType var_type,
+  PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOH));
   return new (p) CptIOH(file_region, dir, VpiAuxType::Var,
-			VpiNetType::None, var_type, false);
+			VpiNetType::None, var_type,
+			item_top);
 }
 
 // @brief 初期値付き IO 宣言の要素の生成
