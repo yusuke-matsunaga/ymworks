@@ -1,0 +1,373 @@
+﻿#ifndef CPTASSIGNSTMT_H
+#define CPTASSIGNSTMT_H
+
+/// @file CptStmt.h
+/// @brief CptStmt のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2026 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "CptStmt.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 代入文系の基底クラス
+//////////////////////////////////////////////////////////////////////
+class CptAssignBase :
+  public CptStmt
+{
+protected:
+
+  /// @brief コンストラクタ
+  CptAssignBase(
+    const FileRegion& file_region,
+    const AstExpr* lhs
+  ) : CptStmt(file_region),
+    mLhs{lhs}
+  {
+    if ( lhs == nullptr ) {
+      throw std::logic_error{"lhs = nullptr"};
+    }
+  }
+
+  /// @brief デストラクタ
+  ~CptAssignBase() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief lhs を得る．
+  const AstExpr*
+  lhs() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 左辺
+  const AstExpr* mLhs;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 代入文
+//////////////////////////////////////////////////////////////////////
+class CptAssign :
+  public CptAssignBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptAssign(
+    const FileRegion& file_region,
+    const AstExpr* lhs,
+    const AstExpr* rhs
+  ) : CptAssignBase(file_region, lhs),
+      mRhs{rhs}
+  {
+    if ( rhs == nullptr ) {
+      throw std::logic_error{"rhs = nullptr"};
+    }
+  }
+
+  /// @brief デストラクタ
+  ~CptAssign() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の派生クラスのための仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief クラスの型を返す仮想関数
+  Type
+  type() const override;
+
+  /// @brief rhs を得る．
+  const AstExpr*
+  rhs() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 右辺
+  const AstExpr* mRhs;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief コントロールつきの代入文
+//////////////////////////////////////////////////////////////////////
+class CptAssignC :
+  public CptAssign
+{
+public:
+
+  /// @brief コンストラクタ
+  CptAssignC(
+    const FileRegion& file_region,
+    const AstExpr* lhs,
+    const AstExpr* rhs,
+    const AstControl* control
+  ) : CptAssign(file_region, lhs, rhs),
+      mControl{control}
+  {
+    if ( control == nullptr ) {
+      throw std::logic_error{"control = nullptr"};
+    }
+  }
+
+  /// @brief デストラクタ
+  ~CptAssignC() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief コントロールを返す．
+  const AstControl*
+  control() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // コントロール
+  const AstControl* mControl;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief ノンブロッキング代入文
+//////////////////////////////////////////////////////////////////////
+class CptNbAssign :
+  public CptAssign
+{
+public:
+
+  /// @brief コンストラクタ
+  CptNbAssign(
+    const FileRegion& file_region,
+    const AstExpr* lhs,
+    const AstExpr* rhs
+  ) : CptAssign(file_region, lhs, rhs)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptNbAssign() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の派生クラスのための仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief クラスの型を返す仮想関数
+  Type
+  type() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief コントロールつきノンブロッキング代入文
+//////////////////////////////////////////////////////////////////////
+class CptNbAssignC :
+  public CptAssignC
+{
+public:
+
+  /// @brief コンストラクタ
+  CptNbAssignC(
+    const FileRegion& file_region,
+    const AstExpr* lhs,
+    const AstExpr* rhs,
+    const AstControl* control
+  ) : CptAssignC(file_region, lhs, rhs, control)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptNbAssignC() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief クラスの型を返す仮想関数
+  Type
+  type() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief procedural continuous assigment 文
+//////////////////////////////////////////////////////////////////////
+class CptPcAssign :
+  public CptAssignBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptPcAssign(
+    const FileRegion& file_region,
+    const AstExpr* lhs,
+    const AstExpr* rhs
+  ) : CptAssignBase(file_region, lhs),
+      mRhs{rhs}
+  {
+    if ( rhs == nullptr ) {
+      throw std::logic_error{"rhs = nullptr"};
+    }
+  }
+
+  /// @brief デストラクタ
+  ~CptPcAssign() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の派生クラスのための仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief クラスの型を返す仮想関数
+  Type
+  type() const override;
+
+  /// @brief 右辺式を返す．
+  const AstExpr*
+  rhs() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 右辺
+  const AstExpr* mRhs;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief deassigment 文
+//////////////////////////////////////////////////////////////////////
+class CptDeassign :
+  public CptAssignBase
+{
+public:
+
+  /// @brief コンストラクタ
+  CptDeassign(
+    const FileRegion& file_region,
+    const AstExpr* lhs
+  ) : CptAssignBase(file_region, lhs)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptDeassign() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の派生クラスのための仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief クラスの型を返す仮想関数
+  Type
+  type() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief force 文
+//////////////////////////////////////////////////////////////////////
+class CptForce :
+  public CptPcAssign
+{
+public:
+
+  /// @brief コンストラクタ
+  CptForce(
+    const FileRegion& file_region,
+    const AstExpr* lhs,
+    const AstExpr* rhs
+  ) : CptPcAssign(file_region, lhs, rhs)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptForce() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の派生クラスのための仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief クラスの型を返す仮想関数
+  Type
+  type() const override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief release 文
+//////////////////////////////////////////////////////////////////////
+class CptRelease :
+  public CptDeassign
+{
+public:
+
+  /// @brief コンストラクタ
+  CptRelease(
+    const FileRegion& file_region,
+    const AstExpr* lhs
+  ) : CptDeassign(file_region, lhs)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptRelease() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtStmt の派生クラスのための仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief クラスの型を返す仮想関数
+  Type
+  type() const override;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // CPTASSIGNSTMT_H

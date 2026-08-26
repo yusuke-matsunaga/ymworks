@@ -22,6 +22,33 @@
 #  ターゲットの設定
 # ===================================================================
 
+ym_add_gtest ( verilog_PtListTest
+  PtListTest.cc
+  $<TARGET_OBJECTS:ym_misc_obj_d>
+  $<TARGET_OBJECTS:ym_logic_obj_d>
+  $<TARGET_OBJECTS:ym_clib_obj_d>
+  $<TARGET_OBJECTS:ym_verilog_obj_d>
+  ADDRESS_SANITIZE
+  )
+
+ym_add_gtest ( verilog_PtHierNameTest
+  PtHierNameTest.cc
+  $<TARGET_OBJECTS:ym_misc_obj_d>
+  $<TARGET_OBJECTS:ym_logic_obj_d>
+  $<TARGET_OBJECTS:ym_clib_obj_d>
+  $<TARGET_OBJECTS:ym_verilog_obj_d>
+  ADDRESS_SANITIZE
+  )
+
+ym_add_gtest ( verilog_PtIODListTest
+  PtIODListTest.cc
+  $<TARGET_OBJECTS:ym_misc_obj_d>
+  $<TARGET_OBJECTS:ym_logic_obj_d>
+  $<TARGET_OBJECTS:ym_clib_obj_d>
+  $<TARGET_OBJECTS:ym_verilog_obj_d>
+  ADDRESS_SANITIZE
+  )
+
 ym_add_gtest ( verilog_ParserTest_decl
   ParserTest_decl.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>

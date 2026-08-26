@@ -97,78 +97,81 @@ fr_merge(
 
 // トークンの型
 %union {
+  // 組み込み型
   int inttype;
   double dbltype;
   unsigned long uinttype;
   const char* strtype;
 
-  VpiVarType vartype;
+  // 列挙型
+  VpiConstType consttype;
   VpiNetType nettype;
   VpiPrimType primtype;
-  VpiConstType consttype;
   VpiStrength strengthtype;
-  VpiRangeMode rangemode;
+  VpiVarType vartype;
   VpiVsType vstype;
   char udpsymbol;
 
-  AstBase* obj;
-
-  PtAttrInstList attrinstlist;
-  PtAttrSpecList attrspeclist;
-  PtHierName hiername;
-  PtHeadList headlist;
-  PtPortList portlist;
-  PtIOPortList ioportlist;
-  PtIOHeadList ioheadlist;
-  PtIOItemList ioitemlist;
-  PtDeclPortList declportlist;
-  PtDeclHeadList declheadlist;
-  PtDeclItemList declitemlist;
-  PtItemList itemlist;
-  PtDefParamList defparamlist;
-  PtContAssignList contassignlist;
-  PtInstList instlist;
-  PtConnectionList connectionlist;
-  PtGenCaseItemList gencaseitemlist;
-  PtStmtList stmtlist;
-  PtCaseItemList caseitemlist;
-  PtExprList exprlist;
-  PtRangeList rangelist;
-  PtUdpEntryList udpentrylist;
-  PtUdpValueList udpvaluelist;
-
+  // PtPort.h
   PtPort* port;
+  PtPortList portlist;
 
+  // PtDecl.h
   PtIOHead* iohead;
   PtIOItem* ioitem;
+  PtIOItemList ioitemlist;
+  PtIODList iodlist;
   PtDeclHead* declhead;
   PtDeclItem* declitem;
+  PtDeclItemList declitemlist;
+  PtDeclDList decldlist;
   PtRange* range;
+  PtRangeList rangelist;
 
+  // PtItem.h
   PtItem* item;
   PtDefParam* defparam;
+  PtDefParamList defparamlist;
   PtContAssign* contassign;
+  PtContAssignList contassignlist;
   PtInst* inst;
+  PtInstList instlist;
   PtGenCaseItem* gencaseitem;
+  PtGenCaseItemList gencaseitemlist;
   PtPathDecl* pathdecl;
   PtPathDelay* pathdelay;
 
+  // PtStmt.h
   PtStmt* stmt;
+  PtStmtList stmtlist;
   PtCaseItem* caseitem;
+  PtCaseItemList caseitemlist;
 
+  // PtExpr.h
   PtExpr* expr;
+  PtExprList exprlist;
   PtPart* part;
 
+  // PtMisc.h
   PtStrength* strength;
   PtDelay* delay;
   PtControl* control;
   PtConnection* connection;
-
-  PtUdpEntry* udpentry;
-  PtUdpValue* udpvalue;
-
+  PtConnectionList connectionlist;
   PtAttrInst* attrinst;
+  PtAttrInstList attrinstlist;
   PtAttrSpec* attrspec;
+  PtAttrSpecList attrspeclist;
+
+  // PtUdp.h
+  PtUdpEntry* udpentry;
+  PtUdpEntryList udpentrylist;
+  PtUdpValue* udpvalue;
+  PtUdpValueList udpvaluelist;
+
+  // それ以外の構造体型
+  PtHierName hiername;
+  PtHeadList headlist;
 
 }
 
@@ -408,36 +411,37 @@ fr_merge(
 %nonassoc ELSE
 
 // 非終端ノードの型定義
-// 何かもっといい方法があるような気がする．
+
 %type <inttype> module_keyword
-
 %type <inttype> opt_auto
+%type <inttype> sign
+%type <inttype> pol_op pol_colon
+%type <inttype> edge
 
-%type <udpentrylist> list_of_udp_entries
-%type <udpentry> udp_entry
+%type <consttype> numbase
 
-%type <udpvaluelist> seq_input_list
-%type <udpvalue> level_symbol_value
-%type <udpvalue> edge_indicator
+%type <nettype> net_type
 
-%type <headlist> list_of_module_items
-%type <headlist> list_of_module_items2
-%type <headlist> nzlist_of_fitem_decl
-%type <headlist> list_of_titem_decl
-%type <headlist> list_of_generate_items
-%type <headlist> generate_item_or_null
+%type <primtype> cmos_switchtype enable_gatetype mos_switchtype
+%type <primtype> n_input_gatetype n_output_gatetype pass_en_switchtype
+%type <primtype> pass_switchtype
 
-%type <portlist> list_of_ports
+%type <strengthtype> strength0 strength1
+
+%type <vartype> task_port_type
+%type <vartype> data_type
+
+%type <vstype> vstype
+
+%type <udpsymbol> next_state output_symbol level_symbol edge_symbol
+
 %type <port> port
 %type <port> nonnull_port
-%type <portlist> udp_port_list
 %type <port> udp_port
 
-%type <ioportlist> udp_declaration_port_list
-%type <ioportlist> module_portdecl_list
-%type <ioportlist> function_port_list
-%type <ioportlist> task_port_list
-%type <ioportlist> list_of_port_declarations
+%type <portlist> list_of_ports
+%type <portlist> udp_port_list
+
 %type <iohead> portdecl_head
 %type <iohead> udp_output_port_declaration
 
@@ -455,70 +459,67 @@ fr_merge(
 %type <iohead> tf_inout_declaration
 %type <iohead> tf_output_declaration
 
-%type <ioitemlist> list_of_port_identifiers
-%type <ioitem> port_identifier_item
-%type <ioitemlist> list_of_variable_port_identifiers
-%type <ioitem> variable_port_identifier_item
-%type <headlist> nzlist_of_uport_decl
 %type <iohead> udp_input_declaration
 %type <iohead> udp_output_declaration
+
+%type <iodlist> udp_declaration_port_list
+%type <iodlist> module_portdecl_list
+%type <iodlist> function_port_list
+%type <iodlist> task_port_list
+%type <iodlist> list_of_port_declarations
+
+%type <ioitem> port_identifier_item
+%type <ioitem> variable_port_identifier_item
+
+%type <ioitemlist> list_of_port_identifiers
+%type <ioitemlist> list_of_variable_port_identifiers
+
 %type <declhead> udp_reg_declaration
-
-%type <declportlist> module_parameter_port_list
-%type <declportlist> list_of_paramport_decl
 %type <declhead> paramport_head
-%type <declitem> paramport_assignment
-%type <declitemlist> list_of_param_assignments
-%type <declitem> param_assignment
-
-%type <declitemlist> list_of_specparam_assignments
-%type <declitem> specparam_assignment
-
 %type <declhead> module_or_generate_decl
 %type <declhead> module_decl
-%type <declhead> module_decl_body
 %type <declhead> bitem_decl_body
-
 %type <declhead> event_declaration
-%type <declitemlist> list_of_event_identifiers
-
 %type <declhead> genvar_declaration
-%type <declitemlist> list_of_genvar_identifiers
-
 %type <declhead> integer_declaration
-%type <declitemlist> list_of_variable_identifiers
-
 %type <declhead> real_declaration
-%type <declitemlist> list_of_real_identifiers
-
 %type <declhead> realtime_declaration
-
 %type <declhead> time_declaration
-
 %type <declhead> net_declaration
-%type <declitemlist> list_of_net_decls
-%type <declitemlist> list_of_net_identifiers
-%type <declitemlist> list_of_net_decl_assignments
-%type <declitem> net_decl_assignment
-
 %type <declhead> reg_declaration
 %type <declhead> block_reg_declaration
-
 %type <declhead> parameter_declaration
-
 %type <declhead> specparam_declaration
-
-%type <headlist> list_of_bitem_decl
 %type <declhead> block_item_declaration
 
+%type <decldlist> module_parameter_port_list
+%type <decldlist> list_of_paramport_decl
+
+%type <declitem> paramport_assignment
+%type <declitem> param_assignment
+%type <declitem> specparam_assignment
+%type <declitem> net_decl_assignment
 %type <declitem> identifier_with_range
 %type <declitem> variable_type
-%type <declitemlist> list_of_block_variable_identifiers
 %type <declitem> block_variable_type
 %type <declitem> real_type
 
+%type <declitemlist> list_of_param_assignments
+%type <declitemlist> list_of_specparam_assignments
+%type <declitemlist> list_of_event_identifiers
+%type <declitemlist> list_of_genvar_identifiers
+%type <declitemlist> list_of_variable_identifiers
+%type <declitemlist> list_of_real_identifiers
+%type <declitemlist> list_of_net_decls
+%type <declitemlist> list_of_net_identifiers
+%type <declitemlist> list_of_net_decl_assignments
+%type <declitemlist> list_of_block_variable_identifiers
+
+%type <range> range
+
+%type <rangelist> nzlist_of_dimensions
+
 %type <item> module_item
-%type <item> module_item_body
 %type <item> module_or_generate_item
 %type <item> generated_instantiation
 %type <item> specify_block
@@ -533,41 +534,44 @@ fr_merge(
 %type <item> always_construct
  //%type <item> specify_item
 
-%type <defparamlist> nzlist_of_defparam_assignment
 %type <defparam> defparam_assignment
 
-%type <contassignlist> list_of_net_assignments
+%type <defparamlist> nzlist_of_defparam_assignment
+
 %type <contassign> net_assignment
 
-%type <instlist> nzlist_of_cmos_switch_inst
-%type <inst> cmos_switch_instance
-%type <instlist> nzlist_of_enable_gate_inst
-%type <inst> enable_gate_instance
-%type <instlist> nzlist_of_mos_switch_inst
-%type <inst> mos_switch_instance
-%type <instlist> nzlist_of_n_input_gate_inst
-%type <inst> n_input_gate_instance
-%type <instlist> nzlist_of_n_output_gate_inst
-%type <inst> n_output_gate_instance
-%type <instlist> nzlist_of_pass_en_switch_inst
-%type <inst> pass_enable_switch_instance
-%type <instlist> nzlist_of_pass_switch_inst
-%type <inst> pass_switch_instance
-%type <instlist> nzlist_of_pull_inst
-%type <inst> pull_gate_instance
+%type <contassignlist> list_of_net_assignments
 
-%type <instlist> nzlist_of_mu_inst
+%type <inst> cmos_switch_instance
+%type <inst> enable_gate_instance
+%type <inst> mos_switch_instance
+%type <inst> n_input_gate_instance
+%type <inst> n_output_gate_instance
+%type <inst> pass_enable_switch_instance
+%type <inst> pass_switch_instance
+%type <inst> pull_gate_instance
 %type <inst> mu_instance
 
-%type <connectionlist> n_input_gate_terminals
-%type <connectionlist> n_output_gate_terminals
+%type <instlist> nzlist_of_cmos_switch_inst
+%type <instlist> nzlist_of_enable_gate_inst
+%type <instlist> nzlist_of_mos_switch_inst
+%type <instlist> nzlist_of_n_input_gate_inst
+%type <instlist> nzlist_of_n_output_gate_inst
+%type <instlist> nzlist_of_pass_en_switch_inst
+%type <instlist> nzlist_of_pass_switch_inst
+%type <instlist> nzlist_of_pull_inst
+%type <instlist> nzlist_of_mu_inst
 
-%type <connectionlist> list_of_ordered_param_assign
-%type <connectionlist> list_of_named_param_assign
-%type <connectionlist> list_of_ordered_port_connections
-%type <connection> ordered_port_connection
-%type <connectionlist> list_of_named_port_connections
-%type <connection> named_port_connection
+%type <gencaseitem> genvar_case_item
+
+%type <gencaseitemlist> list_of_gencaseitem
+
+%type <pathdecl> path_declaration
+%type <pathdecl> simple_path_declaration
+%type <pathdecl> edge_sensitive_path_declaration
+
+%type <pathdelay> path_delay_value
+%type <pathdelay> list_of_path_delay_expressions
 
 %type <stmt> blocking_assignment
 %type <stmt> nonblocking_assignment
@@ -587,15 +591,9 @@ fr_merge(
 
 %type <stmtlist> nzlist_of_stmt
 
-%type <exprlist> nzlist_of_expressions
-%type <exprlist> nzlist_of_lvalues
-%type <exprlist> nzlist_of_terminals
-%type <exprlist> nzlist_of_arguments
-%type <exprlist> nzlist_of_port_references
-%type <exprlist> nzlist_of_index
-%type <exprlist> case_item_label
-%type <exprlist> eve_list
-%type <exprlist> event_expression
+%type <caseitem> case_item
+
+%type <caseitemlist> list_of_case_items
 
 %type <expr> port_reference
 %type <expr> concatenation
@@ -613,59 +611,77 @@ fr_merge(
 %type <expr> unumber
 %type <expr> rnumber
 %type <expr> argument
-
 %type <expr> index
+%type <expr> delay_value delay_value_x delay_value_y
+%type <expr> path_delay_expression
+%type <expr> mintypmax_expression
+%type <expr> init_val
+%type <expr> event_primary
+%type <expr> specify_terminal
 
-%type <range> range
-%type <rangelist> nzlist_of_dimensions
+%type <exprlist> nzlist_of_expressions
+%type <exprlist> nzlist_of_lvalues
+%type <exprlist> nzlist_of_terminals
+%type <exprlist> nzlist_of_arguments
+%type <exprlist> nzlist_of_port_references
+%type <exprlist> nzlist_of_index
+%type <exprlist> case_item_label
+%type <exprlist> eve_list
+%type <exprlist> event_expression
+%type <exprlist> genvar_case_head
 
 %type <part> part
-
-%type <nettype> net_type
-%type <vstype> vstype
-%type <inttype> sign
-
-%type <gencaseitemlist> list_of_gencaseitem
-%type <gencaseitem> genvar_case_item
-%type <exprlist> genvar_case_head
 
 %type <strength> drive_strength
 %type <strength> charge_strength
 %type <strength> pulldown_strength
 %type <strength> pullup_strength
-%type <strengthtype> strength0 strength1
 
 %type <delay> delay3 delay2
-%type <expr> delay_value delay_value_x delay_value_y
-%type <expr> path_delay_expression
-%type <expr> mintypmax_expression
-
-%type <vartype> task_port_type
-%type <vartype> data_type
-%type <primtype> cmos_switchtype enable_gatetype mos_switchtype
-%type <primtype> n_input_gatetype n_output_gatetype pass_en_switchtype
-%type <primtype> pass_switchtype
-
-%type <connection> named_parameter_assignment
-
-%type <expr> init_val
-
-%type <udpsymbol> next_state output_symbol level_symbol edge_symbol
 
 %type <control> delay_control
 %type <control> event_control
 %type <control> repeat_control
-%type <expr> event_primary
 
-%type <caseitemlist> list_of_case_items
-%type <caseitem> case_item
+%type <connection> ordered_port_connection
+%type <connection> named_port_connection
+%type <connection> named_parameter_assignment
 
-%type <pathdecl> path_declaration simple_path_declaration
-                 edge_sensitive_path_declaration
-%type <expr> specify_terminal
-%type <pathdelay> path_delay_value list_of_path_delay_expressions
-%type <inttype> pol_op pol_colon
-%type <inttype> edge
+%type <connectionlist> n_input_gate_terminals
+%type <connectionlist> n_output_gate_terminals
+%type <connectionlist> list_of_ordered_param_assign
+%type <connectionlist> list_of_named_param_assign
+%type <connectionlist> list_of_ordered_port_connections
+%type <connectionlist> list_of_named_port_connections
+
+%type <attrinst> ai_list
+%type <attrinst> attr_inst
+
+%type <attrinstlist> nz_ai_list
+
+%type <attrspec> attr_spec
+
+%type <attrspeclist> nzlist_of_attr_spec
+
+%type <udpentry> udp_entry
+
+%type <udpentrylist> list_of_udp_entries
+
+%type <udpvalue> level_symbol_value
+%type <udpvalue> edge_indicator
+
+%type <udpvaluelist> seq_input_list
+
+%type <hiername> hierarchical_identifier
+
+%type <headlist> list_of_module_items
+%type <headlist> list_of_module_items2
+%type <headlist> nzlist_of_fitem_decl
+%type <headlist> list_of_titem_decl
+%type <headlist> list_of_generate_items
+%type <headlist> generate_item_or_null
+%type <headlist> nzlist_of_uport_decl
+%type <headlist> list_of_bitem_decl
 
 /* まだできていない */
 %type <inttype> system_timing_check
@@ -681,14 +697,6 @@ fr_merge(
 %type <inttype> opt_timing_check_condition
 %type <inttype> timing_check_condition
 /* end-of まだできていない */
-
-%type <consttype> numbase
-%type <attrinst> ai_list
-%type <attrinstlist> nz_ai_list
-%type <attrinst> attr_inst
-%type <attrspeclist> nzlist_of_attr_spec
-%type <attrspec> attr_spec
-%type <hiername> hierarchical_identifier
 
 %%
 
@@ -799,7 +807,7 @@ module_keyword
 module_portdecl_list
 : // 空もあり
 {
-  $$ = PtIOPortList();
+  $$ = PtIODList();
   $$.init();
 }
 | '(' list_of_port_declarations ')'
@@ -822,7 +830,7 @@ module_portdecl_list
 module_parameter_port_list
 : // 空
 {
-  $$ = PtDeclPortList();
+  $$ = PtDeclDList();
   $$.init();
 }
 | '#' '(' list_of_paramport_decl ')'
@@ -836,7 +844,7 @@ module_parameter_port_list
 list_of_paramport_decl
 : ai_list paramport_head
 {
-  $$ = PtDeclPortList();
+  $$ = PtDeclDList();
   $$.init($2);
   parser.reg_attrinst($2, $1);
 }
@@ -853,6 +861,7 @@ list_of_paramport_decl
 }
 ;
 
+// head と言っているが，実際にはヘッダと最初の要素を含んでいる．
 paramport_head
 : PARAMETER paramport_assignment
 {
@@ -1013,7 +1022,7 @@ port_reference
 list_of_port_declarations
 : ai_list portdecl_head
 {
-  $$ = PtIOPortList();
+  $$ = PtIODList();
   $$.init($2);
   parser.reg_attrinst($2, $1);
 }
@@ -1158,16 +1167,15 @@ list_of_module_items
 {
   $$ = PtHeadList();
 }
-| list_of_module_items ai_list io_declaration
+| list_of_module_items io_declaration
 {
   $$ = $1;
-  $1.iohead_list.add($3);
+  $1.iohead_list.add($2);
 }
-| list_of_module_items ai_list module_decl_body
+| list_of_module_items module_decl
 {
   $$ = $1;
-  $1.declhead_list.add($3);
-  parser.reg_attrinst($3, $2);
+  $1.declhead_list.add($2);
 }
 | list_of_module_items module_item
 {
@@ -1199,65 +1207,51 @@ list_of_module_items2
 // ai_list の処理を一つにまとめるため module_decl_body という
 // 非終端節点を追加している．
 module_decl
-: ai_list module_decl_body
+: ai_list module_or_generate_decl
 {
   $$ = $2;
   parser.reg_attrinst($2, $1);
 }
-;
-
-module_decl_body
-: module_or_generate_decl
+| ai_list parameter_declaration
 {
-  $$ = $1;
+  $$ = $2;
+  parser.reg_attrinst($2, $1);
 }
-| parameter_declaration
+| ai_list specparam_declaration
 {
-  $$ = $1;
-}
-| specparam_declaration
-{
-  $$ = $1;
+  $$ = $2;
+  parser.reg_attrinst($2, $1);
 }
 ;
 
 io_declaration
-: inout_declaration
+: ai_list inout_declaration
 {
-  $$ = $1;
+  $$ = $2;
+  parser.reg_attrinst($2, $1);
 }
-| input_declaration
+| ai_list input_declaration
 {
-  $$ = $1;
+  $$ = $2;
+  parser.reg_attrinst($2, $1);
 }
-| output_declaration
-{
-  $$ = $1;
-}
-;
-
-// ai_list の処理を一つにまとめるため module_item_body という
-// 非終端節点を追加している．
-module_item
-: ai_list module_item_body
+| ai_list output_declaration
 {
   $$ = $2;
   parser.reg_attrinst($2, $1);
 }
 ;
 
-module_item_body
-: module_or_generate_item
+module_item
+: ai_list module_or_generate_item
 {
-  $$ = $1;
+  $$ = $2;
+  parser.reg_attrinst($2, $1);
 }
-| generated_instantiation
+| ai_list generated_instantiation
 {
-  $$ = $1;
-}
-| specify_block
-{
-  $$ = $1;
+  $$ = $2;
+  parser.reg_attrinst($2, $1);
 }
 ;
 
@@ -2762,7 +2756,7 @@ list_of_bitem_decl
 function_port_list
 : ai_list tf_input_declhead
 {
-  $$ = PtIOPortList();
+  $$ = PtIODList();
   $$.init($2);
   parser.reg_attrinst($2, $1);
 }
@@ -2937,17 +2931,17 @@ tf_io_declaration
 task_port_list
 : tf_input_declhead
 {
-  $$ = PtIOPortList();
+  $$ = PtIODList();
   $$.init($1);
 }
 | tf_output_declhead
 {
-  $$ = PtIOPortList();
+  $$ = PtIODList();
   $$.init($1);
 }
 | tf_inout_declhead
 {
-  $$ = PtIOPortList();
+  $$ = PtIODList();
   $$.init($1);
 }
 | task_port_list ',' tf_input_declhead
@@ -4630,7 +4624,7 @@ udp_reg_declaration
 udp_declaration_port_list
 : udp_output_port_declaration ',' ai_list INPUT port_identifier_item
 {
-  $$ = PtIOPortList();
+  $$ = PtIODList();
   $$.init($1);
   auto head = parser.factory().new_IOHead(@4, VpiDir::Input, $5);
   parser.reg_attrinst(head, $3);

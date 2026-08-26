@@ -172,18 +172,20 @@ Parser::new_Udp1995(
     }
   }
 
-  if ( sane ) {
-    new_Udp(file_region,
-	    udp_name,
-	    init_name,
-	    init_loc,
-	    init_value,
-	    is_seq,
-	    out_item,
-	    port_top,
-	    io_top,
-	    entry_top);
+  if ( !sane ) {
+    return nullptr;
   }
+
+  return new_Udp(file_region,
+		 udp_name,
+		 init_name,
+		 init_loc,
+		 init_value,
+		 is_seq,
+		 out_item,
+		 port_top,
+		 io_top,
+		 entry_top);
 }
 
 // UDP を生成する．(Verilog-2001)
@@ -216,16 +218,16 @@ Parser::new_Udp2001(
   // iohead_array から port_array を生成する．
   auto port_array = new_PortArray(AstIOHeadList(io_top));
 
-  new_Udp(file_region,
-	  udp_name,
-	  init_name,
-	  init_loc,
-	  init_value,
-	  is_seq,
-	  out_item,
-	  nullptr, /*port_top,*/
-	  io_top,
-	  entry_top);
+  return new_Udp(file_region,
+		 udp_name,
+		 init_name,
+		 init_loc,
+		 init_value,
+		 is_seq,
+		 out_item,
+		 nullptr, /*port_top,*/
+		 io_top,
+		 entry_top);
 }
 
 // @brief new_Udp の下請け関数

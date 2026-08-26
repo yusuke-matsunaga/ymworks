@@ -127,6 +127,9 @@ private:
 /// @brief PtIOItem のリスト
 using PtIOItemList = PtList<PtIOItem>;
 
+/// @brief PtIOHead と PtIOItem の二重構造のリスト
+using PtIODList = PtDList<PtIOHead, PtIOItem>;
+
 
 //////////////////////////////////////////////////////////////////////
 /// @class PtDeclHead PtDecl.h "parser/PtDecl.h"
@@ -237,6 +240,9 @@ private:
 
 /// @brief PtDeclItem のリスト
 using PtDeclItemList = PtList<PtDeclItem>;
+
+/// @brief PtDeclHead と PtDeclItem の二重構造のリスト
+using PtDeclDList = PtDList<PtDeclHead, PtDeclItem>;
 
 
 //////////////////////////////////////////////////////////////////////

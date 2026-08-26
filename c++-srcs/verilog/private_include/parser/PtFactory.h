@@ -176,7 +176,6 @@ public:
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     VpiDir dir,		   ///< [in] IO の種類 (input, inout, output)
     PtIOItem* item_top     ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成
@@ -188,7 +187,6 @@ public:
     bool sign,		   ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range, ///< [in] パース木の範囲定義
     PtIOItem* item_top     ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 1ビットの IO 宣言のヘッダの生成 (reg 型)
@@ -198,7 +196,6 @@ public:
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     VpiDir dir,		   ///< [in] IO の種類 (input, inout, output)
     PtIOItem* item_top     ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (reg 型)
@@ -210,7 +207,6 @@ public:
     bool sign,		   ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range, ///< [in] パース木の範囲定義
     PtIOItem* item_top     ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 1ビットの IO 宣言のヘッダの生成 (ネット型)
@@ -221,7 +217,6 @@ public:
     VpiDir dir,		   ///< [in] IO の種類 (input, inout, output)
     VpiNetType net_type,   ///< [in] 補助的なネット型
     PtIOItem* item_top     ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 範囲付きの IO 宣言のヘッダの生成 (ネット型)
@@ -234,7 +229,6 @@ public:
     bool sign,             ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range, ///< [in] パース木の範囲定義
     PtIOItem* item_top     ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief IO 宣言のヘッダの生成 (変数型)
@@ -245,7 +239,6 @@ public:
     VpiDir dir,           ///< [in] IO の種類 (input, inout, output)
     VpiVarType var_type,  ///< [in] 補助的な変数型
     PtIOItem* item_top    ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 初期値付き IO 宣言の要素の生成
@@ -276,7 +269,6 @@ public:
   new_ParamH(
     const FileRegion& fr,  ///< [in] ファイル位置の情報
     PtDeclItem* item_top   ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 範囲指定型パラメータ宣言のヘッダの生成
@@ -287,7 +279,6 @@ public:
     bool sign,             ///< [in] 符号付きのとき true となるフラグ
     const AstRange* range, ///< [in] パース木の範囲定義
     PtDeclItem* item_top   ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 1ビットの型ローカルパラメータ宣言のヘッダの生成
@@ -315,7 +306,6 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiVarType var_type,  ///< [in] データ型
     PtDeclItem* item_top  ///< [in] 要素の先頭
-    = nullptr
   );
 
   /// @brief 組み込み型ローカルパラメータ宣言のヘッダの生成

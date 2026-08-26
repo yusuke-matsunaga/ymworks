@@ -90,23 +90,22 @@ Parser::new_Module1995(
     }
   }
 
-  auto module = mFactory.new_Module(file_region,
-				    module_name,
-				    is_macro,
-				    is_cell,
-				    is_protected,
-				    time_u, time_p,
-				    nettype, unconn,
-				    delay, decay,
-				    named_port,
-				    portfaults, suppress_faults,
-				    config, library, cell,
-				    paramport_top,
-				    port_top,
-				    iohead_top,
-				    declhead_top,
-				    item_top);
-  return module;
+  return mFactory.new_Module(file_region,
+			     module_name,
+			     is_macro,
+			     is_cell,
+			     is_protected,
+			     time_u, time_p,
+			     nettype, unconn,
+			     delay, decay,
+			     named_port,
+			     portfaults, suppress_faults,
+			     config, library, cell,
+			     paramport_top,
+			     port_top,
+			     iohead_top,
+			     declhead_top,
+			     item_top);
 }
 
 // Verilog2001 タイプのモジュールを生成する．
@@ -146,23 +145,22 @@ Parser::new_Module2001(
     return nullptr;
   }
 
-  // iohead_array からポートの配列を作る．
-  auto port_array = new_PortArray(portdecl_top);
+  // iohead_array からポートリストを作る．
+  auto port_list = new_PortArray(portdecl_top);
 
-  auto module = mFactory.new_Module(file_region,
-				    module_name,
-				    is_macro, is_cell, is_protected,
-				    time_u, time_p, nettype,
-				    unconn, delay, decay,
-				    true,
-				    portfaults, suppress_faults,
-				    config, library, cell,
-				    paramport_top,
-				    /*port_array,*/nullptr,
-				    portdecl_top,
-				    declhead_top,
-				    item_top);
-  return module;
+  return mFactory.new_Module(file_region,
+			     module_name,
+			     is_macro, is_cell, is_protected,
+			     time_u, time_p, nettype,
+			     unconn, delay, decay,
+			     true,
+			     portfaults, suppress_faults,
+			     config, library, cell,
+			     paramport_top,
+			     port_list.top,
+			     portdecl_top,
+			     declhead_top,
+			     item_top);
 }
 
 // @brief ポート宣言とIO宣言の齟齬をチェックする．
@@ -220,5 +218,54 @@ Parser::check_IO(
     }
   }
 }
+
+// @brief 入出力宣言中の重複チェックを行う．
+bool
+Parser::check_PortArray(
+  const AstIOHeadList& iohead_list
+)
+{
+  std::unordered_set<std::string> portref_dic;
+  for ( auto head: iohead_list ) {
+    for ( auto elem: head->item_list() ) {
+      auto name = elem->name();
+      if ( portref_dic.count(name) > 0 ) {
+	std::ostringstream buf;
+	buf << "\"" << name << "\" is redefined.";
+	MsgMgr::put_msg(__FILE__, __LINE__,
+			elem->file_region(),
+			MsgType::Error,
+			"ELAB",
+			buf.str());
+	return false;
+      }
+      portref_dic.insert(name);
+    }
+  }
+  return true;
+}
+
+// @brief 入出力宣言からポートリストを作る．
+PtPortList
+Parser::new_PortArray(
+  const AstIOHeadList& iohead_list
+)
+{
+  // ポートを生成し vec に格納する．
+  PtPortList port_list;
+  port_list.init();
+  for ( auto head: iohead_list ) {
+    for ( auto elem: head->item_list() ) {
+      auto name = elem->name();
+      auto portref = mFactory.new_Primary(elem->file_region(), name);
+      auto port = mFactory.new_Port(elem->file_region(), name, portref);
+      auto dir = head->direction();
+      port->set_portref_dir(0, dir);
+      port_list.add(port);
+    }
+  }
+  return port_list;
+}
+
 
 END_NAMESPACE_YM_VERILOG

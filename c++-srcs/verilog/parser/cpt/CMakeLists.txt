@@ -43,10 +43,14 @@
 # ===================================================================
 
 set ( parser_cpt_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/CptAssignStmt.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptAttrInst.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/CptBlockStmt.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/CptCondStmt.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptContAssign.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptConst.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptControl.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/CptCtrlStmt.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptDeclHead.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptDeclItem.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptDefParam.cc
@@ -55,6 +59,7 @@ set ( parser_cpt_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/CptIO.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptInst.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptItem.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/CptLoopStmt.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptMisc.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptModule.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptNameBranch.cc

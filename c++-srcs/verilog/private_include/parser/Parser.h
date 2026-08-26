@@ -20,8 +20,6 @@
 #include "parser/PtStmt.h"
 #include "parser/PtMisc.h"
 #include "parser/PtHierName.h"
-#include "parser/PtIOPortList.h"
-#include "parser/PtDeclPortList.h"
 #include "parser/PtHeadList.h"
 #include "parser/AstMgr.h"
 #include "ym/MsgMgr.h"
@@ -204,8 +202,8 @@ public:
     const AstIOHeadList& iohead_list
   );
 
-  /// @brief 入出力宣言からポートを作る．
-  std::vector<PtPort*>
+  /// @brief 入出力宣言からポートリストを作る．
+  PtPortList
   new_PortArray(
     const AstIOHeadList& iohead_list
   );
