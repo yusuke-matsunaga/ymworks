@@ -96,6 +96,10 @@ public:
   const AstExpr*
   rhs() const override;
 
+  /// @brief コントロールを返す．
+  const AstControl*
+  control() const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////

@@ -1,24 +1,24 @@
-#ifndef PARSERTEST_DECL_H
-#define PARSERTEST_DECL_H
+#ifndef PTDECLTEST_H
+#define PTDECLTEST_H
 
-/// @file ParserTest_Decl.h
-/// @brief ParserTest_Decl のヘッダファイル
+/// @file PtDeclTest.h
+/// @brief PtDeclTest のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ParserTest.h"
+#include "PtTest.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class ParserTest_Decl ParserTest_Decl.h "ParserTest_Decl.h"
-/// @brief ParserTest の AstDecl 用テスト環境
+/// @class PtDeclTest PtDeclTest.h "PtDeclTest.h"
+/// @brief PtDecl 用テスト環境
 //////////////////////////////////////////////////////////////////////
-class ParserTest_Decl :
-  public ParserTest
+class PtDeclTest :
+  public PtTest
 {
 public:
   //////////////////////////////////////////////////////////////////////
@@ -109,4 +109,4 @@ public:
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // PARSERTEST_DECL_H
+#endif // PTDECLTEST_H

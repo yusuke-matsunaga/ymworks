@@ -75,6 +75,10 @@ public:
   const AstExpr*
   rep() const override;
 
+  /// @brief 引数リストの取得
+  AstExprList
+  arg_list() const override;
+
   /// @brief 定数インデックスのチェック
   /// @retval true インデックスもしくは範囲が定数にならなければならないとき
   /// @retval false 上記以外
@@ -242,9 +246,13 @@ public:
   const char*
   name() const override;
 
-  /// @brief オペランドのリストの取得
+  /// @brief 階層ブランチのリストを返す．
+  AstNameBranchList
+  namebranch_list() const override;
+
+  /// @brief 引数リストの取得
   AstExprList
-  operand_list() const override;
+  arg_list() const override;
 
 
 private:

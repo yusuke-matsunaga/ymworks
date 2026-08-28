@@ -6,13 +6,13 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ParserTest.h"
+#include "PtTest.h"
 #include "parser/PtHierName.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ParserTest, new1)
+TEST_F(PtTest, new1)
 {
   const char* head = "head1";
   const char* tail = "tail1";
@@ -27,7 +27,7 @@ TEST_F(ParserTest, new1)
   EXPECT_EQ( nullptr, nb_top->_link() );
 }
 
-TEST_F(ParserTest, new2)
+TEST_F(PtTest, new2)
 {
   const char* head = "head1";
   int index = 2;
@@ -42,7 +42,7 @@ TEST_F(ParserTest, new2)
   EXPECT_EQ( nullptr, nb_top->_link() );
 }
 
-TEST_F(ParserTest, add1)
+TEST_F(PtTest, add1)
 {
   const char* head = "head1";
   const char* tail = "tail1";
@@ -61,7 +61,7 @@ TEST_F(ParserTest, add1)
   EXPECT_EQ( nullptr, nb2->_link() );
 }
 
-TEST_F(ParserTest, add2)
+TEST_F(PtTest, add2)
 {
   const char* head = "head1";
   const char* tail = "tail1";

@@ -1,25 +1,21 @@
 
-/// @file ParserTest_expr.cc
-/// @brief ParserTest_expr の実装ファイル
+/// @file PtExprTest1.cc
+/// @brief PtExprTest の実装ファイルその1
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include <gtest/gtest.h>
-#include "ParserTest.h"
-#include "parser/PtDecl.h"
-#include "parser/PtMisc.h"
-#include "parser/PtExpr.h"
+#include "PtExprTest.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ParserTest, Opr1)
+TEST_F(PtExprTest, Opr1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
+  auto expr1 = factory.new_IntConst(fr1, 123U);
   for ( auto type: { VpiOpType::Minus, VpiOpType::Plus,
 		     VpiOpType::Not, VpiOpType::BitNeg,
 		     VpiOpType::UnaryAnd, VpiOpType::UnaryNand,
@@ -27,11 +23,10 @@ TEST_F(ParserTest, Opr1)
 		     VpiOpType::UnaryXor, VpiOpType::UnaryXNor,
 		     VpiOpType::Posedge, VpiOpType::Negedge,
 		     VpiOpType::Null} ) {
-    auto expr = parser.new_Opr(fr, type, expr1, nullptr);
+    auto expr = factory.new_Opr(fr, type, expr1);
 
-    ASSERT_TRUE( expr != nullptr );
-    check_expr_name(expr);
-    check_expr_opr(expr, type, {expr1});
+    check_Opr1(expr, fr, type, expr1);
+
     bool exp_is_index_expr = true;
     if ( type == VpiOpType::Posedge || type == VpiOpType::Negedge ) {
       exp_is_index_expr = false;
@@ -82,13 +77,12 @@ TEST_F(ParserTest, Opr1)
   }
 }
 
-TEST_F(ParserTest, Opr2)
+TEST_F(PtExprTest, Opr2)
 {
-  auto fr = make_file_region(1, 2, 3, 4);
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.factory().new_IntConst(fr1, 123U);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr2 = parser.factory().new_IntConst(fr2, 4U);
+  auto fr1 = make_file_region(1, 1, 1, 9);
+  auto expr1 = factory.new_IntConst(fr1, 123U);
+  auto fr2 = make_file_region(1, 20, 1, 29);
+  auto expr2 = factory.new_IntConst(fr2, 4U);
   for ( auto type: { VpiOpType::Sub,
 		     VpiOpType::Div, VpiOpType::Mod,
 		     VpiOpType::Eq, VpiOpType::Neq,
@@ -101,11 +95,10 @@ TEST_F(ParserTest, Opr2)
 		     VpiOpType::BitAnd, VpiOpType::BitOr,
 		     VpiOpType::BitXor, VpiOpType::BitXNor,
 		     VpiOpType::ArithLShift, VpiOpType::ArithRShift} ) {
-    auto expr = parser.new_Opr(fr, type, expr1, expr2, nullptr);
+    auto expr = factory.new_Opr(type, expr1, expr2);
 
-    ASSERT_TRUE( expr != nullptr );
-    check_expr_name(expr);
-    check_expr_opr(expr, type, {expr1, expr2});
+    check_Opr2(expr, type, expr1, expr2);
+
     EXPECT_TRUE( expr->is_index_expr() );
     int exp_index_value = 0;
     switch ( type ) {
@@ -168,21 +161,20 @@ TEST_F(ParserTest, Opr2)
   }
 }
 
-TEST_F(ParserTest, Opr3)
+TEST_F(PtExprTest, Opr3)
 {
-  auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.factory().new_IntConst(fr1, 1U);
+  auto expr1 = factory.new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr2 = parser.factory().new_IntConst(fr2, 2U);
+  auto expr2 = factory.new_IntConst(fr2, 2U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto expr3 = parser.factory().new_IntConst(fr3, 3U);
+  auto expr3 = factory.new_IntConst(fr3, 3U);
+  auto fr = FileRegion(fr1, fr3);
   auto type = VpiOpType::Condition;
-  auto expr = parser.new_Opr(fr, type, expr1, expr2, expr3, nullptr);
+  auto expr = factory.new_Opr(type, expr1, expr2, expr3);
 
-  ASSERT_TRUE( expr != nullptr );
-  check_expr_name(expr);
-  check_expr_opr(expr, type, {expr1, expr2, expr3});
+  check_Opr3(expr, type, expr1, expr2, expr3);
+
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
@@ -191,24 +183,24 @@ TEST_F(ParserTest, Opr3)
   EXPECT_EQ( "1?2:3", expr->decompile() );
 }
 
-TEST_F(ParserTest, Concat)
+TEST_F(PtExprTest, Concat)
 {
   auto fr = make_file_region(1, 2, 3, 4);
-  auto expr_list = parser.new_expr_list();
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.factory().new_IntConst(fr1, 1U);
-  expr_list->push_back(astmgr.alloc(), expr1);
+  auto expr1 = factory.new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr2 = parser.factory().new_IntConst(fr2, 2U);
-  expr_list->push_back(astmgr.alloc(), expr2);
+  auto expr2 = factory.new_IntConst(fr2, 2U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto expr3 = parser.factory().new_IntConst(fr3, 3U);
-  expr_list->push_back(astmgr.alloc(), expr3);
-  auto expr = parser.new_Concat(fr, expr_list);
+  auto expr3 = factory.new_IntConst(fr3, 3U);
+  PtExprList expr_list;
+  expr_list.init();
+  expr_list.add(expr1);
+  expr_list.add(expr2);
+  expr_list.add(expr3);
+  auto expr = factory.new_Concat(fr, expr_list.top);
 
-  ASSERT_TRUE( expr != nullptr );
-  check_expr_name(expr);
-  check_expr_opr(expr, VpiOpType::Concat, {expr1, expr2, expr3});
+  check_Concat(expr, fr, {expr1, expr2, expr3});
+
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
@@ -217,26 +209,26 @@ TEST_F(ParserTest, Concat)
   EXPECT_EQ( "{1,2,3}", expr->decompile() );
 }
 
-TEST_F(ParserTest, MultiConcat)
+TEST_F(PtExprTest, MultiConcat)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto rep = parser.factory().new_IntConst(fr1, 4U);
-  auto expr_list = parser.new_expr_list();
+  auto rep = factory.new_IntConst(fr1, 4U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr1 = parser.factory().new_IntConst(fr2, 1U);
-  expr_list->push_back(astmgr.alloc(), expr1);
+  auto expr1 = factory.new_IntConst(fr2, 1U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto expr2 = parser.factory().new_IntConst(fr3, 2U);
-  expr_list->push_back(astmgr.alloc(), expr2);
+  auto expr2 = factory.new_IntConst(fr3, 2U);
   auto fr4 = make_file_region(4, 4, 4, 4);
-  auto expr3 = parser.factory().new_IntConst(fr4, 3U);
-  expr_list->push_back(astmgr.alloc(), expr3);
-  auto expr = parser.new_MultiConcat(fr, rep, expr_list);
+  auto expr3 = factory.new_IntConst(fr4, 3U);
+  PtExprList expr_list;
+  expr_list.init();
+  expr_list.add(expr1);
+  expr_list.add(expr2);
+  expr_list.add(expr3);
+  auto expr = factory.new_MultiConcat(fr, rep, expr_list.top);
 
-  ASSERT_TRUE( expr != nullptr );
-  check_expr_name(expr);
-  check_expr_multiconcat(expr, VpiOpType::MultiConcat, rep, {expr1, expr2, expr3});
+  check_MultiConcat(expr, fr, rep, {expr1, expr2, expr3});
+
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
@@ -245,20 +237,18 @@ TEST_F(ParserTest, MultiConcat)
   EXPECT_EQ( "{4{1,2,3}}", expr->decompile() );
 }
 
-TEST_F(ParserTest, MinTypMax)
+TEST_F(PtExprTest, MinTypMax)
 {
-  auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto expr1 = parser.factory().new_IntConst(fr1, 1U);
+  auto expr1 = factory.new_IntConst(fr1, 1U);
   auto fr2 = make_file_region(2, 2, 2, 2);
-  auto expr2 = parser.factory().new_IntConst(fr2, 2U);
+  auto expr2 = factory.new_IntConst(fr2, 2U);
   auto fr3 = make_file_region(3, 3, 3, 3);
-  auto expr3 = parser.factory().new_IntConst(fr3, 3U);
-  auto expr = parser.new_MinTypMax(fr, expr1, expr2, expr3);
+  auto expr3 = factory.new_IntConst(fr3, 3U);
+  auto expr = factory.new_MinTypMax(expr1, expr2, expr3);
 
-  ASSERT_TRUE( expr != nullptr );
-  check_expr_name(expr);
-  check_expr_opr(expr, VpiOpType::MinTypMax, {expr1, expr2, expr3});
+  check_Opr3(expr, VpiOpType::MinTypMax, expr1, expr2, expr3);
+
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );

@@ -614,7 +614,6 @@ public:
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* name,	  ///< [in] task 名
     bool automatic,	  ///< [in] automatic task の時に true となるフラグ
-    bool sign,		  ///< [in] signed 属性がついていたら true となるフラグ
     PtIOHead* iodecl_top, ///< [in] IO宣言のリスト
     PtDeclHead* decl_top, ///< [in] 宣言のリスト
     const AstStmt* stmt	  ///< [in] 本体のステートメント
@@ -1390,7 +1389,6 @@ public:
   /// @return 生成された演算子
   PtExpr*
   new_Opr(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiOpType type,	  ///< [in] 演算の種類
     const AstExpr* opr1,  ///< [in] オペランド1
     const AstExpr* opr2	  ///< [in] オペランド2
@@ -1400,7 +1398,6 @@ public:
   /// @return 生成された演算子
   PtExpr*
   new_Opr(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
     VpiOpType type,	  ///< [in] 演算の種類
     const AstExpr* opr1,  ///< [in] オペランド1
     const AstExpr* opr2,  ///< [in] オペランド2
@@ -1428,7 +1425,6 @@ public:
   /// @return 生成された min/typ/max 演算子
   PtExpr*
   new_MinTypMax(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
     const AstExpr* val0,  ///< [in] minimum 値
     const AstExpr* val1,  ///< [in] typical 値
     const AstExpr* val2   ///< [in] maximum 値

@@ -1,18 +1,18 @@
 
-/// @file ParserTest_udp.cc
-/// @brief ParserTest_udp の実装ファイル
+/// @file PtUdpTest.cc
+/// @brief PtUdpTest の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ParserTest.h"
+#include "PtTest.h"
 #include "ym/vl/VlUdpVal.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ParserTest, UdpValue1)
+TEST_F(PtTest, UdpValue1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   for ( auto sym1: { '0', '1', 'x', 'b', '?', 'r', 'f', 'p', 'n', '-', '*' } ) {
@@ -24,7 +24,7 @@ TEST_F(ParserTest, UdpValue1)
   }
 }
 
-TEST_F(ParserTest, UdpValue2)
+TEST_F(PtTest, UdpValue2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   for ( auto sym1: { '0', '1', 'x', 'b', '?' } ) {
@@ -38,7 +38,7 @@ TEST_F(ParserTest, UdpValue2)
   }
 }
 
-TEST_F(ParserTest, UdpEntry1)
+TEST_F(PtTest, UdpEntry1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
@@ -61,7 +61,7 @@ TEST_F(ParserTest, UdpEntry1)
   EXPECT_EQ( oval, ue->output() );
 }
 
-TEST_F(ParserTest, UdpEntry2)
+TEST_F(PtTest, UdpEntry2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
@@ -88,7 +88,7 @@ TEST_F(ParserTest, UdpEntry2)
   EXPECT_EQ( VlUdpVal(osym1), oval->symbol() );
 }
 
-TEST_F(ParserTest, Udp1995)
+TEST_F(PtTest, Udp1995)
 {
   PtUdpEntry* entry;
   {

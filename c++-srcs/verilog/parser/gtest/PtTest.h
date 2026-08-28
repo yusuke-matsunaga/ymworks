@@ -1,8 +1,8 @@
-#ifndef PARSERTEST_H
-#define PARSERTEST_H
+#ifndef PTTEST_H
+#define PTTEST_H
 
-/// @file ParserTest.h
-/// @brief ParserTest のヘッダファイル
+/// @file PtTest.h
+/// @brief PtTest のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
@@ -23,16 +23,36 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class ParserTest ParserTest.h "ParserTest.h"
+/// @class PtTest PtTest.h "PtTest.h"
 /// @brief Parser のテスト環境
 //////////////////////////////////////////////////////////////////////
-class ParserTest :
+class PtTest :
   public ::testing::Test
 {
 public:
 
+  /// @brief NameBranch の仕様を表す構造体
+  struct NameBranchSpec {
+    const char* name;
+    int index; // 最下位ビットが1の時 インデックスを持つ.
+
+    std::string
+    decompile() const
+    {
+      std::ostringstream buf;
+      buf << name;
+      if ( index & 1 ) {
+	buf << "[" << (index / 2) << "]";
+      }
+      return buf.str();
+    }
+  };
+
+
+public:
+
   // コンストラクタ
-  ParserTest(
+  PtTest(
   ) : parser(astmgr),
       factory(parser.factory()),
       file_info("filename1")
@@ -123,11 +143,23 @@ public:
   check_NamedBase(
     const AstNamedBase* obj,
     const FileRegion& fr,
-    const char* name = nullptr
+    const char* name
   )
   {
     check_Base(obj, fr);
     EXPECT_STREQ( name, obj->name() );
+  }
+
+  /// @brief AstNamedBase のテスト
+  void
+  check_NamedBase(
+    const AstNamedBase* obj,
+    const FileRegion& fr
+  )
+  {
+    check_Base(obj, fr);
+    EXPECT_THROW( obj->name(),
+		  std::logic_error );
   }
 
   /// @brief AstHierNamedBase のテスト
@@ -135,21 +167,60 @@ public:
   check_HierNamedBase(
     const AstHierNamedBase* obj,
     const FileRegion& fr,
-    const char* name = nullptr,
-    const std::vector<const AstNameBranch*>& nb_vec = {}
+    const char* name,
+    const std::vector<NameBranchSpec>& nbspec_vec
   )
   {
     check_NamedBase(obj, fr, name);
-    EXPECT_EQ( nb_vec, obj->namebranch_list().to_vector() );
+    SizeType index = 0;
+    for ( auto nb: obj->namebranch_list() ) {
+      auto& spec = nbspec_vec[index];
+      EXPECT_EQ( spec.name, nb->name() );
+      if ( spec.index & 1 ) {
+	EXPECT_TRUE( nb->has_index() );
+	EXPECT_EQ( spec.index / 2, nb->index() );
+      }
+      else {
+	EXPECT_FALSE( nb->has_index() );
+	EXPECT_THROW( nb->index(),
+		      std::logic_error );
+      }
+      ++ index;
+    }
     std::string exp_name;
-    if ( obj->name() != nullptr ) {
-      for ( auto nb: obj->namebranch_list() ) {
-	exp_name += nb->decompile();
+    if ( name != nullptr ) {
+      for ( auto nbspec: nbspec_vec ) {
+	exp_name += nbspec.decompile();
 	exp_name += ".";
       }
-      exp_name += obj->name();
+      exp_name += name;
     }
     EXPECT_EQ( exp_name, obj->decompile_name() );
+  }
+
+  /// @brief AstHierNamedBase のテスト
+  void
+  check_HierNamedBase(
+    const AstHierNamedBase* obj,
+    const FileRegion& fr,
+    const char* name
+  )
+  {
+    check_NamedBase(obj, fr, name);
+    EXPECT_THROW( obj->namebranch_list(),
+		  std::logic_error );
+  }
+
+  /// @brief AstHierNamedBase のテスト
+  void
+  check_HierNamedBase(
+    const AstHierNamedBase* obj,
+    const FileRegion& fr
+  )
+  {
+    check_NamedBase(obj, fr);
+    EXPECT_THROW( obj->namebranch_list(),
+		  std::logic_error );
   }
 
 
@@ -170,4 +241,4 @@ public:
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // PARSERTEST_H
+#endif // PTTEST_H

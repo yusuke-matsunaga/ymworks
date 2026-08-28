@@ -1,91 +1,103 @@
 
-/// @file ParserTest_decl.cc
-/// @brief ParserTest_decl の実装ファイル
+/// @file PtDeclTest.cc
+/// @brief PtDeclTest の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ParserTest_Decl.h"
+#include "PtDeclTest.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ParserTest_Decl, IOHead1)
+TEST_F(PtDeclTest, IOHead1)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
+      auto fr1 = make_file_region(1, 1, 1, 1);
+      const char* name1 = "name1";
+      auto item = factory.new_IOItem(fr1, name1);
       auto fr = make_file_region(1, 2, 3, 4);
-      auto head = factory.new_IOHead(fr, dir, nullptr);
+      auto head = factory.new_IOHead(fr, dir, item);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::None,
 		   VpiNetType::None,
 		   VpiVarType::None,
 		   false, nullptr,
-		   std::vector<const AstIOItem*>{});
+		   std::vector<const AstIOItem*>{item});
     }
   }
 }
 
-TEST_F(ParserTest_Decl, IOHead2)
+TEST_F(PtDeclTest, IOHead2)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
+      auto fr1 = make_file_region(1, 1, 1, 1);
+      const char* name1 = "name1";
+      auto item = factory.new_IOItem(fr1, name1);
       auto fr = make_file_region(1, 2, 3, 4);
-      auto head = factory.new_IOHead(fr, dir, sign, range, nullptr);
+      auto head = factory.new_IOHead(fr, dir, sign, range, item);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::None,
 		   VpiNetType::None,
 		   VpiVarType::None,
 		   sign, range,
-		   std::vector<const AstIOItem*>{});
+		   std::vector<const AstIOItem*>{item});
     }
   }
 }
 
-TEST_F(ParserTest_Decl, RegIOHead)
+TEST_F(PtDeclTest, RegIOHead)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
+      auto fr1 = make_file_region(1, 1, 1, 1);
+      const char* name1 = "name1";
+      auto item = factory.new_IOItem(fr1, name1);
       auto fr = make_file_region(1, 2, 3, 4);
-      auto head = factory.new_RegIOHead(fr, dir, nullptr);
+      auto head = factory.new_RegIOHead(fr, dir, item);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::Reg,
 		   VpiNetType::None,
 		   VpiVarType::None,
 		   false, nullptr,
-		   std::vector<const AstIOItem*>{});
+		   std::vector<const AstIOItem*>{item});
     }
   }
 }
 
-TEST_F(ParserTest_Decl, RegIOHead2)
+TEST_F(PtDeclTest, RegIOHead2)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( bool sign: { true, false } ) {
+      auto fr1 = make_file_region(1, 1, 1, 1);
+      const char* name1 = "name1";
+      auto item = factory.new_IOItem(fr1, name1);
       auto fr = make_file_region(1, 2, 3, 4);
-      auto head = factory.new_RegIOHead(fr, dir, sign, range, nullptr);
+      auto head = factory.new_RegIOHead(fr, dir, sign, range, item);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::Reg,
 		   VpiNetType::None,
 		   VpiVarType::None,
 		   sign, range,
-		   std::vector<const AstIOItem*>{});
+		   std::vector<const AstIOItem*>{item});
     }
   }
 }
 
-TEST_F(ParserTest_Decl, NetIOHead)
+TEST_F(PtDeclTest, NetIOHead)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
@@ -93,65 +105,73 @@ TEST_F(ParserTest_Decl, NetIOHead)
 		      VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		      VpiNetType::Supply1, VpiNetType::Supply0 } ) {
       for ( bool sign: { true, false } ) {
+	auto fr1 = make_file_region(1, 1, 1, 1);
+	const char* name1 = "name1";
+	auto item = factory.new_IOItem(fr1, name1);
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetIOHead(fr, dir, net, nullptr);
+	auto head = factory.new_NetIOHead(fr, dir, net, item);
 
 	check_IOHead(head, fr, dir,
 		     VpiAuxType::Net,
 		     net,
 		     VpiVarType::None,
 		     false, nullptr,
-		     std::vector<const AstIOItem*>{});
+		     std::vector<const AstIOItem*>{item});
       }
     }
   }
 }
 
-TEST_F(ParserTest_Decl, NetIOHead2)
+TEST_F(PtDeclTest, NetIOHead2)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		      VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		      VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		      VpiNetType::Supply1, VpiNetType::Supply0 } ) {
       for ( bool sign: { true, false } ) {
+	auto fr1 = make_file_region(1, 1, 1, 1);
+	const char* name1 = "name1";
+	auto item = factory.new_IOItem(fr1, name1);
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetIOHead(fr, dir, net, sign, range, nullptr);
+	auto head = factory.new_NetIOHead(fr, dir, net, sign, range, item);
 
 	check_IOHead(head, fr, dir,
 		     VpiAuxType::Net,
 		     net,
 		     VpiVarType::None,
 		     sign, range,
-		     std::vector<const AstIOItem*>{});
+		     std::vector<const AstIOItem*>{item});
       }
     }
   }
 }
 
-TEST_F(ParserTest_Decl, VarIOHead)
+TEST_F(PtDeclTest, VarIOHead)
 {
   for ( auto dir: { VpiDir::Input, VpiDir::Output, VpiDir::Inout } ) {
     for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		      VpiVarType::Time, VpiVarType::Realtime } ) {
+      auto fr1 = make_file_region(1, 1, 1, 1);
+      const char* name1 = "name1";
+      auto item = factory.new_IOItem(fr1, name1);
       auto fr = make_file_region(1, 2, 3, 4);
-      auto head = factory.new_VarIOHead(fr, dir, var, nullptr);
-      ASSERT_TRUE( head != nullptr );
+      auto head = factory.new_VarIOHead(fr, dir, var, item);
 
       check_IOHead(head, fr, dir,
 		   VpiAuxType::Var,
 		   VpiNetType::None,
 		   var,
 		   false, nullptr,
-		   std::vector<const AstIOItem*>{});
+		   std::vector<const AstIOItem*>{item});
     }
   }
 }
 
-TEST_F(ParserTest_Decl, IOItem)
+TEST_F(PtDeclTest, IOItem)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "port1";
@@ -160,7 +180,7 @@ TEST_F(ParserTest_Decl, IOItem)
   check_IOItem(item, fr, name, nullptr);
 }
 
-TEST_F(ParserTest_Decl, IOItem2)
+TEST_F(PtDeclTest, IOItem2)
 {
   auto fr2 = make_file_region(1, 10, 3, 14);
   auto fr3 = make_file_region(2, 20, 2, 22);
@@ -171,10 +191,13 @@ TEST_F(ParserTest_Decl, IOItem2)
   check_IOItem(item, FileRegion(fr2, fr3), name, expr);
 }
 
-TEST_F(ParserTest_Decl, ParamH)
+TEST_F(PtDeclTest, ParamH)
 {
+  auto fr1 = make_file_region(1, 1, 1, 1);
+  const char* name1 = "name1";
+  auto item = factory.new_DeclItem(fr1, name1);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_ParamH(fr, nullptr);
+  auto head = factory.new_ParamH(fr, item);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Param,
@@ -185,17 +208,20 @@ TEST_F(ParserTest_Decl, ParamH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{});
+		 std::vector<const AstDeclItem*>{item});
 }
 
-TEST_F(ParserTest_Decl, ParamH2)
+TEST_F(PtDeclTest, ParamH2)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   for ( auto sign: { true, false } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_ParamH(fr, sign, range, nullptr);
+    auto head = factory.new_ParamH(fr, sign, range, item);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Param,
@@ -206,16 +232,19 @@ TEST_F(ParserTest_Decl, ParamH2)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, ParamH3)
+TEST_F(PtDeclTest, ParamH3)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_ParamH(fr, var, nullptr);
+    auto head = factory.new_ParamH(fr, var, item);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Param,
@@ -226,14 +255,17 @@ TEST_F(ParserTest_Decl, ParamH3)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, LocalParamH)
+TEST_F(PtDeclTest, LocalParamH)
 {
+  auto fr1 = make_file_region(1, 1, 1, 1);
+  const char* name1 = "name1";
+  auto item = factory.new_DeclItem(fr1, name1);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_LocalParamH(fr, nullptr);
+  auto head = factory.new_LocalParamH(fr, item);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::LocalParam,
@@ -244,17 +276,20 @@ TEST_F(ParserTest_Decl, LocalParamH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{});
+		 std::vector<const AstDeclItem*>{item});
 }
 
-TEST_F(ParserTest_Decl, LocalParamH2)
+TEST_F(PtDeclTest, LocalParamH2)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   for ( auto sign: { true, false } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_LocalParamH(fr, sign, range, nullptr);
+    auto head = factory.new_LocalParamH(fr, sign, range, item);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::LocalParam,
@@ -265,16 +300,19 @@ TEST_F(ParserTest_Decl, LocalParamH2)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, LocalParamH3)
+TEST_F(PtDeclTest, LocalParamH3)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_LocalParamH(fr, var, nullptr);
+    auto head = factory.new_LocalParamH(fr, var, item);
 
     auto sign = (var == VpiVarType::Time) ? false : true;
     check_DeclHead(head, fr,
@@ -286,14 +324,17 @@ TEST_F(ParserTest_Decl, LocalParamH3)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, SpecParamH)
+TEST_F(PtDeclTest, SpecParamH)
 {
+  auto fr1 = make_file_region(1, 1, 1, 1);
+  const char* name1 = "name1";
+  auto item = factory.new_DeclItem(fr1, name1);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_SpecParamH(fr, nullptr);
+  auto head = factory.new_SpecParamH(fr, item);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::SpecParam,
@@ -304,16 +345,19 @@ TEST_F(ParserTest_Decl, SpecParamH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{});
+		 std::vector<const AstDeclItem*>{item});
 }
 
-TEST_F(ParserTest_Decl, SpecParamH2)
+TEST_F(PtDeclTest, SpecParamH2)
 {
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  const char* name1 = "name1";
+  auto item = factory.new_DeclItem(fr1, name1);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_SpecParamH(fr, range, nullptr);
+  auto head = factory.new_SpecParamH(fr, range, item);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::SpecParam,
@@ -324,13 +368,16 @@ TEST_F(ParserTest_Decl, SpecParamH2)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{});
+		 std::vector<const AstDeclItem*>{item});
 }
 
-TEST_F(ParserTest_Decl, EventH)
+TEST_F(PtDeclTest, EventH)
 {
+  auto fr1 = make_file_region(1, 1, 1, 1);
+  const char* name1 = "name1";
+  auto item = factory.new_DeclItem(fr1, name1);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_EventH(fr, nullptr);
+  auto head = factory.new_EventH(fr, item);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Event,
@@ -341,13 +388,16 @@ TEST_F(ParserTest_Decl, EventH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{});
+		 std::vector<const AstDeclItem*>{item});
 }
 
-TEST_F(ParserTest_Decl, GenvarH)
+TEST_F(PtDeclTest, GenvarH)
 {
+  auto fr1 = make_file_region(1, 1, 1, 1);
+  const char* name1 = "name1";
+  auto item = factory.new_DeclItem(fr1, name1);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_GenvarH(fr, nullptr);
+  auto head = factory.new_GenvarH(fr, item);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Genvar,
@@ -358,15 +408,18 @@ TEST_F(ParserTest_Decl, GenvarH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{});
+		 std::vector<const AstDeclItem*>{item});
 }
 
-TEST_F(ParserTest_Decl, VarH)
+TEST_F(PtDeclTest, VarH)
 {
   for ( auto var: { VpiVarType::Integer, VpiVarType::Real,
 		    VpiVarType::Time, VpiVarType::Realtime } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_VarH(fr, var, nullptr);
+    auto head = factory.new_VarH(fr, var, item);
 
     auto sign = (var == VpiVarType::Time) ? false : true;
     check_DeclHead(head, fr,
@@ -378,14 +431,17 @@ TEST_F(ParserTest_Decl, VarH)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, RegH)
+TEST_F(PtDeclTest, RegH)
 {
+  auto fr1 = make_file_region(1, 1, 1, 1);
+  const char* name1 = "name1";
+  auto item = factory.new_DeclItem(fr1, name1);
   auto fr = make_file_region(1, 2, 3, 4);
-  auto head = factory.new_RegH(fr, nullptr);
+  auto head = factory.new_RegH(fr, item);
 
   check_DeclHead(head, fr,
 		 AstDeclHead::Reg,
@@ -396,17 +452,20 @@ TEST_F(ParserTest_Decl, RegH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{});
+		 std::vector<const AstDeclItem*>{item});
 }
 
-TEST_F(ParserTest_Decl, RegH2)
+TEST_F(PtDeclTest, RegH2)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   for ( bool sign: { true, false } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_RegH(fr, sign, range, nullptr);
+    auto head = factory.new_RegH(fr, sign, range, item);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Reg,
@@ -417,18 +476,21 @@ TEST_F(ParserTest_Decl, RegH2)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, NetH)
+TEST_F(PtDeclTest, NetH)
 {
   for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_NetH(fr, net, nullptr);
+    auto head = factory.new_NetH(fr, net, item);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -439,11 +501,11 @@ TEST_F(ParserTest_Decl, NetH)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, NetHS)
+TEST_F(PtDeclTest, NetHS)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   auto str = factory.new_Strength(fr1,
@@ -453,8 +515,11 @@ TEST_F(ParserTest_Decl, NetHS)
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_NetH(fr, net, str, nullptr);
+    auto head = factory.new_NetH(fr, net, str, item);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -465,22 +530,25 @@ TEST_F(ParserTest_Decl, NetHS)
 		   VpiVsType::None,
 		   str,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, NetHD)
+TEST_F(PtDeclTest, NetHD)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto val = factory.new_IntConst(fr1, 1U);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto delay = factory.new_Delay(fr2, val);
+  auto fr_val = make_file_region(1, 1, 1, 1);
+  auto val = factory.new_IntConst(fr_val, 1U);
+  auto fr_delay = make_file_region(2, 2, 2, 2);
+  auto delay = factory.new_Delay(fr_delay, val);
   for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_NetH(fr, net, delay, nullptr);
+    auto head = factory.new_NetH(fr, net, delay, item);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -491,26 +559,29 @@ TEST_F(ParserTest_Decl, NetHD)
 		   VpiVsType::None,
 		   nullptr,
 		   delay,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, NetHSD)
+TEST_F(PtDeclTest, NetHSD)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto str = factory.new_Strength(fr1,
+  auto fr_str = make_file_region(1, 1, 1, 1);
+  auto str = factory.new_Strength(fr_str,
 				  VpiStrength::SupplyDrive,
 				  VpiStrength::StrongDrive);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto val = factory.new_IntConst(fr2, 1U);
-  auto fr3 = make_file_region(3, 3, 3, 3);
-  auto delay = factory.new_Delay(fr3, val);
+  auto fr_val = make_file_region(2, 2, 2, 2);
+  auto val = factory.new_IntConst(fr_val, 1U);
+  auto fr_delay = make_file_region(3, 3, 3, 3);
+  auto delay = factory.new_Delay(fr_val, val);
   for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
+    auto fr1 = make_file_region(1, 1, 1, 1);
+    const char* name1 = "name1";
+    auto item = factory.new_DeclItem(fr1, name1);
     auto fr = make_file_region(1, 2, 3, 4);
-    auto head = factory.new_NetH(fr, net, str, delay, nullptr);
+    auto head = factory.new_NetH(fr, net, str, delay, item);
 
     check_DeclHead(head, fr,
 		   AstDeclHead::Net,
@@ -521,23 +592,26 @@ TEST_F(ParserTest_Decl, NetHSD)
 		   VpiVsType::None,
 		   str,
 		   delay,
-		   std::vector<const AstDeclItem*>{});
+		   std::vector<const AstDeclItem*>{item});
   }
 }
 
-TEST_F(ParserTest_Decl, NetH2)
+TEST_F(PtDeclTest, NetH2)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
+	auto fr1 = make_file_region(1, 1, 1, 1);
+	const char* name1 = "name1";
+	auto item = factory.new_DeclItem(fr1, name1);
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetH(fr, net, vs, sign, range, nullptr);
+	auto head = factory.new_NetH(fr, net, vs, sign, range, item);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -548,99 +622,108 @@ TEST_F(ParserTest_Decl, NetH2)
 		       vs,
 		       nullptr,
 		       nullptr,
-		       std::vector<const AstDeclItem*>{});
+		       std::vector<const AstDeclItem*>{item});
       }
     }
   }
 }
 
-TEST_F(ParserTest_Decl, NetHS2)
+TEST_F(PtDeclTest, NetHS2)
 {
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
-  auto fr4 = make_file_region(4, 4, 4, 4);
-  auto str = factory.new_Strength(fr4,
-					   VpiStrength::SupplyDrive,
-					   VpiStrength::StrongDrive);
-  for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
-		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
-		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
-		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
-    for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
-      for ( bool sign: { true, false } ) {
-	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetH(fr, net, str, vs, sign, range, nullptr);
-
-	check_DeclHead(head, fr,
-		       AstDeclHead::Net,
-		       sign,
-		       range,
-		       VpiVarType::None,
-		       net,
-		       vs,
-		       str,
-		       nullptr,
-		       std::vector<const AstDeclItem*>{});
-      }
-    }
-  }
-}
-
-TEST_F(ParserTest_Decl, NetHD2)
-{
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
-  auto fr4 = make_file_region(4, 4, 4, 4);
-  auto val = factory.new_IntConst(fr4, 1U);
-  auto fr5 = make_file_region(5, 5, 5, 5);
-  auto delay = factory.new_Delay(fr5, val);
-  for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
-		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
-		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
-		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
-    for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
-      for ( bool sign: { true, false } ) {
-	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetH(fr, net, vs, sign, range, delay, nullptr);
-
-	check_DeclHead(head, fr,
-		       AstDeclHead::Net,
-		       sign,
-		       range,
-		       VpiVarType::None,
-		       net,
-		       vs,
-		       nullptr,
-		       delay,
-		       std::vector<const AstDeclItem*>{});
-      }
-    }
-  }
-}
-
-TEST_F(ParserTest_Decl, NetHSD2)
-{
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   auto fr4 = make_file_region(4, 4, 4, 4);
   auto str = factory.new_Strength(fr4,
 				  VpiStrength::SupplyDrive,
 				  VpiStrength::StrongDrive);
-  auto fr5 = make_file_region(5, 5, 5, 5);
-  auto val = factory.new_IntConst(fr5, 1U);
-  auto fr6 = make_file_region(6, 6, 6, 6);
-  auto delay = factory.new_Delay(fr6, val);
   for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
 		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
 		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
 		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
     for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
       for ( bool sign: { true, false } ) {
+	auto fr1 = make_file_region(1, 1, 1, 1);
+	const char* name1 = "name1";
+	auto item = factory.new_DeclItem(fr1, name1);
 	auto fr = make_file_region(1, 2, 3, 4);
-	auto head = factory.new_NetH(fr, net, str, vs, sign, range, delay, nullptr);
+	auto head = factory.new_NetH(fr, net, str, vs, sign, range, item);
+
+	check_DeclHead(head, fr,
+		       AstDeclHead::Net,
+		       sign,
+		       range,
+		       VpiVarType::None,
+		       net,
+		       vs,
+		       str,
+		       nullptr,
+		       std::vector<const AstDeclItem*>{item});
+      }
+    }
+  }
+}
+
+TEST_F(PtDeclTest, NetHD2)
+{
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
+  auto fr_val = make_file_region(4, 4, 4, 4);
+  auto val = factory.new_IntConst(fr_val, 1U);
+  auto fr_delay = make_file_region(5, 5, 5, 5);
+  auto delay = factory.new_Delay(fr_delay, val);
+  for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
+		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
+		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
+		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
+    for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
+      for ( bool sign: { true, false } ) {
+	auto fr1 = make_file_region(1, 1, 1, 1);
+	const char* name1 = "name1";
+	auto item = factory.new_DeclItem(fr1, name1);
+	auto fr = make_file_region(1, 2, 3, 4);
+	auto head = factory.new_NetH(fr, net, vs, sign, range, delay, item);
+
+	check_DeclHead(head, fr,
+		       AstDeclHead::Net,
+		       sign,
+		       range,
+		       VpiVarType::None,
+		       net,
+		       vs,
+		       nullptr,
+		       delay,
+		       std::vector<const AstDeclItem*>{item});
+      }
+    }
+  }
+}
+
+TEST_F(PtDeclTest, NetHSD2)
+{
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
+  auto fr_str = make_file_region(4, 4, 4, 4);
+  auto str = factory.new_Strength(fr_str,
+				  VpiStrength::SupplyDrive,
+				  VpiStrength::StrongDrive);
+  auto fr_val = make_file_region(5, 5, 5, 5);
+  auto val = factory.new_IntConst(fr_val, 1U);
+  auto fr_delay = make_file_region(6, 6, 6, 6);
+  auto delay = factory.new_Delay(fr_delay, val);
+  for ( auto net: { VpiNetType::Wire, VpiNetType::Wand, VpiNetType::Wor,
+		    VpiNetType::Tri, VpiNetType::Tri0, VpiNetType::Tri1,
+		    VpiNetType::TriReg, VpiNetType::TriAnd, VpiNetType::TriOr,
+		    VpiNetType::Supply1, VpiNetType::Supply0 } ) {
+    for ( auto vs: { VpiVsType::Vectored, VpiVsType::Scalared } ) {
+      for ( bool sign: { true, false } ) {
+	auto fr1 = make_file_region(1, 1, 1, 1);
+	const char* name1 = "name1";
+	auto item = factory.new_DeclItem(fr1, name1);
+	auto fr = make_file_region(1, 2, 3, 4);
+	auto head = factory.new_NetH(fr, net, str, vs, sign, range, delay, item);
 
 	check_DeclHead(head, fr,
 		       AstDeclHead::Net,
@@ -651,13 +734,13 @@ TEST_F(ParserTest_Decl, NetHSD2)
 		       vs,
 		       str,
 		       delay,
-		       std::vector<const AstDeclItem*>{});
+		       std::vector<const AstDeclItem*>{item});
       }
     }
   }
 }
 
-TEST_F(ParserTest_Decl, DeclItem)
+TEST_F(PtDeclTest, DeclItem)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto name = "port1";
@@ -666,7 +749,7 @@ TEST_F(ParserTest_Decl, DeclItem)
   check_DeclItem(item, fr, name, {}, nullptr);
 }
 
-TEST_F(ParserTest_Decl, DeclItem2)
+TEST_F(PtDeclTest, DeclItem2)
 {
   auto fr2 = make_file_region(1, 10, 1, 14);
   auto fr3 = make_file_region(1, 20, 1, 28);
@@ -677,27 +760,27 @@ TEST_F(ParserTest_Decl, DeclItem2)
   check_DeclItem(item, FileRegion(fr2, fr3), name, {}, expr);
 }
 
-TEST_F(ParserTest_Decl, DeclItem3)
+TEST_F(PtDeclTest, DeclItem3)
 {
   auto name = "port1";
-  auto fr1 = make_file_region(1, 1, 1, 1);
-  auto fr2 = make_file_region(2, 2, 2, 2);
-  auto range = new_range(fr1, 31, fr2, 0);
+  auto fr_left = make_file_region(1, 1, 1, 1);
+  auto fr_right = make_file_region(2, 2, 2, 2);
+  auto range = new_range(fr_left, 31, fr_right, 0);
   auto fr = make_file_region(1, 2, 3, 4);
   auto item = factory.new_DeclItem(fr, name, range);
 
   check_DeclItem(item, fr, name, {range}, nullptr);
 }
 
-TEST_F(ParserTest_Decl, DeclItem4)
+TEST_F(PtDeclTest, DeclItem4)
 {
   auto name = "port1";
-  auto fr1 = make_file_region(1, 1, 1, 9);
-  auto fr2 = make_file_region(2, 10, 1, 19);
-  auto range1 = new_range(fr1, 31, fr2, 0);
-  auto fr3 = make_file_region(1, 20, 1, 29);
-  auto fr4 = make_file_region(2, 30, 1, 39);
-  auto range2 = new_range(fr2, 63, fr2, 0);
+  auto fr_left1 = make_file_region(1, 1, 1, 9);
+  auto fr_right1 = make_file_region(2, 10, 1, 19);
+  auto range1 = new_range(fr_left1, 31, fr_right1, 0);
+  auto fr_left2 = make_file_region(1, 20, 1, 29);
+  auto fr_right2 = make_file_region(2, 30, 1, 39);
+  auto range2 = new_range(fr_left2, 63, fr_right2, 0);
   range1->set_link(range2);
   auto fr = make_file_region(1, 2, 3, 4);
   auto item = factory.new_DeclItem(fr, name, range1);
@@ -705,7 +788,7 @@ TEST_F(ParserTest_Decl, DeclItem4)
   check_DeclItem(item, fr, name, {range1, range2}, nullptr);
 }
 
-TEST_F(ParserTest_Decl, Range)
+TEST_F(PtDeclTest, Range)
 {
   auto left_fr = make_file_region(1, 1, 1, 1);
   SizeType left_val = 31U;

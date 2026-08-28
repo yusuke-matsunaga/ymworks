@@ -1,18 +1,17 @@
 
-/// @file ParserTest_misc.cc
-/// @brief ParserTest_misc の実装ファイル
+/// @file PtMiscTest.cc
+/// @brief PtMiscTest の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include <gtest/gtest.h>
-#include "ParserTest.h"
+#include "PtTest.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ParserTest, DelayControl)
+TEST_F(PtTest, DelayControl)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto fr1 = make_file_region(1, 10, 1, 19);
@@ -29,7 +28,7 @@ TEST_F(ParserTest, DelayControl)
 		std::logic_error );
 }
 
-TEST_F(ParserTest, EventControl1)
+TEST_F(PtTest, EventControl1)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto control = parser.factory().new_EventControl(fr);
@@ -45,7 +44,7 @@ TEST_F(ParserTest, EventControl1)
 		std::logic_error );
 }
 
-TEST_F(ParserTest, EventControl2)
+TEST_F(PtTest, EventControl2)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto name_fr = make_file_region(1, 5, 1, 10);
@@ -67,7 +66,7 @@ TEST_F(ParserTest, EventControl2)
 		std::logic_error );
 }
 
-TEST_F(ParserTest, EventControl3)
+TEST_F(PtTest, EventControl3)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto name_fr = make_file_region(1, 5, 1, 10);
@@ -95,7 +94,7 @@ TEST_F(ParserTest, EventControl3)
 		std::logic_error );
 }
 
-TEST_F(ParserTest, EventControl4)
+TEST_F(PtTest, EventControl4)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto fr1 = make_file_region(1, 5, 1, 10);
@@ -120,7 +119,7 @@ TEST_F(ParserTest, EventControl4)
 		std::logic_error );
 }
 
-TEST_F(ParserTest, RepeatControl1)
+TEST_F(PtTest, RepeatControl1)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto fr1 = make_file_region(1, 10, 1, 19);
@@ -137,7 +136,7 @@ TEST_F(ParserTest, RepeatControl1)
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
-TEST_F(ParserTest, RepeatControl2)
+TEST_F(PtTest, RepeatControl2)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto rep_fr = make_file_region(1, 10, 1, 19);
@@ -160,7 +159,7 @@ TEST_F(ParserTest, RepeatControl2)
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
-TEST_F(ParserTest, RepatControl3)
+TEST_F(PtTest, RepatControl3)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto rep_fr = make_file_region(1, 10, 1, 19);
@@ -189,7 +188,7 @@ TEST_F(ParserTest, RepatControl3)
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
-TEST_F(ParserTest, RepeatControl4)
+TEST_F(PtTest, RepeatControl4)
 {
   auto fr = make_file_region(1, 2, 1, 4);
   auto rep_fr = make_file_region(1, 10, 1, 19);
@@ -215,7 +214,7 @@ TEST_F(ParserTest, RepeatControl4)
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
-TEST_F(ParserTest, OrderedCon1)
+TEST_F(PtTest, OrderedCon1)
 {
   auto fr = make_file_region(1, 1, 1, 9);
   auto expr = parser.factory().new_IntConst(fr, 1U);
@@ -226,7 +225,7 @@ TEST_F(ParserTest, OrderedCon1)
   EXPECT_EQ( expr, con->expr() );
 }
 
-TEST_F(ParserTest, NamedCon1)
+TEST_F(PtTest, NamedCon1)
 {
   auto fr1 = make_file_region(1, 1, 1, 9);
   auto name = "name1";
@@ -239,7 +238,7 @@ TEST_F(ParserTest, NamedCon1)
   EXPECT_EQ( expr, con->expr() );
 }
 
-TEST_F(ParserTest, Strength1)
+TEST_F(PtTest, Strength1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto val0 = VpiStrength::SupplyDrive;
@@ -253,7 +252,7 @@ TEST_F(ParserTest, Strength1)
   EXPECT_EQ( VpiStrength::NoStrength, str->charge() );
 }
 
-TEST_F(ParserTest, Strength2)
+TEST_F(PtTest, Strength2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto val0 = VpiStrength::WeakDrive;
@@ -266,7 +265,7 @@ TEST_F(ParserTest, Strength2)
   EXPECT_EQ( val0, str->charge() );
 }
 
-TEST_F(ParserTest, Delay1)
+TEST_F(PtTest, Delay1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
@@ -280,7 +279,7 @@ TEST_F(ParserTest, Delay1)
   EXPECT_EQ( nullptr, delay->value2() );
 }
 
-TEST_F(ParserTest, Delay2)
+TEST_F(PtTest, Delay2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
@@ -296,7 +295,7 @@ TEST_F(ParserTest, Delay2)
   EXPECT_EQ( nullptr, delay->value2() );
 }
 
-TEST_F(ParserTest, Delay3)
+TEST_F(PtTest, Delay3)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
@@ -315,7 +314,7 @@ TEST_F(ParserTest, Delay3)
 }
 
 #if 0
-TEST_F(ParserTest, HierName1)
+TEST_F(PtTest, HierName1)
 {
   auto head = "head1";
   auto name = "name1";
@@ -333,7 +332,7 @@ TEST_F(ParserTest, HierName1)
   EXPECT_STREQ( name, hname->tail_name() );
 }
 
-TEST_F(ParserTest, HierName2)
+TEST_F(PtTest, HierName2)
 {
   auto head = "head1";
   auto name = "name1";
@@ -353,7 +352,7 @@ TEST_F(ParserTest, HierName2)
   EXPECT_STREQ( name, hname->tail_name() );
 }
 
-TEST_F(ParserTest, HierName3)
+TEST_F(PtTest, HierName3)
 {
   auto head = "head1";
   auto head2 = "head2";
@@ -377,7 +376,7 @@ TEST_F(ParserTest, HierName3)
   EXPECT_STREQ( name, hname->tail_name() );
 }
 
-TEST_F(ParserTest, HierName4)
+TEST_F(PtTest, HierName4)
 {
   auto head = "head1";
   auto head2 = "head2";
@@ -404,7 +403,7 @@ TEST_F(ParserTest, HierName4)
 }
 #endif
 
-TEST_F(ParserTest, Part1)
+TEST_F(PtTest, Part1)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
@@ -420,7 +419,7 @@ TEST_F(ParserTest, Part1)
   EXPECT_EQ( expr2, part->right() );
 }
 
-TEST_F(ParserTest, Part2)
+TEST_F(PtTest, Part2)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
@@ -436,7 +435,7 @@ TEST_F(ParserTest, Part2)
   EXPECT_EQ( expr2, part->right() );
 }
 
-TEST_F(ParserTest, Part3)
+TEST_F(PtTest, Part3)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 1, 1, 9);
@@ -452,7 +451,7 @@ TEST_F(ParserTest, Part3)
   EXPECT_EQ( expr2, part->right() );
 }
 
-TEST_F(ParserTest, AttrSpec)
+TEST_F(PtTest, AttrSpec)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto name1 = "attr1";
@@ -466,7 +465,7 @@ TEST_F(ParserTest, AttrSpec)
   EXPECT_EQ( expr1, as->expr() );
 }
 
-TEST_F(ParserTest, AttrInst)
+TEST_F(PtTest, AttrInst)
 {
   auto fr = make_file_region(1, 2, 3, 4);
   auto fr1 = make_file_region(1, 10, 1, 19);

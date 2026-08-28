@@ -199,6 +199,16 @@ public:
   bool
   is_signed() const override;
 
+  /// @brief 範囲の取得
+  /// @return 範囲
+  const AstRange*
+  range() const override;
+
+  /// @brief 戻値のデータ型の取得
+  /// @return 戻値のデータ型
+  VpiVarType
+  data_type() const override;
+
   /// @brief constant function の展開中の印をつける．
   void
   set_in_use() const override;

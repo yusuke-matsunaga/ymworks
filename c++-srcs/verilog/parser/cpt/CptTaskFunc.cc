@@ -98,6 +98,20 @@ CptFunction::is_signed() const
   return mSigned;
 }
 
+// @brief 範囲の取得
+const AstRange*
+CptFunction::range() const
+{
+  return nullptr;
+}
+
+// @brief 戻値のデータ型の取得
+VpiVarType
+CptFunction::data_type() const
+{
+  return VpiVarType::None;
+}
+
 // constant function の展開中の印をつける．
 void
 CptFunction::set_in_use() const
@@ -171,14 +185,13 @@ PtFactory::new_Function(
   const FileRegion& file_region,
   const char* name,
   bool automatic,
-  bool sign,
   PtIOHead* iohead_top,
   PtDeclHead* declhead_top,
   const AstStmt* stmt
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptFunction));
-  return new (p) CptFunction(file_region, name, automatic, sign,
+  return new (p) CptFunction(file_region, name, automatic, false,
 			     iohead_top, declhead_top,
 			     stmt);
 }

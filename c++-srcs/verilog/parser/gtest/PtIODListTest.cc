@@ -6,13 +6,13 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ParserTest.h"
+#include "PtTest.h"
 #include "parser/PtDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ParserTest, PtIODList_init1)
+TEST_F(PtTest, PtIODList_init1)
 {
   PtIODList port_list;
 
@@ -23,7 +23,7 @@ TEST_F(ParserTest, PtIODList_init1)
   EXPECT_EQ( nullptr, port_list.item_tail );
 }
 
-TEST_F(ParserTest, PtIODList_init2)
+TEST_F(PtTest, PtIODList_init2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   const char* name1 = "name1";
@@ -44,7 +44,7 @@ TEST_F(ParserTest, PtIODList_init2)
   EXPECT_EQ( nullptr, item->_link() );
 }
 
-TEST_F(ParserTest, PtIODList_add_head1)
+TEST_F(PtTest, PtIODList_add_head1)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   const char* name1 = "name1";
@@ -73,7 +73,7 @@ TEST_F(ParserTest, PtIODList_add_head1)
   EXPECT_EQ( item2, port_list.item_tail );
 }
 
-TEST_F(ParserTest, PtIODList_add_head2)
+TEST_F(PtTest, PtIODList_add_head2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   const char* name1 = "name1";
@@ -111,7 +111,7 @@ TEST_F(ParserTest, PtIODList_add_head2)
   EXPECT_EQ( item3, port_list.item_tail );
 }
 
-TEST_F(ParserTest, PtIODList_add_item1)
+TEST_F(PtTest, PtIODList_add_item1)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   const char* name1 = "name1";
@@ -138,7 +138,7 @@ TEST_F(ParserTest, PtIODList_add_item1)
   EXPECT_EQ( item2, port_list.item_tail );
 }
 
-TEST_F(ParserTest, PtIODList_add_item2)
+TEST_F(PtTest, PtIODList_add_item2)
 {
   auto fr1 = make_file_region(1, 1, 1, 1);
   const char* name1 = "name1";

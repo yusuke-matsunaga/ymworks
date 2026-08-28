@@ -39,11 +39,9 @@ union YYSTYPE;
 ///
 /// 役割は2つある．
 /// - Yacc/Bison を駆動する外部インターフェイス
-/// - Yacc/Bison のアクションに対応した処理を行う API の提供
-///   本来は構文規則に対応したアクションで構文木を作るが，
-///   Yacc/Bison の制約で YYSTYPE にコンストラクタ/デストラクタが
-///   必要なデータ型を使用できない．
-///   そこで Parser 内部に std::vector<> のリスト構造を持つ．
+/// - Yacc/Bison の文法規則では判断できない構文エラーのチェック
+///   例えば Module のポートリスト中に現れる名前が入出力宣言にも
+///   現れていなければならない，など
 //////////////////////////////////////////////////////////////////////
 class Parser
 {
@@ -91,23 +89,6 @@ public:
   // 直後に new_Udp() を呼ぶことで，直前の init_udp() から end_udp()
   // の間に生成された要素を持つ UDP を生成する．
   //////////////////////////////////////////////////////////////////////
-
-  /// @brief UDP定義の開始
-  ///
-  /// - port list の初期化
-  /// - iohead list の初期化
-  /// - declhead list の初期化
-  /// - UDP entry list の初期化
-  /// を行う．
-  /// 'udp' キーワードに連動して呼ばれることを想定している．
-  void
-  init_udp();
-
-  /// @brief UDP 定義の終了
-  ///
-  /// 'endudp' キーワードに連動して呼ばれることを想定している．
-  void
-  end_udp();
 
   /// @brief Verilog1995 タイプのUDP を生成する．
   PtUdp*
@@ -214,34 +195,6 @@ public:
   // GenFor の生成
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief GenFor 文のチェックを行う．
-  ///
-  /// 具体的には loop_var と next_var が同一かチェックする．
-  bool
-  check_GenFor(
-    const FileRegion& fr, ///< [in] ファイル位置の情報
-    const char* loop_var, ///< [in] ループ変数
-    const char* next_var  ///< [in] 増加式の左辺の変数
-  )
-  {
-    if ( strcmp(loop_var, next_var) == 0 ) {
-      return true;
-    }
-
-    std::ostringstream buf;
-    buf << "Lhs of the increment statement ("
-	<< next_var
-	<< ") does not match with Lhs of the initial statement ("
-	<< loop_var
-	<< ")";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    fr,
-		    MsgType::Error,
-		    "PARSER",
-		    buf.str());
-    return false;
-  }
-
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -267,14 +220,13 @@ public:
   /// @return 生成された演算子
   PtExpr*
   new_Opr(
-    const FileRegion& fr,     ///< [in] ファイル位置の情報
     VpiOpType type,           ///< [in] 演算の種類
     const AstExpr* opr1,      ///< [in] オペランド1
     const AstExpr* opr2,      ///< [in] オペランド2
     const AstAttrInst* ai_top ///< [in] 属性リスト
   )
   {
-    auto expr = mFactory.new_Opr(fr, type, opr1, opr2);
+    auto expr = mFactory.new_Opr(type, opr1, opr2);
     reg_attrinst(expr, ai_top);
     return expr;
   }
@@ -283,7 +235,6 @@ public:
   /// @return 生成された演算子
   PtExpr*
   new_Opr(
-    const FileRegion& fr,     ///< [in] ファイル位置の情報
     VpiOpType type,	      ///< [in] 演算の種類
     const AstExpr* opr1,      ///< [in] オペランド1
     const AstExpr* opr2,      ///< [in] オペランド2
@@ -291,7 +242,7 @@ public:
     const AstAttrInst* ai_top ///< [in] 属性リスト
   )
   {
-    auto expr = mFactory.new_Opr(fr, type, opr1, opr2, opr3);
+    auto expr = mFactory.new_Opr(type, opr1, opr2, opr3);
     reg_attrinst(expr, ai_top);
     return expr;
   }
@@ -382,18 +333,6 @@ public:
   // その他の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 関数内で使えるステートメントかどうかのチェック
-  bool
-  check_function_statement(
-    const AstStmt* stmt
-  );
-
-  /// @briefdefault ラベルが2つ以上含まれていないかどうかのチェック
-  bool
-  check_default_label(
-    const AstCaseItemList& caseitem_list
-  );
-
   /// @brief UDP定義を登録する．
   void
   reg_udp(
@@ -446,6 +385,46 @@ public:
     PtIOHead* iohead_top,           ///< [in] IO宣言のリスト
     std::unordered_map<std::string, VpiDir>& iodecl_dirs ///< [in] IO宣言名をキーとして向きを保持する辞書
   );
+
+  /// @brief 関数内で使えるステートメントかどうかのチェック
+  bool
+  check_function_statement(
+    const AstStmt* stmt
+  );
+
+  /// @briefdefault ラベルが2つ以上含まれていないかどうかのチェック
+  bool
+  check_default_label(
+    const AstCaseItemList& caseitem_list
+  );
+
+  /// @brief GenFor 文のチェックを行う．
+  ///
+  /// 具体的には loop_var と next_var が同一かチェックする．
+  bool
+  check_GenFor(
+    const FileRegion& fr, ///< [in] ファイル位置の情報
+    const char* loop_var, ///< [in] ループ変数
+    const char* next_var  ///< [in] 増加式の左辺の変数
+  )
+  {
+    if ( strcmp(loop_var, next_var) == 0 ) {
+      return true;
+    }
+
+    std::ostringstream buf;
+    buf << "Lhs of the increment statement ("
+	<< next_var
+	<< ") does not match with Lhs of the initial statement ("
+	<< loop_var
+	<< ")";
+    MsgMgr::put_msg(__FILE__, __LINE__,
+		    fr,
+		    MsgType::Error,
+		    "PARSER",
+		    buf.str());
+    return false;
+  }
 
 
 private:

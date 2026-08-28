@@ -49,6 +49,16 @@ public:
   Type
   type() const override;
 
+  /// @brief strength の取得
+  /// @return 信号強度
+  const AstStrength*
+  strength() const override;
+
+  /// @brief delay の取得
+  /// @return 遅延
+  const AstDelay*
+  delay() const override;
+
   /// @brief プリミティブタイプを返す．
   VpiPrimType
   prim_type() const override;
@@ -255,6 +265,18 @@ public:
   /// @brief 定義名を返す．
   const char*
   name() const override;
+
+  /// @brief パラメータ割り当てのリストの取得
+  AstConnectionList
+  paramassign_list() const override;
+
+  /// @brief strength を返す．
+  const AstStrength*
+  strength() const override;
+
+  /// @brief delay を返す．
+  const AstDelay*
+  delay() const override;
 
   /// @brief module/UDP/gate instance リストの取得
   AstInstList

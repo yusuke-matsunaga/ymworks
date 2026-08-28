@@ -49,8 +49,8 @@ ym_add_gtest ( verilog_PtIODListTest
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_decl
-  ParserTest_decl.cc
+ym_add_gtest ( verilog_PtDeclTest
+  PtDeclTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -58,8 +58,8 @@ ym_add_gtest ( verilog_ParserTest_decl
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_item1
-  ParserTest_item1.cc
+ym_add_gtest ( verilog_PtItemTest1
+  PtItemTest1.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -67,9 +67,8 @@ ym_add_gtest ( verilog_ParserTest_item1
   ADDRESS_SANITIZE
   )
 
-if ( 0 )
-ym_add_gtest ( verilog_ParserTest_item2
-  ParserTest_item2.cc
+ym_add_gtest ( verilog_PtItemTest2
+  PtItemTest2.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -77,8 +76,8 @@ ym_add_gtest ( verilog_ParserTest_item2
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_item3
-  ParserTest_item3.cc
+ym_add_gtest ( verilog_PtItemTest3
+  PtItemTest3.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -86,8 +85,8 @@ ym_add_gtest ( verilog_ParserTest_item3
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_item4
-  ParserTest_item4.cc
+ym_add_gtest ( verilog_PtItemTest4
+  PtItemTest4.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -95,8 +94,8 @@ ym_add_gtest ( verilog_ParserTest_item4
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_stmt1
-  ParserTest_stmt1.cc
+ym_add_gtest ( verilog_PtStmtTest1
+  PtStmtTest1.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -104,19 +103,8 @@ ym_add_gtest ( verilog_ParserTest_stmt1
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_stmt2
-  ParserTest_stmt2.cc
-  $<TARGET_OBJECTS:ym_misc_obj_d>
-  $<TARGET_OBJECTS:ym_logic_obj_d>
-  $<TARGET_OBJECTS:ym_clib_obj_d>
-  $<TARGET_OBJECTS:ym_verilog_obj_d>
-  ADDRESS_SANITIZE
-  )
-endif ()
-
-if (0)
-ym_add_gtest ( verilog_ParserTest_expr1
-  ParserTest_expr1.cc
+ym_add_gtest ( verilog_PtStmtTest2
+  PtStmtTest2.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -124,8 +112,8 @@ ym_add_gtest ( verilog_ParserTest_expr1
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_expr2
-  ParserTest_expr2.cc
+ym_add_gtest ( verilog_PtExprTest1
+  PtExprTest1.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -133,18 +121,8 @@ ym_add_gtest ( verilog_ParserTest_expr2
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_expr3
-  ParserTest_expr3.cc
-  $<TARGET_OBJECTS:ym_misc_obj_d>
-  $<TARGET_OBJECTS:ym_logic_obj_d>
-  $<TARGET_OBJECTS:ym_clib_obj_d>
-  $<TARGET_OBJECTS:ym_verilog_obj_d>
-  ADDRESS_SANITIZE
-  )
-endif ()
-
-ym_add_gtest ( verilog_ParserTest_misc
-  ParserTest_misc.cc
+ym_add_gtest ( verilog_PtExprTest2
+  PtExprTest2.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>
@@ -152,8 +130,26 @@ ym_add_gtest ( verilog_ParserTest_misc
   ADDRESS_SANITIZE
   )
 
-ym_add_gtest ( verilog_ParserTest_udp
-  ParserTest_udp.cc
+ym_add_gtest ( verilog_PtExprTest3
+  PtExprTest3.cc
+  $<TARGET_OBJECTS:ym_misc_obj_d>
+  $<TARGET_OBJECTS:ym_logic_obj_d>
+  $<TARGET_OBJECTS:ym_clib_obj_d>
+  $<TARGET_OBJECTS:ym_verilog_obj_d>
+  ADDRESS_SANITIZE
+  )
+
+ym_add_gtest ( verilog_PtMiscTest
+  PtMiscTest.cc
+  $<TARGET_OBJECTS:ym_misc_obj_d>
+  $<TARGET_OBJECTS:ym_logic_obj_d>
+  $<TARGET_OBJECTS:ym_clib_obj_d>
+  $<TARGET_OBJECTS:ym_verilog_obj_d>
+  ADDRESS_SANITIZE
+  )
+
+ym_add_gtest ( verilog_PtUdpTest
+  PtUdpTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>

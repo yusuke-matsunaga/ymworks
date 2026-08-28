@@ -43,6 +43,13 @@ CptAssign::rhs() const
   return mRhs;
 }
 
+// @brief コントロールを返す．
+const AstControl*
+CptAssign::control() const
+{
+  return nullptr;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス CptAssignC

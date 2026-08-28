@@ -508,7 +508,8 @@ public:
       mName{block_name},
       mLoopVar{loop_var},
       mInitExpr{init_expr},
-      mCond{cond}
+      mCond{cond},
+      mNextExpr{next_expr}
   {
   }
 

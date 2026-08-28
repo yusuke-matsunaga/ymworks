@@ -126,7 +126,7 @@ public:
   /// @brief コントロールの取得
   /// @return ディレイ/イベントコントロール
   ///
-  /// - type() != DelayControl|EventControl の時 std::logic_error 例外を送出する．
+  /// - type() != DelayControl|EventControl|Assign|NbAssign の時 std::logic_error 例外を送出する．
   virtual
   const AstControl*
   control() const = 0;
@@ -140,7 +140,7 @@ public:
   /// @brief 左辺式の取得
   /// @return 左辺式
   ///
-  /// - type() != Assign|Force|PcAssign|Release|Deassign の時
+  /// - type() != Assign|NbAssign|Force|PcAssign|Release|Deassign の時
   ///   std::logic_error 例外を送出する．
   virtual
   const AstExpr*
@@ -149,7 +149,7 @@ public:
   /// @brief 右辺式の取得
   /// @return 右辺式
   ///
-  /// - type() != Assign|Force|PcAssign の時 std::logic_error 例外を送出する．
+  /// - type() != Assign|NbAssign|Force|PcAssign の時 std::logic_error 例外を送出する．
   virtual
   const AstExpr*
   rhs() const = 0;

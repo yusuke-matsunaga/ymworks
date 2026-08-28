@@ -67,10 +67,6 @@ public:
   const AstDelay*
   delay() const override;
 
-  /// @brief パラメータ割り当てのリストの取得
-  AstConnectionList
-  paramassign_list() const override;
-
   /// @brief defparam リストの取得
   AstDefParamList
   defparam_list() const override;
@@ -78,6 +74,10 @@ public:
   /// @brief continuous assign リストの取得
   AstContAssignList
   contassign_list() const override;
+
+  /// @brief パラメータ割り当てのリストの取得
+  AstConnectionList
+  paramassign_list() const override;
 
   /// @brief プリミティブタイプの取得
   /// @return プリミティブタイプ

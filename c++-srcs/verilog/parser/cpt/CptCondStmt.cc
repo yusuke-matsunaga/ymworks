@@ -39,6 +39,13 @@ CptIf::body() const
   return mThen;
 }
 
+// 成り立たなかったとき実行されるステートメント
+const AstStmt*
+CptIf::else_body() const
+{
+  return nullptr;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス CptIfElse

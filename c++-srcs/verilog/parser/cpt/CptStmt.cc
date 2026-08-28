@@ -65,14 +65,14 @@ CptStmt::stmt_name() const
 AstNameBranchList
 CptStmt::namebranch_list() const
 {
-  throw std::logic_error{"namebranch_list(): typemismatch"};
+  return AstNameBranchList(nullptr);
 }
 
 // @brief 名前の取得
 const char*
 CptStmt::name() const
 {
-  throw std::logic_error{"name(): typemismatch"};
+  return nullptr;
 }
 
 // @brief 引数のリストの取得
@@ -217,6 +217,13 @@ CptEnableBase::name() const
   return mName;
 }
 
+// @brief 階層ブランチのリストを返す．
+AstNameBranchList
+CptEnableBase::namebranch_list() const
+{
+  return AstNameBranchList();
+}
+
 // @brief 引数のリストの取得
 AstExprList
 CptEnableBase::arg_list() const
@@ -234,13 +241,6 @@ AstStmt::Type
 CptEnable::type() const
 {
   return Enable;
-}
-
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptEnable::namebranch_list() const
-{
-  return AstNameBranchList();
 }
 
 

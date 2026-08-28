@@ -36,7 +36,7 @@ CptExpr::namebranch_list() const
 const char*
 CptExpr::name() const
 {
-  return nullptr;
+  throw std::logic_error{"name(): type mismatch"};
 }
 
 // @brief 0番目のオペランドの取得
@@ -64,7 +64,7 @@ CptExpr::operand2() const
 AstExprList
 CptExpr::operand_list() const
 {
-  throw std::out_of_range{"operand_list(): type mismatch"};
+  throw std::logic_error{"operand_list(): type mismatch"};
 }
 
 // @brief multi-concat の繰り返し数
@@ -74,39 +74,46 @@ CptExpr::rep() const
   throw std::logic_error{"rep(): Not a multi-concat oprator"};
 }
 
+// @brief 引数リストの取得
+AstExprList
+CptExpr::arg_list() const
+{
+  throw std::logic_error{"arg_list(): type mismatch"};
+}
+
 // @brief 定数インデックスのチェック
 bool
 CptExpr::is_const_index() const
 {
-  throw std::logic_error{"is_const_index(): Not a Primary type"};
+  throw std::logic_error{"is_const_index(): type mismatch"};
 }
 
 // @brief インデックスリストの取得
 AstExprList
 CptExpr::index_list() const
 {
-  throw std::logic_error{"index_list(); Not a Primary type"};
+  throw std::logic_error{"index_list(); type mismatch"};
 }
 
 // @brief 範囲指定の取得
 const AstPart*
 CptExpr::part() const
 {
-  throw std::logic_error{"part(): Not a Primary type"};
+  throw std::logic_error{"part(): type mismatch"};
 }
 
 // @brief 定数の種類の取得
 VpiConstType
 CptExpr::const_type() const
 {
-  throw std::logic_error{"const_type(): Not a CONST type"};
+  throw std::logic_error{"const_type(): type mismatch"};
 }
 
 // @brief 整数型の定数のサイズの取得
 SizeType
 CptExpr::const_size() const
 {
-  throw std::logic_error{"const_size(): Not a CONST type"};
+  throw std::logic_error{"const_size(): type mismatch"};
 }
 
 // @brief 整数型の値の取得
@@ -217,9 +224,16 @@ CptFuncCallBase::name() const
   return mName;
 }
 
-// @brief オペランドのリストの取得
+// @brief 階層ブランチのリストを返す．
+AstNameBranchList
+CptFuncCallBase::namebranch_list() const
+{
+  return AstNameBranchList(nullptr);
+}
+
+// @brief 引数リストの取得
 AstExprList
-CptFuncCallBase::operand_list() const
+CptFuncCallBase::arg_list() const
 {
   return AstExprList(mArgTop);
 }
@@ -268,7 +282,6 @@ CptSysFuncCall::type() const
 // min-typ-max を生成する．
 PtExpr*
 PtFactory::new_MinTypMax(
-  const FileRegion& file_region,
   const AstExpr* val0,
   const AstExpr* val1,
   const AstExpr* val2

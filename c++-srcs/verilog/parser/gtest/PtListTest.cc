@@ -7,12 +7,12 @@
 /// All rights reserved.
 
 #include <gtest/gtest.h>
-#include "ParserTest.h"
+#include "PtTest.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ParserTest, PtRangeList_init)
+TEST_F(PtTest, PtRangeList_init)
 {
   PtRangeList range_list;
 
@@ -22,7 +22,7 @@ TEST_F(ParserTest, PtRangeList_init)
   EXPECT_EQ( nullptr, range_list.tail );
 }
 
-TEST_F(ParserTest, PtRangeList_add1)
+TEST_F(PtTest, PtRangeList_add1)
 {
   PtRangeList range_list;
 
@@ -41,7 +41,7 @@ TEST_F(ParserTest, PtRangeList_add1)
   EXPECT_EQ( nullptr, range1->_link() );
 }
 
-TEST_F(ParserTest, PtRangeList_add2)
+TEST_F(PtTest, PtRangeList_add2)
 {
   PtRangeList range_list;
 

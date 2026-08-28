@@ -266,6 +266,10 @@ public:
   const char*
   name() const override;
 
+  /// @brief 階層ブランチのリストを返す．
+  AstNameBranchList
+  namebranch_list() const override;
+
   /// @brief 引数のリストの取得
   ///
   /// - type() != Enable の時 std::logic_error 例外を送出する．
@@ -316,10 +320,6 @@ public:
   /// @brief クラスの型を返す仮想関数
   Type
   type() const override;
-
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
 
 };
 

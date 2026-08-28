@@ -56,6 +56,10 @@ public:
   const AstStmt*
   body() const override;
 
+  /// @brief 成り立たなかったとき実行されるステートメント
+  const AstStmt*
+  else_body() const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////

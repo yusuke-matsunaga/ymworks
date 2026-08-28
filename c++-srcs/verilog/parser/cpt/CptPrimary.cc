@@ -31,6 +31,34 @@ CptPrimaryBase::name() const
   return mName;
 }
 
+// @brief 階層ブランチのリストを返す．
+AstNameBranchList
+CptPrimaryBase::namebranch_list() const
+{
+  return AstNameBranchList(nullptr);
+}
+
+// @brief 定数インデックスのチェック
+bool
+CptPrimaryBase::is_const_index() const
+{
+  return false;
+}
+
+// @brief インデックスリストの取得
+AstExprList
+CptPrimaryBase::index_list() const
+{
+  return AstExprList(nullptr);
+}
+
+// @brief 範囲指定を表す構文木を返す．
+const AstPart*
+CptPrimaryBase::part() const
+{
+  return nullptr;
+}
+
 // index_list も range も持たないとき true を返す．
 bool
 CptPrimaryBase::is_simple() const

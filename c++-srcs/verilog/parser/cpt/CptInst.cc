@@ -33,6 +33,20 @@ CptGateH::type() const
   return GateInst;
 }
 
+// @brief strength の取得
+const AstStrength*
+CptGateH::strength() const
+{
+  return nullptr;
+}
+
+// @brief delay の取得
+const AstDelay*
+CptGateH::delay() const
+{
+  return nullptr;
+}
+
 // プリミティブタイプ(vpiAndPrim など)を返す．
 VpiPrimType
 CptGateH::prim_type() const
@@ -114,6 +128,27 @@ const char*
 CptMuH::name() const
 {
   return mName;
+}
+
+// @brief パラメータ割り当てのリストの取得
+AstConnectionList
+CptMuH::paramassign_list() const
+{
+  return AstConnectionList(nullptr);
+}
+
+// @brief strength を返す．
+const AstStrength*
+CptMuH::strength() const
+{
+  return nullptr;
+}
+
+// @brief delay を返す．
+const AstDelay*
+CptMuH::delay() const
+{
+  return nullptr;
 }
 
 // @brief module/UDP/gate instance リストの取得

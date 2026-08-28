@@ -122,7 +122,7 @@ public:
 
   /// @brief オペランドのリストの取得
   ///
-  /// - Concat/MultiConcat/FuncCall/SysFuncCall 演算以外は
+  /// - Concat/MultiConcat 演算以外は
   ///   std::logi_error 例外を送出する．
   virtual
   AstExprList
@@ -135,6 +135,19 @@ public:
   virtual
   const AstExpr*
   rep() const = 0;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 関数呼び出しグループの関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 引数リストの取得
+  ///
+  /// - FuncCall/SysFuncCall 演算以外は std::logi_error 例外を送出する．
+  virtual
+  AstExprList
+  arg_list() const = 0;
 
 
 public:

@@ -333,7 +333,6 @@ PtFactory::new_Opr(
 
 PtExpr*
 PtFactory::new_Opr(
-  const FileRegion& file_region,
   VpiOpType type,
   const AstExpr* opr1,
   const AstExpr* opr2
@@ -346,7 +345,6 @@ PtFactory::new_Opr(
 
 PtExpr*
 PtFactory::new_Opr(
-  const FileRegion& file_region,
   VpiOpType type,
   const AstExpr* opr1,
   const AstExpr* opr2,

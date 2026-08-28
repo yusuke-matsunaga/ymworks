@@ -72,6 +72,23 @@ public:
   const char*
   name() const override;
 
+  /// @brief 階層ブランチのリストを返す．
+  AstNameBranchList
+  namebranch_list() const override;
+
+  /// @brief 定数インデックスのチェック
+  bool
+  is_const_index() const override;
+
+  /// @brief インデックスリストの取得
+  AstExprList
+  index_list() const override;
+
+  /// @brief 範囲指定を表す構文木を返す．
+  /// @return 範囲指定
+  const AstPart*
+  part() const override;
+
   // index_list も range も持たないとき true を返す．
   bool
   is_simple() const override;

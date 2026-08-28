@@ -314,7 +314,7 @@ decompile_impl(
       auto ans = expr->decompile_name();
       ans += "(";
       const char* comma = "";
-      for ( auto expr1: expr->operand_list() ) {
+      for ( auto expr1: expr->arg_list() ) {
 	ans += comma + expr1->decompile();
 	comma = ", ";
       }

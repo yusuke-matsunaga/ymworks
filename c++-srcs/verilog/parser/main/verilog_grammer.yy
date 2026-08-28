@@ -2204,7 +2204,7 @@ delay_value
 }
 | delay_value_x ':' delay_value_x ':' delay_value_x
 {
-  $$ = parser.factory().new_MinTypMax(@$, $1, $3, $5);
+  $$ = parser.factory().new_MinTypMax($1, $3, $5);
 }
 | '(' expression ')'
 {
@@ -2593,7 +2593,8 @@ function_declaration
 {
   // 関数内で使用できないステートメントが含まれていないかチェック
   if ( parser.check_function_statement($7) ) {
-    $$ = parser.factory().new_Function(@$, $4, $2, $3,
+    // sign は無視
+    $$ = parser.factory().new_Function(@$, $4, $2,
 				       $6.iohead_list.top,
 				       $6.declhead_list.top,
 				       $7);
@@ -2644,7 +2645,8 @@ function_declaration
 
   // 関数内で使用できないステートメントが含まれていないかチェック
   if ( parser.check_function_statement($10) ) {
-    $$ = parser.factory().new_Function(@$, $4, $2, $3,
+    // sign は無視
+    $$ = parser.factory().new_Function(@$, $4, $2,
 				       $6.head_list.top,
 				       $9.declhead_list.top,
 				       $10);
@@ -6727,7 +6729,7 @@ expression
 }
 | expr1 '?' ai_list expr1 ':' expression %prec COND
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Condition, $1, $4, $6, $3);
+  $$ = parser.new_Opr(VpiOpType::Condition, $1, $4, $6, $3);
 }
 ;
 
@@ -6778,99 +6780,99 @@ expr1
 }
 | expr1 STARSTAR ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Power, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Power, $1, $4, $3);
 }
 | expr1 '+' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Add, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Add, $1, $4, $3);
 }
 | expr1 '-' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Sub, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Sub, $1, $4, $3);
 }
 | expr1 '*' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Mult, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Mult, $1, $4, $3);
 }
 | expr1 '/' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Div, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Div, $1, $4, $3);
 }
 | expr1 '%' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Mod, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Mod, $1, $4, $3);
 }
 | expr1 EQEQ ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Eq, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Eq, $1, $4, $3);
 }
 | expr1 NOTEQ ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Neq, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Neq, $1, $4, $3);
 }
 | expr1 EQEQEQ ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::CaseEq, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::CaseEq, $1, $4, $3);
 }
 | expr1 NOTEQEQ ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::CaseNeq, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::CaseNeq, $1, $4, $3);
 }
 | expr1 ANDAND ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::LogAnd, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::LogAnd, $1, $4, $3);
 }
 | expr1 OROR ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::LogOr, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::LogOr, $1, $4, $3);
 }
 | expr1 '<' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Lt, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Lt, $1, $4, $3);
 }
 | expr1 '>' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Gt, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Gt, $1, $4, $3);
 }
 | expr1 LTEQ ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Le, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Le, $1, $4, $3);
 }
 | expr1 GTEQ ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::Ge, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::Ge, $1, $4, $3);
 }
 | expr1 '&' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::BitAnd, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::BitAnd, $1, $4, $3);
 }
 | expr1 '|' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::BitOr, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::BitOr, $1, $4, $3);
 }
 | expr1 '^' ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::BitXor, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::BitXor, $1, $4, $3);
 }
 | expr1 TILDEXOR ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::BitXNor, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::BitXNor, $1, $4, $3);
 }
 | expr1 LTLT ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::LShift, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::LShift, $1, $4, $3);
 }
 | expr1 GTGT ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::RShift, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::RShift, $1, $4, $3);
 }
 | expr1 LTLTLT ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::ArithLShift, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::ArithLShift, $1, $4, $3);
 }
 | expr1 GTGTGT ai_list expr1
 {
-  $$ = parser.new_Opr(@$, VpiOpType::ArithRShift, $1, $4, $3);
+  $$ = parser.new_Opr(VpiOpType::ArithRShift, $1, $4, $3);
 }
 | STRING
 {
@@ -6904,7 +6906,7 @@ module_path_expression
 mintypmax_expression
 :  expression ':' expression ':' expression
 {
-  $$ = parser.factory().new_MinTypMax(@$, $1, $3, $5);
+  $$ = parser.factory().new_MinTypMax($1, $3, $5);
 }
 ;
 
