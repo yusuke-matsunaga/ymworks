@@ -29,9 +29,24 @@ struct PtList
   /// @brief 末尾の要素
   T* tail;
 
-  /// @brief 初期化する．
+  /// @brief 初期化されたインスタンスを返す．
+  ///
+  /// Yacc/Bison 中ではコンストラクタが使えないため
+  /// 明示的な初期化関数の呼び出しが必要となる．
+  static
+  PtList
+  new_obj(
+    T* elem = nullptr
+  )
+  {
+    PtList ptlist;
+    ptlist._init(elem);
+    return ptlist;
+  }
+
+  /// @brief 初期化関数
   void
-  init(
+  _init(
     T* elem = nullptr
   )
   {
@@ -74,13 +89,28 @@ struct PtDList
   /// @brief 末尾の子供
   T2* item_tail;
 
-  /// @brief 初期化する．
-  void
-  init(
+  /// @brief 初期化されたインスタンスを返す．
+  ///
+  /// Yacc/Bison 中ではコンストラクタが使えないため
+  /// 明示的な初期化関数の呼び出しが必要となる．
+  static
+  PtDList
+  new_obj(
     T1* head = nullptr
   )
   {
-    head_list.init(head);
+    PtDList ptdlist;
+    ptdlist._init(head);
+    return ptdlist;
+  }
+
+  /// @brief 初期化関数
+  void
+  _init(
+    T1* head = nullptr
+  )
+  {
+    head_list._init(head);
     if ( head != nullptr ) {
       item_tail = head->_item_top();
     }

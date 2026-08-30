@@ -34,13 +34,26 @@ struct PtHeadList
   /// @brief 要素のリスト
   PtItemList item_list;
 
-  /// @brief 初期化する．
-  void
-  init()
+  /// @brief 初期化されたインスタンスを返す．
+  ///
+  /// Yacc/Bison 中ではコンストラクタが使えないため
+  /// 明示的な初期化関数の呼び出しが必要となる．
+  static
+  PtHeadList
+  new_obj()
   {
-    iohead_list.init();
-    declhead_list.init();
-    item_list.init();
+    PtHeadList ptheadlist;
+    ptheadlist._init();
+    return ptheadlist;
+  }
+
+  /// @brief 初期化関数
+  void
+  _init()
+  {
+    iohead_list._init();
+    declhead_list._init();
+    item_list._init();
   }
 
 };

@@ -1,0 +1,161 @@
+﻿#ifndef CPTDELAY_H
+#define CPTDELAY_H
+
+/// @file CptDelay.h
+/// @brief CptDelay のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2026 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "parser/PtMisc.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 1つの値を持つ delay を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptDelay1 :
+  public PtDelay
+{
+public:
+
+  /// @brief コンストラクタ
+  CptDelay1(
+    const FileRegion& file_region,
+    const AstExpr* value1
+  ) : mFileRegion{file_region},
+      mValue{value1}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptDelay1() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を取出す．
+  FileRegion
+  file_region() const override;
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value0() const override;
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value1() const override;
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value2() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+  // 値
+  const AstExpr* mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 2つの値を持つ delay を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptDelay2 :
+  public CptDelay1
+{
+public:
+
+  /// @brief コンストラクタ
+  CptDelay2(
+    const FileRegion& file_region,
+    const AstExpr* value1,
+    const AstExpr* value2
+  ) : CptDelay1(file_region, value1),
+      mValue{value2}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptDelay2() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value1() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  const AstExpr* mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 3つの値を持つ delay を表すクラス
+//////////////////////////////////////////////////////////////////////
+class CptDelay3 :
+  public CptDelay2
+{
+public:
+
+  /// @brief コンストラクタ
+  CptDelay3(
+    const FileRegion& file_region,
+    const AstExpr* value1,
+    const AstExpr* value2,
+    const AstExpr* value3
+  ) : CptDelay2(file_region, value1, value2),
+      mValue{value3}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptDelay3() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtDelay の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 値を取り出す．
+  const AstExpr*
+  value2() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  const AstExpr* mValue;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // CPTDELAY_H

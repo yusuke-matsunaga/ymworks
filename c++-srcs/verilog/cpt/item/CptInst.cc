@@ -1,0 +1,324 @@
+﻿
+/// @file CptInst.cc
+/// @brief インスタンス系オブジェクトの実装ファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2026 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "CptInst.h"
+#include "alloc/Alloc.h"
+#include "parser/PtMisc.h"
+#include "parser/PtFactory.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptInst
+//////////////////////////////////////////////////////////////////////
+
+// ファイル位置を返す．
+FileRegion
+CptInst::file_region() const
+{
+  return mFileRegion;
+}
+
+// @brief 名前の取得
+const char*
+CptInst::name() const
+{
+  return nullptr;
+}
+
+// @brief 範囲の取得
+const AstRange*
+CptInst::range() const
+{
+  return nullptr;
+}
+
+// @brief ポートリストの取得
+AstConnectionList
+CptInst::port_list() const
+{
+  return AstConnectionList(mPortTop);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptInstN
+//////////////////////////////////////////////////////////////////////
+
+// 名前を返す．
+const char*
+CptInstN::name() const
+{
+  return mName;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス CptInstR
+//////////////////////////////////////////////////////////////////////
+
+// 範囲を取出す．
+const AstRange*
+CptInstR::range() const
+{
+  return mRange;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス PtFactory
+//////////////////////////////////////////////////////////////////////
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  PtConnection* con_top
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region, con_top);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  PtConnection* con_top
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, con_top);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstRange* range,
+  PtConnection* con_top
+)
+{
+  void* p = mAlloc.get_memory(sizeof(CptInstR));
+  return new (p) CptInstR(file_region, name, range, con_top);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstExpr* expr1
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* expr1
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstRange* range,
+  const AstExpr* expr1
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  void* p = mAlloc.get_memory(sizeof(CptInstR));
+  return new (p) CptInstR(file_region, name, range, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstExpr* expr1,
+  const AstExpr* expr2
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  con1->set_link(con2);
+   void* p = mAlloc.get_memory(sizeof(CptInst));
+   return new (p) CptInst(file_region, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* expr1,
+  const AstExpr* expr2
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  con1->set_link(con2);
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstRange* range,
+  const AstExpr* expr1,
+  const AstExpr* expr2
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  con1->set_link(con2);
+  void* p = mAlloc.get_memory(sizeof(CptInstR));
+  return new (p) CptInstR(file_region, name, range, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  con1->set_link(con2);
+  con2->set_link(con3);
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  con1->set_link(con2);
+  con2->set_link(con3);
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstRange* range,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  con1->set_link(con2);
+  con2->set_link(con3);
+  void* p = mAlloc.get_memory(sizeof(CptInstR));
+  return new (p) CptInstR(file_region, name, range, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3,
+  const AstExpr* expr4
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  auto con4 = new_OrderedCon(expr4);
+  con1->set_link(con2);
+  con2->set_link(con3);
+  con3->set_link(con4);
+  void* p = mAlloc.get_memory(sizeof(CptInst));
+  return new (p) CptInst(file_region, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3,
+  const AstExpr* expr4
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  auto con4 = new_OrderedCon(expr4);
+  con1->set_link(con2);
+  con2->set_link(con3);
+  con3->set_link(con4);
+  void* p = mAlloc.get_memory(sizeof(CptInstN));
+  return new (p) CptInstN(file_region, name, con1);
+}
+
+// module instance/UDP instance の要素を生成する．
+PtInst*
+PtFactory::new_Inst(
+  const FileRegion& file_region,
+  const char* name,
+  const AstRange* range,
+  const AstExpr* expr1,
+  const AstExpr* expr2,
+  const AstExpr* expr3,
+  const AstExpr* expr4
+)
+{
+  auto con1 = new_OrderedCon(expr1);
+  auto con2 = new_OrderedCon(expr2);
+  auto con3 = new_OrderedCon(expr3);
+  auto con4 = new_OrderedCon(expr4);
+  con1->set_link(con2);
+  con2->set_link(con3);
+  con3->set_link(con4);
+  void* p = mAlloc.get_memory(sizeof(CptInstR));
+  return new (p) CptInstR(file_region, name, range, con1);
+}
+
+END_NAMESPACE_YM_VERILOG

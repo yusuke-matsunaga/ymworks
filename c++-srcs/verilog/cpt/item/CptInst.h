@@ -1,0 +1,164 @@
+﻿#ifndef CPTINST_H
+#define CPTINST_H
+
+/// @file CptInst.h
+/// @brief CptInst のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2026 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "parser/PtItem.h"
+#include "parser/PtMisc.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @brief module instance/UDP/gate instance のベース実装クラス
+//////////////////////////////////////////////////////////////////////
+class CptInst :
+  public PtInst
+{
+public:
+
+  /// @brief コンストラクタ
+  CptInst(
+    const FileRegion& file_region,
+    PtConnection* con_top
+  ) : mFileRegion{file_region},
+      mPortTop{con_top}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptInst() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtMuInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+  /// @brief 名前の取得
+  /// @return 名前
+  const char*
+  name() const override;
+
+  /// @brief 範囲の取得
+  /// @return 範囲
+  const AstRange*
+  range() const override;
+
+  /// @brief ポートリストの取得
+  AstConnectionList
+  port_list() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // ファイル位置
+  FileRegion mFileRegion;
+
+  // ポート割り当ての先頭
+  PtConnection* mPortTop;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 名前を持つ CptInst
+//////////////////////////////////////////////////////////////////////
+class CptInstN :
+  public CptInst
+{
+public:
+
+  /// @brief コンストラクタ
+  CptInstN(
+    const FileRegion& file_region,
+    const char* name,
+    PtConnection* con_top
+  ) : CptInst(file_region, con_top),
+      mName{name}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptInstN() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 名前を返す．
+  const char*
+  name() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 名前
+  const char* mName;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 名前と範囲指定を持つ CptInst
+//////////////////////////////////////////////////////////////////////
+class CptInstR :
+  public CptInstN
+{
+public:
+
+  /// @brief コンストラクタ
+  CptInstR(
+    const FileRegion& file_region,
+    const char* name,
+    const AstRange* range,
+    PtConnection* con_top
+  ) : CptInstN(file_region, name, con_top),
+      mRange{range}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~CptInstR() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // PtInst の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 範囲を取出す．
+  const AstRange*
+  range() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 範囲
+  const AstRange* mRange;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // CPTINST_H

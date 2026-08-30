@@ -37,12 +37,18 @@
 # サブディレクトリの設定
 # ===================================================================
 
-add_subdirectory ( gtest )
-
 
 # ===================================================================
 #  ソースの設定
 # ===================================================================
+
+set ( parser_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/Parser.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Parser_module.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Parser_udp.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/PtItem.cc
+  PARENT_SCOPE
+  )
 
 # ===================================================================
 #  ターゲットの設定

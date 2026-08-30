@@ -67,8 +67,9 @@ public:
   bool
   read_file(
     const std::string& filename,                    ///< [in] 読み込むファイル名
-    const PathList& searchpath,                     ///< [in] サーチパス
+    const PathList& searchpath = {},                ///< [in] サーチパス
     const std::vector<VlLineWatcher*>& watcher_list ///< [in] 行番号ウオッチャーのリスト
+    = {}
   );
 
   /// @brief PtFactory を返す．
@@ -227,22 +228,6 @@ public:
   )
   {
     auto expr = mFactory.new_Opr(type, opr1, opr2);
-    reg_attrinst(expr, ai_top);
-    return expr;
-  }
-
-  /// @brief 三項演算子の生成
-  /// @return 生成された演算子
-  PtExpr*
-  new_Opr(
-    VpiOpType type,	      ///< [in] 演算の種類
-    const AstExpr* opr1,      ///< [in] オペランド1
-    const AstExpr* opr2,      ///< [in] オペランド2
-    const AstExpr* opr3,      ///< [in] オペランド3
-    const AstAttrInst* ai_top ///< [in] 属性リスト
-  )
-  {
-    auto expr = mFactory.new_Opr(type, opr1, opr2, opr3);
     reg_attrinst(expr, ai_top);
     return expr;
   }

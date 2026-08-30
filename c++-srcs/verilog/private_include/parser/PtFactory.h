@@ -1397,8 +1397,7 @@ public:
   /// @brief 三項演算子の生成
   /// @return 生成された演算子
   PtExpr*
-  new_Opr(
-    VpiOpType type,	  ///< [in] 演算の種類
+  new_Condition(
     const AstExpr* opr1,  ///< [in] オペランド1
     const AstExpr* opr2,  ///< [in] オペランド2
     const AstExpr* opr3   ///< [in] オペランド3
