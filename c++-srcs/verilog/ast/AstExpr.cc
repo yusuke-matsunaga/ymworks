@@ -360,4 +360,12 @@ AstExpr::decompile() const
   return decompile_impl(this, 0);
 }
 
+// @brief 内容を JsonValue に変換する．
+JsonValue
+AstExpr::json_obj() const
+{
+  auto jobj = AstHierNamedBase::json_obj();
+  return jobj;
+}
+
 END_NAMESPACE_YM_VERILOG
