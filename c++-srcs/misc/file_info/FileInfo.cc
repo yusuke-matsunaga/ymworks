@@ -89,6 +89,19 @@ FileInfo::parent_loc_list() const
   return tmp_list;
 }
 
+// @brief 内容を JsonValue に変換する．
+JsonValue
+FileInfo::json_obj() const
+{
+  auto jobj = JsonValue::object();
+  jobj.add("filename", JsonValue(filename()));
+  auto ploc = parent_loc();
+  if ( ploc.is_valid() ) {
+    jobj.add("parent_loc", ploc.json_obj());
+  }
+  return jobj;
+}
+
 // @brief 内部の静的なデータをクリアする．
 void
 FileInfo::clear()

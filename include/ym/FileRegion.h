@@ -13,6 +13,7 @@
 #include "ym/FileInfo.h"
 #include "ym/FileLoc.h"
 #include "ym/FileLineColumn.h"
+#include "ym/JsonValue.h"
 
 
 BEGIN_NAMESPACE_YM
@@ -178,7 +179,13 @@ public:
 
   /// @brief 内容を JsonValue に変換する．
   JsonValue
-  json_obj() const;
+  json_obj() const
+  {
+    auto jobj = JsonValue::object();
+    jobj.add("start_loc", start_loc().json_obj());
+    jobj.add("end_loc", end_loc().json_obj());
+    return jobj;
+  }
 
 
 public:

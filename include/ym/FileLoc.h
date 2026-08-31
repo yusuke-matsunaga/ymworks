@@ -97,7 +97,15 @@ public:
 
   /// @brief 内容を JsonValue に変換する．
   JsonValue
-  json_obj() const;
+  json_obj() const
+  {
+    auto jobj = JsonValue::object();
+    jobj.add("filename", JsonValue(filename()));
+    // parent_loc() は無視する．
+    jobj.add("line", JsonValue(line()));
+    jobj.add("column", JsonValue(column()));
+    return jobj;
+  }
 
 
 public:

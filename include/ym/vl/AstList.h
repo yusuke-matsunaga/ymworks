@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
+#include "ym/JsonValue.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -165,6 +166,19 @@ public:
       vec.push_back(x);
     }
     return vec;
+  }
+
+  /// @brief 内容を JsonValue に変換する．
+  ///
+  /// T::json_obj() というメンバ関数が実装されていると仮定している．
+  JsonValue
+  json_obj() const
+  {
+    auto jobj = JsonValue::array();
+    for ( auto x = mTop; x != nullptr; x = x->link() ) {
+      jobj.add(x->json_obj());
+    }
+    return jobj;
   }
 
 
