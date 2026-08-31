@@ -43,10 +43,11 @@
 # ===================================================================
 
 set ( ast_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/AstBase.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/AstDumper.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/AstExpr.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/AstHierNamedBase.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/AstMgr.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/AstMisc.cc
   PARENT_SCOPE
   )
 

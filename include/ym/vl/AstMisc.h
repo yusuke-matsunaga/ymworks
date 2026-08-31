@@ -272,15 +272,11 @@ public:
 
   /// @brief インデックスを含めた名前を返す．
   std::string
-  decompile() const
-  {
-    std::ostringstream buf;
-    buf << name();
-    if ( has_index() ) {
-      buf << "[" << index() << "]";
-    }
-    return buf.str();
-  }
+  decompile() const;
+
+  /// @brief 内容を JsonValue に変換する．
+  JsonValue
+  json_obj() const;
 
 
 private:

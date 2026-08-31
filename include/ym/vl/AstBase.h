@@ -45,7 +45,7 @@ public:
   /// @brief 内容を表す JSON オブジェクトを返す．
   virtual
   JsonValue
-  json_obj() const = 0;
+  json_obj() const;
 
 };
 
@@ -69,6 +69,10 @@ public:
   virtual
   const char*
   name() const = 0;
+
+  /// @brief 内容を表す JSON オブジェクトを返す．
+  JsonValue
+  json_obj() const override;
 
 };
 
@@ -95,6 +99,10 @@ public:
   /// @brief 階層名を展開する．
   std::string
   decompile_name() const;
+
+  /// @brief 内容を表す JSON オブジェクトを返す．
+  JsonValue
+  json_obj() const override;
 
 };
 
