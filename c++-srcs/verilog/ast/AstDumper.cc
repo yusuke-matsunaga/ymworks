@@ -317,8 +317,7 @@ AstDumper::put(
   put("mNetType", io->net_type());
   put("mVarType", io->var_type());
   put("mSigned", io->is_signed());
-  put("mLeftRange", io->range()->left());
-  put("mRightRange", io->range()->right());
+  put("mLeftRange", "mRightRange", io->range());
 
   for ( auto item: io->item_list() ) {
     AstHeader x(*this, "mElem", "IOElem");
@@ -399,8 +398,7 @@ AstDumper::put(
 #endif
 
   put("mSigned", decl->is_signed());
-  put("mLeftRange", decl->range()->left());
-  put("mRightRange", decl->range()->right());
+  put("mLeftRange", "mRightRange", decl->range());
   put("mVsType", decl->vs_type());
   put("mStrength", decl->strength());
   put("mDelay", decl->delay());
@@ -412,9 +410,7 @@ AstDumper::put(
     put("mName", item->name());
     for ( auto range: item->range_list() ) {
       AstHeader x(*this, "mDimension", "Range");
-
-      put("mLeftRange", range->left());
-      put("mRightRange", range->right());
+      put("mLeftRange", "mRightRange", range);
     }
     put("mInitValue", item->init_value());
   }
@@ -507,8 +503,7 @@ AstDumper::put(
     put("mAutomatic", item->automatic());
     if ( item->range() ) {
       put("mSigned", item->is_signed());
-      put("mLeftRange", item->range()->left());
-      put("mRightRange", item->range()->right());
+      put("mLeftRange", "mRightRange", item->range());
     }
     put("mName", item->name());
     put_decls(item->iohead_list(),
@@ -528,8 +523,7 @@ AstDumper::put(
 	put("mName", gi->name());
       }
       if ( gi->range() ) {
-	put("mLeftRange", gi->range()->left());
-	put("mRightrange", gi->range()->right());
+	put("mLeftRange", "mRightRange", gi->range());
       }
       for ( auto con: gi->port_list() ) {
 	put("mPortCon", con);
@@ -550,8 +544,7 @@ AstDumper::put(
       put("mFileRegion", mui->file_region());
       put("mName", mui->name());
       if ( mui->range() ) {
-	put("mLeftRange", mui->range()->left());
-	put("mRightRange", mui->range()->right());
+	put("mLeftRange", "mRightRange", mui->range());
       }
       for ( auto con: mui->port_list() ) {
 	put("mPortCon", con);
@@ -998,6 +991,20 @@ AstDumper::put_decl_item(
   }
   for ( auto item: item_list ) {
     put("mItem", item);
+  }
+}
+
+// @brief 範囲の出力
+void
+AstDumper::put(
+  const char* left_label,
+  const char* right_label,
+  const AstRange* range
+)
+{
+  if ( range != nullptr ) {
+    put(left_label,  range->left());
+    put(right_label, range->right());
   }
 }
 

@@ -146,6 +146,14 @@ private:
     const AstItemList& item_list         ///< [in] 要素のリスト
   );
 
+  /// @brief 範囲の出力
+  void
+  put(
+    const char* left_label,  ///< [in] 左側の範囲のラベル
+    const char* right_label, ///< [in] 右側の範囲のラベル
+    const AstRange* range    ///< [in] 範囲
+  );
+
   /// @brief 階層名の出力
   void
   put(

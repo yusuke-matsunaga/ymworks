@@ -67,12 +67,46 @@
 // [SPEC] level_input_list ::= level_symbol { level_symbol }
 // [SPEC] edge_input_list ::= { level_symbol } edge_indicator { level_symbol }
 //
+// [SPEC] output_symbol ::= '0' | '1' | 'x' | 'X'
+//
 // [SPEC] current_state ::= level_symbol
 //
 // [SPEC] level_symbol ::= '0' | '1' | 'x' | 'X' | '?' | 'b' | 'B'
 //
 // [SPEC] edge_symbol ::= 'r' | 'R' | 'f' | 'F' | 'p' | 'P' | 'n' | 'N' | '*'
-primitive udp_comb1 ( output1, input1 );
+primitive udp_comb1995_1 ( output1, input1 );
    output output1;
    input input1;
    table
+      0 : 1;
+      1 : 0;
+   endtable
+endprimitive
+
+primitive udp_comb1995_2 ( output1, input1, input2 );
+   output output1;
+   input input1;
+   input input2;
+   table
+      00 : 1;
+      01 : 1;
+      10 : 1;
+      11 : 0;
+   endtable
+endprimitive
+
+primitive udp_comb2001_1 ( output output1, input input1 );
+   table
+      0 : 1;
+      1 : 0;
+   endtable
+endprimitive
+
+primitive udp_comb2001_2 ( output output1, input input1, input2 );
+   table
+      00 : 1;
+      01 : 1;
+      10 : 1;
+      11 : 0;
+   endtable
+endprimitive
