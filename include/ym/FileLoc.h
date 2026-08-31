@@ -11,6 +11,7 @@
 #include "ym_config.h"
 #include "ym/FileInfo.h"
 #include "ym/FileLineColumn.h"
+#include "ym/JsonValue.h"
 
 
 BEGIN_NAMESPACE_YM
@@ -93,6 +94,10 @@ public:
   /// @return コラム位置
   int
   column() const { return mLineColumn.column(); }
+
+  /// @brief 内容を JsonValue に変換する．
+  JsonValue
+  json_obj() const;
 
 
 public:

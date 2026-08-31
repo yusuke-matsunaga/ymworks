@@ -176,6 +176,10 @@ public:
     return mEndLineColumn.column();
   }
 
+  /// @brief 内容を JsonValue に変換する．
+  JsonValue
+  json_obj() const;
+
 
 public:
   //////////////////////////////////////////////////////////////////////

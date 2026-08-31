@@ -10,6 +10,7 @@
 
 #include "ym/verilog.h"
 #include "ym/FileRegion.h"
+#include "ym/JsonValue.h"
 #include "ym/vl/AstFwd.h"
 
 
@@ -40,6 +41,11 @@ public:
   virtual
   FileRegion
   file_region() const = 0;
+
+  /// @brief 内容を表す JSON オブジェクトを返す．
+  virtual
+  JsonValue
+  json_obj() const = 0;
 
 };
 
