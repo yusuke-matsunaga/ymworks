@@ -20,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 単項演算子を生成する．
 ElbExpr*
 EiFactory::new_UnaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr1
 )
@@ -63,7 +63,7 @@ EiFactory::new_UnaryOp(
 
 // @brief コンストラクタ
 EiUnaryOp::EiUnaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1
 ) : EiOperation(ast_expr),
     mOpr1{opr1}
@@ -112,7 +112,7 @@ EiUnaryOp::operand_list() const
 
 // @brief コンストラクタ
 EiNotOp::EiNotOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1
 ) : EiUnaryOp(ast_expr, opr1)
 {
@@ -149,7 +149,7 @@ EiNotOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiBitNegOp::EiBitNegOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1
 ) : EiUnaryOp(ast_expr, opr1),
     mType{opr1->value_type()}
@@ -188,7 +188,7 @@ EiBitNegOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiReductionOp::EiReductionOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1
 ) : EiUnaryOp(ast_expr, opr1)
 {
@@ -229,7 +229,7 @@ EiReductionOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiUnaryArithOp::EiUnaryArithOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1
 ) : EiUnaryOp(ast_expr, opr1)
 {
@@ -264,7 +264,7 @@ EiUnaryArithOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiEventEdgeOp::EiEventEdgeOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1
 ) : EiUnaryOp(ast_expr, opr1)
 {

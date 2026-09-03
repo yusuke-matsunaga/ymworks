@@ -72,7 +72,7 @@ ElbProxy::allow_empty_io_range()
 void
 ElbProxy::phase1_module_item(
   ElbModule* module,
-  const AstModule* ast_module,
+  const AstModule& ast_module,
   const std::vector<ElbParamCon>& param_con_list
 )
 {
@@ -134,7 +134,7 @@ ElbProxy::phase1_items(
 const VlTaskFunc*
 ElbProxy::instantiate_constant_function(
   const VlScope* parent,
-  const AstItem* ast_function
+  const AstItem& ast_function
 )
 {
   return mItemGen->instantiate_constant_function(parent, ast_function);
@@ -144,7 +144,7 @@ ElbProxy::instantiate_constant_function(
 void
 ElbProxy::phase1_stmt(
   const VlScope* parent,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   bool cf
 )
 {
@@ -157,7 +157,7 @@ ElbProxy::instantiate_stmt(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   return mStmtGen->instantiate_stmt(parent, process, env, ast_stmt);
@@ -168,7 +168,7 @@ ElbExpr*
 ElbProxy::instantiate_expr(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprGen->instantiate_expr(parent, env, ast_expr);
@@ -178,7 +178,7 @@ ElbProxy::instantiate_expr(
 ElbExpr*
 ElbProxy::instantiate_constant_expr(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprGen->instantiate_constant_expr(parent, ast_expr);
@@ -189,7 +189,7 @@ ElbExpr*
 ElbProxy::instantiate_event_expr(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprGen->instantiate_event_expr(parent, env, ast_expr);
@@ -200,7 +200,7 @@ ElbExpr*
 ElbProxy::instantiate_arg(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprGen->instantiate_arg(parent, env, ast_expr);
@@ -211,7 +211,7 @@ ElbExpr*
 ElbProxy::instantiate_lhs(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprGen->instantiate_lhs(parent, env, ast_expr);
@@ -222,7 +222,7 @@ ElbExpr*
 ElbProxy::instantiate_rhs(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* lhs
 )
 {
@@ -238,7 +238,7 @@ ElbProxy::instantiate_rhs(
 ElbExpr*
 ElbProxy::instantiate_namedevent(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprGen->instantiate_namedevent(parent, ast_expr);
@@ -248,7 +248,7 @@ ElbProxy::instantiate_namedevent(
 const VlDelay*
 ElbProxy::instantiate_delay(
   const VlScope* parent,
-  const AstDelay* ast_delay
+  const AstDelay& ast_delay
 )
 {
   return mExprGen->instantiate_delay(parent, ast_delay);
@@ -258,7 +258,7 @@ ElbProxy::instantiate_delay(
 const VlDelay*
 ElbProxy::instantiate_delay(
   const VlScope* parent,
-  const AstItem* ast_head
+  const AstItem& ast_head
 )
 {
   return mExprGen->instantiate_delay(parent, ast_head);
@@ -268,7 +268,7 @@ ElbProxy::instantiate_delay(
 VlValue
 ElbProxy::evaluate_expr(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprEval->evaluate_expr(parent, ast_expr);
@@ -278,7 +278,7 @@ ElbProxy::evaluate_expr(
 int
 ElbProxy::evaluate_int(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprEval->evaluate_int(parent, ast_expr);
@@ -288,7 +288,7 @@ ElbProxy::evaluate_int(
 int
 ElbProxy::evaluate_int_if_const(
   const VlScope* parent,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   bool& is_const
 )
 {
@@ -299,7 +299,7 @@ ElbProxy::evaluate_int_if_const(
 VlScalarVal
 ElbProxy::evaluate_scalar(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprEval->evaluate_scalar(parent, ast_expr);
@@ -309,7 +309,7 @@ ElbProxy::evaluate_scalar(
 bool
 ElbProxy::evaluate_bool(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprEval->evaluate_bool(parent, ast_expr);
@@ -319,7 +319,7 @@ ElbProxy::evaluate_bool(
 BitVector
 ElbProxy::evaluate_bitvector(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   return mExprEval->evaluate_bitvector(parent, ast_expr);
@@ -329,7 +329,7 @@ ElbProxy::evaluate_bitvector(
 RangeVal
 ElbProxy::evaluate_range(
   const VlScope* parent,
-  const AstRange* ast_range
+  const AstRange& ast_range
 )
 {
   return mExprEval->evaluate_range(parent, ast_range);
@@ -339,7 +339,7 @@ ElbProxy::evaluate_range(
 RangeVal
 ElbProxy::evaluate_range(
   const VlScope* parent,
-  const AstPart* ast_part
+  const AstPart& ast_part
 )
 {
   return mExprEval->evaluate_range(parent, ast_part);
@@ -348,7 +348,7 @@ ElbProxy::evaluate_range(
 // @brief 構文木要素に対応する属性リストを返す．
 const std::vector<const VlAttribute*>&
 ElbProxy::attribute_list(
-  const AstBase* ast_obj
+  const AstBase& ast_obj
 )
 {
   return mAttrGen->attribute_list(ast_obj);
@@ -357,8 +357,8 @@ ElbProxy::attribute_list(
 // @brief 構文木要素に対応する属性リストを返す．
 std::vector<const VlAttribute*>
 ElbProxy::attribute_list(
-  const AstBase* ast_obj1,
-  const AstBase* ast_obj2
+  const AstBase& ast_obj1,
+  const AstBase& ast_obj2
 )
 {
   auto ans = mAttrGen->attribute_list(ast_obj1);

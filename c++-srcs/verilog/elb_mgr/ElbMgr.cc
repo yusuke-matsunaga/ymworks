@@ -21,7 +21,6 @@
 #include "ym/vl/VlUserSystf.h"
 #include "ym/vl/VlUdp.h"
 #include "ym/vl/AstUdp.h"
-#include "ym/vl/AstMisc.h"
 #include "elaborator/ElbGfRoot.h"
 #include "elaborator/ElbUdp.h"
 #include "elaborator/ElbModule.h"
@@ -169,7 +168,7 @@ ElbMgr::find_namedobj(
 ObjHandle*
 ElbMgr::find_obj_up(
   const VlScope* base_scope,
-  const AstHierNamedBase* ast_obj,
+  const AstHierNamedBase& ast_obj,
   const VlScope* ulimit
 )
 {
@@ -180,13 +179,13 @@ ElbMgr::find_obj_up(
   }
 
   if ( debug & debug_find_scope ) {
-    DOUT << "find_obj_up( " << ast_obj->name() << " )@"
+    DOUT << "find_obj_up( " << ast_obj.name() << " )@"
 	 << base_scope->full_name() << std::endl;
   }
 
   // base_scope を起点として name というオブジェクトを探す．
   for ( ; base_scope; base_scope = base_scope->parent_scope() ) {
-    auto handle{find_obj(base_scope, ast_obj->name())};
+    auto handle{find_obj(base_scope, ast_obj.name())};
     if ( handle ) {
       // 見つけた
       if ( debug & debug_find_scope ) {
@@ -212,34 +211,34 @@ ElbMgr::find_obj_up(
 const VlScope*
 ElbMgr::find_scope_up(
   const VlScope* base_scope,
-  const AstHierNamedBase* ast_obj,
+  const AstHierNamedBase& ast_obj,
   const VlScope* ulimit
 )
 {
   if ( debug & debug_find_scope ) {
     DOUT << "find_scope_up( "
-	 << ast_obj->decompile_name()
+	 << ast_obj.decompile_name()
 	 << " ) @"
 	 << base_scope->full_name() << std::endl;
   }
 
-  auto ast_nb_list = ast_obj->namebranch_list();
+  auto ast_nb_list = ast_obj.namebranch_list();
   auto n = ast_nb_list.size();
   auto cur_scope{base_scope};
   for ( auto name_branch: ast_nb_list ) {
-    auto top_name = name_branch->name();
+    auto top_name = name_branch.name();
     const VlScope* top_scope{nullptr};
     // まず普通に探す．
     auto handle = find_obj(cur_scope, top_name);
     if ( handle ) {
-      if ( name_branch->has_index() ) {
-	top_scope = handle->array_elem(name_branch->index());
+      if ( name_branch.has_index() ) {
+	top_scope = handle->array_elem(name_branch.index());
       }
       else {
 	top_scope = handle->scope();
       }
     }
-    else if ( !name_branch->has_index() ) {
+    else if ( !name_branch.has_index() ) {
       // モジュール定義名として探す．
       auto module = mModuleDefDict.find(cur_scope, top_name);
       if ( module ) {
@@ -313,7 +312,7 @@ ElbMgr::new_Toplevel()
 const VlScope*
 ElbMgr::new_StmtBlockScope(
   const VlScope* parent,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   auto scope = factory().new_StmtBlockScope(parent, ast_stmt);
@@ -326,7 +325,7 @@ ElbMgr::new_StmtBlockScope(
 const VlScope*
 ElbMgr::new_GenBlock(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   auto scope = factory().new_GenBlock(parent, ast_item);
@@ -339,7 +338,7 @@ ElbMgr::new_GenBlock(
 ElbGfRoot*
 ElbMgr::new_GfRoot(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   auto gfroot = factory().new_GfRoot(parent, ast_item);
@@ -352,7 +351,7 @@ ElbMgr::new_GfRoot(
 const VlScope*
 ElbMgr::new_GfBlock(
   const VlScope* parent,
-  const AstItem* ast_item,
+  const AstItem& ast_item,
   int gvi
 )
 {
@@ -365,14 +364,14 @@ ElbMgr::new_GfBlock(
 // @brief UDP定義を生成する．
 ElbUdpDefn*
 ElbMgr::new_UdpDefn(
-  const AstUdp* ast_udp,
+  const AstUdp& ast_udp,
   bool is_protected
 )
 {
   auto udp = factory().new_UdpDefn(ast_udp, is_protected);
   mObjList.push_back(udp);
   mUdpList.push_back(udp);
-  mUdpHash[ast_udp->name()] = udp;
+  mUdpHash[ast_udp.name()] = udp;
   return udp;
 }
 
@@ -380,9 +379,9 @@ ElbMgr::new_UdpDefn(
 ElbModule*
 ElbMgr::new_Module(
   const VlScope* parent,
-  const AstModule* ast_module,
-  const AstItem* ast_head,
-  const AstInst* ast_inst
+  const AstModule& ast_module,
+  const AstItem& ast_head,
+  const AstInst& ast_inst
 )
 {
   auto module = factory().new_Module(parent, ast_module, ast_head, ast_inst);
@@ -400,10 +399,10 @@ ElbMgr::new_Module(
 ElbModuleArray*
 ElbMgr::new_ModuleArray(
   const VlScope* parent,
-  const AstModule* ast_module,
-  const AstItem* ast_head,
-  const AstInst* ast_inst,
-  const AstRange* ast_range,
+  const AstModule& ast_module,
+  const AstItem& ast_head,
+  const AstInst& ast_inst,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
@@ -420,7 +419,7 @@ ElbMgr::new_ModuleArray(
 ElbIOHead*
 ElbMgr::new_IOHead(
   const VlModule* module,
-  const AstIOHead* ast_header
+  const AstIOHead& ast_header
 )
 {
   auto head = factory().new_IOHead(module, ast_header);
@@ -432,7 +431,7 @@ ElbMgr::new_IOHead(
 ElbIOHead*
 ElbMgr::new_IOHead(
   const VlTaskFunc* taskfunc,
-  const AstIOHead* ast_header
+  const AstIOHead& ast_header
 )
 {
   auto head = factory().new_IOHead(taskfunc, ast_header);
@@ -444,7 +443,7 @@ ElbMgr::new_IOHead(
 ElbDeclHead*
 ElbMgr::new_DeclHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head,
+  const AstDeclHead& ast_head,
   bool has_delay
 )
 {
@@ -457,8 +456,8 @@ ElbMgr::new_DeclHead(
 ElbDeclHead*
 ElbMgr::new_DeclHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head,
-  const AstRange* ast_range,
+  const AstDeclHead& ast_head,
+  const AstRange& ast_range,
   const RangeVal& range,
   bool has_delay
 )
@@ -474,7 +473,7 @@ ElbMgr::new_DeclHead(
 ElbDeclHead*
 ElbMgr::new_DeclHead(
   const VlScope* parent,
-  const AstIOHead* ast_head,
+  const AstIOHead& ast_head,
   VpiAuxType aux_type
 )
 {
@@ -487,9 +486,9 @@ ElbMgr::new_DeclHead(
 ElbDeclHead*
 ElbMgr::new_DeclHead(
   const VlScope* parent,
-  const AstIOHead* ast_head,
+  const AstIOHead& ast_head,
   VpiAuxType aux_type,
-  const AstRange* ast_range,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
@@ -503,7 +502,7 @@ ElbMgr::new_DeclHead(
 ElbDeclHead*
 ElbMgr::new_DeclHead(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   auto head = factory().new_DeclHead(parent, ast_item);
@@ -515,8 +514,8 @@ ElbMgr::new_DeclHead(
 ElbDeclHead*
 ElbMgr::new_DeclHead(
   const VlScope* parent,
-  const AstItem* ast_item,
-  const AstRange* ast_range,
+  const AstItem& ast_item,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
@@ -530,7 +529,7 @@ ElbDecl*
 ElbMgr::new_Decl(
   int tag,
   ElbDeclHead* head,
-  const AstNamedBase* ast_item,
+  const AstNamedBase& ast_item,
   const VlExpr* init
 )
 {
@@ -545,7 +544,7 @@ ElbMgr::new_Decl(
 ElbDecl*
 ElbMgr::new_ImpNet(
   const VlScope* parent,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiNetType net_type
 )
 {
@@ -560,7 +559,7 @@ const VlDeclArray*
 ElbMgr::new_DeclArray(
   int tag,
   ElbDeclHead* head,
-  const AstNamedBase* ast_item,
+  const AstNamedBase& ast_item,
   const std::vector<ElbRangeSrc>& range_src
 )
 {
@@ -579,7 +578,7 @@ ElbMgr::new_DeclArray(
 ElbParamHead*
 ElbMgr::new_ParamHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head
+  const AstDeclHead& ast_head
 )
 {
   auto head = factory().new_ParamHead(parent, ast_head);
@@ -591,8 +590,8 @@ ElbMgr::new_ParamHead(
 ElbParamHead*
 ElbMgr::new_ParamHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head,
-  const AstRange* ast_range,
+  const AstDeclHead& ast_head,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
@@ -605,7 +604,7 @@ ElbMgr::new_ParamHead(
 ElbParameter*
 ElbMgr::new_Parameter(
   ElbParamHead* head,
-  const AstNamedBase* ast_item,
+  const AstNamedBase& ast_item,
   bool is_local
 )
 {
@@ -620,7 +619,7 @@ ElbMgr::new_Parameter(
 ElbGenvar*
 ElbMgr::new_Genvar(
   const VlScope* parent,
-  const AstDeclItem* ast_item,
+  const AstDeclItem& ast_item,
   int val
 )
 {
@@ -634,7 +633,7 @@ ElbMgr::new_Genvar(
 ElbCaHead*
 ElbMgr::new_CaHead(
   const VlModule* module,
-  const AstItem* ast_head,
+  const AstItem& ast_head,
   const VlDelay* delay
 )
 {
@@ -647,7 +646,7 @@ ElbMgr::new_CaHead(
 const VlContAssign*
 ElbMgr::new_ContAssign(
   ElbCaHead* head,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
@@ -662,7 +661,7 @@ ElbMgr::new_ContAssign(
 const VlContAssign*
 ElbMgr::new_ContAssign(
   const VlModule* module,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
@@ -677,9 +676,9 @@ ElbMgr::new_ContAssign(
 const VlParamAssign*
 ElbMgr::new_ParamAssign(
   const VlModule* module,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
@@ -694,9 +693,9 @@ ElbMgr::new_ParamAssign(
 const VlParamAssign*
 ElbMgr::new_NamedParamAssign(
   const VlModule* module,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
@@ -711,10 +710,10 @@ ElbMgr::new_NamedParamAssign(
 const VlDefParam*
 ElbMgr::new_DefParam(
   const VlModule* module,
-  const AstItem* ast_header,
-  const AstDefParam* ast_defparam,
+  const AstItem& ast_header,
+  const AstDefParam& ast_defparam,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
@@ -729,7 +728,7 @@ ElbMgr::new_DefParam(
 ElbPrimHead*
 ElbMgr::new_PrimHead(
   const VlScope* parent,
-  const AstItem* ast_header,
+  const AstItem& ast_header,
   bool has_delay
 )
 {
@@ -742,7 +741,7 @@ ElbMgr::new_PrimHead(
 ElbPrimHead*
 ElbMgr::new_UdpHead(
   const VlScope* parent,
-  const AstItem* ast_header,
+  const AstItem& ast_header,
   const VlUdpDefn* udp,
   bool has_delay
 )
@@ -756,7 +755,7 @@ ElbMgr::new_UdpHead(
 ElbPrimHead*
 ElbMgr::new_CellHead(
   const VlScope* parent,
-  const AstItem* ast_header,
+  const AstItem& ast_header,
   const ClibCell& cell
 )
 {
@@ -769,7 +768,7 @@ ElbMgr::new_CellHead(
 ElbPrimitive*
 ElbMgr::new_Primitive(
   ElbPrimHead* head,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
   auto prim = factory().new_Primitive(head, ast_inst);
@@ -783,8 +782,8 @@ ElbMgr::new_Primitive(
 ElbPrimArray*
 ElbMgr::new_PrimitiveArray(
   ElbPrimHead* head,
-  const AstInst* ast_inst,
-  const AstRange* ast_range,
+  const AstInst& ast_inst,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
@@ -799,7 +798,7 @@ ElbPrimitive*
 ElbMgr::new_CellPrimitive(
   ElbPrimHead* head,
   const ClibCell& cell,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
   auto prim = factory().new_CellPrimitive(head, cell, ast_inst);
@@ -812,8 +811,8 @@ ElbPrimArray*
 ElbMgr::new_CellPrimitiveArray(
   ElbPrimHead* head,
   const ClibCell& cell,
-  const AstInst* ast_inst,
-  const AstRange* ast_range,
+  const AstInst& ast_inst,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
@@ -827,7 +826,7 @@ ElbMgr::new_CellPrimitiveArray(
 ElbTaskFunc*
 ElbMgr::new_Function(
   const VlScope* parent,
-  const AstItem* ast_item,
+  const AstItem& ast_item,
   bool const_func
 )
 {
@@ -843,8 +842,8 @@ ElbMgr::new_Function(
 ElbTaskFunc*
 ElbMgr::new_Function(
   const VlScope* parent,
-  const AstItem* ast_item,
-  const AstRange* ast_range,
+  const AstItem& ast_item,
+  const AstRange& ast_range,
   const RangeVal& range,
   bool const_func
 )
@@ -862,7 +861,7 @@ ElbMgr::new_Function(
 ElbTaskFunc*
 ElbMgr::new_Task(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   auto task = factory().new_Task(parent, ast_item);
@@ -876,7 +875,7 @@ ElbMgr::new_Task(
 ElbProcess*
 ElbMgr::new_Process(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   auto process = factory().new_Process(parent, ast_item);
@@ -890,7 +889,7 @@ const VlStmt*
 ElbMgr::new_Assignment(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs,
   bool block,
@@ -908,7 +907,7 @@ const VlStmt*
 ElbMgr::new_AssignStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
@@ -924,7 +923,7 @@ const VlStmt*
 ElbMgr::new_DeassignStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* lhs
 )
 {
@@ -938,7 +937,7 @@ const VlStmt*
 ElbMgr::new_ForceStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
@@ -953,7 +952,7 @@ const VlStmt*
 ElbMgr::new_ReleaseStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* lhs
 )
 {
@@ -967,7 +966,7 @@ const VlStmt*
 ElbMgr::new_Begin(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
@@ -981,7 +980,7 @@ const VlStmt*
 ElbMgr::new_Fork(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
@@ -995,7 +994,7 @@ const VlStmt*
 ElbMgr::new_NamedBegin(
   const VlScope* block,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
@@ -1009,7 +1008,7 @@ const VlStmt*
 ElbMgr::new_NamedFork(
   const VlScope* block,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
@@ -1023,7 +1022,7 @@ const VlStmt*
 ElbMgr::new_WhileStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* body
 )
@@ -1038,7 +1037,7 @@ const VlStmt*
 ElbMgr::new_RepeatStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* body
 )
@@ -1053,7 +1052,7 @@ const VlStmt*
 ElbMgr::new_WaitStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* body
 )
@@ -1068,7 +1067,7 @@ const VlStmt*
 ElbMgr::new_ForStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* init_stmt,
   const VlStmt* inc_stmt,
@@ -1086,7 +1085,7 @@ const VlStmt*
 ElbMgr::new_ForeverStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlStmt* body
 )
 {
@@ -1100,7 +1099,7 @@ const VlStmt*
 ElbMgr::new_IfStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* then_stmt,
   const VlStmt* else_stmt
@@ -1117,7 +1116,7 @@ const VlStmt*
 ElbMgr::new_CaseStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* expr,
   const std::vector<const VlCaseItem*>& caseitem_list
 )
@@ -1131,7 +1130,7 @@ ElbMgr::new_CaseStmt(
 // @brief caseitem を生成する．
 const VlCaseItem*
 ElbMgr::new_CaseItem(
-  const AstCaseItem* ast_item,
+  const AstCaseItem& ast_item,
   const std::vector<ElbExpr*>& label_list,
   const VlStmt* body
 )
@@ -1146,7 +1145,7 @@ const VlStmt*
 ElbMgr::new_EventStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   ElbExpr* named_event
 )
 {
@@ -1161,7 +1160,7 @@ const VlStmt*
 ElbMgr::new_NullStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   auto stmt = factory().new_NullStmt(parent, process, ast_stmt);
@@ -1174,7 +1173,7 @@ const VlStmt*
 ElbMgr::new_TaskCall(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlTaskFunc* task,
   const std::vector<ElbExpr*>& arg_array
 )
@@ -1190,7 +1189,7 @@ const VlStmt*
 ElbMgr::new_SysTaskCall(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlUserSystf* user_systf,
   const std::vector<ElbExpr*>& arg_array
 )
@@ -1206,7 +1205,7 @@ const VlStmt*
 ElbMgr::new_DisableStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlScope* target
 )
 {
@@ -1220,7 +1219,7 @@ const VlStmt*
 ElbMgr::new_CtrlStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlControl* control,
   const VlStmt* body
 )
@@ -1234,7 +1233,7 @@ ElbMgr::new_CtrlStmt(
 // @brief 遅延コントロールを生成する．
 const VlControl*
 ElbMgr::new_DelayControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   ElbExpr* delay
 )
 {
@@ -1246,7 +1245,7 @@ ElbMgr::new_DelayControl(
 // @brief イベントコントロールを生成する．
 const VlControl*
 ElbMgr::new_EventControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   const std::vector<ElbExpr*>& event_list
 )
 {
@@ -1258,7 +1257,7 @@ ElbMgr::new_EventControl(
 // @brief リピートコントロールを生成する．
 const VlControl*
 ElbMgr::new_RepeatControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   ElbExpr* rep,
   const std::vector<ElbExpr*>& event_list
 )
@@ -1271,7 +1270,7 @@ ElbMgr::new_RepeatControl(
 // @brief 単項演算子を生成する．
 ElbExpr*
 ElbMgr::new_UnaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr1
 )
@@ -1285,7 +1284,7 @@ ElbMgr::new_UnaryOp(
 // @brief 2項演算子を生成する．
 ElbExpr*
 ElbMgr::new_BinaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr1,
   ElbExpr* opr2
@@ -1300,7 +1299,7 @@ ElbMgr::new_BinaryOp(
 // @brief 3項演算子を生成する．
 ElbExpr*
 ElbMgr::new_TernaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr1,
   ElbExpr* opr2,
@@ -1316,7 +1315,7 @@ ElbMgr::new_TernaryOp(
 // @brief 連結演算子を生成する．
 ElbExpr*
 ElbMgr::new_ConcatOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const std::vector<ElbExpr*>& opr_list
 )
 {
@@ -1328,7 +1327,7 @@ ElbMgr::new_ConcatOp(
 // @brief 反復連結演算子を生成する．
 ElbExpr*
 ElbMgr::new_MultiConcatOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   SizeType rep_num,
   ElbExpr* rep_expr,
   const std::vector<ElbExpr*>& opr_list
@@ -1344,7 +1343,7 @@ ElbMgr::new_MultiConcatOp(
 // @brief プライマリ式を生成する．
 ElbExpr*
 ElbMgr::new_Primary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDecl* obj
 )
 {
@@ -1356,7 +1355,7 @@ ElbMgr::new_Primary(
 // @brief プライマリ式を生成する(net decl の初期値用)．
 ElbExpr*
 ElbMgr::new_Primary(
-  const AstDeclItem* ast_item,
+  const AstDeclItem& ast_item,
   const VlDecl* obj
 )
 {
@@ -1368,7 +1367,7 @@ ElbMgr::new_Primary(
 // @brief プライマリ式を生成する．
 ElbExpr*
 ElbMgr::new_Primary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbParameter* obj
 )
 {
@@ -1380,7 +1379,7 @@ ElbMgr::new_Primary(
 // @brief プライマリ式を生成する(配列要素版)．
 ElbExpr*
 ElbMgr::new_Primary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* obj,
   const std::vector<ElbExpr*>& index_list
 )
@@ -1393,7 +1392,7 @@ ElbMgr::new_Primary(
 // @brief プライマリ式を生成する(固定インデックスの配列要素版)．
 ElbExpr*
 ElbMgr::new_Primary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* obj,
   int offset
 )
@@ -1406,9 +1405,9 @@ ElbMgr::new_Primary(
 // @brief 固定ビット選択式を生成する．
 ElbExpr*
 ElbMgr::new_BitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base,
-  const AstExpr* bit_index,
+  const AstExpr& bit_index,
   int bit_index_val
 )
 {
@@ -1421,7 +1420,7 @@ ElbMgr::new_BitSelect(
 // @brief 固定ビット選択式を生成する．
 ElbExpr*
 ElbMgr::new_BitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base,
   int bit_index_val
 )
@@ -1434,7 +1433,7 @@ ElbMgr::new_BitSelect(
 // @brief 可変ビット選択式を生成する．
 ElbExpr*
 ElbMgr::new_BitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base,
   ElbExpr* bit_index
 )
@@ -1447,10 +1446,10 @@ ElbMgr::new_BitSelect(
 // @brief 固定部分選択式を生成する．
 ElbExpr*
 ElbMgr::new_PartSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* obj,
-  const AstExpr* index1,
-  const AstExpr* index2,
+  const AstExpr& index1,
+  const AstExpr& index2,
   int index1_val,
   int index2_val
 )
@@ -1465,7 +1464,7 @@ ElbMgr::new_PartSelect(
 // @brief 固定部分選択式を生成する．
 ElbExpr*
 ElbMgr::new_PartSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base,
   int index1,
   int index2
@@ -1480,10 +1479,10 @@ ElbMgr::new_PartSelect(
 // @brief 可変部分選択式を生成する．
 ElbExpr*
 ElbMgr::new_PlusPartSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* obj,
   ElbExpr* base,
-  const AstExpr* range_expr,
+  const AstExpr& range_expr,
   int range_val
 )
 {
@@ -1496,10 +1495,10 @@ ElbMgr::new_PlusPartSelect(
 // @brief 可変部分選択式を生成する．
 ElbExpr*
 ElbMgr::new_MinusPartSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* obj,
   ElbExpr* base,
-  const AstExpr* range_expr,
+  const AstExpr& range_expr,
   int range_val
 )
 {
@@ -1512,7 +1511,7 @@ ElbMgr::new_MinusPartSelect(
 // @brief 定数式を生成する．
 ElbExpr*
 ElbMgr::new_Constant(
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   auto expr = factory().new_Constant(ast_expr);
@@ -1523,7 +1522,7 @@ ElbMgr::new_Constant(
 // @brief genvar 起因の定数式を生成する．
 ElbExpr*
 ElbMgr::new_GenvarConstant(
-  const AstExpr* ast_primary,
+  const AstExpr& ast_primary,
   int val
 )
 {
@@ -1535,7 +1534,7 @@ ElbMgr::new_GenvarConstant(
 // @brief 関数呼び出し式を生成する．
 ElbExpr*
 ElbMgr::new_FuncCall(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlTaskFunc* func,
   const std::vector<ElbExpr*>& arg_list
 )
@@ -1548,7 +1547,7 @@ ElbMgr::new_FuncCall(
 // @brief システム関数呼び出し式を生成する．
 ElbExpr*
 ElbMgr::new_SysFuncCall(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlUserSystf* user_systf,
   const std::vector<ElbExpr*>& arg_list
 )
@@ -1562,7 +1561,7 @@ ElbMgr::new_SysFuncCall(
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 ElbMgr::new_ArgHandle(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlScope* arg
 )
 {
@@ -1574,7 +1573,7 @@ ElbMgr::new_ArgHandle(
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 ElbMgr::new_ArgHandle(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlPrimitive* arg
 )
 {
@@ -1586,7 +1585,7 @@ ElbMgr::new_ArgHandle(
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 ElbMgr::new_ArgHandle(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* arg
 )
 {
@@ -1598,7 +1597,7 @@ ElbMgr::new_ArgHandle(
 // @brief 連結演算子の左辺式を生成する．
 ElbExpr*
 ElbMgr::new_Lhs(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const std::vector<ElbExpr*>& opr_array,
   const std::vector<ElbExpr*>& lhs_elem_array
 )
@@ -1611,7 +1610,7 @@ ElbMgr::new_Lhs(
 // @brief 遅延値を生成する．
 const VlDelay*
 ElbMgr::new_Delay(
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const std::vector<ElbExpr*>& expr_list
 )
 {
@@ -1623,7 +1622,7 @@ ElbMgr::new_Delay(
 // @brief attribute instance のリストを生成する．
 const VlAttribute*
 ElbMgr::new_Attribute(
-  const AstAttrSpec* ast_attr,
+  const AstAttrSpec& ast_attr,
   const VlExpr* expr,
   bool def
 )

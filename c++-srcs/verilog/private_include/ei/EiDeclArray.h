@@ -27,7 +27,7 @@ public:
   /// @brief コンストラクタ
   EiDeclArray(
     ElbDeclHead* head,                      ///< [in] ヘッダ
-    const AstNamedBase* ast_item,             ///< [in] パース木の宣言要素
+    const AstNamedBase& ast_item,           ///< [in] パース木の宣言要素
     const std::vector<EiRange>& range_array ///< [in] 範囲の配列
   );
 
@@ -212,7 +212,7 @@ private:
   ElbDeclHead* mHead;
 
   // パース木の宣言要素
-  const AstNamedBase* mAstItem;
+  const AstNamedBase& mAstItem;
 
   // dimension の配列
   EiRangeArray mRangeList;

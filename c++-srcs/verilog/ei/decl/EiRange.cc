@@ -9,8 +9,6 @@
 #include "ei/EiFactory.h"
 #include "ei/EiRange.h"
 
-#include "ym/vl/AstExpr.h"
-
 
 BEGIN_NAMESPACE_YM_VERILOG
 
@@ -52,7 +50,7 @@ EiRange::type() const
 FileRegion
 EiRange::file_region() const
 {
-  return mAstRange->file_region();
+  return mAstRange.file_region();
 }
 
 // @brief 要素数(ビット幅)を返す．
@@ -80,14 +78,14 @@ EiRange::right_range_val() const
 std::string
 EiRange::left_range_string() const
 {
-  return mLeftRange->decompile();
+  return mLeftRange.decompile();
 }
 
 // @brief LSB を表す文字列を返す．
 std::string
 EiRange::right_range_string() const
 {
-  return mRightRange->decompile();
+  return mRightRange.decompile();
 }
 
 // @brief 範囲のチェック

@@ -24,8 +24,8 @@ protected:
 
   /// @brief コンストラクタ
   EiBitSelect(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* base_expr     ///< [in] 対象の式
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* base_expr       ///< [in] 対象の式
   );
 
   /// @brief デストラクタ
@@ -134,10 +134,10 @@ public:
 
   /// @brief コンストラクタ
   EiConstBitSelect(
-    const AstExpr* ast_expr,    ///< [in] パース木の定義要素
-    ElbExpr* base_expr,       ///< [in] 対象の式
-    const AstExpr* index_expr, ///< [in] ビット選択式
-    int index_val             ///< [in] ビット選択式の値
+    const AstExpr& ast_expr,   ///< [in] パース木の定義要素
+    ElbExpr* base_expr,        ///< [in] 対象の式
+    const AstExpr& index_expr, ///< [in] ビット選択式
+    int index_val              ///< [in] ビット選択式の値
   );
 
   /// @brief デストラクタ
@@ -168,7 +168,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // インデックス式
-  const AstExpr* mIndexExpr;
+  AstExpr mIndexExpr;
 
   // インデックス値
   int mIndexVal;
@@ -187,9 +187,9 @@ public:
 
   /// @brief コンストラクタ
   EiVarBitSelect(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* base_expr,    ///< [in] 対象の式
-    ElbExpr* index_expr    ///< [in] ビット選択式
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* base_expr,      ///< [in] 対象の式
+    ElbExpr* index_expr      ///< [in] ビット選択式
   );
 
   /// @brief デストラクタ

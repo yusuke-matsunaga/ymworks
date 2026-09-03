@@ -8,7 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtExpr.h"
+#include "parser/PtPart.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,8 +25,8 @@ public:
   /// @brief コンストラクタ
   CptPart(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    const AstExpr* expr1, ///< [in] 1番目の式
-    const AstExpr* expr2  ///< [in] 2番目の式
+    const PtExpr* expr1, ///< [in] 1番目の式
+    const PtExpr* expr2  ///< [in] 2番目の式
   ) : mFileRegion{fr},
       mLeft{expr1},
       mRight{expr2}
@@ -47,11 +47,11 @@ public:
   file_region() const override;
 
   /// @brief 1番目の式を取り出す．
-  const AstExpr*
+  const PtExpr*
   left() const override;
 
   /// @brief 2番めの式を取り出す．
-  const AstExpr*
+  const PtExpr*
   right() const override;
 
 
@@ -64,10 +64,10 @@ private:
   FileRegion mFileRegion;
 
   // 1番目の式
-  const AstExpr* mLeft;
+  const PtExpr* mLeft;
 
   // 2番目の式
-  const AstExpr* mRight;
+  const PtExpr* mRight;
 
 };
 
@@ -84,8 +84,8 @@ public:
   /// @brief コンストラクタ
   CptPartC(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    const AstExpr* expr1, ///< [in] 1番目の式
-    const AstExpr* expr2  ///< [in] 2番目の式
+    const PtExpr* expr1, ///< [in] 1番目の式
+    const PtExpr* expr2  ///< [in] 2番目の式
   ) : CptPart(fr, expr1, expr2)
   {
   }
@@ -118,8 +118,8 @@ public:
   /// @brief コンストラクタ
   CptPartP(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    const AstExpr* expr1, ///< [in] 1番目の式
-    const AstExpr* expr2  ///< [in] 2番目の式
+    const PtExpr* expr1, ///< [in] 1番目の式
+    const PtExpr* expr2  ///< [in] 2番目の式
   ) : CptPart(fr, expr1, expr2)
   {
   }
@@ -152,8 +152,8 @@ public:
   /// @brief コンストラクタ
   CptPartM(
     const FileRegion& fr, ///< [in] ファイル位置の情報
-    const AstExpr* expr1, ///< [in] 1番目の式
-    const AstExpr* expr2  ///< [in] 2番目の式
+    const PtExpr* expr1, ///< [in] 1番目の式
+    const PtExpr* expr2  ///< [in] 2番目の式
   ) : CptPart(fr, expr1, expr2)
   {
   }

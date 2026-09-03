@@ -25,7 +25,7 @@ public:
   /// @brief コンストラクタ
   CptItem_Process(
     const FileRegion& file_region,
-    const AstStmt* body
+    const PtStmt* body
   ) : mTopLoc{file_region.start_loc()},
       mBody{body}
   {
@@ -40,7 +40,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を取り出す．
@@ -48,7 +48,7 @@ public:
   file_region() const override;
 
   /// @brief 本体のステートメントを返す．
-  const AstStmt*
+  const PtStmt*
   body() const override;
 
 
@@ -61,7 +61,7 @@ private:
   FileLoc mTopLoc;
 
   // 本体
-  const AstStmt* mBody;
+  const PtStmt* mBody;
 
 };
 
@@ -78,7 +78,7 @@ public:
   /// @brief コンストラクタ
   CptItem_Initial(
     const FileRegion& file_region,
-    const AstStmt* body
+    const PtStmt* body
   ) : CptItem_Process(file_region, body)
   {
   }
@@ -89,11 +89,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
 };
@@ -111,7 +111,7 @@ public:
   /// @brief コンストラクタ
   CptItem_Always(
     const FileRegion& file_region,
-    const AstStmt* body
+    const PtStmt* body
   ) : CptItem_Process(file_region, body)
   {
   }
@@ -122,11 +122,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
 };

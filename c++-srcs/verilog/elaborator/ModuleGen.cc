@@ -11,12 +11,9 @@
 #include "ElbStub.h"
 #include "ErrorGen.h"
 
-#include "ym/vl/AstModule.h"
 #include "ym/vl/AstPort.h"
-#include "ym/vl/AstDecl.h"
-#include "ym/vl/AstItem.h"
-#include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
+#include "ym/vl/AstInst.h"
+#include "ym/vl/AstPart.h"
 
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbDecl.h"
@@ -50,11 +47,11 @@ ModuleGen::~ModuleGen()
 void
 ModuleGen::phase1_topmodule(
   const VlScope* toplevel,
-  const AstModule* ast_module
+  const AstModule& ast_module
 )
 {
-  const auto& file_region = ast_module->file_region();
-  auto name = ast_module->name();
+  const auto& file_region = ast_module.file_region();
+  auto name = ast_module.name();
 
   {
     std::ostringstream buf;
@@ -69,8 +66,8 @@ ModuleGen::phase1_topmodule(
   // モジュール本体の生成
   auto module = mgr().new_Module(toplevel,
 				 ast_module,
-				 nullptr,
-				 nullptr);
+				 AstItem(),
+				 AstInst());
 
   // attribute instance の生成
   const auto& attr_list = attribute_list(ast_module);
@@ -94,48 +91,48 @@ ModuleGen::phase1_topmodule(
 void
 ModuleGen::phase1_module_item(
   ElbModule* module,
-  const AstModule* ast_module,
+  const AstModule& ast_module,
   const std::vector<ElbParamCon>& param_con_list
 )
 {
   // ループチェック用のフラグを立てる．
-  ast_module->set_in_use();
+  ast_module.set_in_use();
 
   // パラメータポートを実体化する．
-  bool has_paramportdecl = (ast_module->paramport_list().size() > 0);
+  bool has_paramportdecl = (ast_module.paramport_list().size() > 0);
   if ( has_paramportdecl ) {
-    phase1_decl(module, ast_module->paramport_list(), false);
+    phase1_decl(module, ast_module.paramport_list(), false);
   }
 
   // parameter と genvar を実体化する．
-  phase1_decl(module, ast_module->declhead_list(), has_paramportdecl);
+  phase1_decl(module, ast_module.declhead_list(), has_paramportdecl);
 
   // パラメータの割り当てを作る．
   bool named_con = (param_con_list.size() > 0 &&
-		    param_con_list[0].mAstCon->name() != nullptr);
+		    param_con_list[0].mAstCon.name() != nullptr);
   // パラメータポートリストの名前を現れた順番に paramport_list に入れる．
   std::vector<const char*> paramport_list;
   if ( named_con ) {
     // 名前による割り当て
     for ( const auto& param_con: param_con_list ) {
       auto ast_con = param_con.mAstCon;
-      paramport_list.push_back(ast_con->name());
+      paramport_list.push_back(ast_con.name());
     }
   }
   else {
     // 順序による割り当て
     if ( has_paramportdecl ) {
-      for ( auto ast_param: ast_module->paramport_list() ) {
-	for ( auto ast_item: ast_param->item_list() ) {
-	  paramport_list.push_back(ast_item->name());
+      for ( auto ast_param: ast_module.paramport_list() ) {
+	for ( auto ast_item: ast_param.item_list() ) {
+	  paramport_list.push_back(ast_item.name());
 	}
       }
     }
     else {
-      for ( auto ast_decl: ast_module->declhead_list() ) {
-	if ( ast_decl->type() == AstDeclHead::Param ) {
-	  for ( auto ast_item: ast_decl->item_list() ) {
-	    paramport_list.push_back(ast_item->name());
+      for ( auto ast_decl: ast_module.declhead_list() ) {
+	if ( ast_decl.type() == AstDeclHead::Param ) {
+	  for ( auto ast_item: ast_decl.item_list() ) {
+	    paramport_list.push_back(ast_item.name());
 	  }
 	}
       }
@@ -171,31 +168,31 @@ ModuleGen::phase1_module_item(
   }
 
   // それ以外の要素を実体化する．
-  phase1_items(module, ast_module->item_list());
+  phase1_items(module, ast_module.item_list());
 
   // phase2 で行う処理を登録しておく．
   add_phase2stub(module, ast_module);
 
   // ループチェック用のフラグを下ろす．
-  ast_module->reset_in_use();
+  ast_module.reset_in_use();
 }
 
 // @brief module の中身のインスタンス化を行う．
 void
 ModuleGen::phase2_module_item(
   ElbModule* module,
-  const AstModule* ast_module
+  const AstModule& ast_module
 )
 {
   // 宣言要素を実体化する．
-  instantiate_decl(module, ast_module->declhead_list());
+  instantiate_decl(module, ast_module.declhead_list());
 
   // IODecl を実体化する．
-  instantiate_iodecl(module, ast_module->iohead_list());
+  instantiate_iodecl(module, ast_module.iohead_list());
 
   // ポートを実体化する
   SizeType index = 0;
-  for ( auto ast_port: ast_module->port_list() ) {
+  for ( auto ast_port: ast_module.port_list() ) {
     instantiate_port(module, index, ast_port);
     ++ index;
   }
@@ -206,19 +203,19 @@ void
 ModuleGen::instantiate_port(
   ElbModule* module,
   SizeType index,
-  const AstPort* ast_port
+  const AstPort& ast_port
 )
 {
   // 内側の接続と向きを作る．
-  auto n = ast_port->portref_list().size();
+  auto n = ast_port.portref_list().size();
   if ( n == 0 ) {
     // 空のポートの場合
-    module->init_port(index, nullptr, nullptr, VpiDir::NoDirection);
+    module->init_port(index, AstPort(), nullptr, VpiDir::NoDirection);
   }
   else if ( n == 1 ) {
     // 単一の要素の場合
-    auto ast_expr = ast_port->portref_list().front();
-    auto dir = ast_port->portref_dir(0);
+    auto ast_expr = ast_port.portref_list().front();
+    auto dir = ast_port.portref_dir(0);
     auto low_conn = instantiate_portref(module, ast_expr);
     module->init_port(index, ast_port, low_conn, dir);
   }
@@ -227,13 +224,13 @@ ModuleGen::instantiate_port(
     std::vector<ElbExpr*> expr_list;
     expr_list.reserve(n);
     auto dir = VpiDir::NoDirection;
-    for ( auto ast_expr: ast_port->portref_list() ) {
+    for ( auto ast_expr: ast_port.portref_list() ) {
       auto expr = instantiate_portref(module, ast_expr);
       if ( !expr ) {
 	return;
       }
 
-      auto dir1 = ast_port->portref_dir(expr_list.size());
+      auto dir1 = ast_port.portref_dir(expr_list.size());
       if ( dir == VpiDir::NoDirection ) {
 	dir = dir1;
       }
@@ -250,7 +247,7 @@ ModuleGen::instantiate_port(
       lhs_elem_array[n - i - 1] = expr;
     }
 
-    auto low_conn = mgr().new_Lhs(ast_port->expr(), expr_list, lhs_elem_array);
+    auto low_conn = mgr().new_Lhs(ast_port.expr(), expr_list, lhs_elem_array);
     module->init_port(index, ast_port, low_conn, dir);
   }
 }
@@ -259,60 +256,60 @@ ModuleGen::instantiate_port(
 ElbExpr*
 ModuleGen::instantiate_portref(
   ElbModule* module,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
-  auto name = ast_expr->name();
+  auto name = ast_expr.name();
   auto handle = mgr().find_obj(module, name);
   if ( !handle ) {
     ErrorGen::not_found(__FILE__, __LINE__,
-			ast_expr->file_region(), name);
+			ast_expr.file_region(), name);
   }
 
   if ( handle->declarray() ) {
     ErrorGen::port_array(__FILE__, __LINE__,
-			 ast_expr->file_region(), handle->declarray());
+			 ast_expr.file_region(), handle->declarray());
   }
 
   auto decl = handle->decl();
   if ( decl == nullptr ) {
     ErrorGen::illegal_port(__FILE__, __LINE__,
-			   ast_expr->file_region(), name);
+			   ast_expr.file_region(), name);
   }
 
   auto primary = mgr().new_Primary(ast_expr, decl);
 
   // 添字の部分を実体化する．
-  const AstExpr* ast_index = nullptr;
-  if ( ast_expr->index_list().size() > 0 ) {
-    ast_index = ast_expr->index_list().front();
+  AstExpr ast_index;
+  if ( ast_expr.index_list().size() > 0 ) {
+    ast_index = ast_expr.index_list().front();
   }
-  if ( ast_index ) {
+  if ( ast_index.is_valid() ) {
     int index_val = evaluate_int(module, ast_index);
     SizeType offset;
     bool stat2 = decl->calc_bit_offset(index_val, offset);
     if ( !stat2 ) {
       // 添字が範囲外
-      warning_index_out_of_range(ast_index->file_region());
+      warning_index_out_of_range(ast_index.file_region());
     }
     return mgr().new_BitSelect(ast_expr, primary, ast_index, index_val);
   }
-  auto ast_part = ast_expr->part();
-  if ( ast_part != nullptr ) {
+  auto ast_part = ast_expr.part();
+  if ( ast_part.is_valid() ) {
     auto range = evaluate_range(module, ast_part);
     SizeType offset;
     bool stat1 = decl->calc_bit_offset(range.left, offset);
     if ( !stat1 ) {
       // 左の添字が範囲外
-      warning_left_index_out_of_range(ast_part->left()->file_region());
+      warning_left_index_out_of_range(ast_part.left().file_region());
     }
     bool stat2 = decl->calc_bit_offset(range.right, offset);
     if ( !stat2 ) {
       // 右の添字が範囲外
-      warning_right_index_out_of_range(ast_part->right()->file_region());
+      warning_right_index_out_of_range(ast_part.right().file_region());
     }
     return mgr().new_PartSelect(ast_expr, primary,
-				ast_part->left(), ast_part->right(),
+				ast_part.left(), ast_part.right(),
 				range.left, range.right);
   }
   return primary;

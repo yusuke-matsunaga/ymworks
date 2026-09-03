@@ -25,7 +25,7 @@ public:
   // コンストラクタ
   CptOpr_Concat(
     const FileRegion& file_region,
-    const AstExpr* expr_top
+    const PtExpr* expr_top
   ) : mFileRegion{file_region},
       mExprTop{expr_top}
   {
@@ -37,7 +37,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // ファイル位置を返す．
@@ -48,9 +48,9 @@ public:
   VpiOpType
   op_type() const override;
 
-  /// @brief オペランドのリストの取得
-  AstExprList
-  operand_list() const override;
+  /// @brief オペランドのリストの先頭の取得
+  const PtExpr*
+  operand_top() const override;
 
 
 private:
@@ -62,7 +62,7 @@ private:
   FileRegion mFileRegion;
 
   // 結合する式の先頭
-  const AstExpr* mExprTop;
+  const PtExpr* mExprTop;
 
 };
 

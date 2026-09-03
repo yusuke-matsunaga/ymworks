@@ -78,7 +78,7 @@ public:
   /// 対応する要素がない場合には空リストを返す．
   AstAttrInstVec
   ast_attr_list(
-    const AstBase* ast_obj ///< [in] 対象の構文木要素
+    const AstBase& ast_obj ///< [in] 対象の構文木要素
   ) const;
 
 

@@ -1,5 +1,5 @@
-#ifndef PTUDP_H
-#define PTUDP_H
+#ifndef PARSER_PTUDP_H
+#define PARSER_PTUDP_H
 
 /// @file PtUdp.h
 /// @brief PtUdp のヘッダファイル
@@ -8,37 +8,69 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/vl/AstUdp.h"
-#include "parser/PtList.h"
+//#include "ym/vl/AstUdp.h"
+#include "parser/PtBase.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
+
+class PtPort;
+class PtIOHead;
+class PtExpr;
+class PtUdpEntry;
 
 //////////////////////////////////////////////////////////////////////
 /// @class PtUdp PtUdp.h "parser/PtUdp.h"
 /// @brief AstUdp の実装クラス
 //////////////////////////////////////////////////////////////////////
 class PtUdp :
-  public AstUdp
+  public PtBase
 {
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstUdp の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素を返す．
-  const AstUdp*
-  link() const override;
-
-
 public:
   //////////////////////////////////////////////////////////////////////
   // PtUdp の関数
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief ファイル位置の取得
+  /// @return ファイル位置
+  virtual
+  FileRegion
+  file_region() const = 0;
+
+  /// @brief 名前の取得
+  /// @return 名前
+  virtual
+  const char*
+  name() const = 0;
+
+  /// @brief primitive type を返す．
+  virtual
+  VpiPrimType
+  prim_type() const = 0;
+
+  /// @brief ポートのリストの先頭を取り出す．
+  virtual
+  const PtPort*
+  port_top() const = 0;
+
+  /// @brief 入出力宣言ヘッダのリストの先頭取得
+  virtual
+  const PtIOHead*
+  iohead_top() const = 0;
+
+  /// @brief 初期値を取出す．
+  virtual
+  const PtExpr*
+  init_value() const = 0;
+
+  /// @brief テーブルのリストの先頭を返す．
+  virtual
+  const PtUdpEntry*
+  table_top() const = 0;
+
   /// @brief 次の要素を返す．
   PtUdp*
-  _link() const
+  link() const
   {
     return mLink;
   }
@@ -63,112 +95,6 @@ private:
 
 };
 
-
-//////////////////////////////////////////////////////////////////////
-/// @class PtUdpEntry PtUdp.h "parser/PtUdp.h"
-/// @brief AstUdpEntry の実装クラス
-//////////////////////////////////////////////////////////////////////
-class PtUdpEntry :
-  public AstUdpEntry
-{
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstUdpEntry の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素を返す．
-  const AstUdpEntry*
-  link() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtUdpEntry の関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素を返す．
-  PtUdpEntry*
-  _link() const
-  {
-    return mLink;
-  }
-
-  /// @brief link を設定する．
-  void
-  set_link(
-    PtUdpEntry* link
-  )
-  {
-    mLink = link;
-  }
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 次の要素
-  PtUdpEntry* mLink{nullptr};
-
-};
-
-/// @brief PtUdpEntry のリスト
-using PtUdpEntryList = PtList<PtUdpEntry>;
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class PtUdpValue PtUdp.h "parser/PtUdp.h"
-/// @brief AstUdpValue の実装クラス
-//////////////////////////////////////////////////////////////////////
-class PtUdpValue :
-  public AstUdpValue
-{
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstUdpValue の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素を返す．
-  const AstUdpValue*
-  link() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtUdpValue の関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素を返す．
-  PtUdpValue*
-  _link() const
-  {
-    return mLink;
-  }
-
-  /// @brief link を設定する．
-  void
-  set_link(
-    PtUdpValue* link
-  )
-  {
-    mLink = link;
-  }
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 次の要素
-  PtUdpValue* mLink{nullptr};
-
-};
-
-/// @brief PtUdpValue のリスト
-using PtUdpValueList = PtList<PtUdpValue>;
-
 END_NAMESPACE_YM_VERILOG
 
-#endif // PTUDP_H
+#endif // PARSER_PTUDP_H

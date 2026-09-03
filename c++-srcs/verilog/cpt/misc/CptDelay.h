@@ -8,7 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtMisc.h"
+#include "parser/PtDelay.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -24,7 +24,7 @@ public:
   /// @brief コンストラクタ
   CptDelay1(
     const FileRegion& file_region,
-    const AstExpr* value1
+    const PtExpr* value1
   ) : mFileRegion{file_region},
       mValue{value1}
   {
@@ -44,15 +44,15 @@ public:
   file_region() const override;
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value0() const override;
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value1() const override;
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value2() const override;
 
 
@@ -65,7 +65,7 @@ private:
   FileRegion mFileRegion;
 
   // 値
-  const AstExpr* mValue;
+  const PtExpr* mValue;
 
 };
 
@@ -81,8 +81,8 @@ public:
   /// @brief コンストラクタ
   CptDelay2(
     const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2
+    const PtExpr* value1,
+    const PtExpr* value2
   ) : CptDelay1(file_region, value1),
       mValue{value2}
   {
@@ -98,7 +98,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value1() const override;
 
 
@@ -108,7 +108,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 値
-  const AstExpr* mValue;
+  const PtExpr* mValue;
 
 };
 
@@ -124,9 +124,9 @@ public:
   /// @brief コンストラクタ
   CptDelay3(
     const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2,
-    const AstExpr* value3
+    const PtExpr* value1,
+    const PtExpr* value2,
+    const PtExpr* value3
   ) : CptDelay2(file_region, value1, value2),
       mValue{value3}
   {
@@ -142,7 +142,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value2() const override;
 
 
@@ -152,7 +152,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 値
-  const AstExpr* mValue;
+  const PtExpr* mValue;
 
 };
 

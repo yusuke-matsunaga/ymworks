@@ -12,10 +12,6 @@
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbExpr.h"
 
-#include "ym/vl/AstDecl.h"
-#include "ym/vl/AstItem.h"
-#include "ym/vl/AstMisc.h"
-
 
 BEGIN_NAMESPACE_YM_VERILOG
 
@@ -27,7 +23,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlDeclArray*
 EiFactory::new_DeclArray(
   ElbDeclHead* head,
-  const AstNamedBase* ast_item,
+  const AstNamedBase& ast_item,
   const std::vector<ElbRangeSrc>& range_src
 )
 {
@@ -48,7 +44,7 @@ EiFactory::new_DeclArray(
 // @brief コンストラクタ
 EiDeclArray::EiDeclArray(
   ElbDeclHead* head,
-  const AstNamedBase* ast_item,
+  const AstNamedBase& ast_item,
   const std::vector<EiRange>& range_array
 ) : mHead{head},
     mAstItem{ast_item},
@@ -82,7 +78,7 @@ EiDeclArray::type() const
 FileRegion
 EiDeclArray::file_region() const
 {
-  return mAstItem->file_region();
+  return mAstItem.file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -96,7 +92,7 @@ EiDeclArray::parent_scope() const
 std::string
 EiDeclArray::name() const
 {
-  return mAstItem->name();
+  return mAstItem.name();
 }
 
 // @brief 値の型を返す．

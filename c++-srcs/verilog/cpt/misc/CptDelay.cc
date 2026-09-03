@@ -25,21 +25,21 @@ CptDelay1::file_region() const
 }
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptDelay1::value0() const
 {
   return mValue;
 }
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptDelay1::value1() const
 {
   return nullptr;
 }
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptDelay1::value2() const
 {
   return nullptr;
@@ -51,7 +51,7 @@ CptDelay1::value2() const
 //////////////////////////////////////////////////////////////////////
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptDelay2::value1() const
 {
   return mValue;
@@ -63,7 +63,7 @@ CptDelay2::value1() const
 //////////////////////////////////////////////////////////////////////
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptDelay3::value2() const
 {
   return mValue;
@@ -78,7 +78,7 @@ CptDelay3::value2() const
 PtDelay*
 PtFactory::new_Delay(
   const FileRegion& file_region,
-  const AstExpr* value1
+  const PtExpr* value1
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDelay1));
@@ -89,8 +89,8 @@ PtFactory::new_Delay(
 PtDelay*
 PtFactory::new_Delay(
   const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2
+  const PtExpr* value1,
+  const PtExpr* value2
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDelay2));
@@ -101,9 +101,9 @@ PtFactory::new_Delay(
 PtDelay*
 PtFactory::new_Delay(
   const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2,
-  const AstExpr* value3
+  const PtExpr* value1,
+  const PtExpr* value2,
+  const PtExpr* value3
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDelay3));

@@ -16,6 +16,7 @@
 // IEEE Std 1364-2001 26.6.36 Case
 
 #include "EiStmt.h"
+#include "ym/vl/AstCaseItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -34,7 +35,7 @@ public:
   EiLoopStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* cond,       ///< [in] 条件式
     const VlStmt* stmt        ///< [in] 本体のステートメント
   );
@@ -85,7 +86,7 @@ public:
   EiWhileStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* cond,       ///< [in] 条件式
     const VlStmt* stmt        ///< [in] 本体のステートメント
   );
@@ -120,7 +121,7 @@ public:
   EiRepeatStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* cond,	      ///< [in] 条件式
     const VlStmt* stmt	      ///< [in] 本体のステートメント
   );
@@ -155,7 +156,7 @@ public:
   EiWaitStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* cond,	      ///< [in] 条件式
     const VlStmt* stmt	      ///< [in] 本体のステートメント
   );
@@ -190,7 +191,7 @@ public:
   EiForStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* cond,	      ///< [in] 条件式
     const VlStmt* init_stmt,  ///< [in] 初期化式
     const VlStmt* inc_stmt,   ///< [in] 増加式
@@ -253,7 +254,7 @@ public:
   EiForeverStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlStmt* stmt	      ///< [in] 本体のステートメント
   );
 
@@ -306,7 +307,7 @@ public:
   EiIfStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* cond,	      ///< [in] 条件式
     const VlStmt* stmt	      ///< [in] 本体のステートメント
   );
@@ -367,7 +368,7 @@ public:
   EiIfElseStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* cond,	      ///< [in] 条件式
     const VlStmt* stmt,	      ///< [in] 本体のステートメント
     const VlStmt* else_stmt   ///< [in] else節のステートメント
@@ -420,7 +421,7 @@ public:
 
   /// @brief コンストラクタ
   EiCaseItem(
-    const AstCaseItem* ast_item,               ///< [in] パース木の caseitem 要素
+    const AstCaseItem& ast_item,             ///< [in] パース木の caseitem 要素
     const std::vector<ElbExpr*>& label_list, ///< [in] ラベルを表す式のリスト
     const VlStmt* body                       ///< [in] 本体のステートメント
   );
@@ -473,7 +474,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の caseitem 定義
-  const AstCaseItem* mAstCaseItem;
+  AstCaseItem mAstCaseItem;
 
   // ラベルのリスト
   std::vector<ElbExpr*> mExprList;
@@ -496,10 +497,10 @@ public:
 
   /// @brief コンストラクタ
   EiCaseStmt(
-    const VlScope* parent,                          ///< [in] 親のスコープ
-    const VlProcess* process,                       ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,                          ///< [in] パース木のステートメント定義
-    const VlExpr* expr,                             ///< [in] 条件式
+    const VlScope* parent,        ///< [in] 親のスコープ
+    const VlProcess* process,     ///< [in] 親のプロセス (or nullptr)
+    const AstStmt& ast_stmt,      ///< [in] パース木のステートメント定義
+    const VlExpr* expr,           ///< [in] 条件式
     const std::vector<const VlCaseItem*>& item_list ///< [in] caseitem のリスト
   );
 

@@ -10,18 +10,33 @@
 
 #include "ym/vl/Ast.h"
 #include "ym/PathList.h"
-#include "parser/PtFactory.h"
-#include "parser/PtModule.h"
-#include "parser/PtUdp.h"
-#include "parser/PtPort.h"
-#include "parser/PtDecl.h"
+#include "parser/AstMgr.h"
+#include "parser/PtAttrInst.h"
+#include "parser/PtAttrSpec.h"
+#include "parser/PtCaseItem.h"
+#include "parser/PtConnection.h"
+#include "parser/PtContAssign.h"
+#include "parser/PtControl.h"
+#include "parser/PtDeclHead.h"
+#include "parser/PtDeclItem.h"
+#include "parser/PtDefParam.h"
 #include "parser/PtExpr.h"
+#include "parser/PtFactory.h"
+#include "parser/PtGenCaseItem.h"
 #include "parser/PtItem.h"
+#include "parser/PtInst.h"
+#include "parser/PtIOHead.h"
+#include "parser/PtIOItem.h"
+#include "parser/PtModule.h"
 #include "parser/PtStmt.h"
-#include "parser/PtMisc.h"
 #include "parser/PtHierName.h"
 #include "parser/PtHeadList.h"
-#include "parser/AstMgr.h"
+#include "parser/PtRange.h"
+#include "parser/PtPart.h"
+#include "parser/PtPort.h"
+#include "parser/PtUdp.h"
+#include "parser/PtUdpEntry.h"
+#include "parser/PtUdpValue.h"
 #include "ym/MsgMgr.h"
 
 
@@ -98,11 +113,11 @@ public:
     const char* name,              ///< [in] 名前
     const char* init_name,         ///< [in] 初期値の名前
     const FileRegion& init_loc,    ///< [in] 初期値の位置
-    PtExpr* init_value,     ///< [in] 初期値のパース木
-    PtPort* port_top,   ///< [in] ポートの先頭
-    PtIOHead* io_top,   ///< [in] IO宣言の先頭
-    PtDeclHead* decl_top, ///< [in] Reg 宣言の先頭
-    PtUdpEntry* entry_top ///< [in] テーブルエントリの先頭
+    const PtExpr* init_value,      ///< [in] 初期値のパース木
+    const PtPort* port_top,        ///< [in] ポートの先頭
+    const PtIOHead* io_top,        ///< [in] IO宣言の先頭
+    const PtDeclHead* decl_top,    ///< [in] Reg 宣言の先頭
+    const PtUdpEntry* entry_top    ///< [in] テーブルエントリの先頭
   );
 
   /// @brief Verilog2001 タイプのUDP を生成する．
@@ -112,9 +127,9 @@ public:
     const char* name,		   ///< [in] 名前
     const char* init_name,	   ///< [in] 初期値の名前
     const FileRegion& init_loc,	   ///< [in] 初期値の位置
-    PtExpr* init_value,	   ///< [in] 初期値のパース木
-    PtIOHead* io_top,              ///< [in] IO宣言の先頭
-    PtUdpEntry* entry_top          ///< [in] テーブルエントリの先頭
+    const PtExpr* init_value,	   ///< [in] 初期値のパース木
+    const PtIOHead* io_top,        ///< [in] IO宣言の先頭
+    const PtUdpEntry* entry_top    ///< [in] テーブルエントリの先頭
   );
 
 
@@ -127,12 +142,12 @@ private:
     const char* udp_name,
     const char* init_name,
     const FileRegion& init_loc,
-    const AstExpr* init_value,
+    const PtExpr* init_value,
     bool is_seq,
-    const AstIOItem* out_item,
-    PtPort* port_top,
-    PtIOHead* iohead_top,
-    PtUdpEntry* entry_top
+    const PtIOItem* out_item,
+    const PtPort* port_top,
+    const PtIOHead* iohead_top,
+    const PtUdpEntry* entry_top
   );
 
 
@@ -181,13 +196,13 @@ public:
   /// @brief 入出力宣言中の重複チェックを行う．
   bool
   check_PortArray(
-    const AstIOHeadList& iohead_list
+    const PtIOHead* iohead_top
   );
 
   /// @brief 入出力宣言からポートリストを作る．
   PtPortList
   new_PortArray(
-    const AstIOHeadList& iohead_list
+    const PtIOHead* iohead_top
   );
 
 
@@ -208,8 +223,8 @@ public:
   new_Opr(
     const FileRegion& fr,     ///< [in] ファイル位置の情報
     VpiOpType type,           ///< [in] 演算の種類
-    const AstExpr* opr,       ///< [in] オペランド
-    const AstAttrInst* ai_top ///< [in] 属性リスト
+    const PtExpr* opr,       ///< [in] オペランド
+    const PtAttrInst* ai_top ///< [in] 属性リスト
   )
   {
     auto expr = mFactory.new_Opr(fr, type, opr);
@@ -222,9 +237,9 @@ public:
   PtExpr*
   new_Opr(
     VpiOpType type,           ///< [in] 演算の種類
-    const AstExpr* opr1,      ///< [in] オペランド1
-    const AstExpr* opr2,      ///< [in] オペランド2
-    const AstAttrInst* ai_top ///< [in] 属性リスト
+    const PtExpr* opr1,      ///< [in] オペランド1
+    const PtExpr* opr2,      ///< [in] オペランド2
+    const PtAttrInst* ai_top ///< [in] 属性リスト
   )
   {
     auto expr = mFactory.new_Opr(type, opr1, opr2);
@@ -321,19 +336,19 @@ public:
   /// @brief UDP定義を登録する．
   void
   reg_udp(
-    const AstUdp* udp
+    const PtUdp* udp
   )
   {
-    mAstMgr.reg_udp(udp);
+    mAstMgr.reg_udp(AstUdp(udp));
   }
 
   /// @brief モジュール定義を登録する．
   void
   reg_module(
-    const AstModule* module
+    const PtModule* module
   )
   {
-    mAstMgr.reg_module(module);
+    mAstMgr.reg_module(AstModule(module));
   }
 
   /// @brief 使用されているモジュール名を登録する．
@@ -349,12 +364,13 @@ public:
   /// @brief attribute instance を登録する．
   void
   reg_attrinst(
-    const AstBase* obj,
-    const AstAttrInst* ai_top,
+    const PtBase* obj,
+    const PtAttrInst* ai_top,
     bool def = false
   )
   {
-    mAstMgr.reg_attrinst(obj, ai_top, def);
+    auto ptr = reinterpret_cast<PtrIntType>(obj);
+    mAstMgr.reg_attrinst(ptr, AstAttrInstList(AstAttrInst(ai_top)), def);
   }
 
 
@@ -374,13 +390,13 @@ public:
   /// @brief 関数内で使えるステートメントかどうかのチェック
   bool
   check_function_statement(
-    const AstStmt* stmt
+    const PtStmt* stmt
   );
 
   /// @briefdefault ラベルが2つ以上含まれていないかどうかのチェック
   bool
   check_default_label(
-    const AstCaseItemList& caseitem_list
+    const PtCaseItem* caseitem_top
   );
 
   /// @brief GenFor 文のチェックを行う．

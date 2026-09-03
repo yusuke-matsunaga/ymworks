@@ -8,7 +8,7 @@
 
 #include "CptStmt.h"
 #include "alloc/Alloc.h"
-#include "parser/PtDecl.h"
+#include "parser/PtDeclHead.h"
 #include "parser/PtFactory.h"
 #include "parser/PtHierName.h"
 
@@ -26,46 +26,11 @@ CptStmt::file_region() const
   return mFileRegion;
 }
 
-// @brief ステートメントの種類を表す文字列の取得
-const char*
-CptStmt::stmt_name() const
-{
-  switch ( type() ) {
-  case Disable:       return "disable statement";
-  case Enable:        return "task enable statement";
-  case SysEnable:     return "system task enable statement";
-  case DelayControl:  return "delay control statement";
-  case EventControl:  return "event control statement";
-  case Assign:        return "assignment";
-  case NbAssign:      return "nonblocking assignment";
-  case Event:         return "event statement";
-  case Null:          return "null statement";
-  case If:            return "if statement";
-  case Case:          return "case statement";
-  case CaseX:         return "casex statement";
-  case CaseZ:         return "casez statement";
-  case Wait:          return "wait statement";
-  case Forever:       return "forever statement";
-  case Repeat:        return "repeat statement";
-  case While:         return "while statement";
-  case For:           return "for-loop statement";
-  case PcAssign:      return "procedural continuous assignment";
-  case Deassign:      return "deassign statement";
-  case Force:         return "force statement";
-  case Release:       return "release statement";
-  case NamedParBlock:
-  case ParBlock:      return "parallel block";
-  case NamedSeqBlock:
-  case SeqBlock:      return "sequential block";
-  }
-  return "";
-}
-
 // @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptStmt::namebranch_list() const
+const PtNameBranch*
+CptStmt::namebranch_top() const
 {
-  return AstNameBranchList(nullptr);
+  return nullptr;
 }
 
 // @brief 名前の取得
@@ -76,77 +41,77 @@ CptStmt::name() const
 }
 
 // @brief 引数のリストの取得
-AstExprList
-CptStmt::arg_list() const
+const PtExpr*
+CptStmt::arg_top() const
 {
-  throw std::logic_error{"arg_list(): type mismatch"};
+  throw std::logic_error{"arg_top(): type mismatch"};
 }
 
 // @brief コントロールの取得
-const AstControl*
+const PtControl*
 CptStmt::control() const
 {
   throw std::logic_error{"control(): type miscmatch"};
 }
 
 // @brief 本体のステートメントの取得
-const AstStmt*
+const PtStmt*
 CptStmt::body() const
 {
   throw std::logic_error{"body(): type mismatch"};
 }
 
 // @brief 式の取得
-const AstExpr*
+const PtExpr*
 CptStmt::expr() const
 {
   throw std::logic_error{"expr(): type mismatch"};
 }
 
 // @brief 左辺式の取得
-const AstExpr*
+const PtExpr*
 CptStmt::lhs() const
 {
   throw std::logic_error{"lhs(): type mismatch"};
 }
 
 // @brief 右辺式の取得
-const AstExpr*
+const PtExpr*
 CptStmt::rhs() const
 {
   throw std::logic_error{"rhs(): type mismatch"};
 }
 
 // @brief イベントプライマリの取得
-const AstExpr*
+const PtExpr*
 CptStmt::primary() const
 {
   throw std::logic_error{"primary(): type mismatch"};
 }
 
 // @brief 条件が成り立たなかったとき実行されるステートメントの取得
-const AstStmt*
+const PtStmt*
 CptStmt::else_body() const
 {
   throw std::logic_error{"else_body(): type mismatch"};
 }
 
 // @brief case item のリストの取得
-AstCaseItemList
-CptStmt::caseitem_list() const
+const PtCaseItem*
+CptStmt::caseitem_top() const
 {
-  throw std::logic_error{"caseitem_list(): type mismatch"};
+  throw std::logic_error{"caseitem_top(): type mismatch"};
 }
 
 // @brief 初期化代入文の取得
-const AstStmt*
+const PtStmt*
 CptStmt::init_stmt() const
 {
   throw std::logic_error{"init_stmt(): type mismatch"};
 }
 
 // @brief 繰り返し代入文の取得
-const AstStmt*
+const PtStmt*
 CptStmt::next_stmt() const
 {
   throw std::logic_error{"next_stmt(): type mismatch"};
@@ -154,17 +119,17 @@ CptStmt::next_stmt() const
 }
 
 // @brief 宣言ヘッダのリストの取得
-AstDeclHeadList
-CptStmt::declhead_list() const
+const PtDeclHead*
+CptStmt::declhead_top() const
 {
-  throw std::logic_error{"declhead_list(): type mismatch"};
+  throw std::logic_error{"declhead_top(): type mismatch"};
 }
 
 // @brief 子供のステートメントのリストの取得
-AstStmtList
-CptStmt::stmt_list() const
+const PtStmt*
+CptStmt::stmt_top() const
 {
-  throw std::logic_error{"stmt_list(): type mismatch"};
+  throw std::logic_error{"stmt_top(): type mismatch"};
 }
 
 
@@ -176,7 +141,7 @@ CptStmt::stmt_list() const
 AstStmt::Type
 CptStmt_Disable::type() const
 {
-  return Disable;
+  return AstStmt::Disable;
 }
 
 // 末尾の名前を返す．
@@ -187,10 +152,10 @@ CptStmt_Disable::name() const
 }
 
 // @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptStmt_Disable::namebranch_list() const
+const PtNameBranch*
+CptStmt_Disable::namebranch_top() const
 {
-  return AstNameBranchList();
+  return nullptr;
 }
 
 
@@ -199,10 +164,10 @@ CptStmt_Disable::namebranch_list() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptStmt_DisableH::namebranch_list() const
+const PtNameBranch*
+CptStmt_DisableH::namebranch_top() const
 {
-  return AstNameBranchList(mNbTop);
+  return mNbTop;
 }
 
 
@@ -218,17 +183,17 @@ CptStmt_EnableBase::name() const
 }
 
 // @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptStmt_EnableBase::namebranch_list() const
+const PtNameBranch*
+CptStmt_EnableBase::namebranch_top() const
 {
-  return AstNameBranchList();
+  return nullptr;
 }
 
 // @brief 引数のリストの取得
-AstExprList
-CptStmt_EnableBase::arg_list() const
+const PtExpr*
+CptStmt_EnableBase::arg_top() const
 {
-  return AstExprList(mArgTop);
+  return mArgTop;
 }
 
 
@@ -240,7 +205,7 @@ CptStmt_EnableBase::arg_list() const
 AstStmt::Type
 CptStmt_Enable::type() const
 {
-  return Enable;
+  return AstStmt::Enable;
 }
 
 
@@ -249,10 +214,10 @@ CptStmt_Enable::type() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptStmt_EnableH::namebranch_list() const
+const PtNameBranch*
+CptStmt_EnableH::namebranch_top() const
 {
-  return AstNameBranchList(mNbTop);
+  return mNbTop;
 }
 
 
@@ -264,7 +229,7 @@ CptStmt_EnableH::namebranch_list() const
 AstStmt::Type
 CptStmt_SysEnable::type() const
 {
-  return SysEnable;
+  return AstStmt::SysEnable;
 }
 
 
@@ -276,11 +241,11 @@ CptStmt_SysEnable::type() const
 AstStmt::Type
 CptStmt_Event::type() const
 {
-  return Event;
+  return AstStmt::Event;
 }
 
 // イベントプライマリを返す．
-const AstExpr*
+const PtExpr*
 CptStmt_Event::primary() const
 {
   return mPrimary;
@@ -295,7 +260,7 @@ CptStmt_Event::primary() const
 AstStmt::Type
 CptStmt_Null::type() const
 {
-  return Null;
+  return AstStmt::Null;
 }
 
 
@@ -329,7 +294,7 @@ PtStmt*
 PtFactory::new_Enable(
   const FileRegion& file_region,
   const char* name,
-  PtExpr* arg_top
+  const PtExpr* arg_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Enable));
@@ -340,7 +305,7 @@ PtStmt*
 PtFactory::new_Enable(
   const FileRegion& file_region,
   const PtHierName& hname,
-  PtExpr* arg_top
+  const PtExpr* arg_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_EnableH));
@@ -353,7 +318,7 @@ PtStmt*
 PtFactory::new_SysEnable(
   const FileRegion& file_region,
   const char* task_name,
-  PtExpr* arg_top
+  const PtExpr* arg_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_SysEnable));
@@ -364,7 +329,7 @@ PtFactory::new_SysEnable(
 PtStmt*
 PtFactory::new_EventStmt(
   const FileRegion& file_region,
-  const AstExpr* event
+  const PtExpr* event
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Event));

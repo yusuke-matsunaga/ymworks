@@ -24,8 +24,8 @@ public:
 
   /// @brief コンストラクタ
   CptOpr_LogAnd(
-    const AstExpr* opr1,
-    const AstExpr* opr2
+    const PtExpr* opr1,
+    const PtExpr* opr2
   ) : CptOpr2(opr1, opr2)
   {
   }
@@ -36,7 +36,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 演算子のトークン番号を得る．

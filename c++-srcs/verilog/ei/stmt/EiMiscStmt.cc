@@ -30,7 +30,7 @@ const VlStmt*
 EiFactory::new_EventStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   ElbExpr* named_event
 )
 {
@@ -45,7 +45,7 @@ const VlStmt*
 EiFactory::new_NullStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   auto stmt = new EiNullStmt{parent, process, ast_stmt};
@@ -57,7 +57,7 @@ const VlStmt*
 EiFactory::new_TaskCall(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlTaskFunc* task,
   const std::vector<ElbExpr*>& arg_array
 )
@@ -72,7 +72,7 @@ const VlStmt*
 EiFactory::new_SysTaskCall(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlUserSystf* user_systf,
   const std::vector<ElbExpr*>& arg_array
 )
@@ -87,7 +87,7 @@ const VlStmt*
 EiFactory::new_DisableStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlScope* target
 )
 {
@@ -101,7 +101,7 @@ const VlStmt*
 EiFactory::new_CtrlStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlControl* control,
   const VlStmt* stmt
 )
@@ -120,7 +120,7 @@ EiFactory::new_CtrlStmt(
 EiEventStmt::EiEventStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   ElbExpr* named_event
 ) : EiStmtBase{parent, process, ast_stmt},
     mEvent{named_event}
@@ -155,7 +155,7 @@ EiEventStmt::named_event() const
 EiNullStmt::EiNullStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 ) : EiStmtBase{parent, process, ast_stmt}
 {
 }
@@ -181,7 +181,7 @@ EiNullStmt::type() const
 EiTcBase::EiTcBase(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const std::vector<ElbExpr*>& arg_array
 ) : EiStmtBase{parent, process, ast_stmt},
     mArgumentList{arg_array}
@@ -228,7 +228,7 @@ EiTcBase::argument_list() const
 EiTaskCall::EiTaskCall(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlTaskFunc* task,
   const std::vector<ElbExpr*>& arg_array
 ) : EiTcBase{parent, process, ast_stmt, arg_array},
@@ -264,7 +264,7 @@ EiTaskCall::task() const
 EiSysTaskCall::EiSysTaskCall(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlUserSystf* user_systf,
   const std::vector<ElbExpr*>& arg_array
 ) : EiTcBase{parent, process, ast_stmt, arg_array},
@@ -300,7 +300,7 @@ EiSysTaskCall::user_systf() const
 EiDisableStmt::EiDisableStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlScope* target
 ) : EiStmtBase{parent, process, ast_stmt},
     mExpr{target}
@@ -335,7 +335,7 @@ EiDisableStmt::target_scope() const
 EiCtrlStmt::EiCtrlStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlControl* control,
   const VlStmt* stmt
 ) : EiStmtBase{parent, process, ast_stmt},

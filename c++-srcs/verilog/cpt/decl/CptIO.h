@@ -8,7 +8,8 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtDecl.h"
+#include "parser/PtIOHead.h"
+#include "parser/PtIOItem.h"
 #include "ym/FileRegion.h"
 
 
@@ -30,7 +31,7 @@ protected:
     VpiNetType net_type,           ///< [in] 補助的なネット型
     VpiVarType var_type,           ///< [in] 補助的な変数型
     bool sign,                     ///< [in] 符号つきの時 true にするフラグ
-    PtIOItem* item_top = nullptr   ///< [in] 要素の先頭
+    const PtIOItem* item_top       ///< [in] 要素の先頭
   ) : mFileRegion{file_region},
       mItemTop{item_top}
   {
@@ -80,22 +81,12 @@ public:
   /// @brief 範囲の取得
   /// @retval 範囲
   /// @retval nullptr 範囲を持たないとき
-  const AstRange*
+  const PtRange*
   range() const override;
 
-  /// @brief 要素のリストの取得
-  AstIOItemList
-  item_list() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtIOHead の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 先頭の要素を返す．
-  PtIOItem*
-  _item_top() const override;
+  /// @brief 要素のリストの先頭の取得
+  const PtIOItem*
+  item_top() const override;
 
 
 private:
@@ -110,7 +101,7 @@ private:
   std::uint32_t mAttr;
 
   // 要素の先頭
-  PtIOItem* mItemTop{nullptr};
+  const PtIOItem* mItemTop{nullptr};
 
 };
 
@@ -130,7 +121,7 @@ public:
     VpiAuxType aux_type,	   ///< [in] 補助的な型
     VpiNetType net_type,	   ///< [in] 補助的なネット型
     VpiVarType var_type, 	   ///< [in] 補助的な変数型
-    PtIOItem* item_top = nullptr   ///< [in] 要素の先頭
+    const PtIOItem* item_top       ///< [in] 要素の先頭
   ) : CptIOHBase(file_region, dir, aux_type,
 		 net_type, var_type, false, item_top)
   {
@@ -157,8 +148,8 @@ public:
     VpiAuxType aux_type,	   ///< [in] 補助的な型
     VpiNetType net_type,	   ///< [in] 補助的なネット型
     bool sign,                     ///< [in] 符号つきの時 true にするフラグ
-    const AstRange* range,         ///< [in] パース木の範囲定義
-    PtIOItem* item_top = nullptr   ///< [in] 要素の先頭
+    const PtRange* range,          ///< [in] パース木の範囲定義
+    const PtIOItem* item_top       ///< [in] 要素の先頭
   ) : CptIOHBase(file_region, dir, aux_type,
 		 net_type, VpiVarType::None, sign, item_top),
       mRange{range}
@@ -175,7 +166,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 範囲の取得
-  const AstRange*
+  const PtRange*
   range() const override;
 
 
@@ -185,7 +176,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const AstRange* mRange;
+  const PtRange* mRange;
 
 };
 
@@ -227,7 +218,7 @@ public:
   /// @brief 初期値の取得
   /// @retval 初期値
   /// @retval nullptr 初期値を持たないとき
-  const AstExpr*
+  const PtExpr*
   init_value() const override;
 
 
@@ -257,7 +248,7 @@ public:
   CptIOItemI(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name,              ///< [in] 名前
-    const AstExpr* init_value      ///< [in] 初期値
+    const PtExpr* init_value      ///< [in] 初期値
   ) : CptIOItem(file_region, name),
       mInitValue{init_value}
   {
@@ -280,7 +271,7 @@ public:
   file_region() const override;
 
   /// @brief 初期値の取得
-  const AstExpr*
+  const PtExpr*
   init_value() const override;
 
 
@@ -290,7 +281,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 初期値
-  const AstExpr* mInitValue;
+  const PtExpr* mInitValue;
 
 };
 

@@ -9,6 +9,8 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
+#include "ym/vl/AstModule.h"
+#include "ym/vl/AstUdp.h"
 #include "alloc/Alloc.h"
 #include "PtAttrInfo.h"
 
@@ -40,12 +42,12 @@ public:
 
   /// @brief 登録されているモジュールのリストを返す．
   /// @return 登録されているモジュールのリスト
-  const std::vector<const AstModule*>&
+  const std::vector<AstModule>&
   module_list() const;
 
   /// @brief 登録されている UDP のリストを返す．
   /// @return 登録されている UDP のリスト
-  const std::vector<const AstUdp*>&
+  const std::vector<AstUdp>&
   udp_list() const;
 
   /// @brief インスタンス記述で用いられている名前かどうか調べる．
@@ -57,10 +59,10 @@ public:
 
   /// @brief 関数を探す．
   ///
-  /// なければ nullptr を返す．
-  const AstItem*
+  /// なければ無効な値を返す．
+  AstItem
   find_function(
-    const AstModule* module, ///< [in] 親のモジュール
+    const AstModule& module, ///< [in] 親のモジュール
     const std::string& name ///< [in] 関数名
   ) const;
 
@@ -70,12 +72,16 @@ public:
   /// 空の場合もある．
   AstAttrInstVec
   find_attr_list(
-    const AstBase* ast_obj ///< [in] 対象の構文木の要素
+    const AstBase& ast_obj ///< [in] 対象の構文木の要素
   ) const;
 
   /// @brief 全ての属性リストのリストを返す．
   std::vector<PtAttrInfo>
   all_attr_list() const;
+
+  /// @brief 内容を JsonValue に変換する．
+  JsonValue
+  json_obj() const;
 
 
 public:
@@ -92,7 +98,7 @@ public:
   /// 内部で reg_ast() を呼んでいる．
   void
   reg_udp(
-    const AstUdp* udp
+    const AstUdp& udp
   );
 
   /// @brief モジュール定義を追加する．
@@ -100,7 +106,7 @@ public:
   /// 内部で reg_ast() を呼んでいる．
   void
   reg_module(
-    const AstModule* module
+    const AstModule& module
   );
 
   /// @brief インスタンス定義名を追加する．
@@ -112,8 +118,8 @@ public:
   /// @brief attribute instance を登録する．
   void
   reg_attrinst(
-    const AstBase* ast_obj,
-    const AstAttrInst* ai_top,
+    PtrIntType ptr,
+    const AstAttrInstList& ai_list,
     bool def = false
   );
 
@@ -146,10 +152,10 @@ private:
   std::unique_ptr<Alloc> mAlloc;
 
   // UDP 定義のリスト
-  std::vector<const AstUdp*> mUdpList;
+  std::vector<AstUdp> mUdpList;
 
   // モジュール定義のリスト
-  std::vector<const AstModule*> mModuleList;
+  std::vector<AstModule> mModuleList;
 
   // インスタンス記述で用いられている名前
   // たぶんモジュール名か UDP名のはず
@@ -166,8 +172,8 @@ private:
       const PtAttrInfo& attr_info
     ) const
     {
-      auto tmp = reinterpret_cast<SizeType>(attr_info.obj());
-      return (tmp * tmp) >> 16;
+      auto key = attr_info.key();
+      return (key * key) >> 16;
     }
   };
 
@@ -180,7 +186,7 @@ private:
       const PtAttrInfo& attr_info2
     ) const
     {
-      return attr_info1.obj() == attr_info2.obj();
+      return attr_info1.key() == attr_info2.key();
     }
   };
 

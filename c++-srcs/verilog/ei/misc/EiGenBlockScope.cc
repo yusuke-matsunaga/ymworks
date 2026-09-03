@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlScope*
 EiFactory::new_GenBlock(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   return new EiGenBlockScope(parent, ast_item);
@@ -31,7 +31,7 @@ EiFactory::new_GenBlock(
 const VlScope*
 EiFactory::new_GfBlock(
   const VlScope* parent,
-  const AstItem* ast_item,
+  const AstItem& ast_item,
   int gvi
 )
 {
@@ -46,7 +46,7 @@ EiFactory::new_GfBlock(
 // @brief コンストラクタ
 EiGenBlockScope::EiGenBlockScope(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 ) : EiScope(parent),
     mAstItem{ast_item}
 {
@@ -61,14 +61,14 @@ EiGenBlockScope::~EiGenBlockScope()
 FileRegion
 EiGenBlockScope::file_region() const
 {
-  return mAstItem->file_region();
+  return mAstItem.file_region();
 }
 
 // @brief 名前の取得
 std::string
 EiGenBlockScope::name() const
 {
-  return mAstItem->name();
+  return mAstItem.name();
 }
 
 
@@ -79,7 +79,7 @@ EiGenBlockScope::name() const
 // @brief コンストラクタ
 EiGfBlockScope::EiGfBlockScope(
   const VlScope* parent,
-  const AstItem* ast_item,
+  const AstItem& ast_item,
   int index
 ) : EiGenBlockScope(parent, ast_item),
     mIndex{index}

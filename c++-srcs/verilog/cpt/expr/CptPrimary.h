@@ -56,38 +56,38 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // クラスの型を返す．
-  Type
+  AstExpr::Type
   type() const override;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPrimary の仮想関数
+  // PtPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // 末尾の名前を取り出す．
   const char*
   name() const override;
 
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  /// @brief 階層ブランチのリストの先頭を返す．
+  const PtNameBranch*
+  namebranch_top() const override;
 
   /// @brief 定数インデックスのチェック
   bool
   is_const_index() const override;
 
-  /// @brief インデックスリストの取得
-  AstExprList
-  index_list() const override;
+  /// @brief インデックスリストの先頭の取得
+  const PtExpr*
+  index_top() const override;
 
   /// @brief 範囲指定を表す構文木を返す．
   /// @return 範囲指定
-  const AstPart*
+  const PtPart*
   part() const override;
 
   // index_list も range も持たないとき true を返す．
@@ -129,7 +129,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // ファイル位置を返す．
@@ -160,7 +160,7 @@ public:
   CptPrimaryI(
     const FileRegion& file_region,
     const char* name,
-    PtExpr* index_top
+    const PtExpr* index_top
   ) : CptPrimary(file_region, name),
       mIndexTop{index_top}
   {
@@ -172,12 +172,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPrimary の仮想関数
+  // PtPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief インデックスリストの取得
-  AstExprList
-  index_list() const override;
+  /// @brief インデックスリストの先頭の取得
+  const PtExpr*
+  index_top() const override;
 
   // index_list も range も持たないとき true を返す．
   bool
@@ -190,7 +190,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // インデックスの先頭
-  const AstExpr* mIndexTop;
+  const PtExpr* mIndexTop;
 
 };
 
@@ -207,7 +207,7 @@ public:
   CptPrimaryCI(
     const FileRegion& file_region,
     const char* name,
-    PtExpr* index_top
+    const PtExpr* index_top
   ) : CptPrimaryI(file_region, name, index_top)
   {
   }
@@ -240,7 +240,7 @@ public:
   CptPrimaryR(
     const FileRegion& file_region,
     const char* name,
-    const AstPart* part
+    const PtPart* part
   ) : CptPrimaryBase(name),
       mFileRegion{file_region},
       mPart{part}
@@ -261,7 +261,7 @@ public:
   file_region() const override;
 
   // 範囲指定の取得
-  const AstPart*
+  const PtPart*
   part() const override;
 
   // index_list も range も持たないとき true を返す．
@@ -278,7 +278,7 @@ private:
   FileRegion mFileRegion;
 
   // 範囲指定
-  const AstPart* mPart;
+  const PtPart* mPart;
 
 };
 
@@ -295,7 +295,7 @@ public:
   CptPrimaryCR(
     const FileRegion& file_region,
     const char* name,
-    const AstPart* part
+    const PtPart* part
   ) : CptPrimaryR(file_region, name, part)
   {
   }
@@ -328,8 +328,8 @@ public:
   CptPrimaryIR(
     const FileRegion& file_region,
     const char* name,
-    PtExpr* index_top,
-    const AstPart* part
+    const PtExpr* index_top,
+    const PtPart* part
   ) : CptPrimaryI(file_region, name, index_top),
       mPart{part}
   {
@@ -345,7 +345,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲指定を取出す．
-  const AstPart*
+  const PtPart*
   part() const override;
 
 
@@ -355,7 +355,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲指定
-  const AstPart* mPart;
+  const PtPart* mPart;
 
 };
 
@@ -391,9 +391,9 @@ public:
   FileRegion
   file_region() const override;
 
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  /// @brief 階層ブランチのリストの先頭を返す．
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -405,7 +405,7 @@ private:
   FileRegion mFileRegion;
 
   // 先頭の階層ブランチ
-  const AstNameBranch* mNbTop;
+  const PtNameBranch* mNbTop;
 
 };
 
@@ -422,7 +422,7 @@ public:
   CptPrimaryHI(
     const FileRegion& file_region,
     const PtHierName& hname,
-    PtExpr* index_top
+    const PtExpr* index_top
   ) : CptPrimaryI(file_region, hname.tail_name, index_top),
       mNbTop{hname.nb_list.top}
   {
@@ -434,12 +434,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPrimary の仮想関数
+  // PtPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  /// @brief 階層ブランチのリストの先頭を返す．
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -448,7 +448,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 先頭の階層ブランチ
-  const AstNameBranch* mNbTop;
+  const PtNameBranch* mNbTop;
 
 };
 
@@ -465,7 +465,7 @@ public:
   CptPrimaryHCI(
     const FileRegion& file_region,
     const PtHierName& hname,
-    PtExpr* index_top
+    const PtExpr* index_top
   ) : CptPrimaryHI(file_region, hname, index_top)
   {
   }
@@ -498,7 +498,7 @@ public:
   CptPrimaryHR(
     const FileRegion& file_region,
     const PtHierName& hname,
-    const AstPart* part
+    const PtPart* part
   ) : CptPrimaryR(file_region, hname.tail_name, part),
       mNbTop{hname.nb_list.top}
   {
@@ -510,12 +510,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPrimary の仮想関数
+  // PtPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  /// @brief 階層ブランチのリストの先頭を返す．
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -524,7 +524,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 先頭の階層ブランチ
-  const AstNameBranch* mNbTop;
+  const PtNameBranch* mNbTop;
 
 };
 
@@ -541,8 +541,8 @@ public:
   CptPrimaryHIR(
     const FileRegion& file_region,
     const PtHierName& hname,
-    PtExpr* index_top,
-    const AstPart* part
+    const PtExpr* index_top,
+    const PtPart* part
   ) : CptPrimaryIR(file_region, hname.tail_name,
 		   index_top, part),
       mNbTop{hname.nb_list.top}
@@ -555,12 +555,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPrimary の仮想関数
+  // PtPrimary の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  /// @brief 階層ブランチのリストの先頭を返す．
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -568,8 +568,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 階層ブランチのリスト
-  const AstNameBranch* mNbTop;
+  // 階層ブランチの先頭
+  const PtNameBranch* mNbTop;
 
 };
 

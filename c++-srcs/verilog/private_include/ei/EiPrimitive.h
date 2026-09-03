@@ -11,6 +11,7 @@
 #include "elaborator/ElbPrimitive.h"
 #include "ei/EiRange.h"
 #include "ym/ClibCell.h"
+#include "ym/vl/AstInst.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -31,8 +32,8 @@ public:
 
   /// @brief コンストラクタ
   EiPrimHead(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem* ast_header ///< [in] パース木の定義
+    const VlScope* parent,    ///< [in] 親のスコープ
+    const AstItem& ast_header ///< [in] パース木の定義
   );
 
   /// @brief デストラクタ
@@ -92,7 +93,7 @@ private:
   const VlScope* mParent;
 
   // パース木の定義
-  const AstItem* mAstHead;
+  AstItem mAstHead;
 
 };
 
@@ -108,8 +109,8 @@ public:
 
   /// @brief コンストラクタ
   EiPrimHeadD(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem* ast_header ///< [in] パース木の定義
+    const VlScope* parent,    ///< [in] 親のスコープ
+    const AstItem& ast_header ///< [in] パース木の定義
   );
 
   /// @brief デストラクタ
@@ -154,9 +155,9 @@ public:
 
   /// @brief コンストラクタ
   EiPrimHeadU(
-    const VlScope* parent,   ///< [in] 親のスコープ
-    const AstItem* ast_header, ///< [in] パース木の定義
-    const VlUdpDefn* udp     ///< [in] 定義
+    const VlScope* parent,     ///< [in] 親のスコープ
+    const AstItem& ast_header, ///< [in] パース木の定義
+    const VlUdpDefn* udp       ///< [in] 定義
   );
 
   /// @brief デストラクタ
@@ -203,9 +204,9 @@ public:
 
   /// @brief コンストラクタ
   EiPrimHeadUD(
-    const VlScope* parent,   ///< [in] 親のスコープ
-    const AstItem* ast_header, ///< [in] パース木の定義
-    const VlUdpDefn* udp     ///< [in] 定義
+    const VlScope* parent,     ///< [in] 親のスコープ
+    const AstItem& ast_header, ///< [in] パース木の定義
+    const VlUdpDefn* udp       ///< [in] 定義
   );
 
   /// @brief デストラクタ
@@ -250,9 +251,9 @@ public:
 
   /// @brief コンストラクタ
   EiPrimHeadC(
-    const VlScope* parent,   ///< [in] 親のスコープ
-    const AstItem* ast_header, ///< [in] パース木の定義
-    const ClibCell& cell     ///< [in] セル
+    const VlScope* parent,     ///< [in] 親のスコープ
+    const AstItem& ast_header, ///< [in] パース木の定義
+    const ClibCell& cell       ///< [in] セル
   );
 
   /// @brief デストラクタ
@@ -415,7 +416,7 @@ private:
 
   /// @brief パース木のインスタンス定義を得る．
   virtual
-  const AstInst*
+  AstInst
   ast_inst() const = 0;
 
 
@@ -489,7 +490,7 @@ private:
   head() const override;
 
   /// @brief パース木のインスタンス定義を得る．
-  const AstInst*
+  AstInst
   ast_inst() const override;
 
 
@@ -519,14 +520,14 @@ public:
   /// @brief コンストラクタ
   EiPrimitive2(
     ElbPrimHead* head,    ///< [in] ヘッダ
-    const AstInst* ast_inst ///< [in] インスタンス定義
+    const AstInst& ast_inst ///< [in] インスタンス定義
   );
 
   /// @brief コンストラクタ
   EiPrimitive2(
-    ElbPrimHead* head,    ///< [in] ヘッダ
-    const ClibCell& cell, ///< [in] セル
-    const AstInst* ast_inst ///< [in] インスタンス定義
+    ElbPrimHead* head,      ///< [in] ヘッダ
+    const ClibCell& cell,   ///< [in] セル
+    const AstInst& ast_inst ///< [in] インスタンス定義
   );
 
   /// @brief デストラクタ
@@ -553,7 +554,7 @@ private:
   head() const override;
 
   /// @brief パース木のインスタンス定義を得る．
-  const AstInst*
+  AstInst
   ast_inst() const override;
 
 
@@ -566,7 +567,7 @@ private:
   ElbPrimHead* mHead;
 
   // パース木のインスタンス定義
-  const AstInst* mAstInst;
+  AstInst mAstInst;
 
 };
 
@@ -582,19 +583,19 @@ public:
 
   /// @brief コンストラクタ
   EiPrimArray(
-    ElbPrimHead* head,       ///< [in] ヘッダ
-    const AstInst* ast_inst,   ///< [in] インスタンス定義
-    const AstRange* ast_range, ///< [in] パース木の範囲定義
-    const RangeVal& range    ///< [in] 範囲の値
+    ElbPrimHead* head,         ///< [in] ヘッダ
+    const AstInst& ast_inst,   ///< [in] インスタンス定義
+    const AstRange& ast_range, ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief コンストラクタ
   EiPrimArray(
-    ElbPrimHead* head,       ///< [in] ヘッダ
-    const ClibCell& cell,    ///< [in] セル
-    const AstInst* ast_inst,   ///< [in] インスタンス定義
-    const AstRange* ast_range, ///< [in] パース木の範囲定義
-    const RangeVal& range    ///< [in] 範囲の値
+    ElbPrimHead* head,         ///< [in] ヘッダ
+    const ClibCell& cell,      ///< [in] セル
+    const AstInst& ast_inst,   ///< [in] インスタンス定義
+    const AstRange& ast_range, ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -717,7 +718,7 @@ public:
   head() const override;
 
   /// @brief パース木のインスタンス定義を得る．
-  const AstInst*
+  AstInst
   ast_inst() const;
 
 
@@ -730,7 +731,7 @@ private:
   ElbPrimHead* mHead;
 
   // パース木のインスタンス定義
-  const AstInst* mAstInst;
+  AstInst mAstInst;
 
   // 範囲の情報
   RangeInfo mRange;

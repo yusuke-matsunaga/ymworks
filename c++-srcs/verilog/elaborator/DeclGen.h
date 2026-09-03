@@ -73,65 +73,79 @@ private:
   /// @brief パラメータ用の instantiate 関数
   void
   instantiate_param_head(
-    const VlScope* parent,     ///< [in] 親のスコープ
-    const AstDeclHead* ast_head, ///< [in] 宣言ヘッダ
-    bool is_local              ///< [in] local_param にする時 true
+    const VlScope* parent,       ///< [in] 親のスコープ
+    const AstDeclHead& ast_head, ///< [in] 宣言ヘッダ
+    bool is_local                ///< [in] local_param にする時 true
   );
 
   /// @brief net をインスタンス化する．
   void
   instantiate_net_head(
-    const VlScope* parent,    ///< [in] 親のスコープ
-    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstDeclHead& ast_head ///< [in] 宣言のヘッダ
+  );
+
+  /// @brief link_net_delay() を起動するスタブを作る．
+  ElbStub*
+  make_net_delay_stub(
+    ElbDeclHead* net_head,    ///< [in] ネットのヘッダ
+    const AstDelay& ast_delay ///< [in] パース木の遅延式定義
   );
 
   /// @brief net の遅延値を生成する．
   void
   link_net_delay(
-    ElbDeclHead* net_head,  ///< [in] ネットのヘッダ
-    const AstDelay* ast_delay ///< [in] パース木の遅延式定義
+    ElbDeclHead* net_head,    ///< [in] ネットのヘッダ
+    const AstDelay& ast_delay ///< [in] パース木の遅延式定義
+  );
+
+  /// @brief link_net_delay() を起動するスタブを作る．
+  ElbStub*
+  make_net_assign_stub(
+    ElbDecl* net,               ///< [in] ネットのヘッダ
+    const AstDeclItem& ast_item ///< [in] パース木の遅延式定義
   );
 
   /// @brief net の初期値を生成する．
   void
   link_net_assign(
-    ElbDecl* net,             ///< [in] ネット
-    const AstDeclItem* ast_item ///< [in] パース木のネット定義要素
+    ElbDecl* net,               ///< [in] ネット
+    const AstDeclItem& ast_item ///< [in] パース木のネット定義要素
   );
 
   /// @brief reg をインスタンス化する．
   void
   instantiate_reg_head(
-    const VlScope* parent,    ///< [in] 親のスコープ
-    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstDeclHead& ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief variable をインスタンス化する．
   void
   instantiate_var_head(
-    const VlScope* parent,    ///< [in] 親のスコープ
-    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstDeclHead& ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief named_event をインスタンス化する．
   void
   instantiate_event_head(
-    const VlScope* parent,    ///< [in] 親のスコープ
-    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstDeclHead& ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief genvar をインスタンス化する．
   void
   instantiate_genvar_head(
-    const VlScope* parent,    ///< [in] 親のスコープ
-    const AstDeclHead* ast_head ///< [in] 宣言のヘッダ
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstDeclHead& ast_head ///< [in] 宣言のヘッダ
   );
 
   /// @brief 配列の次元リストを生成する．
   bool
   instantiate_dimension_list(
-    const VlScope* parent,         ///< [in] 親のスコープ
-    const AstDeclItem* ast_item,     ///< [in] 要素定義
+    const VlScope* parent,              ///< [in] 親のスコープ
+    const AstDeclItem& ast_item,        ///< [in] 要素定義
     std::vector<ElbRangeSrc>& range_src ///< [in] 範囲の情報を設定する配列
   );
 

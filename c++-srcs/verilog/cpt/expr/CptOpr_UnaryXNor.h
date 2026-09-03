@@ -25,7 +25,7 @@ public:
   /// @brief コンストラクタ
   CptOpr_UnaryXNor(
     const FileRegion& file_region,
-    const AstExpr* opr
+    const PtExpr* opr
   ) : CptOpr1(file_region, opr)
   {
   }
@@ -36,7 +36,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 演算子のトークン番号を得る．

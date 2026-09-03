@@ -38,7 +38,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPort の継承クラスが実装しなければならない仮想関数
+  // PtPort の継承クラスが実装しなければならない仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置の取得
@@ -53,14 +53,14 @@ public:
   ext_name() const override;
 
   /// @brief 内側のポート結線を表す式の取得
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
   /// @brief 内部のポート結線のリストの取得
   ///
   /// portef_size() <= 1 の時は nullptr を返す．
-  AstExprList
-  portref_list() const override;
+  const PtExpr*
+  portref_top() const override;
 
   /// @brief 内部のポート結線の向きの取得
   VpiDir
@@ -108,7 +108,7 @@ public:
   CptPort1(
     const FileRegion& file_region,
     const char* ext_name,
-    const AstExpr* expr
+    const PtExpr* expr
   ) : CptPort(file_region, ext_name),
       mExpr{expr}
   {
@@ -120,16 +120,16 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPort の継承クラスが実装しなければならない仮想関数
+  // PtPort の継承クラスが実装しなければならない仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内側のポート結線を表す式の取得
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
   /// @brief 内部のポート結線のリストの取得
-  AstExprList
-  portref_list() const override;
+  const PtExpr*
+  portref_top() const override;
 
   /// @brief 内部のポート結線の向きの取得
   VpiDir
@@ -174,7 +174,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 唯一の要素
-  const AstExpr* mExpr;
+  const PtExpr* mExpr;
 
   // 向き
   VpiDir mDir;
@@ -194,8 +194,8 @@ public:
   CptPort2(
     const FileRegion& file_region,
     const char* ext_name,
-    const AstExpr* expr,
-    const AstExpr* portref_top,
+    const PtExpr* expr,
+    const PtExpr* portref_top,
     VpiDir* dir_array
   ) : CptPort(file_region, ext_name),
       mExpr{expr},
@@ -210,16 +210,16 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPort の継承クラスが実装しなければならない仮想関数
+  // PtPort の継承クラスが実装しなければならない仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内側のポート結線を表す式の取得
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
   /// @brief 内部のポート結線のリストの取得
-  AstExprList
-  portref_list() const override;
+  const PtExpr*
+  portref_top() const override;
 
   /// @brief 内部のポート結線の向きの取得
   VpiDir
@@ -247,10 +247,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 全体を表す式
-  const AstExpr* mExpr;
+  const PtExpr* mExpr;
 
   // ポート参照式の先頭
-  const AstExpr* mPortRefTop;
+  const PtExpr* mPortRefTop;
 
   // 向きの配列
   VpiDir* mDirArray;

@@ -9,6 +9,7 @@
 #include "CptDeclItem.h"
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
+#include "parser/PtExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -24,15 +25,15 @@ CptDeclItemBase::name() const
   return mName;
 }
 
-// @brief 範囲のリストを返す．
-const AstRangeList
-CptDeclItemBase::range_list() const
+// @brief 範囲のリストの先頭を返す．
+const PtRange*
+CptDeclItemBase::range_top() const
 {
-  return AstRangeList();
+  return nullptr;
 }
 
 // 初期値の取得
-const AstExpr*
+const PtExpr*
 CptDeclItemBase::init_value() const
 {
   return nullptr;
@@ -62,11 +63,11 @@ CptDeclItemR::file_region() const
   return mFileRegion;
 }
 
-// @brief 範囲のリストを返す．
-const AstRangeList
-CptDeclItemR::range_list() const
+// @brief 範囲のリストの先頭を返す．
+const PtRange*
+CptDeclItemR::range_top() const
 {
-  return AstRangeList(mRangeTop);
+  return mRangeTop;
 }
 
 
@@ -83,7 +84,7 @@ CptDeclItemI::file_region() const
 }
 
 // 初期値の取得
-const AstExpr*
+const PtExpr*
 CptDeclItemI::init_value() const
 {
   return mInitValue;
@@ -108,7 +109,7 @@ PtDeclItem*
 PtFactory::new_DeclItem(
   const FileRegion& file_region,
   const char* name,
-  const AstExpr* init_value
+  const PtExpr* init_value
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDeclItemI));
@@ -119,7 +120,7 @@ PtDeclItem*
 PtFactory::new_DeclItem(
   const FileRegion& file_region,
   const char* name,
-  PtRange* range_top
+  const PtRange* range_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDeclItemR));

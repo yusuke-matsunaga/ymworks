@@ -208,7 +208,7 @@ EiStmt::target_scope() const
 EiStmtBase::EiStmtBase(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 ) : EiStmt{process},
     mParent{parent},
     mAstStmt{ast_stmt}
@@ -226,7 +226,7 @@ EiStmtBase::parent_scope() const
 FileRegion
 EiStmtBase::file_region() const
 {
-  return mAstStmt->file_region();
+  return mAstStmt.file_region();
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -13,6 +13,8 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+class PtStmt;
+
 //////////////////////////////////////////////////////////////////////
 /// @class AstStmt AstStmt.h "ym/vl/AstStmt.h"
 /// @ingroup VlParser
@@ -24,11 +26,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// その条件が複雑なので注意が必要
 //////////////////////////////////////////////////////////////////////
 class AstStmt :
-  public AstHierNamedBase
+  public AstHierNamedBaseWithPtr<const PtStmt>
 {
-  friend class AstList<const AstStmt>;
-  friend class AstListIter<const AstStmt>;
-
 public:
 
   /// @brief AstStmt の派生クラスの型を表す列挙型
@@ -63,21 +62,33 @@ public:
 
 
 public:
+
+  /// @brief コンストラクタ
+  explicit
+  AstStmt(
+    const PtStmt* ptr = nullptr ///< [in] 実体のポインタ
+  ) : AstHierNamedBaseWithPtr<const PtStmt>(ptr)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~AstStmt() = default;
+
+
+public:
   //////////////////////////////////////////////////////////////////////
   // 共通の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型の取得
   /// @return 型
-  virtual
   Type
-  type() const = 0;
+  type() const;
 
   /// @brief ステートメントの種類を表す文字列の取得
   /// @return ステートメントの種類を表す文字列
-  virtual
   const char*
-  stmt_name() const = 0;
+  stmt_name() const;
 
 
 public:
@@ -90,18 +101,16 @@ public:
   ///
   /// - type() != DelayControl|EventControl|Forever|Repeat|While|For|If
   //    の時 std::logic_error 例外を送出する．
-  virtual
-  const AstStmt*
-  body() const = 0;
+  AstStmt
+  body() const;
 
   /// @brief 式の取得
   /// @return 式
   ///
   /// - type() != Wait|Repeat|While|For|If|Case|CaseX|CaseZ の時
   ///   std::logic_error 例外を送出する．
-  virtual
-  const AstExpr*
-  expr() const = 0;
+  AstExpr
+  expr() const;
 
 
 public:
@@ -112,9 +121,8 @@ public:
   /// @brief 引数のリストの取得
   ///
   /// - type() != Enable の時 std::logic_error 例外を送出する．
-  virtual
   AstExprList
-  arg_list() const = 0;
+  arg_list() const;
 
 
 public:
@@ -126,10 +134,10 @@ public:
   /// @brief コントロールの取得
   /// @return ディレイ/イベントコントロール
   ///
-  /// - type() != DelayControl|EventControl|Assign|NbAssign の時 std::logic_error 例外を送出する．
-  virtual
-  const AstControl*
-  control() const = 0;
+  /// - type() != DelayControl|EventControl|Assign|NbAssign の時
+  ///   std::logic_error 例外を送出する．
+  AstControl
+  control() const;
 
 
 public:
@@ -142,17 +150,15 @@ public:
   ///
   /// - type() != Assign|NbAssign|Force|PcAssign|Release|Deassign の時
   ///   std::logic_error 例外を送出する．
-  virtual
-  const AstExpr*
-  lhs() const = 0;
+  AstExpr
+  lhs() const;
 
   /// @brief 右辺式の取得
   /// @return 右辺式
   ///
   /// - type() != Assign|NbAssign|Force|PcAssign の時 std::logic_error 例外を送出する．
-  virtual
-  const AstExpr*
-  rhs() const = 0;
+  AstExpr
+  rhs() const;
 
 
 public:
@@ -164,9 +170,8 @@ public:
   /// @return イベントプライマリ
   ///
   /// - type() != EventStmt の時 std::logic_error 例外を送出する．
-  virtual
-  const AstExpr*
-  primary() const = 0;
+  AstExpr
+  primary() const;
 
 
 public:
@@ -178,9 +183,8 @@ public:
   /// @return 条件が成り立たなかったとき実行されるステートメント
   ///
   /// - type() != If の時 std::logic_error 例外を送出する．
-  virtual
-  const AstStmt*
-  else_body() const = 0;
+  AstStmt
+  else_body() const;
 
 
 public:
@@ -191,9 +195,8 @@ public:
   /// @brief case item のリストの取得
   ///
   /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  virtual
   AstCaseItemList
-  caseitem_list() const = 0;
+  caseitem_list() const;
 
 
 public:
@@ -205,17 +208,15 @@ public:
   /// @return 初期化代入文
   ///
   /// - type() != For の時 std::logic_error 例外を送出する．
-  virtual
-  const AstStmt*
-  init_stmt() const = 0;
+  AstStmt
+  init_stmt() const;
 
   /// @brief 繰り返し代入文の取得
   /// @return 繰り返し代入文
   ///
   /// - type() != For の時 std::logic_error 例外を送出する．
-  virtual
-  const AstStmt*
-  next_stmt() const = 0;
+  AstStmt
+  next_stmt() const;
 
 
 public:
@@ -226,17 +227,15 @@ public:
   /// @brief 宣言ヘッダのリストの取得
   ///
   /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  virtual
   AstDeclHeadList
-  declhead_list() const = 0;
+  declhead_list() const;
 
   /// @brief 子供のステートメントのリストの取得
   ///
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
-  virtual
   AstStmtList
-  stmt_list() const = 0;
+  stmt_list() const;
 
 
 public:
@@ -244,9 +243,49 @@ public:
   // AstBase の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 内容を JsonValue に変換する．
-  JsonValue
-  json_obj() const override;
+  /// @brief 適切な値を持っている時 true を返す．
+  bool
+  is_valid() const override;
+
+  /// @brief ファイル位置の取得
+  /// @return ファイル位置
+  FileRegion
+  file_region() const override;
+
+  /// @brief 比較用のユニークなキーを返す．
+  PtrIntType
+  key() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstNamedBase の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 名前の取得
+  /// @return 名前
+  const char*
+  name() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstHierNamedBase の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 階層ブランチのリストを返す．
+  AstNameBranchList
+  namebranch_list() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstList<> の要素のための関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  AstStmt
+  next() const;
 
 
 private:
@@ -254,62 +293,121 @@ private:
   // 内部で用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 次の要素の取得
-  virtual
-  const AstStmt*
-  link() const = 0;
+  /// @brief json_obj() の下請け関数
+  void
+  json_sub(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const override;
 
-};
+  /// @brief Disable 用の json_sub()
+  void
+  json_sub_disable(
+    JsonValue& jobj
+  ) const;
 
+  /// @brief Enable/SysEnable 用の json_sub()
+  void
+  json_sub_enable(
+    JsonValue& jobj,
+    const char* label
+  ) const;
 
-//////////////////////////////////////////////////////////////////////
-/// @class AstCaseItem AstStmt.h "ym/vl/AstStmt.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief caseitemを表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstCaseItem :
-  public AstBase
-{
-  friend class AstList<const AstCaseItem>;
-  friend class AstListIter<const AstCaseItem>;
+  /// @brief EventControl/DelayControl 用の json_sub()
+  void
+  json_sub_control(
+    JsonValue& jobj,
+    const char* label
+  ) const;
 
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstCaseItem の継承クラスが実装する仮想関数
-  //////////////////////////////////////////////////////////////////////
+  /// @brief Assign/NbAssign 用の json_sub()
+  void
+  json_sub_assign(
+    JsonValue& jobj,
+    const char* label
+  ) const;
 
-  /// @brief ラベルリストの取得
-  virtual
-  AstExprList
-  label_list() const = 0;
+  /// @brief Event 用の json_sub()
+  void
+  json_sub_event(
+    JsonValue& jobj
+  ) const;
 
-  /// @brief 本体のステートメントの取得
-  /// @return 本体のステートメント
-  virtual
-  const AstStmt*
-  body() const = 0;
+  /// @brief Null 用の json_sub()
+  void
+  json_sub_null(
+    JsonValue& jobj
+  ) const;
 
+  /// @brief If 用の json_sub()
+  void
+  json_sub_if(
+    JsonValue& jobj
+  ) const;
 
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstBase の仮想関数
-  //////////////////////////////////////////////////////////////////////
+  /// @brief Case 用の json_sub()
+  void
+  json_sub_case(
+    JsonValue& jobj,
+    const char* label
+  ) const;
 
-  /// @brief 内容を JsonValue に変換する．
-  JsonValue
-  json_obj() const override;
+  /// @brief Wait 用の json_sub()
+  void
+  json_sub_wait(
+    JsonValue& jobj
+  ) const;
 
+  /// @brief Forever 用の json_sub()
+  void
+  json_sub_forever(
+    JsonValue& jobj
+  ) const;
 
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
+  /// @brief Repeat 用の json_sub()
+  void
+  json_sub_repeat(
+    JsonValue& jobj
+  ) const;
 
-  /// @brief 次の要素の取得
-  virtual
-  const AstCaseItem*
-  link() const = 0;
+  /// @brief While 用の json_sub()
+  void
+  json_sub_while(
+    JsonValue& jobj
+  ) const;
+
+  /// @brief For 用の json_sub()
+  void
+  json_sub_for(
+    JsonValue& jobj
+  ) const;
+
+  /// @brief PcAssign/Force 用の json_sub()
+  void
+  json_sub_pcassign(
+    JsonValue& jobj,
+    const char* label
+  ) const;
+
+  /// @brief Deassign 用の json_sub()
+  void
+  json_sub_deassign(
+    JsonValue& jobj,
+    const char* label
+  ) const;
+
+  /// @brief ParBlock/SeqBlock 用の json_sub()
+  void
+  json_sub_block(
+    JsonValue& jobj,
+    const char* label
+  ) const;
+
+  /// @brief NamedParBlock/NamedSeqBlock 用の json_sub()
+  void
+  json_sub_namedblock(
+    JsonValue& jobj,
+    const char* label
+  ) const;
 
 };
 

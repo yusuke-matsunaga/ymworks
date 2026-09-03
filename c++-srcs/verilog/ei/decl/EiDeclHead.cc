@@ -8,13 +8,7 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiDeclHead.h"
-
 #include "ym/vl/VlDelay.h"
-
-#include "ym/vl/AstDecl.h"
-#include "ym/vl/AstExpr.h"
-#include "ym/vl/AstItem.h"
-#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,14 +21,14 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head,
-  const AstRange* ast_range,
+  const AstDeclHead& ast_head,
+  const AstRange& ast_range,
   const RangeVal& range,
   bool has_delay
 )
 {
-  if ( ast_range == nullptr ) {
-    throw std::logic_error{"ast_range == nullptr"};
+  if ( ast_range.is_invalid() ) {
+    throw std::logic_error{"ast_range.is_invalid()"};
   }
 
   if ( has_delay ) {
@@ -49,7 +43,7 @@ EiFactory::new_DeclHead(
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head,
+  const AstDeclHead& ast_head,
   bool delay
 )
 {
@@ -65,14 +59,14 @@ EiFactory::new_DeclHead(
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const AstIOHead* ast_head,
+  const AstIOHead& ast_head,
   VpiAuxType aux_type,
-  const AstRange* ast_range,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
-  if ( ast_range == nullptr ) {
-    throw std::logic_error{"ast_range == nullptr"};
+  if ( ast_range.is_invalid() ) {
+    throw std::logic_error{"ast_range.is_invalid()"};
   }
 
   return new EiDeclHeadAst2V(parent, ast_head, aux_type,
@@ -83,7 +77,7 @@ EiFactory::new_DeclHead(
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const AstIOHead* ast_head,
+  const AstIOHead& ast_head,
   VpiAuxType aux_type
 )
 {
@@ -94,13 +88,13 @@ EiFactory::new_DeclHead(
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const AstItem* ast_item,
-  const AstRange* ast_range,
+  const AstItem& ast_item,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
-  if ( ast_range == nullptr ) {
-    throw std::logic_error{"ast_range == nullptr"};
+  if ( ast_range.is_invalid() ) {
+    throw std::logic_error{"ast_range.is_invalid()"};
   }
 
   return new EiDeclHeadAst3V(parent, ast_item, ast_range, range);
@@ -110,7 +104,7 @@ EiFactory::new_DeclHead(
 ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   return new EiDeclHeadAst3(parent, ast_item);
@@ -148,7 +142,7 @@ EiDeclHead::parent_scope() const
 // @brief コンストラクタ
 EiDeclHeadAst::EiDeclHeadAst(
   const VlScope* parent,
-  const AstDeclHead* ast_header
+  const AstDeclHead& ast_header
 ) : EiDeclHead{parent},
     mAstHead{ast_header}
 {
@@ -163,7 +157,7 @@ EiDeclHeadAst::~EiDeclHeadAst()
 VpiObjType
 EiDeclHeadAst::type() const
 {
-  switch ( mAstHead->type() ) {
+  switch ( mAstHead.type() ) {
   case AstDeclHead::Param:
   case AstDeclHead::LocalParam:
     return VpiObjType::Parameter;
@@ -172,7 +166,7 @@ EiDeclHeadAst::type() const
     return VpiObjType::Reg;
 
   case AstDeclHead::Var:
-    switch ( mAstHead->data_type() ) {
+    switch ( mAstHead.data_type() ) {
     case VpiVarType::Integer:  return VpiObjType::IntegerVar;
     case VpiVarType::Real:     return VpiObjType::RealVar;
     case VpiVarType::Time:     return VpiObjType::TimeVar;
@@ -200,7 +194,7 @@ EiDeclHeadAst::type() const
 bool
 EiDeclHeadAst::is_signed() const
 {
-  return mAstHead->is_signed();
+  return mAstHead.is_signed();
 }
 
 // @brief 範囲指定を持つとき true を返す．
@@ -256,7 +250,7 @@ EiDeclHeadAst::is_little_endian() const
 SizeType
 EiDeclHeadAst::bit_size() const
 {
-  switch ( mAstHead->type() ) {
+  switch ( mAstHead.type() ) {
   case AstDeclHead::Reg:
   case AstDeclHead::Net:
     // この型は範囲指定を含まないので 1ビットとなる．
@@ -265,7 +259,7 @@ EiDeclHeadAst::bit_size() const
   case AstDeclHead::Param:
   case AstDeclHead::LocalParam:
   case AstDeclHead::Var:
-    switch ( mAstHead->data_type() ) {
+    switch ( mAstHead.data_type() ) {
     case VpiVarType::Integer:
       return kVpiSizeInteger;
 
@@ -301,7 +295,7 @@ EiDeclHeadAst::calc_bit_offset(
   SizeType& offset
 ) const
 {
-  switch ( mAstHead->type() ) {
+  switch ( mAstHead.type() ) {
   case AstDeclHead::Reg:
   case AstDeclHead::Net:
     // この型は範囲指定を含まないので 1ビットとなる．
@@ -315,7 +309,7 @@ EiDeclHeadAst::calc_bit_offset(
   case AstDeclHead::Param:
   case AstDeclHead::LocalParam:
   case AstDeclHead::Var:
-    switch ( mAstHead->data_type() ) {
+    switch ( mAstHead.data_type() ) {
     case VpiVarType::Real:
       // 実数タイプの部分ビット指定は無効
       return false;
@@ -366,57 +360,51 @@ EiDeclHeadAst::calc_bit_offset(
 VpiVarType
 EiDeclHeadAst::data_type() const
 {
-  return mAstHead->data_type();
+  return mAstHead.data_type();
 }
 
 // @brief net 型の取得
 VpiNetType
 EiDeclHeadAst::net_type() const
 {
-  return mAstHead->net_type();
+  return mAstHead.net_type();
 }
 
 // @brief vectored|scalared 属性の取得
 VpiVsType
 EiDeclHeadAst::vs_type() const
 {
-  return mAstHead->vs_type();
+  return mAstHead.vs_type();
 }
 
 // @brief drive0 strength の取得
 VpiStrength
 EiDeclHeadAst::drive0() const
 {
-  if ( mAstHead->strength() ) {
-    return mAstHead->strength()->drive0();
-  }
-  else {
+  if ( mAstHead.strength().is_invalid() ) {
     return VpiStrength::NoStrength;
   }
+  return mAstHead.strength().drive0();
 }
 
 // @brief drive1 strength の取得
 VpiStrength
 EiDeclHeadAst::drive1() const
 {
-  if ( mAstHead->strength() ) {
-    return mAstHead->strength()->drive1();
-  }
-  else {
+  if ( mAstHead.strength().is_invalid() ) {
     return VpiStrength::NoStrength;
   }
+  return mAstHead.strength().drive1();
 }
 
 // @brief charge strength の取得
 VpiStrength
 EiDeclHeadAst::charge() const
 {
-  if ( mAstHead->strength() ) {
-    return mAstHead->strength()->charge();
-  }
-  else {
+  if ( mAstHead.strength().is_invalid() ) {
     return VpiStrength::NoStrength;
   }
+  return mAstHead.strength().charge();
 }
 
 
@@ -427,7 +415,7 @@ EiDeclHeadAst::charge() const
 // @brief コンストラクタ
 EiDeclHeadAstD::EiDeclHeadAstD(
   const VlScope* parent,
-  const AstDeclHead* ast_header
+  const AstDeclHead& ast_header
 ) : EiDeclHeadAst{parent, ast_header}
 {
 }
@@ -461,8 +449,8 @@ EiDeclHeadAstD::set_delay(
 // @brief コンストラクタ
 EiDeclHeadAstV::EiDeclHeadAstV(
   const VlScope* parent,
-  const AstDeclHead* ast_header,
-  const AstRange* ast_range,
+  const AstDeclHead& ast_header,
+  const AstRange& ast_range,
   const RangeVal& range
 ) : EiDeclHeadAst{parent, ast_header},
     mRange(ast_range, range)
@@ -548,8 +536,8 @@ EiDeclHeadAstV::calc_bit_offset(
 // @brief コンストラクタ
 EiDeclHeadAstVD::EiDeclHeadAstVD(
   const VlScope* parent,
-  const AstDeclHead* ast_header,
-  const AstRange* ast_range,
+  const AstDeclHead& ast_header,
+  const AstRange& ast_range,
   const RangeVal& range
 ) : EiDeclHeadAstV(parent, ast_header, ast_range, range),
     mDelay{nullptr}
@@ -585,7 +573,7 @@ EiDeclHeadAstVD::set_delay(
 // @brief コンストラクタ
 EiDeclHeadAst2::EiDeclHeadAst2(
   const VlScope* parent,
-  const AstIOHead* ast_header,
+  const AstIOHead& ast_header,
   VpiAuxType aux_type
 ) : EiDeclHead(parent),
     mAstHead{ast_header},
@@ -606,7 +594,7 @@ EiDeclHeadAst2::type() const
   case VpiAuxType::Net: return VpiObjType::Net;
   case VpiAuxType::Reg: return VpiObjType::Reg;
   case VpiAuxType::Var:
-    switch ( mAstHead->var_type() ) {
+    switch ( mAstHead.var_type() ) {
     case VpiVarType::Integer:  return VpiObjType::IntegerVar;
     case VpiVarType::Real:     return VpiObjType::RealVar;
     case VpiVarType::Time:     return VpiObjType::TimeVar;
@@ -625,7 +613,7 @@ EiDeclHeadAst2::type() const
 bool
 EiDeclHeadAst2::is_signed() const
 {
-  return mAstHead->is_signed();
+  return mAstHead.is_signed();
 }
 
 // @brief 範囲指定を持つとき true を返す．
@@ -685,7 +673,7 @@ EiDeclHeadAst2::bit_size() const
   case VpiAuxType::Net: return 1;
   case VpiAuxType::Reg: return 1;
   case VpiAuxType::Var:
-    switch ( mAstHead->var_type() ) {
+    switch ( mAstHead.var_type() ) {
     case VpiVarType::Integer:  return kVpiSizeInteger;
     case VpiVarType::Real:     return kVpiSizeReal;
     case VpiVarType::Time:     return kVpiSizeTime;
@@ -719,7 +707,7 @@ EiDeclHeadAst2::calc_bit_offset(
     return false;
 
   case VpiAuxType::Var:
-    switch ( mAstHead->var_type() ) {
+    switch ( mAstHead.var_type() ) {
     case VpiVarType::Integer:
       if ( index >= 0 && index < static_cast<int>(kVpiSizeInteger) ) {
 	offset = index;
@@ -755,14 +743,14 @@ EiDeclHeadAst2::calc_bit_offset(
 VpiVarType
 EiDeclHeadAst2::data_type() const
 {
-  return mAstHead->var_type();
+  return mAstHead.var_type();
 }
 
 // @brief net 型の取得
 VpiNetType
 EiDeclHeadAst2::net_type() const
 {
-  return mAstHead->net_type();
+  return mAstHead.net_type();
 }
 
 
@@ -773,9 +761,9 @@ EiDeclHeadAst2::net_type() const
 // @brief コンストラクタ
 EiDeclHeadAst2V::EiDeclHeadAst2V(
   const VlScope* parent,
-  const AstIOHead* ast_header,
+  const AstIOHead& ast_header,
   VpiAuxType aux_type,
-  const AstRange* ast_range,
+  const AstRange& ast_range,
   const RangeVal& range
 ) : EiDeclHeadAst2(parent, ast_header, aux_type),
     mRange(ast_range, range)
@@ -861,7 +849,7 @@ EiDeclHeadAst2V::calc_bit_offset(
 // @brief コンストラクタ
 EiDeclHeadAst3::EiDeclHeadAst3(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 ) : EiDeclHead(parent),
     mAstItem{ast_item}
 {
@@ -892,7 +880,7 @@ EiDeclHeadAst3::type() const
 bool
 EiDeclHeadAst3::is_signed() const
 {
-  return mAstItem->is_signed();
+  return mAstItem.is_signed();
 }
 
 // @brief 範囲指定を持つとき true を返す．
@@ -1008,7 +996,7 @@ EiDeclHeadAst3::calc_bit_offset(
 VpiVarType
 EiDeclHeadAst3::data_type() const
 {
-  return mAstItem->data_type();
+  return mAstItem.data_type();
 }
 
 // @brief net 型の取得
@@ -1027,8 +1015,8 @@ EiDeclHeadAst3::net_type() const
 // @brief コンストラクタ
 EiDeclHeadAst3V::EiDeclHeadAst3V(
   const VlScope* parent,
-  const AstItem* ast_item,
-  const AstRange* ast_range,
+  const AstItem& ast_item,
+  const AstRange& ast_range,
   const RangeVal& range
 ) : EiDeclHeadAst3(parent, ast_item),
     mRange(ast_range, range)

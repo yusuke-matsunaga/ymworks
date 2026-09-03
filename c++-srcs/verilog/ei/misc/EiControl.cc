@@ -11,7 +11,6 @@
 
 #include "elaborator/ElbExpr.h"
 
-#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -23,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 遅延コントロールを生成する．
 const VlControl*
 EiFactory::new_DelayControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   ElbExpr* delay
 )
 {
@@ -33,7 +32,7 @@ EiFactory::new_DelayControl(
 // @brief イベントコントロールを生成する．
 const VlControl*
 EiFactory::new_EventControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   const std::vector<ElbExpr*>& event_list
 )
 {
@@ -43,7 +42,7 @@ EiFactory::new_EventControl(
 // @brief リピートコントロールを生成する．
 const VlControl*
 EiFactory::new_RepeatControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   ElbExpr* rep,
   const std::vector<ElbExpr*>& event_list
 )
@@ -58,7 +57,7 @@ EiFactory::new_RepeatControl(
 
 // @brief コンストラクタ
 EiControl::EiControl(
-  const AstControl* ast_control
+  const AstControl& ast_control
 ) : mAstControl{ast_control}
 {
 }
@@ -72,7 +71,7 @@ EiControl::~EiControl()
 FileRegion
 EiControl::file_region() const
 {
-  return mAstControl->file_region();
+  return mAstControl.file_region();
 }
 
 // @brief 遅延式を返す．
@@ -119,7 +118,7 @@ EiControl::event_list() const
 
 // @brief コンストラクタ
 EiDelayControl::EiDelayControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   ElbExpr* delay
 ) : EiControl(ast_control),
     mDelay{delay}
@@ -152,7 +151,7 @@ EiDelayControl::delay() const
 
 // @brief コンストラクタ
 EiEventControl::EiEventControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   const std::vector<ElbExpr*>& event_list
 ) : EiControl(ast_control),
     mEventList{event_list}
@@ -204,7 +203,7 @@ EiEventControl::event_list() const
 
 // @brief コンストラクタ
 EiRepeatControl::EiRepeatControl(
-  const AstControl* ast_control,
+  const AstControl& ast_control,
   ElbExpr* rep,
   const std::vector<ElbExpr*>& event_list
 ) : EiEventControl(ast_control, event_list),

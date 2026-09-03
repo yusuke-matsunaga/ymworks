@@ -27,29 +27,29 @@ StmtGen::instantiate_assign(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   bool block
 )
 {
   ElbVarLhsEnv env1{env};
-  auto ast_lhs = ast_stmt->lhs();
+  auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
   }
 
-  auto ast_rhs = ast_stmt->rhs();
+  auto ast_rhs = ast_stmt.rhs();
   auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
   if ( !rhs ) {
     return nullptr;
   }
 
-  auto ast_control = ast_stmt->control();
-  if ( ast_control && env.inside_function() ) {
+  auto ast_control = ast_stmt.control();
+  if ( ast_control.is_valid() && env.inside_function() ) {
     // function 内のインスタンス化なのでコントロールは付いていないはず
     std::ostringstream buf;
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    ast_stmt->file_region(),
+		    ast_stmt.file_region(),
 		    MsgType::Error,
 		    "ELAB",
 		    "assignment in a constant function cannot have"
@@ -68,17 +68,17 @@ StmtGen::instantiate_pca(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   ElbPcaLhsEnv env1{env};
-  auto ast_lhs = ast_stmt->lhs();
+  auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
   }
 
-  auto ast_rhs = ast_stmt->rhs();
+  auto ast_rhs = ast_stmt.rhs();
   auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
   if ( !rhs ) {
     return nullptr;
@@ -93,11 +93,11 @@ StmtGen::instantiate_deassign(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   ElbPcaLhsEnv env1{env};
-  auto ast_lhs = ast_stmt->lhs();
+  auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
@@ -112,17 +112,17 @@ StmtGen::instantiate_force(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   ElbForceLhsEnv env1{env};
-  auto ast_lhs = ast_stmt->lhs();
+  auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;
   }
 
-  auto ast_rhs = ast_stmt->rhs();
+  auto ast_rhs = ast_stmt.rhs();
   auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
   if ( !rhs ) {
     return nullptr;
@@ -139,11 +139,11 @@ StmtGen::instantiate_release(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   ElbForceLhsEnv env1{env};
-  auto ast_lhs = ast_stmt->lhs();
+  auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs(parent, env1, ast_lhs);
   if ( !lhs ) {
     return nullptr;

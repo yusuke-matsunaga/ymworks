@@ -24,9 +24,9 @@ public:
 
   /// @brief コンストラクタ
   CptOpr_Condition(
-    const AstExpr* opr1,
-    const AstExpr* opr2,
-    const AstExpr* opr3
+    const PtExpr* opr1,
+    const PtExpr* opr2,
+    const PtExpr* opr3
   ) : CptOpr3(opr1, opr2, opr3)
   {
   }
@@ -37,7 +37,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 演算子のトークン番号を得る．

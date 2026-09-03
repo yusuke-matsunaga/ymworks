@@ -9,7 +9,8 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "parser/PtDecl.h"
+#include "parser/PtIOHead.h"
+#include "parser/PtDeclHead.h"
 #include "parser/PtItem.h"
 
 

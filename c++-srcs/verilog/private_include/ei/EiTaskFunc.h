@@ -27,9 +27,9 @@ public:
 
   /// @brief コンストラクタ
   EiTaskFunc(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstItem* ast_item, ///< [in] パース木の定義
-    SizeType io_num        ///< [in] IOの数
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstItem& ast_item, ///< [in] パース木の定義
+    SizeType io_num          ///< [in] IOの数
   );
 
   /// @brief デストラクタ
@@ -96,9 +96,9 @@ public:
   /// @brief 入出力の初期設定を行う．
   void
   add_iodecl(
-    ElbIOHead* head,         ///< [in] ヘッダ
-    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
-    const VlDecl* decl       ///< [in] 対応する宣言要素
+    ElbIOHead* head,           ///< [in] ヘッダ
+    const AstIOItem& ast_item, ///< [in] パース木のIO宣言要素
+    const VlDecl* decl         ///< [in] 対応する宣言要素
   ) override;
 
   /// @brief 本体のステートメントをセットする．
@@ -114,7 +114,7 @@ protected:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief AstItem を取り出す．
-  const AstItem*
+  AstItem
   ast_item() const
   {
     return mAstItem;
@@ -130,7 +130,7 @@ private:
   const VlScope* mParent;
 
   // パース木のタスク/関数定義
-  const AstItem* mAstItem;
+  AstItem mAstItem;
 
   // 入出力用ヘッダのリスト
   std::vector<ElbIOHead*> mIOHeadList;
@@ -155,9 +155,9 @@ public:
 
   /// @brief コンストラクタ
   EiTask(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstItem* ast_item, ///< [in] パース木の定義
-    SizeType io_num        ///< [in] IOの数
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstItem& ast_item, ///< [in] パース木の定義
+    SizeType io_num          ///< [in] IOの数
   );
 
   /// @brief デストラクタ
@@ -248,10 +248,10 @@ public:
 
   /// @brief コンストラクタ
   EiFunction(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstItem* ast_item, ///< [in] パース木の定義
-    SizeType io_num,       ///< [in] IOの数
-    bool const_func        ///< [in] constant function の時 true にする．
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstItem& ast_item, ///< [in] パース木の定義
+    SizeType io_num,         ///< [in] IOの数
+    bool const_func          ///< [in] constant function の時 true にする．
   );
 
   /// @brief デストラクタ
@@ -354,12 +354,12 @@ public:
 
   /// @brief コンストラクタ
   EiFunctionV(
-    const VlScope* parent,   ///< [in] 親のスコープ
-    const AstItem* ast_item,   ///< [in] パース木の定義
-    SizeType io_num,         ///< [in] IOの数
-    const AstRange* ast_range, ///< [in] パース木の範囲定義
-    const RangeVal& range,   ///< [in] 範囲の値
-    bool const_func          ///< [in] 定数関数フラグ
+    const VlScope* parent,     ///< [in] 親のスコープ
+    const AstItem& ast_item,   ///< [in] パース木の定義
+    SizeType io_num,           ///< [in] IOの数
+    const AstRange& ast_range, ///< [in] パース木の範囲定義
+    const RangeVal& range,     ///< [in] 範囲の値
+    bool const_func            ///< [in] 定数関数フラグ
   );
 
   /// @brief デストラクタ

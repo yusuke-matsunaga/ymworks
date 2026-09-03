@@ -8,7 +8,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtMisc.h"
+#include "parser/PtControl.h"
 #include "parser/PtExpr.h"
 #include "ym/FileRegion.h"
 
@@ -38,19 +38,19 @@ public:
   /// @brief 遅延式の取得
   /// @retval 遅延を表す式 delay control の場合
   /// @retval nullptr 上記以外
-  const AstExpr*
+  const PtExpr*
   delay() const override;
 
   /// @brief イベントリストの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
-  AstExprList
-  event_list() const override;
+  const PtExpr*
+  event_top() const override;
 
   /// @brief 繰り返し数の取得
   /// @retval 繰り返し数を表す式 repeat control の場合
   /// @retval nullptr 上記以外
-  const AstExpr*
+  const PtExpr*
   rep_expr() const override;
 
 };
@@ -67,7 +67,7 @@ public:
   /// @brief コンストラクタ
   CptDelayControl(
     const FileRegion& file_region,
-    const AstExpr* value
+    const PtExpr* value
   ) : mTopLoc{file_region.start_loc()},
       mDelay{value}
   {
@@ -90,11 +90,11 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstControl::Type
   type() const override;
 
   /// @brief 遅延式を返す．
-  const AstExpr*
+  const PtExpr*
   delay() const override;
 
 
@@ -107,7 +107,7 @@ private:
   FileLoc mTopLoc;
 
   // 遅延を表す式
-  const AstExpr* mDelay;
+  const PtExpr* mDelay;
 
 };
 
@@ -143,14 +143,14 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstControl::Type
   type() const override;
 
   /// @brief イベントリストの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
-  AstExprList
-  event_list() const override;
+  const PtExpr*
+  event_top() const override;
 
 
 private:
@@ -175,7 +175,7 @@ public:
   /// @brief コンストラクタ
   CptEventControl1(
     const FileRegion& file_region,
-    const AstExpr* event_top
+    const PtExpr* event_top
   ) : CptEventControl(file_region),
       mEventTop{event_top}
   {
@@ -193,8 +193,8 @@ public:
   /// @brief イベントリストの取得
   ///
   /// - type() == Delay の時 std::logic_error 例外を送出する．
-  AstExprList
-  event_list() const override;
+  const PtExpr*
+  event_top() const override;
 
 
 private:
@@ -203,7 +203,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // イベントの先頭
-  const AstExpr* mEventTop;
+  const PtExpr* mEventTop;
 
 };
 
@@ -219,7 +219,7 @@ public:
   /// @brief コンストラクタ
   CptRepeatControl(
     const FileRegion& file_region,
-    const AstExpr* rep
+    const PtExpr* rep
   ) : CptEventControl(file_region),
       mRepExpr{rep}
   {
@@ -238,11 +238,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstControl::Type
   type() const override;
 
   /// @brief 繰り返し数を得る．
-  const AstExpr*
+  const PtExpr*
   rep_expr() const override;
 
 
@@ -252,7 +252,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 繰り返し数を表す式
-  const AstExpr* mRepExpr;
+  const PtExpr* mRepExpr;
 
 };
 
@@ -268,8 +268,8 @@ public:
   /// @brief コンストラクタ
   CptRepeatControl1(
     const FileRegion& file_region,
-    const AstExpr* rep,
-    const AstExpr* event_top
+    const PtExpr* rep,
+    const PtExpr* event_top
   ) : CptEventControl1(file_region, event_top),
       mRepExpr{rep}
   {
@@ -288,11 +288,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstControl::Type
   type() const override;
 
   /// @brief 繰り返し数を得る．
-  const AstExpr*
+  const PtExpr*
   rep_expr() const override;
 
 
@@ -302,7 +302,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 繰り返し数を表す式
-  const AstExpr* mRepExpr;
+  const PtExpr* mRepExpr;
 
 };
 

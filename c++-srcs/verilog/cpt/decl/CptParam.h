@@ -25,7 +25,7 @@ public:
   /// @brief コンストラクタ
   CptParamH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptDeclHead(file_region, item_top)
   {
   }
@@ -41,7 +41,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };
@@ -58,7 +58,7 @@ public:
   /// @brief コンストラクタ
   CptLocalParamH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptDeclHead(file_region, item_top)
   {
   }
@@ -74,7 +74,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };
@@ -91,8 +91,8 @@ public:
   /// @brief コンストラクタ
   CptParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range,         ///< [in] 範囲
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtRange* range,          ///< [in] 範囲
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptParamH(file_region, item_top),
       mRange{range}
   {
@@ -115,7 +115,7 @@ public:
 
   /// @brief 範囲Bの取得
   /// @return 範囲
-  const AstRange*
+  const PtRange*
   range() const override;
 
 
@@ -125,7 +125,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const AstRange* mRange;
+  const PtRange* mRange;
 
 };
 
@@ -141,8 +141,8 @@ public:
   /// @brief コンストラクタ
   CptParamHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range,         ///< [in] 範囲
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtRange* range,          ///< [in] 範囲
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptParamHV(file_region, range, item_top)
   {
   }
@@ -176,8 +176,8 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range,         ///< [in] 範囲
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtRange* range,          ///< [in] 範囲
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptParamHV(file_region, range, item_top)
   {
   }
@@ -193,7 +193,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };
@@ -210,8 +210,8 @@ public:
   /// @brief コンストラクタ
   CptLocalParamHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range,	   ///< [in] 範囲
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtRange* range,	   ///< [in] 範囲
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptParamHSV(file_region, range, item_top)
   {
   }
@@ -227,7 +227,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };
@@ -245,7 +245,7 @@ public:
   CptParamHT(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiVarType var_type,           ///< [in] データ型
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptDeclHead(file_region, item_top),
       mVarType{var_type}
   {
@@ -262,7 +262,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
   /// @brief 符号の取得
@@ -301,7 +301,7 @@ public:
   CptLocalParamHT(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiVarType var_type,           ///< [in] データ型
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptParamHT(file_region, var_type, item_top)
   {
   }
@@ -317,7 +317,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };
@@ -334,7 +334,7 @@ public:
   /// @brief コンストラクタ
   CptSpecParamH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptDeclHead(file_region, item_top)
   {
   }
@@ -350,7 +350,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };
@@ -367,8 +367,8 @@ public:
   /// @brief コンストラクタ
   CptSpecParamHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range,         ///< [in] パース木の範囲定義
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtRange* range,          ///< [in] パース木の範囲定義
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptSpecParamH(file_region, item_top),
       mRange{range}
   {
@@ -385,7 +385,7 @@ public:
 
   /// @brief 範囲を返す．
   /// @return 範囲
-  const AstRange*
+  const PtRange*
   range() const override;
 
 
@@ -395,7 +395,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const AstRange* mRange;
+  const PtRange* mRange;
 
 };
 

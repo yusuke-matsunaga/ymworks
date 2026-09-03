@@ -9,7 +9,6 @@
 #include "parser/AstMgr.h"
 #include "parser/PtModule.h"
 #include "parser/PtUdp.h"
-#include "parser/PtMisc.h"
 #include "alloc/Alloc.h"
 
 
@@ -32,14 +31,14 @@ AstMgr::~AstMgr()
 }
 
 // @brief 登録されているモジュールのリストを返す．
-const std::vector<const AstModule*>&
+const std::vector<AstModule>&
 AstMgr::module_list() const
 {
   return mModuleList;
 }
 
 // @brief 登録されている UDP のリストを返す．
-const std::vector<const AstUdp*>&
+const std::vector<AstUdp>&
 AstMgr::udp_list() const
 {
   return mUdpList;
@@ -57,12 +56,13 @@ AstMgr::check_def_name(
 // @brief attribute instance を取り出す．
 AstAttrInstVec
 AstMgr::find_attr_list(
-  const AstBase* obj
+  const AstBase& ast_obj
 ) const
 {
-  PtAttrInfo key(obj, {});
-  if ( mAttrDict.count(key) > 0 ) {
-    const auto& attr_info = mAttrDict.find(key);
+  auto key = ast_obj.key();
+  PtAttrInfo info(key, {});
+  if ( mAttrDict.count(info) > 0 ) {
+    const auto& attr_info = mAttrDict.find(info);
     return attr_info->attr_list().to_vector();
   }
   return {};
@@ -78,6 +78,26 @@ AstMgr::all_attr_list() const
     ans.push_back(ai);
   }
   return ans;
+}
+
+// @brief 内容を JsonValue に変換する．
+JsonValue
+AstMgr::json_obj() const
+{
+  auto jobj = JsonValue::object();
+  auto module_array = JsonValue::array();
+  for ( auto module: module_list() ) {
+    auto jobj1 = module.json_obj();
+    module_array.add(jobj1);
+  }
+  jobj.add("module_list", module_array);
+  auto udp_array = JsonValue::array();
+  for ( auto udp: udp_list() ) {
+    auto jobj1 = udp.json_obj();
+    udp_array.add(jobj1);
+  }
+  jobj.add("udp_list", udp_array);
+  return jobj;
 }
 
 // @brief 今までに生成したインスタンスをすべて破壊する．
@@ -96,7 +116,7 @@ AstMgr::clear()
 // UDP の登録
 void
 AstMgr::reg_udp(
-  const AstUdp* udp
+  const AstUdp& udp
 )
 {
   mUdpList.push_back(udp);
@@ -105,7 +125,7 @@ AstMgr::reg_udp(
 // モジュールの登録
 void
 AstMgr::reg_module(
-  const AstModule* module
+  const AstModule& module
 )
 {
   mModuleList.push_back(module);
@@ -123,13 +143,13 @@ AstMgr::reg_defname(
 // @brief attribute instance を登録する．
 void
 AstMgr::reg_attrinst(
-  const AstBase* obj,
-  const AstAttrInst* ai_top,
+  PtrIntType ptr,
+  const AstAttrInstList& ai_list,
   bool def
 )
 {
-  if ( obj != nullptr && ai_top != nullptr ) {
-    mAttrDict.emplace(PtAttrInfo(obj, ai_top, def));
+  if ( ptr != 0 && ai_list.size() > 0 ) {
+    mAttrDict.emplace(PtAttrInfo(ptr, ai_list, def));
   }
 }
 

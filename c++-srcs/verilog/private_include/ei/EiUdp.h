@@ -14,6 +14,7 @@
 #include "elaborator/ElbUdp.h"
 #include "ym/vl/VlIODecl.h"
 #include "ym/vl/VlScalarVal.h"
+#include "ym/vl/AstUdpEntry.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -33,10 +34,10 @@ public:
 
   /// @brief コンストラクタ
   EiUdpDefn(
-    const AstUdp* ast_udp, ///< [in] パース木の UDP 定義
-    bool is_protected,   ///< [in] プロテクト属性
-    SizeType io_num,     ///< [in] ポート数
-    SizeType table_num   ///< [in] テーブルの行数
+    const AstUdp& ast_udp, ///< [in] パース木の UDP 定義
+    bool is_protected,     ///< [in] プロテクト属性
+    SizeType io_num,       ///< [in] ポート数
+    SizeType table_num     ///< [in] テーブルの行数
   );
 
   /// @brief デストラクタ
@@ -116,24 +117,24 @@ public:
   /// @brief 入出力オブジェクトの内容を設定する．
   void
   set_io(
-    SizeType pos,              ///< [in] ポート中の位置
-    const AstIOHead* ast_header, ///< [in] パース木の宣言ヘッダ
-    const AstIOItem* ast_item    ///< [in] パース木の宣言要素
+    SizeType pos,                ///< [in] ポート中の位置
+    const AstIOHead& ast_header, ///< [in] パース木の宣言ヘッダ
+    const AstIOItem& ast_item    ///< [in] パース木の宣言要素
   ) override;
 
   /// @brief 初期値を設定する．
   void
   set_initial(
-    const AstExpr* init_expr,    ///< [in] 初期値を表す式
+    const AstExpr& init_expr,   ///< [in] 初期値を表す式
     const VlScalarVal& init_val ///< [in] 初期値
   ) override;
 
   /// @brief table entry の内容を設定する．
   void
   set_tableentry(
-    SizeType pos,                        ///< [in] 行番号
-    const AstUdpEntry* ast_udp_entry,      ///< [in] パース木の一行分の定義
-    const std::vector<VlUdpVal>& vals    ///< [in] シンボル値の配列
+    SizeType pos,                     ///< [in] 行番号
+    const AstUdpEntry& ast_udp_entry, ///< [in] パース木の一行分の定義
+    const std::vector<VlUdpVal>& vals ///< [in] シンボル値の配列
   ) override;
 
 
@@ -143,7 +144,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の UDP 定義
-  const AstUdp* mAstUdp;
+  AstUdp mAstUdp;
 
   // ポート数
   SizeType mPortNum;
@@ -155,7 +156,7 @@ private:
   std::vector<EiUdpIO> mIODeclList;
 
   // 初期値の式
-  const AstExpr* mInitExpr;
+  AstExpr mInitExpr;
 
   // 初期値
   VlScalarVal mInitVal;
@@ -273,8 +274,8 @@ public:
   /// @brief 内容を設定する．
   void
   set(
-    const AstIOHead* ast_header, ///< [in] パース木のIO宣言ヘッダ
-    const AstIOItem* ast_item    ///< [in] パース木のIO宣言定義
+    const AstIOHead& ast_header, ///< [in] パース木のIO宣言ヘッダ
+    const AstIOItem& ast_item    ///< [in] パース木のIO宣言定義
   );
 
 
@@ -287,10 +288,10 @@ private:
   ElbUdpDefn* mUdp;
 
   // パース木のIO宣言ヘッダ
-  const AstIOHead* mAstHeader;
+  AstIOHead mAstHeader;
 
   // パース木のIO宣言定義
-  const AstIOItem* mAstItem;
+  AstIOItem mAstItem;
 
 };
 
@@ -359,7 +360,7 @@ public:
   /// @brief 設定する．
   void
   set(
-    const AstUdpEntry* ast_entry,
+    const AstUdpEntry& ast_entry,
     const std::vector<VlUdpVal>& vals
   ) override;
 
@@ -373,7 +374,7 @@ private:
   ElbUdpDefn* mUdp;
 
   // パース木の定義
-  const AstUdpEntry* mAstUdpEntry;
+  AstUdpEntry mAstUdpEntry;
 
   // 値の配列
   std::vector<VlUdpVal> mValArray;

@@ -18,7 +18,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 // 実行すべき本体を返す．
-const AstStmt*
+const PtStmt*
 CptStmt_Loop::body() const
 {
   return mBody;
@@ -33,7 +33,7 @@ CptStmt_Loop::body() const
 AstStmt::Type
 CptStmt_Forever::type() const
 {
-  return Forever;
+  return AstStmt::Forever;
 }
 
 
@@ -45,11 +45,11 @@ CptStmt_Forever::type() const
 AstStmt::Type
 CptStmt_Repeat::type() const
 {
-  return Repeat;
+  return AstStmt::Repeat;
 }
 
 // 繰り返し式を返す．
-const AstExpr*
+const PtExpr*
 CptStmt_Repeat::expr() const
 {
   return mExpr;
@@ -64,7 +64,7 @@ CptStmt_Repeat::expr() const
 AstStmt::Type
 CptStmt_While::type() const
 {
-  return While;
+  return AstStmt::While;
 }
 
 
@@ -76,18 +76,18 @@ CptStmt_While::type() const
 AstStmt::Type
 CptStmt_For::type() const
 {
-  return For;
+  return AstStmt::For;
 }
 
 // 初期化代入式を取出す
-const AstStmt*
+const PtStmt*
 CptStmt_For::init_stmt() const
 {
   return mInit;
 }
 
 // 繰り返し代入式を取出す
-const AstStmt*
+const PtStmt*
 CptStmt_For::next_stmt() const
 {
   return mNext;
@@ -102,7 +102,7 @@ CptStmt_For::next_stmt() const
 PtStmt*
 PtFactory::new_Forever(
   const FileRegion& file_region,
-  const AstStmt* body
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Forever));
@@ -113,8 +113,8 @@ PtFactory::new_Forever(
 PtStmt*
 PtFactory::new_Repeat(
   const FileRegion& file_region,
-  const AstExpr* expr,
-  const AstStmt* body
+  const PtExpr* expr,
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Repeat));
@@ -125,8 +125,8 @@ PtFactory::new_Repeat(
 PtStmt*
 PtFactory::new_While(
   const FileRegion& file_region,
-  const AstExpr* cond,
-  const AstStmt* body
+  const PtExpr* cond,
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_While));
@@ -137,10 +137,10 @@ PtFactory::new_While(
 PtStmt*
 PtFactory::new_For(
   const FileRegion& file_region,
-  const AstStmt* init,
-  const AstExpr* cond,
-  const AstStmt* next,
-  const AstStmt* body
+  const PtStmt* init,
+  const PtExpr* cond,
+  const PtStmt* next,
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_For));

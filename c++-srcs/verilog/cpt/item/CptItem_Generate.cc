@@ -8,7 +8,7 @@
 
 #include "CptItem_Generate.h"
 #include "alloc/Alloc.h"
-#include "parser/PtDecl.h"
+#include "parser/PtDeclHead.h"
 #include "parser/PtExpr.h"
 #include "parser/PtFactory.h"
 
@@ -27,17 +27,17 @@ CptItem_GenBase::file_region() const
 }
 
 // @brief 宣言ヘッダリストの取得
-AstDeclHeadList
-CptItem_GenBase::declhead_list() const
+const PtDeclHead*
+CptItem_GenBase::declhead_top() const
 {
-  return mBody.declhead_list();
+  return mBody.declhead_top();
 }
 
 // @brief item リストの取得
-AstItemList
-CptItem_GenBase::item_list() const
+const PtItem*
+CptItem_GenBase::item_top() const
 {
-  return mBody.item_list();
+  return mBody.item_top();
 }
 
 
@@ -49,7 +49,7 @@ CptItem_GenBase::item_list() const
 AstItem::Type
 CptItem_Generate::type() const
 {
-  return Generate;
+  return AstItem::Generate;
 }
 
 
@@ -61,7 +61,7 @@ CptItem_Generate::type() const
 AstItem::Type
 CptItem_GenBlock::type() const
 {
-  return GenBlock;
+  return AstItem::GenBlock;
 }
 
 
@@ -92,42 +92,42 @@ CptItem_GenIf::file_region() const
 AstItem::Type
 CptItem_GenIf::type() const
 {
-  return GenIf;
+  return AstItem::GenIf;
 }
 
 // 条件式を返す．
-const AstExpr*
+const PtExpr*
 CptItem_GenIf::cond_expr() const
 {
   return mCond;
 }
 
 // @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-AstDeclHeadList
-CptItem_GenIf::then_declhead_list() const
+const PtDeclHead*
+CptItem_GenIf::then_declhead_top() const
 {
-  return mThenBody.declhead_list();
+  return mThenBody.declhead_top();
 }
 
 // @brief 条件が成り立った時に生成される要素リストの取得
-AstItemList
-CptItem_GenIf::then_item_list() const
+const PtItem*
+CptItem_GenIf::then_item_top() const
 {
-  return mThenBody.item_list();
+  return mThenBody.item_top();
 }
 
 // @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-AstDeclHeadList
-CptItem_GenIf::else_declhead_list() const
+const PtDeclHead*
+CptItem_GenIf::else_declhead_top() const
 {
-  return AstDeclHeadList();
+  return nullptr;
 }
 
 // @brief 条件が成り立たなかった時に生成されるitemリストの取得
-AstItemList
-CptItem_GenIf::else_item_list() const
+const PtItem*
+CptItem_GenIf::else_item_top() const
 {
-  return AstItemList();
+  return nullptr;
 }
 
 
@@ -136,17 +136,17 @@ CptItem_GenIf::else_item_list() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-AstDeclHeadList
-CptItem_GenIfElse::else_declhead_list() const
+const PtDeclHead*
+CptItem_GenIfElse::else_declhead_top() const
 {
-  return mElseBody.declhead_list();
+  return mElseBody.declhead_top();
 }
 
 // @brief 条件が成り立たなかった時に生成されるitemリストの取得
-AstItemList
-CptItem_GenIfElse::else_item_list() const
+const PtItem*
+CptItem_GenIfElse::else_item_top() const
 {
-  return mElseBody.item_list();
+  return mElseBody.item_top();
 }
 
 
@@ -162,24 +162,24 @@ CptGenCaseItem::file_region() const
 }
 
 // @brief ラベルリストの取得
-AstExprList
-CptGenCaseItem::label_list() const
+const PtExpr*
+CptGenCaseItem::label_top() const
 {
-  return AstExprList(mLabelTop);
+  return mLabelTop;
 }
 
 // @brief 宣言リストの取得
-AstDeclHeadList
-CptGenCaseItem::declhead_list() const
+const PtDeclHead*
+CptGenCaseItem::declhead_top() const
 {
-  return mBody.declhead_list();
+  return mBody.declhead_top();
 }
 
 // @brief item リストの取得
-AstItemList
-CptGenCaseItem::item_list() const
+const PtItem*
+CptGenCaseItem::item_top() const
 {
-  return mBody.item_list();
+  return mBody.item_top();
 }
 
 
@@ -198,21 +198,21 @@ CptItem_GenCase::file_region() const
 AstItem::Type
 CptItem_GenCase::type() const
 {
-  return GenCase;
+  return AstItem::GenCase;
 }
 
 // 比較式を返す．
-const AstExpr*
+const PtExpr*
 CptItem_GenCase::cond_expr() const
 {
   return mExpr;
 }
 
 // @brief case item リストの取得
-AstGenCaseItemList
-CptItem_GenCase::caseitem_list() const
+const PtGenCaseItem*
+CptItem_GenCase::caseitem_top() const
 {
-  return AstGenCaseItemList(mCaseItemTop);
+  return mCaseItemTop;
 }
 
 
@@ -224,7 +224,7 @@ CptItem_GenCase::caseitem_list() const
 AstItem::Type
 CptItem_GenFor::type() const
 {
-  return GenFor;
+  return AstItem::GenFor;
 }
 
 // 名前を返す．
@@ -242,21 +242,21 @@ CptItem_GenFor::loop_var() const
 }
 
 // 初期化文の右辺を返す．
-const AstExpr*
+const PtExpr*
 CptItem_GenFor::init_expr() const
 {
   return mInitExpr;
 }
 
 // 繰り返し条件を返す．
-const AstExpr*
+const PtExpr*
 CptItem_GenFor::cond_expr() const
 {
   return mCond;
 }
 
 // 増加文の右辺を返す．
-const AstExpr*
+const PtExpr*
 CptItem_GenFor::next_expr() const
 {
   return mNextExpr;
@@ -271,8 +271,8 @@ CptItem_GenFor::next_expr() const
 PtItem*
 PtFactory::new_Generate(
   const FileRegion& file_region,
-  PtDeclHead* declhead_top,
-  PtItem* item_top
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_Generate));
@@ -285,8 +285,8 @@ PtFactory::new_Generate(
 PtItem*
 PtFactory::new_GenBlock(
   const FileRegion& file_region,
-  PtDeclHead* declhead_top,
-  PtItem* item_top
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GenBlock));
@@ -300,8 +300,8 @@ PtItem*
 PtFactory::new_GenBlock(
   const FileRegion& file_region,
   const char* name,
-  PtDeclHead* declhead_top,
-  PtItem* item_top
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GenBlockN));
@@ -314,9 +314,9 @@ PtFactory::new_GenBlock(
 PtItem*
 PtFactory::new_GenIf(
   const FileRegion& file_region,
-  const AstExpr* cond,
-  PtDeclHead* declhead_top,
-  PtItem* item_top
+  const PtExpr* cond,
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GenIf));
@@ -329,11 +329,11 @@ PtFactory::new_GenIf(
 PtItem*
 PtFactory::new_GenIfElse(
   const FileRegion& file_region,
-  const AstExpr* cond,
-  PtDeclHead* then_declhead_top,
-  PtItem* then_item_top,
-  PtDeclHead* else_declhead_top,
-  PtItem* else_item_top
+  const PtExpr* cond,
+  const PtDeclHead* then_declhead_top,
+  const PtItem* then_item_top,
+  const PtDeclHead* else_declhead_top,
+  const PtItem* else_item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GenIfElse));
@@ -348,8 +348,8 @@ PtFactory::new_GenIfElse(
 PtItem*
 PtFactory::new_GenCase(
   const FileRegion& file_region,
-  const AstExpr* expr,
-  PtGenCaseItem* item_top
+  const PtExpr* expr,
+  const PtGenCaseItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GenCase));
@@ -360,9 +360,9 @@ PtFactory::new_GenCase(
 PtGenCaseItem*
 PtFactory::new_GenCaseItem(
   const FileRegion& file_region,
-  PtExpr* label_top,
-  PtDeclHead* declhead_top,
-  PtItem* item_top
+  const PtExpr* label_top,
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenCaseItem));
@@ -377,12 +377,12 @@ PtItem*
 PtFactory::new_GenFor(
   const FileRegion& file_region,
   const char* loop_var,
-  const AstExpr* init_expr,
-  const AstExpr* cond,
-  const AstExpr* next_expr,
+  const PtExpr* init_expr,
+  const PtExpr* cond,
+  const PtExpr* next_expr,
   const char* block_name,
-  PtDeclHead* declhead_top,
-  PtItem* item_top
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GenFor));

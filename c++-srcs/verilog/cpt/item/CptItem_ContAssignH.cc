@@ -9,6 +9,7 @@
 #include "CptItem_ContAssignH.h"
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
+#include "parser/PtExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -28,28 +29,28 @@ CptItem_ContAssignH::file_region() const
 AstItem::Type
 CptItem_ContAssignH::type() const
 {
-  return ContAssign;
+  return AstItem::ContAssign;
 }
 
 // @brief strength の取得
-const AstStrength*
+const PtStrength*
 CptItem_ContAssignH::strength() const
 {
   return nullptr;
 }
 
 // @brief delay の取得
-const AstDelay*
+const PtDelay*
 CptItem_ContAssignH::delay() const
 {
   return nullptr;
 }
 
 // @brief continuous assign リストの取得
-AstContAssignList
-CptItem_ContAssignH::contassign_list() const
+const PtContAssign*
+CptItem_ContAssignH::contassign_top() const
 {
-  return AstContAssignList(mTop);
+  return mTop;
 }
 
 
@@ -58,7 +59,7 @@ CptItem_ContAssignH::contassign_list() const
 //////////////////////////////////////////////////////////////////////
 
 // strength を返す．
-const AstStrength*
+const PtStrength*
 CptItem_ContAssignHS::strength() const
 {
   return mStrength;
@@ -70,7 +71,7 @@ CptItem_ContAssignHS::strength() const
 //////////////////////////////////////////////////////////////////////
 
 // delay を返す．
-const AstDelay*
+const PtDelay*
 CptItem_ContAssignHD::delay() const
 {
   return mDelay;
@@ -82,14 +83,14 @@ CptItem_ContAssignHD::delay() const
 //////////////////////////////////////////////////////////////////////
 
 // strength を返す．
-const AstStrength*
+const PtStrength*
 CptItem_ContAssignHSD::strength() const
 {
   return mStrength;
 }
 
 // delay を返す．
-const AstDelay*
+const PtDelay*
 CptItem_ContAssignHSD::delay() const
 {
   return mDelay;
@@ -108,14 +109,14 @@ CptContAssign::file_region() const
 }
 
 // 左辺式を取り出す．
-const AstExpr*
+const PtExpr*
 CptContAssign::lhs() const
 {
   return mLhs;
 }
 
 // 右辺式を取り出す．
-const AstExpr*
+const PtExpr*
 CptContAssign::rhs() const
 {
   return mRhs;
@@ -130,7 +131,7 @@ CptContAssign::rhs() const
 PtItem*
 PtFactory::new_ContAssignH(
   const FileRegion& file_region,
-  PtContAssign* elem_top
+  const PtContAssign* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_ContAssignH));
@@ -141,8 +142,8 @@ PtFactory::new_ContAssignH(
 PtItem*
 PtFactory::new_ContAssignH(
   const FileRegion& file_region,
-  const AstDelay* delay,
-  PtContAssign* elem_top
+  const PtDelay* delay,
+  const PtContAssign* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_ContAssignHD));
@@ -153,8 +154,8 @@ PtFactory::new_ContAssignH(
 PtItem*
 PtFactory::new_ContAssignH(
   const FileRegion& file_region,
-  const AstStrength* strength,
-  PtContAssign* elem_top
+  const PtStrength* strength,
+  const PtContAssign* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_ContAssignHS));
@@ -165,9 +166,9 @@ PtFactory::new_ContAssignH(
 PtItem*
 PtFactory::new_ContAssignH(
   const FileRegion& file_region,
-  const AstStrength* strength,
-  const AstDelay* delay,
-  PtContAssign* elem_top
+  const PtStrength* strength,
+  const PtDelay* delay,
+  const PtContAssign* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_ContAssignHSD));
@@ -178,8 +179,8 @@ PtFactory::new_ContAssignH(
 PtContAssign*
 PtFactory::new_ContAssign(
   const FileRegion& file_region,
-  const AstExpr* lhs,
-  const AstExpr* rhs
+  const PtExpr* lhs,
+  const PtExpr* rhs
 )
 {
   // 実は file_region は不要

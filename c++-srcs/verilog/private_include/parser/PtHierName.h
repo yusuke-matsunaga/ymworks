@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "parser/PtMisc.h"
+#include "parser/PtNameBranch.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

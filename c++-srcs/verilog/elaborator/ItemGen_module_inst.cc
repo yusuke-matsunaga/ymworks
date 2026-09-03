@@ -14,8 +14,8 @@
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstPort.h"
 #include "ym/vl/AstItem.h"
+#include "ym/vl/AstInst.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 #include "ym/vl/VlPort.h"
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbModuleArray.h"
@@ -35,14 +35,14 @@ BEGIN_NAMESPACE_YM_VERILOG
 void
 ItemGen::phase1_muheader(
   const VlScope* parent,
-  const AstItem* ast_head
+  const AstItem& ast_head
 )
 {
-  auto defname = ast_head->name();
+  auto defname = ast_head.name();
 
   // モジュールを探す
   auto ast_module = find_moduledef(defname);
-  if ( ast_module ) {
+  if ( ast_module.is_valid() ) {
     // モジュール定義が見つかった．
     phase1_module(parent, ast_head, ast_module);
     return;
@@ -50,7 +50,7 @@ ItemGen::phase1_muheader(
 
   // 次に udp を探す．
   auto udpdefn = mgr().find_udp(defname);
-  if ( udpdefn ) {
+  if ( udpdefn != nullptr ) {
     phase1_udp(parent, ast_head, udpdefn);
     return;
   }
@@ -70,27 +70,26 @@ ItemGen::phase1_muheader(
 void
 ItemGen::phase1_module(
   const VlScope* parent,
-  const AstItem* ast_head,
-  const AstModule* ast_module
+  const AstItem& ast_head,
+  const AstModule& ast_module
 )
 {
-  if ( ast_module->is_in_use() ) {
+  if ( ast_module.is_in_use() ) {
     // 依存関係が循環している．
     ErrorGen::cyclic_dependency(__FILE__, __LINE__, ast_module);
   }
 
-  for ( auto ast_inst: ast_head->inst_list() ) {
-    auto name = ast_inst->name();
+  for ( auto ast_inst: ast_head.inst_list() ) {
+    auto name = ast_inst.name();
     if ( name == nullptr ) {
       // 名無しのモジュールインスタンスはない
       ErrorGen::noname_module(__FILE__, __LINE__, ast_inst);
     }
 
-    auto ast_range = ast_inst->range();
-    if ( ast_range != nullptr ) {
+    auto ast_range = ast_inst.range();
+    if ( ast_range.is_valid() ) {
       // 配列型は今すぐにはインスタンス化できない．
-      add_phase1stub(make_stub(this, &ItemGen::phase1_module_array,
-			       parent, ast_module, ast_head, ast_inst));
+      add_phase1stub(make_module_array_stub(parent, ast_module, ast_head, ast_inst));
     }
     else {
       // 単一の要素
@@ -107,7 +106,7 @@ ItemGen::phase1_module(
 	std::ostringstream buf;
 	buf << "\"" << module1->full_name() << "\" has been created.";
 	MsgMgr::put_msg(__FILE__, __LINE__,
-			ast_inst->file_region(),
+			ast_inst.file_region(),
 			MsgType::Info,
 			"ELAB",
 			buf.str());
@@ -117,8 +116,7 @@ ItemGen::phase1_module(
       auto param_con_list = gen_param_con_list(parent, ast_head);
       phase1_module_item(module1, ast_module, param_con_list);
 
-      add_phase3stub(make_stub(this, &ItemGen::link_module,
-			       module1, ast_module, ast_inst));
+      add_phase3stub(make_link_module_stub(module1, ast_module, ast_inst));
     }
   }
 }
@@ -127,15 +125,15 @@ ItemGen::phase1_module(
 void
 ItemGen::phase1_module_array(
   const VlScope* parent,
-  const AstModule* ast_module,
-  const AstItem* ast_head,
-  const AstInst* ast_inst
+  const AstModule& ast_module,
+  const AstItem& ast_head,
+  const AstInst& ast_inst
 )
 {
-  auto defname = ast_head->name();
+  auto defname = ast_head.name();
 
-  auto name = ast_inst->name();
-  auto ast_range = ast_inst->range();
+  auto name = ast_inst.name();
+  auto ast_range = ast_inst.range();
 
   auto range = evaluate_range(parent, ast_range);
   auto module_array = mgr().new_ModuleArray(parent, ast_module,
@@ -147,14 +145,13 @@ ItemGen::phase1_module_array(
     buf << "instantiating module array \"" << name << "\" of \""
 	<< defname << "\" [" << range.left << " : " << range.right << "].";
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    ast_head->file_region(),
+		    ast_head.file_region(),
 		    MsgType::Info,
 		    "ELAB",
 		    buf.str());
   }
 
-  add_phase3stub(make_stub(this, &ItemGen::link_module_array,
-			   module_array, ast_module, ast_inst));
+  add_phase3stub(make_link_module_array_stub(module_array, ast_module, ast_inst));
 
   // パラメータ割り当て式の生成
   auto param_con_list = gen_param_con_list(parent, ast_head);
@@ -184,52 +181,50 @@ ItemGen::phase1_module_array(
 void
 ItemGen::phase1_udp(
   const VlScope* parent,
-  const AstItem* ast_head,
+  const AstItem& ast_head,
   const VlUdpDefn* udpdefn
 )
 {
   // この場合, mParamList は空でなければならない．
   // 問題は delay が mParamList に見える場合があるということ．
-  auto pa_list = ast_head->paramassign_list();
+  auto pa_list = ast_head.paramassign_list();
   auto param_size = pa_list.size();
-  auto ast_delay = ast_head->delay();
-  if ( param_size > 0 && pa_list.front()->name() != nullptr ) {
+  auto ast_delay = ast_head.delay();
+  if ( param_size > 0 && pa_list.front().name() != nullptr ) {
     ErrorGen::udp_with_named_paramassign(__FILE__, __LINE__, ast_head);
   }
-  if ( (ast_delay && param_size > 0) || param_size > 1 ) {
+  if ( (ast_delay.is_valid() && param_size > 0) || param_size > 1 ) {
     ErrorGen::udp_with_ordered_paramassign(__FILE__, __LINE__, ast_head);
   }
 
   // 今すぐには処理できないのでキューに積む．
-  add_phase2stub(make_stub(this, &ItemGen::instantiate_udpheader,
-			   parent, ast_head, udpdefn));
+  add_phase2stub(make_udpheader_stub(parent, ast_head, udpdefn));
 }
 
 // @brief cell instance の生成を行う．
 void
 ItemGen::phase1_cell(
   const VlScope* parent,
-  const AstItem* ast_head,
+  const AstItem& ast_head,
   ClibCell cell
 )
 {
   // この場合, parameter 割り当てリストは空でなければならない．
-  auto pa_list = ast_head->paramassign_list();
+  auto pa_list = ast_head.paramassign_list();
   if ( pa_list.size() > 0 ) {
     ErrorGen::cell_with_paramassign(__FILE__, __LINE__, ast_head);
   }
 
   // 今すぐには処理できないのでキューに積む．
-  add_phase2stub(make_stub(this, &ItemGen::instantiate_cell,
-			   parent, ast_head, cell));
+  add_phase2stub(make_cell_stub(parent, ast_head, cell));
 }
 
 // @brief module array instance の入出力端子の接続を行う．
 void
 ItemGen::link_module_array(
   ElbModuleArray* module_array,
-  const AstModule* ast_module,
-  const AstInst* ast_inst
+  const AstModule& ast_module,
+  const AstInst& ast_inst
 )
 {
   auto parent = module_array->parent_scope();
@@ -238,7 +233,7 @@ ItemGen::link_module_array(
   auto module0 = module_array->elem_by_offset(0);
   SizeType port_num = module0->port_num();
 
-  auto port_list = ast_inst->port_list();
+  auto port_list = ast_inst.port_list();
   SizeType n = port_list.size();
 
   // ポートの割り当てを行う．
@@ -249,9 +244,8 @@ ItemGen::link_module_array(
   // () を取らない形を用意しておけば良かったのに．
   if ( port_num == 0 && n == 1 ) {
     auto con = port_list.front();
-    if ( /* con->attr_top() == nullptr &&*/
-	 con->name() == nullptr &&
-	 con->expr() == nullptr ) {
+    if ( con.name() == nullptr &&
+	 con.expr().is_invalid() ) {
       // この要素は無視する．
       return;
     }
@@ -262,13 +256,13 @@ ItemGen::link_module_array(
   // どうやら実際のポート数よりも少ないのはいいらしい
 
   // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (port_list.front()->name() != nullptr);
+  bool conn_by_name = (port_list.front().name() != nullptr);
   std::unordered_map<std::string, int> port_index;
   if ( conn_by_name ) {
     // ポート名とインデックスの辞書を作る．
     SizeType index{0};
-    for ( auto ast_port: ast_module->port_list() ) {
-      auto name = ast_port->ext_name();
+    for ( auto ast_port: ast_module.port_list() ) {
+      auto name = ast_port.ext_name();
       if ( name != nullptr ) {
 	port_index[std::string(name)] = index;
       }
@@ -279,9 +273,9 @@ ItemGen::link_module_array(
   // ポートに接続する式を生成する．
   ElbEnv env;
   SizeType pos{0};
-  for ( auto ast_con: ast_inst->port_list() ) {
-    auto ast_expr = ast_con->expr();
-    if ( !ast_expr ) {
+  for ( auto ast_con: ast_inst.port_list() ) {
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_invalid() ) {
       continue;
     }
 
@@ -289,7 +283,7 @@ ItemGen::link_module_array(
     SizeType index;
     if ( conn_by_name ) {
       // 名前による割り当ての場合はポート名で探す．
-      auto port_name = ast_con->name();
+      auto port_name = ast_con.name();
       if ( port_name == nullptr ) {
 	throw std::logic_error{"part_name == nullptr"};
       }
@@ -305,7 +299,7 @@ ItemGen::link_module_array(
       // 順序に割り当ての場合は単純に pos
       index = pos;
       // 前にも書いたように YACC の文法で規定されているのでこれは常に偽のはず
-      if ( ast_con->name() != nullptr ) {
+      if ( ast_con.name() != nullptr ) {
 	throw std::logic_error{"ast_con->name() != nullptr"};
       }
       ++ pos;
@@ -419,13 +413,13 @@ ItemGen::link_module_array(
 void
 ItemGen::link_module(
   ElbModule* module,
-  const AstModule* ast_module,
-  const AstInst* ast_inst
+  const AstModule& ast_module,
+  const AstInst& ast_inst
 )
 {
   auto parent = module->parent_scope();
   SizeType port_num = module->port_num();
-  auto port_list = ast_inst->port_list();
+  auto port_list = ast_inst.port_list();
   SizeType n = port_list.size();
   // ポートの割り当てを行う．
   // 例外: ポートを一つも取らないモジュールの場合
@@ -435,9 +429,8 @@ ItemGen::link_module(
   // () を取らない形を用意しておけば良かったのに．
   if ( port_num == 0 && n == 1 ) {
     auto ast_con = port_list.front();
-    if ( /* ast_con->attr_top() == nullptr &&*/
-	 ast_con->name() == nullptr &&
-	 ast_con->expr() == nullptr ) {
+    if ( ast_con.name() == nullptr &&
+	 ast_con.expr().is_invalid() ) {
       // この要素は無視する．
       return;
     }
@@ -448,13 +441,13 @@ ItemGen::link_module(
   // どうやら実際のポート数よりも少ないのはいいらしい
 
   // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (port_list.front()->name() != nullptr);
+  bool conn_by_name = (port_list.front().name() != nullptr);
   std::unordered_map<std::string, SizeType> port_index;
   if ( conn_by_name ) {
     // ポート名とインデックスの辞書を作る．
     SizeType index{0};
-    for ( auto ast_port: ast_module->port_list() ) {
-      auto name = ast_port->ext_name();
+    for ( auto ast_port: ast_module.port_list() ) {
+      auto name = ast_port.ext_name();
       if ( name != nullptr ) {
 	port_index[std::string(name)] = index;
       }
@@ -465,9 +458,9 @@ ItemGen::link_module(
   // ポートに接続する式を生成する．
   ElbEnv env;
   SizeType pos{0};
-  for ( auto ast_con: ast_inst->port_list() ) {
-    auto ast_expr = ast_con->expr();
-    if ( !ast_expr ) {
+  for ( auto ast_con: ast_inst.port_list() ) {
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_invalid() ) {
       continue;
     }
 
@@ -475,7 +468,7 @@ ItemGen::link_module(
     int index{-1};
     if ( conn_by_name ) {
       // 名前による割り当ての場合はポート名で探す．
-      auto port_name = ast_con->name();
+      auto port_name = ast_con.name();
       if ( port_name == nullptr ) {
 	throw std::logic_error{"port_name == nullptr"};
       }
@@ -491,7 +484,7 @@ ItemGen::link_module(
       // 順序による割り当ての場合は単純に pos
       index = pos;
       // 前にも書いたように YACC の文法から下の仮定は常に成り立たないはず．
-      if ( ast_con->name() != nullptr ) {
+      if ( ast_con.name() != nullptr ) {
 	throw std::logic_error{"ast_con->name() != nullptr"};
       }
       ++ pos;
@@ -523,7 +516,7 @@ ItemGen::link_module(
 	    std::ostringstream buf;
 	    buf << "port_size: " << port_size << ", expr_size: " << expr_size;
 	    MsgMgr::put_msg(__FILE__, __LINE__,
-			    ast_expr->file_region(),
+			    ast_expr.file_region(),
 			    MsgType::Debug,
 			    "ELAB",
 			    buf.str());
@@ -556,13 +549,13 @@ ItemGen::link_module(
 std::vector<ElbParamCon>
 ItemGen::gen_param_con_list(
   const VlScope* parent,
-  const AstItem* ast_head
+  const AstItem& ast_head
 )
 {
   std::vector<ElbParamCon> param_con_list;
-  auto pa_list = ast_head->paramassign_list();
+  auto pa_list = ast_head.paramassign_list();
   for ( auto ast_con: pa_list ) {
-    auto ast_expr = ast_con->expr();
+    auto ast_expr = ast_con.expr();
     auto value = evaluate_expr(parent, ast_expr);
     param_con_list.push_back({ast_con, ast_expr, value});
   }

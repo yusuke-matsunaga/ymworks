@@ -13,6 +13,7 @@
 #include "parser/PtModule.h"
 #include "parser/PtPort.h"
 #include "parser/PtItem.h"
+#include "ym/vl/AstPort.h"
 #include "ym/MsgMgr.h"
 
 
@@ -64,13 +65,13 @@ Parser::new_Module1995(
   // 調べる．
   // 同時に名無しのポートがあるかどうかしらべる．
   bool named_port = true;
-  for ( auto port = port_top; port != nullptr; port = port->_link() ) {
+  for ( auto port: PtPortList::new_obj(port_top) ) {
     if ( port->ext_name() == nullptr ) {
       // 1つでも名前を持たないポートがあったら名前での結合はできない．
       named_port = false;
     }
     SizeType index = 0;
-    for ( auto expr: port->portref_list() ) {
+    for ( auto expr: PtList<const PtExpr>::new_obj(port->portref_top()) ) {
       auto name = expr->name();
       if ( iodecl_dirs.count(name) == 0 ) {
 	// name は IOH リストに存在しない．
@@ -141,7 +142,7 @@ Parser::new_Module2001(
   std::string library; // ?
   std::string cell;    // ?
 
-  if ( !check_PortArray(AstIOHeadList(portdecl_top)) ) {
+  if ( !check_PortArray(portdecl_top) ) {
     return nullptr;
   }
 
@@ -174,8 +175,8 @@ Parser::check_IO(
   // port_array をスキャンして中で用いられている名前を portref_dic
   // に登録する．
   std::unordered_set<std::string> portref_dic;
-  for ( auto port: AstPortList(port_top) ) {
-    for ( auto expr: port->portref_list() ) {
+  for ( auto port: PtList<const PtPort>::new_obj(port_top) ) {
+    for ( auto expr: PtList<const PtExpr>::new_obj(port->portref_top()) ) {
       auto name = expr->name();
       portref_dic.insert(name);
     }
@@ -184,10 +185,10 @@ Parser::check_IO(
   // 入出力ポート宣言に現れる名前を iodecl_names に入れる．
   // ポート宣言が型を持つ場合にはモジュール内部の宣言要素を生成する．
   // 持たない場合にはデフォルトタイプのネットを生成する．
-  for ( auto io_head: AstIOHeadList(iohead_top) ) {
+  for ( auto iohead: PtList<const PtIOHead>::new_obj(iohead_top) ) {
     // 名前をキーにして方向を記録しておく
-    VpiDir dir = io_head->direction();
-    for ( auto elem: io_head->item_list() ) {
+    VpiDir dir = iohead->direction();
+    for ( auto elem: PtList<const PtIOItem>::new_obj(iohead->item_top()) ) {
       auto elem_name = elem->name();
 
       // まず未定義/多重定義のエラーをチェックする．
@@ -222,12 +223,12 @@ Parser::check_IO(
 // @brief 入出力宣言中の重複チェックを行う．
 bool
 Parser::check_PortArray(
-  const AstIOHeadList& iohead_list
+  const PtIOHead* iohead_top
 )
 {
   std::unordered_set<std::string> portref_dic;
-  for ( auto head: iohead_list ) {
-    for ( auto elem: head->item_list() ) {
+  for ( auto head: PtList<const PtIOHead>::new_obj(iohead_top) ) {
+    for ( auto elem: PtList<const PtIOItem>::new_obj(head->item_top()) ) {
       auto name = elem->name();
       if ( portref_dic.count(name) > 0 ) {
 	std::ostringstream buf;
@@ -248,13 +249,13 @@ Parser::check_PortArray(
 // @brief 入出力宣言からポートリストを作る．
 PtPortList
 Parser::new_PortArray(
-  const AstIOHeadList& iohead_list
+  const PtIOHead* iohead_top
 )
 {
   // ポートを生成し vec に格納する．
   auto port_list = PtPortList::new_obj();
-  for ( auto head: iohead_list ) {
-    for ( auto elem: head->item_list() ) {
+  for ( auto head: PtList<const PtIOHead>::new_obj(iohead_top) ) {
+    for ( auto elem: PtList<const PtIOItem>::new_obj(head->item_top()) ) {
       auto name = elem->name();
       auto portref = mFactory.new_Primary(elem->file_region(), name);
       auto port = mFactory.new_Port(elem->file_region(), name, portref);

@@ -24,7 +24,7 @@ TEST_F(PtTest, new1)
   EXPECT_FALSE( nb_top->has_index() );
   EXPECT_THROW( nb_top->index(),
 		std::logic_error );
-  EXPECT_EQ( nullptr, nb_top->_link() );
+  EXPECT_EQ( nullptr, nb_top->link() );
 }
 
 TEST_F(PtTest, new2)
@@ -39,7 +39,7 @@ TEST_F(PtTest, new2)
   EXPECT_STREQ( head, nb_top->name() );
   EXPECT_TRUE( nb_top->has_index() );
   EXPECT_EQ( index, nb_top->index() );
-  EXPECT_EQ( nullptr, nb_top->_link() );
+  EXPECT_EQ( nullptr, nb_top->link() );
 }
 
 TEST_F(PtTest, add1)
@@ -55,10 +55,10 @@ TEST_F(PtTest, add1)
   auto nb_top = hname.nb_list.top;
   EXPECT_STREQ( head, nb_top->name() );
   EXPECT_FALSE( nb_top->has_index() );
-  auto nb2 = nb_top->_link();
+  auto nb2 = nb_top->link();
   EXPECT_STREQ( tail, nb2->name() );
   EXPECT_FALSE( nb2->has_index() );
-  EXPECT_EQ( nullptr, nb2->_link() );
+  EXPECT_EQ( nullptr, nb2->link() );
 }
 
 TEST_F(PtTest, add2)
@@ -75,11 +75,11 @@ TEST_F(PtTest, add2)
   auto nb_top = hname.nb_list.top;
   EXPECT_STREQ( head, nb_top->name() );
   EXPECT_FALSE( nb_top->has_index() );
-  auto nb2 = nb_top->_link();
+  auto nb2 = nb_top->link();
   EXPECT_STREQ( tail, nb2->name() );
   EXPECT_TRUE( nb2->has_index() );
   EXPECT_EQ( index2, nb2->index() );
-  EXPECT_EQ( nullptr, nb2->_link() );
+  EXPECT_EQ( nullptr, nb2->link() );
 }
 
 END_NAMESPACE_YM_VERILOG

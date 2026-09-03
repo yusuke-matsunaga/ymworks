@@ -14,6 +14,8 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+class PtPort;
+
 //////////////////////////////////////////////////////////////////////
 /// @class AstPort AstPort.h "ym/vl/AstPort.h"
 /// @ingroup VlParser
@@ -32,45 +34,81 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// 異なる可能性がある．
 //////////////////////////////////////////////////////////////////////
 class AstPort :
-  public AstBase
+  public AstBaseWithPtr<const PtPort>
 {
-  friend class AstList<const AstPort>;
-  friend class AstListIter<const AstPort>;
+public:
+
+  /// @brief コンストラクタ
+  explicit
+  AstPort(
+    const PtPort* ptr = nullptr ///< [in] 実体のポインタ
+  ) : AstBaseWithPtr<const PtPort>(ptr)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~AstPort() = default;
+
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPort の継承クラスが実装しなければならない仮想関数
+  // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 外向の名前の取得
   /// @return 外向の名前(本当のポート名)
   ///
   /// 無い場合は nullptr を返す
-  virtual
   const char*
-  ext_name() const = 0;
+  ext_name() const;
 
   /// @brief 内部の結線を表す式の取得
   ///
-  /// - nullptr の場合もある．
+  /// - 無効な値の場合もある．
   /// - 複数の結線からなる場合には Concat 演算となる．
-  virtual
-  const AstExpr*
-  expr() const = 0;
+  AstExpr
+  expr() const;
 
   /// @brief 内部のポート結線のリストの取得
   ///
-  /// portef_size() <= 1 の時は nullptr を返す．
-  virtual
+  /// portef_size() <= 1 の時は空リストを返す．
   AstExprList
-  portref_list() const = 0;
+  portref_list() const;
 
   /// @brief 内部のポート結線の向きの取得
-  virtual
   VpiDir
   portref_dir(
     SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
-  ) const = 0;
+  ) const;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstBase の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 適切な値を持っている時 true を返す．
+  bool
+  is_valid() const override;
+
+  /// @brief ファイル位置の取得
+  /// @return ファイル位置
+  FileRegion
+  file_region() const override;
+
+  /// @brief 比較用のユニークなキーを返す．
+  PtrIntType
+  key() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstList<> の要素のための関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  AstPort
+  next() const;
 
 
 private:
@@ -78,10 +116,11 @@ private:
   // 内部で用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 次の要素の取得
-  virtual
-  const AstPort*
-  link() const = 0;
+  /// @brief json_obj() の下請け関数
+  void
+  json_sub(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const override;
 
 };
 

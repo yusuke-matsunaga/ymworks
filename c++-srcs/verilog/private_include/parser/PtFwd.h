@@ -68,9 +68,6 @@ class PtUdp;
 class PtUdpEntry;
 class PtUdpValue;
 
-class PtHeadList;
-class PtIOPortList;
-class PtDeclPortList;
 
 END_NAMESPACE_YM_VERILOG
 

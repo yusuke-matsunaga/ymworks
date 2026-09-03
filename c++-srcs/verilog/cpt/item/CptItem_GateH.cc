@@ -8,7 +8,7 @@
 
 #include "CptItem_GateH.h"
 #include "alloc/Alloc.h"
-#include "parser/PtMisc.h"
+//#include "parser/PtMisc.h"
 #include "parser/PtFactory.h"
 
 
@@ -30,18 +30,18 @@ CptItem_GateH::file_region() const
 AstItem::Type
 CptItem_GateH::type() const
 {
-  return GateInst;
+  return AstItem::GateInst;
 }
 
 // @brief strength の取得
-const AstStrength*
+const PtStrength*
 CptItem_GateH::strength() const
 {
   return nullptr;
 }
 
 // @brief delay の取得
-const AstDelay*
+const PtDelay*
 CptItem_GateH::delay() const
 {
   return nullptr;
@@ -55,10 +55,10 @@ CptItem_GateH::prim_type() const
 }
 
 // @brief module/UDP/gate instance リストの取得
-AstInstList
-CptItem_GateH::inst_list() const
+const PtInst*
+CptItem_GateH::inst_top() const
 {
-  return AstInstList(mInstTop);
+  return mInstTop;
 }
 
 
@@ -67,7 +67,7 @@ CptItem_GateH::inst_list() const
 //////////////////////////////////////////////////////////////////////
 
 // strength を返す．
-const AstStrength*
+const PtStrength*
 CptItem_GateHS::strength() const
 {
   return mStrength;
@@ -79,7 +79,7 @@ CptItem_GateHS::strength() const
 //////////////////////////////////////////////////////////////////////
 
 // delay を返す．
-const AstDelay*
+const PtDelay*
 CptItem_GateHD::delay() const
 {
   return mDelay;
@@ -91,14 +91,14 @@ CptItem_GateHD::delay() const
 //////////////////////////////////////////////////////////////////////
 
 // strength を返す．
-const AstStrength*
+const PtStrength*
 CptItem_GateHSD::strength() const
 {
   return mStrength;
 }
 
 // delay を返す．
-const AstDelay*
+const PtDelay*
 CptItem_GateHSD::delay() const
 {
   return mDelay;
@@ -114,7 +114,7 @@ PtItem*
 PtFactory::new_GateH(
   const FileRegion& file_region,
   VpiPrimType type,
-  PtInst* inst_top
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GateH));
@@ -126,8 +126,8 @@ PtItem*
 PtFactory::new_GateH(
   const FileRegion& file_region,
   VpiPrimType type,
-  const AstDelay* delay,
-  PtInst* inst_top
+  const PtDelay* delay,
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GateHD));
@@ -139,8 +139,8 @@ PtItem*
 PtFactory::new_GateH(
   const FileRegion& file_region,
   VpiPrimType type,
-  const AstStrength* strength,
-  PtInst* inst_top
+  const PtStrength* strength,
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GateHS));
@@ -152,9 +152,9 @@ PtItem*
 PtFactory::new_GateH(
   const FileRegion& file_region,
   VpiPrimType type,
-  const AstStrength* strength,
-  const AstDelay* delay,
-  PtInst* inst_top
+  const PtStrength* strength,
+  const PtDelay* delay,
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_GateHSD));

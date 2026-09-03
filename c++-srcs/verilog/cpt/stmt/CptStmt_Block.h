@@ -25,7 +25,7 @@ protected:
   /// @brief コンストラクタ
   CptStmt_Block(
     const FileRegion& file_region,
-    PtStmt* stmt_top
+    const PtStmt* stmt_top
   ) : CptStmt(file_region),
       mStmtTop{stmt_top}
   {
@@ -37,15 +37,15 @@ protected:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の仮想関数
+  // PtStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 子供のステートメントのリストの取得
   ///
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
-  AstStmtList
-  stmt_list() const override;
+  const PtStmt*
+  stmt_top() const override;
 
 
 private:
@@ -54,7 +54,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ステートメントの先頭
-  const AstStmt* mStmtTop;
+  const PtStmt* mStmtTop;
 
 };
 
@@ -72,8 +72,8 @@ public:
   CptStmt_BlockN(
     const FileRegion& file_region,
     const char* name,
-    PtDeclHead* declhead_top,
-    PtStmt* stmt_top
+    const PtDeclHead* declhead_top,
+    const PtStmt* stmt_top
   ) : CptStmt_Block(file_region, stmt_top),
       mName{name},
       mDeclHeadTop{declhead_top}
@@ -96,8 +96,8 @@ public:
   /// @brief 宣言ヘッダのリストの取得
   ///
   /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  AstDeclHeadList
-  declhead_list() const override;
+  const PtDeclHead*
+  declhead_top() const override;
 
 
 private:
@@ -109,7 +109,7 @@ private:
   const char* mName;
 
   // 宣言の先頭
-  PtDeclHead* mDeclHeadTop;
+  const PtDeclHead* mDeclHeadTop;
 
 };
 
@@ -126,7 +126,7 @@ public:
   /// @brief コンストラクタ
   CptStmt_ParBlock(
     const FileRegion& file_region,
-    PtStmt* stmt_top
+    const PtStmt* stmt_top
   ) : CptStmt_Block(file_region, stmt_top)
   {
   }
@@ -141,7 +141,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -160,8 +160,8 @@ public:
   CptStmt_ParBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtDeclHead* declhead_top,
-    PtStmt* stmt_top
+    const PtDeclHead* declhead_top,
+    const PtStmt* stmt_top
   ) : CptStmt_BlockN(file_region, name, declhead_top, stmt_top)
   {
   }
@@ -176,7 +176,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -194,7 +194,7 @@ public:
   /// @brief コンストラクタ
   CptStmt_SeqBlock(
     const FileRegion& file_region,
-    PtStmt* stmt_top
+    const PtStmt* stmt_top
   ) : CptStmt_Block(file_region, stmt_top)
   {
   }
@@ -209,7 +209,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -227,8 +227,8 @@ public:
   CptStmt_SeqBlockN(
     const FileRegion& file_region,
     const char* name,
-    PtDeclHead* declhead_top,
-    PtStmt* stmt_top
+    const PtDeclHead* declhead_top,
+    const PtStmt* stmt_top
   ) : CptStmt_BlockN(file_region, name, declhead_top, stmt_top)
   {
   }
@@ -243,7 +243,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };

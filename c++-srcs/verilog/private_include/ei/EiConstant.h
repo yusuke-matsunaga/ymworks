@@ -25,7 +25,7 @@ protected:
 
   /// @brief コンストラクタ
   EiConstant(
-    const AstExpr* ast_expr ///< [in] パース木の定義要素
+    const AstExpr& ast_expr ///< [in] パース木の定義要素
   );
 
   /// @brief デストラクタ
@@ -77,8 +77,8 @@ public:
 
   /// @brief コンストラクタ
   EiIntConst(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    std::int32_t value     ///< [in] 値
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    std::int32_t value       ///< [in] 値
   );
 
   /// @brief デストラクタ
@@ -125,7 +125,7 @@ public:
 
   /// @brief コンストラクタ
   EiBitVectorConst(
-    const AstExpr* ast_expr,   ///< [in] パース木の定義要素
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
     VpiConstType const_type, ///< [in] 定数型
     const BitVector& value   ///< [in] 値
   );
@@ -177,8 +177,8 @@ public:
 
   /// @brief コンストラクタ
   EiRealConst(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    double value           ///< [in] 値
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    double value             ///< [in] 値
   );
 
   /// @brief デストラクタ
@@ -225,7 +225,7 @@ public:
 
   /// @brief コンストラクタ
   EiStringConst(
-    const AstExpr* ast_expr,   ///< [in] パース木の定義要素
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
     const std::string& value ///< [in] 値
   );
 

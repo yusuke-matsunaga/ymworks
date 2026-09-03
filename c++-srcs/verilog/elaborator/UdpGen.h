@@ -41,7 +41,7 @@ public:
   /// @brief UDP定義を生成する．
   void
   instantiate_udp(
-    const AstUdp* ast_udp ///< [in] パース木の UDP 定義
+    const AstUdp& ast_udp ///< [in] パース木の UDP 定義
   );
 
 };

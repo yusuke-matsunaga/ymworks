@@ -50,9 +50,8 @@ TEST_F(PtTest, UdpEntry1)
   auto ue = factory.new_UdpEntry(fr1, val1, oval);
 
   ASSERT_TRUE( ue != nullptr );
-  EXPECT_EQ( 1, ue->input_list().size() );
-  EXPECT_EQ( std::vector<const AstUdpValue*>{val1},
-	     ue->input_list().to_vector() );
+  auto exp_input_list = std::vector<const PtUdpValue*>{val1};
+  EXPECT_EQ( exp_input_list, to_vector(ue->input_top()) );
 
   EXPECT_EQ( VlUdpVal(isym1), val1->symbol() );
   EXPECT_EQ( nullptr, ue->current() );
@@ -80,8 +79,8 @@ TEST_F(PtTest, UdpEntry2)
   auto ue = factory.new_UdpEntry(fr, val_list.top, cval, oval);
 
   ASSERT_TRUE( ue != nullptr );
-  auto exp_val_list = std::vector<const AstUdpValue*>{val1, val2};
-  EXPECT_EQ( exp_val_list, ue->input_list().to_vector() );
+  auto exp_val_list = std::vector<const PtUdpValue*>{val1, val2};
+  EXPECT_EQ( exp_val_list, to_vector(ue->input_top()) );
   EXPECT_EQ( VlUdpVal(isym1), val1->symbol() );
   EXPECT_EQ( cval, ue->current() );
   EXPECT_EQ( VlUdpVal(csym1), cval->symbol() );

@@ -8,7 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtMisc.h"
+#include "parser/PtConnection.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,7 +25,7 @@ protected:
   /// @brief コンストラクタ
   CptConnection(
     const FileRegion& file_region,
-    const AstExpr* expr
+    const PtExpr* expr
   ) : mFileRegion{file_region},
       mExpr{expr}
   {
@@ -51,7 +51,7 @@ public:
   name() const override;
 
   /// @brief 式を取り出す．
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
 
@@ -64,7 +64,7 @@ private:
   FileRegion mFileRegion;
 
   // 接続を表す式
-  const AstExpr* mExpr;
+  const PtExpr* mExpr;
 
 };
 
@@ -80,7 +80,7 @@ public:
   /// @brief コンストラクタ
   CptOrderedCon(
     const FileRegion& file_region,
-    const AstExpr* expr
+    const PtExpr* expr
   ) : CptConnection(file_region, expr)
   {
   }
@@ -103,7 +103,7 @@ public:
   CptNamedCon(
     const FileRegion& file_region,
     const char* name,
-    const AstExpr* expr
+    const PtExpr* expr
   ) : CptConnection(file_region, expr),
       mName{name}
   {

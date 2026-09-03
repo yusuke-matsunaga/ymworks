@@ -18,10 +18,10 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 // @brief 子供のステートメントのリストの取得
-AstStmtList
-CptStmt_Block::stmt_list() const
+const PtStmt*
+CptStmt_Block::stmt_top() const
 {
-  return AstStmtList(mStmtTop);
+  return mStmtTop;
 }
 
 
@@ -37,10 +37,10 @@ CptStmt_BlockN::name() const
 }
 
 // @brief 宣言ヘッダのリストの取得
-AstDeclHeadList
-CptStmt_BlockN::declhead_list() const
+const PtDeclHead*
+CptStmt_BlockN::declhead_top() const
 {
-  return AstDeclHeadList(mDeclHeadTop);
+  return mDeclHeadTop;
 }
 
 
@@ -52,7 +52,7 @@ CptStmt_BlockN::declhead_list() const
 AstStmt::Type
 CptStmt_ParBlock::type() const
 {
-  return ParBlock;
+  return AstStmt::ParBlock;
 }
 
 
@@ -64,7 +64,7 @@ CptStmt_ParBlock::type() const
 AstStmt::Type
 CptStmt_ParBlockN::type() const
 {
-  return NamedParBlock;
+  return AstStmt::NamedParBlock;
 }
 
 
@@ -76,7 +76,7 @@ CptStmt_ParBlockN::type() const
 AstStmt::Type
 CptStmt_SeqBlock::type() const
 {
-  return SeqBlock;
+  return AstStmt::SeqBlock;
 }
 
 
@@ -88,7 +88,7 @@ CptStmt_SeqBlock::type() const
 AstStmt::Type
 CptStmt_SeqBlockN::type() const
 {
-  return NamedSeqBlock;
+  return AstStmt::NamedSeqBlock;
 }
 
 
@@ -100,7 +100,7 @@ CptStmt_SeqBlockN::type() const
 PtStmt*
 PtFactory::new_ParBlock(
   const FileRegion& file_region,
-  PtStmt* stmt_top
+  const PtStmt* stmt_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_ParBlock));
@@ -112,8 +112,8 @@ PtStmt*
 PtFactory::new_NamedParBlock(
   const FileRegion& file_region,
   const char* name,
-  PtDeclHead* declhead_top,
-  PtStmt* stmt_top
+  const PtDeclHead* declhead_top,
+  const PtStmt* stmt_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_ParBlockN));
@@ -125,7 +125,7 @@ PtFactory::new_NamedParBlock(
 PtStmt*
 PtFactory::new_SeqBlock(
   const FileRegion& file_region,
-  PtStmt* stmt_top
+  const PtStmt* stmt_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_SeqBlock));
@@ -137,8 +137,8 @@ PtStmt*
 PtFactory::new_NamedSeqBlock(
   const FileRegion& file_region,
   const char* name,
-  PtDeclHead* declhead_top,
-  PtStmt* stmt_top
+  const PtDeclHead* declhead_top,
+  const PtStmt* stmt_top
 
 )
 {

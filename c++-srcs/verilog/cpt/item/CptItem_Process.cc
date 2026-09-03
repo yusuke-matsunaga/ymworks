@@ -9,6 +9,7 @@
 #include "CptItem_Process.h"
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
+#include "parser/PtStmt.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,7 +26,7 @@ CptItem_Process::file_region() const
 }
 
 // 本体のステートメントを返す．
-const AstStmt*
+const PtStmt*
 CptItem_Process::body() const
 {
   return mBody;
@@ -40,7 +41,7 @@ CptItem_Process::body() const
 AstItem::Type
 CptItem_Initial::type() const
 {
-  return Initial;
+  return AstItem::Initial;
 }
 
 
@@ -52,7 +53,7 @@ CptItem_Initial::type() const
 AstItem::Type
 CptItem_Always::type() const
 {
-  return Always;
+  return AstItem::Always;
 }
 
 
@@ -64,7 +65,7 @@ CptItem_Always::type() const
 PtItem*
 PtFactory::new_Initial(
   const FileRegion& file_region,
-  const AstStmt* body
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_Initial));
@@ -75,7 +76,7 @@ PtFactory::new_Initial(
 PtItem*
 PtFactory::new_Always(
   const FileRegion& file_region,
-  const AstStmt* body
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_Always));

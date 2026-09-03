@@ -28,7 +28,7 @@ CptConstant::file_region() const
 AstExpr::Type
 CptConstant::type() const
 {
-  return Const;
+  return AstExpr::Const;
 }
 
 

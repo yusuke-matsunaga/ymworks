@@ -12,8 +12,6 @@
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbPrimitive.h"
 #include "ym/vl/VlValue.h"
-#include "ym/vl/AstDecl.h"
-#include "ym/vl/AstExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,7 +23,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief プライマリ式を生成する．
 ElbExpr*
 EiFactory::new_Primary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDecl* obj
 )
 {
@@ -35,7 +33,7 @@ EiFactory::new_Primary(
 // @brief プライマリ式を生成する．
 ElbExpr*
 EiFactory::new_Primary(
-  const AstDeclItem* ast_item,
+  const AstDeclItem& ast_item,
   const VlDecl* obj
 )
 {
@@ -45,7 +43,7 @@ EiFactory::new_Primary(
 // @brief プライマリ式を生成する．
 ElbExpr*
 EiFactory::new_Primary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbParameter* obj
 )
 {
@@ -55,7 +53,7 @@ EiFactory::new_Primary(
 // @brief プライマリ式を生成する(配列要素版)．
 ElbExpr*
 EiFactory::new_Primary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* obj,
   const std::vector<ElbExpr*>& index_list
 )
@@ -66,7 +64,7 @@ EiFactory::new_Primary(
 // @brief プライマリ式を生成する(固定インデックスの配列要素版)．
 ElbExpr*
 EiFactory::new_Primary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* obj,
   SizeType offset
 )
@@ -77,7 +75,7 @@ EiFactory::new_Primary(
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 EiFactory::new_ArgHandle(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlScope* arg
 )
 {
@@ -87,7 +85,7 @@ EiFactory::new_ArgHandle(
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 EiFactory::new_ArgHandle(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlPrimitive* arg
 )
 {
@@ -97,7 +95,7 @@ EiFactory::new_ArgHandle(
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
 EiFactory::new_ArgHandle(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* arg
 )
 {
@@ -111,7 +109,7 @@ EiFactory::new_ArgHandle(
 
 // @brief コンストラクタ
 EiPrimaryBase::EiPrimaryBase(
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 ) : EiExprBase(ast_expr)
 {
 }
@@ -144,7 +142,7 @@ EiPrimaryBase::_set_reqsize(
 
 // @brief コンストラクタ
 EiPrimary::EiPrimary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDecl* obj
 ) : EiPrimaryBase(ast_expr),
     mObj{obj}
@@ -224,7 +222,7 @@ EiPrimary::lhs_elem_list() const
 
 // @brief コンストラクタ
 EiDeclPrimary::EiDeclPrimary(
-  const AstDeclItem* ast_item,
+  const AstDeclItem& ast_item,
   const VlDecl* obj
 ) : mAstObj{ast_item},
     mObj{obj}
@@ -282,7 +280,7 @@ EiDeclPrimary::decl_obj() const
 std::string
 EiDeclPrimary::decompile() const
 {
-  return mAstObj->name();
+  return mAstObj.name();
 }
 
 // @brief 左辺式の要素数の取得
@@ -321,7 +319,7 @@ EiDeclPrimary::_set_reqsize(
 }
 
 // @brief パース木の定義要素を返す．
-const AstBase*
+const AstBase&
 EiDeclPrimary::ast_obj() const
 {
   return mAstObj;
@@ -334,7 +332,7 @@ EiDeclPrimary::ast_obj() const
 
 // @brief コンストラクタ
 EiDeclArrayPrimary::EiDeclArrayPrimary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* obj
 ) : mAstObj{ast_expr},
     mObj{obj}
@@ -393,7 +391,7 @@ EiDeclArrayPrimary::decl_obj() const
 std::string
 EiDeclArrayPrimary::decompile() const
 {
-  return mAstObj->name();
+  return mAstObj.name();
 }
 
 // @brief 左辺式の要素数の取得
@@ -432,7 +430,7 @@ EiDeclArrayPrimary::_set_reqsize(
 }
 
 // @brief パース木の定義要素を返す．
-const AstBase*
+const AstBase&
 EiDeclArrayPrimary::ast_obj() const
 {
   return mAstObj;
@@ -445,7 +443,7 @@ EiDeclArrayPrimary::ast_obj() const
 
 // @brief コンストラクタ
 EiParamPrimary::EiParamPrimary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbParameter* obj
 ) : EiPrimaryBase(ast_expr),
     mObj{obj}
@@ -506,7 +504,7 @@ EiParamPrimary::decl_obj() const
 
 // @brief コンストラクタ
 EiArrayElemPrimary::EiArrayElemPrimary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* obj,
   const std::vector<ElbExpr*>& index_list
 ) : EiPrimaryBase(ast_expr),
@@ -605,7 +603,7 @@ EiArrayElemPrimary::lhs_elem_list() const
 
 // @brief コンストラクタ
 EiConstArrayElemPrimary::EiConstArrayElemPrimary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlDeclArray* obj,
   SizeType offset
 ) : EiPrimaryBase(ast_expr),
@@ -718,7 +716,7 @@ EiConstArrayElemPrimary::lhs_elem_list() const
 
 // @brief コンストラクタ
 EiScopePrimary::EiScopePrimary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlScope* obj
 ) : EiPrimaryBase{ast_expr},
     mObj{obj}
@@ -765,7 +763,7 @@ EiScopePrimary::scope_obj() const
 
 // @brief コンストラクタ
 EiPrimitivePrimary::EiPrimitivePrimary(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlPrimitive* obj
 ) : EiPrimaryBase(ast_expr),
     mObj{obj}

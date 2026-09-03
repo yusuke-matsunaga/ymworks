@@ -10,6 +10,7 @@
 #include "scanner/Lex.h"
 #include "parser/PtFactory.h"
 #include "parser/AstMgr.h"
+#include "parser/PtCaseItem.h"
 #include "parser/PtModule.h"
 #include "parser/PtUdp.h"
 
@@ -115,7 +116,7 @@ Parser::yylex(
 // 関数内で使えるステートメントかどうかのチェック
 bool
 Parser::check_function_statement(
-  const AstStmt* stmt
+  const PtStmt* stmt
 )
 {
   switch ( stmt->type() ) {
@@ -144,7 +145,7 @@ Parser::check_function_statement(
   case AstStmt::Case:
   case AstStmt::CaseX:
   case AstStmt::CaseZ:
-    for ( auto item: stmt->caseitem_list() ) {
+    for ( auto item: PtList<const PtCaseItem>::new_obj(stmt->caseitem_top()) ) {
       if ( !check_function_statement(item->body()) ) {
 	return false;
       }
@@ -169,7 +170,7 @@ Parser::check_function_statement(
 
   case AstStmt::SeqBlock:
   case AstStmt::NamedSeqBlock:
-    for ( auto stmt1: stmt->stmt_list() ) {
+    for ( auto stmt1: PtList<const PtStmt>::new_obj(stmt->stmt_top()) ) {
       if ( !check_function_statement(stmt1) ) {
 	return false;
       }
@@ -180,7 +181,7 @@ Parser::check_function_statement(
     break;
   }
   std::ostringstream buf;
-  buf << stmt->stmt_name()
+  buf << AstStmt(stmt).stmt_name()
       << " cannot be used in function declaration.";
   MsgMgr::put_msg(__FILE__, __LINE__,
 		  stmt->file_region(),
@@ -193,12 +194,12 @@ Parser::check_function_statement(
 // default ラベルが2つ以上含まれていないかどうかのチェック
 bool
 Parser::check_default_label(
-  const AstCaseItemList& caseitem_list
+  const PtCaseItem* caseitem_top
 )
 {
   SizeType n = 0;
-  for ( auto ci: caseitem_list ) {
-    if ( ci->label_list().size() == 0 ) {
+  for ( auto ci: PtList<const PtCaseItem>::new_obj(caseitem_top) ) {
+    if ( ci->label_top() == nullptr ) {
       ++ n;
       if ( n > 1 ) {
 	MsgMgr::put_msg(__FILE__, __LINE__,

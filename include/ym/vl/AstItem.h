@@ -5,14 +5,15 @@
 /// @brief AstItem のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
-#include "ym/vl/AstDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
+
+class PtItem;
 
 //////////////////////////////////////////////////////////////////////
 /// @class AstItem AstItem.h "ym/vl/AstItem.h"
@@ -60,9 +61,13 @@ BEGIN_NAMESPACE_YM_VERILOG
 ///   * GateInst
 ///   * MuInst
 ///
-/// - declhead_list(), item_list()
+/// - declhead_list()
 ///   * Task
 ///   * Func
+///   * Generate/GenBlock
+///   * GenFor
+///
+/// - item_list()
 ///   * Generate/GenBlock
 ///   * GenFor
 ///
@@ -83,15 +88,15 @@ BEGIN_NAMESPACE_YM_VERILOG
 ///   else_declhead_list(), else_item_list()
 ///   * GenIf
 ///
+/// - caseitem_list()
+///   * GenCase
+///
 /// - loop_var(), init_expr(), next_expr()
 ///   * GenFor
 //////////////////////////////////////////////////////////////////////
 class AstItem :
-  public AstNamedBase
+  public AstNamedBaseWithPtr<const PtItem>
 {
-  friend class AstList<const AstItem>;
-  friend class AstListIter<const AstItem>;
-
 public:
 
   /// @brief AstItem の派生クラスの型を表す列挙型
@@ -115,15 +120,28 @@ public:
 
 
 public:
+
+  /// @brief コンストラクタ
+  explicit
+  AstItem(
+    const PtItem* ptr = nullptr ///< [in] 実体のポインタ
+  ) : AstNamedBaseWithPtr<const PtItem>(ptr)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~AstItem() = default;
+
+
+public:
   //////////////////////////////////////////////////////////////////////
   // 共通の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型の取得
   /// @return 型
-  virtual
   Type
-  type() const = 0;
+  type() const;
 
 
 public:
@@ -133,27 +151,23 @@ public:
 
   /// @brief 条件式の取得
   /// @return 条件式
-  virtual
-  const AstExpr*
-  cond_expr() const = 0;
+  AstExpr
+  cond_expr() const;
 
   /// @brief 本体のステートメントの取得
   /// @return 本体のステートメント
-  virtual
-  const AstStmt*
-  body() const = 0;
+  AstStmt
+  body() const;
 
   /// @brief strength の取得
   /// @return 信号強度
-  virtual
-  const AstStrength*
-  strength() const = 0;
+  AstStrength
+  strength() const;
 
   /// @brief delay の取得
   /// @return 遅延
-  virtual
-  const AstDelay*
-  delay() const = 0;
+  AstDelay
+  delay() const;
 
 
 public:
@@ -162,9 +176,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief defparam リストの取得
-  virtual
   AstDefParamList
-  defparam_list() const = 0;
+  defparam_list() const;
 
 
 public:
@@ -173,9 +186,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief continuous assign リストの取得
-  virtual
   AstContAssignList
-  contassign_list() const = 0;
+  contassign_list() const;
 
 
 public:
@@ -185,9 +197,8 @@ public:
 
   /// @brief プリミティブタイプの取得
   /// @return プリミティブタイプ
-  virtual
   VpiPrimType
-  prim_type() const = 0;
+  prim_type() const;
 
 
 public:
@@ -196,9 +207,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief パラメータ割り当てのリストの取得
-  virtual
   AstConnectionList
-  paramassign_list() const = 0;
+  paramassign_list() const;
 
 
 public:
@@ -207,26 +217,30 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief module/UDP/gate instance リストの取得
-  virtual
   AstInstList
-  inst_list() const = 0;
+  inst_list() const;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 内部に宣言要素を持つタイプの関数
+  // Task/Function/Generate系
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 宣言ヘッダリストの取得
+  AstDeclHeadList
+  declhead_list() const;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
   // 内部に要素を持つタイプの関数
-  // Task/Function/Generate系
+  // Generate系
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 宣言ヘッダリストの取得
-  virtual
-  AstDeclHeadList
-  declhead_list() const = 0;
-
   /// @brief item リストの取得
-  virtual
   AstItemList
-  item_list() const = 0;
+  item_list() const;
 
 
 public:
@@ -237,19 +251,16 @@ public:
   /// @brief automatic 情報の取得
   /// @retval true automatic 宣言された task/function
   /// @retval false 上記以外
-  virtual
   bool
-  automatic() const = 0;
+  automatic() const;
 
   /// @brief IO宣言ヘッダリストの取得
-  virtual
   AstIOHeadList
-  iohead_list() const = 0;
+  iohead_list() const;
 
   /// @brief IO要素の数
-  virtual
   SizeType
-  ioitem_num() const = 0;
+  ioitem_num() const;
 
 
 public:
@@ -260,37 +271,31 @@ public:
   /// @brief 符号の取得
   /// @retval true 符号つき
   /// @retval false 符号なし
-  virtual
   bool
-  is_signed() const = 0;
+  is_signed() const;
 
   /// @brief 範囲の取得
   /// @return 範囲
-  virtual
-  const AstRange*
-  range() const = 0;
+  AstRange
+  range() const;
 
   /// @brief 戻値のデータ型の取得
   /// @return 戻値のデータ型
-  virtual
   VpiVarType
-  data_type() const = 0;
+  data_type() const;
 
   /// @brief constant function の展開中の印をつける．
-  virtual
   void
-  set_in_use() const = 0;
+  set_in_use() const;
 
   /// @brief constant function の展開中の印を消す．
-  virtual
   void
-  clear_in_use() const = 0;
+  clear_in_use() const;
 
   /// @brief 使用中(constant function として展開中)のチェック
   /// @return 使用中の時 true を返す．
-  virtual
   bool
-  is_in_use() const = 0;
+  is_in_use() const;
 
 
 public:
@@ -300,14 +305,12 @@ public:
 
   /// @brief specify block item の種類の取得
   /// @return specify block item の種類
-  virtual
   VpiSpecItemType
-  specitem_type() const = 0;
+  specitem_type() const;
 
   /// @brief ターミナルリストの取得
-  virtual
   AstExprList
-  terminal_list() const = 0;
+  terminal_list() const;
 
 
 public:
@@ -317,15 +320,13 @@ public:
 
   /// @brief specify block path の種類の取得
   /// @return specify block path の種類
-  virtual
   VpiSpecPathType
-  specpath_type() const = 0;
+  specpath_type() const;
 
   /// @brief パス記述の取得
   /// @return パス記述
-  virtual
-  const AstPathDecl*
-  path_decl() const = 0;
+  AstPathDecl
+  path_decl() const;
 
 
 public:
@@ -334,24 +335,20 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-  virtual
   AstDeclHeadList
-  then_declhead_list() const = 0;
+  then_declhead_list() const;
 
   /// @brief 条件が成り立った時に生成される要素リストの取得
-  virtual
   AstItemList
-  then_item_list() const = 0;
+  then_item_list() const;
 
   /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-  virtual
   AstDeclHeadList
-  else_declhead_list() const = 0;
+  else_declhead_list() const;
 
   /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
-  virtual
   AstItemList
-  else_item_list() const = 0;
+  else_item_list() const;
 
 
 public:
@@ -360,9 +357,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief case item リストの取得
-  virtual
   AstGenCaseItemList
-  caseitem_list() const = 0;
+  caseitem_list() const;
 
 
 public:
@@ -372,21 +368,58 @@ public:
 
   /// @brief 繰り返し制御用の変数名の取得
   /// @return 繰り返し制御用の変数名
-  virtual
   const char*
-  loop_var() const = 0;
+  loop_var() const;
 
   /// @brief 初期化文の右辺の取得
   /// @return 初期化文の右辺
-  virtual
-  const AstExpr*
-  init_expr() const = 0;
+  AstExpr
+  init_expr() const;
 
   /// @brief 増加文の右辺の取得
   /// @return 増加文の右辺
-  virtual
-  const AstExpr*
-  next_expr() const = 0;
+  AstExpr
+  next_expr() const;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstBase の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 適切な値を持っている時 true を返す．
+  bool
+  is_valid() const override;
+
+  /// @brief ファイル位置の取得
+  /// @return ファイル位置
+  FileRegion
+  file_region() const override;
+
+  /// @brief 比較用のユニークなキーを返す．
+  PtrIntType
+  key() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstNamedBase の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 名前の取得
+  /// @return 名前
+  const char*
+  name() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstList<> の要素のための関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 次の要素を返す．
+  AstItem
+  next() const;
 
 
 private:
@@ -394,10 +427,96 @@ private:
   // 内部で用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 次の要素の取得
-  virtual
-  const AstItem*
-  link() const = 0;
+  /// @brief json_obj() の下請け関数
+  void
+  json_sub(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const override;
+
+  /// @brief DefParam 用の json_sub()
+  void
+  json_sub_defparam(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief ContAssign 用の json_sub()
+  void
+  json_sub_contassign(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief Initial/Process 用の json_sub()
+  void
+  json_sub_process(
+    JsonValue& jobj,  ///< [in] 対象の JSON オブジェクト
+    const char* label ///< [in] ラベル
+  ) const;
+
+  /// @brief Task 用の json_sub()
+  void
+  json_sub_task(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief Func 用の json_sub()
+  void
+  json_sub_func(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief GateInst 用の json_sub()
+  void
+  json_sub_gateinst(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief MuInst 用の json_sub()
+  void
+  json_sub_muinst(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief SpecItem 用の json_sub()
+  void
+  json_sub_specitem(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief SpecPath 用の json_sub()
+  void
+  json_sub_specpath(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief Generate 用の json_sub()
+  void
+  json_sub_generate(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief GenBlock 用の json_sub()
+  void
+  json_sub_genblock(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief GenIf 用の json_sub()
+  void
+  json_sub_genif(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief GenCase 用の json_sub()
+  void
+  json_sub_gencase(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
+
+  /// @brief GenFor 用の json_sub()
+  void
+  json_sub_genfor(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const;
 
 };
 
@@ -428,267 +547,6 @@ operator<<(
   }
   return s;
 }
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstDefParam AstItem.h "ym/vl/AstItem.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief defparam 文を表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstDefParam :
-  public AstHierNamedBase
-{
-  friend class AstList<const AstDefParam>;
-  friend class AstListIter<const AstDefParam>;
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstDefParam の継承クラスが実装する仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 値の取得
-  /// @return 値を表す式
-  virtual
-  const AstExpr*
-  expr() const = 0;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素の取得
-  virtual
-  const AstDefParam*
-  link() const = 0;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstContAssign AstItem.h "ym/vl/AstItem.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief continuous assign 文
-//////////////////////////////////////////////////////////////////////
-class AstContAssign :
-  public AstBase
-{
-  friend class AstList<const AstContAssign>;
-  friend class AstListIter<const AstContAssign>;
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstContAssign の継承クラスが実装する仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 左辺式の取得
-  /// @return 左辺式
-  virtual
-  const AstExpr*
-  lhs() const = 0;
-
-  /// @brief 右辺式の取得
-  /// @return 右辺式
-  virtual
-  const AstExpr*
-  rhs() const = 0;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素の取得
-  virtual
-  const AstContAssign*
-  link() const = 0;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstInst AstItem.h "ym/vl/AstItem.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief module instance/UDP/gate instance を表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstInst :
-  public AstNamedBase
-{
-  friend class AstList<const AstInst>;
-  friend class AstListIter<const AstInst>;
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstInst の継承クラスが実装する仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 範囲の取得
-  /// @return 範囲
-  virtual
-  const AstRange*
-  range() const = 0;
-
-  /// @brief ポートリストの取得
-  virtual
-  AstConnectionList
-  port_list() const = 0;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素の取得
-  virtual
-  const AstInst*
-  link() const = 0;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstGenCaseItem AstItem.h "ym/vl/AstItem.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief gencaseitemを表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstGenCaseItem :
-  public AstBase
-{
-  friend class AstList<const AstGenCaseItem>;
-  friend class AstListIter<const AstGenCaseItem>;
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstGenCaseItem の継承クラスが実装する仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief ラベルリストの取得
-  virtual
-  AstExprList
-  label_list() const = 0;
-
-  /// @brief 宣言リストの取得
-  virtual
-  AstDeclHeadList
-  declhead_list() const = 0;
-
-  /// @brief item リストの取得
-  virtual
-  AstItemList
-  item_list() const = 0;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素の取得
-  virtual
-  const AstGenCaseItem*
-  link() const = 0;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstPathDecl AstItem.h "ym/vl/AstItem.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief path_delay_declaration を表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstPathDecl :
-  public AstBase
-{
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstPathDecl の継承クラスが実装する仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief edge_descriptor の取得
-  /// @return edge_descriptor
-  ///
-  /// 0の場合もある．
-  virtual
-  int
-  edge() const = 0;
-
-  /// @brief 入力のリストの取得
-  virtual
-  AstExprList
-  input_list() const = 0;
-
-  /// @brief 入力の極性の取得
-  /// @return 入力の極性\n
-  /// 0の場合もありうる．
-  virtual
-  int
-  input_pol() const = 0;
-
-  /// @brief パス記述子(?)の取得
-  /// @return vpiParallel か vpiFull
-  virtual
-  VpiPathType
-  op() const = 0;
-
-  /// @brief 出力リストの取得
-  virtual
-  AstExprList
-  output_list() const = 0;
-
-  /// @brief 出力の極性の取得
-  /// @return 出力の極性\n
-  /// 0の場合もありうる．
-  virtual
-  int
-  output_pol() const = 0;
-
-  /// @brief 式の取得
-  /// @return 式\n
-  /// nullptr の場合もありうる．
-  virtual
-  const AstExpr*
-  expr() const = 0;
-
-  /// @brief path_delay_value の取得
-  /// @return path_delay_value
-  virtual
-  const AstPathDelay*
-  path_delay() const = 0;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstPathDelay AstItem.h "ym/vl/AstItem.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief path_delay_value を表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstPathDelay :
-  public AstBase
-{
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstPathDecl の継承クラスが実装する仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 値を取り出す．
-  /// 0の場合もある．
-  virtual
-  const AstExpr*
-  value(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < 3 )
-  ) const = 0;
-
-};
 
 END_NAMESPACE_YM_VERILOG
 

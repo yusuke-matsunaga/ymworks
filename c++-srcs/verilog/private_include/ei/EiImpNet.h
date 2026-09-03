@@ -27,7 +27,7 @@ public:
   /// @brief コンストラクタ
   EiImpNet(
     const VlScope* parent,   ///< [in] 親のスコープ
-    const AstExpr* ast_expr, ///< [in] パース木のプライマリ式
+    const AstExpr& ast_expr, ///< [in] パース木のプライマリ式
     VpiNetType net_type      ///< [in] ネットの型
   );
 
@@ -196,7 +196,7 @@ private:
   const VlScope* mParent;
 
   // パース木のプライマリ式
-  const AstExpr* mAstExpr;
+  AstExpr mAstExpr;
 
   // ネット型
   VpiNetType mNetType;

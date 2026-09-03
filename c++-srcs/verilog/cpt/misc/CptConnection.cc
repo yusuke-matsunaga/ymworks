@@ -9,6 +9,7 @@
 #include "CptConnection.h"
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
+#include "parser/PtExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -32,7 +33,7 @@ CptConnection::name() const
 }
 
 // 式を取出す
-const AstExpr*
+const PtExpr*
 CptConnection::expr() const
 {
   return mExpr;
@@ -66,7 +67,7 @@ PtFactory::new_OrderedCon()
 // 順序つき結合子を生成する．
 PtConnection*
 PtFactory::new_OrderedCon(
-  const AstExpr* expr
+  const PtExpr* expr
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptOrderedCon));
@@ -77,7 +78,7 @@ PtFactory::new_OrderedCon(
 PtConnection*
 PtFactory::new_OrderedCon(
   const FileRegion& file_region,
-  const AstExpr* expr
+  const PtExpr* expr
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptOrderedCon));
@@ -100,7 +101,7 @@ PtConnection*
 PtFactory::new_NamedCon(
   const FileRegion& file_region,
   const char* name,
-  const AstExpr* expr
+  const PtExpr* expr
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNamedCon));

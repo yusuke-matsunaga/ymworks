@@ -13,7 +13,6 @@
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 
 #include "elaborator/ElbExpr.h"
 
@@ -42,17 +41,17 @@ ElbExpr*
 ExprGen::instantiate_expr(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   // '(' expression ')' の時の対応
-  while ( ast_expr->type() == AstExpr::Opr &&
-	  ast_expr->op_type() == VpiOpType::Null ) {
-    ast_expr = ast_expr->operand0();
+  while ( ast_expr.type() == AstExpr::Opr &&
+	  ast_expr.op_type() == VpiOpType::Null ) {
+    return instantiate_expr(parent, env, ast_expr.operand0());
   }
 
   // ここでは式の種類に応じたサブルーティンをディスパッチするだけ．
-  switch ( ast_expr->type() ) {
+  switch ( ast_expr.type() ) {
   case AstExpr::Opr:
     return instantiate_opr(parent, env, ast_expr);
 
@@ -88,11 +87,11 @@ ExprGen::instantiate_expr(
 ElbExpr*
 ExprGen::instantiate_constant_expr(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
-  if ( ast_expr == nullptr ) {
-    throw std::logic_error{"ast_expr == nullptr"};
+  if ( ast_expr.is_invalid() ) {
+    throw std::logic_error{"ast_expr.is_invalid()"};
   }
 
   ElbConstantEnv env;
@@ -104,23 +103,23 @@ ElbExpr*
 ExprGen::instantiate_event_expr(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   // '(' expression ')' の時の対応
-  while ( ast_expr->type() == AstExpr::Opr &&
-	  ast_expr->op_type() == VpiOpType::Null ) {
-    ast_expr = ast_expr->operand0();
+  while ( ast_expr.type() == AstExpr::Opr &&
+	  ast_expr.op_type() == VpiOpType::Null ) {
+    return instantiate_event_expr(parent, env, ast_expr.operand0());
   }
 
-  switch ( ast_expr->type() ) {
+  switch ( ast_expr.type() ) {
   case AstExpr::Opr:
-    switch ( ast_expr->op_type() ) {
+    switch ( ast_expr.op_type() ) {
     case VpiOpType::Posedge:
     case VpiOpType::Negedge:
     { // これのみがイベント式の特徴
-      auto opr0 = instantiate_expr(parent, env, ast_expr->operand0());
-      auto expr = mgr().new_UnaryOp(ast_expr, ast_expr->op_type(), opr0);
+      auto opr0 = instantiate_expr(parent, env, ast_expr.operand0());
+      auto expr = mgr().new_UnaryOp(ast_expr, ast_expr.op_type(), opr0);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_expr);
@@ -169,16 +168,16 @@ ElbExpr*
 ExprGen::instantiate_arg(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   // '(' expression ')' の時の対応
-  while ( ast_expr->type() == AstExpr::Opr &&
-	  ast_expr->op_type() == VpiOpType::Null ) {
-    ast_expr = ast_expr->operand0();
+  while ( ast_expr.type() == AstExpr::Opr &&
+	  ast_expr.op_type() == VpiOpType::Null ) {
+    return instantiate_arg(parent, env, ast_expr.operand0());
   }
 
-  if ( ast_expr->type() == AstExpr::Primary ) {
+  if ( ast_expr.type() == AstExpr::Primary ) {
     // システム関数の引数用の特別処理はここだけ．
     ElbSystemTfArgEnv env1(env);
     return instantiate_primary(parent, env1, ast_expr);
@@ -191,15 +190,15 @@ ElbExpr*
 ExprGen::instantiate_lhs(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
-  switch ( ast_expr->type() ) {
+  switch ( ast_expr.type() ) {
   case AstExpr::Opr:
     // 左辺では concatination しか適当でない．
-    if ( ast_expr->op_type() == VpiOpType::Concat ) {
+    if ( ast_expr.op_type() == VpiOpType::Concat ) {
       std::vector<ElbExpr*> elem_array;
-      auto ast_opr_list = ast_expr->operand_list().to_vector();
+      auto ast_opr_list = ast_expr.operand_list().to_vector();
       auto opr_size = ast_opr_list.size();
       std::vector<ElbExpr*> opr_list(opr_size);
       for ( SizeType i = 0; i < opr_size; ++ i ) {
@@ -251,15 +250,15 @@ ElbExpr*
 ExprGen::instantiate_lhs_sub(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   std::vector<ElbExpr*>& elem_array
 )
 {
-  switch ( ast_expr->type() ) {
+  switch ( ast_expr.type() ) {
   case AstExpr::Opr:
     // 左辺では concatination しか適当でない．
-    if ( ast_expr->op_type() == VpiOpType::Concat ) {
-      auto ast_opr_list = ast_expr->operand_list().to_vector();
+    if ( ast_expr.op_type() == VpiOpType::Concat ) {
+      auto ast_opr_list = ast_expr.operand_list().to_vector();
       auto opr_size = ast_opr_list.size();
       std::vector<ElbExpr*> opr_list(opr_size);
       for ( SizeType i = 0; i < opr_size; ++ i ) {
@@ -313,27 +312,27 @@ ExprGen::instantiate_lhs_sub(
 const VlDelay*
 ExprGen::instantiate_delay(
   const VlScope* parent,
-  const AstDelay* ast_delay)
+  const AstDelay& ast_delay)
 {
-  if ( ast_delay == nullptr ) {
+  if ( ast_delay.is_invalid() ) {
     // もともと遅延式を持たない場合は nullptr を返す．
     // エラーではない．
     return nullptr;
   }
 
   SizeType n = 0;
-  std::vector<const AstExpr*> expr_array;
+  std::vector<AstExpr> expr_array;
   expr_array.reserve(3);
-  auto expr0 = ast_delay->value0();
-  if ( expr0 == nullptr ) {
-    throw std::logic_error{"ast_delay->value0() == nullptr"};
+  auto expr0 = ast_delay.value0();
+  if ( expr0.is_invalid() ) {
+    throw std::logic_error{"ast_delay.value0().is_invalid()"};
   }
   expr_array.push_back(expr0);
-  auto expr1 = ast_delay->value1();
-  if ( expr1 != nullptr ) {
+  auto expr1 = ast_delay.value1();
+  if ( expr1.is_valid() ) {
     expr_array.push_back(expr1);
-    auto expr2 = ast_delay->value2();
-    if ( expr2 != nullptr ) {
+    auto expr2 = ast_delay.value2();
+    if ( expr2.is_valid() ) {
       expr_array.push_back(expr2);
     }
   }
@@ -344,22 +343,22 @@ ExprGen::instantiate_delay(
 const VlDelay*
 ExprGen::instantiate_delay(
   const VlScope* parent,
-  const AstItem* ast_header
+  const AstItem& ast_header
 )
 {
-  if ( ast_header == nullptr ) {
+  if ( ast_header.is_invalid() ) {
     // もともと遅延式を持たない場合は nullptr を返す．
     // エラーではない．
     return nullptr;
   }
 
-  auto n = ast_header->paramassign_list().size();
+  auto n = ast_header.paramassign_list().size();
   if ( n != 1 ) {
-    throw std::logic_error{"n != 1"};
+    throw std::logic_error{"ast_head.paramassign_list().size() != 1"};
   }
 
-  auto ast_con = ast_header->paramassign_list().front();
-  std::vector<const AstExpr*> expr_array{ast_con->expr()};
+  auto ast_con = ast_header.paramassign_list().front();
+  std::vector<AstExpr> expr_array{ast_con.expr()};
 
   return instantiate_delay_sub(parent, ast_header, expr_array);
 }
@@ -368,8 +367,8 @@ ExprGen::instantiate_delay(
 const VlDelay*
 ExprGen::instantiate_delay_sub(
   const VlScope* parent,
-  const AstBase* ast_obj,
-  const std::vector<const AstExpr*>& ast_expr_array
+  const AstBase& ast_obj,
+  const std::vector<AstExpr>& ast_expr_array
 )
 {
   if ( ast_expr_array.size() > 3 ) {

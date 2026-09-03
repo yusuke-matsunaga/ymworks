@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtDefParam.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,7 +26,7 @@ public:
   /// @brief コンストラクタ
   CptItem_DefParamH(
     const FileRegion& file_region,
-    PtDefParam* dp_top
+    const PtDefParam* dp_top
   ) : mFileRegion{file_region},
       mTop{dp_top}
   {
@@ -37,7 +38,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置の取得
@@ -45,12 +46,12 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
   /// @brief defparam リストの取得
-  AstDefParamList
-  defparam_list() const override;
+  const PtDefParam*
+  defparam_top() const override;
 
 
 private:
@@ -62,7 +63,7 @@ private:
   FileRegion mFileRegion;
 
   // 要素の先頭
-  const AstDefParam* mTop;
+  const PtDefParam* mTop;
 
 };
 
@@ -80,7 +81,7 @@ public:
   CptDefParam(
     const FileRegion& file_region,
     const char* name,
-    const AstExpr* value
+    const PtExpr* value
   ) : mTopLoc{file_region.start_loc()},
       mName{name},
       mExpr{value}
@@ -96,7 +97,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstDefParam の仮想関数
+  // PtDefParam の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置の取得
@@ -105,8 +106,8 @@ public:
   file_region() const override;
 
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  const PtNameBranch*
+  namebranch_top() const override;
 
   /// @brief 末尾の名前の取得
   /// @return 末尾の名前
@@ -115,7 +116,7 @@ public:
 
   /// @brief 値の取得
   /// @return 値を表す式
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
 
@@ -131,7 +132,7 @@ private:
   const char* mName;
 
   // 値
-  const AstExpr* mExpr;
+  const PtExpr* mExpr;
 
 };
 
@@ -148,9 +149,9 @@ public:
   /// @brief コンストラクタ
   CptDefParam2(
     const FileRegion& file_region,
-    const AstNameBranch* nb_top,
+    const PtNameBranch* nb_top,
     const char* tail_name,
-    const AstExpr* value
+    const PtExpr* value
   ) : CptDefParam(file_region, tail_name, value),
       mNbTop{nb_top}
   {
@@ -162,12 +163,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstDefParam の仮想関数
+  // PtDefParam の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -176,7 +177,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 先頭の階層ブランチ
-  const AstNameBranch* mNbTop;
+  const PtNameBranch* mNbTop;
 
 };
 

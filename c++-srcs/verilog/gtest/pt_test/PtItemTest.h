@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "PtTest.h"
+#include "parser/PtPathDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -28,37 +29,37 @@ public:
   // DefParamH 型のテスト
   void
   check_DefParamH(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const std::vector<const AstDefParam*>& defparam_list
+    const std::vector<const PtDefParam*>& defparam_list
   )
   {
     check_common(item, file_region, AstItem::DefParam);
-    EXPECT_EQ( defparam_list, item->defparam_list().to_vector() );
+    EXPECT_EQ( defparam_list, to_vector(item->defparam_top()) );
   }
 
   // ContAssign 型のテスト
   void
   check_ContAssignH(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const AstStrength* strength,
-    const AstDelay* delay,
-    const std::vector<const AstContAssign*>& ca_list
+    const PtStrength* strength,
+    const PtDelay* delay,
+    const std::vector<const PtContAssign*>& ca_list
   )
   {
     check_common(item, file_region, AstItem::ContAssign);
     EXPECT_EQ( strength, item->strength() );
     EXPECT_EQ( delay, item->delay() );
-    EXPECT_EQ( ca_list, item->contassign_list().to_vector() );
+    EXPECT_EQ( ca_list, to_vector(item->contassign_top()) );
   }
 
   // Initial のテスト
   void
   check_Initial(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const AstStmt* body
+    const PtStmt* body
   )
   {
     check_common(item, file_region, AstItem::Initial);
@@ -68,9 +69,9 @@ public:
   // Always のテスト
   void
   check_Always(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const AstStmt* body
+    const PtStmt* body
   )
   {
     check_common(item, file_region, AstItem::Always);
@@ -80,42 +81,42 @@ public:
   // Task のテスト
   void
   check_Task(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     const char* name,
     bool automatic,
-    const std::vector<const AstIOHead*>& iohead_list,
-    const std::vector<const AstDeclHead*>& declhead_list,
-    const AstStmt* body
+    const std::vector<const PtIOHead*>& iohead_list,
+    const std::vector<const PtDeclHead*>& declhead_list,
+    const PtStmt* body
   )
   {
     check_common(item, file_region, AstItem::Task, name);
     EXPECT_EQ( body, item->body() );
     EXPECT_EQ( automatic, item->automatic() );
-    EXPECT_EQ( iohead_list, item->iohead_list().to_vector() );
-    EXPECT_EQ( declhead_list, item->declhead_list().to_vector() );
+    EXPECT_EQ( iohead_list, to_vector(item->iohead_top()) );
+    EXPECT_EQ( declhead_list, to_vector(item->declhead_top()) );
   }
 
   // Func のテスト
   void
   check_Function(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     const char* name,
     bool is_signed,
-    const AstRange* range,
+    const PtRange* range,
     VpiVarType data_type,
     bool automatic,
-    const std::vector<const AstIOHead*>& iohead_list,
-    const std::vector<const AstDeclHead*>& declhead_list,
-    const AstStmt* body
+    const std::vector<const PtIOHead*>& iohead_list,
+    const std::vector<const PtDeclHead*>& declhead_list,
+    const PtStmt* body
   )
   {
     check_common(item, file_region, AstItem::Func, name);
     EXPECT_EQ( body, item->body() );
     EXPECT_EQ( automatic, item->automatic() );
-    EXPECT_EQ( iohead_list, item->iohead_list().to_vector() );
-    EXPECT_EQ( declhead_list, item->declhead_list().to_vector() );
+    EXPECT_EQ( iohead_list, to_vector(item->iohead_top()) );
+    EXPECT_EQ( declhead_list, to_vector(item->declhead_top()) );
     EXPECT_EQ( is_signed, item->is_signed() );
     EXPECT_EQ( range, item->range() );
     EXPECT_EQ( data_type, item->data_type() );
@@ -124,62 +125,62 @@ public:
   /// GateInst 型のテスト
   void
   check_GateH(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    const std::vector<const AstInst*>& inst_list,
-    const AstStrength* strength = nullptr,
-    const AstDelay* delay = nullptr
+    const std::vector<const PtInst*>& inst_list,
+    const PtStrength* strength = nullptr,
+    const PtDelay* delay = nullptr
   )
   {
     check_common(item, file_region, AstItem::GateInst);
     EXPECT_EQ( prim_type, item->prim_type() );
     EXPECT_EQ( strength, item->strength() );
     EXPECT_EQ( delay, item->delay() );
-    EXPECT_EQ( inst_list, item->inst_list().to_vector() );
+    EXPECT_EQ( inst_list, to_vector(item->inst_top()) );
   }
 
   // MuInst のテスト
   void
   check_MuH(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     const char* name,
-    const std::vector<const AstConnection*>& con_list,
-    const std::vector<const AstInst*>& inst_list,
-    const AstStrength* strength = nullptr,
-    const AstDelay* delay = nullptr
+    const std::vector<const PtConnection*>& con_list,
+    const std::vector<const PtInst*>& inst_list,
+    const PtStrength* strength = nullptr,
+    const PtDelay* delay = nullptr
   )
   {
     check_common(item, file_region, AstItem::MuInst, name);
-    EXPECT_EQ( con_list, item->paramassign_list().to_vector() );
+    EXPECT_EQ( con_list, to_vector(item->paramassign_top()) );
     EXPECT_EQ( strength, item->strength() );
     EXPECT_EQ( delay, item->delay() );
-    EXPECT_EQ( inst_list, item->inst_list().to_vector() );
+    EXPECT_EQ( inst_list, to_vector(item->inst_top()) );
   }
 
   // SpecItem のテスト
   void
   check_SpecItem(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     VpiSpecItemType specitem_type,
-    const std::vector<const AstExpr*>& terminal_list
+    const std::vector<const PtExpr*>& terminal_list
   )
   {
     check_common(item, file_region, AstItem::SpecItem);
     EXPECT_EQ( specitem_type, item->specitem_type() );
-    EXPECT_EQ( terminal_list, item->terminal_list().to_vector() );
+    EXPECT_EQ( terminal_list, to_vector(item->terminal_top()) );
   }
 
   // SpecPath のテスト
   void
   check_SpecPath(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     VpiSpecPathType specpath_type,
-    const AstExpr* expr,
-    const AstPathDecl* path_decl
+    const PtExpr* expr,
+    const PtPathDecl* path_decl
   )
   {
     check_common(item, file_region, AstItem::SpecPath);
@@ -191,10 +192,10 @@ public:
   // Generate のテスト
   void
   check_Generate(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const std::vector<const AstDeclHead*>& declhead_list,
-    const std::vector<const AstItem*>& item_list
+    const std::vector<const PtDeclHead*>& declhead_list,
+    const std::vector<const PtItem*>& item_list
   )
   {
     check_common(item, file_region, AstItem::Generate);
@@ -204,10 +205,10 @@ public:
   // GenBlock のテスト
   void
   check_GenBlock(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const std::vector<const AstDeclHead*>& declhead_list,
-    const std::vector<const AstItem*>& item_list
+    const std::vector<const PtDeclHead*>& declhead_list,
+    const std::vector<const PtItem*>& item_list
   )
   {
     check_common(item, file_region, AstItem::GenBlock);
@@ -217,10 +218,10 @@ public:
   // GenBlock のテスト
   void
   check_GenBlock(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const std::vector<const AstDeclHead*>& declhead_list,
-    const std::vector<const AstItem*>& item_list,
+    const std::vector<const PtDeclHead*>& declhead_list,
+    const std::vector<const PtItem*>& item_list,
     const char* name
   )
   {
@@ -231,49 +232,49 @@ public:
   // GenIf のテスト
   void
   check_GenIf(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const AstExpr* cond_expr,
-    const std::vector<const AstDeclHead*>& then_declhead_list,
-    const std::vector<const AstItem*>& then_item_list,
-    const std::vector<const AstDeclHead*>& else_declhead_list,
-    const std::vector<const AstItem*>& else_item_list
+    const PtExpr* cond_expr,
+    const std::vector<const PtDeclHead*>& then_declhead_list,
+    const std::vector<const PtItem*>& then_item_list,
+    const std::vector<const PtDeclHead*>& else_declhead_list,
+    const std::vector<const PtItem*>& else_item_list
   )
   {
     check_common(item, file_region, AstItem::GenIf);
     EXPECT_EQ( cond_expr, item->cond_expr() );
-    EXPECT_EQ( then_declhead_list, item->then_declhead_list().to_vector() );
-    EXPECT_EQ( then_item_list, item->then_item_list().to_vector() );
-    EXPECT_EQ( else_declhead_list, item->else_declhead_list().to_vector() );
-    EXPECT_EQ( else_item_list, item->else_item_list().to_vector() );
+    EXPECT_EQ( then_declhead_list, to_vector(item->then_declhead_top()) );
+    EXPECT_EQ( then_item_list, to_vector(item->then_item_top()) );
+    EXPECT_EQ( else_declhead_list, to_vector(item->else_declhead_top()) );
+    EXPECT_EQ( else_item_list, to_vector(item->else_item_top()) );
   }
 
   // GenCase のテスト
   void
   check_GenCase(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
-    const AstExpr* expr,
-    const std::vector<const AstGenCaseItem*>& gci_list
+    const PtExpr* expr,
+    const std::vector<const PtGenCaseItem*>& gci_list
   )
   {
     check_common(item, file_region, AstItem::GenCase);
-    EXPECT_EQ( gci_list, item->caseitem_list().to_vector() );
+    EXPECT_EQ( gci_list, to_vector(item->caseitem_top()) );
     EXPECT_EQ( expr, item->cond_expr() );
   }
 
   // GenFor のテスト
   void
   check_GenFor(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     const char* name,
     const char* loop_var,
-    const AstExpr* init_expr,
-    const AstExpr* cond_expr,
-    const AstExpr* next_expr,
-    const std::vector<const AstDeclHead*>& declhead_list,
-    const std::vector<const AstItem*>& item_list
+    const PtExpr* init_expr,
+    const PtExpr* cond_expr,
+    const PtExpr* next_expr,
+    const std::vector<const PtDeclHead*>& declhead_list,
+    const std::vector<const PtItem*>& item_list
   )
   {
     check_common(item, file_region, AstItem::GenFor, name);
@@ -287,47 +288,49 @@ public:
   // 内部に要素を持つタイプのテスト
   void
   check_container(
-    const AstItem* item,
-    const std::vector<const AstDeclHead*>& declhead_list,
-    const std::vector<const AstItem*>& item_list
+    const PtItem* item,
+    const std::vector<const PtDeclHead*>& declhead_list,
+    const std::vector<const PtItem*>& item_list
   )
   {
-    EXPECT_EQ( declhead_list, item->declhead_list().to_vector() );
-    EXPECT_EQ( item_list, item->item_list().to_vector() );
+    EXPECT_EQ( declhead_list, to_vector(item->declhead_top()) );
+    EXPECT_EQ( item_list, to_vector(item->item_top()) );
   }
 
   // 共通のテスト
   void
   check_common(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     AstItem::Type type
   )
   {
     ASSERT_TRUE( item != nullptr );
-    check_NamedBase(item, file_region);
-    check_common_sub(item, file_region, type);
+    check_Base(item, file_region);
+    EXPECT_THROW( item->name(),
+		  std::logic_error );
+    check_common_sub(item, type);
   }
 
   // 共通のテスト
   void
   check_common(
-    const AstItem* item,
+    const PtItem* item,
     const FileRegion& file_region,
     AstItem::Type type,
     const char* name
   )
   {
     ASSERT_TRUE( item != nullptr );
-    check_NamedBase(item, file_region, name);
-    check_common_sub(item, file_region, type);
+    check_Base(item, file_region);
+    EXPECT_STREQ( name, item->name() );
+    check_common_sub(item, type);
   }
 
   /// @biref check_common() の下請け関数
   void
   check_common_sub(
-    const AstItem* item,
-    const FileRegion& file_region,
+    const PtItem* item,
     AstItem::Type type
   )
   {
@@ -351,9 +354,9 @@ public:
 	 type != AstItem::Generate &&
 	 type != AstItem::GenBlock &&
 	 type != AstItem::GenFor ) {
-      EXPECT_THROW( item->declhead_list(),
+      EXPECT_THROW( item->declhead_top(),
 		    std::logic_error );
-      EXPECT_THROW( item->item_list(),
+      EXPECT_THROW( item->item_top(),
 		    std::logic_error );
     }
     if ( type != AstItem::ContAssign &&
@@ -365,18 +368,18 @@ public:
 		    std::logic_error );
     }
     if ( type != AstItem::DefParam ) {
-      EXPECT_THROW( item->defparam_list(),
+      EXPECT_THROW( item->defparam_top(),
 		    std::logic_error );
     }
     if ( type != AstItem::ContAssign ) {
-      EXPECT_THROW( item->contassign_list(),
+      EXPECT_THROW( item->contassign_top(),
 		    std::logic_error );
     }
     if ( type != AstItem::Task &&
 	 type != AstItem::Func ) {
       EXPECT_THROW( item->automatic(),
 		    std::logic_error );
-      EXPECT_THROW( item->iohead_list(),
+      EXPECT_THROW( item->iohead_top(),
 		    std::logic_error );
     }
     if ( type != AstItem::Func ) {
@@ -392,12 +395,12 @@ public:
 		    std::logic_error );
     }
     if ( type != AstItem::MuInst ) {
-      EXPECT_THROW( item->paramassign_list(),
+      EXPECT_THROW( item->paramassign_top(),
 		    std::logic_error );
     }
     if ( type != AstItem::MuInst &&
 	 type != AstItem::GateInst ) {
-      EXPECT_THROW( item->inst_list(),
+      EXPECT_THROW( item->inst_top(),
 		    std::logic_error );
     }
     if ( type != AstItem::SpecItem ) {
@@ -407,23 +410,23 @@ public:
 		    std::logic_error );
     }
     if ( type != AstItem::SpecPath ) {
-      EXPECT_THROW( item->terminal_list(),
+      EXPECT_THROW( item->terminal_top(),
 		    std::logic_error );
       EXPECT_THROW( item->path_decl(),
 		    std::logic_error );
     }
     if ( type != AstItem::GenIf ) {
-      EXPECT_THROW( item->then_declhead_list(),
+      EXPECT_THROW( item->then_declhead_top(),
 		    std::logic_error );
-      EXPECT_THROW( item->then_item_list(),
+      EXPECT_THROW( item->then_item_top(),
 		    std::logic_error );
-      EXPECT_THROW( item->else_declhead_list(),
+      EXPECT_THROW( item->else_declhead_top(),
 		    std::logic_error );
-      EXPECT_THROW( item->else_item_list(),
+      EXPECT_THROW( item->else_item_top(),
 		    std::logic_error );
     }
     if ( type != AstItem::GenCase ) {
-      EXPECT_THROW( item->caseitem_list(),
+      EXPECT_THROW( item->caseitem_top(),
 		    std::logic_error );
     }
     if ( type != AstItem::GenFor ) {
@@ -439,34 +442,36 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstDefParam 用のテスト
+  // PtDefParam 用のテスト
   //////////////////////////////////////////////////////////////////////
 
   void
   check_DefParam(
-    const AstDefParam* defparam,
+    const PtDefParam* defparam,
     const FileRegion& fr,
     const char* name,
     const std::vector<NameBranchSpec>& nbspec_vec,
-    const AstExpr* expr
+    const PtExpr* expr
   )
   {
-    check_HierNamedBase(defparam, fr, name, nbspec_vec);
+    check_Base(defparam, fr);
+    EXPECT_STREQ( name, defparam->name() );
+    check_namebranch_list(defparam->namebranch_top(), nbspec_vec);
     EXPECT_EQ( expr, defparam->expr() );
   }
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstContAssign 用のテスト
+  // PtContAssign 用のテスト
   //////////////////////////////////////////////////////////////////////
 
   void
   check_ContAssign(
-    const AstContAssign* contassign,
+    const PtContAssign* contassign,
     const FileRegion& fr,
-    const AstExpr* lhs,
-    const AstExpr* rhs
+    const PtExpr* lhs,
+    const PtExpr* rhs
   )
   {
     check_Base(contassign, fr);
@@ -477,35 +482,37 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstInst 用のテスト
+  // PtInst 用のテスト
   //////////////////////////////////////////////////////////////////////
 
   void
   check_Inst(
-    const AstInst* inst,
+    const PtInst* inst,
     const FileRegion& fr,
     const char* name,
-    const AstRange* range,
-    const std::vector<const AstConnection*>& con_list
+    const PtRange* range,
+    const std::vector<const PtConnection*>& con_list
   )
   {
-    check_NamedBase(inst, fr, name);
+    check_Base(inst, fr);
+    EXPECT_STREQ( name, inst->name() );
     EXPECT_EQ( range, inst->range() );
-    EXPECT_EQ( con_list, inst->port_list().to_vector() );
+    EXPECT_EQ( con_list, to_vector(inst->port_top()) );
   }
 
   void
   check_Inst(
-    const AstInst* inst,
+    const PtInst* inst,
     const FileRegion& fr,
     const char* name,
-    const AstRange* range,
-    const std::vector<const AstExpr*>& expr_list
+    const PtRange* range,
+    const std::vector<const PtExpr*>& expr_list
   )
   {
-    check_NamedBase(inst, fr, name);
+    check_Base(inst, fr);
+    EXPECT_STREQ( name, inst->name() );
     EXPECT_EQ( range, inst->range() );
-    auto con_list = inst->port_list().to_vector();
+    auto con_list = to_vector(inst->port_top());
     ASSERT_EQ( expr_list.size(), con_list.size() );
     for ( SizeType i = 0; i < expr_list.size(); ++ i ) {
       auto con = con_list[i];
@@ -517,50 +524,50 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstGenCaseItem 用のテスト
+  // PtGenCaseItem 用のテスト
   //////////////////////////////////////////////////////////////////////
 
   void
   check_GenCaseItem(
-    const AstGenCaseItem* item,
+    const PtGenCaseItem* item,
     const FileRegion& fr,
-    const std::vector<const AstExpr*>& label_list,
-    const std::vector<const AstDeclHead*>& declhead_list,
-    const std::vector<const AstItem*>& item_list
+    const std::vector<const PtExpr*>& label_list,
+    const std::vector<const PtDeclHead*>& declhead_list,
+    const std::vector<const PtItem*>& item_list
   )
   {
     check_Base(item, fr);
-    EXPECT_EQ( label_list, item->label_list().to_vector() );
-    EXPECT_EQ( declhead_list, item->declhead_list().to_vector() );
-    EXPECT_EQ( item_list, item->item_list().to_vector() );
+    EXPECT_EQ( label_list, to_vector(item->label_top()) );
+    EXPECT_EQ( declhead_list, to_vector(item->declhead_top()) );
+    EXPECT_EQ( item_list, to_vector(item->item_top()) );
   }
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstPathDecl 用のテスト
+  // PtPathDecl 用のテスト
   //////////////////////////////////////////////////////////////////////
 
   void
   check_PathDecl(
-    const AstPathDecl* pathdecl,
+    const PtPathDecl* pathdecl,
     const FileRegion& fr,
     int edge,
-    const std::vector<const AstExpr*>& input_list,
+    const std::vector<const PtExpr*>& input_list,
     int input_pol,
     VpiPathType op,
-    const std::vector<const AstExpr*>& output_list,
+    const std::vector<const PtExpr*>& output_list,
     int output_pol,
-    const AstExpr* expr,
-    const AstPathDelay* path_delay
+    const PtExpr* expr,
+    const PtPathDelay* path_delay
   )
   {
     check_Base(pathdecl, fr);
     EXPECT_EQ( edge, pathdecl->edge() );
-    EXPECT_EQ( input_list, pathdecl->input_list().to_vector() );
+    EXPECT_EQ( input_list, to_vector(pathdecl->input_top()) );
     EXPECT_EQ( input_pol, pathdecl->input_pol() );
     EXPECT_EQ( op, pathdecl->op() );
-    EXPECT_EQ( output_list, pathdecl->output_list().to_vector() );
+    EXPECT_EQ( output_list, to_vector(pathdecl->output_top()) );
     EXPECT_EQ( output_pol, pathdecl->output_pol() );
     EXPECT_EQ( expr, pathdecl->expr() );
     EXPECT_EQ( path_delay, pathdecl->path_delay() );

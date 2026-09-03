@@ -10,6 +10,7 @@
 
 #include "ym/vl/VlParamAssign.h"
 #include "ym/vl/VlValue.h"
+#include "ym/vl/AstDefParam.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,9 +27,9 @@ public:
   /// @brief コンストラクタ
   EiParamAssign(
     const VlModule* module,  ///< [in] 親のモジュール
-    const AstBase* ast_obj,    ///< [in] パース木の宣言要素
+    const AstBase& ast_obj,  ///< [in] パース木の宣言要素
     ElbParameter* param,     ///< [in] 対象の parameter
-    const AstExpr* rhs_expr,  ///< [in] 割り当て式の右辺
+    const AstExpr& rhs_expr, ///< [in] 割り当て式の右辺
     const VlValue& rhs_value ///< [in] 右辺の値
   );
 
@@ -85,13 +86,13 @@ private:
   const VlModule* mModule;
 
   // パース木中の対応するオブジェクト
-  const AstBase* mAstObj;
+  const AstBase& mAstObj;
 
   // パラメータ
   ElbParameter* mLhs;
 
   // 右辺式
-  const AstExpr* mRhsExpr;
+  AstExpr mRhsExpr;
 
   // 右辺の値
   VlValue mRhsValue;
@@ -111,9 +112,9 @@ public:
   /// @brief コンストラクタ
   EiParamAssign2(
     const VlModule* module,  ///< [in] 親のモジュール
-    const AstBase* ast_obj,    ///< [in] パース木の接続を表す要素
+    const AstBase& ast_obj,    ///< [in] パース木の接続を表す要素
     ElbParameter* param,     ///< [in] 対象の parameter
-    const AstExpr* rhs_expr,  ///< [in] 割り当て式の右辺
+    const AstExpr& rhs_expr,  ///< [in] 割り当て式の右辺
     const VlValue& rhs_value ///< [in] 右辺の値
   );
 
@@ -145,12 +146,12 @@ public:
 
   /// @brief コンストラクタ
   EiDefParam(
-    const VlModule* module,        ///< [in] 親のモジュール
-    const AstItem* ast_header,       ///< [in] パース木の defparam ヘッダ
-    const AstDefParam* ast_defparam, ///< [in] パース木の defparam 定義
-    ElbParameter* param,           ///< [in] 対象の parameter
-    const AstExpr* rhs_expr,        ///< [in] 割り当て式の右辺
-    const VlValue& rhs_value       ///< [in] 右辺の値
+    const VlModule* module,          ///< [in] 親のモジュール
+    const AstItem& ast_header,       ///< [in] パース木の defparam ヘッダ
+    const AstDefParam& ast_defparam, ///< [in] パース木の defparam 定義
+    ElbParameter* param,             ///< [in] 対象の parameter
+    const AstExpr& rhs_expr,         ///< [in] 割り当て式の右辺
+    const VlValue& rhs_value         ///< [in] 右辺の値
   );
 
   /// @brief デストラクタ
@@ -202,16 +203,16 @@ private:
   const VlModule* mModule;
 
   // パース木の defparam ヘッダ
-  const AstItem* mAstHead;
+  AstItem mAstHead;
 
   // パース木の defparam 定義
-  const AstDefParam* mAstDefParam;
+  AstDefParam mAstDefParam;
 
   // パラメータ
   ElbParameter* mLhs;
 
   // 右辺式
-  const AstExpr* mRhsExpr;
+  AstExpr mRhsExpr;
 
   // 右辺の値
   VlValue mRhsValue;

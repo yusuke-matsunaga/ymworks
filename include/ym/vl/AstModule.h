@@ -13,6 +13,8 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+class PtModule;
+
 //////////////////////////////////////////////////////////////////////
 /// @class AstModule AstModule.h "ym/vl/AstModule.h"
 /// @ingroup VlParser
@@ -20,158 +22,193 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @brief module を表すノード
 //////////////////////////////////////////////////////////////////////
 class AstModule :
-  public AstNamedBase
+  public AstNamedBaseWithPtr<const PtModule>
 {
 public:
+
+  /// @brief コンストラクタ
+  explicit
+  AstModule(
+    const PtModule* ptr = nullptr ///< [in] 実体のポインタ
+  ) : AstNamedBaseWithPtr<const PtModule>(ptr)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~AstModule() = default;
+
+
+public:
   //////////////////////////////////////////////////////////////////////
-  // AstModule の継承クラスが実装しなければならない仮想関数
+  // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
   /// @brief macromodule 情報の取得
   /// @retval true macromodule の場合
   /// @retval false module の場合
-  virtual
   bool
-  is_macromodule() const = 0;
+  is_macromodule() const;
 
   /// @brief cell 情報の取得
   /// @retval true `celldefine --- `endcelldefine に挟まれたモジュールの場合
   /// @retval false 上記以外
-  virtual
   bool
-  is_cell() const = 0;
+  is_cell() const;
 
   /// @brief protect 情報の取得
   /// @return プロテクトされていたら true を返す．
-  virtual
   bool
-  is_protected() const = 0;
+  is_protected() const;
 
   /// @brief time unit の取得
   /// @return 時間の単位を表す 2 〜 -15 の整数\n
   /// もしくは未定義を表す -16
-  virtual
   int
-  time_unit() const = 0;
+  time_unit() const;
 
   /// @brief time precision の取得
   /// @return 時間の精度を表す 2 〜 -15 の整数\n
   /// もしくは未定義を表す -16
-  virtual
   int
-  time_precision() const = 0;
+  time_precision() const;
 
   /// @brief default net type の取得
   /// @return default net type
-  virtual
   VpiNetType
-  nettype() const = 0;
+  nettype() const;
 
   /// @brief unconnected drive の取得
   /// @return unconnected drive
-  virtual
   VpiUnconnDrive
-  unconn_drive() const = 0;
+  unconn_drive() const;
 
   /// @brief default delay mode の取得
   /// @return default delay mode
-  virtual
   VpiDefDelayMode
-  delay_mode() const = 0;
+  delay_mode() const;
 
   /// @brief default decay time の取得
   /// @return default decay time
-  virtual
   int
-  decay_time() const = 0;
+  decay_time() const;
 
   /// @brief portfaults 情報の取得
   /// @return true で enable_portfaults を表す．
-  virtual
   bool
-  portfaults() const = 0;
+  portfaults() const;
 
   /// @brief suppress_faults 情報の取得
   /// @return true で suppress_faults が効いていることを表す．
-  virtual
   bool
-  suppress_faults() const = 0;
+  suppress_faults() const;
 
   /// @brief config 情報の取得
   /// @return config 情報
-  virtual
   const std::string&
-  config() const = 0;
+  config() const;
 
   /// @brief library 情報の取得
   /// @return library 情報
-  virtual
   const std::string&
-  library() const = 0;
+  library() const;
 
   /// @brief cell 情報の取得
   /// @return cell 情報
-  virtual
   const std::string&
-  cell() const = 0;
+  cell() const;
 
   /// @brief パラメータポート宣言のリストの取得
-  virtual
   AstDeclHeadList
-  paramport_list() const = 0;
+  paramport_list() const;
 
   /// @brief ポートのリストを返す．
-  virtual
   AstPortList
-  port_list() const = 0;
+  port_list() const;
 
   /// @brief 入出力宣言のヘッダのリストを返す．
-  virtual
   AstIOHeadList
-  iohead_list() const = 0;
+  iohead_list() const;
 
   /// @brief 入出力宣言の要素数の取得
   ///
   /// 個々のヘッダが持つ要素数の総和を計算する．
-  virtual
   SizeType
-  iodecl_num() const = 0;
+  iodecl_num() const;
 
   /// @brief 宣言ヘッダのリストを返す．
-  virtual
   AstDeclHeadList
-  declhead_list() const = 0;
+  declhead_list() const;
 
   /// @brief item のリストを返す．
-  virtual
   AstItemList
-  item_list() const = 0;
+  item_list() const;
 
   /// @brief top_module フラグを下ろす
-  virtual
   void
-  clear_topmodule() const = 0;
+  clear_topmodule() const;
 
   /// @brief top module のチェック
   /// @return top module の場合に true を返す．
-  virtual
   bool
-  is_topmodule() const = 0;
+  is_topmodule() const;
 
   /// @brief in_use フラグの設定
-  virtual
   void
-  set_in_use() const = 0;
+  set_in_use() const;
 
   /// @brief in_use フラグの解除
-  virtual
   void
-  reset_in_use() const = 0;
+  reset_in_use() const;
 
   /// @brief in_use フラグの取得
-  virtual
   bool
-  is_in_use() const = 0;
+  is_in_use() const;
+
+  /// @brief ハッシュ値を返す．
+  SizeType
+  hash() const;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstBase の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 適切な値を持っている時 true を返す．
+  bool
+  is_valid() const override;
+
+  /// @brief ファイル位置の取得
+  /// @return ファイル位置
+  FileRegion
+  file_region() const override;
+
+  /// @brief 比較用のユニークなキーを返す．
+  PtrIntType
+  key() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstNamedBase の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 名前の取得
+  /// @return 名前
+  const char*
+  name() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief json_obj() の下請け関数
+  void
+  json_sub(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const override;
 
 };
 
@@ -179,27 +216,14 @@ END_NAMESPACE_YM_VERILOG
 
 BEGIN_NAMESPACE_STD
 
-// AstModule へのポインタをキーにしたハッシュ関数クラスの定義
+// const AstModule をキーにしたハッシュ関数クラスの定義
 template <>
-struct hash<YM_NAMESPACE::nsVerilog::AstModule*>
+struct hash<YM_NAMESPACE::nsVerilog::AstModule>
 {
   SizeType
-  operator()(YM_NAMESPACE::nsVerilog::AstModule* module) const
+  operator()(const YM_NAMESPACE::nsVerilog::AstModule& module) const
   {
-    auto tmp = reinterpret_cast<PtrIntType>(module)/sizeof(void*);
-    return static_cast<SizeType>(tmp);
-  }
-};
-
-// const AstModule へのポインタをキーにしたハッシュ関数クラスの定義
-template <>
-struct hash<const YM_NAMESPACE::nsVerilog::AstModule*>
-{
-  SizeType
-  operator()(const YM_NAMESPACE::nsVerilog::AstModule* module) const
-  {
-    auto tmp = reinterpret_cast<PtrIntType>(module)/sizeof(void*);
-    return static_cast<SizeType>(tmp);
+    return module.hash();
   }
 };
 

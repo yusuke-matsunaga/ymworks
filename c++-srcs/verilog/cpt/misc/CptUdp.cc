@@ -10,7 +10,7 @@
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 #include "parser/PtPort.h"
-#include "parser/PtDecl.h"
+#include "parser/PtDeclHead.h"
 #include "parser/PtExpr.h"
 
 
@@ -47,31 +47,31 @@ CptUdp::name() const
 }
 
 // @brief ポートのリストを取り出す．
-AstPortList
-CptUdp::port_list() const
+const PtPort*
+CptUdp::port_top() const
 {
-  return AstPortList(mPortTop);
+  return mPortTop;
 }
 
 // @brief 入出力宣言ヘッダのリストの取得
-AstIOHeadList
-CptUdp::iohead_list() const
+const PtIOHead*
+CptUdp::iohead_top() const
 {
-  return AstIOHeadList(mIOHeadTop);
+  return mIOHeadTop;
 }
 
 // 初期値を取出す．
-const AstExpr*
+const PtExpr*
 CptUdp::init_value() const
 {
   return mInitValue;
 }
 
 // @brief テーブルのリストを返す．
-AstUdpEntryList
-CptUdp::table_list() const
+const PtUdpEntry*
+CptUdp::table_top() const
 {
-  return AstUdpEntryList(mTableTop);
+  return mTableTop;
 }
 
 
@@ -87,21 +87,21 @@ CptUdpEntry::file_region() const
 }
 
 // @brief 入力値のリストを取り出す．
-AstUdpValueList
-CptUdpEntry::input_list() const
+const PtUdpValue*
+CptUdpEntry::input_top() const
 {
-  return AstUdpValueList(mInputTop);
+  return mInputTop;
 }
 
 // @brief 現状態の値を取り出す．
-const AstUdpValue*
+const PtUdpValue*
 CptUdpEntry::current() const
 {
   return nullptr;
 }
 
 // 出力の値を取り出す．
-const AstUdpValue*
+const PtUdpValue*
 CptUdpEntry::output() const
 {
   return mOutput;
@@ -113,7 +113,7 @@ CptUdpEntry::output() const
 //////////////////////////////////////////////////////////////////////
 
 // 現状態の値を取り出す．
-const AstUdpValue*
+const PtUdpValue*
 CptUdpEntryS::current() const
 {
   return mCurrent;
@@ -148,9 +148,9 @@ PtUdp*
 PtFactory::new_CmbUdp(
   const FileRegion& file_region,
   const char* name,
-  PtPort* port_top,
-  PtIOHead* iohead_top,
-  PtUdpEntry* entry_top
+  const PtPort* port_top,
+  const PtIOHead* iohead_top,
+  const PtUdpEntry* entry_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptUdp));
@@ -166,10 +166,10 @@ PtUdp*
 PtFactory::new_SeqUdp(
   const FileRegion& file_region,
   const char* name,
-  PtPort* port_top,
-  PtIOHead* iohead_top,
-  const AstExpr* init_value,
-  PtUdpEntry* entry_top
+  const PtPort* port_top,
+  const PtIOHead* iohead_top,
+  const PtExpr* init_value,
+  const PtUdpEntry* entry_top
 
 )
 {
@@ -185,8 +185,8 @@ PtFactory::new_SeqUdp(
 PtUdpEntry*
 PtFactory::new_UdpEntry(
   const FileRegion& file_region,
-  PtUdpValue* input_top,
-  const AstUdpValue* output
+  const PtUdpValue* input_top,
+  const PtUdpValue* output
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptUdpEntry));
@@ -199,9 +199,9 @@ PtFactory::new_UdpEntry(
 PtUdpEntry*
 PtFactory::new_UdpEntry(
   const FileRegion& file_region,
-  PtUdpValue* input_top,
-  const AstUdpValue* current,
-  const AstUdpValue* output
+  const PtUdpValue* input_top,
+  const PtUdpValue* current,
+  const PtUdpValue* output
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptUdpEntryS));

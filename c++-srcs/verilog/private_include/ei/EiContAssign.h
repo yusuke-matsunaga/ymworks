@@ -26,7 +26,7 @@ public:
   /// @brief コンストラクタ
   EiCaHead(
     const VlModule* module, ///< [in] 親のモジュール
-    const AstItem* ast_head   ///< [in] パース木のヘッダ定義
+    const AstItem& ast_head ///< [in] パース木のヘッダ定義
   );
 
   /// @brief デストラクタ
@@ -65,7 +65,7 @@ private:
   const VlModule* mModule;
 
   // パース木のヘッダ定義
-  const AstItem* mAstHead;
+  AstItem mAstHead;
 
 };
 
@@ -81,9 +81,9 @@ public:
 
   /// @brief コンストラクタ
   EiCaHeadD(
-    const VlModule* module, ///< [in] 親のモジュール
-    const AstItem* ast_head,  ///< [in] パース木のヘッダ定義
-    const VlDelay* delay    ///< [in] 遅延値
+    const VlModule* module,  ///< [in] 親のモジュール
+    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
+    const VlDelay* delay     ///< [in] 遅延値
   );
 
   /// @brief デストラクタ
@@ -122,9 +122,9 @@ protected:
 
   /// @brief コンストラクタ
   EiContAssign(
-    const AstBase* ast_obj, ///< [in] 対応するパース木中の定義要素
-    const VlExpr* lhs,    ///< [in] 左辺式
-    const VlExpr* rhs     ///< [in] 右辺式
+    const AstBase& ast_obj, ///< [in] 対応するパース木中の定義要素
+    const VlExpr* lhs,      ///< [in] 左辺式
+    const VlExpr* rhs       ///< [in] 右辺式
   );
 
   /// @brief デストラクタ
@@ -169,7 +169,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 対応するパース木の定義要素
-  const AstBase* mAstObj;
+  const AstBase& mAstObj;
 
   // 左辺式
   const VlExpr* mLhs;
@@ -191,10 +191,10 @@ public:
 
   /// @brief コンストラクタ
   EiContAssign1(
-    ElbCaHead* head,      ///< [in] ヘッダ
-    const AstBase* ast_obj, ///< [in] 対応するパース木中の定義要素
-    const VlExpr* lhs,    ///< [in] 左辺式
-    const VlExpr* rhs     ///< [in] 右辺式
+    ElbCaHead* head,        ///< [in] ヘッダ
+    const AstBase& ast_obj, ///< [in] 対応するパース木中の定義要素
+    const VlExpr* lhs,      ///< [in] 左辺式
+    const VlExpr* rhs       ///< [in] 右辺式
   );
 
   /// @brief デストラクタ
@@ -250,7 +250,7 @@ public:
   /// @brief コンストラクタ
   EiContAssign2(
     const VlModule* module, ///< [in] 親のモジュール
-    const AstBase* ast_obj,   ///< [in] パース木の定義要素
+    const AstBase& ast_obj, ///< [in] パース木の定義要素
     const VlExpr* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   );

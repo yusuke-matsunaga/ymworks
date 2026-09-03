@@ -14,7 +14,6 @@
 
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,9 +26,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlParamAssign*
 EiFactory::new_ParamAssign(
   const VlModule* module,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
@@ -40,9 +39,9 @@ EiFactory::new_ParamAssign(
 const VlParamAssign*
 EiFactory::new_NamedParamAssign(
   const VlModule* module,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
@@ -53,10 +52,10 @@ EiFactory::new_NamedParamAssign(
 const VlDefParam*
 EiFactory::new_DefParam(
   const VlModule* module,
-  const AstItem* ast_header,
-  const AstDefParam* ast_defparam,
+  const AstItem& ast_header,
+  const AstDefParam& ast_defparam,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
@@ -72,9 +71,9 @@ EiFactory::new_DefParam(
 // @brief コンストラクタ
 EiParamAssign::EiParamAssign(
   const VlModule* parent,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 ) : mModule{parent},
     mAstObj{ast_obj},
@@ -100,7 +99,7 @@ EiParamAssign::type() const
 FileRegion
 EiParamAssign::file_region() const
 {
-  return mAstObj->file_region();
+  return mAstObj.file_region();
 }
 
 // @brief 親のモジュールを返す．
@@ -128,7 +127,7 @@ EiParamAssign::rhs_value() const
 std::string
 EiParamAssign::rhs_string() const
 {
-  return mRhsExpr->decompile();
+  return mRhsExpr.decompile();
 }
 
 // @brief 名前による接続の場合に true を返す．
@@ -146,9 +145,9 @@ EiParamAssign::is_conn_by_name() const
 // @brief コンストラクタ
 EiParamAssign2::EiParamAssign2(
   const VlModule* parent,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 ) : EiParamAssign(parent, ast_obj, param, rhs_expr, rhs_value)
 {
@@ -174,10 +173,10 @@ EiParamAssign2::is_conn_by_name() const
 // @brief コンストラクタ
 EiDefParam::EiDefParam(
   const VlModule* parent,
-  const AstItem* ast_header,
-  const AstDefParam* ast_defparam,
+  const AstItem& ast_header,
+  const AstDefParam& ast_defparam,
   ElbParameter* param,
-  const AstExpr* rhs_expr,
+  const AstExpr& rhs_expr,
   const VlValue& rhs_value
 ) : mModule{parent},
     mAstHead{ast_header},
@@ -204,7 +203,7 @@ EiDefParam::type() const
 FileRegion
 EiDefParam::file_region() const
 {
-  return mAstDefParam->file_region();
+  return mAstDefParam.file_region();
 }
 
 // @brief 親のモジュールを返す．
@@ -232,7 +231,7 @@ EiDefParam::rhs_value() const
 std::string
 EiDefParam::rhs_string() const
 {
-  return mRhsExpr->decompile();
+  return mRhsExpr.decompile();
 }
 
 END_NAMESPACE_YM_VERILOG

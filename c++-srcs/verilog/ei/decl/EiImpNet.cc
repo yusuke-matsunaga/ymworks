@@ -8,7 +8,6 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiImpNet.h"
-#include "ym/vl/AstExpr.h"
 #include "ym/vl/BitVector.h"
 
 
@@ -22,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbDecl*
 EiFactory::new_ImpNet(
   const VlScope* parent,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiNetType net_type
 )
 {
@@ -37,7 +36,7 @@ EiFactory::new_ImpNet(
 // @brief コンストラクタ
 EiImpNet::EiImpNet(
   const VlScope* parent,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiNetType net_type
 ) : mParent{parent},
     mAstExpr{ast_expr},
@@ -61,7 +60,7 @@ EiImpNet::type() const
 FileRegion
 EiImpNet::file_region() const
 {
-  return mAstExpr->file_region();
+  return mAstExpr.file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -75,7 +74,7 @@ EiImpNet::parent_scope() const
 std::string
 EiImpNet::name() const
 {
-  return mAstExpr->name();
+  return mAstExpr.name();
 }
 
 // @brief 値の型を返す．

@@ -9,6 +9,8 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtPathDecl.h"
+#include "parser/PtPathDelay.h"
 #include "parser/PtExpr.h"
 
 
@@ -26,7 +28,7 @@ public:
   CptSpecItem(
     const FileRegion& file_region,
     VpiSpecItemType id,
-    const AstExpr* terminal_top
+    const PtExpr* terminal_top
   ) : mFileRegion{file_region},
       mId{id},
       mTerminalTop{terminal_top}
@@ -39,7 +41,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
@@ -47,16 +49,16 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
   /// @brief specify block item の種類を返す．
   VpiSpecItemType
   specitem_type() const override;
 
-  /// @brief ターミナルリストの取得
-  AstExprList
-  terminal_list() const override;
+  /// @brief ターミナルリストの先頭の取得
+  const PtExpr*
+  terminal_top() const override;
 
 
 private:
@@ -70,8 +72,8 @@ private:
   // トークン番号
   VpiSpecItemType mId;
 
-  // ターミナルのリスト
-  const AstExpr* mTerminalTop;
+  // ターミナルのリストの先頭
+  const PtExpr* mTerminalTop;
 
 };
 
@@ -88,8 +90,8 @@ public:
   CptSpecPath(
     const FileRegion& file_region,
     VpiSpecPathType id,
-    const AstExpr* expr,
-    const AstPathDecl* path_decl
+    const PtExpr* expr,
+    const PtPathDecl* path_decl
   ) : mFileRegion{file_region},
       mId{id},
       mExpr{expr},
@@ -111,7 +113,7 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
   /// @brief specify block path の種類を返す．
@@ -119,11 +121,11 @@ public:
   specpath_type() const override;
 
   /// @brief モジュールパスの式を返す．
-  const AstExpr*
+  const PtExpr*
   cond_expr() const override;
 
   /// @brief パス記述を返す．
-  const AstPathDecl*
+  const PtPathDecl*
   path_decl() const override;
 
 
@@ -139,10 +141,10 @@ private:
   VpiSpecPathType mId;
 
   // モジュールパスの式
-  const AstExpr* mExpr;
+  const PtExpr* mExpr;
 
   // パス記述
-  const AstPathDecl* mPathDecl;
+  const PtPathDecl* mPathDecl;
 
 };
 
@@ -159,13 +161,13 @@ public:
   CptPathDecl(
     const FileRegion& file_region,
     int edge,
-    PtExpr* input_top,
+    const PtExpr* input_top,
     int input_pol,
     VpiPathType op,
-    PtExpr* output_top,
+    const PtExpr* output_top,
     int output_pol,
-    const AstExpr* expr,
-    const AstPathDelay* path_delay
+    const PtExpr* expr,
+    const PtPathDelay* path_delay
   ) : mFileRegion{file_region},
       mEdge{edge},
       mInputTop{input_top},
@@ -195,9 +197,9 @@ public:
   int
   edge() const override;
 
-  /// @brief 入力のリストの取得
-  AstExprList
-  input_list() const override;
+  /// @brief 入力のリストの先頭の取得
+  const PtExpr*
+  input_top() const override;
 
   /// @brief 入力の極性を取り出す．
   int
@@ -207,20 +209,20 @@ public:
   VpiPathType
   op() const override;
 
-  /// @brief 出力リストの取得
-  AstExprList
-  output_list() const override;
+  /// @brief 出力リストの先頭の取得
+  const PtExpr*
+  output_top() const override;
 
   /// @brief 出力の極性を取り出す．
   int
   output_pol() const override;
 
   /// @brief 式を取り出す．
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
   /// @brief path_delay_value を取り出す．
-  const AstPathDelay*
+  const PtPathDelay*
   path_delay() const override;
 
 
@@ -233,13 +235,13 @@ private:
   FileRegion mFileRegion;
 
   int mEdge;
-  const AstExpr* mInputTop;
+  const PtExpr* mInputTop;
   int mInputPol;
   VpiPathType mOp;
-  const AstExpr* mOutputTop;
+  const PtExpr* mOutputTop;
   int mOutputPol;
-  const AstExpr* mExpr;
-  const AstPathDelay* mPathDelay;
+  const PtExpr* mExpr;
+  const PtPathDelay* mPathDelay;
 
 };
 
@@ -273,7 +275,7 @@ public:
   file_region() const override;
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value(
     SizeType pos
   ) const override;
@@ -301,7 +303,7 @@ public:
   /// @brief コンストラクタ
   CptPathDelay1(
     const FileRegion& file_region,
-    const AstExpr* value1
+    const PtExpr* value1
   ) : CptPathDelayBase(file_region),
       mValue{value1}
   {
@@ -317,7 +319,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value(
     SizeType pos
   ) const override;
@@ -329,7 +331,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ディレイ値
-  const AstExpr* mValue;
+  const PtExpr* mValue;
 
 };
 
@@ -345,8 +347,8 @@ public:
   /// @brief コンストラクタ
   CptPathDelay2(
     const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2
+    const PtExpr* value1,
+    const PtExpr* value2
   ) : CptPathDelayBase(file_region),
       mValues{value1, value2}
   {
@@ -362,7 +364,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value(
     SizeType pos
   ) const override;
@@ -374,7 +376,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ディレイ値
-  const AstExpr* mValues[2];
+  const PtExpr* mValues[2];
 
 };
 
@@ -390,9 +392,9 @@ public:
   /// @brief コンストラクタ
   CptPathDelay3(
     const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2,
-    const AstExpr* value3
+    const PtExpr* value1,
+    const PtExpr* value2,
+    const PtExpr* value3
   ) : CptPathDelayBase(file_region),
       mValues{value1, value2, value3}
   {
@@ -408,7 +410,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value(
     SizeType pos
   ) const override;
@@ -420,7 +422,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ディレイ値
-  const AstExpr* mValues[3];
+  const PtExpr* mValues[3];
 
 };
 
@@ -436,12 +438,12 @@ public:
   /// @brief コンストラクタ
   CptPathDelay6(
     const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2,
-    const AstExpr* value3,
-    const AstExpr* value4,
-    const AstExpr* value5,
-    const AstExpr* value6
+    const PtExpr* value1,
+    const PtExpr* value2,
+    const PtExpr* value3,
+    const PtExpr* value4,
+    const PtExpr* value5,
+    const PtExpr* value6
   ) : CptPathDelayBase(file_region),
       mValues{value1, value2, value3,
 	      value4, value5, value6}
@@ -458,7 +460,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value(
     SizeType pos
   ) const override;
@@ -470,7 +472,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ディレイ値
-  const AstExpr* mValues[6];
+  const PtExpr* mValues[6];
 
 };
 
@@ -486,18 +488,18 @@ public:
   /// @brief コンストラクタ
   CptPathDelay12(
     const FileRegion& file_region,
-    const AstExpr* value1,
-    const AstExpr* value2,
-    const AstExpr* value3,
-    const AstExpr* value4,
-    const AstExpr* value5,
-    const AstExpr* value6,
-    const AstExpr* value7,
-    const AstExpr* value8,
-    const AstExpr* value9,
-    const AstExpr* value10,
-    const AstExpr* value11,
-    const AstExpr* value12
+    const PtExpr* value1,
+    const PtExpr* value2,
+    const PtExpr* value3,
+    const PtExpr* value4,
+    const PtExpr* value5,
+    const PtExpr* value6,
+    const PtExpr* value7,
+    const PtExpr* value8,
+    const PtExpr* value9,
+    const PtExpr* value10,
+    const PtExpr* value11,
+    const PtExpr* value12
   ) : CptPathDelayBase(file_region),
       mValues{value1, value2, value3,
 	      value4, value5, value6,
@@ -516,7 +518,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値を取り出す．
-  const AstExpr*
+  const PtExpr*
   value(
     SizeType pos
   ) const override;
@@ -528,7 +530,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ディレイ値
-  const AstExpr* mValues[12];
+  const PtExpr* mValues[12];
 
 };
 

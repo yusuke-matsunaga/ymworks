@@ -24,7 +24,7 @@ public:
   /// @brief コンストラクタ
   CptRegH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptDeclHead(file_region, item_top)
   {
   }
@@ -40,7 +40,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };
@@ -57,8 +57,8 @@ public:
   /// @brief コンストラクタ
   CptRegHV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range,         ///< [in] 範囲
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtRange* range,          ///< [in] 範囲
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptRegH(file_region, item_top),
       mRange{range}
   {
@@ -80,7 +80,7 @@ public:
 
   /// @brief 範囲の取得
   /// @return 範囲
-  const AstRange*
+  const PtRange*
   range() const override;
 
 
@@ -90,7 +90,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const AstRange* mRange;
+  const PtRange* mRange;
 
 };
 
@@ -106,8 +106,8 @@ public:
   /// @brief コンストラクタ
   CptRegHSV(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    const AstRange* range,         ///< [in] パース木の範囲定義
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtRange* range,          ///< [in] パース木の範囲定義
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptRegHV(file_region, range, item_top)
   {
   }

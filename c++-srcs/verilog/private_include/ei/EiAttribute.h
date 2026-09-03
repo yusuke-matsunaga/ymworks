@@ -25,7 +25,7 @@ public:
 
   /// @brief コンストラクタ
   EiAttribute(
-    const AstAttrSpec* ast_attr, ///< [in] パース木の定義要素
+    const AstAttrSpec& ast_attr, ///< [in] パース木の定義要素
     const VlExpr* expr,          ///< [in] 値
     bool def                     ///< [in] 定義側の属性の時 true
   );
@@ -72,7 +72,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const AstAttrSpec* mAstAttrSpec;
+  AstAttrSpec mAstAttrSpec;
 
   // 値
   const VlExpr* mExpr;

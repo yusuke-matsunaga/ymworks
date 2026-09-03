@@ -25,7 +25,7 @@ protected:
   /// @brief コンストラクタ
   CptStmt_Loop(
     const FileRegion& file_region,
-    const AstStmt* body
+    const PtStmt* body
   ) : CptStmt(file_region),
       mBody{body}
   {
@@ -40,11 +40,11 @@ protected:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 実行すべき本体を返す．
-  const AstStmt*
+  const PtStmt*
   body() const override;
 
 
@@ -54,7 +54,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 実行すべき本体
-  const AstStmt* mBody;
+  const PtStmt* mBody;
 
 };
 
@@ -71,7 +71,7 @@ public:
   /// @brief コンストラクタ
   CptStmt_Forever(
     const FileRegion& file_region,
-    const AstStmt* body
+    const PtStmt* body
   ) : CptStmt_Loop(file_region, body)
   {
   }
@@ -86,7 +86,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -104,8 +104,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_Repeat(
     const FileRegion& file_region,
-    const AstExpr* expr,
-    const AstStmt* body
+    const PtExpr* expr,
+    const PtStmt* body
   ) : CptStmt_Loop(file_region, body),
       mExpr{expr}
   {
@@ -124,11 +124,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
   /// @brief 繰り返し式を返す．
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
 
@@ -138,7 +138,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 繰り返し式
-  const AstExpr* mExpr;
+  const PtExpr* mExpr;
 
 };
 
@@ -155,8 +155,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_While(
     const FileRegion& file_region,
-    const AstExpr* expr,
-    const AstStmt* body
+    const PtExpr* expr,
+    const PtStmt* body
   ) : CptStmt_Repeat(file_region, expr, body)
   {
   }
@@ -171,7 +171,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -189,10 +189,10 @@ public:
   /// @brief コンストラクタ
   CptStmt_For(
     const FileRegion& file_region,
-    const AstStmt* init,
-    const AstExpr* cond,
-    const AstStmt* next,
-    const AstStmt* body
+    const PtStmt* init,
+    const PtExpr* cond,
+    const PtStmt* next,
+    const PtStmt* body
   ) : CptStmt_Repeat(file_region, cond, body),
       mInit{init},
       mNext{next}
@@ -215,15 +215,15 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
   /// @brief 初期化代入式を取出す
-  const AstStmt*
+  const PtStmt*
   init_stmt() const override;
 
   /// @brief 繰り返し代入式を取出す
-  const AstStmt*
+  const PtStmt*
   next_stmt() const override;
 
 
@@ -233,10 +233,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 初期化文
-  const AstStmt* mInit;
+  const PtStmt* mInit;
 
   // 増加処理文
-  const AstStmt* mNext;
+  const PtStmt* mNext;
 
 };
 

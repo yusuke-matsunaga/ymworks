@@ -81,7 +81,7 @@ private:
   void
   add_defparamstub(
     const VlModule* module, ///< [in] アイテムテンプレートのヘッダ (defparam を持つ)
-    const AstItem* header   ///< [in] defparam 文のテンプレート
+    const AstItem& header   ///< [in] defparam 文のテンプレート
   );
 
   /// @brief phase1 で行う処理を登録する．
@@ -111,13 +111,13 @@ private:
   /// @brief 名前からモジュール定義を取り出す．
   /// @return name という名のモジュール定義
   /// @return なければ nullptr を返す．
-  const AstModule*
+  AstModule
   find_moduledef(
     const std::string& name ///< [in] 名前
   ) const;
 
   /// @brief 関数定義を探す．
-  const AstItem*
+  AstItem
   find_funcdef(
     const VlModule* module, ///< [in] 親のモジュール
     const std::string& name ///< [in] 関数名
@@ -203,13 +203,13 @@ private:
   std::unique_ptr<AttrGen> mAttrGen;
 
   // 関数定義の辞書
-  std::unordered_map<std::string, const AstItem*> mFuncDict;
+  std::unordered_map<std::string, AstItem> mFuncDict;
 
   // constant function の辞書
   ObjDict mCfDict;
 
   // モジュールテンプレートの辞書
-  std::unordered_map<std::string, const AstModule*> mModuleDict;
+  std::unordered_map<std::string, AstModule> mModuleDict;
 
   // attribute instance の辞書
   AttrDict mAttrDict;

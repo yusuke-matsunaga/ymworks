@@ -12,8 +12,8 @@
 #include "ErrorGen.h"
 
 #include "ym/vl/AstStmt.h"
+#include "ym/vl/AstCaseItem.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 #include "ym/vl/VlStmt.h"
 
 #include "elaborator/ElbTaskFunc.h"
@@ -46,7 +46,7 @@ StmtGen::~StmtGen()
 void
 StmtGen::phase1_stmt(
   const VlScope* parent,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   bool cf
 )
 {
@@ -55,11 +55,11 @@ StmtGen::phase1_stmt(
   // 1. 内部にステートメントを持つステートメントは再帰する．
   // 2. 自身がスコープとなるもの (named-begin, named-fork) はスコープ
   //    を生成し，phase2 用のキューに登録す．
-  if ( ast_stmt == nullptr ) {
-    throw std::logic_error{"ast_stmt == nullptr"};
+  if ( ast_stmt.is_invalid() ) {
+    throw std::logic_error{"ast_stmt.is_invalid()"};
   }
 
-  switch ( ast_stmt->type() ) {
+  switch ( ast_stmt.type() ) {
   case AstStmt::Disable:
   case AstStmt::Enable:
   case AstStmt::SysEnable:
@@ -81,27 +81,27 @@ StmtGen::phase1_stmt(
   case AstStmt::Repeat:
   case AstStmt::While:
   case AstStmt::For:
-    phase1_stmt(parent, ast_stmt->body());
+    phase1_stmt(parent, ast_stmt.body());
     break;
 
   case AstStmt::If:
-    phase1_stmt(parent, ast_stmt->body());
-    if ( ast_stmt->else_body() ) {
-      phase1_stmt(parent, ast_stmt->else_body());
+    phase1_stmt(parent, ast_stmt.body());
+    if ( ast_stmt.else_body().is_valid() ) {
+      phase1_stmt(parent, ast_stmt.else_body());
     }
     break;
 
   case AstStmt::Case:
   case AstStmt::CaseX:
   case AstStmt::CaseZ:
-    for ( auto ast_item: ast_stmt->caseitem_list() ) {
-      phase1_stmt(parent, ast_item->body());
+    for ( auto ast_item: ast_stmt.caseitem_list() ) {
+      phase1_stmt(parent, ast_item.body());
     }
     break;
 
   case AstStmt::ParBlock:
   case AstStmt::SeqBlock:
-    for ( auto ast_stmt1: ast_stmt->stmt_list() ) {
+    for ( auto ast_stmt1: ast_stmt.stmt_list() ) {
       phase1_stmt(parent, ast_stmt1);
     }
     break;
@@ -111,11 +111,11 @@ StmtGen::phase1_stmt(
     {
       auto block_scope{new_StmtBlockScope(parent, ast_stmt)};
 
-      for ( auto ast_stmt1: ast_stmt->stmt_list() ) {
+      for ( auto ast_stmt1: ast_stmt.stmt_list() ) {
 	phase1_stmt(block_scope, ast_stmt1);
       }
       if ( cf ) {
-	phase2_namedblock(block_scope, ast_stmt->declhead_list());
+	phase2_namedblock(block_scope, ast_stmt.declhead_list());
       }
       else {
 	auto stub = make_stub<StmtGen,
@@ -123,7 +123,7 @@ StmtGen::phase1_stmt(
 			      const AstDeclHeadList&>(this,
 						      &StmtGen::phase2_namedblock,
 						      block_scope,
-						      ast_stmt->declhead_list());
+						      ast_stmt.declhead_list());
 	add_phase2stub(stub);
       }
     }
@@ -140,15 +140,15 @@ StmtGen::instantiate_stmt(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  if ( ast_stmt == nullptr ) {
+  if ( ast_stmt.is_invalid() ) {
     return nullptr;
   }
 
   const VlStmt* stmt{nullptr};
-  switch ( ast_stmt->type() ) {
+  switch ( ast_stmt.type() ) {
   case AstStmt::Disable:
     stmt = instantiate_disable(parent, process, ast_stmt);
     break;
@@ -299,10 +299,10 @@ StmtGen::instantiate_stmt(
   // 使えません．
   {
     std::ostringstream buf;
-    buf << ast_stmt->stmt_name()
+    buf << ast_stmt.stmt_name()
 	<< " : cannot be used in a constant function.";
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    ast_stmt->file_region(),
+		    ast_stmt.file_region(),
 		    MsgType::Error,
 		    "ELAB",
 		    buf.str());
@@ -320,17 +320,17 @@ const VlStmt*
 StmtGen::instantiate_disable(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  const auto& fr = ast_stmt->file_region();
+  const auto& fr = ast_stmt.file_region();
 
   // disable はモジュール境界を越えない？
   // 仕様書には何も書いていないのでたぶん越えられる．
   auto handle = mgr().find_obj_up(parent, ast_stmt, nullptr);
   if ( !handle ) {
     std::ostringstream buf;
-    buf << ast_stmt->decompile_name() << " : Not found.";
+    buf << ast_stmt.decompile_name() << " : Not found.";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    fr,
 		    MsgType::Error,
@@ -364,17 +364,17 @@ StmtGen::instantiate_enable(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  const auto& fr = ast_stmt->file_region();
+  const auto& fr = ast_stmt.file_region();
 
   // タスクを探し出して設定する．
   // タスク名の探索はモジュール境界を越える．
   auto handle = mgr().find_obj_up(parent, ast_stmt, nullptr);
   if ( !handle ) {
     std::ostringstream buf;
-    buf << ast_stmt->decompile_name() << " : Not found.";
+    buf << ast_stmt.decompile_name() << " : Not found.";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    fr,
 		    MsgType::Error,
@@ -384,7 +384,7 @@ StmtGen::instantiate_enable(
   }
   if ( handle->type() != VpiObjType::Task ) {
     std::ostringstream buf;
-    buf << ast_stmt->decompile_name() << " : Not a task.";
+    buf << ast_stmt.decompile_name() << " : Not a task.";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    fr,
 		    MsgType::Error,
@@ -400,8 +400,8 @@ StmtGen::instantiate_enable(
 
   // 引数を生成する．
   std::vector<ElbExpr*> arg_list;
-  arg_list.reserve(ast_stmt->arg_list().size());
-  for ( auto ast_expr: ast_stmt->arg_list() ) {
+  arg_list.reserve(ast_stmt.arg_list().size());
+  for ( auto ast_expr: ast_stmt.arg_list() ) {
     auto expr = instantiate_expr(parent, env, ast_expr);
     if ( !expr ) {
       // エラーが起った．
@@ -420,11 +420,11 @@ StmtGen::instantiate_sysenable(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  const auto& fr = ast_stmt->file_region();
-  auto name = ast_stmt->name();
+  const auto& fr = ast_stmt.file_region();
+  auto name = ast_stmt.name();
 
   // UserSystf を取り出す．
   auto user_systf = mgr().find_user_systf(name);
@@ -433,7 +433,7 @@ StmtGen::instantiate_sysenable(
   }
 
   // 引数の数のチェック
-  auto n = ast_stmt->arg_list().size();
+  auto n = ast_stmt.arg_list().size();
   if ( !user_systf->check_n_of_args(n) ) {
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_stmt);
   }
@@ -441,10 +441,10 @@ StmtGen::instantiate_sysenable(
   // 引数を生成する．
   std::vector<ElbExpr*> arg_list;
   arg_list.reserve(n);
-  for ( auto ast_expr: ast_stmt->arg_list() ) {
+  for ( auto ast_expr: ast_stmt.arg_list() ) {
     // 空の引数があるのでエラーと区別する．
     ElbExpr* arg = nullptr;
-    if ( ast_expr ) {
+    if ( ast_expr.is_valid() ) {
       arg = instantiate_arg(parent, env, ast_expr);
     }
     if ( !user_systf->check_argument(arg_list.size(), arg) ) {
@@ -464,12 +464,12 @@ StmtGen::instantiate_ctrlstmt(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto ast_body = ast_stmt->body();
+  auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
-  auto ast_control = ast_stmt->control();
+  auto ast_control = ast_stmt.control();
   auto control = instantiate_control(parent, env, ast_control);
 
   if ( !body || !control ) {
@@ -485,15 +485,15 @@ const VlControl*
 StmtGen::instantiate_control(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstControl* ast_control
+  const AstControl& ast_control
 )
 {
-  if ( ast_control == nullptr ) {
+  if ( ast_control.is_invalid() ) {
     return nullptr;
   }
 
-  if ( ast_control->type() == AstControl::Delay ) {
-    auto delay = instantiate_expr(parent, env, ast_control->delay());
+  if ( ast_control.type() == AstControl::Delay ) {
+    auto delay = instantiate_expr(parent, env, ast_control.delay());
     if ( delay ) {
       return mgr().new_DelayControl(ast_control, delay);
     }
@@ -501,10 +501,10 @@ StmtGen::instantiate_control(
   }
 
   // イベントリストの生成を行う．
-  SizeType event_num = ast_control->event_list().size();
+  SizeType event_num = ast_control.event_list().size();
   std::vector<ElbExpr*> event_list;
   event_list.reserve(event_num);
-  for ( auto ast_expr: ast_control->event_list() ) {
+  for ( auto ast_expr: ast_control.event_list() ) {
     auto expr = instantiate_event_expr(parent, env, ast_expr);
     if ( !expr ) {
       return nullptr;
@@ -512,11 +512,11 @@ StmtGen::instantiate_control(
     event_list.push_back(expr);
   }
 
-  if ( ast_control->type() == AstControl::Event ) {
+  if ( ast_control.type() == AstControl::Event ) {
     return mgr().new_EventControl(ast_control, event_list);
   }
 
-  auto rep = instantiate_expr(parent, env, ast_control->rep_expr());
+  auto rep = instantiate_expr(parent, env, ast_control.rep_expr());
   if ( !rep ) {
     return nullptr;
   }
@@ -528,10 +528,10 @@ const VlStmt*
 StmtGen::instantiate_eventstmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto ast_expr = ast_stmt->primary();
+  auto ast_expr = ast_stmt.primary();
   auto named_event = instantiate_namedevent(parent, ast_expr);
   if ( !named_event ) {
     return nullptr;
@@ -545,7 +545,7 @@ const VlStmt*
 StmtGen::instantiate_nullstmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   return mgr().new_NullStmt(parent, process, ast_stmt);

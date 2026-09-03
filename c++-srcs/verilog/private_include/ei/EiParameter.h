@@ -26,8 +26,8 @@ public:
 
   /// @brief コンストラクタ
   EiParamHead(
-    const VlScope* parent,    ///< [in] 親のスコープ
-    const AstDeclHead* ast_head ///< [in] パース木の宣言ヘッダ
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstDeclHead& ast_head ///< [in] パース木の宣言ヘッダ
   );
 
   /// @brief デストラクタ
@@ -116,7 +116,7 @@ protected:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief パース木の宣言ヘッダを返す．
-  const AstDeclHead*
+  AstDeclHead
   ast_head() const;
 
 
@@ -129,7 +129,7 @@ private:
   const VlScope* mParent;
 
   // パース木の宣言ヘッダ
-  const AstDeclHead* mAstHead;
+  AstDeclHead mAstHead;
 
 };
 
@@ -145,10 +145,10 @@ public:
 
   /// @brief コンストラクタ
   EiParamHeadV(
-    const VlScope* parent,     ///< [in] 親のスコープ
-    const AstDeclHead* ast_head, ///< [in] パース木の宣言ヘッダ
-    const AstRange* ast_range,   ///< [in] パース木の範囲定義
-    const RangeVal& range      ///< [in] 範囲の値
+    const VlScope* parent,       ///< [in] 親のスコープ
+    const AstDeclHead& ast_head, ///< [in] パース木の宣言ヘッダ
+    const AstRange& ast_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range        ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -241,8 +241,8 @@ public:
 
   /// @brief コンストラクタ
   EiParameter(
-    ElbParamHead* head,        ///< [in] ヘッダ
-    const AstNamedBase* ast_item ///< [in] パース木の宣言要素
+    ElbParamHead* head,          ///< [in] ヘッダ
+    const AstNamedBase& ast_item ///< [in] パース木の宣言要素
   );
 
   /// @brief デストラクタ
@@ -397,7 +397,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 式の取得
-  const AstExpr*
+  AstExpr
   init_expr() const override;
 
   /// @brief 値の取得
@@ -407,7 +407,7 @@ public:
   /// @brief 値の設定
   void
   set_init_expr(
-    const AstExpr* expr,  ///< [in] 値を表す式
+    const AstExpr& expr, ///< [in] 値を表す式
     const VlValue& value ///< [in] 値
   ) override;
 
@@ -421,10 +421,10 @@ private:
   ElbParamHead* mHead;
 
   // パース木の宣言要素
-  const AstNamedBase* mAstItem;
+  const AstNamedBase& mAstItem;
 
   // 式
-  const AstExpr* mExpr;
+  AstExpr mExpr;
 
   // 値
   VlValue mValue;
@@ -443,8 +443,8 @@ public:
 
   /// @brief コンストラクタ
   EiLocalParam(
-    ElbParamHead* head,        ///< [in] ヘッダ
-    const AstNamedBase* ast_item ///< [in] パース木の宣言要素
+    ElbParamHead* head,          ///< [in] ヘッダ
+    const AstNamedBase& ast_item ///< [in] パース木の宣言要素
   );
 
   /// @brief デストラクタ

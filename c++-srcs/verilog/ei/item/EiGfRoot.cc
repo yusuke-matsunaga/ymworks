@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbGfRoot*
 EiFactory::new_GfRoot(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   return new EiGfRoot(parent, ast_item);
@@ -36,7 +36,7 @@ EiFactory::new_GfRoot(
 // @brief コンストラクタ
 EiGfRoot::EiGfRoot(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 ) : mParent{parent},
     mAstItem{ast_item}
 {
@@ -58,7 +58,7 @@ EiGfRoot::type() const
 FileRegion
 EiGfRoot::file_region() const
 {
-  return mAstItem->file_region();
+  return mAstItem.file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -72,7 +72,7 @@ EiGfRoot::parent_scope() const
 std::string
 EiGfRoot::name() const
 {
-  return mAstItem->name();
+  return mAstItem.name();
 }
 
 // @brief 子供のスコープを追加する．

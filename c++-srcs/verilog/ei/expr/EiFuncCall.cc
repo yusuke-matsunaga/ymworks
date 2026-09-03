@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 関数呼び出し式を生成する．
 ElbExpr*
 EiFactory::new_FuncCall(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlTaskFunc* func,
   const std::vector<ElbExpr*>& arg_list
 )
@@ -33,7 +33,7 @@ EiFactory::new_FuncCall(
 // @brief システム関数呼び出し式を生成する．
 ElbExpr*
 EiFactory::new_SysFuncCall(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlUserSystf* user_systf,
   const std::vector<ElbExpr*>& arg_list
 )
@@ -48,7 +48,7 @@ EiFactory::new_SysFuncCall(
 
 // @brief コンストラクタ
 EiFcBase::EiFcBase(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const std::vector<ElbExpr*>& arg_list
 ) : EiExprBase(ast_expr),
     mArgList{arg_list}
@@ -102,7 +102,7 @@ EiFcBase::_set_reqsize(
 
 // @brief コンストラクタ
 EiFuncCall::EiFuncCall(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlTaskFunc* func,
   const std::vector<ElbExpr*>& arg_list
 ) : EiFcBase(ast_expr, arg_list),
@@ -185,7 +185,7 @@ EiFuncCall::function() const
 
 // @brief コンストラクタ
 EiSysFuncCall::EiSysFuncCall(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const VlUserSystf* user_systf,
   const std::vector<ElbExpr*>& arg_list
 ) : EiFcBase(ast_expr, arg_list),

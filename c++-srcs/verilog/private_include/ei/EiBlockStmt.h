@@ -30,7 +30,7 @@ public:
   EiBlockStmt(
     const VlScope* parent,                 ///< [in] 親のスコープ
     const VlProcess* process,              ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,                 ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,               ///< [in] パース木のステートメント定義
     const std::vector<const VlStmt*>& stmt_list ///< [in] ステートメントのリスト
   );
 
@@ -83,7 +83,7 @@ public:
   EiBegin(
     const VlScope* parent,                      ///< [in] 親のスコープ
     const VlProcess* process,		        ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,		        ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,		        ///< [in] パース木のステートメント定義
     const std::vector<const VlStmt*>& stmt_list ///< [in] ステートメントのリスト
   );
 
@@ -117,7 +117,7 @@ public:
   EiFork(
     const VlScope* parent,                      ///< [in] 親のスコープ
     const VlProcess* process,                   ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,	                ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,	                ///< [in] パース木のステートメント定義
     const std::vector<const VlStmt*>& stmt_list ///< [in] ステートメントのリスト
   );
 
@@ -151,7 +151,7 @@ public:
   EiNamedBlockStmt(
     const VlScope* scope,                       ///< [in] 親のスコープ
     const VlProcess* process,		        ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,		        ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,		        ///< [in] パース木のステートメント定義
     const std::vector<const VlStmt*>& stmt_list ///< [in] ステートメントのリスト
   );
 
@@ -194,7 +194,7 @@ public:
   EiNamedBegin(
     const VlScope* block,                       ///< [in] 親のスコープ
     const VlProcess* process,	                ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,     	                ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,     	        ///< [in] パース木のステートメント定義
     const std::vector<const VlStmt*>& stmt_list ///< [in] ステートメントのリスト
   );
 
@@ -228,7 +228,7 @@ public:
   EiNamedFork(
     const VlScope* block,                       ///< [in] 親のスコープ
     const VlProcess* process,	                ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,                      ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,                    ///< [in] パース木のステートメント定義
     const std::vector<const VlStmt*>& stmt_list ///< [in] ステートメントのリスト
   );
 

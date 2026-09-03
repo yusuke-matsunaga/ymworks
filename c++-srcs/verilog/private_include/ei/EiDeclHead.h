@@ -64,8 +64,8 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadAst(
-    const VlScope* parent,    ///< [in] 親のスコープ
-    const AstDeclHead* ast_head ///< [in] パース木の宣言ヘッダ
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstDeclHead& ast_head ///< [in] パース木の宣言ヘッダ
   );
 
   /// @brief デストラクタ
@@ -172,7 +172,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の宣言ヘッダ
-  const AstDeclHead* mAstHead;
+  AstDeclHead mAstHead;
 
 };
 
@@ -188,8 +188,8 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadAstD(
-    const VlScope* parent,    ///< [in] 親のスコープ
-    const AstDeclHead* ast_head ///< [in] パース木の宣言ヘッダ
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstDeclHead& ast_head ///< [in] パース木の宣言ヘッダ
   );
 
   /// @brief デストラクタ
@@ -242,10 +242,10 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadAstV(
-    const VlScope* parent,     ///< [in] ヘッダ
-    const AstDeclHead* ast_head, ///< [in] パース木の宣言ヘッダ
-    const AstRange* ast_range,   ///< [in] パース木の範囲定義
-    const RangeVal& range      ///< [in] 範囲の値
+    const VlScope* parent,       ///< [in] ヘッダ
+    const AstDeclHead& ast_head, ///< [in] パース木の宣言ヘッダ
+    const AstRange& ast_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range        ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -321,10 +321,10 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadAstVD(
-    const VlScope* parent,     ///< [in] ヘッダ
-    const AstDeclHead* ast_head, ///< [in] パース木の宣言ヘッダ
-    const AstRange* ast_range,   ///< [in] パース木の範囲定義
-    const RangeVal& range      ///< [in] 範囲の値
+    const VlScope* parent,       ///< [in] ヘッダ
+    const AstDeclHead& ast_head, ///< [in] パース木の宣言ヘッダ
+    const AstRange& ast_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range        ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -377,9 +377,9 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadAst2(
-    const VlScope* parent,   ///< [in] 親のスコープ
-    const AstIOHead* ast_head, ///< [in] パース木のIO宣言ヘッダ
-    VpiAuxType aux_type      ///< [in] 補助的なデータ型
+    const VlScope* parent,     ///< [in] 親のスコープ
+    const AstIOHead& ast_head, ///< [in] パース木のIO宣言ヘッダ
+    VpiAuxType aux_type        ///< [in] 補助的なデータ型
   );
 
   /// @brief デストラクタ
@@ -462,7 +462,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木のIO宣言ヘッダ
-  const AstIOHead* mAstHead;
+  AstIOHead mAstHead;
 
   // 補助的なデータ型
   VpiAuxType mAuxType;
@@ -481,11 +481,11 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadAst2V(
-    const VlScope* parent,   ///< [in] ヘッダ
-    const AstIOHead* ast_head, ///< [in] パース木のIO宣言ヘッダ
-    VpiAuxType aux_type,     ///< [in] 補助的なデータ型
-    const AstRange* ast_range, ///< [in] パース木の範囲定義
-    const RangeVal& range    ///< [in] 範囲の値
+    const VlScope* parent,     ///< [in] ヘッダ
+    const AstIOHead& ast_head, ///< [in] パース木のIO宣言ヘッダ
+    VpiAuxType aux_type,       ///< [in] 補助的なデータ型
+    const AstRange& ast_range, ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ
@@ -561,8 +561,8 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadAst3(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstItem* ast_item  ///< [in] パース木の宣言要素
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstItem& ast_item ///< [in] パース木の宣言要素
   );
 
   /// @brief デストラクタ
@@ -647,7 +647,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の関数定義
-  const AstItem* mAstItem;
+  AstItem mAstItem;
 
 };
 
@@ -663,10 +663,10 @@ public:
 
   /// @brief コンストラクタ
   EiDeclHeadAst3V(
-    const VlScope* parent,   ///< [in] ヘッダ
-    const AstItem* ast_item,   ///< [in] パース木の宣言ヘッダ
-    const AstRange* ast_range, ///< [in] パース木の範囲定義
-    const RangeVal& range    ///< [in] 範囲の値
+    const VlScope* parent,     ///< [in] ヘッダ
+    const AstItem& ast_item,   ///< [in] パース木の宣言ヘッダ
+    const AstRange& ast_range, ///< [in] パース木の範囲定義
+    const RangeVal& range      ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ

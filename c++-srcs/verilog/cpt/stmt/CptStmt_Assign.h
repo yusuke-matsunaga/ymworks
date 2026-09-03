@@ -25,7 +25,7 @@ protected:
   /// @brief コンストラクタ
   CptStmt_AssignBase(
     const FileRegion& file_region,
-    const AstExpr* lhs
+    const PtExpr* lhs
   ) : CptStmt(file_region),
     mLhs{lhs}
   {
@@ -40,11 +40,11 @@ protected:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の仮想関数
+  // PtStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief lhs を得る．
-  const AstExpr*
+  const PtExpr*
   lhs() const override;
 
 
@@ -54,7 +54,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 左辺
-  const AstExpr* mLhs;
+  const PtExpr* mLhs;
 
 };
 
@@ -71,8 +71,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_Assign(
     const FileRegion& file_region,
-    const AstExpr* lhs,
-    const AstExpr* rhs
+    const PtExpr* lhs,
+    const PtExpr* rhs
   ) : CptStmt_AssignBase(file_region, lhs),
       mRhs{rhs}
   {
@@ -87,19 +87,19 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
   /// @brief rhs を得る．
-  const AstExpr*
+  const PtExpr*
   rhs() const override;
 
   /// @brief コントロールを返す．
-  const AstControl*
+  const PtControl*
   control() const override;
 
 
@@ -109,7 +109,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 右辺
-  const AstExpr* mRhs;
+  const PtExpr* mRhs;
 
 };
 
@@ -126,9 +126,9 @@ public:
   /// @brief コンストラクタ
   CptStmt_AssignC(
     const FileRegion& file_region,
-    const AstExpr* lhs,
-    const AstExpr* rhs,
-    const AstControl* control
+    const PtExpr* lhs,
+    const PtExpr* rhs,
+    const PtControl* control
   ) : CptStmt_Assign(file_region, lhs, rhs),
       mControl{control}
   {
@@ -143,11 +143,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の仮想関数
+  // PtStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief コントロールを返す．
-  const AstControl*
+  const PtControl*
   control() const override;
 
 
@@ -157,7 +157,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // コントロール
-  const AstControl* mControl;
+  const PtControl* mControl;
 
 };
 
@@ -174,8 +174,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_NbAssign(
     const FileRegion& file_region,
-    const AstExpr* lhs,
-    const AstExpr* rhs
+    const PtExpr* lhs,
+    const PtExpr* rhs
   ) : CptStmt_Assign(file_region, lhs, rhs)
   {
   }
@@ -186,11 +186,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -208,9 +208,9 @@ public:
   /// @brief コンストラクタ
   CptStmt_NbAssignC(
     const FileRegion& file_region,
-    const AstExpr* lhs,
-    const AstExpr* rhs,
-    const AstControl* control
+    const PtExpr* lhs,
+    const PtExpr* rhs,
+    const PtControl* control
   ) : CptStmt_AssignC(file_region, lhs, rhs, control)
   {
   }
@@ -221,11 +221,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の仮想関数
+  // PtStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -243,8 +243,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_PcAssign(
     const FileRegion& file_region,
-    const AstExpr* lhs,
-    const AstExpr* rhs
+    const PtExpr* lhs,
+    const PtExpr* rhs
   ) : CptStmt_AssignBase(file_region, lhs),
       mRhs{rhs}
   {
@@ -259,15 +259,15 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
   /// @brief 右辺式を返す．
-  const AstExpr*
+  const PtExpr*
   rhs() const override;
 
 
@@ -277,7 +277,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 右辺
-  const AstExpr* mRhs;
+  const PtExpr* mRhs;
 
 };
 
@@ -294,7 +294,7 @@ public:
   /// @brief コンストラクタ
   CptStmt_Deassign(
     const FileRegion& file_region,
-    const AstExpr* lhs
+    const PtExpr* lhs
   ) : CptStmt_AssignBase(file_region, lhs)
   {
   }
@@ -305,11 +305,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -327,8 +327,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_Force(
     const FileRegion& file_region,
-    const AstExpr* lhs,
-    const AstExpr* rhs
+    const PtExpr* lhs,
+    const PtExpr* rhs
   ) : CptStmt_PcAssign(file_region, lhs, rhs)
   {
   }
@@ -339,11 +339,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -361,7 +361,7 @@ public:
   /// @brief コンストラクタ
   CptStmt_Release(
     const FileRegion& file_region,
-    const AstExpr* lhs
+    const PtExpr* lhs
   ) : CptStmt_Deassign(file_region, lhs)
   {
   }
@@ -372,11 +372,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };

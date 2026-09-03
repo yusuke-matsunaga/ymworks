@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "parser/PtStmt.h"
-#include "parser/PtDecl.h"
+#include "parser/PtDeclHead.h"
 #include "parser/PtExpr.h"
 #include "parser/PtHierName.h"
 #include "ym/FileRegion.h"
@@ -38,7 +38,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置の取得
@@ -47,88 +47,83 @@ public:
   file_region() const override;
 
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  const PtNameBranch*
+  namebranch_top() const override;
 
   /// @brief 名前の取得
   /// @return 名前
   const char*
   name() const override;
 
-  /// @brief ステートメントの種類を表す文字列の取得
-  /// @return ステートメントの種類を表す文字列
-  const char*
-  stmt_name() const override;
-
   /// @brief 引数のリストの取得
   ///
   /// - type() != Enable の時 std::logic_error 例外を送出する．
-  AstExprList
-  arg_list() const override;
+  const PtExpr*
+  arg_top() const override;
 
   /// @brief コントロールの取得
   /// @return ディレイ/イベントコントロール
-  const AstControl*
+  const PtControl*
   control() const override;
 
   /// @brief 本体のステートメントの取得
   /// @return 本体のステートメント
-  const AstStmt*
+  const PtStmt*
   body() const override;
 
   /// @brief 式の取得
   /// @return 式
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
   /// @brief 左辺式の取得
   /// @return 左辺式
-  const AstExpr*
+  const PtExpr*
   lhs() const override;
 
   /// @brief 右辺式の取得
   /// @return 右辺式
-  const AstExpr*
+  const PtExpr*
   rhs() const override;
 
   /// @brief イベントプライマリの取得
   /// @return イベントプライマリ
-  const AstExpr*
+  const PtExpr*
   primary() const override;
 
   /// @brief 条件が成り立たなかったとき実行されるステートメントの取得
   /// @return 条件が成り立たなかったとき実行されるステートメント
-  const AstStmt*
+  const PtStmt*
   else_body() const override;
 
   /// @brief case item のリストの取得
   ///
   /// - type() != Case|CaseX|CaseZ の時 std::logic_error 例外を送出する．
-  AstCaseItemList
-  caseitem_list() const override;
+  const PtCaseItem*
+  caseitem_top() const override;
 
   /// @brief 初期化代入文の取得
   /// @return 初期化代入文
-  const AstStmt*
+  const PtStmt*
   init_stmt() const override;
 
   /// @brief 繰り返し代入文の取得
   /// @return 繰り返し代入文
-  const AstStmt*
+  const PtStmt*
   next_stmt() const override;
 
   /// @brief 宣言ヘッダのリストの取得
   ///
   /// - type() != NamedParBlock|NamedSeqBlock の時 std::logic_error 例外を送出する．
-  AstDeclHeadList
-  declhead_list() const override;
+  const PtDeclHead*
+  declhead_top() const override;
 
   /// @brief 子供のステートメントのリストの取得
   ///
   /// - type() != ParBlock|SeqBlock|NamedParBlock|NamedSeqBlock の時
   ///   std::logic_error 例外を送出する．
-  AstStmtList
-  stmt_list() const override;
+  const PtStmt*
+  stmt_top() const override;
 
 
 private:
@@ -166,11 +161,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
   /// @brief 末尾の名前を返す．
@@ -178,8 +173,8 @@ public:
   name() const override;
 
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -217,12 +212,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の仮想関数
+  // PtStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -231,7 +226,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 階層ブランチの先頭
-  const AstNameBranch* mNbTop;
+  const PtNameBranch* mNbTop;
 
 };
 
@@ -249,7 +244,7 @@ protected:
   CptStmt_EnableBase(
     const FileRegion& file_region,
     const char* name,
-    PtExpr* arg_top
+    const PtExpr* arg_top
   ) : CptStmt(file_region),
       mName{name},
       mArgTop{arg_top}
@@ -262,7 +257,7 @@ protected:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の仮想関数
+  // PtStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 末尾の名前を返す．
@@ -270,14 +265,14 @@ public:
   name() const override;
 
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  const PtNameBranch*
+  namebranch_top() const override;
 
   /// @brief 引数のリストの取得
   ///
   /// - type() != Enable の時 std::logic_error 例外を送出する．
-  AstExprList
-  arg_list() const override;
+  const PtExpr*
+  arg_top() const override;
 
 
 private:
@@ -289,7 +284,7 @@ private:
   const char* mName;
 
   // 引数のリスト
-  const AstExpr* mArgTop;
+  const PtExpr* mArgTop;
 
 };
 
@@ -307,7 +302,7 @@ public:
   CptStmt_Enable(
     const FileRegion& file_region,
     const char* name,
-    PtExpr* arg_top
+    const PtExpr* arg_top
   ) : CptStmt_EnableBase(file_region, name, arg_top)
   {
   }
@@ -318,11 +313,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -341,7 +336,7 @@ public:
   CptStmt_EnableH(
     const FileRegion& file_region,
     const PtHierName& hname,
-    PtExpr* arg_top
+    const PtExpr* arg_top
   ) : CptStmt_Enable(file_region, hname.tail_name, arg_top),
       mNbTop{hname.nb_list.top}
   {
@@ -353,12 +348,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の仮想関数
+  // PtStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -367,7 +362,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 階層ブランチのトップ
-  const AstNameBranch* mNbTop;
+  const PtNameBranch* mNbTop;
 
 };
 
@@ -385,7 +380,7 @@ public:
   CptStmt_SysEnable(
     const FileRegion& file_region,
     const char* task_name,
-    PtExpr* arg_top
+    const PtExpr* arg_top
   ) : CptStmt_EnableBase(file_region, task_name, arg_top)
   {
   }
@@ -396,11 +391,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -418,7 +413,7 @@ public:
   /// @brief コンストラクタ
   CptStmt_Event(
     const FileRegion& file_region,
-    const AstExpr* event
+    const PtExpr* event
   ) : CptStmt(file_region),
       mPrimary{event}
   {
@@ -433,15 +428,15 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
   /// @brief イベントプライマリを返す．
-  const AstExpr*
+  const PtExpr*
   primary() const override;
 
 
@@ -451,7 +446,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // イベント名を表すプライマリ
-  const AstExpr* mPrimary;
+  const PtExpr* mPrimary;
 
 };
 
@@ -482,7 +477,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };

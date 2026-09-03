@@ -145,8 +145,15 @@ CptOpr1::index_value() const
   throw std::logic_error{"is_index_expr() == false"};
 }
 
+// @brief 固定オペランド数の取得
+SizeType
+CptOpr1::operand_num() const
+{
+  return 1;
+}
+
 // @brief 0番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptOpr1::operand0() const
 {
   return mOpr;
@@ -318,7 +325,7 @@ PtExpr*
 new_opr(
   Alloc& alloc,
   const FileRegion& file_region,
-  const AstExpr* opr
+  const PtExpr* opr
 )
 {
   auto p = alloc.get_memory(sizeof(T));
@@ -330,7 +337,7 @@ PtExpr*
 PtFactory::new_Opr(
   const FileRegion& file_region,
   VpiOpType type,
-  const AstExpr* opr
+  const PtExpr* opr
 )
 {
   switch ( type ) {

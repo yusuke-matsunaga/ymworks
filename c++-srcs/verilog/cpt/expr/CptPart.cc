@@ -25,14 +25,14 @@ CptPart::file_region() const
 }
 
 // @brief 1番目の式を取り出す．
-const AstExpr*
+const PtExpr*
 CptPart::left() const
 {
   return mLeft;
 }
 
 // @brief 2番めの式を取り出す．
-const AstExpr*
+const PtExpr*
 CptPart::right() const
 {
   return mRight;
@@ -83,8 +83,8 @@ CptPartM::mode() const
 PtPart*
 PtFactory::new_PartConst(
   const FileRegion& fr,
-  const AstExpr* expr1,
-  const AstExpr* expr2
+  const PtExpr* expr1,
+  const PtExpr* expr2
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptPartC));
@@ -95,8 +95,8 @@ PtFactory::new_PartConst(
 PtPart*
 PtFactory::new_PartPlus(
   const FileRegion& fr,
-  const AstExpr* expr1,
-  const AstExpr* expr2
+  const PtExpr* expr1,
+  const PtExpr* expr2
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptPartP));
@@ -107,8 +107,8 @@ PtFactory::new_PartPlus(
 PtPart*
 PtFactory::new_PartMinus(
   const FileRegion& fr,
-  const AstExpr* expr1,
-  const AstExpr* expr2
+  const PtExpr* expr1,
+  const PtExpr* expr2
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptPartM));

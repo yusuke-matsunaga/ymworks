@@ -9,11 +9,8 @@
 #include "ErrorGen.h"
 #include "ElbError.h"
 #include "ElbParamCon.h"
-#include "ym/vl/AstModule.h"
-#include "ym/vl/AstDecl.h"
-#include "ym/vl/AstItem.h"
-#include "ym/vl/AstStmt.h"
-#include "ym/vl/AstExpr.h"
+#include "ym/vl/AstDefParam.h"
+#include "ym/vl/AstInst.h"
 #include "ym/vl/VlDeclArray.h"
 #include "ym/vl/VlExpr.h"
 
@@ -47,7 +44,7 @@ ErrorGen::too_many_param(
 )
 {
   auto last = param_con_list.back();
-  error_common(file, line, last.mAstCon->file_region(),
+  error_common(file, line, last.mAstCon.file_region(),
 	       "ELABXXX",
 	       "Too many parameters.");
 }
@@ -57,13 +54,13 @@ void
 ErrorGen::no_param(
   const char* file,
   int line,
-  const AstConnection* ast_con,
+  const AstConnection& ast_con,
   const char* name
 )
 {
   std::ostringstream buf;
   buf << name << " : No such parameter.";
-  error_common(file, line, ast_con->file_region(),
+  error_common(file, line, ast_con.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -122,13 +119,13 @@ void
 ErrorGen::no_impnet(
   const char* file,
   int line,
-  const AstIOItem* ast_item
+  const AstIOItem& ast_item
 )
 {
   std::ostringstream buf;
-  buf << ast_item->name() << " : Implicit declaration is inhibited "
+  buf << ast_item.name() << " : Implicit declaration is inhibited "
       << " because default_nettype = \"none\".";
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -138,13 +135,13 @@ void
 ErrorGen::impnet_with_init(
   const char* file,
   int line,
-  const AstIOItem* ast_item
+  const AstIOItem& ast_item
 )
 {
   std::ostringstream buf;
-  buf << ast_item->name()
+  buf << ast_item.name()
       << " : Implicit net declaration cannot have initial value.";
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -154,15 +151,15 @@ void
 ErrorGen::duplicate_type(
   const char* file,
   int line,
-  const AstIOItem* ast_item,
+  const AstIOItem& ast_item,
   const FileRegion& prev_loc
 )
 {
   std::ostringstream buf;
-  buf << ast_item->name() << " : has an aux-type declaration"
+  buf << ast_item.name() << " : has an aux-type declaration"
       << ", while it also has another declaration in "
       << prev_loc << ".";
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -172,13 +169,13 @@ void
 ErrorGen::array_io(
   const char* file,
   int line,
-  const AstIOItem* ast_item
+  const AstIOItem& ast_item
 )
 {
   std::ostringstream buf;
-  buf << ast_item->name()
+  buf << ast_item.name()
       << ": Array object shall not be connected to IO port.";
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -188,7 +185,7 @@ void
 ErrorGen::illegal_io(
   const char* file,
   int line,
-  const AstIOItem* ast_item,
+  const AstIOItem& ast_item,
   const std::string& name,
   bool is_module
 )
@@ -199,7 +196,7 @@ ErrorGen::illegal_io(
     buf << "net, ";
   }
   buf << "reg or integer/time variable.";
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -209,13 +206,13 @@ void
 ErrorGen::conflict_io_range(
   const char* file,
   int line,
-  const AstIOItem* ast_item
+  const AstIOItem& ast_item
 )
 {
   std::ostringstream buf;
   buf << "Conflictive range declaration of \""
-      << ast_item->name() << "\".";
-  error_common(file, line, ast_item->file_region(),
+      << ast_item.name() << "\".";
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -225,12 +222,12 @@ void
 ErrorGen::not_a_parameter(
   const char* file,
   int line,
-  const AstDefParam* ast_item
+  const AstDefParam& ast_item
 )
 {
   std::ostringstream buf;
-  buf << "\"" << ast_item->decompile_name() << "\" is not a parameter.";
-  error_common(file, line, ast_item->file_region(),
+  buf << "\"" << ast_item.decompile_name() << "\" is not a parameter.";
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -240,13 +237,13 @@ void
 ErrorGen::is_a_localparam(
   const char* file,
   int line,
-  const AstDefParam* ast_item
+  const AstDefParam& ast_item
 )
 {
   std::ostringstream buf;
-  buf << "\"" << ast_item->decompile_name()
+  buf << "\"" << ast_item.decompile_name()
       << "\" is a localparam, which shall not be override.";
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -256,10 +253,10 @@ void
 ErrorGen::duplicate_gencase_labels(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       "Matches more than one labels.");
 }
@@ -269,12 +266,12 @@ void
 ErrorGen::genvar_not_found(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   std::ostringstream buf;
-  buf << ast_item->loop_var() << " : Not found.";
-  error_common(file, line, ast_item->file_region(),
+  buf << ast_item.loop_var() << " : Not found.";
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -284,12 +281,12 @@ void
 ErrorGen::not_a_genvar(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   std::ostringstream buf;
-  buf << ast_item->loop_var() << " : Not a genvar.";
-  error_common(file, line, ast_item->file_region(),
+  buf << ast_item.loop_var() << " : Not a genvar.";
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -299,12 +296,12 @@ void
 ErrorGen::genvar_in_use(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   std::ostringstream buf;
-  buf << ast_item->loop_var() << " : Already in use.";
-  error_common(file, line, ast_item->file_region(),
+  buf << ast_item.loop_var() << " : Already in use.";
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -314,10 +311,10 @@ void
 ErrorGen::genvar_negative(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       "genvar should not be negative.");
 }
@@ -327,12 +324,12 @@ void
 ErrorGen::cyclic_dependency(
   const char* file,
   int line,
-  const AstModule* ast_module
+  const AstModule& ast_module
 )
 {
   std::ostringstream buf;
-  buf << ast_module->name() << " : instantiated within itself.";
-  error_common(file, line, ast_module->file_region(),
+  buf << ast_module.name() << " : instantiated within itself.";
+  error_common(file, line, ast_module.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -342,10 +339,10 @@ void
 ErrorGen::noname_module(
   const char* file,
   int line,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
-  error_common(file, line, ast_inst->file_region(),
+  error_common(file, line, ast_inst.file_region(),
 	       "ELABXXX",
 	       "No module instance name given.");
 }
@@ -355,10 +352,10 @@ void
 ErrorGen::udp_with_named_paramassign(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       "UDP instance cannot have named parameter list.");
 }
@@ -368,10 +365,10 @@ void
 ErrorGen::udp_with_ordered_paramassign(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       "UDP instance cannot have ordered parameter list.");
 }
@@ -381,10 +378,10 @@ void
 ErrorGen::cell_with_paramassign(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
-  error_common(file, line, ast_item->file_region(),
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       "Cell instance cannot have parameter list.");
 }
@@ -394,12 +391,12 @@ void
 ErrorGen::instance_not_found(
   const char* file,
   int line,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   std::ostringstream buf;
-  buf << ast_item->name() << " : No such module or UDP.";
-  error_common(file, line, ast_item->file_region(),
+  buf << ast_item.name() << " : No such module or UDP.";
+  error_common(file, line, ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -409,10 +406,10 @@ void
 ErrorGen::too_many_items_in_port_list(
   const char* file,
   int line,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
-  error_common(file, line, ast_inst->file_region(),
+  error_common(file, line, ast_inst.file_region(),
 	       "ELABXXX",
 	       "Too many items in the port list.");
 }
@@ -422,13 +419,13 @@ void
 ErrorGen::illegal_port_name(
   const char* file,
   int line,
-  const AstConnection* ast_con
+  const AstConnection& ast_con
 )
 {
-  auto port_name = ast_con->name();
+  auto port_name = ast_con.name();
   std::ostringstream buf;
   buf << port_name << " : does not exist in the port list.";
-  error_common(file, line, ast_con->file_region(),
+  error_common(file, line, ast_con.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -452,7 +449,7 @@ void
 ErrorGen::port_size_mismatch(
   const char* file,
   int line,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const std::string& name,
   int index
 )
@@ -461,7 +458,7 @@ ErrorGen::port_size_mismatch(
   buf << name << " : "
       << (index + 1) << num_suffix(index + 1)
       << " port : port size does not match with the expression.";
-  error_common(file, line, ast_expr->file_region(),
+  error_common(file, line, ast_expr.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -471,10 +468,10 @@ void
 ErrorGen::named_port_in_udp_instance(
   const char* file,
   int line,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
-  error_common(file, line, ast_inst->file_region(),
+  error_common(file, line, ast_inst.file_region(),
 	       "ELABXXX",
 	       "UDP instance cannot have named port list.");
 }
@@ -484,10 +481,10 @@ void
 ErrorGen::port_num_mismatch(
   const char* file,
   int line,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
-  error_common(file, line, ast_inst->file_region(),
+  error_common(file, line, ast_inst.file_region(),
 	       "ELABXXX",
 	       "Number of ports mismatch.");
 }
@@ -497,13 +494,13 @@ void
 ErrorGen::illegal_pin_name(
   const char* file,
   int line,
-  const AstConnection* ast_con
+  const AstConnection& ast_con
 )
 {
-  auto pin_name = ast_con->name();
+  auto pin_name = ast_con.name();
   std::ostringstream buf;
   buf << pin_name << ": No such pin.";
-  error_common(file, line, ast_con->file_region(),
+  error_common(file, line, ast_con.file_region(),
 	       "ELABXXX",
 	       buf.str());
 }
@@ -513,10 +510,10 @@ void
 ErrorGen::empty_port_expression(
   const char* file,
   int line,
-  const AstConnection* ast_con
+  const AstConnection& ast_con
 )
 {
-  error_common(__FILE__, __LINE__, ast_con->file_region(),
+  error_common(__FILE__, __LINE__, ast_con.file_region(),
 	       "ELABXXX",
 	       "Empty expression in UDP/primitive instance port is not allowed.");
 }
@@ -526,7 +523,7 @@ void
 ErrorGen::illegal_sysfunccall_in_cf(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const_common(file, line, ast_expr,
@@ -539,7 +536,7 @@ void
 ErrorGen::illegal_sysfunccall_in_ce(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const_common(file, line, ast_expr,
@@ -552,7 +549,7 @@ void
 ErrorGen::uses_itself(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const_with_hname(file, line, ast_expr,
@@ -565,7 +562,7 @@ void
 ErrorGen::not_a_constant_function(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const_with_hname(file, line, ast_expr,
@@ -578,7 +575,7 @@ void
 ErrorGen::illegal_object_cf(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const_with_hname(file, line, ast_expr,
@@ -591,7 +588,7 @@ void
 ErrorGen::hname_in_ce(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const_with_hname(file, line, ast_expr,
@@ -605,7 +602,7 @@ void
 ErrorGen::hname_in_cf(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const_with_hname(file, line, ast_expr,
@@ -619,7 +616,7 @@ void
 ErrorGen::not_a_parameter(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const_with_hname(file, line, ast_expr,
@@ -632,7 +629,7 @@ void
 ErrorGen::illegal_constant_in_event_expression(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -645,7 +642,7 @@ void
 ErrorGen::illegal_funccall_in_event_expression(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -658,7 +655,7 @@ void
 ErrorGen::illegal_sysfunccall_in_event_expression(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -671,7 +668,7 @@ void
 ErrorGen::illegal_operator_in_lhs(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -684,7 +681,7 @@ void
 ErrorGen::illegal_constant_in_lhs(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -697,7 +694,7 @@ void
 ErrorGen::illegal_funccall_in_lhs(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -710,7 +707,7 @@ void
 ErrorGen::illegal_sysfunccall_in_lhs(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -745,7 +742,7 @@ void
 ErrorGen::illegal_edge_descriptor(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -758,7 +755,7 @@ void
 ErrorGen::illegal_real_type(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -771,7 +768,7 @@ void
 ErrorGen::no_such_function(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -784,7 +781,7 @@ void
 ErrorGen::no_such_sysfunction(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -795,9 +792,9 @@ ErrorGen::no_such_sysfunction(
 // @brief 該当するシステムタスクが存在しない．
 void
 ErrorGen::no_such_systask(
-  const char* file,     ///< [in] ファイル名
-  int line,		  ///< [in] 行番号
-  const AstStmt* ast_stmt ///< [in] 対象の構文木要素
+  const char* file,
+  int line,
+  const AstStmt& ast_stmt
 )
 {
   stmt_common(file, line, ast_stmt,
@@ -810,7 +807,7 @@ void
 ErrorGen::not_a_function(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -823,7 +820,7 @@ void
 ErrorGen::n_of_arguments_mismatch(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -836,7 +833,7 @@ void
 ErrorGen::n_of_arguments_mismatch(
   const char* file,
   int line,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   stmt_common(file, line, ast_stmt,
@@ -849,7 +846,7 @@ void
 ErrorGen::illegal_argument_type(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -863,7 +860,7 @@ void
 ErrorGen::not_found(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -876,7 +873,7 @@ void
 ErrorGen::illegal_object(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -889,7 +886,7 @@ void
 ErrorGen::not_a_namedevent(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -902,7 +899,7 @@ void
 ErrorGen::range_order(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_common(file, line, ast_expr,
@@ -915,7 +912,7 @@ void
 ErrorGen::select_for_namedevent(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -928,7 +925,7 @@ void
 ErrorGen::select_in_pca(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -942,7 +939,7 @@ void
 ErrorGen::select_in_force(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -956,7 +953,7 @@ void
 ErrorGen::array_in_pca(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -970,7 +967,7 @@ void
 ErrorGen::array_in_force(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -984,7 +981,7 @@ void
 ErrorGen::dimension_mismatch(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -997,7 +994,7 @@ void
 ErrorGen::select_for_real(
   const char* file,
   int line,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   expr_with_hname(file, line, ast_expr,
@@ -1010,7 +1007,7 @@ void
 ErrorGen::const_with_hname(
   const char* file,
   int line,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const char* label,
   const std::string& msg
 )
@@ -1024,12 +1021,12 @@ void
 ErrorGen::const_common(
   const char* file,
   int line,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const char* label,
   const std::string& msg
 )
 {
-  throw ElbConstError{file, line, ast_expr->file_region(), label, msg};
+  throw ElbConstError{file, line, ast_expr.file_region(), label, msg};
 }
 
 // @brief 階層名付きのエラーメッセージを生成する共通部分
@@ -1037,7 +1034,7 @@ void
 ErrorGen::expr_with_hname(
   const char* file,
   int line,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const char* label,
   const std::string& msg
 )
@@ -1051,12 +1048,12 @@ void
 ErrorGen::expr_common(
   const char* file,
   int line,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const char* label,
   const std::string& msg
 )
 {
-  error_common(file, line, ast_expr->file_region(), label, msg);
+  error_common(file, line, ast_expr.file_region(), label, msg);
 }
 
 // @brief AstStmt に関するエラーメッセージを生成する共通部分
@@ -1064,12 +1061,12 @@ void
 ErrorGen::stmt_common(
   const char* file,
   int line,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const char* label,
   const std::string& msg
 )
 {
-  error_common(file, line, ast_stmt->file_region(), label, msg);
+  error_common(file, line, ast_stmt.file_region(), label, msg);
 }
 
 // @brief エラーメッセージを生成する共通部分
@@ -1087,12 +1084,12 @@ ErrorGen::error_common(
 
 std::string
 ErrorGen::make_message(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const std::string& msg
 )
 {
   std::ostringstream buf;
-  buf << ast_expr->decompile_name() << " : " << msg;
+  buf << ast_expr.decompile_name() << " : " << msg;
   return buf.str();
 }
 

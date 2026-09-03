@@ -327,7 +327,7 @@ protected:
   EiStmtBase(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in]	親のプロセス (or nullptr)
-    const AstStmt* ast_stmt   ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt   ///< [in] パース木のステートメント定義
   );
 
   /// デストラクタ
@@ -354,7 +354,7 @@ protected:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief パース木の定義要素を得る．
-  const AstStmt*
+  AstStmt
   ast_stmt() const
   {
     return mAstStmt;
@@ -370,7 +370,7 @@ private:
   const VlScope* mParent;
 
   // パース木のステートメント定義
-  const AstStmt* mAstStmt;
+  AstStmt mAstStmt;
 
 };
 

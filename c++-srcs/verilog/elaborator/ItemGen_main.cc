@@ -15,15 +15,15 @@
 #include "ErrorGen.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstItem.h"
+#include "ym/vl/AstContAssign.h"
+#include "ym/vl/AstGenCaseItem.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 #include "ym/vl/VlModule.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbProcess.h"
 #include "elaborator/ElbGfRoot.h"
 #include "elaborator/ElbGenvar.h"
 #include "elaborator/ElbExpr.h"
-
 
 #include "ym/MsgMgr.h"
 
@@ -63,11 +63,11 @@ ItemGen::phase1_items(
 void
 ItemGen::phase1_item(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   try {
-    switch ( ast_item->type() ) {
+    switch ( ast_item.type() ) {
     case AstItem::DefParam:
       // 実際には登録するだけ
       add_defparamstub(parent->parent_module(), ast_item);
@@ -75,16 +75,14 @@ ItemGen::phase1_item(
 
     case AstItem::ContAssign:
       // phase3 で処理する．
-      add_phase3stub(make_stub(this, &ItemGen::instantiate_cont_assign,
-			       parent, ast_item));
+      add_phase3stub(cont_assign_stub(parent, ast_item));
       break;
 
     case AstItem::Initial:
     case AstItem::Always:
-      phase1_stmt(parent, ast_item->body());
+      phase1_stmt(parent, ast_item.body());
       // 本体の生成は phase3 で処理する．
-      add_phase3stub(make_stub(this, &ItemGen::instantiate_process,
-			       parent, ast_item));
+      add_phase3stub(process_stub(parent, ast_item));
       break;
 
     case AstItem::Task:
@@ -94,8 +92,7 @@ ItemGen::phase1_item(
 
     case AstItem::GateInst:
       // 今すぐには処理できないのでキューに積む．
-      add_phase2stub(make_stub(this, &ItemGen::instantiate_gateheader,
-			       parent, ast_item));
+      add_phase2stub(gateheader_stub(parent, ast_item));
       break;
 
     case AstItem::MuInst:
@@ -104,8 +101,7 @@ ItemGen::phase1_item(
 
     case AstItem::Generate:
       // 実際にはキューに積まれるだけ
-      add_phase1stub(make_stub(this, &ItemGen::phase1_generate,
-			       parent, ast_item));
+      add_phase1stub(generate_stub(parent, ast_item));
       break;
 
     case AstItem::GenBlock:
@@ -188,15 +184,15 @@ ItemGen::defparam_override(
     return true;
   }
 
-  auto ast_rhs_expr = ast_defparam->expr();
+  auto ast_rhs_expr = ast_defparam.expr();
   auto value = evaluate_expr(module, ast_rhs_expr);
 
   {
     std::ostringstream buf;
     buf << "instantiating defparam: " << param->full_name()
-	<< " = " << ast_rhs_expr->decompile() << ".";
+	<< " = " << ast_rhs_expr.decompile() << ".";
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    ast_defparam->file_region(),
+		    ast_defparam.file_region(),
 		    MsgType::Info,
 		    "ELAB",
 		    buf.str());
@@ -216,26 +212,26 @@ ItemGen::defparam_override(
 void
 ItemGen::instantiate_cont_assign(
   const VlScope* parent,
-  const AstItem* ast_header
+  const AstItem& ast_header
 )
 {
   // delay の実体化でエラーが置きても nullptr になっているだけで処理を続ける．
   // エラーメッセージは出力されている．
   auto module = parent->parent_module();
-  auto ast_delay = ast_header->delay();
+  auto ast_delay = ast_header.delay();
   auto delay = instantiate_delay(parent, ast_delay);
   auto ca_head = mgr().new_CaHead(module, ast_header, delay);
 
   ElbEnv env;
   ElbNetLhsEnv env1(env);
-  for ( auto ast_elem: ast_header->contassign_list() ) {
+  for ( auto ast_elem: ast_header.contassign_list() ) {
     try {
       // 左辺式の生成
-      auto ast_lhs = ast_elem->lhs();
+      auto ast_lhs = ast_elem.lhs();
       auto lhs = instantiate_lhs(parent, env1, ast_lhs);
 
       // 右辺式の生成
-      auto ast_rhs = ast_elem->rhs();
+      auto ast_rhs = ast_elem.rhs();
       auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
 
       auto ca = mgr().new_ContAssign(ca_head, ast_elem, lhs, rhs);
@@ -245,7 +241,7 @@ ItemGen::instantiate_cont_assign(
 	buf << "instantiating continuous assign: "
 	    << lhs->decompile() << " = " << rhs->decompile() << ".";
 	MsgMgr::put_msg(__FILE__, __LINE__,
-			ast_elem->file_region(),
+			ast_elem.file_region(),
 			MsgType::Info,
 			"ELAB",
 			buf.str());
@@ -261,7 +257,7 @@ ItemGen::instantiate_cont_assign(
 void
 ItemGen::instantiate_process(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   try {
@@ -269,7 +265,7 @@ ItemGen::instantiate_process(
 
     ElbEnv env;
     auto body = instantiate_stmt(parent, process, env,
-				 ast_item->body());
+				 ast_item.body());
     process->set_stmt(body);
   }
   catch ( const ElbError& error ) {
@@ -281,22 +277,22 @@ ItemGen::instantiate_process(
 void
 ItemGen::phase1_generate(
   const VlScope* parent,
-  const AstItem* ast_generate
+  const AstItem& ast_generate
 )
 {
   phase1_genitem(parent,
-		 ast_generate->declhead_list(),
-		 ast_generate->item_list());
+		 ast_generate.declhead_list(),
+		 ast_generate.item_list());
 }
 
 // @brief AstGenBlock に対応するインスタンスの生成を行う
 void
 ItemGen::phase1_genblock(
   const VlScope* parent,
-  const AstItem* ast_genblock
+  const AstItem& ast_genblock
 )
 {
-  auto* name = ast_genblock->name();
+  auto* name = ast_genblock.name();
   if ( name != nullptr ) {
     parent = mgr().new_GenBlock(parent, ast_genblock);
   }
@@ -307,20 +303,20 @@ ItemGen::phase1_genblock(
 void
 ItemGen::phase1_genif(
   const VlScope* parent,
-  const AstItem* ast_genif
+  const AstItem& ast_genif
 )
 {
-  auto ast_cond = ast_genif->cond_expr();
+  auto ast_cond = ast_genif.cond_expr();
   bool cond = evaluate_bool(parent, ast_cond);
   if ( cond ) {
     phase1_genitem(parent,
-		   ast_genif->then_declhead_list(),
-		   ast_genif->then_item_list());
+		   ast_genif.then_declhead_list(),
+		   ast_genif.then_item_list());
   }
   else {
     phase1_genitem(parent,
-		   ast_genif->else_declhead_list(),
-		   ast_genif->else_item_list());
+		   ast_genif.else_declhead_list(),
+		   ast_genif.else_item_list());
   }
 }
 
@@ -328,18 +324,18 @@ ItemGen::phase1_genif(
 void
 ItemGen::phase1_gencase(
   const VlScope* parent,
-  const AstItem* ast_gencase
+  const AstItem& ast_gencase
 )
 {
-  auto ast_expr = ast_gencase->cond_expr();
+  auto ast_expr = ast_gencase.cond_expr();
   BitVector val{evaluate_bitvector(parent, ast_expr)};
 
   bool already_matched = false;
-  for ( auto ast_caseitem: ast_gencase->caseitem_list() ) {
+  for ( auto ast_caseitem: ast_gencase.caseitem_list() ) {
     // default(ラベルリストが空) なら常にマッチする．
-    SizeType n = ast_caseitem->label_list().size();
+    SizeType n = ast_caseitem.label_list().size();
     bool match = (n == 0);
-    for ( auto ast_expr: ast_caseitem->label_list() ) {
+    for ( auto ast_expr: ast_caseitem.label_list() ) {
       BitVector label_val{evaluate_bitvector(parent, ast_expr)};
       if ( label_val == val ) {
 	match = true;
@@ -353,8 +349,8 @@ ItemGen::phase1_gencase(
       else {
 	already_matched = true;
 	phase1_genitem(parent,
-		       ast_caseitem->declhead_list(),
-		       ast_caseitem->item_list());
+		       ast_caseitem.declhead_list(),
+		       ast_caseitem.item_list());
       }
     }
   }
@@ -364,7 +360,7 @@ ItemGen::phase1_gencase(
 void
 ItemGen::phase1_genfor(
   const VlScope* parent,
-  const AstItem* ast_genfor
+  const AstItem& ast_genfor
 )
 {
   // Genvar を使用中にするオブジェクト
@@ -392,12 +388,12 @@ ItemGen::phase1_genfor(
 
   };
 
-  auto name0 = ast_genfor->name();
+  auto name0 = ast_genfor.name();
   if ( name0 == nullptr ) {
     throw std::logic_error{"name0 == nullptr"};
   }
 
-  auto handle = mgr().find_obj(parent, ast_genfor->loop_var());
+  auto handle = mgr().find_obj(parent, ast_genfor.loop_var());
   if ( !handle ) {
     // 見つからなかった．
     ErrorGen::genvar_not_found(__FILE__, __LINE__, ast_genfor);
@@ -419,8 +415,8 @@ ItemGen::phase1_genfor(
   // 子供のスコープの検索用オブジェクト
   auto gfroot = mgr().new_GfRoot(parent, ast_genfor);
 
-  auto ast_init_expr = ast_genfor->init_expr();
-  int init_val{evaluate_int(parent, ast_init_expr)};
+  auto ast_init_expr = ast_genfor.init_expr();
+  auto init_val = evaluate_int(parent, ast_init_expr);
   if ( init_val < 0 ) {
     ErrorGen::genvar_negative(__FILE__, __LINE__, ast_genfor);
   }
@@ -428,7 +424,7 @@ ItemGen::phase1_genfor(
 
   for ( ; ; ) {
     // 終了条件のチェック
-    auto ast_cond_expr = ast_genfor->cond_expr();
+    auto ast_cond_expr = ast_genfor.cond_expr();
     bool cond_val = evaluate_bool(parent, ast_cond_expr);
     if ( !cond_val ) {
       break;
@@ -447,8 +443,8 @@ ItemGen::phase1_genfor(
     }
 
     // genvar の増加分の処理．
-    auto ast_next_expr = ast_genfor->next_expr();
-    int next_val = evaluate_int(parent, ast_next_expr);
+    auto ast_next_expr = ast_genfor.next_expr();
+    auto next_val = evaluate_int(parent, ast_next_expr);
     if ( next_val < 0 ) {
       ErrorGen::genvar_negative(__FILE__, __LINE__, ast_genfor);
       genvar->set_value(next_val);

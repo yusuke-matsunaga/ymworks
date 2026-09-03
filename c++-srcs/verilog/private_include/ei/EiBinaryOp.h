@@ -46,9 +46,9 @@ public:
 
   /// @brief コンストラクタ
   EiBinaryOp(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* opr1,         ///< [in] オペランド1
-    ElbExpr* opr2          ///< [in] オペランド2
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,           ///< [in] オペランド1
+    ElbExpr* opr2            ///< [in] オペランド2
   );
 
   /// @brief デストラクタ
@@ -101,9 +101,9 @@ public:
 
   /// @brief コンストラクタ
   EiCompareOp(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* opr1,         ///< [in] オペランド1
-    ElbExpr* opr2          ///< [in] オペランド2
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,           ///< [in] オペランド1
+    ElbExpr* opr2            ///< [in] オペランド2
   );
 
   /// @brief デストラクタ
@@ -154,9 +154,9 @@ public:
 
   /// @brief コンストラクタ
   EiBinaryLogOp(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* opr1,         ///< [in] オペランド1
-    ElbExpr* opr2          ///< [in] オペランド2
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,           ///< [in] オペランド1
+    ElbExpr* opr2            ///< [in] オペランド2
   );
 
   /// @brief デストラクタ
@@ -198,9 +198,9 @@ public:
 
   /// @brief コンストラクタ
   EiBinaryBitOp(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* opr1,	   ///< [in] オペランド1
-    ElbExpr* opr2	   ///< [in] オペランド2
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,	     ///< [in] オペランド1
+    ElbExpr* opr2	     ///< [in] オペランド2
   );
 
   /// @brief デストラクタ
@@ -251,9 +251,9 @@ public:
 
   /// @brief コンストラクタ
   EiBinaryArithOp(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* opr1,	   ///< [in] オペランド1
-    ElbExpr* opr2	   ///< [in] オペランド2
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,	     ///< [in] オペランド1
+    ElbExpr* opr2	     ///< [in] オペランド2
   );
 
   /// @brief デストラクタ
@@ -304,9 +304,9 @@ public:
 
   /// @brief コンストラクタ
   EiPowerOp(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* opr1,	   ///< [in] オペランド1
-    ElbExpr* opr2	   ///< [in] オペランド2
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,	     ///< [in] オペランド1
+    ElbExpr* opr2	     ///< [in] オペランド2
   );
 
   /// @brief デストラクタ
@@ -357,9 +357,9 @@ public:
 
   /// @brief コンストラクタ
   EiShiftOp(
-    const AstExpr* ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* opr1,	   ///< [in] オペランド1
-    ElbExpr* opr2	   ///< [in] オペランド2
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,	     ///< [in] オペランド1
+    ElbExpr* opr2	     ///< [in] オペランド2
   );
 
   /// @brief デストラクタ

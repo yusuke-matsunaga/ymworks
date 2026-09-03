@@ -23,10 +23,14 @@ class AstListIter
 {
 public:
 
+  /// @brief 空のコンストラクタ
+  AstListIter() = default;
+
   /// @brief コンストラクタ
+  explicit
   AstListIter(
-    T* ptr = nullptr
-  ) : mPtr{ptr}
+    const T& val
+  ) : mVal{val}
   {
   }
 
@@ -40,18 +44,18 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 内容を取り出す．
-  T*
+  T
   operator*() const
   {
-    return mPtr;
+    return mVal;
   }
 
   /// @brief 次の要素に移動する．
   AstListIter&
   operator++()
   {
-    if ( mPtr != nullptr ) {
-      mPtr = mPtr->link();
+    if ( mVal.is_valid() ) {
+      mVal = mVal.next();
     }
     return *this;
   }
@@ -62,7 +66,7 @@ public:
     const AstListIter& right
   ) const
   {
-    return mPtr == right.mPtr;
+    return mVal == right.mVal;
   }
 
   /// @brief 非等価比較演算子
@@ -71,7 +75,7 @@ public:
     const AstListIter& right
   ) const
   {
-    return mPtr != right.mPtr;
+    return !operator==(right);
   }
 
 
@@ -80,8 +84,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 要素のポインタ
-  T* mPtr;
+  // 値
+  T mVal;
 
 };
 
@@ -90,7 +94,7 @@ private:
 /// @class AstList AstList.h "ym/vl/AstList.h"
 /// @brief AstXXX のリストを表すクラス
 ///
-/// AstXXX が link() という関数を持っていると仮定している．
+/// T が is_valid(), link() という関数を持っていると仮定している．
 //////////////////////////////////////////////////////////////////////
 template <typename T>
 class AstList
@@ -107,7 +111,7 @@ public:
 
   /// @brief 先頭の要素を指定したコンストラクタ
   AstList(
-    const T* top
+    const T& top
   ) : mTop{top}
   {
   }
@@ -121,6 +125,13 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 空リストの時 true を返す．
+  bool
+  empty() const
+  {
+    return mTop.is_invalid();
+  }
+
   /// @brief 要素数を返す．
   ///
   /// O(n) なので多用しないこと．
@@ -128,14 +139,14 @@ public:
   size() const
   {
     SizeType n = 0;
-    for ( auto x = mTop; x != nullptr; x = x->link() ) {
+    for ( auto x = mTop; x.is_valid(); x = x.next() ) {
       ++n;
     }
     return n;
   }
 
   /// @brief 先頭の要素を返す．
-  T*
+  T
   front() const
   {
     return mTop;
@@ -152,17 +163,17 @@ public:
   const_iterator
   end() const
   {
-    return const_iterator(nullptr);
+    return const_iterator();
   }
 
-  /// @brief 内容を std::vector<T*> に変換する．
-  std::vector<T*>
+  /// @brief 内容を std::vector<T> に変換する．
+  std::vector<T>
   to_vector() const
   {
     auto n = size();
-    std::vector<T*> vec;
+    std::vector<T> vec;
     vec.reserve(n);
-    for ( auto x = mTop; x != nullptr; x = x->link() ) {
+    for ( auto x = mTop; x.is_valid(); x = x.next() ) {
       vec.push_back(x);
     }
     return vec;
@@ -175,8 +186,8 @@ public:
   json_obj() const
   {
     auto jobj = JsonValue::array();
-    for ( auto x = mTop; x != nullptr; x = x->link() ) {
-      jobj.add(x->json_obj());
+    for ( auto x = mTop; x.is_valid(); x = x.next() ) {
+      jobj.add(x.json_obj());
     }
     return jobj;
   }
@@ -188,7 +199,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 先頭の要素
-  T* mTop;
+  T mTop;
 
 };
 

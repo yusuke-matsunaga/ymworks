@@ -30,7 +30,7 @@ public:
   /// @brief コンストラクタ
   EiGfRoot(
     const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem* ast_item ///< [in] 対応するパース木の要素
+    const AstItem& ast_item ///< [in] 対応するパース木の要素
   );
 
   /// @brief デストラクタ
@@ -93,7 +93,7 @@ private:
   const VlScope* mParent;
 
   // 対応するパース木の要素
-  const AstItem* mAstItem;
+  AstItem mAstItem;
 
   // 子供のスコープのハッシュ表
   std::unordered_map<SizeType, const VlScope*> mTable;

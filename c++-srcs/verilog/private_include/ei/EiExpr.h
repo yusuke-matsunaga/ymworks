@@ -225,7 +225,7 @@ private:
 
   /// @brief パース木の定義要素を返す．
   virtual
-  const AstBase*
+  const AstBase&
   ast_obj() const = 0;
 
 };
@@ -242,7 +242,7 @@ protected:
 
   /// @brief コンストラクタ
   EiExprBase(
-    const AstExpr* ast_expr ///< [in] パース木の定義要素
+    const AstExpr& ast_expr ///< [in] パース木の定義要素
   );
 
   /// @brief デストラクタ
@@ -265,7 +265,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief パース木の定義要素を返す．
-  const AstBase*
+  const AstBase&
   ast_obj() const override;
 
 
@@ -275,7 +275,7 @@ protected:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief AstExpr を得る．
-  const AstExpr*
+  const AstExpr&
   ast_expr() const { return mAstExpr; }
 
 
@@ -285,7 +285,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const AstExpr* mAstExpr;
+  AstExpr mAstExpr;
 
 };
 

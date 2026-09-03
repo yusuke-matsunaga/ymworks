@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstDeclHead::Type
 CptRegH::type() const
 {
-  return Reg;
+  return AstDeclHead::Reg;
 }
 
 
@@ -37,7 +37,7 @@ CptRegHV::is_signed() const
 }
 
 // 範囲の取得
-const AstRange*
+const PtRange*
 CptRegHV::range() const
 {
   return mRange;
@@ -64,7 +64,7 @@ CptRegHSV::is_signed() const
 PtDeclHead*
 PtFactory::new_RegH(
   const FileRegion& file_region,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptRegH));
@@ -76,8 +76,8 @@ PtDeclHead*
 PtFactory::new_RegH(
   const FileRegion& file_region,
   bool sign,
-  const AstRange* range,
-  PtDeclItem* item_top
+  const PtRange* range,
+  const PtDeclItem* item_top
 )
 {
   if ( sign ) {

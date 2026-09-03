@@ -29,7 +29,7 @@ protected:
 
   /// @brief コンストラクタ
   EiControl(
-    const AstControl* ast_control ///< [in] パース木の定義要素
+    const AstControl& ast_control ///< [in] パース木の定義要素
   );
 
   /// デストラクタ
@@ -80,7 +80,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const AstControl* mAstControl;
+  AstControl mAstControl;
 
 };
 
@@ -99,7 +99,7 @@ public:
 
   /// @brief コンストラクタ
   EiDelayControl(
-    const AstControl* ast_control, ///< [in] パース木の定義要素
+    const AstControl& ast_control, ///< [in] パース木の定義要素
     ElbExpr* delay                 ///< [in] 遅延式
   );
 
@@ -152,7 +152,7 @@ public:
 
   /// @brief コンストラクタ
   EiEventControl(
-    const AstControl* ast_control,          ///< [in] パース木の定義要素
+    const AstControl& ast_control,          ///< [in] パース木の定義要素
     const std::vector<ElbExpr*>& event_list ///< [in] イベントリスト
   );
 
@@ -213,7 +213,7 @@ public:
 
   /// @brief コンストラクタ
   EiRepeatControl(
-    const AstControl* ast_control,          ///< [in] パース木の定義要素
+    const AstControl& ast_control,          ///< [in] パース木の定義要素
     ElbExpr* rep,                           ///< [in] 繰り返し式
     const std::vector<ElbExpr*>& event_list ///< [in] イベントリスト
   );

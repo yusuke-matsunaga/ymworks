@@ -34,7 +34,7 @@ EiExpr::~EiExpr()
 FileRegion
 EiExpr::file_region() const
 {
-  return ast_obj()->file_region();
+  return ast_obj().file_region();
 }
 
 // @brief 定数の時 true を返す．
@@ -340,7 +340,7 @@ EiExpr::lhs_elem_list() const
 
 // @brief コンストラクタ
 EiExprBase::EiExprBase(
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 ) : mAstExpr{ast_expr}
 {
 }
@@ -354,11 +354,11 @@ EiExprBase::~EiExprBase()
 std::string
 EiExprBase::decompile() const
 {
-  return ast_expr()->decompile();
+  return ast_expr().decompile();
 }
 
 /// @brief パース木の定義要素を返す．
-const AstBase*
+const AstBase&
 EiExprBase::ast_obj() const
 {
   return ast_expr();
@@ -371,7 +371,7 @@ EiExprBase::ast_obj() const
 
 // @brief コンストラクタ
 EiOperation::EiOperation(
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 ) : EiExprBase{ast_expr}
 {
 }
@@ -399,7 +399,7 @@ EiOperation::is_operation() const
 VpiOpType
 EiOperation::op_type() const
 {
-  return ast_expr()->op_type();
+  return ast_expr().op_type();
 }
 
 END_NAMESPACE_YM_VERILOG

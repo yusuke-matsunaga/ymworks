@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ei/EiScope.h"
+#include "ym/vl/AstItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -24,8 +25,8 @@ public:
 
   /// @brief コンストラクタ
   EiGenBlockScope(
-    const VlScope* parent, ///< [in] 親のスコープ環境
-    const AstItem* ast_item  ///< [in] 対応するパース木の要素
+    const VlScope* parent,  ///< [in] 親のスコープ環境
+    const AstItem& ast_item ///< [in] 対応するパース木の要素
   );
 
   /// @brief デストラクタ
@@ -58,7 +59,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 対応するパース木の要素
-  const AstItem* mAstItem;
+  AstItem mAstItem;
 
 };
 
@@ -74,9 +75,9 @@ public:
 
   /// @brief コンストラクタ
   EiGfBlockScope(
-    const VlScope* parent, ///< [in] 親のスコープ環境
-    const AstItem* ast_item, ///< [in] 対応するパース木の要素
-    int index              ///< [in] インデックス
+    const VlScope* parent,   ///< [in] 親のスコープ環境
+    const AstItem& ast_item, ///< [in] 対応するパース木の要素
+    int index                ///< [in] インデックス
   );
 
   /// @brief デストラクタ

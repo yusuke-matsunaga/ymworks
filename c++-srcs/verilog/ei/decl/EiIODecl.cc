@@ -8,13 +8,9 @@
 
 #include "ei/EiIODecl.h"
 #include "ei/EiFactory.h"
-
 #include "elaborator/ElbDecl.h"
-
 #include "ym/vl/VlScope.h"
 #include "ym/vl/VlTaskFunc.h"
-#include "ym/vl/AstDecl.h"
-
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -23,7 +19,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbIOHead*
 EiFactory::new_IOHead(
   const VlModule* module,
-  const AstIOHead* ast_header
+  const AstIOHead& ast_header
 )
 {
   return new EiModIOHead(module, ast_header);
@@ -33,7 +29,7 @@ EiFactory::new_IOHead(
 ElbIOHead*
 EiFactory::new_IOHead(
   const VlTaskFunc* taskfunc,
-  const AstIOHead* ast_header
+  const AstIOHead& ast_header
 )
 {
   if ( taskfunc->type() == VpiObjType::Task ) {
@@ -51,7 +47,7 @@ EiFactory::new_IOHead(
 
 // @brief コンストラクタ
 EiIOHead::EiIOHead(
-  const AstIOHead* ast_header
+  const AstIOHead& ast_header
 ) : mAstHead{ast_header}
 {
 }
@@ -65,7 +61,7 @@ EiIOHead::~EiIOHead()
 VpiDir
 EiIOHead::direction() const
 {
-  return mAstHead->direction();
+  return mAstHead.direction();
 }
 
 // @brief 親のモジュールの取得
@@ -97,7 +93,7 @@ EiIOHead::function() const
 // @brief コンストラクタ
 EiModIOHead::EiModIOHead(
   const VlModule* module,
-  const AstIOHead* ast_header
+  const AstIOHead& ast_header
 ) : EiIOHead(ast_header),
     mModule{module}
 {
@@ -123,7 +119,7 @@ EiModIOHead::module() const
 // @brief コンストラクタ
 EiTaskIOHead::EiTaskIOHead(
   const VlTaskFunc* task,
-  const AstIOHead* ast_header
+  const AstIOHead& ast_header
 ) : EiIOHead(ast_header),
     mTask{task}
 {
@@ -149,7 +145,7 @@ EiTaskIOHead::task() const
 // @brief コンストラクタ
 EiFunctionIOHead::EiFunctionIOHead(
   const VlTaskFunc* func,
-  const AstIOHead* ast_header
+  const AstIOHead& ast_header
 ) : EiIOHead(ast_header),
     mFunction{func}
 {
@@ -175,7 +171,7 @@ EiFunctionIOHead::function() const
 // @brief コンストラクタ
 EiIODecl::EiIODecl(
   ElbIOHead* head,
-  const AstIOItem* ast_item,
+  const AstIOItem& ast_item,
   const VlDecl* decl
 ) : mHead{head},
     mAstItem{ast_item},
@@ -199,14 +195,14 @@ EiIODecl::type() const
 FileRegion
 EiIODecl::file_region() const
 {
-  return mAstItem->file_region();
+  return mAstItem.file_region();
 }
 
 // @brief 名前を返す．
 std::string
 EiIODecl::name() const
 {
-  return mAstItem->name();
+  return mAstItem.name();
 }
 
 // @brief 方向を返す．

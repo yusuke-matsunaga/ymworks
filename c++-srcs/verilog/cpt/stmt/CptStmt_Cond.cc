@@ -21,25 +21,25 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstStmt::Type
 CptStmt_If::type() const
 {
-  return If;
+  return AstStmt::If;
 }
 
 // 条件式を返す．
-const AstExpr*
+const PtExpr*
 CptStmt_If::expr() const
 {
   return mCond;
 }
 
 // 成り立ったとき実行されるステートメント
-const AstStmt*
+const PtStmt*
 CptStmt_If::body() const
 {
   return mThen;
 }
 
 // 成り立たなかったとき実行されるステートメント
-const AstStmt*
+const PtStmt*
 CptStmt_If::else_body() const
 {
   return nullptr;
@@ -51,7 +51,7 @@ CptStmt_If::else_body() const
 //////////////////////////////////////////////////////////////////////
 
 // 成り立たなかったとき実行されるステートメント
-const AstStmt*
+const PtStmt*
 CptStmt_IfElse::else_body() const
 {
   return mElse;
@@ -66,21 +66,21 @@ CptStmt_IfElse::else_body() const
 AstStmt::Type
 CptStmt_Case::type() const
 {
-  return Case;
+  return AstStmt::Case;
 }
 
 // 比較される式を返す．
-const AstExpr*
+const PtExpr*
 CptStmt_Case::expr() const
 {
   return mExpr;
 }
 
 // @brief case item のリストの取得
-AstCaseItemList
-CptStmt_Case::caseitem_list() const
+const PtCaseItem*
+CptStmt_Case::caseitem_top() const
 {
-  return AstCaseItemList(mCaseItemTop);
+  return mCaseItemTop;
 }
 
 
@@ -92,7 +92,7 @@ CptStmt_Case::caseitem_list() const
 AstStmt::Type
 CptStmt_CaseX::type() const
 {
-  return CaseX;
+  return AstStmt::CaseX;
 }
 
 
@@ -104,7 +104,7 @@ CptStmt_CaseX::type() const
 AstStmt::Type
 CptStmt_CaseZ::type() const
 {
-  return CaseZ;
+  return AstStmt::CaseZ;
 }
 
 
@@ -120,14 +120,14 @@ CptCaseItem::file_region() const
 }
 
 // @brief ラベルリストの取得
-AstExprList
-CptCaseItem::label_list() const
+const PtExpr*
+CptCaseItem::label_top() const
 {
-  return AstExprList(mLabelTop);
+  return mLabelTop;
 }
 
 // 本体のステートメント得る．
-const AstStmt*
+const PtStmt*
 CptCaseItem::body() const
 {
   return mBody;
@@ -142,8 +142,8 @@ CptCaseItem::body() const
 PtStmt*
 PtFactory::new_If(
   const FileRegion& file_region,
-  const AstExpr* expr,
-  const AstStmt* then_body
+  const PtExpr* expr,
+  const PtStmt* then_body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_If));
@@ -154,9 +154,9 @@ PtFactory::new_If(
 PtStmt*
 PtFactory::new_IfElse(
   const FileRegion& file_region,
-  const AstExpr* expr,
-  const AstStmt* then_body,
-  const AstStmt* else_body
+  const PtExpr* expr,
+  const PtStmt* then_body,
+  const PtStmt* else_body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_IfElse));
@@ -168,8 +168,8 @@ PtFactory::new_IfElse(
 PtStmt*
 PtFactory::new_Case(
   const FileRegion& file_region,
-  const AstExpr* expr,
-  PtCaseItem* caseitem_top
+  const PtExpr* expr,
+  const PtCaseItem* caseitem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Case));
@@ -180,8 +180,8 @@ PtFactory::new_Case(
 PtStmt*
 PtFactory::new_CaseX(
   const FileRegion& file_region,
-  const AstExpr* expr,
-  PtCaseItem* caseitem_top
+  const PtExpr* expr,
+  const PtCaseItem* caseitem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_CaseX));
@@ -192,8 +192,8 @@ PtFactory::new_CaseX(
 PtStmt*
 PtFactory::new_CaseZ(
   const FileRegion& file_region,
-  const AstExpr* expr,
-  PtCaseItem* caseitem_top
+  const PtExpr* expr,
+  const PtCaseItem* caseitem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_CaseZ));
@@ -204,8 +204,8 @@ PtFactory::new_CaseZ(
 PtCaseItem*
 PtFactory::new_CaseItem(
   const FileRegion& file_region,
-  PtExpr* label_top,
-  const AstStmt* body
+  const PtExpr* label_top,
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptCaseItem));

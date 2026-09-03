@@ -8,9 +8,8 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtDecl.h"
+#include "parser/PtDeclItem.h"
 #include "ym/FileRegion.h"
-#include "ym/vl/Ast.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -44,13 +43,13 @@ public:
   const char*
   name() const override;
 
-  /// @brief 範囲のリストを返す．
-  const AstRangeList
-  range_list() const override;
+  /// @brief 範囲のリストの先頭を返す．
+  const PtRange*
+  range_top() const override;
 
   /// @brief 初期値を取り出す．
   /// @return ここでは常に nullptr を返す．
-  const AstExpr*
+  const PtExpr*
   init_value() const override;
 
 
@@ -120,7 +119,7 @@ public:
   CptDeclItemR(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name,              ///< [in] 名前
-    const AstRange* range_top      ///< [in] 範囲の先頭
+    const PtRange* range_top       ///< [in] 範囲の先頭
   ) : CptDeclItemBase(name),
       mFileRegion{file_region},
       mRangeTop{range_top}
@@ -141,9 +140,9 @@ public:
   FileRegion
   file_region() const override;
 
-  /// @brief 範囲のリストを返す．
-  const AstRangeList
-  range_list() const override;
+  /// @brief 範囲のリストの先頭を返す．
+  const PtRange*
+  range_top() const override;
 
 
 private:
@@ -155,7 +154,7 @@ private:
   FileRegion mFileRegion;
 
   // 範囲の先頭
-  const AstRange* mRangeTop;
+  const PtRange* mRangeTop;
 
 };
 
@@ -172,7 +171,7 @@ public:
   CptDeclItemI(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     const char* name,              ///< [in] 名前
-    const AstExpr* init_value      ///< [in] 初期値
+    const PtExpr* init_value       ///< [in] 初期値
   ) : CptDeclItem(file_region, name),
       mInitValue{init_value}
   {
@@ -198,7 +197,7 @@ public:
   /// @brief 初期値を取り出す．
   /// @retval 初期値
   /// @retval nullptr 設定がない場合
-  const AstExpr*
+  const PtExpr*
   init_value() const override;
 
 
@@ -208,7 +207,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 初期値
-  const AstExpr* mInitValue;
+  const PtExpr* mInitValue;
 
 };
 

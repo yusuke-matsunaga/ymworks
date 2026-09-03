@@ -9,12 +9,21 @@
 #include "parser/AstDumper.h"
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstUdp.h"
-#include "ym/vl/AstPort.h"
-#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstUdpEntry.h"
+#include "ym/vl/AstUdpValue.h"
+#include "ym/vl/AstCaseItem.h"
+#include "ym/vl/AstContAssign.h"
+#include "ym/vl/AstDeclHead.h"
+#include "ym/vl/AstDeclItem.h"
+#include "ym/vl/AstDefParam.h"
+#include "ym/vl/AstGenCaseItem.h"
 #include "ym/vl/AstItem.h"
+#include "ym/vl/AstInst.h"
+#include "ym/vl/AstPart.h"
+#include "ym/vl/AstPort.h"
+#include "ym/vl/AstRange.h"
 #include "ym/vl/AstStmt.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/VlUdpVal.h"
 
@@ -99,8 +108,8 @@ AstDumper::file_loc_mode() const
 // @brief パーサーの内部情報の表示
 void
 AstDumper::put(
-  const std::vector<const AstUdp*>& udp_list,
-  const std::vector<const AstModule*>& module_list
+  const std::vector<AstUdp>& udp_list,
+  const std::vector<AstModule>& module_list
 )
 {
   for ( auto udp: udp_list ) {
@@ -114,39 +123,39 @@ AstDumper::put(
 // @brief UDP を表示する
 void
 AstDumper::put(
-  const AstUdp* udp
+  const AstUdp& udp
 )
 {
   AstHeader x(*this, "UDP", "UDP");
 
-  put("mFileRegion", udp->file_region());
+  put("mFileRegion", udp.file_region());
 #if 0
-  put("mAttrInst",  udp->attr_top());
+  put("mAttrInst",  udp.attr_top());
 #endif
 
-  put("mPrimType", udp->prim_type());
+  put("mPrimType", udp.prim_type());
 
-  put("mName", udp->name());
+  put("mName", udp.name());
 
-  for ( auto port: udp->port_list() ) {
-    put("mPort", port->ext_name());
+  for ( auto port: udp.port_list() ) {
+    put("mPort", port.ext_name());
   }
-  for ( auto io: udp->iohead_list() ) {
+  for ( auto io: udp.iohead_list() ) {
     put("mIO", io);
   }
 
-  put("mInitial", udp->init_value());
+  put("mInitial", udp.init_value());
 
-  for ( auto entry: udp->table_list() ) {
+  for ( auto entry: udp.table_list() ) {
     AstHeader x(*this, "mTable", "UdpEntry");
 
-    put("mFileRegion", entry->file_region());
+    put("mFileRegion", entry.file_region());
 
-    for ( auto v: entry->input_list() ) {
+    for ( auto v: entry.input_list() ) {
       put("mInput", v);
     }
-    put("mCurrent", entry->current());
-    put("mOutput", entry->output());
+    put("mCurrent", entry.current());
+    put("mOutput", entry.output());
   }
 }
 
@@ -154,17 +163,17 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstUdpValue* v
+  const AstUdpValue& v
 )
 {
-  if ( v == nullptr ) {
+  if ( v.is_invalid() ) {
     return;
   }
 
   AstHeader x(*this, label, "UdpValue");
 
-  put("mFileRegion", v->file_region());
-  put("mSymbol", v->symbol().to_string());
+  put("mFileRegion", v.file_region());
+  put("mSymbol", v.symbol().to_string());
 }
 
 BEGIN_NONAMESPACE
@@ -202,92 +211,92 @@ END_NONAMESPACE
 // @brief module を表示する
 void
 AstDumper::put(
-  const AstModule* m
+  const AstModule& m
 )
 {
   AstHeader x(*this, "Module", "Module");
 
-  put("mFileRegion", m->file_region());
+  put("mFileRegion", m.file_region());
 #if 0
-  put("mAttrInst", m->attr_top());
+  put("mAttrInst", m.attr_top());
 #endif
 
-  put("mName", m->name());
+  put("mName", m.name());
 
-  put("mCellDefine", m->is_cell());
-  put("mProtected", m->is_protected());
-  put("mMacroModule", m->is_macromodule());
+  put("mCellDefine", m.is_cell());
+  put("mProtected", m.is_protected());
+  put("mMacroModule", m.is_macromodule());
 
-  if ( m->time_unit() != -16 ) {
-    put("mTimeUnit", unit2str(m->time_unit()));
-    put("mTimePrecision", unit2str(m->time_precision()));
+  if ( m.time_unit() != -16 ) {
+    put("mTimeUnit", unit2str(m.time_unit()));
+    put("mTimePrecision", unit2str(m.time_precision()));
   }
 
-  put("mDefNetType", m->nettype());
-  put("mUnconnDrive", m->unconn_drive());
-  put("mDelayMode", m->delay_mode());
-  put("mDecayTime", m->decay_time());
-  put("config", m->config());
-  put("library", m->library());
-  put("cell", m->cell());
+  put("mDefNetType", m.nettype());
+  put("mUnconnDrive", m.unconn_drive());
+  put("mDelayMode", m.delay_mode());
+  put("mDecayTime", m.decay_time());
+  put("config", m.config());
+  put("library", m.library());
+  put("cell", m.cell());
 
-  for ( auto param: m->paramport_list() ) {
+  for ( auto param: m.paramport_list() ) {
     put("mParamPort", param);
   }
 
-  for ( auto port: m->port_list() ) {
+  for ( auto port: m.port_list() ) {
     AstHeader x(*this, "mPort", "Port");
 
-    put("mFileRegion", port->file_region());
-    if ( port->ext_name() != nullptr ) {
-      put("mExprname", port->ext_name());
+    put("mFileRegion", port.file_region());
+    if ( port.ext_name() != nullptr ) {
+      put("mExprname", port.ext_name());
     }
 
-    auto np = port->portref_list().size();
+    auto np = port.portref_list().size();
     if ( np == 1 ) {
-      auto expr = port->expr();
-      auto dir = port->portref_dir(0);
+      auto expr = port.expr();
+      auto dir = port.portref_dir(0);
       put_portref(expr, dir);
     }
     else if ( np > 1 ) {
       SizeType index = 0;
-      for ( auto expr: port->portref_list() ) {
-	auto dir = port->portref_dir(index);
+      for ( auto expr: port.portref_list() ) {
+	auto dir = port.portref_dir(index);
 	put_portref(expr, dir);
 	++ index;
       }
     }
   }
 
-  put_decls(m->iohead_list(), m->declhead_list());
-  for ( auto item: m->item_list() ) {
+  put_decls(m.iohead_list(), m.declhead_list());
+  for ( auto item: m.item_list() ) {
     put("mItem", item);
   }
 }
 
 void
 AstDumper::put_portref(
-  const AstExpr* expr,
+  const AstExpr& expr,
   VpiDir dir
 )
 {
   AstHeader x(*this, "mPortRef", "PortRef");
 
-  put("mFileRegion", expr->file_region());
+  put("mFileRegion", expr.file_region());
   put("mDir", dir);
-  put("mName", expr->name());
-  auto index_list = expr->index_list().to_vector();
+  put("mName", expr.name());
+  auto index_list = expr.index_list().to_vector();
   if ( index_list.size() == 1 ) {
     put("mIndex", index_list.front());
   }
   else {
     ASSERT_COND( index_list.empty() );
   }
-  if ( expr->part() != nullptr ) {
-    auto part = expr->part();
-    put("mRangeMode", part->mode());
-    put("mLeftRange", part->left());
-    put("mRightRange", part->right());
+  auto part = expr.part();
+  if ( part.is_valid() ) {
+    put("mRangeMode", part.mode());
+    put("mLeftRange", part.left());
+    put("mRightRange", part.right());
   }
 }
 
@@ -295,11 +304,11 @@ AstDumper::put_portref(
 void
 AstDumper::put(
   const char* label,
-  const AstIOHead* io
+  const AstIOHead& io
 )
 {
   const char* nm = nullptr;
-  switch ( io->direction() ) {
+  switch ( io.direction() ) {
   case VpiDir::Input:  nm = "Input"; break;
   case VpiDir::Output: nm = "Output"; break;
   case VpiDir::Inout:  nm = "Inout"; break;
@@ -308,23 +317,23 @@ AstDumper::put(
   AstHeader x(*this, label, nm);
 
 
-  put("mFileRegion", io->file_region());
+  put("mFileRegion", io.file_region());
 #if 0
-  put("mAttrInst", io->attr_top());
+  put("mAttrInst", io.attr_top());
 #endif
 
-  put("mAuxType", io->aux_type());
-  put("mNetType", io->net_type());
-  put("mVarType", io->var_type());
-  put("mSigned", io->is_signed());
-  put("mLeftRange", "mRightRange", io->range());
+  put("mAuxType", io.aux_type());
+  put("mNetType", io.net_type());
+  put("mVarType", io.var_type());
+  put("mSigned", io.is_signed());
+  put("mLeftRange", "mRightRange", io.range());
 
-  for ( auto item: io->item_list() ) {
+  for ( auto item: io.item_list() ) {
     AstHeader x(*this, "mElem", "IOElem");
 
-    put("mFileRegion", item->file_region());
-    put("mName", item->name());
-    put("mInitValue", item->init_value());
+    put("mFileRegion", item.file_region());
+    put("mName", item.name());
+    put("mInitValue", item.init_value());
   }
 }
 
@@ -332,13 +341,13 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstDeclHead* decl
+  const AstDeclHead& decl
 )
 {
   const char* nm = nullptr;
-  switch ( decl->type() ) {
+  switch ( decl.type() ) {
   case AstDeclHead::Param:
-    switch ( decl->data_type() ) {
+    switch ( decl.data_type() ) {
     case VpiVarType::None:            nm = "Parameter"; break;
     case VpiVarType::Integer:         nm = "Parameter(integer)";  break;
     case VpiVarType::Real:            nm = "Parameter(real)"; break;
@@ -348,7 +357,7 @@ AstDumper::put(
     }
     break;
   case AstDeclHead::LocalParam:
-    switch ( decl->data_type() ) {
+    switch ( decl.data_type() ) {
     case VpiVarType::None:            nm = "Localparam"; break;
     case VpiVarType::Integer:         nm = "Localparam(integer)";  break;
     case VpiVarType::Real:            nm = "Localparam(real)"; break;
@@ -359,7 +368,7 @@ AstDumper::put(
     break;
   case AstDeclHead::Reg:            nm = "Reg";        break;
   case AstDeclHead::Var:
-    switch ( decl->data_type() ) {
+    switch ( decl.data_type() ) {
     case VpiVarType::Integer:         nm = "Integer";    break;
     case VpiVarType::Real:            nm = "Real";       break;
     case VpiVarType::Time:            nm = "Time";       break;
@@ -372,7 +381,7 @@ AstDumper::put(
   case AstDeclHead::Event:          nm = "Event";      break;
   case AstDeclHead::SpecParam:      nm = "Specparam";  break;
   case AstDeclHead::Net:
-    switch ( decl->net_type() ) {
+    switch ( decl.net_type() ) {
     case VpiNetType::Supply0:          nm = "Supply0"; break;
     case VpiNetType::Supply1:          nm = "Supply1"; break;
     case VpiNetType::Tri:              nm = "Tri"; break;
@@ -392,27 +401,27 @@ AstDumper::put(
   }
   AstHeader x(*this, label, nm);
 
-  put("mFileRegion", decl->file_region());
+  put("mFileRegion", decl.file_region());
 #if 0
-  put("mAttrInst", decl->attr_top());
+  put("mAttrInst", decl.attr_top());
 #endif
 
-  put("mSigned", decl->is_signed());
-  put("mLeftRange", "mRightRange", decl->range());
-  put("mVsType", decl->vs_type());
-  put("mStrength", decl->strength());
-  put("mDelay", decl->delay());
+  put("mSigned", decl.is_signed());
+  put("mLeftRange", "mRightRange", decl.range());
+  put("mVsType", decl.vs_type());
+  put("mStrength", decl.strength());
+  put("mDelay", decl.delay());
 
-  for ( auto item: decl->item_list() ) {
+  for ( auto item: decl.item_list() ) {
     AstHeader x(*this, "mElem", "DeclItem");
 
-    put("mFileRegion", item->file_region());
-    put("mName", item->name());
-    for ( auto range: item->range_list() ) {
+    put("mFileRegion", item.file_region());
+    put("mName", item.name());
+    for ( auto range: item.range_list() ) {
       AstHeader x(*this, "mDimension", "Range");
       put("mLeftRange", "mRightRange", range);
     }
-    put("mInitValue", item->init_value());
+    put("mInitValue", item.init_value());
   }
 }
 
@@ -420,22 +429,22 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstItem* item
+  const AstItem& item
 )
 {
-  if ( item == nullptr ) {
+  if ( item.is_invalid() ) {
     return;
   }
 
   const char* nm = nullptr;
-  switch ( item->type() ) {
+  switch ( item.type() ) {
   case AstItem::DefParam:        nm = "DefparamHeader"; break;
   case AstItem::ContAssign:      nm = "ContAssignHeader"; break;
   case AstItem::Initial:         nm = "Initial"; break;
   case AstItem::Always:          nm = "Always"; break;
   case AstItem::Task:            nm = "Task"; break;
   case AstItem::Func:
-    switch ( item->data_type() ) {
+    switch ( item.data_type() ) {
     case VpiVarType::None:            nm = "Function"; break;
     case VpiVarType::Integer:         nm = "Function(integer)"; break;
     case VpiVarType::Real:            nm = "Function(real)"; break;
@@ -447,7 +456,7 @@ AstDumper::put(
   case AstItem::GateInst:        nm = "GateHeader"; break;
   case AstItem::MuInst:          nm = "MuHeader"; break;
   case AstItem::SpecItem:
-    switch ( item->specitem_type() ) {
+    switch ( item.specitem_type() ) {
     case VpiSpecItemType::PulsestyleOnEvent:  nm = "Pulse_onevent"; break;
     case VpiSpecItemType::PulsestyleOnDetect: nm = "Pulse_ondetect"; break;
     case VpiSpecItemType::Showcancelled:      nm = "Showcancelled"; break;
@@ -464,107 +473,107 @@ AstDumper::put(
   }
   AstHeader x(*this, label, nm);
 
-  put("mFileRegions", item->file_region());
+  put("mFileRegions", item.file_region());
 #if 0
-  put("mAttrInst", item->attr_top());
+  put("mAttrInst", item.attr_top());
 #endif
 
-  switch ( item->type() ) {
+  switch ( item.type() ) {
   case AstItem::DefParam:
-    for ( auto dp: item->defparam_list() ) {
+    for ( auto dp: item.defparam_list() ) {
       AstHeader x(*this, "mElem", "DefParam");
 
-      put("mFileRegion", dp->file_region());
-      put(dp->namebranch_list());
-      put("mName", dp->name());
-      put("mValue", dp->expr());
+      put("mFileRegion", dp.file_region());
+      put(dp.namebranch_list());
+      put("mName", dp.name());
+      put("mValue", dp.expr());
     }
     break;
 
   case AstItem::ContAssign:
-    put("mStrength", item->strength());
-    put("mDelay", item->delay());
-    for ( auto ca: item->contassign_list() ) {
+    put("mStrength", item.strength());
+    put("mDelay", item.delay());
+    for ( auto ca: item.contassign_list() ) {
       AstHeader x(*this, "mElem", "ContAssign");
 
-      put("mFileRegion", ca->file_region());
-      put("mLhs", ca->lhs());
-      put("mRhs", ca->rhs());
+      put("mFileRegion", ca.file_region());
+      put("mLhs", ca.lhs());
+      put("mRhs", ca.rhs());
     }
     break;
 
   case AstItem::Initial:
   case AstItem::Always:
-    put("mBody", item->body());
+    put("mBody", item.body());
     break;
 
   case AstItem::Task:
   case AstItem::Func:
-    put("mAutomatic", item->automatic());
-    if ( item->range() ) {
-      put("mSigned", item->is_signed());
-      put("mLeftRange", "mRightRange", item->range());
+    put("mAutomatic", item.automatic());
+    if ( item.range().is_valid() ) {
+      put("mSigned", item.is_signed());
+      put("mLeftRange", "mRightRange", item.range());
     }
-    put("mName", item->name());
-    put_decls(item->iohead_list(),
-	      item->declhead_list());
-    put("mBody", item->body());
+    put("mName", item.name());
+    put_decls(item.iohead_list(),
+	      item.declhead_list());
+    put("mBody", item.body());
     break;
 
   case AstItem::GateInst:
-    put("mPrimType", item->prim_type());
-    put("mStrength", item->strength());
-    put("mDelay", item->delay());
-    for ( auto gi: item->inst_list() ) {
+    put("mPrimType", item.prim_type());
+    put("mStrength", item.strength());
+    put("mDelay", item.delay());
+    for ( auto gi: item.inst_list() ) {
       AstHeader x(*this, "mElem", "GateInst");
 
-      put("mFileRegion", gi->file_region());
-      if ( gi->name() != nullptr ) {
-	put("mName", gi->name());
+      put("mFileRegion", gi.file_region());
+      if ( gi.name() != nullptr ) {
+	put("mName", gi.name());
       }
-      if ( gi->range() ) {
-	put("mLeftRange", "mRightRange", gi->range());
+      if ( gi.range().is_valid() ) {
+	put("mLeftRange", "mRightRange", gi.range());
       }
-      for ( auto con: gi->port_list() ) {
+      for ( auto con: gi.port_list() ) {
 	put("mPortCon", con);
       }
     }
     break;
 
   case AstItem::MuInst:
-    put("mDefName", item->name());
-    for ( auto con: item->paramassign_list() ) {
+    put("mDefName", item.name());
+    for ( auto con: item.paramassign_list() ) {
       put("mParamCon", con);
     }
-    put("mStrength", item->strength());
-    put("mDelay", item->delay());
-    for ( auto mui: item->inst_list() ) {
+    put("mStrength", item.strength());
+    put("mDelay", item.delay());
+    for ( auto mui: item.inst_list() ) {
       AstHeader x(*this, "mElem", "MuInst");
 
-      put("mFileRegion", mui->file_region());
-      put("mName", mui->name());
-      if ( mui->range() ) {
-	put("mLeftRange", "mRightRange", mui->range());
+      put("mFileRegion", mui.file_region());
+      put("mName", mui.name());
+      if ( mui.range().is_valid() ) {
+	put("mLeftRange", "mRightRange", mui.range());
       }
-      for ( auto con: mui->port_list() ) {
+      for ( auto con: mui.port_list() ) {
 	put("mPortCon", con);
       }
     }
     break;
 
   case AstItem::SpecItem:
-    for ( auto expr: item->terminal_list() ) {
+    for ( auto expr: item.terminal_list() ) {
       put("mTerminal", expr);
     }
     break;
 
   case AstItem::SpecPath:
 #if 0 // PATH_DECL
-    switch ( item->specpath_type() ) {
+    switch ( item.specpath_type() ) {
     case kVpiSpecPathNull:
       break;
     case kVpiSpecPathIf:
-      put("mIf", item->expr());
+      put("mIf", item.expr());
       break;
     case kVpiSpecPathIfnone:
       {
@@ -574,45 +583,45 @@ AstDumper::put(
     }
     {
       AstHeader x4(s, "mPathDecl");
-      s << item->path_decl();
+      s << item.path_decl();
     }
 #endif
     break;
 
   case AstItem::Generate:
   case AstItem::GenBlock:
-    if ( item->name() != nullptr ) {
-      put("mName", item->name());
+    if ( item.name() != nullptr ) {
+      put("mName", item.name());
     }
-    put_decl_item("mBody", item->declhead_list(), item->item_list());
+    put_decl_item("mBody", item.declhead_list(), item.item_list());
     break;
 
   case AstItem::GenIf:
-    put("mCond", item->cond_expr());
-    put_decl_item("mThenBody", item->then_declhead_list(), item->then_item_list());
-    put_decl_item("mElseBody", item->else_declhead_list(), item->else_item_list());
+    put("mCond", item.cond_expr());
+    put_decl_item("mThenBody", item.then_declhead_list(), item.then_item_list());
+    put_decl_item("mElseBody", item.else_declhead_list(), item.else_item_list());
     break;
 
   case AstItem::GenCase:
-    put("mExpr", item->cond_expr());
-    for ( auto gci: item->caseitem_list() ) {
+    put("mExpr", item.cond_expr());
+    for ( auto gci: item.caseitem_list() ) {
       AstHeader x(*this, "mCaseItem", "GenCaseItem");
 
-      put("mFileRegion", gci->file_region());
-      for ( auto expr: gci->label_list() ) {
+      put("mFileRegion", gci.file_region());
+      for ( auto expr: gci.label_list() ) {
 	put("mLabel", expr);
       }
-      put_decl_item("mBody", gci->declhead_list(), gci->item_list());
+      put_decl_item("mBody", gci.declhead_list(), gci.item_list());
     }
     break;
 
   case AstItem::GenFor:
-    put("mLoopVar", item->loop_var());
-    put("mInitehExpr", item->init_expr());
-    put("mCond", item->cond_expr());
-    put("mNext", item->next_expr());
-    put("mName", item->name());
-    put_decl_item("mBody", item->declhead_list(), item->item_list());
+    put("mLoopVar", item.loop_var());
+    put("mInitehExpr", item.init_expr());
+    put("mCond", item.cond_expr());
+    put("mNext", item.next_expr());
+    put("mName", item.name());
+    put_decl_item("mBody", item.declhead_list(), item.item_list());
     break;
 
   default: ASSERT_NOT_REACHED; break;
@@ -624,14 +633,14 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstPathDecl* item
+  const AstPathDecl& item
 )
 {
   AstHeader x(*this, label, "PathDecl");
 
-  put("mFileRegion", item->file_region());
+  put("mFileRegion", item.file_region());
 
-  switch ( item->edge() ) {
+  switch ( item.edge() ) {
   case vpiPosedgeOp:
     { AstHeader x2(s, "mPosedge"); }
     break;
@@ -641,43 +650,43 @@ AstDumper::put(
   }
 
   ymuint i = 0;
-  for ( auto ei = item->input_top(); ei; ei = ei->next(), ++ i ) {
+  for ( auto ei = item.input_top(); ei; ei = ei.next(), ++ i ) {
     AstHeader x4(s, "mInput", i);
-    s << ei->expr();
+    s << ei.expr();
   }
 
-  if ( item->input_pol() ) {
+  if ( item.input_pol() ) {
     AstHeader x5(s, "InputPol");
-    s << static_cast<char>(item->input_pol());
+    s << static_cast<char>(item.input_pol());
   }
 
   {
     AstHeader x6(s, "mOp");
-    switch ( item->op() ) {
+    switch ( item.op() ) {
     case vpiPathParallel: s << "PathParallel(=>)"; break;
     case vpiPathFull:     s << "PathFull(*>)"; break;
     }
   }
 
   i = 0;
-  for ( auto ei = item->output_top(); ei; ei = ei->next(), ++ i) {
+  for ( auto ei = item.output_top(); ei; ei = ei.next(), ++ i) {
     AstHeader x7(s, "mOutput", i);
-    s << ei->expr();
+    s << ei.expr();
   }
 
-  if ( item->output_pol() ) {
+  if ( item.output_pol() ) {
     AstHeader x8(s, "mOutputPol");
-    s << static_cast<char>(item->output_pol());
+    s << static_cast<char>(item.output_pol());
   }
 
-  if ( item->expr() ) {
+  if ( item.expr() ) {
     AstHeader x9(s, "mExpr");
-    s << item->expr();
+    s << item.expr();
   }
 
   {
     AstHeader x10(s, "mPathDelay");
-    s << item->path_delay();
+    s << item.path_delay();
   }
 }
 
@@ -685,19 +694,19 @@ AstDumper::put(
 AstDumper&
 operator<<(
   AstDumper& s,
-  const AstPathDelay* item
+  const AstPathDelay& item
 )
 {
   AstHeader x1(s, "PathDelay");
 
-  s << item->file_region();
+  s << item.file_region();
 
   for ( int i = 0; i < 12; ++ i ) {
-    if ( item->value(i) == nullptr ) {
+    if ( item.value(i) == nullptr ) {
       break;
     }
     AstHeader x2(s, "mValue", i);
-    s << item->value(i);
+    s << item.value(i);
   }
 
   return s;
@@ -708,15 +717,15 @@ operator<<(
 void
 AstDumper::put(
   const char* label,
-  const AstStmt* stmt
+  const AstStmt& stmt
 )
 {
-  if ( stmt == nullptr ) {
+  if ( stmt.is_invalid() ) {
     return;
   }
 
   const char* nm = nullptr;
-  switch ( stmt->type() ) {
+  switch ( stmt.type() ) {
   case AstStmt::Disable:       nm = "Disable"; break;
   case AstStmt::Enable:        nm = "Enable"; break;
   case AstStmt::SysEnable:     nm = "SysEnable"; break;
@@ -747,23 +756,23 @@ AstDumper::put(
   }
   AstHeader x(*this, label, nm);
 
-  put("mFileRegion", stmt->file_region());
+  put("mFileRegion", stmt.file_region());
 #if 0
-  put("mAttrInst", stmt->attr_top());
+  put("mAttrInst", stmt.attr_top());
 #endif
 
-  switch ( stmt->type() ) {
+  switch ( stmt.type() ) {
   case AstStmt::Disable:
-    put(stmt->namebranch_list());
-    put("mName", stmt->name());
+    put(stmt.namebranch_list());
+    put("mName", stmt.name());
     break;
 
   case AstStmt::Enable:
   case AstStmt::SysEnable:
-    put(stmt->namebranch_list());
-    put("mName", stmt->name());
-    for ( auto arg: stmt->arg_list() ) {
-      if ( arg ) {
+    put(stmt.namebranch_list());
+    put("mName", stmt.name());
+    for ( auto arg: stmt.arg_list() ) {
+      if ( arg.is_valid() ) {
 	put("mArg", arg);
       }
       else {
@@ -774,13 +783,13 @@ AstDumper::put(
 
   case AstStmt::DelayControl:
   case AstStmt::EventControl:
-    put("mControl", stmt->control());
-    put("mBody", stmt->body());
+    put("mControl", stmt.control());
+    put("mBody", stmt.body());
     break;
 
   case AstStmt::Wait:
-    put("mExpr", stmt->expr());
-    put("mBody", stmt->body());
+    put("mExpr", stmt.expr());
+    put("mBody", stmt.body());
     break;
 
   case AstStmt::Assign:
@@ -789,36 +798,36 @@ AstDumper::put(
   case AstStmt::Force:
   case AstStmt::Deassign:
   case AstStmt::Release:
-    put("mControl", stmt->control());
-    put("mLhs", stmt->lhs());
-    put("mRhs", stmt->rhs());
+    put("mControl", stmt.control());
+    put("mLhs", stmt.lhs());
+    put("mRhs", stmt.rhs());
     break;
 
   case AstStmt::Event:
-    put("mEventName", stmt->primary());
+    put("mEventName", stmt.primary());
     break;
 
   case AstStmt::Null:
     break;
 
   case AstStmt::If:
-    put("mCond", stmt->expr());
-    put("mThen", stmt->body());
-    put("mElse", stmt->else_body());
+    put("mCond", stmt.expr());
+    put("mThen", stmt.body());
+    put("mElse", stmt.else_body());
     break;
 
   case AstStmt::Case:
   case AstStmt::CaseX:
   case AstStmt::CaseZ:
-    put("mExpr", stmt->expr());
-    for ( auto ci: stmt->caseitem_list() ) {
+    put("mExpr", stmt.expr());
+    for ( auto ci: stmt.caseitem_list() ) {
       AstHeader x(*this, "mCaseItem", "CaseItem");
 
-      put("mFileRegion", ci->file_region());
-      for ( auto expr: ci->label_list() ) {
+      put("mFileRegion", ci.file_region());
+      for ( auto expr: ci.label_list() ) {
 	put("mLabel", expr);
       }
-      put("mBody", ci->body());
+      put("mBody", ci.body());
     }
     break;
 
@@ -826,23 +835,23 @@ AstDumper::put(
   case AstStmt::Repeat:
   case AstStmt::While:
   case AstStmt::For:
-    put("mInit", stmt->init_stmt());
-    put("mExpr", stmt->expr());
-    put("mNext", stmt->next_stmt());
-    put("mBody", stmt->body());
+    put("mInit", stmt.init_stmt());
+    put("mExpr", stmt.expr());
+    put("mNext", stmt.next_stmt());
+    put("mBody", stmt.body());
     break;
 
   case AstStmt::NamedParBlock:
   case AstStmt::NamedSeqBlock:
-    put("mName", stmt->name());
+    put("mName", stmt.name());
     // 次の case にわざと継続する．
 
   case AstStmt::ParBlock:
   case AstStmt::SeqBlock:
-    for ( auto head: stmt->declhead_list() ) {
+    for ( auto head: stmt.declhead_list() ) {
       put("mDecl", head);
     }
-    for ( auto stmt1: stmt->stmt_list() ) {
+    for ( auto stmt1: stmt.stmt_list() ) {
       put("mStatement", stmt1);
     }
     break;
@@ -855,29 +864,29 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstExpr* expr
+  const AstExpr& expr
 )
 {
-  if ( expr == nullptr ) {
+  if ( expr.is_invalid() ) {
     return;
   }
 
-  switch ( expr->type() ) {
+  switch ( expr.type() ) {
   case AstExpr::Opr:
-    if ( expr->op_type() == VpiOpType::Null ) {
+    if ( expr.op_type() == VpiOpType::Null ) {
       // '(' expression ')' なので無視
-      return put(label, expr->operand0());
+      return put(label, expr.operand0());
     }
     {
       AstHeader x(*this, label, "Opr");
 
-      put("mFileRegion", expr->file_region());
+      put("mFileRegion", expr.file_region());
 #if 0
-      put("mAttrInst", expr->attr_top());
+      put("mAttrInst", expr.attr_top());
 #endif
 
-      put("mOprType", expr->op_type());
-      for ( auto expr1: expr->operand_list() ) {
+      put("mOprType", expr.op_type());
+      for ( auto expr1: expr.operand_list() ) {
 	put("mOperand",  expr1);
       }
     }
@@ -887,11 +896,11 @@ AstDumper::put(
     {
       AstHeader x(*this, label, "Constant");
 
-      put("mFileRegion", expr->file_region());
-      put("mConstType", expr->const_type());
-      put("mConstBitVector", expr->const_bitvect());
-      put("mConstStr", expr->const_str());
-      put("mConstReal", expr->const_real());
+      put("mFileRegion", expr.file_region());
+      put("mConstType", expr.const_type());
+      put("mConstBitVector", expr.const_bitvect());
+      put("mConstStr", expr.const_str());
+      put("mConstReal", expr.const_real());
     }
     break;
 
@@ -899,7 +908,7 @@ AstDumper::put(
   case AstExpr::SysFuncCall:
     {
       const char* nm = nullptr;
-      if ( expr->type() == AstExpr::FuncCall ) {
+      if ( expr.type() == AstExpr::FuncCall ) {
 	nm = "FuncCall";
       }
       else {
@@ -907,14 +916,14 @@ AstDumper::put(
       }
       AstHeader x(*this, label, nm);
 
-      put("mFileRegion", expr->file_region());
+      put("mFileRegion", expr.file_region());
 #if 0
-      put("mAttrInst", expr->attr_top());
+      put("mAttrInst", expr.attr_top());
 #endif
-      put(expr->namebranch_list());
-      put("mName", expr->name());
-      for ( auto opr: expr->operand_list() ) {
-	if ( opr ) {
+      put(expr.namebranch_list());
+      put("mName", expr.name());
+      for ( auto opr: expr.operand_list() ) {
+	if ( opr.is_valid() ) {
 	  put("mOperand", opr);
 	}
 	else {
@@ -928,17 +937,17 @@ AstDumper::put(
     {
       AstHeader x(*this, label, "Primary");
 
-      put("mFileRegion", expr->file_region());
-      put(expr->namebranch_list());
-      put("mName", expr->name());
-      for ( auto index: expr->index_list() ) {
+      put("mFileRegion", expr.file_region());
+      put(expr.namebranch_list());
+      put("mName", expr.name());
+      for ( auto index: expr.index_list() ) {
 	put("mIndex", index);
       }
-      auto part = expr->part();
-      if ( part != nullptr ) {
-	put("mRangeMode", part->mode());
-	put("mLeftRange", part->left());
-	put("mRightRange", part->right());
+      auto part = expr.part();
+      if ( part.is_valid() ) {
+	put("mRangeMode", part.mode());
+	put("mLeftRange", part.left());
+	put("mRightRange", part.right());
       }
     }
     break;
@@ -999,12 +1008,12 @@ void
 AstDumper::put(
   const char* left_label,
   const char* right_label,
-  const AstRange* range
+  const AstRange& range
 )
 {
-  if ( range != nullptr ) {
-    put(left_label,  range->left());
-    put(right_label, range->right());
+  if ( range.is_valid() ) {
+    put(left_label,  range.left());
+    put(right_label, range.right());
   }
 }
 
@@ -1470,24 +1479,24 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstAttrInst* attr
+  const AstAttrInst& attr
 )
 {
-  if ( attr == nullptr ) {
+  if ( attr.is_invalid() ) {
     return;
   }
 
   AstHeader x(*this, label, "AttrInstList");
 #if 0
-  for ( ; attr; attr = attr->next()) {
+  for ( ; attr; attr = attr.next()) {
     AstHeader x(*this, "mAttrInst", "AttrInst");
-    for (const AstAttrSpec* as = attr->attr_spec_top();
-	 as; as = as->next()) {
+    for (const AstAttrSpec* as = attr.attr_spec_top();
+	 as; as = as.next()) {
       AstHeader x(*this, "mAttrSpec", "AttrSpec");
 
-      put("mFileRegion", as->file_region());
-      put("mName", as->name());
-      put("mExpr", as->expr());
+      put("mFileRegion", as.file_region());
+      put("mName", as.name());
+      put("mExpr", as.expr());
     }
   }
 #endif
@@ -1497,15 +1506,15 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstControl* ctrl
+  const AstControl& ctrl
 )
 {
-  if ( ctrl == nullptr ) {
+  if ( ctrl.is_invalid() ) {
     return;
   }
 
   const char* nm = nullptr;
-  switch ( ctrl->type() ) {
+  switch ( ctrl.type() ) {
   case AstControl::Delay:  nm = "DelayControl"; break;
   case AstControl::Event:  nm = "EventControl"; break;
   case AstControl::Repeat: nm = "RepeatControl"; break;
@@ -1513,10 +1522,10 @@ AstDumper::put(
   }
   AstHeader x(*this, label, nm);
 
-  put("mFileRegion", ctrl->file_region());
-  put("mDelay", ctrl->delay());
-  put("mRepExpr", ctrl->rep_expr());
-  for ( auto expr: ctrl->event_list() ) {
+  put("mFileRegion", ctrl.file_region());
+  put("mDelay", ctrl.delay());
+  put("mRepExpr", ctrl.rep_expr());
+  for ( auto expr: ctrl.event_list() ) {
     put("mEvent", expr);
   }
 }
@@ -1525,24 +1534,24 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstStrength* str
+  const AstStrength& str
 )
 {
-  if ( str == nullptr ) {
+  if ( str.is_invalid() ) {
     return;
   }
 
   AstHeader x(*this, label, "Strengh");
 
-  put("mFileRegion", str->file_region());
-  if ( str->drive0() != VpiStrength::NoStrength ) {
-    put("mDrive0", str->drive0());
+  put("mFileRegion", str.file_region());
+  if ( str.drive0() != VpiStrength::NoStrength ) {
+    put("mDrive0", str.drive0());
   }
-  if ( str->drive1() != VpiStrength::NoStrength ) {
-    put("mDrive1", str->drive1());
+  if ( str.drive1() != VpiStrength::NoStrength ) {
+    put("mDrive1", str.drive1());
   }
-  if ( str->charge() != VpiStrength::NoStrength ) {
-    put("mCharge", str->charge());
+  if ( str.charge() != VpiStrength::NoStrength ) {
+    put("mCharge", str.charge());
   }
 }
 
@@ -1550,34 +1559,34 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstDelay* delay
+  const AstDelay& delay
 )
 {
-  if ( delay == nullptr ) {
+  if ( delay.is_invalid() ) {
     return;
   }
 
   AstHeader x(*this, label, "Delay");
 
-  put("mFileRegion", delay->file_region());
-  put("mDelay0", delay->value0());
-  put("mDelay1", delay->value1());
-  put("mDelay2", delay->value2());
+  put("mFileRegion", delay.file_region());
+  put("mDelay0", delay.value0());
+  put("mDelay1", delay.value1());
+  put("mDelay2", delay.value2());
 }
 
 // @brief 接続情報を表示する．
 void
 AstDumper::put(
   const char* label,
-  const AstConnection* con
+  const AstConnection& con
 )
 {
-  if ( con == nullptr ) {
+  if ( con.is_invalid() ) {
     return;
   }
 
   const char* nm = nullptr;
-  if ( con->name() != nullptr ) {
+  if ( con.name() != nullptr ) {
     nm = "NamedCon";
   }
   else {
@@ -1585,16 +1594,16 @@ AstDumper::put(
   }
   AstHeader x(*this, label, nm);
 
-  put("mFileRegion", con->file_region());
+  put("mFileRegion", con.file_region());
 #if 0
-  put("mAttrInst", con->attr_top());
+  put("mAttrInst", con.attr_top());
 #endif
 
-  if ( con->name() != nullptr ) {
-    put("mName", con->name());
+  if ( con.name() != nullptr ) {
+    put("mName", con.name());
   }
-  if ( con->expr() ) {
-    put("mExpr", con->expr());
+  if ( con.expr().is_valid() ) {
+    put("mExpr", con.expr());
   }
   else {
     put("mExpr", "null");
@@ -1605,14 +1614,14 @@ AstDumper::put(
 void
 AstDumper::put(
   const char* label,
-  const AstNameBranch* nb
+  const AstNameBranch& nb
 )
 {
   AstHeader x(*this, label, "NameBranch");
 
-  put("mName", nb->name());
-  if ( nb->has_index() ) {
-    put("mIndex", nb->index());
+  put("mName", nb.name());
+  if ( nb.has_index() ) {
+    put("mIndex", nb.index());
   }
 }
 

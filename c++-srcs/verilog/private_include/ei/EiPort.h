@@ -10,6 +10,7 @@
 
 #include "ym/vl/VlPort.h"
 #include "ym/vl/Ast.h"
+#include "ym/vl/AstPort.h"
 #include "elaborator/ElbFwd.h"
 
 
@@ -95,11 +96,11 @@ public:
   /// @brief 初期設定を行う．
   void
   init(
-    const VlModule* parent, ///< [in] 親のモジュール
-    const AstPort* ast_port,  ///< [in] パース木のポート定義
-    SizeType index,         ///< [in] ポート番号
-    ElbExpr* low_conn,      ///< [in] 下位の接続
-    VpiDir dir              ///< [in] 向き
+    const VlModule* parent,  ///< [in] 親のモジュール
+    const AstPort& ast_port, ///< [in] パース木のポート定義
+    SizeType index,          ///< [in] ポート番号
+    ElbExpr* low_conn,       ///< [in] 下位の接続
+    VpiDir dir               ///< [in] 向き
   );
 
   /// @brief high_conn を接続する．
@@ -119,7 +120,7 @@ private:
   const VlModule* mModule;
 
   // パース木のポート定義
-  const AstPort* mAstPort;
+  AstPort mAstPort;
 
   // ポート番号
   SizeType mIndex;

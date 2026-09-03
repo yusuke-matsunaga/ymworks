@@ -8,7 +8,7 @@
 
 #include "CptInst.h"
 #include "alloc/Alloc.h"
-#include "parser/PtMisc.h"
+#include "parser/PtConnection.h"
 #include "parser/PtFactory.h"
 
 
@@ -33,17 +33,17 @@ CptInst::name() const
 }
 
 // @brief 範囲の取得
-const AstRange*
+const PtRange*
 CptInst::range() const
 {
   return nullptr;
 }
 
 // @brief ポートリストの取得
-AstConnectionList
-CptInst::port_list() const
+const PtConnection*
+CptInst::port_top() const
 {
-  return AstConnectionList(mPortTop);
+  return mPortTop;
 }
 
 
@@ -64,7 +64,7 @@ CptInstN::name() const
 //////////////////////////////////////////////////////////////////////
 
 // 範囲を取出す．
-const AstRange*
+const PtRange*
 CptInstR::range() const
 {
   return mRange;
@@ -79,7 +79,7 @@ CptInstR::range() const
 PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
-  PtConnection* con_top
+  const PtConnection* con_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptInst));
@@ -91,7 +91,7 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  PtConnection* con_top
+  const PtConnection* con_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptInstN));
@@ -103,8 +103,8 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstRange* range,
-  PtConnection* con_top
+  const PtRange* range,
+  const PtConnection* con_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptInstR));
@@ -115,7 +115,7 @@ PtFactory::new_Inst(
 PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
-  const AstExpr* expr1
+  const PtExpr* expr1
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -128,7 +128,7 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstExpr* expr1
+  const PtExpr* expr1
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -141,8 +141,8 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstRange* range,
-  const AstExpr* expr1
+  const PtRange* range,
+  const PtExpr* expr1
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -154,8 +154,8 @@ PtFactory::new_Inst(
 PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
-  const AstExpr* expr1,
-  const AstExpr* expr2
+  const PtExpr* expr1,
+  const PtExpr* expr2
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -170,8 +170,8 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstExpr* expr1,
-  const AstExpr* expr2
+  const PtExpr* expr1,
+  const PtExpr* expr2
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -186,9 +186,9 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstRange* range,
-  const AstExpr* expr1,
-  const AstExpr* expr2
+  const PtRange* range,
+  const PtExpr* expr1,
+  const PtExpr* expr2
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -202,9 +202,9 @@ PtFactory::new_Inst(
 PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
-  const AstExpr* expr1,
-  const AstExpr* expr2,
-  const AstExpr* expr3
+  const PtExpr* expr1,
+  const PtExpr* expr2,
+  const PtExpr* expr3
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -221,9 +221,9 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstExpr* expr1,
-  const AstExpr* expr2,
-  const AstExpr* expr3
+  const PtExpr* expr1,
+  const PtExpr* expr2,
+  const PtExpr* expr3
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -240,10 +240,10 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstRange* range,
-  const AstExpr* expr1,
-  const AstExpr* expr2,
-  const AstExpr* expr3
+  const PtRange* range,
+  const PtExpr* expr1,
+  const PtExpr* expr2,
+  const PtExpr* expr3
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -259,10 +259,10 @@ PtFactory::new_Inst(
 PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
-  const AstExpr* expr1,
-  const AstExpr* expr2,
-  const AstExpr* expr3,
-  const AstExpr* expr4
+  const PtExpr* expr1,
+  const PtExpr* expr2,
+  const PtExpr* expr3,
+  const PtExpr* expr4
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -281,10 +281,10 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstExpr* expr1,
-  const AstExpr* expr2,
-  const AstExpr* expr3,
-  const AstExpr* expr4
+  const PtExpr* expr1,
+  const PtExpr* expr2,
+  const PtExpr* expr3,
+  const PtExpr* expr4
 )
 {
   auto con1 = new_OrderedCon(expr1);
@@ -303,11 +303,11 @@ PtInst*
 PtFactory::new_Inst(
   const FileRegion& file_region,
   const char* name,
-  const AstRange* range,
-  const AstExpr* expr1,
-  const AstExpr* expr2,
-  const AstExpr* expr3,
-  const AstExpr* expr4
+  const PtRange* range,
+  const PtExpr* expr1,
+  const PtExpr* expr2,
+  const PtExpr* expr3,
+  const PtExpr* expr4
 )
 {
   auto con1 = new_OrderedCon(expr1);

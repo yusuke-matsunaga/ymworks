@@ -48,15 +48,22 @@ CptOpr2::file_region() const
   return FileRegion(mOpr[0]->file_region(), mOpr[1]->file_region());
 }
 
+// @brief 固定オペランド数の取得
+SizeType
+CptOpr2::operand_num() const
+{
+  return 2;
+}
+
 // @brief 0番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptOpr2::operand0() const
 {
   return mOpr[0];
 }
 
 // @brief 1番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptOpr2::operand1() const
 {
   return mOpr[1];
@@ -404,8 +411,8 @@ template <typename T>
 PtExpr*
 new_opr(
   Alloc& alloc,
-  const AstExpr* opr1,
-  const AstExpr* opr2
+  const PtExpr* opr1,
+  const PtExpr* opr2
 )
 {
   auto p = alloc.get_memory(sizeof(T));
@@ -415,8 +422,8 @@ new_opr(
 PtExpr*
 PtFactory::new_Opr(
   VpiOpType type,
-  const AstExpr* opr1,
-  const AstExpr* opr2
+  const PtExpr* opr1,
+  const PtExpr* opr2
 )
 {
   switch ( type ) {

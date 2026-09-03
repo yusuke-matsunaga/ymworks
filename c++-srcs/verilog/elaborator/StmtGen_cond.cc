@@ -13,6 +13,7 @@
 
 #include "ym/vl/AstStmt.h"
 #include "ym/vl/AstExpr.h"
+#include "ym/vl/AstCaseItem.h"
 
 #include "ym/MsgMgr.h"
 
@@ -29,19 +30,19 @@ StmtGen::instantiate_if(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto ast_cond = ast_stmt->expr();
+  auto ast_cond = ast_stmt.expr();
   auto cond = instantiate_expr(parent, env, ast_cond);
 
-  auto ast_then = ast_stmt->body();
+  auto ast_then = ast_stmt.body();
   auto then_stmt = instantiate_stmt(parent, process, env, ast_then);
 
-  auto ast_else = ast_stmt->else_body();
+  auto ast_else = ast_stmt.else_body();
   auto else_stmt = instantiate_stmt(parent, process, env, ast_else);
 
-  if ( !cond || !then_stmt || ( ast_else && !else_stmt ) ) {
+  if ( !cond || !then_stmt || ( ast_else.is_valid() && !else_stmt ) ) {
     // たぶんエラー
     return nullptr;
   }
@@ -56,11 +57,11 @@ StmtGen::instantiate_case(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   // 条件式の生成
-  auto ast_cond = ast_stmt->expr();
+  auto ast_cond = ast_stmt.expr();
   auto cond = instantiate_expr(parent, env, ast_cond);
   if ( !cond ) {
     // たぶんエラー
@@ -71,27 +72,27 @@ StmtGen::instantiate_case(
   // あとでサイズ調整をするために用いる．
   std::vector<ElbExpr*> expr_list;
   SizeType ne{0};
-  for ( auto ast_item: ast_stmt->caseitem_list() ) {
-    ne += ast_item->label_list().size();
+  for ( auto ast_item: ast_stmt.caseitem_list() ) {
+    ne += ast_item.label_list().size();
   }
   expr_list.reserve(ne);
 
   // default caseitem を末尾にするために順序づけを行う．
   // Parser::check_default_label() で default が高々1個しかないことは確認済み．
-  std::vector<const AstCaseItem*> ast_caseitem_list;
+  std::vector<AstCaseItem> ast_caseitem_list;
   {
-    SizeType nc = ast_stmt->caseitem_list().size();
+    SizeType nc = ast_stmt.caseitem_list().size();
     ast_caseitem_list.reserve(nc);
-    const AstCaseItem* default_caseitem{nullptr};
-    for ( auto ast_item: ast_stmt->caseitem_list() ) {
-      if ( ast_item->label_list().size() > 0 ) {
+    AstCaseItem default_caseitem;
+    for ( auto ast_item: ast_stmt.caseitem_list() ) {
+      if ( ast_item.label_list().size() > 0 ) {
 	ast_caseitem_list.push_back(ast_item);
       }
       else {
 	default_caseitem = ast_item;
       }
     }
-    if ( default_caseitem ) {
+    if ( default_caseitem.is_valid() ) {
       // default caseitem を末尾に置く．
       ast_caseitem_list.push_back(default_caseitem);
     }
@@ -101,19 +102,19 @@ StmtGen::instantiate_case(
   std::vector<const VlCaseItem*> caseitem_list;
   caseitem_list.reserve(ast_caseitem_list.size());
   for ( auto ast_item: ast_caseitem_list ) {
-    auto ast_body = ast_item->body();
+    auto ast_body = ast_item.body();
     auto body = instantiate_stmt(parent, process, env, ast_body);
-    if ( ast_body && !body ) {
+    if ( ast_body.is_valid() && !body ) {
       // たぶんエラー
       return nullptr;
     }
     // ast_body が空の場合はあり．
 
     // ラベルの生成と設定
-    SizeType n = ast_item->label_list().size();
+    SizeType n = ast_item.label_list().size();
     std::vector<ElbExpr*> label_list;
     label_list.reserve(n);
-    for ( auto ast_expr: ast_item->label_list() ) {
+    for ( auto ast_expr: ast_item.label_list() ) {
       auto expr = instantiate_expr(parent, env, ast_expr);
       if ( !expr ) {
 	// たぶんエラー
@@ -187,13 +188,13 @@ StmtGen::instantiate_wait(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto ast_cond = ast_stmt->expr();
+  auto ast_cond = ast_stmt.expr();
   auto cond = instantiate_expr(parent, env, ast_cond);
 
-  auto ast_body = ast_stmt->body();
+  auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !cond || !body ) {
@@ -209,10 +210,10 @@ StmtGen::instantiate_forever(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto ast_body = ast_stmt->body();
+  auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !body ) {
@@ -228,13 +229,13 @@ StmtGen::instantiate_repeat(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto ast_expr = ast_stmt->expr();
+  auto ast_expr = ast_stmt.expr();
   auto expr = instantiate_expr(parent, env, ast_expr);
 
-  auto ast_body = ast_stmt->body();
+  auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !expr || !body ) {
@@ -250,13 +251,13 @@ StmtGen::instantiate_while(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto ast_cond = ast_stmt->expr();
+  auto ast_cond = ast_stmt.expr();
   auto cond = instantiate_expr(parent, env, ast_cond);
 
-  auto ast_body = ast_stmt->body();
+  auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !cond || !body ) {
@@ -272,19 +273,19 @@ StmtGen::instantiate_for(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto ast_cond = ast_stmt->expr();
-  auto cond = instantiate_expr(parent, env, ast_stmt->expr());
+  auto ast_cond = ast_stmt.expr();
+  auto cond = instantiate_expr(parent, env, ast_stmt.expr());
 
-  auto ast_init = ast_stmt->init_stmt();
+  auto ast_init = ast_stmt.init_stmt();
   auto init = instantiate_stmt(parent, process, env, ast_init);
 
-  auto ast_next = ast_stmt->next_stmt();
+  auto ast_next = ast_stmt.next_stmt();
   auto next = instantiate_stmt(parent, process, env, ast_next);
 
-  auto ast_body = ast_stmt->body();
+  auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
 
   if ( !cond || !init || !next || !body ) {

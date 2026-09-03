@@ -8,7 +8,6 @@
 
 #include "AttrGen.h"
 #include "elaborator/ElbExpr.h"
-#include "ym/vl/AstMisc.h"
 #include "ym/vl/VlAttribute.h"
 
 
@@ -37,15 +36,15 @@ AttrGen::instantiate_attribute(
   const PtAttrInfo& attr_info
 )
 {
-  auto ast_obj = attr_info.obj();
-  if ( mHash.count(ast_obj) == 0 ) {
+  auto key = attr_info.key();
+  if ( mHash.count(key) == 0 ) {
     // また未生成なので作る．
     auto ast_attr_list = attr_info.attr_list();
     bool def = attr_info.def();
     std::vector<const VlAttribute*> attr_list;
     for ( auto ast_ai: ast_attr_list ) {
-      for ( auto ast_as: ast_ai->attrspec_list() ) {
-	auto expr = instantiate_constant_expr(nullptr, ast_as->expr());
+      for ( auto ast_as: ast_ai.attrspec_list() ) {
+	auto expr = instantiate_constant_expr(nullptr, ast_as.expr());
 	if ( !expr ) {
 	  // エラー．たぶん expr() が constant_expression ではなかった．
 	  // でも無視する．
@@ -56,19 +55,19 @@ AttrGen::instantiate_attribute(
       }
     }
     // attr_list が空でも処理済みの意味で追加する．
-    mHash.emplace(ast_obj, attr_list);
+    mHash.emplace(key, attr_list);
   }
-  mHash.at(ast_obj);
 }
 
 // @brief 構文木要素に対応する属性リストを返す．
 const std::vector<const VlAttribute*>&
 AttrGen::attribute_list(
-  const AstBase* ast_obj
+  const AstBase& ast_obj
 )
 {
-  if ( mHash.count(ast_obj) > 0 ) {
-    return mHash.at(ast_obj);
+  auto key = ast_obj.key();
+  if ( mHash.count(key) > 0 ) {
+    return mHash.at(key);
   }
   return mEmptyList;
 }

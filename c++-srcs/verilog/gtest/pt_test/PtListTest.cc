@@ -34,7 +34,7 @@ TEST_F(PtTest, PtRangeList_init2)
 
   EXPECT_EQ( range1, range_list.top );
   EXPECT_EQ( range1, range_list.tail );
-  EXPECT_EQ( nullptr, range1->_link() );
+  EXPECT_EQ( nullptr, range1->link() );
 }
 
 TEST_F(PtTest, PtRangeList_add1)
@@ -50,7 +50,7 @@ TEST_F(PtTest, PtRangeList_add1)
 
   EXPECT_EQ( range1, range_list.top );
   EXPECT_EQ( range1, range_list.tail );
-  EXPECT_EQ( nullptr, range1->_link() );
+  EXPECT_EQ( nullptr, range1->link() );
 }
 
 TEST_F(PtTest, PtRangeList_add2)
@@ -81,9 +81,9 @@ TEST_F(PtTest, PtRangeList_add2)
 
   EXPECT_EQ( range1, range_list.top );
   EXPECT_EQ( range3, range_list.tail );
-  EXPECT_EQ( range2, range1->_link() );
-  EXPECT_EQ( range3, range2->_link() );
-  EXPECT_EQ( nullptr, range3->_link() );
+  EXPECT_EQ( range2, range1->link() );
+  EXPECT_EQ( range3, range2->link() );
+  EXPECT_EQ( nullptr, range3->link() );
 }
 
 END_NAMESPACE_YM_VERILOG

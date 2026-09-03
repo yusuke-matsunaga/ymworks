@@ -10,14 +10,9 @@
 
 #include <gtest/gtest.h>
 #include "parser/Parser.h"
-#include "ym/vl/BitVector.h"
-#include "parser/PtModule.h"
-#include "parser/PtUdp.h"
-#include "parser/PtDecl.h"
-#include "parser/PtExpr.h"
-#include "parser/PtMisc.h"
-#include "parser/PtStmt.h"
-#include "parser/PtHierName.h"
+#include "parser/PtNameBranch.h"
+#include "parser/PtPart.h"
+#include "parser/PtRange.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -127,10 +122,10 @@ public:
   // 個々の型のテスト
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief AstBase のテスト
+  /// @brief PtBase のテスト
   void
   check_Base(
-    const AstBase* obj,
+    const PtBase* obj,
     const FileRegion& fr
   )
   {
@@ -138,43 +133,16 @@ public:
     EXPECT_EQ( fr, obj->file_region() );
   }
 
-  /// @brief AstNamedBase のテスト
+  /// @brief PtNameBranch のリストのテスト
   void
-  check_NamedBase(
-    const AstNamedBase* obj,
-    const FileRegion& fr,
-    const char* name
-  )
-  {
-    check_Base(obj, fr);
-    EXPECT_STREQ( name, obj->name() );
-  }
-
-  /// @brief AstNamedBase のテスト
-  void
-  check_NamedBase(
-    const AstNamedBase* obj,
-    const FileRegion& fr
-  )
-  {
-    check_Base(obj, fr);
-    EXPECT_THROW( obj->name(),
-		  std::logic_error );
-  }
-
-  /// @brief AstHierNamedBase のテスト
-  void
-  check_HierNamedBase(
-    const AstHierNamedBase* obj,
-    const FileRegion& fr,
-    const char* name,
+  check_namebranch_list(
+    const PtNameBranch* nb_top,
     const std::vector<NameBranchSpec>& nbspec_vec
   )
   {
-    check_NamedBase(obj, fr, name);
     SizeType index = 0;
-    for ( auto nb: obj->namebranch_list() ) {
-      auto& spec = nbspec_vec[index];
+    for ( auto nb = nb_top; nb != nullptr; nb = nb->link() ) {
+      auto& spec = nbspec_vec[index ++];
       EXPECT_EQ( spec.name, nb->name() );
       if ( spec.index & 1 ) {
 	EXPECT_TRUE( nb->has_index() );
@@ -185,42 +153,21 @@ public:
 	EXPECT_THROW( nb->index(),
 		      std::logic_error );
       }
-      ++ index;
     }
-    std::string exp_name;
-    if ( name != nullptr ) {
-      for ( auto nbspec: nbspec_vec ) {
-	exp_name += nbspec.decompile();
-	exp_name += ".";
-      }
-      exp_name += name;
-    }
-    EXPECT_EQ( exp_name, obj->decompile_name() );
   }
 
-  /// @brief AstHierNamedBase のテスト
-  void
-  check_HierNamedBase(
-    const AstHierNamedBase* obj,
-    const FileRegion& fr,
-    const char* name
+  /// @brief リンクトリストを std::vector<> に変換する．
+  template <typename T>
+  std::vector<const T*>
+  to_vector(
+    const T* top
   )
   {
-    check_NamedBase(obj, fr, name);
-    EXPECT_THROW( obj->namebranch_list(),
-		  std::logic_error );
-  }
-
-  /// @brief AstHierNamedBase のテスト
-  void
-  check_HierNamedBase(
-    const AstHierNamedBase* obj,
-    const FileRegion& fr
-  )
-  {
-    check_NamedBase(obj, fr);
-    EXPECT_THROW( obj->namebranch_list(),
-		  std::logic_error );
+    std::vector<const T*> vec;
+    for ( auto x = top; x != nullptr; x = x->link() ) {
+      vec.push_back(x);
+    }
+    return vec;
   }
 
 

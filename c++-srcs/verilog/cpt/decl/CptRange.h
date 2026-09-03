@@ -8,7 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtDecl.h"
+#include "parser/PtRange.h"
 #include "ym/FileRegion.h"
 
 
@@ -26,8 +26,8 @@ public:
   /// @brief コンストラクタ
   CptRange(
     const FileRegion& fr, ///< [in] ファイル上の位置
-    const AstExpr* msb,   ///< [in] 範囲の MSB
-    const AstExpr* lsb    ///< [in] 範囲の LSB
+    const PtExpr* msb,   ///< [in] 範囲の MSB
+    const PtExpr* lsb    ///< [in] 範囲の LSB
   ) : mFileRegion{fr},
       mMsb{msb},
       mLsb{lsb}
@@ -40,7 +40,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstRange の仮想関数
+  // PtRange の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// ファイル位置の取得
@@ -48,11 +48,11 @@ public:
   file_region() const override;
 
   /// @brief 範囲の MSB を取り出す．
-  const AstExpr*
+  const PtExpr*
   left() const override;
 
   /// @brief 範囲の LSB を取り出す．
-  const AstExpr*
+  const PtExpr*
   right() const override;
 
 
@@ -65,10 +65,10 @@ private:
   FileRegion mFileRegion;
 
   // MSB
-  const AstExpr* mMsb;
+  const PtExpr* mMsb;
 
   // LSB
-  const AstExpr* mLsb;
+  const PtExpr* mLsb;
 
 };
 

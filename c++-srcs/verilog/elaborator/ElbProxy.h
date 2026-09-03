@@ -84,7 +84,7 @@ protected:
   /// @brief 名前からモジュール定義を取り出す．
   /// @return name という名のモジュール定義
   /// @return なければ nullptr を返す．
-  const AstModule*
+  AstModule
   find_moduledef(
     const std::string& name ///< [in] 名前
   ) const
@@ -93,7 +93,7 @@ protected:
   }
 
   /// @brief 関数定義を探す．
-  const AstItem*
+  AstItem
   find_funcdef(
     const VlModule* module, ///< [in] 親のモジュール
     const std::string& name      ///< [in] 関数名
@@ -151,7 +151,7 @@ protected:
   void
   add_defparamstub(
     const VlModule* module, ///< [in] 親のモジュール
-    const AstItem* header    ///< [in] アイテムテンプレートのヘッダ (defparam を持つ)
+    const AstItem& header   ///< [in] アイテムテンプレートのヘッダ (defparam を持つ)
   )
   {
     mElaborator.add_defparamstub(module, header);
@@ -258,7 +258,7 @@ protected:
   void
   phase1_module_item(
     ElbModule* module,                        ///< [in] モジュール
-    const AstModule* ast_module,                ///< [in] モジュール定義
+    const AstModule& ast_module,              ///< [in] モジュール定義
     const std::vector<ElbParamCon>& param_con_list ///< [in] パラメータ割り当ての情報
   );
 
@@ -314,7 +314,7 @@ protected:
   const VlTaskFunc*
   instantiate_constant_function(
     const VlScope* parent,    ///< [in] 親のスコープ
-    const AstItem* ast_function ///< [in] 関数定義
+    const AstItem& ast_function ///< [in] 関数定義
   );
 
 
@@ -326,9 +326,9 @@ protected:
   /// @brief スコープに関係するステートメントの実体化を行う．
   void
   phase1_stmt(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstStmt* ast_stmt, ///< [in] 対象のステートメント
-    bool cf = false        ///< [in] constant function 中のステートメントの時 true
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstStmt& ast_stmt, ///< [in] 対象のステートメント
+    bool cf = false          ///< [in] constant function 中のステートメントの時 true
   );
 
   /// @brief ステートメントの実体化を行う．
@@ -337,7 +337,7 @@ protected:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス
     const ElbEnv& env,        ///< [in] 生成時の環境
-    const AstStmt* ast_stmt     ///< [in] 対象のステートメント
+    const AstStmt& ast_stmt   ///< [in] 対象のステートメント
   );
 
 
@@ -352,9 +352,9 @@ protected:
   /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
   ElbExpr*
   instantiate_expr(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const ElbEnv& env,     ///< [in] 生成時の環境
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const ElbEnv& env,      ///< [in] 生成時の環境
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief AstExpr から定数式の ElbExpr を生成する
@@ -363,8 +363,8 @@ protected:
   /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
   ElbExpr*
   instantiate_constant_expr(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief AstExpr からイベント式の ElbExpr を生成する
@@ -373,9 +373,9 @@ protected:
   /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
   ElbExpr*
   instantiate_event_expr(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const ElbEnv& env,     ///< [in] 生成時の環境
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const ElbEnv& env,      ///< [in] 生成時の環境
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief AstExpr からシステム関数の引数を生成する．
@@ -384,9 +384,9 @@ protected:
   /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
   ElbExpr*
   instantiate_arg(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const ElbEnv& env,     ///< [in] 生成時の環境
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const ElbEnv& env,      ///< [in] 生成時の環境
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief AstExpr から左辺式を生成する
@@ -395,9 +395,9 @@ protected:
   /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
   ElbExpr*
   instantiate_lhs(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const ElbEnv& env,     ///< [in] 生成時の環境
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const ElbEnv& env,      ///< [in] 生成時の環境
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief AstExpr から右辺式を生成する
@@ -406,24 +406,24 @@ protected:
   /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
   ElbExpr*
   instantiate_rhs(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const ElbEnv& env,     ///< [in] 生成時の環境
-    const AstExpr* ast_expr, ///< [in] 式を表すパース木
-    ElbExpr* lhs           ///< [in] 左辺式
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const ElbEnv& env,       ///< [in] 生成時の環境
+    const AstExpr& ast_expr, ///< [in] 式を表すパース木
+    ElbExpr* lhs             ///< [in] 左辺式
   );
 
   /// @brief AstExpr(primary) から named_event を生成する．
   ElbExpr*
   instantiate_namedevent(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief AstDelay から ElbExpr を生成する．
   const VlDelay*
   instantiate_delay(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstDelay* ast_delay ///< [in] 遅延を表すパース木
+    const VlScope* parent,    ///< [in] 親のスコープ
+    const AstDelay& ast_delay ///< [in] 遅延を表すパース木
   );
 
   /// @brief AstOrderedCon から ElbExpr を生成する．
@@ -432,8 +432,8 @@ protected:
   /// 遅延なのかわからないので AstOrderedCon で表していることによる．
   const VlDelay*
   instantiate_delay(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstItem* ast_head  ///< [in] 順序付きわりあて式
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstItem& ast_head ///< [in] 順序付きわりあて式
   );
 
   /// @brief 定数式の値を評価する．
@@ -442,8 +442,8 @@ protected:
   /// * 定数式でなければ EvalError 例外を送出する．
   VlValue
   evaluate_expr(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価し int 値を返す．
@@ -453,8 +453,8 @@ protected:
   /// * 評価結果が int でなければ EvalError 例外を送出する．
   int
   evaluate_int(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式ならばを評価し int 値を返す．
@@ -463,9 +463,9 @@ protected:
   /// * 評価結果が int でなければ EvalError 例外を送出する．
   int
   evaluate_int_if_const(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr, ///< [in] 式を表すパース木
-    bool& is_const         ///< [out] 定数式の時に true を返す．
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstExpr& ast_expr, ///< [in] 式を表すパース木
+    bool& is_const           ///< [out] 定数式の時に true を返す．
   );
 
   /// @brief 定数式を評価しスカラー値を返す．
@@ -475,8 +475,8 @@ protected:
   /// * いかなる型でもスカラー値に変換可能
   VlScalarVal
   evaluate_scalar(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価し bool 値を返す．
@@ -486,8 +486,8 @@ protected:
   /// * いかなる型でも bool 値に変換可能
   bool
   evaluate_bool(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価しビットベクタ値を返す．
@@ -497,8 +497,8 @@ protected:
   /// * 評価結果がビットベクタ型でなければ EvalError 例外を送出する．
   BitVector
   evaluate_bitvector(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 範囲を表す式を評価する．
@@ -508,8 +508,8 @@ protected:
   /// * 評価結果が int でなければ EvalError 例外を送出する．
   RangeVal
   evaluate_range(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstRange* ast_range ///< [in] 範囲を表すパーす木
+    const VlScope* parent,    ///< [in] 親のスコープ
+    const AstRange& ast_range ///< [in] 範囲を表すパーす木
   );
 
   /// @brief 範囲を表す式を評価する．
@@ -520,8 +520,8 @@ protected:
   /// * 評価結果が int でなければ EvalError 例外を送出する．
   RangeVal
   evaluate_range(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstPart* ast_part  ///< [in] 範囲指定を表すパーす木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstPart& ast_part ///< [in] 範囲指定を表すパーす木
   );
 
 
@@ -533,14 +533,14 @@ protected:
   /// @brief 構文木要素に対応する属性リストを返す．
   const std::vector<const VlAttribute*>&
   attribute_list(
-    const AstBase* ast_obj ///< [in] 元となる構文木要素
+    const AstBase& ast_obj ///< [in] 元となる構文木要素
   );
 
   /// @brief 構文木要素に対応する属性リストを返す．
   std::vector<const VlAttribute*>
   attribute_list(
-    const AstBase* ast_obj1,
-    const AstBase* ast_obj2
+    const AstBase& ast_obj1,
+    const AstBase& ast_obj2
   );
 
 

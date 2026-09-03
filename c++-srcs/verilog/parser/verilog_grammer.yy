@@ -7,7 +7,6 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-
 #include "ym/MsgMgr.h"
 #include "ym/FileRegion.h"
 #include "parser/Parser.h"
@@ -121,10 +120,14 @@ fr_merge(
   PtIOItem* ioitem;
   PtIOItemList ioitemlist;
   PtIODList iodlist;
+  PtIOHeadItem ioheaditem;
+
   PtDeclHead* declhead;
   PtDeclItem* declitem;
   PtDeclItemList declitemlist;
   PtDeclDList decldlist;
+  PtDeclHeadItem declheaditem;
+
   PtRange* range;
   PtRangeList rangelist;
 
@@ -442,17 +445,16 @@ fr_merge(
 %type <portlist> list_of_ports
 %type <portlist> udp_port_list
 
-%type <iohead> portdecl_head
-%type <iohead> udp_output_port_declaration
+%type <ioheaditem> portdecl_head
 
 %type <iohead> io_declaration
 %type <iohead> inout_declaration
 %type <iohead> input_declaration
 %type <iohead> output_declaration
 
-%type <iohead> tf_inout_declhead
-%type <iohead> tf_input_declhead
-%type <iohead> tf_output_declhead
+%type <ioheaditem> tf_inout_declhead
+%type <ioheaditem> tf_input_declhead
+%type <ioheaditem> tf_output_declhead
 
 %type <iohead> tf_io_declaration
 %type <iohead> tf_input_declaration
@@ -475,7 +477,6 @@ fr_merge(
 %type <ioitemlist> list_of_variable_port_identifiers
 
 %type <declhead> udp_reg_declaration
-%type <declhead> paramport_head
 %type <declhead> module_or_generate_decl
 %type <declhead> module_decl
 %type <declhead> bitem_decl_body
@@ -494,6 +495,8 @@ fr_merge(
 
 %type <decldlist> module_parameter_port_list
 %type <decldlist> list_of_paramport_decl
+
+%type <declheaditem> paramport_declhead
 
 %type <declitem> paramport_assignment
 %type <declitem> param_assignment
@@ -840,16 +843,16 @@ module_parameter_port_list
 // [SPEC*] list_of_param_decl ::=
 //           parameter_declaration { ',' parameter_declaration }
 list_of_paramport_decl
-: ai_list paramport_head
+: ai_list paramport_declhead
 {
-  $$ = PtDeclDList::new_obj($2);
-  parser.reg_attrinst($2, $1);
+  parser.reg_attrinst($2.head, $1);
+  $$ = PtDeclDList::new_obj($2.head, $2.item);
 }
-| list_of_paramport_decl ',' ai_list paramport_head
+| list_of_paramport_decl ',' ai_list paramport_declhead
 {
+  parser.reg_attrinst($4.head, $3);
   $$ = $1;
-  $$.add_head($4);
-  parser.reg_attrinst($4, $3);
+  $$.add_head($4.head, $4.item);
 }
 | list_of_paramport_decl ',' paramport_assignment
 {
@@ -858,19 +861,21 @@ list_of_paramport_decl
 }
 ;
 
-// head と言っているが，実際にはヘッダと最初の要素を含んでいる．
-paramport_head
+paramport_declhead
 : PARAMETER paramport_assignment
 {
-  $$ = parser.factory().new_ParamH(@$, $2);
+  auto head = parser.factory().new_ParamH(@$, $2);
+  $$ = PtDeclHeadItem{head, $2};
 }
 | PARAMETER sign range paramport_assignment
 {
-  $$ = parser.factory().new_ParamH(@$, $2, $3, $4);
+  auto head = parser.factory().new_ParamH(@$, $2, $3, $4);
+  $$ = PtDeclHeadItem{head, $4};
 }
 | PARAMETER data_type paramport_assignment
 {
-  $$ = parser.factory().new_ParamH(@$, $2, $3);
+  auto head = parser.factory().new_ParamH(@$, $2, $3);
+  $$ = PtDeclHeadItem{head, $3};
 }
 ;
 
@@ -1014,17 +1019,20 @@ port_reference
 // INPUT/INOUT/OUTPUT が来るか port_identifier が来るかで区別する様に
 // 変更した．何にも考えていない IEEE1364-2001 の拡張の仕方が悪い．
 // 詳細は A.2.1.2 Port declarations を参照のこと．
+//
+// PtIODList の仕様上，新しいヘッダを追加する時には要素も同時に追加する
+// 必要がある．
 list_of_port_declarations
 : ai_list portdecl_head
 {
-  $$ = PtIODList::new_obj($2);
-  parser.reg_attrinst($2, $1);
+  $$ = PtIODList::new_obj($2.head, $2.item);
+  parser.reg_attrinst($2.head, $1);
 }
 | list_of_port_declarations ',' ai_list portdecl_head
 {
   $$ = $1;
-  $1.add_head($4);
-  parser.reg_attrinst($4, $3);
+  $1.add_head($4.head, $4.item);
+  parser.reg_attrinst($4.head, $3);
 }
 | list_of_port_declarations ',' variable_port_identifier_item
 {
@@ -1045,73 +1053,91 @@ portdecl_head
 : INOUT          sign variable_port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Inout, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 | INOUT net_type sign variable_port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $4);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | INOUT          sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3, $4);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | INOUT net_type sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4, $5);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Inout, $2, $3, $4, $5);
+  $$ = PtIOHeadItem{head, $5};
 }
 | INPUT          sign variable_port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Input, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 | INPUT net_type sign variable_port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $4);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | INPUT          sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3, $4);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | INPUT net_type sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3, $4, $5);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Input, $2, $3, $4, $5);
+  $$ = PtIOHeadItem{head, $5};
 }
 | OUTPUT          sign variable_port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Output, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 | OUTPUT net_type sign variable_port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $4);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | OUTPUT          sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3, $4);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | OUTPUT net_type sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3, $4, $5);
+  auto head = parser.factory().new_NetIOHead(@$, VpiDir::Output, $2, $3, $4, $5);
+  $$ = PtIOHeadItem{head, $5};
 }
 | OUTPUT REG sign variable_port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $4);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Output, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | OUTPUT REG sign range variable_port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4, $5);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4, $5);
+  $$ = PtIOHeadItem{head, $5};
 }
 | OUTPUT INTEGER variable_port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, VpiVarType::Integer, $3);
+  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Output,
+					     VpiVarType::Integer, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 | OUTPUT TIME variable_port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, VpiVarType::Time, $3);
+  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Output,
+					     VpiVarType::Time, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 ;
 
@@ -2740,14 +2766,14 @@ list_of_bitem_decl
 function_port_list
 : ai_list tf_input_declhead
 {
-  $$ = PtIODList::new_obj($2);
-  parser.reg_attrinst($2, $1);
+  $$ = PtIODList::new_obj($2.head, $2.item);
+  parser.reg_attrinst($2.head, $1);
 }
 | function_port_list ',' ai_list tf_input_declhead
 {
   $$ = $1;
-  $$.add_head($4);
-  parser.reg_attrinst($4, $3);
+  $$.add_head($4.head, $4.item);
+  parser.reg_attrinst($4.head, $3);
 }
 | function_port_list ',' port_identifier_item
 {
@@ -2760,24 +2786,29 @@ tf_input_declhead
 : INPUT     sign port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Input, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 | INPUT REG sign port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Input, $4);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Input, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | INPUT     sign range port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3, $4);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Input, $2, $3, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | INPUT REG sign range port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Input, $3, $4, $5);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Input, $3, $4, $5);
+  $$ = PtIOHeadItem{head, $5};
 }
 | INPUT task_port_type port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Input, $2, $3);
+  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Input, $2, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 ;
 
@@ -2914,30 +2945,30 @@ tf_io_declaration
 task_port_list
 : tf_input_declhead
 {
-  $$ = PtIODList::new_obj($1);
+  $$ = PtIODList::new_obj($1.head, $1.item);
 }
 | tf_output_declhead
 {
-  $$ = PtIODList::new_obj($1);
+  $$ = PtIODList::new_obj($1.head, $1.item);
 }
 | tf_inout_declhead
 {
-  $$ = PtIODList::new_obj($1);
+  $$ = PtIODList::new_obj($1.head, $1.item);
 }
 | task_port_list ',' tf_input_declhead
 {
   $$ = $1;
-  $$.add_head($3);
+  $$.add_head($3.head, $3.item);
 }
 | task_port_list ',' tf_output_declhead
 {
   $$ = $1;
-  $$.add_head($3);
+  $$.add_head($3.head, $3.item);
 }
 | task_port_list ',' tf_inout_declhead
 {
   $$ = $1;
-  $$.add_head($3);
+  $$.add_head($3.head, $3.item);
 }
 | task_port_list ',' port_identifier_item
 {
@@ -3021,24 +3052,29 @@ tf_output_declhead
 : OUTPUT     sign port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Output, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 | OUTPUT REG sign port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $4);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Output, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | OUTPUT     sign range port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3, $4);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Output, $2, $3, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | OUTPUT REG sign range port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4, $5);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Output, $3, $4, $5);
+  $$ = PtIOHeadItem{head, $5};
 }
 | OUTPUT task_port_type port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Output, $2, $3);
+  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Output, $2, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 ;
 
@@ -3084,24 +3120,29 @@ tf_inout_declhead
 : INOUT     sign port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $3);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Inout, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 | INOUT REG sign port_identifier_item
 {
   // sign は無視
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $4);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | INOUT     sign range port_identifier_item
 {
-  $$ = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3, $4);
+  auto head = parser.factory().new_IOHead(@$, VpiDir::Inout, $2, $3, $4);
+  $$ = PtIOHeadItem{head, $4};
 }
 | INOUT REG sign range port_identifier_item
 {
-  $$ = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $3, $4, $5);
+  auto head = parser.factory().new_RegIOHead(@$, VpiDir::Inout, $3, $4, $5);
+  $$ = PtIOHeadItem{head, $5};
 }
 | INOUT task_port_type port_identifier_item
 {
-  $$ = parser.factory().new_VarIOHead(@$, VpiDir::Inout, $2, $3);
+  auto head = parser.factory().new_VarIOHead(@$, VpiDir::Inout, $2, $3);
+  $$ = PtIOHeadItem{head, $3};
 }
 ;
 
@@ -4581,39 +4622,30 @@ udp_reg_declaration
 // [SPEC] list_of_port_identifiers ::= port_identifier {',' port_identifier}
 // もういい加減この2重リストの問題はうんざり．
 udp_declaration_port_list
-: udp_output_port_declaration ',' ai_list INPUT port_identifier_item
+: ai_list OUTPUT port_identifier_item
 {
-  $$ = PtIODList::new_obj($1);
-  auto head = parser.factory().new_IOHead(@4, VpiDir::Input, $5);
-  parser.reg_attrinst(head, $3);
-  $$.add_head(head);
+  auto head = parser.factory().new_IOHead(@2, VpiDir::Output, $3);
+  parser.reg_attrinst(head, $1);
+  $$ = PtIODList::new_obj(head, $3);
+}
+| ai_list OUTPUT REG variable_port_identifier_item
+{
+  auto head = parser.factory().new_RegIOHead(FileRegion(@2, @3),
+					     VpiDir::Output, $4);
+  parser.reg_attrinst(head, $1);
+  $$ = PtIODList::new_obj(head, $4);
 }
 | udp_declaration_port_list ',' ai_list INPUT port_identifier_item
 {
   $$ = $1;
   auto head = parser.factory().new_IOHead(@4, VpiDir::Input, $5);
   parser.reg_attrinst(head, $3);
-  $$.add_head(head);
+  $$.add_head(head, $5);
 }
 | udp_declaration_port_list ',' port_identifier_item
 {
   $$ = $1;
   $$.add_item($3);
-}
-;
-
-// udp_output_declaration の ';' なしバージョン
-udp_output_port_declaration
-: ai_list OUTPUT port_identifier_item
-{
-  $$ = parser.factory().new_IOHead(@2, VpiDir::Output, $3);
-  parser.reg_attrinst($$, $1);
-}
-| ai_list OUTPUT REG variable_port_identifier_item
-{
-  $$ = parser.factory().new_RegIOHead(FileRegion(@2, @3),
-				      VpiDir::Output, $4);
-  parser.reg_attrinst($$, $1);
 }
 ;
 

@@ -27,7 +27,7 @@ EiPort::EiPort()
 void
 EiPort::init(
   const VlModule* module,
-  const AstPort* ast_port,
+  const AstPort& ast_port,
   SizeType index,
   ElbExpr* low_conn,
   VpiDir dir
@@ -64,7 +64,7 @@ EiPort::type() const
 FileRegion
 EiPort::file_region() const
 {
-  return mAstPort->file_region();
+  return mAstPort.file_region();
 }
 
 // @brief 入出力の区別を得る．
@@ -92,14 +92,14 @@ EiPort::is_conn_by_name() const
 bool
 EiPort::is_explicit_name() const
 {
-  return mAstPort->ext_name() != nullptr;
+  return mAstPort.ext_name() != nullptr;
 }
 
 // @brief 名前を返す．
 std::string
 EiPort::name() const
 {
-  return mAstPort->ext_name();
+  return mAstPort.ext_name();
 }
 
 // @brief 親のモジュールを取出す

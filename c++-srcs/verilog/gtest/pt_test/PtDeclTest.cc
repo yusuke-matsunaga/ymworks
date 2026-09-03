@@ -26,7 +26,7 @@ TEST_F(PtDeclTest, IOHead1)
 		   VpiNetType::None,
 		   VpiVarType::None,
 		   false, nullptr,
-		   std::vector<const AstIOItem*>{item});
+		   std::vector<const PtIOItem*>{item});
     }
   }
 }
@@ -49,7 +49,7 @@ TEST_F(PtDeclTest, IOHead2)
 		   VpiNetType::None,
 		   VpiVarType::None,
 		   sign, range,
-		   std::vector<const AstIOItem*>{item});
+		   std::vector<const PtIOItem*>{item});
     }
   }
 }
@@ -69,7 +69,7 @@ TEST_F(PtDeclTest, RegIOHead)
 		   VpiNetType::None,
 		   VpiVarType::None,
 		   false, nullptr,
-		   std::vector<const AstIOItem*>{item});
+		   std::vector<const PtIOItem*>{item});
     }
   }
 }
@@ -92,7 +92,7 @@ TEST_F(PtDeclTest, RegIOHead2)
 		   VpiNetType::None,
 		   VpiVarType::None,
 		   sign, range,
-		   std::vector<const AstIOItem*>{item});
+		   std::vector<const PtIOItem*>{item});
     }
   }
 }
@@ -116,7 +116,7 @@ TEST_F(PtDeclTest, NetIOHead)
 		     net,
 		     VpiVarType::None,
 		     false, nullptr,
-		     std::vector<const AstIOItem*>{item});
+		     std::vector<const PtIOItem*>{item});
       }
     }
   }
@@ -144,7 +144,7 @@ TEST_F(PtDeclTest, NetIOHead2)
 		     net,
 		     VpiVarType::None,
 		     sign, range,
-		     std::vector<const AstIOItem*>{item});
+		     std::vector<const PtIOItem*>{item});
       }
     }
   }
@@ -166,7 +166,7 @@ TEST_F(PtDeclTest, VarIOHead)
 		   VpiNetType::None,
 		   var,
 		   false, nullptr,
-		   std::vector<const AstIOItem*>{item});
+		   std::vector<const PtIOItem*>{item});
     }
   }
 }
@@ -208,7 +208,7 @@ TEST_F(PtDeclTest, ParamH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{item});
+		 std::vector<const PtDeclItem*>{item});
 }
 
 TEST_F(PtDeclTest, ParamH2)
@@ -232,7 +232,7 @@ TEST_F(PtDeclTest, ParamH2)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -255,7 +255,7 @@ TEST_F(PtDeclTest, ParamH3)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -276,7 +276,7 @@ TEST_F(PtDeclTest, LocalParamH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{item});
+		 std::vector<const PtDeclItem*>{item});
 }
 
 TEST_F(PtDeclTest, LocalParamH2)
@@ -300,7 +300,7 @@ TEST_F(PtDeclTest, LocalParamH2)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -324,7 +324,7 @@ TEST_F(PtDeclTest, LocalParamH3)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -345,7 +345,7 @@ TEST_F(PtDeclTest, SpecParamH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{item});
+		 std::vector<const PtDeclItem*>{item});
 }
 
 TEST_F(PtDeclTest, SpecParamH2)
@@ -368,7 +368,7 @@ TEST_F(PtDeclTest, SpecParamH2)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{item});
+		 std::vector<const PtDeclItem*>{item});
 }
 
 TEST_F(PtDeclTest, EventH)
@@ -388,7 +388,7 @@ TEST_F(PtDeclTest, EventH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{item});
+		 std::vector<const PtDeclItem*>{item});
 }
 
 TEST_F(PtDeclTest, GenvarH)
@@ -408,7 +408,7 @@ TEST_F(PtDeclTest, GenvarH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{item});
+		 std::vector<const PtDeclItem*>{item});
 }
 
 TEST_F(PtDeclTest, VarH)
@@ -431,7 +431,7 @@ TEST_F(PtDeclTest, VarH)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -452,7 +452,7 @@ TEST_F(PtDeclTest, RegH)
 		 VpiVsType::None,
 		 nullptr,
 		 nullptr,
-		 std::vector<const AstDeclItem*>{item});
+		 std::vector<const PtDeclItem*>{item});
 }
 
 TEST_F(PtDeclTest, RegH2)
@@ -476,7 +476,7 @@ TEST_F(PtDeclTest, RegH2)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -501,7 +501,7 @@ TEST_F(PtDeclTest, NetH)
 		   VpiVsType::None,
 		   nullptr,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -530,7 +530,7 @@ TEST_F(PtDeclTest, NetHS)
 		   VpiVsType::None,
 		   str,
 		   nullptr,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -559,7 +559,7 @@ TEST_F(PtDeclTest, NetHD)
 		   VpiVsType::None,
 		   nullptr,
 		   delay,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -592,7 +592,7 @@ TEST_F(PtDeclTest, NetHSD)
 		   VpiVsType::None,
 		   str,
 		   delay,
-		   std::vector<const AstDeclItem*>{item});
+		   std::vector<const PtDeclItem*>{item});
   }
 }
 
@@ -622,7 +622,7 @@ TEST_F(PtDeclTest, NetH2)
 		       vs,
 		       nullptr,
 		       nullptr,
-		       std::vector<const AstDeclItem*>{item});
+		       std::vector<const PtDeclItem*>{item});
       }
     }
   }
@@ -658,7 +658,7 @@ TEST_F(PtDeclTest, NetHS2)
 		       vs,
 		       str,
 		       nullptr,
-		       std::vector<const AstDeclItem*>{item});
+		       std::vector<const PtDeclItem*>{item});
       }
     }
   }
@@ -694,7 +694,7 @@ TEST_F(PtDeclTest, NetHD2)
 		       vs,
 		       nullptr,
 		       delay,
-		       std::vector<const AstDeclItem*>{item});
+		       std::vector<const PtDeclItem*>{item});
       }
     }
   }
@@ -734,7 +734,7 @@ TEST_F(PtDeclTest, NetHSD2)
 		       vs,
 		       str,
 		       delay,
-		       std::vector<const AstDeclItem*>{item});
+		       std::vector<const PtDeclItem*>{item});
       }
     }
   }

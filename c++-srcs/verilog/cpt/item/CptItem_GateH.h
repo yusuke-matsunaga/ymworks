@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,7 +26,7 @@ public:
   CptItem_GateH(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    PtInst* inst_top
+    const PtInst* inst_top
   ) : mFileRegion{file_region},
       mPrimType{prim_type},
       mInstTop{inst_top}
@@ -40,7 +39,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
@@ -48,26 +47,26 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
   /// @brief strength の取得
   /// @return 信号強度
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
   /// @brief delay の取得
   /// @return 遅延
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
   /// @brief プリミティブタイプを返す．
   VpiPrimType
   prim_type() const override;
 
-  /// @brief module/UDP/gate instance リストの取得
-  AstInstList
-  inst_list() const override;
+  /// @brief module/UDP/gate instance リストの先頭の取得
+  const PtInst*
+  inst_top() const override;
 
 
 private:
@@ -82,7 +81,7 @@ private:
   VpiPrimType mPrimType;
 
   // 要素の先頭
-  const AstInst* mInstTop;
+  const PtInst* mInstTop;
 
 };
 
@@ -100,8 +99,8 @@ public:
   CptItem_GateHS(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    const AstStrength* strength,
-    PtInst* inst_top
+    const PtStrength* strength,
+    const PtInst* inst_top
   ) : CptItem_GateH(file_region, prim_type, inst_top),
       mStrength{strength}
   {
@@ -113,11 +112,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
 
@@ -127,7 +126,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const AstStrength* mStrength;
+  const PtStrength* mStrength;
 
 };
 
@@ -145,8 +144,8 @@ public:
   CptItem_GateHD(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    const AstDelay* delay,
-    PtInst* inst_top
+    const PtDelay* delay,
+    const PtInst* inst_top
   ) : CptItem_GateH(file_region, prim_type, inst_top),
       mDelay{delay}
   {
@@ -158,11 +157,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief delay を返す．
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
 
@@ -172,7 +171,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // delay
-  const AstDelay* mDelay;
+  const PtDelay* mDelay;
 
 };
 
@@ -190,9 +189,9 @@ public:
   CptItem_GateHSD(
     const FileRegion& file_region,
     VpiPrimType prim_type,
-    const AstStrength* strength,
-    const AstDelay* delay,
-    PtInst* inst_top
+    const PtStrength* strength,
+    const PtDelay* delay,
+    const PtInst* inst_top
   ) : CptItem_GateH(file_region, prim_type, inst_top),
       mStrength{strength},
       mDelay{delay}
@@ -205,15 +204,15 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
   /// @brief delay を返す．
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
 
@@ -223,10 +222,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const AstStrength* mStrength;
+  const PtStrength* mStrength;
 
   // delay
-  const AstDelay* mDelay;
+  const PtDelay* mDelay;
 
 };
 

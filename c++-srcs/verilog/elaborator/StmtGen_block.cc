@@ -55,7 +55,7 @@ StmtGen::instantiate_parblock(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   auto stmt_list = instantiate_stmt_list(parent, process, env, ast_stmt);
@@ -68,7 +68,7 @@ StmtGen::instantiate_seqblock(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   auto stmt_list = instantiate_stmt_list(parent, process, env, ast_stmt);
@@ -81,10 +81,10 @@ StmtGen::instantiate_namedparblock(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto block = mgr().find_namedobj(parent, ast_stmt->name());
+  auto block = mgr().find_namedobj(parent, ast_stmt.name());
   if ( block == nullptr ) {
     throw std::logic_error{"block == nullptr"};
   }
@@ -99,10 +99,10 @@ StmtGen::instantiate_namedseqblock(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  auto block = mgr().find_namedobj(parent, ast_stmt->name());
+  auto block = mgr().find_namedobj(parent, ast_stmt.name());
   if ( block == nullptr ) {
     throw std::logic_error{"block == nullptr"};
   }
@@ -117,13 +117,13 @@ StmtGen::instantiate_stmt_list(
   const VlScope* parent,
   const VlProcess* process,
   const ElbEnv& env,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
-  SizeType stmt_num = ast_stmt->stmt_list().size();
+  auto stmt_num = ast_stmt.stmt_list().size();
   std::vector<const VlStmt*> stmt_list;
   stmt_list.reserve(stmt_num);
-  for ( auto ast_stmt1: ast_stmt->stmt_list() ) {
+  for ( auto ast_stmt1: ast_stmt.stmt_list() ) {
     auto stmt1 = instantiate_stmt(parent, process, env, ast_stmt1);
     if ( !stmt1 ) {
       return std::vector<const VlStmt*>{};
@@ -138,7 +138,7 @@ StmtGen::instantiate_stmt_list(
 const VlScope*
 StmtGen::new_StmtBlockScope(
   const VlScope* parent,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   return mgr().new_StmtBlockScope(parent, ast_stmt);

@@ -40,63 +40,63 @@ public:
   /// @brief UDP とモジュールの内部情報の表示
   void
   put(
-    const std::vector<const AstUdp*>& udp_list,      ///< [in] UDP のリスト
-    const std::vector<const AstModule*>& module_list ///< [in] モジュールのリスト
+    const std::vector<AstUdp>& udp_list,      ///< [in] UDP のリスト
+    const std::vector<AstModule>& module_list ///< [in] モジュールのリスト
   );
 
 
   /// @brief UDP を表示する
   void
   put(
-    const AstUdp* udp ///< [in] UDP
+    const AstUdp& udp ///< [in] UDP
   );
 
   /// @brief UDP テーブルの値を表示する
   void
   put(
     const char* label,  ///< [in] ラベル
-    const AstUdpValue* v ///< [in] テーブルの値
+    const AstUdpValue& v ///< [in] テーブルの値
   );
 
   /// @brief module を表示する
   void
   put(
-    const AstModule* m ///< [in] モジュール
+    const AstModule& m ///< [in] モジュール
   );
 
   /// @brief IO のヘッダを出力する．
   void
   put(
     const char* label, ///< [in] ラベル
-    const AstIOHead* io ///< [in] IOヘッダ
+    const AstIOHead& io ///< [in] IOヘッダ
   );
 
   /// @brief 宣言のヘッダを出力する．
   void
   put(
     const char* label,     ///< [in] ラベル
-    const AstDeclHead* decl ///< [in] 宣言ヘッダ
+    const AstDeclHead& decl ///< [in] 宣言ヘッダ
   );
 
   /// @brief 要素の出力
   void
   put(
     const char* label, ///< [in] ラベル
-    const AstItem* item ///< [in] 要素
+    const AstItem& item ///< [in] 要素
   );
 
   /// @brief ステートメントの出力
   void
   put(
     const char* label, ///< [in] ラベル
-    const AstStmt* stmt ///< [in] ステートメント
+    const AstStmt& stmt ///< [in] ステートメント
   );
 
   /// @brief 式の内容を出力する
   void
   put(
     const char* label, ///< [in] ラベル
-    const AstExpr* expr ///< [in] 式
+    const AstExpr& expr ///< [in] 式
   );
 
 
@@ -127,7 +127,7 @@ private:
   /// @brief ポート結線式を出力する．
   void
   put_portref(
-    const AstExpr* expr,
+    const AstExpr& expr,
     VpiDir dir
   );
 
@@ -151,7 +151,7 @@ private:
   put(
     const char* left_label,  ///< [in] 左側の範囲のラベル
     const char* right_label, ///< [in] 右側の範囲のラベル
-    const AstRange* range    ///< [in] 範囲
+    const AstRange& range    ///< [in] 範囲
   );
 
   /// @brief 階層名の出力
@@ -311,42 +311,42 @@ private:
   void
   put(
     const char* label,         ///< [in] ラベル
-    const AstAttrInst* attr_top ///< [in] 属性インスタンスの先頭
+    const AstAttrInst& attr_top ///< [in] 属性インスタンスの先頭
   );
 
   /// @brief コントロールの内容を表示する．
   void
   put(
     const char* label,    ///< [in] ラベル
-    const AstControl* ctrl ///< [in] コントロール
+    const AstControl& ctrl ///< [in] コントロール
   );
 
   /// @brief strength の内容を表示する．
   void
   put(
     const char* label,    ///< [in] ラベル
-    const AstStrength* str ///< [in] 信号強度
+    const AstStrength& str ///< [in] 信号強度
   );
 
   /// @brief 遅延情報を出力する．
   void
   put(
     const char* label,   ///< [in] ラベル
-    const AstDelay* delay ///< [in] 遅延
+    const AstDelay& delay ///< [in] 遅延
   );
 
   /// @brief 接続情報を表示する．
   void
   put(
     const char* label,      ///< [in] ラベル
-    const AstConnection* con ///< [in] 接続情報
+    const AstConnection& con ///< [in] 接続情報
   );
 
   /// @brief 階層ブランチの情報を出力する
   void
   put(
     const char* label,     ///< [in] ラベル
-    const AstNameBranch* nb ///< [in] 階層ブランチ
+    const AstNameBranch& nb ///< [in] 階層ブランチ
   );
 
   /// @brief 開始マーカを出力する．

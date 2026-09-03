@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstDeclHead::Type
 CptParamH::type() const
 {
-  return Param;
+  return AstDeclHead::Param;
 }
 
 
@@ -33,7 +33,7 @@ CptParamH::type() const
 AstDeclHead::Type
 CptLocalParamH::type() const
 {
-  return LocalParam;
+  return AstDeclHead::LocalParam;
 }
 
 
@@ -50,7 +50,7 @@ CptParamHV::is_signed() const
 }
 
 // 範囲の取得
-const AstRange*
+const PtRange*
 CptParamHV::range() const
 {
   return mRange;
@@ -78,7 +78,7 @@ CptParamHSV::is_signed() const
 AstDeclHead::Type
 CptLocalParamHV::type() const
 {
-  return LocalParam;
+  return AstDeclHead::LocalParam;
 }
 
 
@@ -90,7 +90,7 @@ CptLocalParamHV::type() const
 AstDeclHead::Type
 CptLocalParamHSV::type() const
 {
-  return LocalParam;
+  return AstDeclHead::LocalParam;
 }
 
 
@@ -102,7 +102,7 @@ CptLocalParamHSV::type() const
 AstDeclHead::Type
 CptParamHT::type() const
 {
-  return Param;
+  return AstDeclHead::Param;
 }
 
 // @brief 符号の取得
@@ -135,7 +135,7 @@ CptParamHT::data_type() const
 AstDeclHead::Type
 CptLocalParamHT::type() const
 {
-  return LocalParam;
+  return AstDeclHead::LocalParam;
 }
 
 
@@ -147,7 +147,7 @@ CptLocalParamHT::type() const
 AstDeclHead::Type
 CptSpecParamH::type() const
 {
-  return SpecParam;
+  return AstDeclHead::SpecParam;
 }
 
 
@@ -156,7 +156,7 @@ CptSpecParamH::type() const
 //////////////////////////////////////////////////////////////////////
 
 // 範囲の取得
-const AstRange*
+const PtRange*
 CptSpecParamHV::range() const
 {
   return mRange;
@@ -171,7 +171,7 @@ CptSpecParamHV::range() const
 PtDeclHead*
 PtFactory::new_ParamH(
   const FileRegion& file_region,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptParamH));
@@ -183,8 +183,8 @@ PtDeclHead*
 PtFactory::new_ParamH(
   const FileRegion& file_region,
   bool sign,
-  const AstRange* range,
-  PtDeclItem* item_top
+  const PtRange* range,
+  const PtDeclItem* item_top
 )
 {
   if ( sign ) {
@@ -199,7 +199,7 @@ PtFactory::new_ParamH(
 PtDeclHead*
 PtFactory::new_LocalParamH(
   const FileRegion& file_region,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptLocalParamH));
@@ -211,8 +211,8 @@ PtDeclHead*
 PtFactory::new_LocalParamH(
   const FileRegion& file_region,
   bool sign,
-  const AstRange* range,
-  PtDeclItem* item_top
+  const PtRange* range,
+  const PtDeclItem* item_top
 )
 {
   if ( sign ) {
@@ -228,7 +228,7 @@ PtDeclHead*
 PtFactory::new_ParamH(
   const FileRegion& file_region,
   VpiVarType var_type,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptParamHT));
@@ -240,7 +240,7 @@ PtDeclHead*
 PtFactory::new_LocalParamH(
   const FileRegion& file_region,
   VpiVarType var_type,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptLocalParamHT));
@@ -251,7 +251,7 @@ PtFactory::new_LocalParamH(
 PtDeclHead*
 PtFactory::new_SpecParamH(
   const FileRegion& file_region,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecParamH));
@@ -262,8 +262,8 @@ PtFactory::new_SpecParamH(
 PtDeclHead*
 PtFactory::new_SpecParamH(
   const FileRegion& file_region,
-  const AstRange* range,
-  PtDeclItem* item_top
+  const PtRange* range,
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecParamHV));

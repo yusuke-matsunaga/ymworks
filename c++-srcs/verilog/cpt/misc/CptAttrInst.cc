@@ -25,36 +25,10 @@ CptAttrInst::file_region() const
 }
 
 // @brief 要素のリストの取得
-AstAttrSpecList
-CptAttrInst::attrspec_list() const
+const PtAttrSpec*
+CptAttrInst::attrspec_top() const
 {
-  return AstAttrSpecList(mAttrSpecTop);
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス AttrSpec
-//////////////////////////////////////////////////////////////////////
-
-// ファイル位置を返す．
-FileRegion
-CptAttrSpec::file_region() const
-{
-  return mFileRegion;
-}
-
-// 名前を取り出す．
-const char*
-CptAttrSpec::name() const
-{
-  return mName;
-}
-
-// 式を取り出す．nullptr の場合もある．
-const AstExpr*
-CptAttrSpec::expr() const
-{
-  return mExpr;
+  return mAttrSpecTop;
 }
 
 
@@ -66,34 +40,11 @@ CptAttrSpec::expr() const
 PtAttrInst*
 PtFactory::new_AttrInst(
   const FileRegion& file_region,
-  PtAttrSpec* as_top
+  const PtAttrSpec* as_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptAttrInst));
   return new (p) CptAttrInst(file_region, as_top);
-}
-
-// attribute spec を生成する．
-PtAttrSpec*
-PtFactory::new_AttrSpec(
-  const FileRegion& file_region,
-  const char* name
-)
-{
-  void* p = mAlloc.get_memory(sizeof(CptAttrSpec));
-  return new (p) CptAttrSpec(file_region, name, nullptr);
-}
-
-// attribute spec を生成する．
-PtAttrSpec*
-PtFactory::new_AttrSpec(
-  const FileRegion& file_region,
-  const char* name,
-  const AstExpr* expr
-)
-{
-  void* p = mAlloc.get_memory(sizeof(CptAttrSpec));
-  return new (p) CptAttrSpec(file_region, name, expr);
 }
 
 END_NAMESPACE_YM_VERILOG

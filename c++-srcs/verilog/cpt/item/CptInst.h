@@ -8,8 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtItem.h"
-#include "parser/PtMisc.h"
+#include "parser/PtInst.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,7 +24,7 @@ public:
   /// @brief コンストラクタ
   CptInst(
     const FileRegion& file_region,
-    PtConnection* con_top
+    const PtConnection* con_top
   ) : mFileRegion{file_region},
       mPortTop{con_top}
   {
@@ -51,12 +50,12 @@ public:
 
   /// @brief 範囲の取得
   /// @return 範囲
-  const AstRange*
+  const PtRange*
   range() const override;
 
-  /// @brief ポートリストの取得
-  AstConnectionList
-  port_list() const override;
+  /// @brief ポートリストの先頭の取得
+  const PtConnection*
+  port_top() const override;
 
 
 private:
@@ -68,7 +67,7 @@ private:
   FileRegion mFileRegion;
 
   // ポート割り当ての先頭
-  PtConnection* mPortTop;
+  const PtConnection* mPortTop;
 
 };
 
@@ -85,7 +84,7 @@ public:
   CptInstN(
     const FileRegion& file_region,
     const char* name,
-    PtConnection* con_top
+    const PtConnection* con_top
   ) : CptInst(file_region, con_top),
       mName{name}
   {
@@ -128,8 +127,8 @@ public:
   CptInstR(
     const FileRegion& file_region,
     const char* name,
-    const AstRange* range,
-    PtConnection* con_top
+    const PtRange* range,
+    const PtConnection* con_top
   ) : CptInstN(file_region, name, con_top),
       mRange{range}
   {
@@ -145,7 +144,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 範囲を取出す．
-  const AstRange*
+  const PtRange*
   range() const override;
 
 
@@ -155,7 +154,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const AstRange* mRange;
+  const PtRange* mRange;
 
 };
 

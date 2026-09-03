@@ -25,7 +25,7 @@ public:
   // コンストラクタ
   CptOpr1(
     const FileRegion& file_region,
-    const AstExpr* opr
+    const PtExpr* opr
   ) : mFileRegion{file_region},
       mOpr{opr}
   {
@@ -40,7 +40,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // ファイル位置を返す．
@@ -55,8 +55,12 @@ public:
   int
   index_value() const override;
 
+  /// @brief 固定オペランド数の取得
+  SizeType
+  operand_num() const override;
+
   /// @brief 0番目のオペランドの取得
-  const AstExpr*
+  const PtExpr*
   operand0() const override;
 
 
@@ -69,7 +73,7 @@ private:
   FileRegion mFileRegion;
 
   // オペランド
-  const AstExpr* mOpr;
+  const PtExpr* mOpr;
 
 };
 

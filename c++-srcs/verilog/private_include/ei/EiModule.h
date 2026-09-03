@@ -11,6 +11,7 @@
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbModuleArray.h"
 #include "ei/EiRange.h"
+#include "ym/vl/AstInst.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -30,10 +31,10 @@ public:
 
   /// @brief コンストラクタ
   EiModuleHead(
-    const VlScope* parent,     ///< [in] 親のスコープ
-    const AstModule* ast_module, ///< [in] モジュールテンプレート
-    const AstItem* ast_head,     ///< [in] パース木のヘッダ定義
-    const AstInst* ast_inst      ///< [in] インスタンス定義
+    const VlScope* parent,       ///< [in] 親のスコープ
+    const AstModule& ast_module, ///< [in] モジュールテンプレート
+    const AstItem& ast_head,     ///< [in] パース木のヘッダ定義
+    const AstInst& ast_inst      ///< [in] インスタンス定義
   );
 
   /// @brief デストラクタ
@@ -139,13 +140,13 @@ private:
   const VlScope* mParent;
 
   // パース木のモジュール定義
-  const AstModule* mAstModule;
+  AstModule mAstModule;
 
   // パース木のヘッダ定義
-  const AstItem* mAstHead;
+  AstItem mAstHead;
 
   // パース木のモジュールインスタンス定義
-  const AstInst* mAstInst;
+  AstInst mAstInst;
 
 };
 
@@ -315,18 +316,18 @@ public:
   /// @brief 入出力を追加する．
   void
   add_iodecl(
-    ElbIOHead* head,         ///< [in] ヘッダ
-    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
-    const VlDecl* decl       ///< [in] 対応する宣言要素
+    ElbIOHead* head,           ///< [in] ヘッダ
+    const AstIOItem& ast_item, ///< [in] パース木のIO宣言要素
+    const VlDecl* decl         ///< [in] 対応する宣言要素
   ) override;
 
   /// @brief ポートの初期設定を行う．
   void
   init_port(
-    SizeType index,        ///< [in] ポート番号
-    const AstPort* ast_port, ///< [in] パース木のポート定義
-    ElbExpr* low_conn,     ///< [in] 下位の接続
-    VpiDir dir             ///< [in] 向き
+    SizeType index,          ///< [in] ポート番号
+    const AstPort& ast_port, ///< [in] パース木のポート定義
+    ElbExpr* low_conn,       ///< [in] 下位の接続
+    VpiDir dir               ///< [in] 向き
   ) override;
 
   /// @brief ポートの high_conn を接続する．
@@ -472,10 +473,10 @@ public:
 
   /// @brief コンストラクタ
   EiModule2(
-    const VlScope* parent,     ///< [in] 親のスコープ
-    const AstModule* ast_module, ///< [in] モジュールテンプレート
-    const AstItem* ast_head,     ///< [in] パース木のヘッダ定義
-    const AstInst* ast_inst      ///< [in] パース木のインスタンス定義
+    const VlScope* parent,       ///< [in] 親のスコープ
+    const AstModule& ast_module, ///< [in] モジュールテンプレート
+    const AstItem& ast_head,     ///< [in] パース木のヘッダ定義
+    const AstInst& ast_inst      ///< [in] パース木のインスタンス定義
   );
 
   /// @brief デストラクタ
@@ -546,12 +547,12 @@ public:
 
   /// @brief コンストラクタ
   EiModuleArray(
-    const VlScope* parent,     ///< [in] 親のスコープ
-    const AstModule* ast_module, ///< [in] モジュールテンプレート
-    const AstItem* ast_head,     ///< [in] パース木のヘッダ定義
-    const AstInst* ast_inst,     ///< [in] パース木のインスタンス定義
-    const AstRange* ast_range,   ///< [in] パース木の範囲定義
-    const RangeVal& range      ///< [in] 範囲の値
+    const VlScope* parent,       ///< [in] 親のスコープ
+    const AstModule& ast_module, ///< [in] モジュールテンプレート
+    const AstItem& ast_head,     ///< [in] パース木のヘッダ定義
+    const AstInst& ast_inst,     ///< [in] パース木のインスタンス定義
+    const AstRange& ast_range,   ///< [in] パース木の範囲定義
+    const RangeVal& range        ///< [in] 範囲の値
   );
 
   /// @brief デストラクタ

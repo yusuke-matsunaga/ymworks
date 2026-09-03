@@ -8,7 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtMisc.h"
+#include "parser/PtNameBranch.h"
 #include "ym/FileRegion.h"
 
 
@@ -35,7 +35,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstNameBranch の仮想関数
+  // PtNameBranch の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 名前を取り出す．

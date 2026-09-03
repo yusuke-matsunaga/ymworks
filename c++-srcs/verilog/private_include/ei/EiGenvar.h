@@ -25,9 +25,9 @@ public:
 
   /// @brief コンストラクタ
   EiGenvar(
-    const VlScope* parent,     ///< [in] 親のスコープ
-    const AstDeclItem* ast_item, ///< [in] パース木の定義要素
-    int val                    ///< [in] 初期値
+    const VlScope* parent,       ///< [in] 親のスコープ
+    const AstDeclItem& ast_item, ///< [in] パース木の定義要素
+    int val                      ///< [in] 初期値
   );
 
   /// @brief デストラクタ
@@ -90,7 +90,7 @@ public:
   ) override;
 
   /// @brief 元となったパース木の定義要素を返す．
-  const AstDeclItem*
+  AstDeclItem
   ast_item() const override;
 
 
@@ -103,7 +103,7 @@ private:
   const VlScope* mParent;
 
   // パース木の定義要素
-  const AstDeclItem* mAstItem;
+  AstDeclItem mAstItem;
 
   // 使用中の時に true にする flag
   bool mInUse;

@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "parser/PtExpr.h"
-#include "parser/PtMisc.h"
 #include "ym/FileRegion.h"
 
 
@@ -23,59 +22,59 @@ class CptExpr :
 {
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstHierNamedBase の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  /// @brief 階層ブランチのリストの先頭を返す．
+  const PtNameBranch*
+  namebranch_top() const override;
 
   // 末尾の名前を返す．
   const char*
   name() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
 
   /// @brief 演算子の種類の取得
   /// @return 演算子の種類
   VpiOpType
   op_type() const override;
 
+  /// @brief 固定オペランド数の取得
+  ///
+  /// - 演算以外は std::logic_error 例外を送出する．
+  SizeType
+  operand_num() const override;
+
   /// @brief 0番目のオペランドの取得
   ///
   /// - 単項，二項，三項演算以外は std::logic_error 例外を送出する．
-  const AstExpr*
+  const PtExpr*
   operand0() const override;
 
   /// @brief 1番目のオペランドの取得
   ///
   /// - 二項，三項演算以外は std::logic_error 例外を送出する．
-  const AstExpr*
+  const PtExpr*
   operand1() const override;
 
   /// @brief 2番目のオペランドの取得
   ///
   /// - 三項演算以外は std::logic_error 例外を送出する．
-  const AstExpr*
+  const PtExpr*
   operand2() const override;
 
-  /// @brief オペランドのリストの取得
-  AstExprList
-  operand_list() const override;
+  /// @brief オペランドのリストの先頭の取得
+  const PtExpr*
+  operand_top() const override;
 
   /// @brief multi-concat の繰り返し数
   ///
   /// - type() != Opr および op_type() != MultiConcat の時 std::logic 例外を送出する．
-  const AstExpr*
+  const PtExpr*
   rep() const override;
 
-  /// @brief 引数リストの取得
-  AstExprList
-  arg_list() const override;
+  /// @brief 引数リストの先頭の取得
+  const PtExpr*
+  arg_top() const override;
 
   /// @brief 定数インデックスのチェック
   /// @retval true インデックスもしくは範囲が定数にならなければならないとき
@@ -83,13 +82,13 @@ public:
   bool
   is_const_index() const override;
 
-  /// @brief インデックスリストの取得
-  AstExprList
-  index_list() const override;
+  /// @brief インデックスリストの先頭の取得
+  const PtExpr*
+  index_top() const override;
 
   /// @brief 範囲指定を表す構文木を返す．
   /// @return 範囲指定
-  const AstPart*
+  const PtPart*
   part() const override;
 
   /// @brief 定数の種類の取得

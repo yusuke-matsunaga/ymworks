@@ -9,7 +9,9 @@
 #include "CptModule.h"
 #include "alloc/Alloc.h"
 #include "parser/PtPort.h"
-#include "parser/PtDecl.h"
+#include "parser/PtIOHead.h"
+#include "parser/PtDeclHead.h"
+#include "parser/PtItem.h"
 #include "parser/PtFactory.h"
 
 
@@ -38,11 +40,11 @@ CptModule::CptModule(
   const std::string& config,
   const std::string& library,
   const std::string& cell,
-  const AstDeclHead* paramport_top,
-  const AstPort* port_top,
-  const AstIOHead* iohead_top,
-  const AstDeclHead* declhead_top,
-  const AstItem* item_top
+  const PtDeclHead* paramport_top,
+  const PtPort* port_top,
+  const PtIOHead* iohead_top,
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 ) : mFileRegion{file_region},
     mName{name},
     mDefDecayTime{decay},
@@ -71,8 +73,8 @@ CptModule::CptModule(
     ;
 
   mIODeclNum = 0;
-  for ( auto head: AstIOHeadList(mIOHeadTop) ) {
-    mIODeclNum += head->item_list().size();
+  for ( auto head = iohead_top; head != nullptr; head = head->link() ) {
+    mIODeclNum += AstIOItemList(AstIOItem(head->item_top())).size();
   }
 }
 
@@ -96,24 +98,24 @@ CptModule::name() const
 }
 
 // @brief パラメータポート宣言のリストの取得
-AstDeclHeadList
-CptModule::paramport_list() const
+const PtDeclHead*
+CptModule::paramport_top() const
 {
-  return AstDeclHeadList(mParamPortTop);
+  return mParamPortTop;
 }
 
 // @brief ポートのリストを返す．
-AstPortList
-CptModule::port_list() const
+const PtPort*
+CptModule::port_top() const
 {
-  return AstPortList(mPortTop);
+  return mPortTop;
 }
 
 // @brief 入出力宣言のヘッダのリストを返す．
-AstIOHeadList
-CptModule::iohead_list() const
+const PtIOHead*
+CptModule::iohead_top() const
 {
-  return AstIOHeadList(mIOHeadTop);
+  return mIOHeadTop;
 }
 
 // @brief 入出力宣言の要素数の取得
@@ -124,17 +126,17 @@ CptModule::iodecl_num() const
 }
 
 // @brief 宣言ヘッダのリストを返す．
-AstDeclHeadList
-CptModule::declhead_list() const
+const PtDeclHead*
+CptModule::declhead_top() const
 {
-  return AstDeclHeadList(mDeclHeadTop);
+  return mDeclHeadTop;
 }
 
 // @brief item のリストを返す．
-AstItemList
-CptModule::item_list() const
+const PtItem*
+CptModule::item_top() const
 {
-  return AstItemList(mItemTop);
+  return mItemTop;
 }
 
 // macromodule の時 true を返す．
@@ -309,11 +311,11 @@ PtFactory::new_Module(
   const std::string& config,
   const std::string& library,
   const std::string& cell,
-  PtDeclHead* paramport_top,
-  PtPort* port_top,
-  PtIOHead* iohead_top,
-  PtDeclHead* decl_top,
-  PtItem* item_top
+  const PtDeclHead* paramport_top,
+  const PtPort* port_top,
+  const PtIOHead* iohead_top,
+  const PtDeclHead* decl_top,
+  const PtItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptModule));

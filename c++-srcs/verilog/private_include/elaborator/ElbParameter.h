@@ -147,7 +147,7 @@ public:
 
   /// @brief 値の取得
   virtual
-  const AstExpr*
+  AstExpr
   init_expr() const = 0;
 
   /// @brief 値の取得
@@ -159,7 +159,7 @@ public:
   virtual
   void
   set_init_expr(
-    const AstExpr* expr, ///< [in] 値を表す式
+    const AstExpr& expr, ///< [in] 値を表す式
     const VlValue& value ///< [in] 値
   ) = 0;
 

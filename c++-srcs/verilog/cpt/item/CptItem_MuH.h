@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
-#include "parser/PtMisc.h"
+//#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,7 +27,7 @@ public:
   CptItem_MuH(
     const FileRegion& file_region,
     const char* def_name,
-    PtInst* inst_top
+    const PtInst* inst_top
   ) : mFileRegion{file_region},
       mName{def_name},
       mInstTop{inst_top}
@@ -48,28 +48,28 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
   /// @brief 定義名を返す．
   const char*
   name() const override;
 
-  /// @brief パラメータ割り当てのリストの取得
-  AstConnectionList
-  paramassign_list() const override;
+  /// @brief パラメータ割り当てのリストの先頭の取得
+  const PtConnection*
+  paramassign_top() const override;
 
   /// @brief strength を返す．
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
   /// @brief delay を返す．
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
-  /// @brief module/UDP/gate instance リストの取得
-  AstInstList
-  inst_list() const override;
+  /// @brief module/UDP/gate instance リストの先頭の取得
+  const PtInst*
+  inst_top() const override;
 
 
 private:
@@ -84,7 +84,7 @@ private:
   const char* mName;
 
   // 要素の先頭
-  const AstInst* mInstTop;
+  const PtInst* mInstTop;
 
 };
 
@@ -101,8 +101,8 @@ public:
   CptItem_MuHP(
     const FileRegion& file_region,
     const char* def_name,
-    PtConnection* con_top,
-    PtInst* inst_top
+    const PtConnection* con_top,
+    const PtInst* inst_top
   ) : CptItem_MuH(file_region, def_name, inst_top),
       mParamAssignTop{con_top}
   {
@@ -117,9 +117,9 @@ public:
   // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief パラメータ割り当てのリストの取得
-  AstConnectionList
-  paramassign_list() const override;
+  /// @brief パラメータ割り当てのリストの先頭の取得
+  const PtConnection*
+  paramassign_top() const override;
 
 
 private:
@@ -128,7 +128,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パラメータ割り当ての先頭
-  PtConnection* mParamAssignTop;
+  const PtConnection* mParamAssignTop;
 
 };
 
@@ -145,8 +145,8 @@ public:
   CptItem_MuHS(
     const FileRegion& file_region,
     const char* def_name,
-    const AstStrength* strength,
-    PtInst* inst_top
+    const PtStrength* strength,
+    const PtInst* inst_top
   ) : CptItem_MuH(file_region, def_name, inst_top),
       mStrength{strength}
   {
@@ -162,7 +162,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
 
@@ -172,7 +172,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const AstStrength* mStrength;
+  const PtStrength* mStrength;
 
 };
 
@@ -189,8 +189,8 @@ public:
   CptItem_MuHD(
     const FileRegion& file_region,
     const char* def_name,
-    const AstDelay* delay,
-    PtInst* inst_top
+    const PtDelay* delay,
+    const PtInst* inst_top
   ) : CptItem_MuH(file_region, def_name, inst_top),
       mDelay{delay}
   {
@@ -206,7 +206,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief delay を返す．
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
 
@@ -216,7 +216,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // delay
-  const AstDelay* mDelay;
+  const PtDelay* mDelay;
 
 };
 
@@ -233,9 +233,9 @@ public:
   CptItem_MuHSD(
     const FileRegion& file_region,
     const char* def_name,
-    const AstStrength* strength,
-    const AstDelay* delay,
-    PtInst* inst_top
+    const PtStrength* strength,
+    const PtDelay* delay,
+    const PtInst* inst_top
   ) : CptItem_MuH(file_region, def_name, inst_top),
       mStrength{strength},
       mDelay{delay}
@@ -252,11 +252,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
   /// @brief delay を返す．
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
 
@@ -266,10 +266,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const AstStrength* mStrength;
+  const PtStrength* mStrength;
 
   // delay
-  const AstDelay* mDelay;
+  const PtDelay* mDelay;
 
 };
 

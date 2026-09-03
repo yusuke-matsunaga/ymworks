@@ -9,7 +9,7 @@
 #include "CptItem_TaskFunc.h"
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
-#include "parser/PtDecl.h"
+//#include "parser/PtDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -40,10 +40,10 @@ CptItem_TaskFunc::automatic() const
 }
 
 // @brief IO宣言ヘッダリストの取得
-AstIOHeadList
-CptItem_TaskFunc::iohead_list() const
+const PtIOHead*
+CptItem_TaskFunc::iohead_top() const
 {
-  return AstIOHeadList(mIOHeadTop);
+  return mIOHeadTop;
 }
 
 // @brief IO宣言の要素数の取得
@@ -54,14 +54,14 @@ CptItem_TaskFunc::ioitem_num() const
 }
 
 // @brief 宣言ヘッダリストの取得
-AstDeclHeadList
-CptItem_TaskFunc::declhead_list() const
+const PtDeclHead*
+CptItem_TaskFunc::declhead_top() const
 {
-  return AstDeclHeadList(mDeclHeadTop);
+  return mDeclHeadTop;
 }
 
 // 本体を取り出す．
-const AstStmt*
+const PtStmt*
 CptItem_TaskFunc::body() const
 {
   return mBody;
@@ -76,7 +76,7 @@ CptItem_TaskFunc::body() const
 AstItem::Type
 CptItem_Task::type() const
 {
-  return Task;
+  return AstItem::Task;
 }
 
 
@@ -88,7 +88,7 @@ CptItem_Task::type() const
 AstItem::Type
 CptItem_Function::type() const
 {
-  return Func;
+  return AstItem::Func;
 }
 
 // 符号の有無を返す．
@@ -99,7 +99,7 @@ CptItem_Function::is_signed() const
 }
 
 // @brief 範囲の取得
-const AstRange*
+const PtRange*
 CptItem_Function::range() const
 {
   return nullptr;
@@ -139,7 +139,7 @@ CptItem_Function::is_in_use() const
 //////////////////////////////////////////////////////////////////////
 
 // 範囲を得る．
-const AstRange*
+const PtRange*
 CptItem_SizedFunc::range() const
 {
   return mRange;
@@ -168,9 +168,9 @@ PtFactory::new_Task(
   const FileRegion& file_region,
   const char* name,
   bool automatic,
-  PtIOHead* iohead_top,
-  PtDeclHead* declhead_top,
-  const AstStmt* stmt
+  const PtIOHead* iohead_top,
+  const PtDeclHead* declhead_top,
+  const PtStmt* stmt
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_Task));
@@ -185,9 +185,9 @@ PtFactory::new_Function(
   const FileRegion& file_region,
   const char* name,
   bool automatic,
-  PtIOHead* iohead_top,
-  PtDeclHead* declhead_top,
-  const AstStmt* stmt
+  const PtIOHead* iohead_top,
+  const PtDeclHead* declhead_top,
+  const PtStmt* stmt
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_Function));
@@ -203,10 +203,10 @@ PtFactory::new_SizedFunc(
   const char* name,
   bool automatic,
   bool sign,
-  const AstRange* range,
-  PtIOHead* iohead_top,
-  PtDeclHead* declhead_top,
-  const AstStmt* stmt
+  const PtRange* range,
+  const PtIOHead* iohead_top,
+  const PtDeclHead* declhead_top,
+  const PtStmt* stmt
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_SizedFunc));
@@ -225,9 +225,9 @@ PtFactory::new_TypedFunc(
   bool automatic,
   bool sign,
   VpiVarType func_type,
-  PtIOHead* iohead_top,
-  PtDeclHead* declhead_top,
-  const AstStmt* stmt
+  const PtIOHead* iohead_top,
+  const PtDeclHead* declhead_top,
+  const PtStmt* stmt
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_TypedFunc));

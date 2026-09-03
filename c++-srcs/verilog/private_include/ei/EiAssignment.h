@@ -33,7 +33,7 @@ protected:
   EiAssignBase(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* lhs,        ///< [in] 左辺の式
     const VlExpr* rhs         ///< [in] 右辺の式
   );
@@ -84,7 +84,7 @@ public:
   EiNbAssignment(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* lhs,	      ///< [in] 左辺の式
     const VlExpr* rhs,	      ///< [in] 右辺の式
     const VlControl* control  ///< [in] コントロール
@@ -139,7 +139,7 @@ public:
   EiAssignment(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* lhs,	      ///< [in] 左辺の式
     const VlExpr* rhs,	      ///< [in] 右辺の式
     const VlControl* control  ///< [in] コントロール
@@ -177,7 +177,7 @@ public:
   EiAssignStmt(
     const VlScope* parent,     ///< [in] 親のスコープ
     const VlProcess* process,  ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,     ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,   ///< [in] パース木のステートメント定義
     const VlExpr* lhs,	       ///< [in] 左辺の式
     const VlExpr* rhs	       ///< [in] 右辺の式
   );
@@ -212,7 +212,7 @@ public:
   EiForceStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* lhs,	      ///< [in] 左辺の式
     const VlExpr* rhs	      ///< [in] 右辺の式
   );
@@ -246,7 +246,7 @@ protected:
   EiDeassignBase(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* lhs	      ///< [in] 左辺の式
   );
 
@@ -289,7 +289,7 @@ public:
   EiDeassignStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* lhs	      ///< [in] 左辺の式
   );
 
@@ -323,7 +323,7 @@ public:
   EiReleaseStmt(
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
-    const AstStmt* ast_stmt,    ///< [in] パース木のステートメント定義
+    const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
     const VlExpr* lhs	      ///< [in] 左辺の式
   );
 

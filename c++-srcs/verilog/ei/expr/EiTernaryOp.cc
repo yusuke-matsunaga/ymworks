@@ -20,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 3項演算子を生成する．
 ElbExpr*
 EiFactory::new_TernaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr0,
   ElbExpr* opr1,
@@ -47,7 +47,7 @@ EiFactory::new_TernaryOp(
 
 // @brief コンストラクタ
 EiTernaryOp::EiTernaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3
@@ -97,7 +97,7 @@ EiTernaryOp::operand(
 
 // @brief コンストラクタ
 EiConditionOp::EiConditionOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3
@@ -147,7 +147,7 @@ EiConditionOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiMinTypMaxOp::EiMinTypMaxOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2,
   ElbExpr* opr3

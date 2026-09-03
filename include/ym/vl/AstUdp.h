@@ -9,11 +9,11 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
-#include "ym/vl/AstPort.h"
-#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
+
+class PtUdp;
 
 //////////////////////////////////////////////////////////////////////
 /// @class AstUdp AstUdp.h "ym/vl/AstUdp.h"
@@ -22,122 +22,76 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @brief UDP を表すノード
 //////////////////////////////////////////////////////////////////////
 class AstUdp :
-  public AstNamedBase
+  public AstNamedBaseWithPtr<const PtUdp>
 {
-  friend class AstList<const AstUdp>;
-  friend class AstListIter<const AstUdp>;
+public:
+
+  /// @brief コンストラクタ
+  explicit
+  AstUdp(
+    const PtUdp* ptr = nullptr ///< [in] 実体のポインタ
+  ) : AstNamedBaseWithPtr<const PtUdp>(ptr)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~AstUdp() = default;
+
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstUdp の継承クラスが実装しなければならない仮想関数
+  // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
   /// @brief primitive type を返す．
-  virtual
   VpiPrimType
-  prim_type() const = 0;
+  prim_type() const;
 
   /// @brief ポートのリストを取り出す．
-  virtual
   AstPortList
-  port_list() const = 0;
+  port_list() const;
 
   /// @brief 入出力宣言ヘッダのリストの取得
-  virtual
   AstIOHeadList
-  iohead_list() const = 0;
+  iohead_list() const;
 
   /// @brief 初期値を取出す．
-  virtual
-  const AstExpr*
-  init_value() const = 0;
+  AstExpr
+  init_value() const;
 
   /// @brief テーブルのリストを返す．
-  virtual
   AstUdpEntryList
-  table_list() const = 0;
+  table_list() const;
 
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素の取得
-  virtual
-  const AstUdp*
-  link() const = 0;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstUdpEntry AstUdp.h "ym/vl/AstUdp.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief UDP の中身のテーブルを表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstUdpEntry :
-  public AstBase
-{
-  friend class AstList<const AstUdpEntry>;
-  friend class AstListIter<const AstUdpEntry>;
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstUdpEntry の継承クラスが実装しなければならない仮想関数
+  // AstBase の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 入力値のリストを取り出す．
-  virtual
-  AstUdpValueList
-  input_list() const = 0;
+  /// @brief 適切な値を持っている時 true を返す．
+  bool
+  is_valid() const override;
 
-  /// @brief 現状態の値を取り出す．
-  virtual
-  const AstUdpValue*
-  current() const = 0;
+  /// @brief ファイル位置の取得
+  /// @return ファイル位置
+  FileRegion
+  file_region() const override;
 
-  /// @brief 出力の値を取り出す．
-  virtual
-  const AstUdpValue*
-  output() const = 0;
+  /// @brief 比較用のユニークなキーを返す．
+  PtrIntType
+  key() const override;
 
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 次の要素の取得
-  virtual
-  const AstUdpEntry*
-  link() const = 0;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class AstUdpValue AstUdp.h "ym/vl/AstUdp.h"
-/// @ingroup VlParser
-/// @ingroup AstGroup
-/// @brief UDP のテーブルの値を表すクラス
-//////////////////////////////////////////////////////////////////////
-class AstUdpValue :
-  public AstBase
-{
-  friend class AstList<const AstUdpValue>;
-  friend class AstListIter<const AstUdpValue>;
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstUdpValue の継承クラスが実装しなければならない仮想関数
+  // AstNamedBase の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 値を取り出す．
-  virtual
-  VlUdpVal
-  symbol() const = 0;
+  /// @brief 名前の取得
+  /// @return 名前
+  const char*
+  name() const override;
 
 
 private:
@@ -145,10 +99,11 @@ private:
   // 内部で用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 次の要素の取得
-  virtual
-  const AstUdpValue*
-  link() const = 0;
+  /// @brief json_obj() の下請け関数
+  void
+  json_sub(
+    JsonValue& jobj ///< [in] 対象の JSON オブジェクト
+  ) const override;
 
 };
 

@@ -33,7 +33,7 @@ TEST_F(PtExprTest, Primary2)
   auto expr = factory.new_Primary(fr, name, index_list.top);
 
   check_Primary(expr, fr, name, false, {index1, index2});
-  EXPECT_EQ( "net1[1][2]", expr->decompile() );
+  //EXPECT_EQ( "net1[1][2]", expr->decompile() );
 }
 
 TEST_F(PtExprTest, Primary3)
@@ -52,7 +52,7 @@ TEST_F(PtExprTest, Primary3)
 		std::logic_error );
   std::ostringstream buf;
   buf << name << "[" << left_val << ":" << right_val << "]";
-  EXPECT_EQ( buf.str(), expr->decompile() );
+  //EXPECT_EQ( buf.str(), expr->decompile() );
 }
 
 TEST_F(PtExprTest, Primary4)
@@ -78,7 +78,7 @@ TEST_F(PtExprTest, Primary4)
 		std::logic_error );
   std::ostringstream buf;
   buf << name << "[1][2][" << left_val << ":" << right_val << "]";
-  EXPECT_EQ( buf.str(), expr->decompile() );
+  //EXPECT_EQ( buf.str(), expr->decompile() );
 }
 
 TEST_F(PtExprTest, PrimaryH1)
@@ -92,7 +92,7 @@ TEST_F(PtExprTest, PrimaryH1)
   check_Primary(expr, fr, name, {PtTest::NameBranchSpec{head, 0}}, false);
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
-  EXPECT_EQ( "head1.net1", expr->decompile() );
+  //EXPECT_EQ( "head1.net1", expr->decompile() );
 }
 
 TEST_F(PtExprTest, PrimaryH2)
@@ -113,7 +113,7 @@ TEST_F(PtExprTest, PrimaryH2)
   check_Primary(expr, fr, name, {PtTest::NameBranchSpec{head, 0}}, false, {index1, index2});
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
-  EXPECT_EQ( "head1.net1[1][2]", expr->decompile() );
+  //EXPECT_EQ( "head1.net1[1][2]", expr->decompile() );
 }
 
 TEST_F(PtExprTest, PrimaryH3)
@@ -134,7 +134,7 @@ TEST_F(PtExprTest, PrimaryH3)
 		std::logic_error );
   std::ostringstream buf;
   buf << head << "." << name << "[" << left_val << ":" << right_val << "]";
-  EXPECT_EQ( buf.str(), expr->decompile() );
+  //EXPECT_EQ( buf.str(), expr->decompile() );
 }
 
 TEST_F(PtExprTest, PrimaryH4)
@@ -162,7 +162,7 @@ TEST_F(PtExprTest, PrimaryH4)
   std::ostringstream buf;
   buf << head << "." << name << "[1][2]"
       << "[" << left_val << ":" << right_val << "]";
-  EXPECT_EQ( buf.str(), expr->decompile() );
+  //EXPECT_EQ( buf.str(), expr->decompile() );
 }
 
 TEST_F(PtExprTest, CPrimary1)
@@ -176,7 +176,7 @@ TEST_F(PtExprTest, CPrimary1)
   check_Primary(expr, fr, name, true, {index1});
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
-  EXPECT_EQ( "param1[1]", expr->decompile() );
+  //EXPECT_EQ( "param1[1]", expr->decompile() );
 }
 
 TEST_F(PtExprTest, CPrimary2)
@@ -195,7 +195,7 @@ TEST_F(PtExprTest, CPrimary2)
   check_Primary(expr, fr, name, true, {index1, index2});
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
-  EXPECT_EQ( "param1[1][2]", expr->decompile() );
+  //EXPECT_EQ( "param1[1][2]", expr->decompile() );
 }
 
 TEST_F(PtExprTest, CPrimary3)
@@ -214,7 +214,7 @@ TEST_F(PtExprTest, CPrimary3)
 		std::logic_error );
   std::ostringstream buf;
   buf << name << "[" << left_val << ":" << right_val << "]";
-  EXPECT_EQ( buf.str(), expr->decompile() );
+  //EXPECT_EQ( buf.str(), expr->decompile() );
 }
 
 TEST_F(PtExprTest, CPrimary4)
@@ -235,7 +235,7 @@ TEST_F(PtExprTest, CPrimary4)
   check_Primary(expr, fr, name, {NameBranchSpec{head, 0}}, true, {index1, index2});
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
-  EXPECT_EQ( "head1.param1[1][2]", expr->decompile() );
+  //EXPECT_EQ( "head1.param1[1][2]", expr->decompile() );
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -24,9 +24,9 @@ public:
 
   /// @brief コンストラクタ
   CptOpr3(
-    const AstExpr* opr1,
-    const AstExpr* opr2,
-    const AstExpr* opr3
+    const PtExpr* opr1,
+    const PtExpr* opr2,
+    const PtExpr* opr3
   ) : mOpr{opr1, opr2, opr3}
   {
     if ( opr1 == nullptr ) {
@@ -46,23 +46,27 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
   FileRegion
   file_region() const override;
 
+  /// @brief 固定オペランド数の取得
+  SizeType
+  operand_num() const override;
+
   /// @brief 0番目のオペランドの取得
-  const AstExpr*
+  const PtExpr*
   operand0() const override;
 
   /// @brief 1番目のオペランドの取得
-  const AstExpr*
+  const PtExpr*
   operand1() const override;
 
   /// @brief 2番目のオペランドの取得
-  const AstExpr*
+  const PtExpr*
   operand2() const override;
 
 
@@ -72,7 +76,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // オペランド
-  const AstExpr* mOpr[3];
+  const PtExpr* mOpr[3];
 
 };
 

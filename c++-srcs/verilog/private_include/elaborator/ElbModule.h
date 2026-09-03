@@ -32,7 +32,7 @@ public:
   void
   add_iodecl(
     ElbIOHead* head,           ///< [in] ヘッダ
-    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
+    const AstIOItem& ast_item, ///< [in] パース木のIO宣言要素
     const VlDecl* decl         ///< [in] 対応する宣言要素
   ) = 0;
 
@@ -41,7 +41,7 @@ public:
   void
   init_port(
     SizeType index,          ///< [in] ポート番号
-    const AstPort* ast_port, ///< [in] パース木のポート定義
+    const AstPort& ast_port, ///< [in] パース木のポート定義
     ElbExpr* low_conn,       ///< [in] 下位の接続
     VpiDir dir               ///< [in] 向き
   ) = 0;

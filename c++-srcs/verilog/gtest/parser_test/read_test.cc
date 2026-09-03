@@ -25,10 +25,13 @@ TEST(ParserTest, read1)
   auto r = parser.read_file(filename);
   ASSERT_TRUE( r );
 
-  AstDumper dumper(std::cout);
+  //AstDumper dumper(std::cout);
 
-  dumper.put(mgr.udp_list(), mgr.module_list());
+  //dumper.put(mgr.udp_list(), mgr.module_list());
 
+  auto json_obj = mgr.json_obj();
+
+  json_obj.write(std::cout, true);
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -12,7 +12,7 @@
 
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
+#include "ym/vl/AstPart.h"
 
 #include "ym/vl/VlModule.h"
 #include "ym/vl/VlDeclArray.h"
@@ -32,11 +32,11 @@ ElbExpr*
 ExprGen::instantiate_primary(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   // 識別子の階層
-  auto has_hname = (ast_expr->namebranch_list().size() > 0);
+  auto has_hname = (ast_expr.namebranch_list().size() > 0);
   if ( has_hname ) {
     if ( env.is_constant() ) {
       // 階層つき識別子はだめ
@@ -49,10 +49,10 @@ ExprGen::instantiate_primary(
   }
 
   // 識別子の名前
-  auto name = ast_expr->name();
+  auto name = ast_expr.name();
 
   // 識別子の添字の次元
-  auto isize = ast_expr->index_list().size();
+  auto isize = ast_expr.index_list().size();
 
   // 名前に対応したオブジェクトのハンドル
   auto handle = (ObjHandle*){nullptr};
@@ -77,7 +77,7 @@ ExprGen::instantiate_primary(
       // ただし識別子に添字がついていたらだめ
       auto parent_module = parent->parent_module();
       auto def_nettype = parent_module->def_net_type();
-      if ( ast_expr->is_simple() &&
+      if ( ast_expr.is_simple() &&
 	   !has_hname &&
 	   isize == 0 &&
 	   def_nettype != VpiNetType::None ) {
@@ -120,7 +120,7 @@ ExprGen::instantiate_primary(
       }
     }
     else if ( isize == 1 ) {
-      auto index_list = ast_expr->index_list().to_vector();
+      auto index_list = ast_expr.index_list().to_vector();
       auto ast_expr1 = index_list[0];
       auto index = evaluate_int(parent, ast_expr1);
       auto scope = handle->array_elem(index);
@@ -149,7 +149,7 @@ ExprGen::instantiate_primary(
 
   // 添字には constant/constant function 以外の情報は引き継がない
   ElbEnv index_env;
-  if ( ast_expr->is_const_index() ) {
+  if ( ast_expr.is_const_index() ) {
     index_env = ElbConstantEnv();
   }
   else if ( env.inside_constant_function() ) {
@@ -179,7 +179,7 @@ ExprGen::instantiate_primary(
 
   if ( has_bit_select ) {
     // ビット指定付きの場合
-    auto index_vec = ast_expr->index_list().to_vector();
+    auto index_vec = ast_expr.index_list().to_vector();
     auto ast_expr1 = index_vec[isize - 1];
     bool is_const;
     int index_val = evaluate_int_if_const(parent, ast_expr1, is_const);
@@ -191,7 +191,7 @@ ExprGen::instantiate_primary(
 	// インデックスが範囲外
 	// ただ値が X になるだけでエラーにはならないそうだ．
 	put_warning(__FILE__, __LINE__,
-		    ast_expr1->file_region(),
+		    ast_expr1.file_region(),
 		    "ELAB",
 		    "Bit-Select index is out of range.");
       }
@@ -205,13 +205,13 @@ ExprGen::instantiate_primary(
   }
   if ( has_range_select ) {
     // 範囲指定付きの場合
-    auto ast_part = ast_expr->part();
-    switch ( ast_part->mode() ) {
+    auto ast_part = ast_expr.part();
+    switch ( ast_part.mode() ) {
     case VpiRangeMode::Const:
     {
-      auto ast_left = ast_part->left();
+      auto ast_left = ast_part.left();
       auto index1_val = evaluate_int(parent, ast_left);
-      auto ast_right = ast_part->right();
+      auto ast_right = ast_part.right();
       auto index2_val = evaluate_int(parent, ast_right);
       auto big = (index1_val >= index2_val);
       if ( big ^ decl_base->is_big_endian() ) {
@@ -225,7 +225,7 @@ ExprGen::instantiate_primary(
 	// 左のインデックスが範囲外
 	// ただ値が X になるだけでエラーにはならないそうだ．
 	put_warning(__FILE__, __LINE__,
-		    ast_left->file_region(),
+		    ast_left.file_region(),
 		    "ELAB",
 		    "Left index is out of range.");
       }
@@ -235,7 +235,7 @@ ExprGen::instantiate_primary(
 	// 右のインデックスが範囲外
 	// ただ値が X になるだけでエラーにはならないそうだ．
 	put_warning(__FILE__, __LINE__,
-		    ast_right->file_region(),
+		    ast_right.file_region(),
 		    "ELAB",
 		    "Right index is out of range.");
       }
@@ -247,9 +247,9 @@ ExprGen::instantiate_primary(
 
     case VpiRangeMode::Plus:
     {
-      auto ast_range = ast_part->right();
+      auto ast_range = ast_part.right();
       auto range_val = evaluate_int(parent, ast_range);
-      auto ast_base = ast_part->left();
+      auto ast_base = ast_part.left();
       bool is_const;
       auto base_val = evaluate_int_if_const(parent, ast_base, is_const);
       if ( is_const ) {
@@ -272,7 +272,7 @@ ExprGen::instantiate_primary(
 	  // 左か右のインデックスが範囲外
 	  // ただ値が X になるだけでエラーにはならないそうだ．
 	  put_warning(__FILE__, __LINE__,
-		      ast_expr->file_region(),
+		      ast_expr.file_region(),
 		      "ELAB",
 		      "Index is out of range.");
 	}
@@ -290,9 +290,9 @@ ExprGen::instantiate_primary(
 
     case VpiRangeMode::Minus:
     {
-      auto ast_range = ast_part->right();
+      auto ast_range = ast_part.right();
       auto range_val = evaluate_int(parent, ast_range);
-      auto ast_base = ast_part->left();
+      auto ast_base = ast_part.left();
       bool is_const;
       auto base_val = evaluate_int_if_const(parent, ast_base, is_const);
       if ( is_const ) {
@@ -315,7 +315,7 @@ ExprGen::instantiate_primary(
 	  // 左か右のインデックスが範囲外
 	  // ただ値が X になるだけでエラーにはならないそうだ．
 	  put_warning(__FILE__, __LINE__,
-		      ast_expr->file_region(),
+		      ast_expr.file_region(),
 		      "ELAB",
 		      "Index is out of range.");
 	}
@@ -342,13 +342,13 @@ ExprGen::instantiate_primary(
 ElbExpr*
 ExprGen::instantiate_namedevent(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
-  if ( ast_expr->type() != AstExpr::Primary ) {
+  if ( ast_expr.type() != AstExpr::Primary ) {
     throw std::logic_error{"ast_expr->type() != AstExpr::Primary"};
   }
-  if ( ast_expr->part() != nullptr ) {
+  if ( ast_expr.part().is_valid() ) {
     throw std::logic_error{"ast_expr->part() != nullptr"};
   }
 
@@ -361,7 +361,7 @@ ExprGen::instantiate_namedevent(
 
   // 配列要素などの処理を行う．
   ElbEnv env0;
-  if ( ast_expr->is_const_index() ) {
+  if ( ast_expr.is_const_index() ) {
     env0 = ElbConstantEnv();
   }
 
@@ -394,7 +394,7 @@ ExprGen::instantiate_namedevent(
 ObjHandle*
 ExprGen::find_const_handle(
   const VlScope* parent,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   // モジュール内の識別子を探索する．
@@ -405,7 +405,8 @@ ExprGen::find_const_handle(
   }
 
   // handle が持つオブジェクトは genvar か parameter でなければならない．
-  if ( handle->genvar() == nullptr && handle->parameter() == nullptr ) {
+  if ( handle->genvar() == nullptr &&
+       handle->parameter() == nullptr ) {
     ErrorGen::not_a_parameter(__FILE__, __LINE__, ast_expr);
   }
 
@@ -416,12 +417,12 @@ ExprGen::find_const_handle(
 ElbExpr*
 ExprGen::instantiate_genvar(
   const VlScope* parent,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   int val
 )
 {
-  auto has_range_select = (ast_expr->part() != nullptr);
-  auto index_list = ast_expr->index_list();
+  auto has_range_select = ast_expr.part().is_valid();
+  auto index_list = ast_expr.index_list();
   auto isize = index_list.size();
   if (  isize > 1 || (isize == 1 && has_range_select) ) {
     // 配列型ではない．
@@ -435,9 +436,9 @@ ExprGen::instantiate_genvar(
     val &= 1;
   }
   else if ( has_range_select ) {
-    auto ast_part = ast_expr->part();
-    auto index1 = evaluate_int(parent, ast_part->left());
-    auto index2 = evaluate_int(parent, ast_part->right());
+    auto ast_part = ast_expr.part();
+    auto index1 = evaluate_int(parent, ast_part.left());
+    auto index2 = evaluate_int(parent, ast_part.right());
     val >>= index2;
     val &= ((1 << (index1 - index2 + 1)) - 1);
   }
@@ -452,7 +453,7 @@ ExprGen::instantiate_primary_sub(
   ObjHandle* handle,
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   bool& is_array,
   bool& has_range_select,
   bool& has_bit_select
@@ -461,10 +462,10 @@ ExprGen::instantiate_primary_sub(
   // 配列の次元
   SizeType dsize = 0;
   // プライマリ式の次元 (ビット指定を含んでいる可能性あり)
-  auto isize = ast_expr->index_list().size();
+  auto isize = ast_expr.index_list().size();
 
   // 範囲指定があるとき true となるフラグ
-  has_range_select = (ast_expr->part() != nullptr);
+  has_range_select = ast_expr.part().is_valid();
 
   // 答え
   auto primary = (ElbExpr*){nullptr};
@@ -500,7 +501,7 @@ ExprGen::instantiate_primary_sub(
       SizeType offset = 0;
       SizeType mlt = 1;
       auto const_index = true;
-      auto ast_index_list = ast_expr->index_list().to_vector();
+      auto ast_index_list = ast_expr.index_list().to_vector();
       for ( SizeType i = 0; i < dsize; ++ i ) {
 	auto j = dsize - i - 1;
 	auto ast_expr1 = ast_index_list[j];
@@ -564,7 +565,7 @@ ExprGen::instantiate_primary_sub(
 void
 ExprGen::check_decl(
   const ElbEnv& env,
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiObjType decl_type,
   bool is_array,
   bool has_select

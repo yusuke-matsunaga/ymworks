@@ -12,8 +12,8 @@
 #include "ElbError.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstItem.h"
+#include "ym/vl/AstInst.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 #include "ym/ClibCell.h"
 #include "ym/ClibPin.h"
 #include "elaborator/ElbUdp.h"
@@ -51,42 +51,41 @@ END_NONAMESPACE
 void
 ItemGen::instantiate_gateheader(
   const VlScope* parent,
-  const AstItem* ast_head
+  const AstItem& ast_head
 )
 {
-  auto ast_delay = ast_head->delay();
-  bool has_delay = (ast_delay != nullptr);
+  auto ast_delay = ast_head.delay();
+  bool has_delay = ast_delay.is_valid();
   auto prim_head = mgr().new_PrimHead(parent, ast_head, has_delay);
   if ( has_delay ) {
-    add_phase3stub(make_stub(this, &ItemGen::link_gate_delay,
-			     prim_head, ast_delay));
+    add_phase3stub(make_gate_delay_stub(prim_head, ast_delay));
   }
 
-  for ( auto ast_inst: ast_head->inst_list() ) {
-    const auto& fr = ast_inst->file_region();
-    SizeType port_num = ast_inst->port_list().size();
+  for ( auto ast_inst: ast_head.inst_list() ) {
+    const auto& fr = ast_inst.file_region();
+    SizeType port_num = ast_inst.port_list().size();
     SizeType output_num;
     SizeType inout_num;
     SizeType input_num;
-    switch ( ElbPrimitive::get_port_size(ast_head->prim_type(), port_num,
+    switch ( ElbPrimitive::get_port_size(ast_head.prim_type(), port_num,
 					 output_num, inout_num, input_num) ) {
     case -1:
       put_error(ElbError(__FILE__, __LINE__,
-			 ast_inst->file_region(),
+			 ast_inst.file_region(),
 			 "ELAB",
 			 "Too few port connections."));
       continue;
 
     case 1:
       put_error(ElbError(__FILE__, __LINE__,
-			 ast_inst->file_region(),
+			 ast_inst.file_region(),
 			 "ELAB",
 			 "Too many port connections."));
       continue;
     }
 
-    auto ast_range = ast_inst->range();
-    if ( ast_range != nullptr ) {
+    auto ast_range = ast_inst.range();
+    if ( ast_range.is_valid() ) {
       // 配列の場合
       auto range = evaluate_range(parent, ast_range);
       auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
@@ -105,8 +104,7 @@ ItemGen::instantiate_gateheader(
 		 buf.str());
       }
 
-      add_phase3stub(make_stub(this, &ItemGen::link_prim_array,
-			       prim_array, ast_inst));
+      add_phase3stub(make_prim_array_stub(prim_array, ast_inst));
     }
     else {
       // 単一の要素の場合
@@ -125,8 +123,7 @@ ItemGen::instantiate_gateheader(
 		 buf.str());
       }
 
-      add_phase3stub(make_stub(this, &ItemGen::link_primitive,
-			       prim, ast_inst));
+      add_phase3stub(make_primitive_stub(prim, ast_inst));
     }
   }
 }
@@ -135,25 +132,24 @@ ItemGen::instantiate_gateheader(
 void
 ItemGen::instantiate_udpheader(
   const VlScope* parent,
-  const AstItem* ast_head,
+  const AstItem& ast_head,
   const VlUdpDefn* udpdefn
 )
 {
-  SizeType param_size = ast_head->paramassign_list().size();
-  auto ast_delay = ast_head->delay();
-  bool has_delay = ( ast_delay || param_size == 1 );
+  SizeType param_size = ast_head.paramassign_list().size();
+  auto ast_delay = ast_head.delay();
+  bool has_delay = ( ast_delay.is_valid() || param_size == 1 );
   auto prim_head = mgr().new_UdpHead(parent,
 				     ast_head,
 				     udpdefn,
 				     has_delay);
   if ( has_delay ) {
-    add_phase3stub(make_stub(this, &ItemGen::link_udp_delay,
-			     prim_head, ast_head));
+    add_phase3stub(make_udp_delay_stub(prim_head, ast_head));
   }
 
-  for ( auto ast_inst: ast_head->inst_list() ) {
-    auto port_num = ast_inst->port_list().size();
-    if ( port_num > 0 && ast_inst->port_list().front()->name() != nullptr ) {
+  for ( auto ast_inst: ast_head.inst_list() ) {
+    auto port_num = ast_inst.port_list().size();
+    if ( port_num > 0 && ast_inst.port_list().front().name() != nullptr ) {
       ErrorGen::named_port_in_udp_instance(__FILE__, __LINE__, ast_inst);
     }
 
@@ -161,8 +157,8 @@ ItemGen::instantiate_udpheader(
       ErrorGen::port_num_mismatch(__FILE__, __LINE__, ast_inst);
     }
 
-    auto ast_range = ast_inst->range();
-    if ( ast_range != nullptr ) {
+    auto ast_range = ast_inst.range();
+    if ( ast_range.is_valid() ) {
       // 配列
       auto range = evaluate_range(parent, ast_range);
       auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
@@ -172,8 +168,7 @@ ItemGen::instantiate_udpheader(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(prim_array, attr_list);
 
-      add_phase3stub(make_stub(this, &ItemGen::link_prim_array,
-			       prim_array, ast_inst));
+      add_phase3stub(make_prim_array_stub(prim_array, ast_inst));
     }
     else {
       // 単一の要素
@@ -183,8 +178,7 @@ ItemGen::instantiate_udpheader(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(primitive, attr_list);
 
-      add_phase3stub(make_stub(this, &ItemGen::link_primitive,
-			       primitive, ast_inst));
+      add_phase3stub(make_primitive_stub(primitive, ast_inst));
     }
   }
 }
@@ -193,18 +187,18 @@ ItemGen::instantiate_udpheader(
 void
 ItemGen::instantiate_cell(
   const VlScope* parent,
-  const AstItem* ast_head,
+  const AstItem& ast_head,
   ClibCell cell
 )
 {
   auto prim_head = mgr().new_CellHead(parent, ast_head, cell);
-  for ( auto ast_inst: ast_head->inst_list() ) {
+  for ( auto ast_inst: ast_head.inst_list() ) {
     // ポート数のチェックを行う．
-    SizeType port_num = ast_inst->port_list().size();
-    if ( port_num > 0 && ast_inst->port_list().front()->name() != nullptr ) {
+    SizeType port_num = ast_inst.port_list().size();
+    if ( port_num > 0 && ast_inst.port_list().front().name() != nullptr ) {
       // 名前による結合
-      for ( auto ast_con: ast_inst->port_list() ) {
-	auto pin_name = ast_con->name();
+      for ( auto ast_con: ast_inst.port_list() ) {
+	auto pin_name = ast_con.name();
 	auto pin = cell.pin(pin_name);
 	if ( pin.is_invalid() ) {
 	  ErrorGen::illegal_pin_name(__FILE__, __LINE__, ast_con);
@@ -218,8 +212,8 @@ ItemGen::instantiate_cell(
     }
 
     // インスタンスの生成を行う．
-    auto ast_range = ast_inst->range();
-    if ( ast_range != nullptr ) {
+    auto ast_range = ast_inst.range();
+    if ( ast_range.is_valid() ) {
       // 配列
       auto range = evaluate_range(parent, ast_range);
       auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
@@ -229,8 +223,7 @@ ItemGen::instantiate_cell(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(prim_array, attr_list);
 
-      add_phase3stub(make_stub(this, &ItemGen::link_cell_array,
-			       prim_array, ast_inst));
+      add_phase3stub(make_cell_array_stub(prim_array, ast_inst));
     }
     else {
       // 単一の要素
@@ -240,8 +233,7 @@ ItemGen::instantiate_cell(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(primitive, attr_list);
 
-      add_phase3stub(make_stub(this, &ItemGen::link_cell,
-			       primitive, ast_inst));
+      add_phase3stub(make_cell_stub(primitive, ast_inst));
     }
   }
 }
@@ -250,7 +242,7 @@ ItemGen::instantiate_cell(
 void
 ItemGen::link_gate_delay(
   ElbPrimHead* prim_head,
-  const AstDelay* ast_delay
+  const AstDelay& ast_delay
 )
 {
   auto parent = prim_head->parent_scope();
@@ -262,12 +254,12 @@ ItemGen::link_gate_delay(
 void
 ItemGen::link_udp_delay(
   ElbPrimHead* prim_head,
-  const AstItem* ast_head
+  const AstItem& ast_head
 )
 {
   auto parent = prim_head->parent_scope();
-  SizeType param_size = ast_head->paramassign_list().size();
-  auto ast_delay = ast_head->delay();
+  SizeType param_size = ast_head.paramassign_list().size();
+  auto ast_delay = ast_head.delay();
   auto delay = instantiate_delay(parent, ast_delay);
   if ( delay == nullptr && param_size == 1 ) {
     // ordered_param_list が実は遅延式だった．
@@ -282,7 +274,7 @@ ItemGen::link_udp_delay(
 void
 ItemGen::link_prim_array(
   ElbPrimArray* prim_array,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
   auto parent = prim_array->parent_scope();
@@ -294,9 +286,9 @@ ItemGen::link_prim_array(
   ElbEnv env1;
   ElbNetLhsEnv env2(env1);
   SizeType index{0};
-  for ( auto ast_con: ast_inst->port_list() ) {
-    auto ast_expr = ast_con->expr();
-    if ( !ast_expr ) {
+  for ( auto ast_con: ast_inst.port_list() ) {
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_invalid() ) {
       // 空の接続式は許されない．
       ErrorGen::empty_port_expression(__FILE__, __LINE__, ast_con);
     }
@@ -347,7 +339,7 @@ ItemGen::link_prim_array(
     }
     else {
       auto def_name = prim_array->head()->def_name();
-      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con->expr(),
+      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con.expr(),
 				   def_name, index);
     }
   }
@@ -357,7 +349,7 @@ ItemGen::link_prim_array(
 void
 ItemGen::link_primitive(
   ElbPrimitive* primitive,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
   auto parent = primitive->parent_scope();
@@ -365,10 +357,10 @@ ItemGen::link_primitive(
   ElbEnv env1;
   ElbNetLhsEnv env2(env1);
   SizeType index{0};
-  for ( auto ast_con: ast_inst->port_list() ) {
+  for ( auto ast_con: ast_inst.port_list() ) {
     // UDP instance の場合には ai_list は無視する．
-    auto ast_expr = ast_con->expr();
-    if ( !ast_expr ) {
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_invalid() ) {
       continue;
     }
 
@@ -401,7 +393,7 @@ ItemGen::link_primitive(
     }
     else {
       auto def_name = primitive->head()->def_name();
-      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con->expr(),
+      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con.expr(),
 				   def_name, index);
     }
   }
@@ -411,7 +403,7 @@ ItemGen::link_primitive(
 void
 ItemGen::link_cell_array(
   ElbPrimArray* prim_array,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
   auto parent = prim_array->parent_scope();
@@ -421,17 +413,17 @@ ItemGen::link_cell_array(
   auto prim = prim_array->elem_by_offset(0);
 
   // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (ast_inst->port_list().front()->name() != nullptr);
+  bool conn_by_name = (ast_inst.port_list().front().name() != nullptr);
 
   auto cell = prim->cell();
 
   ElbEnv env1;
   ElbNetLhsEnv env2(env1);
   SizeType pos{0};
-  for ( auto ast_con: ast_inst->port_list() ) {
+  for ( auto ast_con: ast_inst.port_list() ) {
     int index;
     if ( conn_by_name ) {
-      auto pin = cell.pin(ast_con->name());
+      auto pin = cell.pin(ast_con.name());
       if ( pin.is_invalid() ) {
 	ErrorGen::illegal_pin_name(__FILE__, __LINE__, ast_con);
       }
@@ -441,8 +433,8 @@ ItemGen::link_cell_array(
       index = pos;
       ++ pos;
     }
-    auto ast_expr = ast_con->expr();
-    if ( !ast_expr ) {
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_invalid() ) {
       // 空の接続式は許されない．
       ErrorGen::empty_port_expression(__FILE__, __LINE__, ast_con);
     }
@@ -489,7 +481,7 @@ ItemGen::link_cell_array(
     }
     else {
       auto def_name = prim_array->head()->def_name();
-      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con->expr(),
+      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con.expr(),
 				   def_name, index);
     }
   }
@@ -499,23 +491,23 @@ ItemGen::link_cell_array(
 void
 ItemGen::link_cell(
   ElbPrimitive* primitive,
-  const AstInst* ast_inst
+  const AstInst& ast_inst
 )
 {
   auto parent = primitive->parent_scope();
 
   // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (ast_inst->port_list().front()->name() != nullptr);
+  bool conn_by_name = (ast_inst.port_list().front().name() != nullptr);
 
   auto cell = primitive->cell();
 
   ElbEnv env1;
   ElbNetLhsEnv env2(env1);
   SizeType pos{0};
-  for ( auto ast_con: ast_inst->port_list() ) {
+  for ( auto ast_con: ast_inst.port_list() ) {
     SizeType index;
     if ( conn_by_name ) {
-      auto pin = cell.pin(ast_con->name());
+      auto pin = cell.pin(ast_con.name());
       if ( pin.is_invalid() ) {
 	ErrorGen::illegal_pin_name(__FILE__, __LINE__, ast_con);
       }
@@ -526,8 +518,8 @@ ItemGen::link_cell(
       ++ pos;
     }
     // ai_list は無視する．
-    auto ast_expr = ast_con->expr();
-    if ( !ast_expr ) {
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_invalid() ) {
       continue;
     }
 
@@ -562,7 +554,7 @@ ItemGen::link_cell(
     }
     else {
       auto def_name = primitive->head()->def_name();
-      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con->expr(),
+      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con.expr(),
 				   def_name, index);
     }
   }

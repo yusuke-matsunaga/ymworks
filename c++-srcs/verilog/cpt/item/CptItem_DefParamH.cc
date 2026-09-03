@@ -9,7 +9,8 @@
 #include "CptItem_DefParamH.h"
 #include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
-#include "parser/PtMisc.h"
+#include "parser/PtExpr.h"
+//#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,14 +30,14 @@ CptItem_DefParamH::file_region() const
 AstItem::Type
 CptItem_DefParamH::type() const
 {
-  return DefParam;
+  return AstItem::DefParam;
 }
 
 // @brief defparam リストの取得
-AstDefParamList
-CptItem_DefParamH::defparam_list() const
+const PtDefParam*
+CptItem_DefParamH::defparam_top() const
 {
-  return AstDefParamList(mTop);
+  return mTop;
 }
 
 
@@ -52,10 +53,10 @@ CptDefParam::file_region() const
 }
 
 // @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptDefParam::namebranch_list() const
+const PtNameBranch*
+CptDefParam::namebranch_top() const
 {
-  return AstNameBranchList();
+  return nullptr;
 }
 
 // 末尾の名前を返す．
@@ -66,7 +67,7 @@ CptDefParam::name() const
 }
 
 // 値を返す．
-const AstExpr*
+const PtExpr*
 CptDefParam::expr() const
 {
   return mExpr;
@@ -78,10 +79,10 @@ CptDefParam::expr() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptDefParam2::namebranch_list() const
+const PtNameBranch*
+CptDefParam2::namebranch_top() const
 {
-  return AstNameBranchList(mNbTop);
+  return mNbTop;
 }
 
 
@@ -93,7 +94,7 @@ CptDefParam2::namebranch_list() const
 PtItem*
 PtFactory::new_DefParamH(
   const FileRegion& file_region,
-  PtDefParam* elem_top
+  const PtDefParam* elem_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_DefParamH));
@@ -105,7 +106,7 @@ PtDefParam*
 PtFactory::new_DefParam(
   const FileRegion& file_region,
   const char* name,
-  const AstExpr* value
+  const PtExpr* value
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDefParam));
@@ -116,7 +117,7 @@ PtDefParam*
 PtFactory::new_DefParam(
   const FileRegion& file_region,
   const PtHierName& hname,
-  const AstExpr* value
+  const PtExpr* value
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDefParam2));

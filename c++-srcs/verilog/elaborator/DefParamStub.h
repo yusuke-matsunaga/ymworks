@@ -9,6 +9,8 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
+#include "ym/vl/AstItem.h"
+#include "ym/vl/AstDefParam.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -21,10 +23,10 @@ struct DefParamStub
   const VlModule* mModule;
 
   /// @brief パース木の DefParam ヘッダ
-  const AstItem* mAstHeader;
+  AstItem mAstHeader;
 
   /// @brief パース木の DefParam 文
-  const AstDefParam* mAstDefparam;
+  AstDefParam mAstDefparam;
 };
 
 END_NAMESPACE_YM_VERILOG

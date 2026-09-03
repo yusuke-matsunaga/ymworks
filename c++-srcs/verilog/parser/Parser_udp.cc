@@ -27,14 +27,14 @@ Parser::new_Udp1995(
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
-  PtExpr* init_value,
-  PtPort* port_top,
-  PtIOHead* io_top,
-  PtDeclHead* decl_top,
-  PtUdpEntry* entry_top
+  const PtExpr* init_value,
+  const PtPort* port_top,
+  const PtIOHead* io_top,
+  const PtDeclHead* decl_top,
+  const PtUdpEntry* entry_top
 )
 {
-  const AstIOItem* out_item = nullptr;
+  const PtIOItem* out_item = nullptr;
   bool is_seq = false;
 
   bool sane = true;
@@ -46,9 +46,8 @@ Parser::new_Udp1995(
   // の確認を行う．
   // まず portdecl_list の各要素を名前をキーにした連想配列に格納する．
   // ついでに output の数を数える．
-  std::unordered_map<std::string, const AstIOItem*> iomap;
-  for ( auto io: AstIOHeadList(io_top) ) {
-    auto item_list = io->item_list();
+  std::unordered_map<std::string, const PtIOItem*> iomap;
+  for ( auto io: PtList<const PtIOHead>::new_obj(io_top) ) {
     if ( io->direction() == VpiDir::Output ) {
       if ( out_item ) {
 	// 複数の出力宣言があった．
@@ -61,15 +60,13 @@ Parser::new_Udp1995(
 	break;
       }
 
-      // これは YACC の文法が正しくかけていれば成り立つはず．
-      ASSERT_COND( item_list.size() == 1 );
-
-      out_item = item_list.front();
+      // YACC の文法が正しくかけていれば io の要素数は 1
+      out_item = io->item_top();
       if ( io->aux_type() == VpiAuxType::Reg ) {
 	is_seq = true;
       }
     }
-    for ( auto elem: item_list ) {
+    for ( auto elem: PtList<const PtIOItem>::new_obj(io->item_top()) ) {
       if ( iomap.count(elem->name()) > 0 ) {
 	// 二重登録
 	std::ostringstream buf;
@@ -88,7 +85,7 @@ Parser::new_Udp1995(
 
   // port_list に現れる名前が iolist 中にあるか調べる．
   bool first = true;
-  for ( auto port: AstPortList(port_top) ) {
+  for ( auto port: PtList<const PtPort>::new_obj(port_top) ) {
     auto port_name = port->ext_name();
     if ( iomap.count(port_name) == 0 ) {
       std::ostringstream buf;
@@ -138,24 +135,23 @@ Parser::new_Udp1995(
   // 次に decl_list の要素数が1以下であり，
   // さらにその要素が REG で名前が出力名と一致することを確認する．
   // ちなみに YACC の文法から REG 以外の宣言要素はありえない．
-  auto decl_list = AstDeclHeadList(decl_top).to_vector();
-  if ( decl_list.size() > 1 ) {
-    // 二つ以上の reg 宣言があった．
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    decl_list[1]->file_region(),
-		    MsgType::Error,
-		    "PARS",
-		    "More than two 'reg' declarations.");
-    sane = false;
-  }
-  else if ( decl_list.size() == 1 ) {
-    auto reghead = decl_list[0];
-    if ( reghead ) {
+  if ( decl_top != nullptr ) {
+    if ( decl_top->link() != nullptr ) {
+      // 二つ以上の reg 宣言があった．
+      MsgMgr::put_msg(__FILE__, __LINE__,
+		      decl_top->file_region(),
+		      MsgType::Error,
+		      "PARS",
+		      "More than two 'reg' declarations.");
+      sane = false;
+    }
+    else {
+      auto reghead = decl_top;
       is_seq = true;
       ASSERT_COND( reghead->type() == AstDeclHead::Reg );
-      ASSERT_COND( reghead->item_list().size() == 1 );
-      auto regitem = reghead->item_list().front();
+      auto regitem = reghead->item_top();
       ASSERT_COND( regitem );
+      ASSERT_COND( regitem->link() == nullptr );
       if ( strcmp(regitem->name(), out_item->name()) != 0 ) {
 	// output と名前が違う
 	std::ostringstream buf;
@@ -195,20 +191,19 @@ Parser::new_Udp2001(
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
-  PtExpr* init_value,
-  PtIOHead* io_top,
-  PtUdpEntry* entry_top
+  const PtExpr* init_value,
+  const PtIOHead* io_top,
+  const PtUdpEntry* entry_top
 )
 {
   bool is_seq = false;
 
   // YACC の文法が正しく書かれていれば最初のヘッダが出力で
   // 要素数が1となっているはず．
-  ASSERT_COND( AstIOHeadList(io_top).size() > 0 );
   auto out_head = io_top;
   ASSERT_COND( out_head->direction() == VpiDir::Output );
-  ASSERT_COND( out_head->item_list().size() == 1 );
-  auto out_item = out_head->item_list().front();
+  auto out_item = out_head->item_top();
+  ASSERT_COND( out_item->link() == nullptr );
 
   if ( out_head->aux_type() == VpiAuxType::Reg ) {
     is_seq = true;
@@ -216,7 +211,7 @@ Parser::new_Udp2001(
   // 残りの要素は入力になっているはず．
 
   // iohead_array から port_array を生成する．
-  auto port_array = new_PortArray(AstIOHeadList(io_top));
+  auto port_array = new_PortArray(io_top);
 
   return new_Udp(file_region,
 		 udp_name,
@@ -237,12 +232,12 @@ Parser::new_Udp(
   const char* udp_name,
   const char* init_name,
   const FileRegion& init_loc,
-  const AstExpr* init_value,
+  const PtExpr* init_value,
   bool is_seq,
-  const AstIOItem* out_item,
-  PtPort* port_top,
-  PtIOHead* iohead_top,
-  PtUdpEntry* entry_top
+  const PtIOItem* out_item,
+  const PtPort* port_top,
+  const PtIOHead* iohead_top,
+  const PtUdpEntry* entry_top
 )
 {
   const AstUdp* udp = nullptr;
@@ -265,7 +260,7 @@ Parser::new_Udp(
 	return nullptr;
       }
 
-      if ( out_item->init_value() ) {
+      if ( out_item->init_value() != nullptr ) {
 	// output 文にも初期値割り当てがある．
 	// これは warning にする．
 	MsgMgr::put_msg(__FILE__, __LINE__,
@@ -279,7 +274,7 @@ Parser::new_Udp(
     }
 
     // このあと elaboration で注意が必要なのは init_value.
-    // 場合によってはこれが nullptrで outhead->top()->init_value()
+    // 場合によってはこれが nullptrで outhead.top().init_value()
     // が空でない場合がある．
     return mFactory.new_SeqUdp(file_region,
 			       udp_name,

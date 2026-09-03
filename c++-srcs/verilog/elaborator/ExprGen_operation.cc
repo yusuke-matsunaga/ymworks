@@ -11,7 +11,6 @@
 #include "ErrorGen.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 #include "elaborator/ElbExpr.h"
 
 
@@ -22,10 +21,10 @@ ElbExpr*
 ExprGen::instantiate_opr(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
-  auto op_type = ast_expr->op_type();
+  auto op_type = ast_expr.op_type();
 
   ElbExpr* opr0{nullptr};
   ElbExpr* opr1{nullptr};
@@ -50,9 +49,9 @@ ExprGen::instantiate_opr(
   case VpiOpType::Plus:
   case VpiOpType::Minus:
   case VpiOpType::Not:
-    opr0 = instantiate_expr(parent, env, ast_expr->operand0());
+    opr0 = instantiate_expr(parent, env, ast_expr.operand0());
     if ( real_check && opr0->value_type().is_real_type() ) {
-      ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr->operand0());
+      ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr.operand0());
     }
     return mgr().new_UnaryOp(ast_expr, op_type, opr0);
 
@@ -82,14 +81,14 @@ ExprGen::instantiate_opr(
   case VpiOpType::Gt:
   case VpiOpType::Le:
   case VpiOpType::Lt:
-    opr0 = instantiate_expr(parent, env, ast_expr->operand0());
-    opr1 = instantiate_expr(parent, env, ast_expr->operand1());
+    opr0 = instantiate_expr(parent, env, ast_expr.operand0());
+    opr1 = instantiate_expr(parent, env, ast_expr.operand1());
     if ( real_check ) {
       if ( opr0->value_type().is_real_type() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr->operand0());
+	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr.operand0());
       }
       if ( opr1->value_type().is_real_type() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr->operand1());
+	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr.operand1());
       }
     }
     expr = mgr().new_BinaryOp(ast_expr, op_type, opr0, opr1);
@@ -97,18 +96,18 @@ ExprGen::instantiate_opr(
 
   case VpiOpType::Condition:
   case VpiOpType::MinTypMax:
-    opr0 = instantiate_expr(parent, env, ast_expr->operand0());
-    opr1 = instantiate_expr(parent, env, ast_expr->operand1());
-    opr2 = instantiate_expr(parent, env, ast_expr->operand2());
+    opr0 = instantiate_expr(parent, env, ast_expr.operand0());
+    opr1 = instantiate_expr(parent, env, ast_expr.operand1());
+    opr2 = instantiate_expr(parent, env, ast_expr.operand2());
     expr = mgr().new_TernaryOp(ast_expr, op_type, opr0, opr1, opr2);
     break;
 
   case VpiOpType::Concat:
     {
-      auto opr_size = ast_expr->operand_list().size();
+      auto opr_size = ast_expr.operand_list().size();
       std::vector<ElbExpr*> opr_list;
       opr_list.reserve(opr_size);
-      for ( auto ast_expr1: ast_expr->operand_list() ) {
+      for ( auto ast_expr1: ast_expr.operand_list() ) {
 	auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	auto type1 = expr1->value_type();
 	if ( type1.is_real_type() ) {
@@ -123,13 +122,13 @@ ExprGen::instantiate_opr(
 
   case VpiOpType::MultiConcat:
     {
-      auto ast_rep = ast_expr->rep();
+      auto ast_rep = ast_expr.rep();
       auto rep_num = evaluate_int(parent, ast_rep);
       auto rep_expr = instantiate_expr(parent, env, ast_rep);
-      auto opr_size = ast_expr->operand_list().size();
+      auto opr_size = ast_expr.operand_list().size();
       std::vector<ElbExpr*> opr_list;
       opr_list.reserve(opr_size);
-      for ( auto ast_expr1: ast_expr->operand_list() ) {
+      for ( auto ast_expr1: ast_expr.operand_list() ) {
 	auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	auto type1 = expr1->value_type();
 	if ( type1.is_real_type() ) {

@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/vl/AstMisc.h"
+#include "ym/vl/AstConnection.h"
 #include "ym/vl/VlValue.h"
 
 
@@ -22,10 +22,10 @@ BEGIN_NAMESPACE_YM_VERILOG
 struct ElbParamCon
 {
   // パース木の要素
-  const AstConnection* mAstCon;
+  AstConnection mAstCon;
 
   // 式
-  const AstExpr* mExpr;
+  AstExpr mExpr;
 
   // 値
   VlValue mValue;

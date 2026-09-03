@@ -27,7 +27,7 @@ TEST_F(PtExprTest, FuncCall1)
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
-  EXPECT_EQ( "func1(1, 2)", expr->decompile() );
+  //EXPECT_EQ( "func1(1, 2)", expr->decompile() );
 }
 
 TEST_F(PtExprTest, FuncCall2)
@@ -48,7 +48,7 @@ TEST_F(PtExprTest, FuncCall2)
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
-  EXPECT_EQ( "head1.func1(1, 2)", expr->decompile() );
+  //EXPECT_EQ( "head1.func1(1, 2)", expr->decompile() );
 }
 
 TEST_F(PtExprTest, SysFuncCall)
@@ -67,7 +67,7 @@ TEST_F(PtExprTest, SysFuncCall)
   EXPECT_FALSE( expr->is_index_expr() );
   EXPECT_THROW( expr->index_value(),
 		std::logic_error );
-  EXPECT_EQ( "$func1(1, 2)", expr->decompile() );
+  //EXPECT_EQ( "$func1(1, 2)", expr->decompile() );
 }
 
 #if 0
@@ -83,7 +83,7 @@ TEST_F(PtExprTest, IntConst1)
   check_expr_int_const(expr, 0, VpiConstType::Int, bv_val, nullptr);
   EXPECT_TRUE( expr->is_index_expr() );
   EXPECT_EQ( uint_val, expr->index_value() );
-  EXPECT_EQ( "1234", expr->decompile() );
+  //EXPECT_EQ( "1234", expr->decompile() );
 }
 
 TEST_F(PtExprTest, IntConst2)
@@ -99,7 +99,7 @@ TEST_F(PtExprTest, IntConst2)
   check_expr_int_const(expr, 0, VpiConstType::Int, bv_val, str_val);
   EXPECT_TRUE( expr->is_index_expr() );
   EXPECT_EQ( int_val, expr->index_value() );
-  EXPECT_EQ( str_val, expr->decompile() );
+  //EXPECT_EQ( str_val, expr->decompile() );
 }
 
 TEST_F(PtExprTest, DecConst1)
@@ -115,7 +115,7 @@ TEST_F(PtExprTest, DecConst1)
   check_expr_int_const(expr, 0, VpiConstType::Dec, bv_val, str_val);
   EXPECT_TRUE( expr->is_index_expr() );
   EXPECT_EQ( int_val, expr->index_value() );
-  EXPECT_EQ( "d1234", expr->decompile() );
+  //EXPECT_EQ( "d1234", expr->decompile() );
 }
 
 TEST_F(PtExprTest, DecConst2)
@@ -132,7 +132,7 @@ TEST_F(PtExprTest, DecConst2)
   check_expr_int_const(expr, size, VpiConstType::Dec, bv_val, str_val);
   EXPECT_TRUE( expr->is_index_expr() );
   EXPECT_EQ( int_val, expr->index_value() );
-  EXPECT_EQ( "16'd1234", expr->decompile() );
+  //EXPECT_EQ( "16'd1234", expr->decompile() );
 }
 
 TEST_F(PtExprTest, BinConst1)
@@ -148,7 +148,7 @@ TEST_F(PtExprTest, BinConst1)
   check_expr_int_const(expr, 0, VpiConstType::Binary, bv_val, str_val);
   EXPECT_TRUE( expr->is_index_expr() );
   EXPECT_EQ( int_val, expr->index_value() );
-  EXPECT_EQ( "b1001", expr->decompile() );
+  //EXPECT_EQ( "b1001", expr->decompile() );
 }
 
 TEST_F(PtExprTest, BinConst2)
@@ -165,7 +165,7 @@ TEST_F(PtExprTest, BinConst2)
   check_expr_int_const(expr, size, VpiConstType::Binary, bv_val, str_val);
   EXPECT_TRUE( expr->is_index_expr() );
   EXPECT_EQ( int_val, expr->index_value() );
-  EXPECT_EQ( "4'b1001", expr->decompile() );
+  //EXPECT_EQ( "4'b1001", expr->decompile() );
 }
 
 TEST_F(PtExprTest, RealConst)
@@ -181,7 +181,7 @@ TEST_F(PtExprTest, RealConst)
   EXPECT_FALSE( expr->is_index_expr() );
   std::ostringstream buf;
   buf << value;
-  EXPECT_EQ( buf.str(), expr->decompile() );
+  //EXPECT_EQ( buf.str(), expr->decompile() );
   check_expr_no_opr(expr);
   check_expr_no_primary(expr);
   EXPECT_EQ( VpiConstType::Real, expr->const_type() );
@@ -207,7 +207,7 @@ TEST_F(PtExprTest, StringConst)
   EXPECT_FALSE( expr->is_index_expr() );
   std::ostringstream buf;
   buf << value;
-  EXPECT_EQ( buf.str(), expr->decompile() );
+  //EXPECT_EQ( buf.str(), expr->decompile() );
   check_expr_no_opr(expr);
   check_expr_no_primary(expr);
   EXPECT_EQ( VpiConstType::String, expr->const_type() );

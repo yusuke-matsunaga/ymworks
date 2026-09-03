@@ -10,10 +10,6 @@
 #include "ei/EiParameter.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/BitVector.h"
-#include "ym/vl/AstDecl.h"
-#include "ym/vl/AstExpr.h"
-#include "ym/vl/AstItem.h"
-#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbParamHead*
 EiFactory::new_ParamHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head
+  const AstDeclHead& ast_head
 )
 {
   return new EiParamHead(parent, ast_head);
@@ -36,13 +32,13 @@ EiFactory::new_ParamHead(
 ElbParamHead*
 EiFactory::new_ParamHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head,
-  const AstRange* ast_range,
+  const AstDeclHead& ast_head,
+  const AstRange& ast_range,
   const RangeVal& range
 )
 {
-  if ( ast_range == nullptr ) {
-    throw std::logic_error{"ast_range == nullptr"};
+  if ( ast_range.is_invalid() ) {
+    throw std::logic_error{"ast_range.is_invalid()"};
   }
   return new EiParamHeadV(parent, ast_head, ast_range, range);
 }
@@ -51,7 +47,7 @@ EiFactory::new_ParamHead(
 ElbParameter*
 EiFactory::new_Parameter(
   ElbParamHead* head,
-  const AstNamedBase* ast_item,
+  const AstNamedBase& ast_item,
   bool is_local
 )
 {
@@ -80,7 +76,7 @@ EiFactory::new_Parameter(
 // @brief コンストラクタ
 EiParamHead::EiParamHead(
   const VlScope* parent,
-  const AstDeclHead* ast_head
+  const AstDeclHead& ast_head
 ) : mParent{parent},
     mAstHead{ast_head}
 {
@@ -95,7 +91,7 @@ EiParamHead::~EiParamHead()
 VpiObjType
 EiParamHead::type() const
 {
-  switch ( mAstHead->type() ) {
+  switch ( mAstHead.type() ) {
   case AstDeclHead::Param:
   case AstDeclHead::LocalParam:
     return VpiObjType::Parameter;
@@ -123,11 +119,11 @@ EiParamHead::is_signed(
   const VlValue& val
 ) const
 {
-  if ( mAstHead->data_type() == VpiVarType::None ) {
+  if ( mAstHead.data_type() == VpiVarType::None ) {
     return val.is_signed();
   }
   else {
-    return mAstHead->is_signed();
+    return mAstHead.is_signed();
   }
 }
 
@@ -142,7 +138,7 @@ EiParamHead::has_range() const
 int
 EiParamHead::left_range_val() const
 {
-  switch ( mAstHead->data_type() ) {
+  switch ( mAstHead.data_type() ) {
   case VpiVarType::Integer:
     return kVpiSizeInteger - 1;
 
@@ -201,7 +197,7 @@ EiParamHead::bit_size(
   const VlValue& val
 ) const
 {
-  switch ( mAstHead->data_type() ) {
+  switch ( mAstHead.data_type() ) {
   case VpiVarType::Integer:
     return kVpiSizeInteger;
 
@@ -230,7 +226,7 @@ EiParamHead::calc_bit_offset(
   const VlValue& val
 ) const
 {
-  switch ( mAstHead->data_type() ) {
+  switch ( mAstHead.data_type() ) {
   case VpiVarType::Real:
   case VpiVarType::Realtime:
     return false;
@@ -269,7 +265,7 @@ EiParamHead::value_type(
   const VlValue& val
 ) const
 {
-  switch ( mAstHead->data_type() ) {
+  switch ( mAstHead.data_type() ) {
   case VpiVarType::Real:
   case VpiVarType::Realtime:
     return VlValueType::real_type();
@@ -294,11 +290,11 @@ EiParamHead::value_type(
 VpiVarType
 EiParamHead::data_type() const
 {
-  return mAstHead->data_type();
+  return mAstHead.data_type();
 }
 
 // @brief パース木の宣言ヘッダを返す．
-const AstDeclHead*
+AstDeclHead
 EiParamHead::ast_head() const
 {
   return mAstHead;
@@ -312,8 +308,8 @@ EiParamHead::ast_head() const
 // @brief コンストラクタ
 EiParamHeadV::EiParamHeadV(
   const VlScope* parent,
-  const AstDeclHead* ast_head,
-  const AstRange* ast_range,
+  const AstDeclHead& ast_head,
+  const AstRange& ast_range,
   const RangeVal& range
 ) : EiParamHead(parent, ast_head),
     mRange(ast_range, range)
@@ -331,7 +327,7 @@ EiParamHeadV::is_signed(
   const VlValue& val
 ) const
 {
-  return ast_head()->is_signed();
+  return ast_head().is_signed();
 }
 
 // @brief 範囲指定を持つとき true を返す．
@@ -409,7 +405,7 @@ EiParamHeadV::value_type(
   const VlValue& val
 ) const
 {
-  return VlValueType(ast_head()->is_signed(), true,
+  return VlValueType(ast_head().is_signed(), true,
 		     mRange.calc_size());
 }
 
@@ -421,7 +417,7 @@ EiParamHeadV::value_type(
 // @brief コンストラクタ
 EiParameter::EiParameter(
   ElbParamHead* head,
-  const AstNamedBase* ast_item
+  const AstNamedBase& ast_item
 ) : mHead{head},
     mAstItem{ast_item},
     mExpr{nullptr}
@@ -444,7 +440,7 @@ EiParameter::type() const
 FileRegion
 EiParameter::file_region() const
 {
-  return mAstItem->file_region();
+  return mAstItem.file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -458,7 +454,7 @@ EiParameter::parent_scope() const
 std::string
 EiParameter::name() const
 {
-  return mAstItem->name();
+  return mAstItem.name();
 }
 
 // @brief 値の型を返す．
@@ -633,7 +629,7 @@ EiParameter::is_local_param() const
 }
 
 // @brief 式の取得
-const AstExpr*
+AstExpr
 EiParameter::init_expr() const
 {
   return mExpr;
@@ -649,7 +645,7 @@ EiParameter::value() const
 // @brief 値の設定
 void
 EiParameter::set_init_expr(
-  const AstExpr* expr,
+  const AstExpr& expr,
   const VlValue& value
 )
 {
@@ -665,7 +661,7 @@ EiParameter::set_init_expr(
 // @brief コンストラクタ
 EiLocalParam::EiLocalParam(
   ElbParamHead* head,
-  const AstNamedBase* ast_item
+  const AstNamedBase& ast_item
 ) : EiParameter(head, ast_item)
 {
 }

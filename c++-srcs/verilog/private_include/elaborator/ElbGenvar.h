@@ -55,7 +55,7 @@ public:
 
   /// @brief 元となったパース木の定義要素を返す．
   virtual
-  const AstDeclItem*
+  AstDeclItem
   ast_item() const = 0;
 
 };

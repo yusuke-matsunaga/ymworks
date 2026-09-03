@@ -21,17 +21,17 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 定数式を生成する．
 ElbExpr*
 EiFactory::new_Constant(
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
-  auto const_type = ast_expr->const_type();
-  auto size = ast_expr->const_size();
+  auto const_type = ast_expr.const_type();
+  auto size = ast_expr.const_size();
   auto is_signed = false;
   int base = 0;
   switch ( const_type ) {
   case VpiConstType::Int:
-    if ( ast_expr->const_str() == nullptr ) {
-      auto val = ast_expr->const_bitvect();
+    if ( ast_expr.const_str() == nullptr ) {
+      auto val = ast_expr.const_bitvect();
       return new EiBitVectorConst(ast_expr, VpiConstType::Int, val);
     }
     break;
@@ -61,10 +61,10 @@ EiFactory::new_Constant(
     break;
 
   case VpiConstType::Real:
-    return new EiRealConst(ast_expr, ast_expr->const_real());
+    return new EiRealConst(ast_expr, ast_expr.const_real());
 
   case VpiConstType::String:
-    return new EiStringConst(ast_expr, ast_expr->const_str());
+    return new EiStringConst(ast_expr, ast_expr.const_str());
 
   default:
     throw std::logic_error{"Should not be reached"};
@@ -72,13 +72,13 @@ EiFactory::new_Constant(
 
   // ここに来たということはビットベクタ型
   return new EiBitVectorConst(ast_expr, const_type,
-			      BitVector(size, is_signed, base, ast_expr->const_str()));
+			      BitVector(size, is_signed, base, ast_expr.const_str()));
 }
 
 // @brief genvar 起因の定数式を生成する．
 ElbExpr*
 EiFactory::new_GenvarConstant(
-  const AstExpr* ast_primary,
+  const AstExpr& ast_primary,
   int val
 )
 {
@@ -92,7 +92,7 @@ EiFactory::new_GenvarConstant(
 
 // @brief コンストラクタ
 EiConstant::EiConstant(
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 ) : EiExprBase(ast_expr)
 {
 }
@@ -133,7 +133,7 @@ EiConstant::_set_reqsize(
 
 // @brief コンストラクタ
 EiIntConst::EiIntConst(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   std::int32_t value
 ) : EiConstant(ast_expr),
     mValue{value}
@@ -173,7 +173,7 @@ EiIntConst::constant_value() const
 
 // @brief コンストラクタ
 EiBitVectorConst::EiBitVectorConst(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiConstType const_type,
   const BitVector& value
 ) : EiConstant(ast_expr),
@@ -217,7 +217,7 @@ EiBitVectorConst::constant_value() const
 
 // @brief コンストラクタ
 EiRealConst::EiRealConst(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   double value
 ) : EiConstant(ast_expr),
     mValue{value}
@@ -257,7 +257,7 @@ EiRealConst::constant_value() const
 
 // @brief コンストラクタ
 EiStringConst::EiStringConst(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const std::string& value
 ) : EiConstant(ast_expr),
     mValue(value)

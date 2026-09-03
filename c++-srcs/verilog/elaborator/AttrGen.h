@@ -60,7 +60,7 @@ public:
   /// @brief 構文木要素に対応する属性リストを返す．
   const std::vector<const VlAttribute*>&
   attribute_list(
-    const AstBase* ast_obj ///< [in] 元となる構文木要素
+    const AstBase& ast_obj ///< [in] 元となる構文木要素
   );
 
 
@@ -70,7 +70,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ハッシュ表
-  std::unordered_map<const AstBase*, std::vector<const VlAttribute*>> mHash;
+  std::unordered_map<PtrIntType, std::vector<const VlAttribute*>> mHash;
 
   // 空のリスト
   std::vector<const VlAttribute*> mEmptyList{};

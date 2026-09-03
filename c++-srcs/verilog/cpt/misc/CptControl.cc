@@ -18,21 +18,21 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 // @brief  遅延式の取得
-const AstExpr*
+const PtExpr*
 CptControl::delay() const
 {
   throw std::logic_error{"Not an Delay control type"};
 }
 
 // @brief イベントリストの取得
-AstExprList
-CptControl::event_list() const
+const PtExpr*
+CptControl::event_top() const
 {
   throw std::logic_error{"Not an Eent|Repeat control type"};
 }
 
 // @brief 繰り返し数の取得
-const AstExpr*
+const PtExpr*
 CptControl::rep_expr() const
 {
   throw std::logic_error{"Not a Repeat control type"};
@@ -54,11 +54,11 @@ CptDelayControl::file_region() const
 AstControl::Type
 CptDelayControl::type() const
 {
-  return Delay;
+  return AstControl::Delay;
 }
 
 // 遅延式を返す．
-const AstExpr*
+const PtExpr*
 CptDelayControl::delay() const
 {
   return mDelay;
@@ -80,14 +80,14 @@ CptEventControl::file_region() const
 AstControl::Type
 CptEventControl::type() const
 {
-  return Event;
+  return AstControl::Event;
 }
 
 // @brief イベントリストの取得
-AstExprList
-CptEventControl::event_list() const
+const PtExpr*
+CptEventControl::event_top() const
 {
-  return AstExprList();
+  return nullptr;
 }
 
 
@@ -96,10 +96,10 @@ CptEventControl::event_list() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief イベントリストの取得
-AstExprList
-CptEventControl1::event_list() const
+const PtExpr*
+CptEventControl1::event_top() const
 {
-  return AstExprList(mEventTop);
+  return mEventTop;
 }
 
 
@@ -111,11 +111,11 @@ CptEventControl1::event_list() const
 AstControl::Type
 CptRepeatControl::type() const
 {
-  return Repeat;
+  return AstControl::Repeat;
 }
 
 // 繰り返し数を得る．
-const AstExpr*
+const PtExpr*
 CptRepeatControl::rep_expr() const
 {
   return mRepExpr;
@@ -130,11 +130,11 @@ CptRepeatControl::rep_expr() const
 AstControl::Type
 CptRepeatControl1::type() const
 {
-  return Repeat;
+  return AstControl::Repeat;
 }
 
 // 繰り返し数を得る．
-const AstExpr*
+const PtExpr*
 CptRepeatControl1::rep_expr() const
 {
   return mRepExpr;
@@ -149,7 +149,7 @@ CptRepeatControl1::rep_expr() const
 PtControl*
 PtFactory::new_DelayControl(
   const FileRegion& file_region,
-  const AstExpr* value
+  const PtExpr* value
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptDelayControl));
@@ -170,7 +170,7 @@ PtFactory::new_EventControl(
 PtControl*
 PtFactory::new_EventControl(
   const FileRegion& file_region,
-  PtExpr* event_top
+  const PtExpr* event_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEventControl1));
@@ -181,7 +181,7 @@ PtFactory::new_EventControl(
 PtControl*
 PtFactory::new_RepeatControl(
   const FileRegion& file_region,
-  const AstExpr* rep
+  const PtExpr* rep
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptRepeatControl));
@@ -192,8 +192,8 @@ PtFactory::new_RepeatControl(
 PtControl*
 PtFactory::new_RepeatControl(
   const FileRegion& file_region,
-  const AstExpr* rep,
-  PtExpr* event_top
+  const PtExpr* rep,
+  const PtExpr* event_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptRepeatControl1));

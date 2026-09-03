@@ -25,8 +25,8 @@ public:
   // コンストラクタ
   CptOpr_MultiConcat(
     const FileRegion& file_region,
-    const AstExpr* rep,
-    const AstExpr* expr_top
+    const PtExpr* rep,
+    const PtExpr* expr_top
   ) : CptOpr_Concat(file_region, expr_top),
       mRep{rep}
   {
@@ -38,7 +38,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   ///演算子の種類の取得
@@ -48,7 +48,7 @@ public:
   /// @brief multi-concat の繰り返し数
   ///
   /// - type() != Opr および op_type() != MultiConcat の時 std::logic 例外を送出する．
-  const AstExpr*
+  const PtExpr*
   rep() const override;
 
 
@@ -58,7 +58,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 繰り返し数
-  const AstExpr* mRep;
+  const PtExpr* mRep;
 
 };
 

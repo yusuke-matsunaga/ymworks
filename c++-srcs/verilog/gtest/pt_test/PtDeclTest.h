@@ -25,18 +25,18 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief AstIOH のテスト
+  /// @brief PtIOH のテスト
   void
   check_IOHead(
-    const AstIOHead* iohead,
+    const PtIOHead* iohead,
     const FileRegion& fr,
     VpiDir dir,
     VpiAuxType aux_type,
     VpiNetType net_type,
     VpiVarType var_type,
     bool is_signed,
-    const AstRange* range,
-    const std::vector<const AstIOItem*>& item_vec
+    const PtRange* range,
+    const std::vector<const PtIOItem*>& item_vec
   )
   {
     check_Base(iohead, fr);
@@ -46,36 +46,37 @@ public:
     EXPECT_EQ( var_type, iohead->var_type() );
     EXPECT_EQ( is_signed, iohead->is_signed() );
     EXPECT_EQ( range, iohead->range() );
-    EXPECT_EQ( item_vec, iohead->item_list().to_vector() );
+    EXPECT_EQ( item_vec, to_vector(iohead->item_top()) );
   }
 
-  /// @brief AstIOItem のテスト
+  /// @brief PtIOItem のテスト
   void
   check_IOItem(
-    const AstIOItem* ioitem,
+    const PtIOItem* ioitem,
     const FileRegion& fr,
     const char* name,
-    const AstExpr* init_value
+    const PtExpr* init_value
   )
   {
-    check_NamedBase(ioitem, fr, name);
+    check_Base(ioitem, fr);
+    EXPECT_STREQ( name, ioitem->name() );
     EXPECT_EQ( init_value, ioitem->init_value() );
   }
 
-  /// @brief AstDeclHead のテスト
+  /// @brief PtDeclHead のテスト
   void
   check_DeclHead(
-    const AstDeclHead* declhead,
+    const PtDeclHead* declhead,
     const FileRegion& fr,
     AstDeclHead::Type type,
     bool is_signed,
-    const AstRange* range,
+    const PtRange* range,
     VpiVarType data_type,
     VpiNetType net_type,
     VpiVsType vs_type,
-    const AstStrength* strength,
-    const AstDelay* delay,
-    const std::vector<const AstDeclItem*>& item_vec
+    const PtStrength* strength,
+    const PtDelay* delay,
+    const std::vector<const PtDeclItem*>& item_vec
   )
   {
     check_Base(declhead, fr);
@@ -87,21 +88,22 @@ public:
     EXPECT_EQ( vs_type, declhead->vs_type() );
     EXPECT_EQ( strength, declhead->strength() );
     EXPECT_EQ( delay, declhead->delay() );
-    EXPECT_EQ( item_vec, declhead->item_list().to_vector() );
+    EXPECT_EQ( item_vec, to_vector(declhead->item_top()) );
   }
 
-  /// @brief AstDeclItem のテスト
+  /// @brief PtDeclItem のテスト
   void
   check_DeclItem(
-    const AstDeclItem* declitem,
+    const PtDeclItem* declitem,
     const FileRegion& fr,
     const char* name,
-    const std::vector<const AstRange*>& range_vec,
-    const AstExpr* init_value
+    const std::vector<const PtRange*>& range_vec,
+    const PtExpr* init_value
   )
   {
-    check_NamedBase(declitem, fr, name);
-    EXPECT_EQ( range_vec, declitem->range_list().to_vector() );
+    check_Base(declitem, fr);
+    EXPECT_STREQ( name, declitem->name() );
+    EXPECT_EQ( range_vec, to_vector(declitem->range_top()) );
     EXPECT_EQ( init_value, declitem->init_value() );
   }
 

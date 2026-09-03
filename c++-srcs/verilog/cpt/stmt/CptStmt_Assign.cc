@@ -18,7 +18,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 // lhs を得る．
-const AstExpr*
+const PtExpr*
 CptStmt_AssignBase::lhs() const
 {
   return mLhs;
@@ -33,18 +33,18 @@ CptStmt_AssignBase::lhs() const
 AstStmt::Type
 CptStmt_Assign::type() const
 {
-  return Assign;
+  return AstStmt::Assign;
 }
 
 // rhs を得る．
-const AstExpr*
+const PtExpr*
 CptStmt_Assign::rhs() const
 {
   return mRhs;
 }
 
 // @brief コントロールを返す．
-const AstControl*
+const PtControl*
 CptStmt_Assign::control() const
 {
   return nullptr;
@@ -56,7 +56,7 @@ CptStmt_Assign::control() const
 //////////////////////////////////////////////////////////////////////
 
 // コントロールを返す．
-const AstControl*
+const PtControl*
 CptStmt_AssignC::control() const
 {
   return mControl;
@@ -71,7 +71,7 @@ CptStmt_AssignC::control() const
 AstStmt::Type
 CptStmt_NbAssign::type() const
 {
-  return NbAssign;
+  return AstStmt::NbAssign;
 }
 
 
@@ -83,7 +83,7 @@ CptStmt_NbAssign::type() const
 AstStmt::Type
 CptStmt_NbAssignC::type() const
 {
-  return NbAssign;
+  return AstStmt::NbAssign;
 }
 
 
@@ -95,11 +95,11 @@ CptStmt_NbAssignC::type() const
 AstStmt::Type
 CptStmt_PcAssign::type() const
 {
-  return PcAssign;
+  return AstStmt::PcAssign;
 }
 
 // 右辺式を返す．
-const AstExpr*
+const PtExpr*
 CptStmt_PcAssign::rhs() const
 {
   return mRhs;
@@ -114,7 +114,7 @@ CptStmt_PcAssign::rhs() const
 AstStmt::Type
 CptStmt_Deassign::type() const
 {
-  return Deassign;
+  return AstStmt::Deassign;
 }
 
 
@@ -126,7 +126,7 @@ CptStmt_Deassign::type() const
 AstStmt::Type
 CptStmt_Force::type() const
 {
-  return Force;
+  return AstStmt::Force;
 }
 
 
@@ -138,7 +138,7 @@ CptStmt_Force::type() const
 AstStmt::Type
 CptStmt_Release::type() const
 {
-  return Release;
+  return AstStmt::Release;
 }
 
 
@@ -150,8 +150,8 @@ CptStmt_Release::type() const
 PtStmt*
 PtFactory::new_Assign(
   const FileRegion& file_region,
-  const AstExpr* lhs,
-  const AstExpr* rhs
+  const PtExpr* lhs,
+  const PtExpr* rhs
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Assign));
@@ -162,9 +162,9 @@ PtFactory::new_Assign(
 PtStmt*
 PtFactory::new_Assign(
   const FileRegion& file_region,
-  const AstExpr* lhs,
-  const AstExpr* rhs,
-  const AstControl* control
+  const PtExpr* lhs,
+  const PtExpr* rhs,
+  const PtControl* control
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_AssignC));
@@ -175,8 +175,8 @@ PtFactory::new_Assign(
 PtStmt*
 PtFactory::new_NbAssign(
   const FileRegion& file_region,
-  const AstExpr* lhs,
-  const AstExpr* rhs
+  const PtExpr* lhs,
+  const PtExpr* rhs
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_NbAssign));
@@ -187,9 +187,9 @@ PtFactory::new_NbAssign(
 PtStmt*
 PtFactory::new_NbAssign(
   const FileRegion& file_region,
-  const AstExpr* lhs,
-  const AstExpr* rhs,
-  const AstControl* control
+  const PtExpr* lhs,
+  const PtExpr* rhs,
+  const PtControl* control
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_NbAssignC));
@@ -200,8 +200,8 @@ PtFactory::new_NbAssign(
 PtStmt*
 PtFactory::new_PcAssign(
   const FileRegion& file_region,
-  const AstExpr* lhs,
-  const AstExpr* rhs
+  const PtExpr* lhs,
+  const PtExpr* rhs
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_PcAssign));
@@ -212,7 +212,7 @@ PtFactory::new_PcAssign(
 PtStmt*
 PtFactory::new_Deassign(
   const FileRegion& file_region,
-  const AstExpr* lhs
+  const PtExpr* lhs
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Deassign));
@@ -223,8 +223,8 @@ PtFactory::new_Deassign(
 PtStmt*
 PtFactory::new_Force(
   const FileRegion& file_region,
-  const AstExpr* lhs,
-  const AstExpr* rhs
+  const PtExpr* lhs,
+  const PtExpr* rhs
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Force));
@@ -235,7 +235,7 @@ PtFactory::new_Force(
 PtStmt*
 PtFactory::new_Release(
   const FileRegion& file_region,
-  const AstExpr* lhs
+  const PtExpr* lhs
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Release));

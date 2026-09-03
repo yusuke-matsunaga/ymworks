@@ -20,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 2項演算子を生成する．
 ElbExpr*
 EiFactory::new_BinaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr0,
   ElbExpr* opr1
@@ -77,7 +77,7 @@ EiFactory::new_BinaryOp(
 
 // @brief コンストラクタ
 EiBinaryOp::EiBinaryOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
 ) : EiOperation(ast_expr),
@@ -130,7 +130,7 @@ EiBinaryOp::operand_list() const
 
 // @brief コンストラクタ
 EiCompareOp::EiCompareOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
 ) : EiBinaryOp(ast_expr, opr1, opr2)
@@ -174,7 +174,7 @@ EiCompareOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiBinaryLogOp::EiBinaryLogOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
 ) : EiBinaryOp(ast_expr, opr1, opr2)
@@ -217,7 +217,7 @@ EiBinaryLogOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiBinaryBitOp::EiBinaryBitOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
 ) : EiBinaryOp(ast_expr, opr1, opr2)
@@ -263,7 +263,7 @@ EiBinaryBitOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiBinaryArithOp::EiBinaryArithOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
 ) : EiBinaryOp(ast_expr, opr1, opr2)
@@ -305,7 +305,7 @@ EiBinaryArithOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiPowerOp::EiPowerOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
 ) : EiBinaryOp(ast_expr, opr1, opr2)
@@ -353,7 +353,7 @@ EiPowerOp::_set_reqsize(
 
 // @brief コンストラクタ
 EiShiftOp::EiShiftOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* opr1,
   ElbExpr* opr2
 ) : EiBinaryOp(ast_expr, opr1, opr2)

@@ -21,7 +21,6 @@
 
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstItem.h"
-#include "ym/vl/AstMisc.h"
 #include "ym/vl/VlTaskFunc.h"
 
 #include "ym/ClibCellLibrary.h"
@@ -60,11 +59,11 @@ BEGIN_NONAMESPACE
 inline
 std::string
 gen_funckey(
-  const AstModule* module,
+  const AstModule& module,
   const std::string& name
 )
 {
-  return std::string{module->name()} + " " + name;
+  return std::string{module.name()} + " " + name;
 }
 
 END_NONAMESPACE
@@ -138,13 +137,13 @@ Elaborator::operator()(
   // と同時に関数定義の辞書を作る．
   int nerr = 0;
   for ( auto ast_module: ast_module_list ) {
-    auto name = ast_module->name();
+    auto name = ast_module.name();
     if ( mMgr.find_udp(name) != nullptr ) {
       std::ostringstream buf;
       buf << "\"" << name
 	  << "\" is duplicately defined as module and as UDP.";
       MsgMgr::put_msg(__FILE__, __LINE__,
-		      ast_module->file_region(),
+		      ast_module.file_region(),
 		      MsgType::Error,
 		      "ELAB",
 		      buf.str());
@@ -154,7 +153,7 @@ Elaborator::operator()(
       std::ostringstream buf;
       buf << "module \"" << name<< "\" is redefined.";
       MsgMgr::put_msg(__FILE__, __LINE__,
-		      ast_module->file_region(),
+		      ast_module.file_region(),
 		      MsgType::Error,
 		      "ELAB",
 		      buf.str());
@@ -165,9 +164,9 @@ Elaborator::operator()(
       mModuleDict.emplace(name, ast_module);
     }
     // 関数の辞書を作る．
-    for ( auto item: ast_module->item_list() ) {
-      if ( item->type() == AstItem::Func ) {
-	auto key = gen_funckey(ast_module, item->name());
+    for ( auto item: ast_module.item_list() ) {
+      if ( item.type() == AstItem::Func ) {
+	auto key = gen_funckey(ast_module, item.name());
 	mFuncDict.emplace(key, item);
       }
     }
@@ -183,7 +182,7 @@ Elaborator::operator()(
 
   // トップモジュールの生成
   for ( auto ast_module: ast_module_list ) {
-    if ( !ast_mgr.check_def_name(ast_module->name()) ) {
+    if ( !ast_mgr.check_def_name(ast_module.name()) ) {
       // 他のモジュールから参照されていないモジュールをトップモジュールとみなす．
       mModuleGen->phase1_topmodule(toplevel, ast_module);
     }
@@ -245,9 +244,9 @@ Elaborator::operator()(
   for ( auto stub: mDefParamStubList ) {
     auto ast_defparam = stub.mAstDefparam;
     std::ostringstream buf;
-    buf << ast_defparam->decompile_name() << " : not found.";
+    buf << ast_defparam.decompile_name() << " : not found.";
     MsgMgr::put_msg(__FILE__, __LINE__,
-		    ast_defparam->file_region(),
+		    ast_defparam.file_region(),
 		    MsgType::Error,
 		    "ELAB",
 		    buf.str());
@@ -280,10 +279,10 @@ Elaborator::operator()(
 void
 Elaborator::add_defparamstub(
   const VlModule* module,
-  const AstItem* ast_header
+  const AstItem& ast_header
 )
 {
-  for ( auto ast_defparam: ast_header->defparam_list() ) {
+  for ( auto ast_defparam: ast_header.defparam_list() ) {
     mDefParamStubList.push_back(DefParamStub{module, ast_header, ast_defparam});
   }
 }
@@ -316,7 +315,7 @@ Elaborator::add_phase3stub(
 }
 
 // @brief 名前からモジュール定義を取り出す．
-const AstModule*
+AstModule
 Elaborator::find_moduledef(
   const std::string& name
 ) const
@@ -324,27 +323,24 @@ Elaborator::find_moduledef(
   if ( mModuleDict.count(name) > 0 ) {
     return mModuleDict.at(name);
   }
-  return nullptr;
+  return AstModule();
 }
 
 // @brief 関数定義を探す．
-const AstItem*
+AstItem
 Elaborator::find_funcdef(
   const VlModule* module,
   const std::string& name
 ) const
 {
   auto ast_module = find_moduledef(module->def_name());
-  if ( ast_module == nullptr ) {
-    return nullptr;
+  if ( ast_module.is_valid() ) {
+    auto key = gen_funckey(ast_module, name);
+    if ( mFuncDict.count(key) > 0 ) {
+      return mFuncDict.at(key);
+    }
   }
-
-  auto key = gen_funckey(ast_module, name);
-  if ( mFuncDict.count(key) > 0 ) {
-    return mFuncDict.at(key);
-  }
-
-  return nullptr;
+  return AstItem();
 }
 
 // @brief constant function を取り出す．

@@ -8,6 +8,7 @@
 
 #include "CptIO.h"
 #include "alloc/Alloc.h"
+#include "parser/PtExpr.h"
 #include "parser/PtFactory.h"
 
 
@@ -60,22 +61,15 @@ CptIOHBase::is_signed() const
 }
 
 // @brief 範囲の取得
-const AstRange*
+const PtRange*
 CptIOHBase::range() const
 {
   return nullptr;
 }
 
-// @brief 要素のリストの取得
-AstIOItemList
-CptIOHBase::item_list() const
-{
-  return AstIOItemList(mItemTop);
-}
-
-// @brief 先頭の要素を返す．
-PtIOItem*
-CptIOHBase::_item_top() const
+// @brief 要素のリストの先頭の取得
+const PtIOItem*
+CptIOHBase::item_top() const
 {
   return mItemTop;
 }
@@ -86,7 +80,7 @@ CptIOHBase::_item_top() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief 範囲の取得
-const AstRange*
+const PtRange*
 CptIOHV::range() const
 {
   return mRange;
@@ -112,7 +106,7 @@ CptIOItem::name() const
 }
 
 // @brief 初期値の取得
-const AstExpr*
+const PtExpr*
 CptIOItem::init_value() const
 {
   return nullptr;
@@ -131,7 +125,7 @@ CptIOItemI::file_region() const
 }
 
 // @brief 初期値の取得
-const AstExpr*
+const PtExpr*
 CptIOItemI::init_value() const
 {
   return mInitValue;
@@ -147,7 +141,7 @@ PtIOHead*
 PtFactory::new_IOHead(
   const FileRegion& file_region,
   VpiDir dir,
-  PtIOItem* item_top
+  const PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOH));
@@ -164,8 +158,8 @@ PtFactory::new_IOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const AstRange* range,
-  PtIOItem* item_top
+  const PtRange* range,
+  const PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
@@ -179,7 +173,7 @@ PtIOHead*
 PtFactory::new_RegIOHead(
   const FileRegion& file_region,
   VpiDir dir,
-  PtIOItem* item_top
+  const PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOH));
@@ -194,8 +188,8 @@ PtFactory::new_RegIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   bool sign,
-  const AstRange* range,
-  PtIOItem* item_top
+  const PtRange* range,
+  const PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
@@ -210,7 +204,7 @@ PtFactory::new_NetIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   VpiNetType net_type,
-  PtIOItem* item_top
+  const PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOH));
@@ -226,8 +220,8 @@ PtFactory::new_NetIOHead(
   VpiDir dir,
   VpiNetType net_type,
   bool sign,
-  const AstRange* range,
-  PtIOItem* item_top
+  const PtRange* range,
+  const PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOHV));
@@ -242,7 +236,7 @@ PtFactory::new_VarIOHead(
   const FileRegion& file_region,
   VpiDir dir,
   VpiVarType var_type,
-  PtIOItem* item_top
+  const PtIOItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOH));
@@ -267,7 +261,7 @@ PtIOItem*
 PtFactory::new_IOItem(
   const FileRegion& file_region,
   const char* name,
-  const AstExpr* init_value
+  const PtExpr* init_value
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptIOItemI));

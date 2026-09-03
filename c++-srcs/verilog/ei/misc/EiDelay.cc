@@ -24,7 +24,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 遅延値を生成する．
 const VlDelay*
 EiFactory::new_Delay(
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const std::vector<ElbExpr*>& expr_list
 )
 {
@@ -38,7 +38,7 @@ EiFactory::new_Delay(
 
 // @brief コンストラクタ
 EiDelay::EiDelay(
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const std::vector<ElbExpr*>& expr_list
 ) : mAstObj{ast_obj},
     mElemList{expr_list}
@@ -62,7 +62,7 @@ EiDelay::type() const
 FileRegion
 EiDelay::file_region() const
 {
-  return mAstObj->file_region();
+  return mAstObj.file_region();
 }
 
 // @brief 要素数を返す．

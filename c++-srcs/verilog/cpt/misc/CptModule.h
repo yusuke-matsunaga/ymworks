@@ -10,7 +10,10 @@
 
 #include "parser/PtModule.h"
 #include "parser/PtPort.h"
-#include "parser/PtDecl.h"
+#include "parser/PtDeclHead.h"
+#include "parser/PtDeclItem.h"
+#include "parser/PtIOHead.h"
+#include "parser/PtIOItem.h"
 #include "parser/PtItem.h"
 #include "ym/FileRegion.h"
 
@@ -44,11 +47,11 @@ public:
     const std::string& config,
     const std::string& library,
     const std::string& cell,
-    const AstDeclHead* paramport_top,
-    const AstPort* port_top,
-    const AstIOHead* iohead_top,
-    const AstDeclHead* declhead_top,
-    const AstItem* item_top
+    const PtDeclHead* paramport_top,
+    const PtPort* port_top,
+    const PtIOHead* iohead_top,
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   );
 
   /// @brief デストラクタ
@@ -125,16 +128,16 @@ public:
   cell() const override;
 
   /// @brief パラメータポート宣言のリストの取得
-  AstDeclHeadList
-  paramport_list() const override;
+  const PtDeclHead*
+  paramport_top() const override;
 
   /// @brief ポートのリストを返す．
-  AstPortList
-  port_list() const override;
+  const PtPort*
+  port_top() const override;
 
   /// @brief 入出力宣言のヘッダのリストを返す．
-  AstIOHeadList
-  iohead_list() const override;
+  const PtIOHead*
+  iohead_top() const override;
 
   /// @brief 入出力宣言の要素数の取得
   ///
@@ -143,12 +146,12 @@ public:
   iodecl_num() const override;
 
   /// @brief 宣言ヘッダのリストを返す．
-  AstDeclHeadList
-  declhead_list() const override;
+  const PtDeclHead*
+  declhead_top() const override;
 
   /// @brief item のリストを返す．
-  AstItemList
-  item_list() const override;
+  const PtItem*
+  item_top() const override;
 
   /// @brief top_module フラグを下ろす．
   void
@@ -212,22 +215,22 @@ private:
   std::string mCell;
 
   // パラメータポート宣言の先頭
-  const AstDeclHead* mParamPortTop;
+  const PtDeclHead* mParamPortTop;
 
   // ポートの先頭
-  const AstPort* mPortTop;
+  const PtPort* mPortTop;
 
   // 入出力宣言の先頭
-  const AstIOHead* mIOHeadTop;
+  const PtIOHead* mIOHeadTop;
 
   // 入出力宣言の要素数
   SizeType mIODeclNum;
 
   // 宣言の先頭
-  const AstDeclHead* mDeclHeadTop;
+  const PtDeclHead* mDeclHeadTop;
 
   // 要素の先頭
-  const AstItem* mItemTop;
+  const PtItem* mItemTop;
 
 };
 

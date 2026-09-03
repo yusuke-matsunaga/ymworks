@@ -19,18 +19,11 @@ BEGIN_NAMESPACE_YM_VERILOG
 // クラス CptExpr
 //////////////////////////////////////////////////////////////////////
 
-// @brief 演算子の種類の取得
-VpiOpType
-CptExpr::op_type() const
+// @brief 階層ブランチのリストの先頭を返す．
+const PtNameBranch*
+CptExpr::namebranch_top() const
 {
-  throw std::logic_error{"Not an Operation Type"};
-}
-
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptExpr::namebranch_list() const
-{
-  throw std::logic_error{"namebranch_list(): type mismatch"};
+  throw std::logic_error{"namebranch_top(): type mismatch"};
 }
 
 // @brief 末尾の名前の取得
@@ -40,46 +33,60 @@ CptExpr::name() const
   throw std::logic_error{"name(): type mismatch"};
 }
 
+// @brief 演算子の種類の取得
+VpiOpType
+CptExpr::op_type() const
+{
+  throw std::logic_error{"op_type(): type mismatch"};
+}
+
+// @brief 固定オペランド数の取得
+SizeType
+CptExpr::operand_num() const
+{
+  throw std::logic_error{"operand_num(): type mismatch"};
+}
+
 // @brief 0番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptExpr::operand0() const
 {
   throw std::logic_error{"operand0(): type mismtach"};
 }
 
 // @brief 1番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptExpr::operand1() const
 {
   throw std::logic_error{"operand0(): type mismtach"};
 }
 
 // @brief 2番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptExpr::operand2() const
 {
   throw std::logic_error{"operand0(): type mismtach"};
 }
 
 // @brief オペランドのリストの取得
-AstExprList
-CptExpr::operand_list() const
+const PtExpr*
+CptExpr::operand_top() const
 {
-  throw std::logic_error{"operand_list(): type mismatch"};
+  throw std::logic_error{"operand_top(): type mismatch"};
 }
 
 // @brief multi-concat の繰り返し数
-const AstExpr*
+const PtExpr*
 CptExpr::rep() const
 {
   throw std::logic_error{"rep(): Not a multi-concat oprator"};
 }
 
 // @brief 引数リストの取得
-AstExprList
-CptExpr::arg_list() const
+const PtExpr*
+CptExpr::arg_top() const
 {
-  throw std::logic_error{"arg_list(): type mismatch"};
+  throw std::logic_error{"arg_top(): type mismatch"};
 }
 
 // @brief 定数インデックスのチェック
@@ -90,14 +97,14 @@ CptExpr::is_const_index() const
 }
 
 // @brief インデックスリストの取得
-AstExprList
-CptExpr::index_list() const
+const PtExpr*
+CptExpr::index_top() const
 {
-  throw std::logic_error{"index_list(); type mismatch"};
+  throw std::logic_error{"index_top(); type mismatch"};
 }
 
 // @brief 範囲指定の取得
-const AstPart*
+const PtPart*
 CptExpr::part() const
 {
   throw std::logic_error{"part(): type mismatch"};
@@ -178,18 +185,18 @@ CptFuncCallBase::name() const
   return mName;
 }
 
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptFuncCallBase::namebranch_list() const
+// @brief 階層ブランチのリストの先頭を返す．
+const PtNameBranch*
+CptFuncCallBase::namebranch_top() const
 {
-  return AstNameBranchList(nullptr);
+  return nullptr;
 }
 
-// @brief 引数リストの取得
-AstExprList
-CptFuncCallBase::arg_list() const
+// @brief 引数リストの先頭の取得
+const PtExpr*
+CptFuncCallBase::arg_top() const
 {
-  return AstExprList(mArgTop);
+  return mArgTop;
 }
 
 
@@ -201,7 +208,7 @@ CptFuncCallBase::arg_list() const
 AstExpr::Type
 CptFuncCall::type() const
 {
-  return FuncCall;
+  return AstExpr::FuncCall;
 }
 
 
@@ -209,11 +216,11 @@ CptFuncCall::type() const
 // クラス CptFuncCallH
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptFuncCallH::namebranch_list() const
+// @brief 階層ブランチのリストの先頭を返す．
+const PtNameBranch*
+CptFuncCallH::namebranch_top() const
 {
-  return AstNameBranchList(mNbTop);
+  return mNbTop;
 }
 
 
@@ -225,7 +232,7 @@ CptFuncCallH::namebranch_list() const
 AstExpr::Type
 CptSysFuncCall::type() const
 {
-  return SysFuncCall;
+  return AstExpr::SysFuncCall;
 }
 
 
@@ -238,7 +245,7 @@ PtExpr*
 PtFactory::new_FuncCall(
   const FileRegion& file_region,
   const char* name,
-  PtExpr* arg_top
+  const PtExpr* arg_top
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptFuncCall));
@@ -250,7 +257,7 @@ PtExpr*
 PtFactory::new_FuncCall(
   const FileRegion& file_region,
   const PtHierName& hname,
-  PtExpr* arg_top
+  const PtExpr* arg_top
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptFuncCallH));
@@ -273,7 +280,7 @@ PtExpr*
 PtFactory::new_SysFuncCall(
   const FileRegion& file_region,
   const char* name,
-  PtExpr* arg_top
+  const PtExpr* arg_top
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptSysFuncCall));

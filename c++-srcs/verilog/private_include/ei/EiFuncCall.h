@@ -24,7 +24,7 @@ public:
 
   /// @brief コンストラクタ
   EiFcBase(
-    const AstExpr* ast_expr,                ///< [in] パース木の定義要素
+    const AstExpr& ast_expr,              ///< [in] パース木の定義要素
     const std::vector<ElbExpr*>& arg_list ///< [in] 引数のリスト
   );
 
@@ -86,7 +86,7 @@ public:
 
   /// @brief コンストラクタ
   EiFuncCall(
-    const AstExpr* ast_expr,                ///< [in] パース木の定義要素
+    const AstExpr& ast_expr,              ///< [in] パース木の定義要素
     const VlTaskFunc* func,               ///< [in] 関数
     const std::vector<ElbExpr*>& arg_list ///< [in] 引数のリスト
   );
@@ -149,7 +149,7 @@ public:
 
   /// @brief コンストラクタ
   EiSysFuncCall(
-    const AstExpr* ast_expr,                ///< [in] パース木の定義要素
+    const AstExpr& ast_expr,              ///< [in] パース木の定義要素
     const VlUserSystf* user_systf,        ///< [in] システム関数
     const std::vector<ElbExpr*>& arg_list ///< [in] 引数のリスト
   );

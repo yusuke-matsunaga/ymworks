@@ -8,9 +8,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "parser/PtDecl.h"
-#include "ym/FileRegion.h"
-#include "ym/vl/Ast.h"
+#include "parser/PtDeclHead.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,7 +24,7 @@ protected:
   /// @brief コンストラクタ
   CptDeclHead(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : mFileRegion{file_region},
       mItemTop{item_top}
   {
@@ -55,7 +53,7 @@ public:
   /// @brief 範囲Bの取得
   /// @retval 範囲 範囲を持つとき
   /// @retval nullptr 範囲を持たないとき
-  const AstRange*
+  const PtRange*
   range() const override;
 
   /// @brief データ型の取得
@@ -80,28 +78,18 @@ public:
   /// @brief strength の取得
   /// @retval strength
   /// @retval nullptr strength の指定なし
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
   /// @brief delay の取得
   /// @retval delay
   /// @retval nullptr delay の指定なし
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
-  /// @brief 要素のリストを返す．
-  AstDeclItemList
-  item_list() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // PtDeclHead の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 先頭の要素を返す．
-  PtDeclItem*
-  _item_top() const override;
+  /// @brief 要素のリストの先頭を返す．
+  const PtDeclItem*
+  item_top() const override;
 
 
 private:
@@ -113,7 +101,7 @@ private:
   FileRegion mFileRegion;
 
   // 要素の先頭
-  PtDeclItem* mItemTop{nullptr};
+  const PtDeclItem* mItemTop{nullptr};
 
 };
 
@@ -130,7 +118,7 @@ public:
   CptVarH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
     VpiVarType var_type,           ///< [in] データ型
-    PtDeclItem* item_top = nullptr ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptDeclHead(file_region, item_top),
       mVarType{var_type}
   {
@@ -147,7 +135,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
   /// @brief 符号の取得
@@ -185,7 +173,7 @@ public:
   /// @brief コンストラクタ
   CptGenvarH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptDeclHead(file_region, item_top)
   {
   }
@@ -201,7 +189,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };
@@ -218,7 +206,7 @@ public:
   /// @brief コンストラクタ
   CptEventH(
     const FileRegion& file_region, ///< [in] ファイル位置の情報
-    PtDeclItem* item_top           ///< [in] 要素の先頭
+    const PtDeclItem* item_top     ///< [in] 要素の先頭
   ) : CptDeclHead(file_region, item_top)
   {
   }
@@ -234,7 +222,7 @@ public:
 
   /// @brief クラスを識別するための型を返す．
   /// @return 宣言要素の型
-  Type
+  AstDeclHead::Type
   type() const override;
 
 };

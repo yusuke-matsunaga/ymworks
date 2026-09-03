@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExpr::Type
 CptPrimaryBase::type() const
 {
-  return Primary;
+  return AstExpr::Primary;
 }
 
 // 末尾の名前を取り出す．
@@ -31,11 +31,11 @@ CptPrimaryBase::name() const
   return mName;
 }
 
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptPrimaryBase::namebranch_list() const
+// @brief 階層ブランチのリストの先頭を返す．
+const PtNameBranch*
+CptPrimaryBase::namebranch_top() const
 {
-  return AstNameBranchList(nullptr);
+  return nullptr;
 }
 
 // @brief 定数インデックスのチェック
@@ -45,15 +45,15 @@ CptPrimaryBase::is_const_index() const
   return false;
 }
 
-// @brief インデックスリストの取得
-AstExprList
-CptPrimaryBase::index_list() const
+// @brief インデックスリストの先頭取得
+const PtExpr*
+CptPrimaryBase::index_top() const
 {
-  return AstExprList(nullptr);
+  return nullptr;
 }
 
 // @brief 範囲指定を表す構文木を返す．
-const AstPart*
+const PtPart*
 CptPrimaryBase::part() const
 {
   return nullptr;
@@ -83,11 +83,11 @@ CptPrimary::file_region() const
 // クラス CptPrimaryI
 //////////////////////////////////////////////////////////////////////
 
-// @brief インデックスリストの取得
-AstExprList
-CptPrimaryI::index_list() const
+// @brief インデックスリストの先頭の取得
+const PtExpr*
+CptPrimaryI::index_top() const
 {
-  return AstExprList(mIndexTop);
+  return mIndexTop;
 }
 
 // index_list も range も持たないとき true を返す．
@@ -123,7 +123,7 @@ CptPrimaryR::file_region() const
 }
 
 // 範囲指定の取得
-const AstPart*
+const PtPart*
 CptPrimaryR::part() const
 {
   return mPart;
@@ -154,7 +154,7 @@ CptPrimaryCR::is_const_index() const
 //////////////////////////////////////////////////////////////////////
 
 // 範囲指定を取り出す．
-const AstPart*
+const PtPart*
 CptPrimaryIR::part() const
 {
   return mPart;
@@ -172,11 +172,11 @@ CptPrimaryH::file_region() const
   return mFileRegion;
 }
 
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptPrimaryH::namebranch_list() const
+// @brief 階層ブランチのリストの先頭を返す．
+const PtNameBranch*
+CptPrimaryH::namebranch_top() const
 {
-  return AstNameBranchList(mNbTop);
+  return mNbTop;
 }
 
 
@@ -184,11 +184,11 @@ CptPrimaryH::namebranch_list() const
 // クラス CptPrimaryHI
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptPrimaryHI::namebranch_list() const
+// @brief 階層ブランチのリストの先頭を返す．
+const PtNameBranch*
+CptPrimaryHI::namebranch_top() const
 {
-  return AstNameBranchList(mNbTop);
+  return mNbTop;
 }
 
 
@@ -208,11 +208,11 @@ CptPrimaryHCI::is_const_index() const
 // クラス CptPrimaryHR
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptPrimaryHR::namebranch_list() const
+// @brief 階層ブランチのリストの先頭を返す．
+const PtNameBranch*
+CptPrimaryHR::namebranch_top() const
 {
-  return AstNameBranchList(mNbTop);
+  return mNbTop;
 }
 
 
@@ -220,11 +220,11 @@ CptPrimaryHR::namebranch_list() const
 // クラス CptPrimaryHIR
 //////////////////////////////////////////////////////////////////////
 
-// @brief 階層ブランチのリストを返す．
-AstNameBranchList
-CptPrimaryHIR::namebranch_list() const
+// @brief 階層ブランチのリストの先頭を返す．
+const PtNameBranch*
+CptPrimaryHIR::namebranch_top() const
 {
-  return AstNameBranchList(mNbTop);
+  return mNbTop;
 }
 
 
@@ -248,7 +248,7 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  PtExpr* index_top
+  const PtExpr* index_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryI));
@@ -260,7 +260,7 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  const AstPart* part
+  const PtPart* part
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryR));
@@ -272,8 +272,8 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const char* name,
-  PtExpr* index_top,
-  const AstPart* part
+  const PtExpr* index_top,
+  const PtPart* part
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryIR));
@@ -297,7 +297,7 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const PtHierName& hname,
-  PtExpr* index_top
+  const PtExpr* index_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHI));
@@ -309,7 +309,7 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const PtHierName& hname,
-  const AstPart* part
+  const PtPart* part
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHR));
@@ -321,8 +321,8 @@ PtExpr*
 PtFactory::new_Primary(
   const FileRegion& file_region,
   const PtHierName& hname,
-  PtExpr* index_top,
-  const AstPart* part
+  const PtExpr* index_top,
+  const PtPart* part
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHIR));
@@ -335,7 +335,7 @@ PtExpr*
 PtFactory::new_CPrimary(
   const FileRegion& file_region,
   const char* name,
-  PtExpr* index_top
+  const PtExpr* index_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCI));
@@ -347,7 +347,7 @@ PtExpr*
 PtFactory::new_CPrimary(
   const FileRegion& file_region,
   const char* name,
-  const AstPart* part
+  const PtPart* part
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryCR));
@@ -359,7 +359,7 @@ PtExpr*
 PtFactory::new_CPrimary(
   const FileRegion& file_region,
   const PtHierName& hname,
-  PtExpr* index_top
+  const PtExpr* index_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPrimaryHCI));

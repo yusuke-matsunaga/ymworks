@@ -24,7 +24,7 @@ public:
 
   /// @brief コンストラクタ
   EiConcatOp(
-    const AstExpr* ast_expr,                ///< [in] パース木の定義要素
+    const AstExpr& ast_expr,              ///< [in] パース木の定義要素
     const std::vector<ElbExpr*>& opr_list ///< [in] オペランドのリスト
   );
 
@@ -107,7 +107,7 @@ public:
 
   /// @brief コンストラクタ
   EiMultiConcatOp(
-    const AstExpr* ast_expr,                 ///< [in] パース木の定義要素
+    const AstExpr& ast_expr,               ///< [in] パース木の定義要素
     SizeType rep_num,                      ///< [in] 繰り返し数
     ElbExpr* rep_expr,                     ///< [in] 繰り返し数を表す式
     const std::vector<ElbExpr*>& opr_array ///< [in] オペランドのリスト

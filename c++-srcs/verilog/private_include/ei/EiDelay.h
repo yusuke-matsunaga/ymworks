@@ -24,7 +24,7 @@ public:
 
   /// @brief コンストラクタ
   EiDelay(
-    const AstBase* ast_obj,                  ///< [in] パース木の定義要素
+    const AstBase& ast_obj,                ///< [in] パース木の定義要素
     const std::vector<ElbExpr*>& expr_list ///< [in] 式の配列
   );
 
@@ -76,7 +76,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の定義要素
-  const AstBase* mAstObj;
+  const AstBase& mAstObj;
 
   // 要素の配列
   std::vector<ElbExpr*> mElemList;

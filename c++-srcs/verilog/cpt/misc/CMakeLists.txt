@@ -44,6 +44,7 @@
 
 set ( cpt_misc_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/CptAttrInst.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/CptAttrSpec.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptConnection.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptControl.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/CptDelay.cc

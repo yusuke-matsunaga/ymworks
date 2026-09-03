@@ -52,7 +52,7 @@ VlMgr::read_file(
 }
 
 // @brief 登録されているモジュールのリストを返す．
-const std::vector<const AstModule*>&
+const std::vector<AstModule>&
 VlMgr::ast_module_list() const
 {
   return mAstMgr->module_list();
@@ -60,19 +60,19 @@ VlMgr::ast_module_list() const
 
 // @brief 登録されている UDP のリストを返す．
 // @return 登録されている UDP のリスト
-const std::vector<const AstUdp*>&
+const std::vector<AstUdp>&
 VlMgr::ast_udp_list() const
 {
   return mAstMgr->udp_list();
 }
 
 // @brief attribute instance のリストを表す構文木要素を返す．
-std::vector<const AstAttrInst*>
+std::vector<AstAttrInst>
 VlMgr::ast_attr_list(
-  const AstBase* pt_obj
+  const AstBase& ast_obj
 ) const
 {
-  return mAstMgr->find_attr_list(pt_obj);
+  return mAstMgr->find_attr_list(ast_obj);
 }
 
 // @brief エラボレーションを行う．

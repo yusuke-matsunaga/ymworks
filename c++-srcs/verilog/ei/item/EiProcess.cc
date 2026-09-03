@@ -24,7 +24,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbProcess*
 EiFactory::new_Process(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   auto process = new EiProcess{parent, ast_item};
@@ -39,7 +39,7 @@ EiFactory::new_Process(
 // @brief コンストラクタ
 EiProcess::EiProcess(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 ) : mParent{parent},
     mAstItem{ast_item}
 {
@@ -54,7 +54,7 @@ EiProcess::~EiProcess()
 VpiObjType
 EiProcess::type() const
 {
-  switch ( mAstItem->type() ) {
+  switch ( mAstItem.type() ) {
   case AstItem::Initial: return VpiObjType::Initial;
   case AstItem::Always:  return VpiObjType::Always;
   default: break;
@@ -67,7 +67,7 @@ EiProcess::type() const
 FileRegion
 EiProcess::file_region() const
 {
-  return mAstItem->file_region();
+  return mAstItem.file_region();
 }
 
 // @brief 親のスコープを返す．

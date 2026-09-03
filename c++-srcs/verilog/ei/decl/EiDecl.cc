@@ -8,12 +8,7 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiDecl.h"
-
 #include "elaborator/ElbExpr.h"
-
-#include "ym/vl/AstDecl.h"
-#include "ym/vl/AstItem.h"
-#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -26,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbDecl*
 EiFactory::new_Decl(
   ElbDeclHead* head,
-  const AstNamedBase* ast_item,
+  const AstNamedBase& ast_item,
   const VlExpr* init
 )
 {
@@ -46,7 +41,7 @@ EiFactory::new_Decl(
 // @brief コンストラクタ
 EiDecl::EiDecl(
   ElbDeclHead* head,
-  const AstNamedBase* ast_item
+  const AstNamedBase& ast_item
 ) : mHead{head},
     mAstItem{ast_item},
     mAuxSign{false}
@@ -69,7 +64,7 @@ EiDecl::type() const
 FileRegion
 EiDecl::file_region() const
 {
-  return mAstItem->file_region();
+  return mAstItem.file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -83,7 +78,7 @@ EiDecl::parent_scope() const
 std::string
 EiDecl::name() const
 {
-  return mAstItem->name();
+  return mAstItem.name();
 }
 
 // @brief 値の型を返す．
@@ -277,7 +272,7 @@ EiDecl::set_signed()
 // @brief コンストラクタ
 EiDeclI::EiDeclI(
   ElbDeclHead* head,
-  const AstNamedBase* ast_item,
+  const AstNamedBase& ast_item,
   const VlExpr* init
 ) : EiDecl(head, ast_item),
     mInit{init}

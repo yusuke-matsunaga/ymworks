@@ -7,7 +7,8 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
-#include "ym/vl/AstMisc.h"
+#include "ym/vl/AstNameBranch.h"
+#include "parser/JsonUtils.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -20,9 +21,21 @@ BEGIN_NAMESPACE_YM_VERILOG
 JsonValue
 AstBase::json_obj() const
 {
+  if ( is_invalid() ) {
+    return JsonValue::null();
+  }
   auto jobj = JsonValue::object();
-  jobj.add("file_region", file_region().json_obj());
+  json_sub(jobj);
   return jobj;
+}
+
+// @brief json_obj() の下請け関数
+void
+AstBase::json_sub(
+  JsonValue& jobj
+) const
+{
+  jobj.add("file_region", file_region().json_obj());
 }
 
 
@@ -30,15 +43,14 @@ AstBase::json_obj() const
 // クラス AstNamedBase
 //////////////////////////////////////////////////////////////////////
 
-// @brief 内容を表す JSON オブジェクトを返す．
-JsonValue
-AstNamedBase::json_obj() const
+// @brief json_obj() の下請け関数
+void
+AstNamedBase::json_sub(
+  JsonValue& jobj
+) const
 {
-  auto jobj = AstBase::json_obj();
-  if ( name() != nullptr ) {
-    jobj.add("name", JsonValue(name()));
-  }
-  return jobj;
+  AstBase::json_sub(jobj);
+  JsonUtils::add(jobj, "name", name());
 }
 
 
@@ -53,7 +65,7 @@ AstHierNamedBase::decompile_name() const
   std::ostringstream buf;
   const char* period = "";
   for ( auto nb: namebranch_list() ) {
-    buf << period << nb->decompile();
+    buf << period << nb.decompile();
     period = ".";
   }
   if ( name() != nullptr ) {
@@ -62,15 +74,15 @@ AstHierNamedBase::decompile_name() const
   return buf.str();
 }
 
-// @brief 内容を表す JSON オブジェクトを返す．
-JsonValue
-AstHierNamedBase::json_obj() const
+
+// @brief json_obj() の下請け関数
+void
+AstHierNamedBase::json_sub(
+  JsonValue& jobj
+) const
 {
-  auto jobj = AstNamedBase::json_obj();
-  if ( namebranch_list().size() > 0 ) {
-    jobj.add("namebranch_list", namebranch_list().json_obj());
-  }
-  return jobj;
+  AstNamedBase::json_sub(jobj);
+  JsonUtils::add_list(jobj, "namebranch_list", namebranch_list());
 }
 
 END_NAMESPACE_YM_VERILOG

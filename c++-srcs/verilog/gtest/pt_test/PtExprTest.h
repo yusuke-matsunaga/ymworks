@@ -9,13 +9,14 @@
 /// All rights reserved.
 
 #include "PtTest.h"
+#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
 /// @class PtExprTest PtExprTest.h "PtExprTest.h"
-/// @brief PtTest の AstExpr用テスト環境
+/// @brief PtTest の PtExpr用テスト環境
 //////////////////////////////////////////////////////////////////////
 class PtExprTest :
   public PtTest
@@ -28,20 +29,21 @@ public:
   /// @brief 単項演算子のテスト
   void
   check_Opr1(
-    const AstExpr* expr,    // 対称の AstExpr
+    const PtExpr* expr,    // 対称の PtExpr
     const FileRegion& file_region,
     VpiOpType op_type,      // 演算の型
-    const AstExpr* operand0 // オペランド
+    const PtExpr* operand0 // オペランド
   )
   {
     check_common(expr, file_region, AstExpr::Opr);
     EXPECT_EQ( op_type, expr->op_type() );
+    EXPECT_EQ( 1, expr->operand_num() );
     EXPECT_EQ( operand0, expr->operand0() );
     EXPECT_THROW( expr->operand1(),
 		  std::logic_error );
     EXPECT_THROW( expr->operand2(),
 		  std::logic_error );
-    EXPECT_THROW( expr->operand_list(),
+    EXPECT_THROW( expr->operand_top(),
 		  std::logic_error );
     EXPECT_THROW( expr->rep(),
 		  std::logic_error );
@@ -50,20 +52,21 @@ public:
   /// @brief 二項演算子関係のテスト
   void
   check_Opr2(
-    const AstExpr* expr,     // 対称の AstExpr
+    const PtExpr* expr,     // 対称の PtExpr
     VpiOpType op_type,       // 演算の型
-    const AstExpr* operand0, // オペランド
-    const AstExpr* operand1  // オペランド
+    const PtExpr* operand0, // オペランド
+    const PtExpr* operand1  // オペランド
   )
   {
     auto file_region = FileRegion(operand0->file_region(), operand1->file_region());
     check_common(expr, file_region, AstExpr::Opr);
     EXPECT_EQ( op_type, expr->op_type() );
+    EXPECT_EQ( 2, expr->operand_num() );
     EXPECT_EQ( operand0, expr->operand0() );
     EXPECT_EQ( operand1, expr->operand1() );
     EXPECT_THROW( expr->operand2(),
 		  std::logic_error );
-    EXPECT_THROW( expr->operand_list(),
+    EXPECT_THROW( expr->operand_top(),
 		  std::logic_error );
     EXPECT_THROW( expr->rep(),
 		  std::logic_error );
@@ -72,20 +75,21 @@ public:
   /// @brief 三項演算子関係のテスト
   void
   check_Opr3(
-    const AstExpr* expr,     // 対称の AstExpr
+    const PtExpr* expr,     // 対称の PtExpr
     VpiOpType op_type,       // 演算の型
-    const AstExpr* operand0, // オペランド
-    const AstExpr* operand1, // オペランド
-    const AstExpr* operand2  // オペランド
+    const PtExpr* operand0, // オペランド
+    const PtExpr* operand1, // オペランド
+    const PtExpr* operand2  // オペランド
   )
   {
     auto file_region = FileRegion(operand0->file_region(), operand2->file_region());
     check_common(expr, file_region, AstExpr::Opr);
     EXPECT_EQ( op_type, expr->op_type() );
+    EXPECT_EQ( 3, expr->operand_num() );
     EXPECT_EQ( operand0, expr->operand0() );
     EXPECT_EQ( operand1, expr->operand1() );
     EXPECT_EQ( operand2, expr->operand2() );
-    EXPECT_THROW( expr->operand_list(),
+    EXPECT_THROW( expr->operand_top(),
 		  std::logic_error );
     EXPECT_THROW( expr->rep(),
 		  std::logic_error );
@@ -94,20 +98,21 @@ public:
   /// @brief Concat Operation 関係のテスト
   void
   check_Concat(
-    const AstExpr* expr,                            // 対称の AstExpr
+    const PtExpr* expr,                            // 対称の PtExpr
     const FileRegion& file_region,
-    const std::vector<const AstExpr*>& operand_list // オペランドのリスト
+    const std::vector<const PtExpr*>& operand_list // オペランドのリスト
   )
   {
     check_common(expr, file_region, AstExpr::Opr);
     EXPECT_EQ( VpiOpType::Concat, expr->op_type() );
+    EXPECT_EQ( 0, expr->operand_num() );
     EXPECT_THROW( expr->operand0(),
 		  std::logic_error);
     EXPECT_THROW( expr->operand1(),
 		  std::logic_error);
     EXPECT_THROW( expr->operand2(),
 		  std::logic_error);
-    EXPECT_EQ( operand_list, expr->operand_list().to_vector() );
+    EXPECT_EQ( operand_list, to_vector(expr->operand_top()) );
     EXPECT_THROW( expr->rep(),
 		  std::logic_error );
   }
@@ -115,28 +120,29 @@ public:
   /// @brief MultiConcat Operation 関係のテスト
   void
   check_MultiConcat(
-    const AstExpr* expr,                            // 対称の AstExpr
+    const PtExpr* expr,                            // 対称の PtExpr
     const FileRegion& file_region,
-    const AstExpr* rep,                             // 繰り返し数
-    const std::vector<const AstExpr*>& operand_list // オペランドのリスト
+    const PtExpr* rep,                             // 繰り返し数
+    const std::vector<const PtExpr*>& operand_list // オペランドのリスト
   )
   {
     check_common(expr, file_region, AstExpr::Opr);
     EXPECT_EQ( VpiOpType::MultiConcat, expr->op_type() );
+    EXPECT_EQ( 0, expr->operand_num() );
     EXPECT_THROW( expr->operand0(),
 		  std::logic_error);
     EXPECT_THROW( expr->operand1(),
 		  std::logic_error);
     EXPECT_THROW( expr->operand2(),
 		  std::logic_error);
-    EXPECT_EQ( operand_list, expr->operand_list().to_vector() );
+    EXPECT_EQ( operand_list, to_vector(expr->operand_top()) );
     EXPECT_EQ( rep, expr->rep() );
   }
 
   /// @brief Primary 関係のテスト
   void
   check_Primary(
-    const AstExpr* expr,                          // 対象の AstExpr
+    const PtExpr* expr,                          // 対象の PtExpr
     const FileRegion& file_region,
     const char* name,
     bool is_const_index                         // 添字に使える時 true
@@ -148,7 +154,7 @@ public:
   /// @brief Primary 関係のテスト
   void
   check_Primary(
-    const AstExpr* expr,                          // 対象の AstExpr
+    const PtExpr* expr,                          // 対象の PtExpr
     const FileRegion& file_region,
     const char* name,
     const std::vector<NameBranchSpec>& nbspec_list,
@@ -161,11 +167,11 @@ public:
   /// @brief Primary 関係のテスト
   void
   check_Primary(
-    const AstExpr* expr,                          // 対象の AstExpr
+    const PtExpr* expr,                          // 対象の PtExpr
     const FileRegion& file_region,
     const char* name,
     bool is_const_index,                // 添字に使える時 true
-    const AstPart* part                 // 範囲指定
+    const PtPart* part                 // 範囲指定
   )
   {
     check_Primary(expr, file_region, name, {}, is_const_index, {}, part);
@@ -174,12 +180,12 @@ public:
   /// @brief Primary 関係のテスト
   void
   check_Primary(
-    const AstExpr* expr,                          // 対象の AstExpr
+    const PtExpr* expr,                          // 対象の PtExpr
     const FileRegion& file_region,
     const char* name,
     const std::vector<NameBranchSpec>& nbspec_list,
     bool is_const_index,                // 添字に使える時 true
-    const AstPart* part                 // 範囲指定
+    const PtPart* part                 // 範囲指定
   )
   {
     check_Primary(expr, file_region, name, nbspec_list, is_const_index, {}, part);
@@ -188,12 +194,12 @@ public:
   /// @brief Primary 関係のテスト
   void
   check_Primary(
-    const AstExpr* expr,                          // 対象の AstExpr
+    const PtExpr* expr,                          // 対象の PtExpr
     const FileRegion& file_region,
     const char* name,
     bool is_const_index,                           // 添字に使える時 true
-    const std::vector<const AstExpr*>& index_list, // インデックスのリスト
-    const AstPart* part = nullptr                  // 範囲指定
+    const std::vector<const PtExpr*>& index_list, // インデックスのリスト
+    const PtPart* part = nullptr                  // 範囲指定
   )
   {
     check_Primary(expr, file_region, name, {}, is_const_index, index_list, part);
@@ -202,18 +208,18 @@ public:
   /// @brief Primary 関係のテスト
   void
   check_Primary(
-    const AstExpr* expr,                          // 対象の AstExpr
+    const PtExpr* expr,                          // 対象の PtExpr
     const FileRegion& file_region,
     const char* name,
     const std::vector<NameBranchSpec>& nbspec_list,
     bool is_const_index,                           // 添字に使える時 true
-    const std::vector<const AstExpr*>& index_list, // インデックスのリスト
-    const AstPart* part = nullptr                  // 範囲指定
+    const std::vector<const PtExpr*>& index_list, // インデックスのリスト
+    const PtPart* part = nullptr                  // 範囲指定
   )
   {
     check_common(expr, file_region, AstExpr::Primary, name, nbspec_list);
     EXPECT_EQ( is_const_index, expr->is_const_index() );
-    EXPECT_EQ( index_list, expr->index_list().to_vector() );
+    EXPECT_EQ( index_list, to_vector(expr->index_top()) );
     EXPECT_EQ( part, expr->part() );
     auto is_simple = (index_list.size() == 0) && (part == nullptr);
     EXPECT_EQ( is_simple, expr->is_simple() );
@@ -222,10 +228,10 @@ public:
   /// @brief 関数呼び出し関係のテスト
   void
   check_FuncCall(
-    const AstExpr* expr,
+    const PtExpr* expr,
     const FileRegion& file_region,
     const char* name,
-    const std::vector<const AstExpr*>& arg_list
+    const std::vector<const PtExpr*>& arg_list
   )
   {
     check_FuncCall(expr, file_region, name, {}, arg_list);
@@ -234,34 +240,34 @@ public:
   /// @brief 関数呼び出し関係のテスト
   void
   check_FuncCall(
-    const AstExpr* expr,
+    const PtExpr* expr,
     const FileRegion& file_region,
     const char* name,
     const std::vector<NameBranchSpec>& nbspec_list,
-    const std::vector<const AstExpr*>& arg_list
+    const std::vector<const PtExpr*>& arg_list
   )
   {
     check_common(expr, file_region, AstExpr::FuncCall, name, nbspec_list);
-    EXPECT_EQ( arg_list, expr->arg_list().to_vector() );
+    EXPECT_EQ( arg_list, to_vector(expr->arg_top()) );
   }
 
   /// @brief システム関数呼び出し関係のテスト
   void
   check_SysFuncCall(
-    const AstExpr* expr,
+    const PtExpr* expr,
     const FileRegion& file_region,
     const char* name,
-    const std::vector<const AstExpr*>& arg_list
+    const std::vector<const PtExpr*>& arg_list
   )
   {
     check_common(expr, file_region, AstExpr::SysFuncCall, name, {});
-    EXPECT_EQ( arg_list, expr->arg_list().to_vector() );
+    EXPECT_EQ( arg_list, to_vector(expr->arg_top()) );
   }
 
-  // AstExpr の整数定数関係のテストを行う．
+  // PtExpr の整数定数関係のテストを行う．
   void
   check_expr_int_const(
-    const AstExpr* expr,
+    const PtExpr* expr,
     const FileRegion& file_region,
     SizeType size,
     VpiConstType type,
@@ -289,50 +295,55 @@ private:
   /// @brief 共通のテスト
   void
   check_common(
-    const AstExpr* expr,
+    const PtExpr* expr,
     const FileRegion& file_region,
     AstExpr::Type type
   )
   {
-    ASSERT_TRUE( expr != nullptr );
-    check_HierNamedBase(expr, file_region);
-    check_common_sub(expr, file_region, type);
+    check_Base(expr, file_region);
+    EXPECT_THROW( expr->name(),
+		  std::logic_error );
+    EXPECT_THROW( expr->namebranch_top(),
+		  std::logic_error );
+    check_common_sub(expr, type);
   }
 
   /// @brief 共通のテスト
   void
   check_common(
-    const AstExpr* expr,
+    const PtExpr* expr,
     const FileRegion& file_region,
     AstExpr::Type type,
     const char* name
   )
   {
-    ASSERT_TRUE( expr != nullptr );
-    check_HierNamedBase(expr, file_region, name);
-    check_common_sub(expr, file_region, type);
+    check_Base(expr, file_region);
+    EXPECT_STREQ( name, expr->name() );
+    EXPECT_THROW( expr->namebranch_top(),
+		  std::logic_error );
+    check_common_sub(expr, type);
   }
 
   /// @brief 共通のテスト
   void
   check_common(
-    const AstExpr* expr,
+    const PtExpr* expr,
     const FileRegion& file_region,
     AstExpr::Type type,
     const char* name,
     const std::vector<NameBranchSpec>& nbspec_list
   )
   {
-    ASSERT_TRUE( expr != nullptr );
-    check_HierNamedBase(expr, file_region, name, nbspec_list);
-    check_common_sub(expr, file_region, type);
+    check_Base(expr, file_region);
+    EXPECT_STREQ( name, expr->name() );
+    check_namebranch_list(expr->namebranch_top(), nbspec_list);
+    check_common_sub(expr, type);
   }
 
   /// @brief check_common() の下請け関数
   void
   check_common_sub(
-    const AstExpr* expr,
-    const FileRegion& file_region,
+    const PtExpr* expr,
     AstExpr::Type type
   )
   {
@@ -340,26 +351,28 @@ private:
     if ( type != AstExpr::Opr ) {
       EXPECT_THROW( expr->op_type(),
 		    std::logic_error );
+      EXPECT_THROW( expr->operand_num(),
+		    std::logic_error );
       EXPECT_THROW( expr->operand0(),
 		    std::logic_error );
       EXPECT_THROW( expr->operand1(),
 		    std::logic_error );
       EXPECT_THROW( expr->operand2(),
 		    std::logic_error );
-      EXPECT_THROW( expr->operand_list(),
+      EXPECT_THROW( expr->operand_top(),
 		    std::logic_error );
       EXPECT_THROW( expr->rep(),
 		    std::logic_error );
     }
     if ( type != AstExpr::FuncCall &&
 	 type != AstExpr::SysFuncCall ) {
-      EXPECT_THROW( expr->arg_list(),
+      EXPECT_THROW( expr->arg_top(),
 		    std::logic_error );
     }
     if ( type != AstExpr::Primary ) {
       EXPECT_THROW( expr->is_const_index(),
 		    std::logic_error );
-      EXPECT_THROW( expr->index_list(),
+      EXPECT_THROW( expr->index_top(),
 		    std::logic_error );
       EXPECT_THROW( expr->part(),
 		    std::logic_error );

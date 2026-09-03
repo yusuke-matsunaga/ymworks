@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstDeclHead::Type
 CptNetH::type() const
 {
-  return Net;
+  return AstDeclHead::Net;
 }
 
 // net 型の取得
@@ -44,7 +44,7 @@ CptNetH::is_signed() const
 //////////////////////////////////////////////////////////////////////
 
 // strength の取得
-const AstStrength*
+const PtStrength*
 CptNetHS::strength() const
 {
   return mStrength;
@@ -56,7 +56,7 @@ CptNetHS::strength() const
 //////////////////////////////////////////////////////////////////////
 
 // delay の取得
-const AstDelay*
+const PtDelay*
 CptNetHD::delay() const
 {
   return mDelay;
@@ -68,14 +68,14 @@ CptNetHD::delay() const
 //////////////////////////////////////////////////////////////////////
 
 // strength の取得
-const AstStrength*
+const PtStrength*
 CptNetHSD::strength() const
 {
   return mStrength;
 }
 
 // delay の取得
-const AstDelay*
+const PtDelay*
 CptNetHSD::delay() const
 {
   return mDelay;
@@ -94,7 +94,7 @@ CptNetHV::vs_type() const
 }
 
 // 範囲の取得
-const AstRange*
+const PtRange*
 CptNetHV::range() const
 {
   return mRange;
@@ -106,7 +106,7 @@ CptNetHV::range() const
 //////////////////////////////////////////////////////////////////////
 
 // strength の取得
-const AstStrength*
+const PtStrength*
 CptNetHVS::strength() const
 {
   return mStrength;
@@ -118,7 +118,7 @@ CptNetHVS::strength() const
 //////////////////////////////////////////////////////////////////////
 
 // delay の取得
-const AstDelay*
+const PtDelay*
 CptNetHVD::delay() const
 {
   return mDelay;
@@ -130,14 +130,14 @@ CptNetHVD::delay() const
 //////////////////////////////////////////////////////////////////////
 
 // strength の取得
-const AstStrength*
+const PtStrength*
 CptNetHVSD::strength() const
 {
   return mStrength;
 }
 
 // delay の取得
-const AstDelay*
+const PtDelay*
 CptNetHVSD::delay() const
 {
   return mDelay;
@@ -153,7 +153,7 @@ PtDeclHead*
 PtFactory::new_NetH(
   const FileRegion& file_region,
   VpiNetType type,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNetH));
@@ -167,8 +167,8 @@ PtFactory::new_NetH(
   VpiNetType type,
   VpiVsType vstype,
   bool sign,
-  const AstRange* range,
-  PtDeclItem* item_top
+  const PtRange* range,
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNetHV));
@@ -181,8 +181,8 @@ PtDeclHead*
 PtFactory::new_NetH(
   const FileRegion& file_region,
   VpiNetType type,
-  const AstDelay* delay,
-  PtDeclItem* item_top
+  const PtDelay* delay,
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNetHD));
@@ -197,9 +197,9 @@ PtFactory::new_NetH(
   VpiNetType type,
   VpiVsType vstype,
   bool sign,
-  const AstRange* range,
-  const AstDelay* delay,
-  PtDeclItem* item_top
+  const PtRange* range,
+  const PtDelay* delay,
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNetHVD));
@@ -212,8 +212,8 @@ PtDeclHead*
 PtFactory::new_NetH(
   const FileRegion& file_region,
   VpiNetType type,
-  const AstStrength* strength,
-  PtDeclItem* item_top
+  const PtStrength* strength,
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNetHS));
@@ -226,11 +226,11 @@ PtDeclHead*
 PtFactory::new_NetH(
   const FileRegion& file_region,
   VpiNetType type,
-  const AstStrength* strength,
+  const PtStrength* strength,
   VpiVsType vstype,
   bool sign,
-  const AstRange* range,
-  PtDeclItem* item_top
+  const PtRange* range,
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNetHVS));
@@ -244,9 +244,9 @@ PtDeclHead*
 PtFactory::new_NetH(
   const FileRegion& file_region,
   VpiNetType type,
-  const AstStrength* strength,
-  const AstDelay* delay,
-  PtDeclItem* item_top
+  const PtStrength* strength,
+  const PtDelay* delay,
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNetHSD));
@@ -260,12 +260,12 @@ PtDeclHead*
 PtFactory::new_NetH(
   const FileRegion& file_region,
   VpiNetType type,
-  const AstStrength* strength,
+  const PtStrength* strength,
   VpiVsType vstype,
   bool sign,
-  const AstRange* range,
-  const AstDelay* delay,
-  PtDeclItem* item_top
+  const PtRange* range,
+  const PtDelay* delay,
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptNetHVSD));

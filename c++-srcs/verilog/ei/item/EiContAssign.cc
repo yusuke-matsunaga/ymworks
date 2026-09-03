@@ -12,7 +12,6 @@
 
 #include "ym/vl/VlDelay.h"
 #include "ym/vl/AstItem.h"
-#include "ym/vl/AstMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,7 +24,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbCaHead*
 EiFactory::new_CaHead(
   const VlModule* module,
-  const AstItem* ast_head,
+  const AstItem& ast_head,
   const VlDelay* delay
 )
 {
@@ -41,7 +40,7 @@ EiFactory::new_CaHead(
 const VlContAssign*
 EiFactory::new_ContAssign(
   ElbCaHead* head,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
@@ -53,7 +52,7 @@ EiFactory::new_ContAssign(
 const VlContAssign*
 EiFactory::new_ContAssign(
   const VlModule* module,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
@@ -69,7 +68,7 @@ EiFactory::new_ContAssign(
 // @brief コンストラクタ
 EiCaHead::EiCaHead(
   const VlModule* module,
-  const AstItem* ast_head
+  const AstItem& ast_head
 ) : mModule{module},
     mAstHead{ast_head}
 {
@@ -91,20 +90,20 @@ EiCaHead::module() const
 VpiStrength
 EiCaHead::drive0() const
 {
-  if ( mAstHead->strength() ) {
-    return mAstHead->strength()->drive0();
+  if ( mAstHead.strength().is_invalid() ) {
+    return VpiStrength::NoStrength;
   }
-  return VpiStrength::NoStrength;
+  return mAstHead.strength().drive0();
 }
 
 // @brief 1の強さを返す．
 VpiStrength
 EiCaHead::drive1() const
 {
-  if ( mAstHead->strength() ) {
-    return mAstHead->strength()->drive0();
+  if ( mAstHead.strength().is_invalid() ) {
+    return VpiStrength::NoStrength;
   }
-  return VpiStrength::NoStrength;
+  return mAstHead.strength().drive0();
 }
 
 // @brief 遅延を表す式を返す．
@@ -123,7 +122,7 @@ EiCaHead::delay() const
 // @brief コンストラクタ
 EiCaHeadD::EiCaHeadD(
   const VlModule* module,
-  const AstItem* ast_head,
+  const AstItem& ast_head,
   const VlDelay* delay
 ) : EiCaHead(module, ast_head),
     mDelay{delay}
@@ -149,7 +148,7 @@ EiCaHeadD::delay() const
 
 // @brief コンストラクタ
 EiContAssign::EiContAssign(
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 ) : mAstObj{ast_obj},
@@ -174,7 +173,7 @@ EiContAssign::type() const
 FileRegion
 EiContAssign::file_region() const
 {
-  return mAstObj->file_region();
+  return mAstObj.file_region();
 }
 
 // @brief ビット幅を返す．
@@ -206,7 +205,7 @@ EiContAssign::rhs() const
 // @brief コンストラクタ
 EiContAssign1::EiContAssign1(
   ElbCaHead* head,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 ) : EiContAssign(ast_obj, lhs, rhs),
@@ -262,7 +261,7 @@ EiContAssign1::has_net_decl_assign() const
 // @brief コンストラクタ
 EiContAssign2::EiContAssign2(
   const VlModule* module,
-  const AstBase* ast_obj,
+  const AstBase& ast_obj,
   const VlExpr* lhs,
   const VlExpr* rhs
 ) : EiContAssign(ast_obj, lhs, rhs),

@@ -34,7 +34,7 @@ END_NONAMESPACE
 void
 ItemGen::phase1_tf(
   const VlScope* parent,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   if ( debug ) {
@@ -44,21 +44,21 @@ ItemGen::phase1_tf(
 	 << " ["
 	 << std::hex << reinterpret_cast<PtrIntType>(parent) << std::dec
 	 << "], "
-	 << ast_item->name() << " )" << std::endl
+	 << ast_item.name() << " )" << std::endl
 	 << std::endl;
   }
 
   auto taskfunc = (ElbTaskFunc*)nullptr;
-  if ( ast_item->type() == AstItem::Task ) {
+  if ( ast_item.type() == AstItem::Task ) {
     taskfunc = mgr().new_Task(parent, ast_item);
   }
   else {
-    if ( ast_item->type() != AstItem::Func ) {
+    if ( ast_item.type() != AstItem::Func ) {
       throw std::logic_error{"ast_item->type() != AstItem::Func"};
     }
 
-    auto ast_range = ast_item->range();
-    if ( ast_range != nullptr ) {
+    auto ast_range = ast_item.range();
+    if ( ast_range.is_valid() ) {
       auto range = evaluate_range(parent, ast_range);
       taskfunc = mgr().new_Function(parent, ast_item,
 				    ast_range, range, false);
@@ -72,7 +72,7 @@ ItemGen::phase1_tf(
   }
 
   // 宣言要素の生成(phase1 では parameter と genvar のみ)
-  phase1_decl(taskfunc, ast_item->declhead_list(), false);
+  phase1_decl(taskfunc, ast_item.declhead_list(), false);
 
   // attribute instance の生成
   auto attr_list = attribute_list(ast_item);
@@ -82,18 +82,18 @@ ItemGen::phase1_tf(
     std::ostringstream buf;
     buf << "instantiating task/func : " << taskfunc->full_name() << ".";
     put_info(__FILE__, __LINE__,
-	     ast_item->file_region(),
+	     ast_item.file_region(),
 	     "ELAB",
 	     buf.str());
   }
 
   // 本体のステートメント内部のスコープの生成
-  auto ast_body = ast_item->body();
+  auto ast_body = ast_item.body();
   phase1_stmt(taskfunc, ast_body);
 
   // 残りの仕事は phase2, phase3 で行う．
-  add_phase2stub(make_stub(this, &ItemGen::phase2_tf, taskfunc, ast_item));
-  add_phase3stub(make_stub(this, &ItemGen::phase3_tf, taskfunc, ast_item));
+  add_phase2stub(make_phase2_tf_stub(taskfunc, ast_item));
+  add_phase3stub(make_phase3_tf_stub(taskfunc, ast_item));
 
   if ( debug ) {
     dout << "phase1_tf end" << std::endl
@@ -105,7 +105,7 @@ ItemGen::phase1_tf(
 void
 ItemGen::phase2_tf(
   ElbTaskFunc* taskfunc,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   if ( debug ) {
@@ -119,10 +119,10 @@ ItemGen::phase2_tf(
   }
 
   // 宣言要素の生成
-  instantiate_decl(taskfunc, ast_item->declhead_list());
+  instantiate_decl(taskfunc, ast_item.declhead_list());
 
   // 入出力の生成
-  instantiate_iodecl(taskfunc, ast_item->iohead_list());
+  instantiate_iodecl(taskfunc, ast_item.iohead_list());
 
   if ( taskfunc->type() == VpiObjType::Function ) {
     // 関数名と同名の変数の生成
@@ -132,7 +132,7 @@ ItemGen::phase2_tf(
     auto head = (ElbDeclHead*)nullptr;
     if ( taskfunc->has_range() ) {
       head = mgr().new_DeclHead(taskfunc, ast_item,
-				ast_item->range(), range);
+				ast_item.range(), range);
     }
     else {
       head = mgr().new_DeclHead(taskfunc, ast_item);
@@ -141,7 +141,7 @@ ItemGen::phase2_tf(
       throw std::logic_error{"head == nullptr"};
     }
 
-    int tag{ (ast_item->data_type() == VpiVarType::None) ? vpiReg : vpiVariables };
+    int tag{ (ast_item.data_type() == VpiVarType::None) ? vpiReg : vpiVariables };
     auto decl = mgr().new_Decl(tag, head, ast_item);
 
     taskfunc->set_ovar(decl);
@@ -157,7 +157,7 @@ ItemGen::phase2_tf(
 void
 ItemGen::phase3_tf(
   ElbTaskFunc* taskfunc,
-  const AstItem* ast_item
+  const AstItem& ast_item
 )
 {
   if ( debug ) {
@@ -172,7 +172,7 @@ ItemGen::phase3_tf(
 
   // 本体のステートメントの生成
   ElbTfEnv env(taskfunc);
-  auto ast_body = ast_item->body();
+  auto ast_body = ast_item.body();
   auto body = instantiate_stmt(taskfunc, nullptr, env, ast_body);
   if ( body ) {
     taskfunc->set_stmt(body);
@@ -188,7 +188,7 @@ ItemGen::phase3_tf(
 const VlTaskFunc*
 ItemGen::instantiate_constant_function(
   const VlScope* parent,
-  const AstItem* ast_function
+  const AstItem& ast_function
 )
 {
   // 基本的には phase1_tf(), phase2_tf(), phase3_tf() と同じことを
@@ -200,16 +200,16 @@ ItemGen::instantiate_constant_function(
 	 << " ["
 	 << std::hex << reinterpret_cast<PtrIntType>(parent) << std::dec
 	 << "] , "
-	 << ast_function->name() << " )" << std::endl
+	 << ast_function.name() << " )" << std::endl
 	 << std::endl;
   }
 
-  auto ast_range = ast_function->range();
+  auto ast_range = ast_function.range();
 
   auto func = (ElbTaskFunc*)nullptr;
   auto scope = (const VlScope*)nullptr;
   auto head = (ElbDeclHead*)nullptr;
-  if ( ast_range != nullptr ) {
+  if ( ast_range.is_valid() ) {
     auto range = evaluate_range(parent, ast_range);
     func = mgr().new_Function(parent, ast_function,
 			      ast_range, range, true);
@@ -231,22 +231,22 @@ ItemGen::instantiate_constant_function(
   reg_constant_function(func);
 
   // parameter の生成
-  phase1_decl(func, ast_function->declhead_list(), false);
+  phase1_decl(func, ast_function.declhead_list(), false);
 
   // 宣言要素の生成
-  instantiate_decl(func, ast_function->declhead_list());
+  instantiate_decl(func, ast_function.declhead_list());
 
   // 関数名と同名の変数の生成
-  int tag{ (ast_function->data_type() == VpiVarType::None) ? vpiReg : vpiVariables };
+  int tag{ (ast_function.data_type() == VpiVarType::None) ? vpiReg : vpiVariables };
   auto decl = mgr().new_Decl(tag, head, ast_function);
 
   func->set_ovar(decl);
 
   // 入出力の生成
-  instantiate_iodecl(func, ast_function->iohead_list());
+  instantiate_iodecl(func, ast_function.iohead_list());
 
   // 本体のステートメント内部のスコープの生成
-  auto ast_body = ast_function->body();
+  auto ast_body = ast_function.body();
   phase1_stmt(func, ast_body, true);
 
   // 本体のステートメントの生成

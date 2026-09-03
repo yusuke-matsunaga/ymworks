@@ -9,7 +9,7 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/vl/AstDecl.h"
+#include "ym/vl/AstRange.h"
 #include "ym/vl/AstExpr.h"
 
 
@@ -155,7 +155,7 @@ public:
 
   /// @brief コンストラクタ
   RangeInfo(
-    const AstRange* ast_range, ///< [in] パース木の範囲定義
+    const AstRange& ast_range, ///< [in] パース木の範囲定義
     const RangeVal& range      ///< [in] 範囲の値
   ) : RangeVal{range},
       mAstRange{ast_range}
@@ -175,14 +175,14 @@ public:
   std::string
   left_string() const
   {
-    return mAstRange->left()->decompile();
+    return mAstRange.left().decompile();
   }
 
   /// @brief 範囲のLSBを表す文字列の取得
   std::string
   right_string() const
   {
-    return mAstRange->right()->decompile();
+    return mAstRange.right().decompile();
   }
 
 
@@ -192,7 +192,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の範囲定義
-  const AstRange* mAstRange;
+  AstRange mAstRange;
 
 };
 

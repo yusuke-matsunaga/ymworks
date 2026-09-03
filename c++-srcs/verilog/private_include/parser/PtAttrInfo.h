@@ -9,12 +9,10 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
-#include "ym/vl/AstBase.h"
+#include "ym/vl/AstAttrInst.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
-
-class AstAttrInst;
 
 //////////////////////////////////////////////////////////////////////
 /// @class PtAttrInfo PtAttrInfo.h "PtAttrInfo.h"
@@ -26,10 +24,10 @@ public:
 
   /// @brief コンストラクタ
   PtAttrInfo(
-    const AstBase* obj,               ///< [in] 元の構文木要素
+    PtrIntType key,                   ///< [in] 構文木要素のキー
     const AstAttrInstList& attr_list, ///< [in] AstAttrInstのリスト
     bool def = false                  ///< [in] 定義側の時 true とするフラグ
-  ) : mObj{obj},
+  ) : mKey{key},
       mAttrList{attr_list},
       mDef{def}
   {
@@ -44,11 +42,11 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
-  /// 元の構文木要素を返す．
-  const AstBase*
-  obj() const
+  /// 構文木要素のキーを返す．
+  PtrIntType
+  key() const
   {
-    return mObj;
+    return mKey;
   }
 
   /// @brief 属性リストを返す．
@@ -71,8 +69,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 元の構文木要素
-  const AstBase* mObj;
+  // 構文木要素のキー
+  PtrIntType mKey;
 
   // 属性リスト
   AstAttrInstList mAttrList;

@@ -32,7 +32,7 @@ CptDeclHead::is_signed() const
 }
 
 // @brief 範囲の取得
-const AstRange*
+const PtRange*
 CptDeclHead::range() const
 {
   return nullptr;
@@ -60,29 +60,22 @@ CptDeclHead::vs_type() const
 }
 
 // @brief strength の取得
-const AstStrength*
+const PtStrength*
 CptDeclHead::strength() const
 {
   return nullptr;
 }
 
 // @brief delay の取得
-const AstDelay*
+const PtDelay*
 CptDeclHead::delay() const
 {
   return nullptr;
 }
 
-// @brief 要素のリストを返す．
-AstDeclItemList
-CptDeclHead::item_list() const
-{
-  return AstDeclItemList(mItemTop);
-}
-
-// @brief 先頭の要素を返す．
-PtDeclItem*
-CptDeclHead::_item_top() const
+// @brief 要素のリストの先頭を返す．
+const PtDeclItem*
+CptDeclHead::item_top() const
 {
   return mItemTop;
 }
@@ -96,7 +89,7 @@ CptDeclHead::_item_top() const
 AstDeclHead::Type
 CptVarH::type() const
 {
-  return Var;
+  return AstDeclHead::Var;
 }
 
 // @brief 符号の取得
@@ -129,7 +122,7 @@ CptVarH::data_type() const
 AstDeclHead::Type
 CptGenvarH::type() const
 {
-  return Genvar;
+  return AstDeclHead::Genvar;
 }
 
 
@@ -141,7 +134,7 @@ CptGenvarH::type() const
 AstDeclHead::Type
 CptEventH::type() const
 {
-  return Event;
+  return AstDeclHead::Event;
 }
 
 
@@ -153,7 +146,7 @@ CptEventH::type() const
 PtDeclHead*
 PtFactory::new_EventH(
   const FileRegion& file_region,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptEventH));
@@ -164,7 +157,7 @@ PtFactory::new_EventH(
 PtDeclHead*
 PtFactory::new_GenvarH(
   const FileRegion& file_region,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptGenvarH));
@@ -176,7 +169,7 @@ PtDeclHead*
 PtFactory::new_VarH(
   const FileRegion& file_region,
   VpiVarType var_type,
-  PtDeclItem* item_top
+  const PtDeclItem* item_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptVarH));

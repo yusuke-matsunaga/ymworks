@@ -25,7 +25,14 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExpr::Type
 CptOpr::type() const
 {
-  return Opr;
+  return AstExpr::Opr;
+}
+
+// @brief 固定オペランド数の取得
+SizeType
+CptOpr::operand_num() const
+{
+  return 0;
 }
 
 
@@ -40,22 +47,29 @@ CptOpr3::file_region() const
   return FileRegion(mOpr[0]->file_region(), mOpr[2]->file_region());
 }
 
+// @brief 固定オペランド数の取得
+SizeType
+CptOpr3::operand_num() const
+{
+  return 3;
+}
+
 // @brief 0番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptOpr3::operand0() const
 {
   return mOpr[0];
 }
 
 // @brief 1番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptOpr3::operand1() const
 {
   return mOpr[1];
 }
 
 // @brief 2番目のオペランドの取得
-const AstExpr*
+const PtExpr*
 CptOpr3::operand2() const
 {
   return mOpr[2];
@@ -103,11 +117,11 @@ CptOpr_Concat::op_type() const
   return VpiOpType::Concat;
 }
 
-// @brief オペランドのリストの取得
-AstExprList
-CptOpr_Concat::operand_list() const
+// @brief オペランドのリストの先頭の取得
+const PtExpr*
+CptOpr_Concat::operand_top() const
 {
-  return AstExprList(mExprTop);
+  return mExprTop;
 }
 
 
@@ -123,7 +137,7 @@ CptOpr_MultiConcat::op_type() const
 }
 
 // @brief multi-concat の繰り返し数
-const AstExpr*
+const PtExpr*
 CptOpr_MultiConcat::rep() const
 {
   return mRep;
@@ -138,9 +152,9 @@ template <typename T>
 PtExpr*
 new_opr(
   Alloc& alloc,
-  const AstExpr* opr1,
-  const AstExpr* opr2,
-  const AstExpr* opr3
+  const PtExpr* opr1,
+  const PtExpr* opr2,
+  const PtExpr* opr3
 )
 {
   auto p = alloc.get_memory(sizeof(T));
@@ -149,9 +163,9 @@ new_opr(
 
 PtExpr*
 PtFactory::new_Condition(
-  const AstExpr* opr1,
-  const AstExpr* opr2,
-  const AstExpr* opr3
+  const PtExpr* opr1,
+  const PtExpr* opr2,
+  const PtExpr* opr3
 )
 {
   return new_opr<CptOpr_Condition>(mAlloc, opr1, opr2, opr3);
@@ -160,9 +174,9 @@ PtFactory::new_Condition(
 // min-typ-max を生成する．
 PtExpr*
 PtFactory::new_MinTypMax(
-  const AstExpr* val0,
-  const AstExpr* val1,
-  const AstExpr* val2
+  const PtExpr* val0,
+  const PtExpr* val1,
+  const PtExpr* val2
 )
 {
   return new_opr<CptOpr_MinTypMax>(mAlloc, val0, val1, val2);
@@ -172,7 +186,7 @@ PtFactory::new_MinTypMax(
 PtExpr*
 PtFactory::new_Concat(
   const FileRegion& file_region,
-  PtExpr* expr_top
+  const PtExpr* expr_top
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptOpr_Concat));
@@ -183,8 +197,8 @@ PtFactory::new_Concat(
 PtExpr*
 PtFactory::new_MultiConcat(
   const FileRegion& file_region,
-  const AstExpr* rep,
-  PtExpr* expr_top
+  const PtExpr* rep,
+  const PtExpr* expr_top
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptOpr_MultiConcat));

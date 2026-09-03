@@ -18,14 +18,14 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 // コントロールを返す．
-const AstControl*
+const PtControl*
 CptStmt_Ctrl::control() const
 {
   return mControl;
 }
 
 // 本体を取り出す．
-const AstStmt*
+const PtStmt*
 CptStmt_Ctrl::body() const
 {
   return mBody;
@@ -40,7 +40,7 @@ CptStmt_Ctrl::body() const
 AstStmt::Type
 CptStmt_DelayControl::type() const
 {
-  return DelayControl;
+  return AstStmt::DelayControl;
 }
 
 
@@ -52,7 +52,7 @@ CptStmt_DelayControl::type() const
 AstStmt::Type
 CptStmt_EventControl::type() const
 {
-  return EventControl;
+  return AstStmt::EventControl;
 }
 
 
@@ -64,18 +64,18 @@ CptStmt_EventControl::type() const
 AstStmt::Type
 CptStmt_Wait::type() const
 {
-  return Wait;
+  return AstStmt::Wait;
 }
 
 // 条件を返す．
-const AstExpr*
+const PtExpr*
 CptStmt_Wait::expr() const
 {
   return mExpr;
 }
 
 // 実行すべき本体を返す．
-const AstStmt*
+const PtStmt*
 CptStmt_Wait::body() const
 {
   return mBody;
@@ -90,8 +90,8 @@ CptStmt_Wait::body() const
 PtStmt*
 PtFactory::new_DcStmt(
   const FileRegion& file_region,
-  const AstControl* delay,
-  const AstStmt* body
+  const PtControl* delay,
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_DelayControl));
@@ -102,8 +102,8 @@ PtFactory::new_DcStmt(
 PtStmt*
 PtFactory::new_EcStmt(
   const FileRegion& file_region,
-  const AstControl* event,
-  const AstStmt* body
+  const PtControl* event,
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_EventControl));
@@ -114,8 +114,8 @@ PtFactory::new_EcStmt(
 PtStmt*
 PtFactory::new_Wait(
   const FileRegion& file_region,
-  const AstExpr* cond,
-  const AstStmt* body
+  const PtExpr* cond,
+  const PtStmt* body
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptStmt_Wait));

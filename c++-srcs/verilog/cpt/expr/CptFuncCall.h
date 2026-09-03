@@ -27,7 +27,7 @@ public:
   CptFuncCallBase(
     const FileRegion& file_region,
     const char* name,
-    const AstExpr* arg_top
+    const PtExpr* arg_top
   ) : mFileRegion{file_region},
       mName{name},
       mArgTop{arg_top}
@@ -40,7 +40,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // ファイル位置を返す．
@@ -51,13 +51,13 @@ public:
   const char*
   name() const override;
 
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  /// @brief 階層ブランチのリストの先頭を返す．
+  const PtNameBranch*
+  namebranch_top() const override;
 
-  /// @brief 引数リストの取得
-  AstExprList
-  arg_list() const override;
+  /// @brief 引数リストの先頭の取得
+  const PtExpr*
+  arg_top() const override;
 
 
 private:
@@ -72,7 +72,7 @@ private:
   const char* mName;
 
   // 引数の先頭
-  const AstExpr* mArgTop;
+  const PtExpr* mArgTop;
 
 };
 
@@ -90,7 +90,7 @@ public:
   CptFuncCall(
     const FileRegion& file_region,
     const char* name,
-    const AstExpr* arg_top
+    const PtExpr* arg_top
   ) : CptFuncCallBase(file_region, name, arg_top)
   {
   }
@@ -101,12 +101,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // クラスの型を返す．
   // このクラスの場合は FunCall を返す．
-  Type
+  AstExpr::Type
   type() const override;
 
 };
@@ -125,7 +125,7 @@ public:
   CptFuncCallH(
     const FileRegion& file_region,
     const PtHierName& hname,
-    const AstExpr* arg_top
+    const PtExpr* arg_top
   ) : CptFuncCall(file_region, hname.tail_name, arg_top),
       mNbTop{hname.nb_list.top}
   {
@@ -137,12 +137,12 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstHierNamedBase の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 階層ブランチのリストを返す．
-  AstNameBranchList
-  namebranch_list() const override;
+  /// @brief 階層ブランチのリストの先頭を返す．
+  const PtNameBranch*
+  namebranch_top() const override;
 
 
 private:
@@ -151,7 +151,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 先頭の階層ブランチ
-  const AstNameBranch* mNbTop;
+  const PtNameBranch* mNbTop;
 
 };
 
@@ -169,7 +169,7 @@ public:
   CptSysFuncCall(
     const FileRegion& file_region,
     const char* name,
-    const AstExpr* arg_top
+    const PtExpr* arg_top
   ) : CptFuncCallBase(file_region, name, arg_top)
   {
   }
@@ -180,11 +180,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // クラスの型を返す．
-  Type
+  AstExpr::Type
   type() const override;
 
 };

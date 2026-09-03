@@ -13,7 +13,6 @@
 #include "ym/vl/AstStmt.h"
 
 
-
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
@@ -25,7 +24,7 @@ const VlStmt*
 EiFactory::new_WhileStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt
 )
@@ -40,7 +39,7 @@ const VlStmt*
 EiFactory::new_RepeatStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt
 )
@@ -55,7 +54,7 @@ const VlStmt*
 EiFactory::new_WaitStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt
 )
@@ -70,7 +69,7 @@ const VlStmt*
 EiFactory::new_ForStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* init_stmt,
   const VlStmt* inc_stmt,
@@ -87,7 +86,7 @@ const VlStmt*
 EiFactory::new_ForeverStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlStmt* stmt
 )
 {
@@ -101,7 +100,7 @@ const VlStmt*
 EiFactory::new_IfStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt,
   const VlStmt* else_stmt
@@ -124,7 +123,7 @@ const VlStmt*
 EiFactory::new_CaseStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* expr,
   const std::vector<const VlCaseItem*>& caseitem_list
 )
@@ -137,7 +136,7 @@ EiFactory::new_CaseStmt(
 // @brief caseitem を生成する．
 const VlCaseItem*
 EiFactory::new_CaseItem(
-  const AstCaseItem* ast_item,
+  const AstCaseItem& ast_item,
   const std::vector<ElbExpr*>& label_list,
   const VlStmt* body
 )
@@ -155,7 +154,7 @@ EiFactory::new_CaseItem(
 EiLoopStmt::EiLoopStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt
 ) : EiStmtBase{parent, process, ast_stmt},
@@ -192,7 +191,7 @@ EiLoopStmt::body_stmt() const
 EiWhileStmt::EiWhileStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt
 ) : EiLoopStmt{parent, process, ast_stmt, cond, stmt}
@@ -220,7 +219,7 @@ EiWhileStmt::type() const
 EiRepeatStmt::EiRepeatStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt
 ) : EiLoopStmt{parent, process, ast_stmt, cond, stmt}
@@ -248,7 +247,7 @@ EiRepeatStmt::type() const
 EiWaitStmt::EiWaitStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt
 ) : EiLoopStmt{parent, process, ast_stmt, cond, stmt}
@@ -276,7 +275,7 @@ EiWaitStmt::type() const
 EiForStmt::EiForStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* init_stmt,
   const VlStmt* inc_stmt,
@@ -322,7 +321,7 @@ EiForStmt::inc_stmt() const
 EiForeverStmt::EiForeverStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlStmt* stmt
 ) : EiStmtBase{parent, process, ast_stmt},
     mBodyStmt{stmt}
@@ -357,7 +356,7 @@ EiForeverStmt::body_stmt() const
 EiIfStmt::EiIfStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt
 ) : EiStmtBase{parent, process, ast_stmt},
@@ -401,7 +400,7 @@ EiIfStmt::body_stmt() const
 EiIfElseStmt::EiIfElseStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* stmt,
   const VlStmt* else_stmt
@@ -436,7 +435,7 @@ EiIfElseStmt::else_stmt() const
 
 // @brief コンストラクタ
 EiCaseItem::EiCaseItem(
-  const AstCaseItem* ast_item,
+  const AstCaseItem& ast_item,
   const std::vector<ElbExpr*>& label_list,
   const VlStmt* body
 ) : mAstCaseItem{ast_item},
@@ -461,7 +460,7 @@ EiCaseItem::type() const
 FileRegion
 EiCaseItem::file_region() const
 {
-  return mAstCaseItem->file_region();
+  return mAstCaseItem.file_region();
 }
 
 // @brief 条件式のリストの要素数を返す．
@@ -506,7 +505,7 @@ EiCaseItem::body_stmt() const
 EiCaseStmt::EiCaseStmt(
   const VlScope* parent,
   const VlProcess* process,
-  const AstStmt* ast_stmt,
+  const AstStmt& ast_stmt,
   const VlExpr* expr,
   const std::vector<const VlCaseItem*>& caseitem_list
 ) : EiStmtBase{parent, process, ast_stmt},
@@ -531,7 +530,7 @@ EiCaseStmt::type() const
 VpiCaseType
 EiCaseStmt::case_type() const
 {
-  switch ( ast_stmt()->type() ) {
+  switch ( ast_stmt().type() ) {
   case AstStmt::Case:  return VpiCaseType::Exact;
   case AstStmt::CaseX: return VpiCaseType::X;
   case AstStmt::CaseZ: return VpiCaseType::Z;

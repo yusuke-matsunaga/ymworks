@@ -9,8 +9,6 @@
 #include "ei/EiFactory.h"
 #include "ei/EiGenvar.h"
 
-#include "ym/vl/AstDecl.h"
-
 
 BEGIN_NAMESPACE_YM_VERILOG
 
@@ -22,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbGenvar*
 EiFactory::new_Genvar(
   const VlScope* parent,
-  const AstDeclItem* ast_item,
+  const AstDeclItem& ast_item,
   int val
 )
 {
@@ -37,7 +35,7 @@ EiFactory::new_Genvar(
 // コンストラクタ
 EiGenvar::EiGenvar(
   const VlScope* parent,
-  const AstDeclItem* ast_item,
+  const AstDeclItem& ast_item,
   int val
 ) : mParent{parent},
     mAstItem{ast_item},
@@ -62,7 +60,7 @@ EiGenvar::type() const
 FileRegion
 EiGenvar::file_region() const
 {
-  return mAstItem->file_region();
+  return mAstItem.file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
@@ -76,7 +74,7 @@ EiGenvar::parent_scope() const
 std::string
 EiGenvar::name() const
 {
-  return mAstItem->name();
+  return mAstItem.name();
 }
 
 // 使用中の時 true を返す．
@@ -117,7 +115,7 @@ EiGenvar::set_value(
 }
 
 // @brief 元となったパース木の定義要素を返す．
-const AstDeclItem*
+AstDeclItem
 EiGenvar::ast_item() const
 {
   return mAstItem;

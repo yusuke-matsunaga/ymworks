@@ -22,7 +22,7 @@ TEST_F(PtItemTest, DefParamH)
   auto item = factory.new_DefParamH(fr, dp);
 
   check_DefParamH(item, fr,
-		  std::vector<const AstDefParam*>{dp});
+		  std::vector<const PtDefParam*>{dp});
 }
 
 TEST_F(PtItemTest, DefParam1)
@@ -65,7 +65,7 @@ TEST_F(PtItemTest, ContAssignH)
   check_ContAssignH(item, fr,
 		    nullptr,
 		    nullptr,
-		    std::vector<const AstContAssign*>{ca});
+		    std::vector<const PtContAssign*>{ca});
 }
 
 TEST_F(PtItemTest, ContAssignHS)
@@ -87,7 +87,7 @@ TEST_F(PtItemTest, ContAssignHS)
   check_ContAssignH(item, fr,
 		    str,
 		    nullptr,
-		    std::vector<const AstContAssign*>{ca});
+		    std::vector<const PtContAssign*>{ca});
 }
 
 TEST_F(PtItemTest, ContAssignHD)
@@ -109,7 +109,7 @@ TEST_F(PtItemTest, ContAssignHD)
   check_ContAssignH(item, fr,
 		    nullptr,
 		    delay,
-		    std::vector<const AstContAssign*>{ca});
+		    std::vector<const PtContAssign*>{ca});
 }
 
 TEST_F(PtItemTest, ContAssignHSD)
@@ -135,7 +135,7 @@ TEST_F(PtItemTest, ContAssignHSD)
   check_ContAssignH(item, fr,
 		    str,
 		    delay,
-		    std::vector<const AstContAssign*>{ca});
+		    std::vector<const PtContAssign*>{ca});
 }
 
 TEST_F(PtItemTest, ContAssign)

@@ -9,7 +9,6 @@
 /// All rights reserved.
 
 #include "parser/PtItem.h"
-#include "ym/vl/AstDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -31,7 +30,7 @@ protected:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstNamedBase の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 名前の取得
@@ -39,60 +38,54 @@ public:
   const char*
   name() const override;
 
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // AstItem の継承クラスが実装する仮想関数
-  //////////////////////////////////////////////////////////////////////
-
   /// @brief 条件式の取得
   /// @return 条件式
-  const AstExpr*
+  const PtExpr*
   cond_expr() const override;
 
   /// @brief 本体のステートメントの取得
   /// @return 本体のステートメント
-  const AstStmt*
+  const PtStmt*
   body() const override;
 
   /// @brief strength の取得
   /// @return 信号強度
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
   /// @brief delay の取得
   /// @return 遅延
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
-  /// @brief defparam リストの取得
-  AstDefParamList
-  defparam_list() const override;
+  /// @brief defparam リストの先頭の取得
+  const PtDefParam*
+  defparam_top() const override;
 
-  /// @brief continuous assign リストの取得
-  AstContAssignList
-  contassign_list() const override;
+  /// @brief continuous assign リストの先頭の取得
+  const PtContAssign*
+  contassign_top() const override;
 
-  /// @brief パラメータ割り当てのリストの取得
-  AstConnectionList
-  paramassign_list() const override;
+  /// @brief パラメータ割り当てのリストの先頭の取得
+  const PtConnection*
+  paramassign_top() const override;
 
   /// @brief プリミティブタイプの取得
   /// @return プリミティブタイプ
   VpiPrimType
   prim_type() const override;
 
-  /// @brief module/UDP/gate instance リストの取得
-  AstInstList
-  inst_list() const override;
+  /// @brief module/UDP/gate instance リストの先頭の取得
+  const PtInst*
+  inst_top() const override;
 
-  /// @brief 宣言ヘッダリストの取得
-  AstDeclHeadList
-  declhead_list() const override;
+  /// @brief 宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  declhead_top() const override;
 
-  /// @brief item リストの取得
-  AstItemList
-  item_list() const override;
+  /// @brief item リストの先頭の取得
+  const PtItem*
+  item_top() const override;
 
   /// @brief automatic 情報の取得
   /// @retval true automatic 宣言された task/function
@@ -100,9 +93,9 @@ public:
   bool
   automatic() const override;
 
-  /// @brief IO宣言ヘッダリストの取得
-  AstIOHeadList
-  iohead_list() const override;
+  /// @brief IO宣言ヘッダリストの先頭の取得
+  const PtIOHead*
+  iohead_top() const override;
 
   /// @brief IO宣言の要素数の取得
   SizeType
@@ -116,7 +109,7 @@ public:
 
   /// @brief 範囲の取得
   /// @return 範囲
-  const AstRange*
+  const PtRange*
   range() const override;
 
   /// @brief 戻値のデータ型の取得
@@ -142,9 +135,9 @@ public:
   VpiSpecItemType
   specitem_type() const override;
 
-  /// @brief ターミナルリストの取得
-  AstExprList
-  terminal_list() const override;
+  /// @brief ターミナルリストの先頭の取得
+  const PtExpr*
+  terminal_top() const override;
 
   /// @brief specify block path の種類の取得
   /// @return specify block path の種類
@@ -153,28 +146,28 @@ public:
 
   /// @brief パス記述の取得
   /// @return パス記述
-  const AstPathDecl*
+  const PtPathDecl*
   path_decl() const override;
 
-  /// @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-  AstDeclHeadList
-  then_declhead_list() const override;
+  /// @brief 条件が成り立った時に生成される宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  then_declhead_top() const override;
 
-  /// @brief 条件が成り立った時に生成されるitemリストの取得
-  AstItemList
-  then_item_list() const override;
+  /// @brief 条件が成り立った時に生成されるitemリストの先頭の取得
+  const PtItem*
+  then_item_top() const override;
 
-  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-  AstDeclHeadList
-  else_declhead_list() const override;
+  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  else_declhead_top() const override;
 
-  /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
-  AstItemList
-  else_item_list() const override;
+  /// @brief 条件が成り立たなかった時に生成されるitemリストの先頭の取得
+  const PtItem*
+  else_item_top() const override;
 
-  /// @brief case item リストの取得
-  AstGenCaseItemList
-  caseitem_list() const override;
+  /// @brief case item リストの先頭の取得
+  const PtGenCaseItem*
+  caseitem_top() const override;
 
   /// @brief 繰り返し制御用の変数名の取得
   /// @return 繰り返し制御用の変数名
@@ -183,12 +176,12 @@ public:
 
   /// @brief 初期化文の右辺の取得
   /// @return 初期化文の右辺
-  const AstExpr*
+  const PtExpr*
   init_expr() const override;
 
   /// @brief 増加文の右辺の取得
   /// @return 増加文の右辺
-  const AstExpr*
+  const PtExpr*
   next_expr() const override;
 
 };

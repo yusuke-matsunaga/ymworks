@@ -33,17 +33,17 @@ CptPort::ext_name() const
 }
 
 // @brief 内側のポート結線を表す式の取得
-const AstExpr*
+const PtExpr*
 CptPort::expr() const
 {
   return nullptr;
 }
 
 // @brief 内部のポート結線のリストの取得
-AstExprList
-CptPort::portref_list() const
+const PtExpr*
+CptPort::portref_top() const
 {
-  return AstExprList();
+  return nullptr;
 }
 
 // @brief 内部のポート結線の向きの取得
@@ -71,17 +71,17 @@ CptPort::set_portref_dir(
 //////////////////////////////////////////////////////////////////////
 
 // @brief 内側のポート結線を表す式の取得
-const AstExpr*
+const PtExpr*
 CptPort1::expr() const
 {
   return mExpr;
 }
 
 // @brief 内部のポート結線のリストの取得
-AstExprList
-CptPort1::portref_list() const
+const PtExpr*
+CptPort1::portref_top() const
 {
-  return AstExprList(mExpr);
+  return mExpr;
 }
 
 // @brief 内部のポート結線の向きの取得
@@ -110,17 +110,17 @@ CptPort1::set_portref_dir(
 //////////////////////////////////////////////////////////////////////
 
 // @brief 内側のポート結線を表す式の取得
-const AstExpr*
+const PtExpr*
 CptPort2::expr() const
 {
   return mExpr;
 }
 
 // @brief 内部のポート結線のリストの取得
-AstExprList
-CptPort2::portref_list() const
+const PtExpr*
+CptPort2::portref_top() const
 {
-  return AstExprList(mPortRefTop);
+  return mPortRefTop;
 }
 
 // @brief 内部のポート結線の向きの取得
@@ -163,15 +163,18 @@ PtPort*
 PtFactory::new_Port(
   const FileRegion& file_region,
   const char* ext_name,
-  PtExpr* portref_top
+  const PtExpr* portref_top
 )
 {
-  auto n = AstExprList(portref_top).size();
+  SizeType n = 0;
+  for ( auto p = portref_top; p != nullptr; p = p->link() ) {
+    ++ n;
+  }
   if ( n == 1 ) {
     // 明示的に外の名前がついていなくても内側の名前が1つで
     // 範囲指定が無いときには内側の名前を外側の名前とする．
     if ( ext_name == nullptr &&
-	 portref_top->index_list().size() == 0 &&
+	 portref_top->index_top() == nullptr &&
 	 portref_top->part() == nullptr ) {
       ext_name = portref_top->name();
     }

@@ -13,7 +13,6 @@
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
 
 #include "ym/vl/VlModule.h"
 #include "ym/vl/VlIODecl.h"
@@ -77,43 +76,43 @@ ElbExpr*
 ExprGen::instantiate_funccall(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
   const VlTaskFunc* child_func{nullptr};
   if ( env.is_constant() ) {
     // 定数関数を探し出す．
-    if ( ast_expr->namebranch_list().size() > 0 ) {
+    if ( ast_expr.namebranch_list().size() > 0 ) {
       // 階層名は受け付けない．
       ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
     }
 
     // 関数名
-    auto name = ast_expr->name();
+    auto name = ast_expr.name();
 
     // 関数本体を探し出す．
     // constant function はモジュール直下にしかあり得ない
     // <- generated scope 内の関数は constant function ではない．
     auto module = parent->parent_module();
     auto ast_func = find_funcdef(module, name);
-    if ( !ast_func ) {
+    if ( ast_func.is_invalid() ) {
       // 関数が見つからなかった．
       ErrorGen::no_such_function(__FILE__, __LINE__, ast_expr);
     }
 
-    if ( ast_func->is_in_use() ) {
+    if ( ast_func.is_in_use() ) {
       // 自分自身を呼び出している．
       ErrorGen::uses_itself(__FILE__, __LINE__, ast_expr);
     }
 
     child_func = find_constant_function(module, name);
     if ( child_func == nullptr ) {
-      ast_func->set_in_use();
+      ast_func.set_in_use();
       // なかったので作る．
       child_func = instantiate_constant_function(parent, ast_func);
-      ast_func->clear_in_use();
+      ast_func.clear_in_use();
     }
-    if ( !child_func ) {
+    if ( child_func == nullptr ) {
       // 定数関数ではなかった．
       ErrorGen::not_a_constant_function(__FILE__, __LINE__, ast_expr);
     }
@@ -136,7 +135,7 @@ ExprGen::instantiate_funccall(
   }
 
   // 引数の生成
-  auto n = ast_expr->operand_list().size();
+  auto n = ast_expr.operand_list().size();
   if ( n != child_func->io_num() ) {
     // 引数の数が合わなかった．
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
@@ -144,7 +143,7 @@ ExprGen::instantiate_funccall(
 
   std::vector<ElbExpr*> arg_list;
   arg_list.reserve(n);
-  for ( auto ast_expr1: ast_expr->operand_list() ) {
+  for ( auto ast_expr1: ast_expr.operand_list() ) {
     auto expr1 = instantiate_expr(parent, env, ast_expr1);
     auto io_decl = child_func->io(arg_list.size());
     auto decl = io_decl->decl();
@@ -177,10 +176,10 @@ ElbExpr*
 ExprGen::instantiate_sysfunccall(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr* ast_expr
+  const AstExpr& ast_expr
 )
 {
-  auto name = ast_expr->name();
+  auto name = ast_expr.name();
 
   // system function を探し出す．
   auto user_systf = mgr().find_user_systf(name);
@@ -189,7 +188,7 @@ ExprGen::instantiate_sysfunccall(
   }
 
   // 引数の数のチェック
-  auto n = ast_expr->operand_list().size();
+  auto n = ast_expr.operand_list().size();
   if ( !user_systf->check_n_of_args(n) ) {
     ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
   }
@@ -197,9 +196,9 @@ ExprGen::instantiate_sysfunccall(
   // 引数の生成
   std::vector<ElbExpr*> arg_list;
   arg_list.reserve(n);
-  for ( auto ast_expr1: ast_expr->operand_list() ) {
+  for ( auto ast_expr1: ast_expr.operand_list() ) {
     ElbExpr* arg = nullptr;
-    if ( ast_expr ) {
+    if ( ast_expr1.is_valid() ) {
       arg = instantiate_arg(parent, env, ast_expr1);
     }
     else {

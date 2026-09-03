@@ -23,25 +23,25 @@ CptItem::name() const
   throw std::logic_error{"name(): type mismatch"};
 }
 
-// @brief パラメータ割り当てのリストの取得
-AstConnectionList
-CptItem::paramassign_list() const
+// @brief パラメータ割り当てのリストの先頭の取得
+const PtConnection*
+CptItem::paramassign_top() const
 {
-  throw std::logic_error{"paramassign_list(): type mismatch"};
+  throw std::logic_error{"paramassign_top(): type mismatch"};
 }
 
 // @brief defparam リストの取得
-AstDefParamList
-CptItem::defparam_list() const
+const PtDefParam*
+CptItem::defparam_top() const
 {
-  throw std::logic_error{"defparam_list(): type mismatch"};
+  throw std::logic_error{"defparam_top(): type mismatch"};
 }
 
 // @brief continuous assign リストの取得
-AstContAssignList
-CptItem::contassign_list() const
+const PtContAssign*
+CptItem::contassign_top() const
 {
-  throw std::logic_error{"contassign_list(): type mismtach"};
+  throw std::logic_error{"contassign_top(): type mismtach"};
 }
 
 // @brief プリミティブタイプの取得
@@ -52,42 +52,42 @@ CptItem::prim_type() const
 }
 
 // @brief strength の取得
-const AstStrength*
+const PtStrength*
 CptItem::strength() const
 {
   throw std::logic_error{"strength(): Does not have strength attribute"};
 }
 
 // @brief delay の取得
-const AstDelay*
+const PtDelay*
 CptItem::delay() const
 {
   throw std::logic_error{"delay(): Does not have delay attribute"};
 }
 
 // @brief module/UDP/gate instance リストの取得
-AstInstList
-CptItem::inst_list() const
+const PtInst*
+CptItem::inst_top() const
 {
-  throw std::logic_error{"inst_list(): type mismtach"};
+  throw std::logic_error{"inst_top(): type mismtach"};
 }
 
 // @brief 宣言ヘッダリストの取得
-AstDeclHeadList
-CptItem::declhead_list() const
+const PtDeclHead*
+CptItem::declhead_top() const
 {
-  throw std::logic_error{"declhead_list(): type mismatch"};
+  throw std::logic_error{"declhead_top(): type mismatch"};
 }
 
 // @brief item リストの取得
-AstItemList
-CptItem::item_list() const
+const PtItem*
+CptItem::item_top() const
 {
-  throw std::logic_error{"item_list(): type mismatch"};
+  throw std::logic_error{"item_top(): type mismatch"};
 }
 
 // @brief 本体のステートメントの取得
-const AstStmt*
+const PtStmt*
 CptItem::body() const
 {
   throw std::logic_error{"body(): Does not have body"};
@@ -101,10 +101,10 @@ CptItem::automatic() const
 }
 
 // @brief IO宣言ヘッダリストの取得
-AstIOHeadList
-CptItem::iohead_list() const
+const PtIOHead*
+CptItem::iohead_top() const
 {
-  throw std::logic_error{"iohead_list(): type mismatch"};
+  throw std::logic_error{"iohead_top(): type mismatch"};
 }
 
 // @brief IO宣言の要素数の取得
@@ -122,7 +122,7 @@ CptItem::is_signed() const
 }
 
 // @brief 範囲の取得
-const AstRange*
+const PtRange*
 CptItem::range() const
 {
   throw std::logic_error{"range(): Not a Func type"};
@@ -164,10 +164,10 @@ CptItem::specitem_type() const
 }
 
 // @brief ターミナルリストの取得
-AstExprList
-CptItem::terminal_list() const
+const PtExpr*
+CptItem::terminal_top() const
 {
-  throw std::logic_error{"terminal_list(): type mismatch"};
+  throw std::logic_error{"terminal_top(): type mismatch"};
 }
 
 // @brief specify block path の種類の取得
@@ -178,52 +178,52 @@ CptItem::specpath_type() const
 }
 
 // @brief 条件式の取得
-const AstExpr*
+const PtExpr*
 CptItem::cond_expr() const
 {
   throw std::logic_error{"cond_expr(): type mismatch"};
 }
 
 // @brief パス記述の取得
-const AstPathDecl*
+const PtPathDecl*
 CptItem::path_decl() const
 {
   throw std::logic_error{"Not a SpecPath type"};
 }
 
 // @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-AstDeclHeadList
-CptItem::then_declhead_list() const
+const PtDeclHead*
+CptItem::then_declhead_top() const
 {
-  throw std::logic_error{"then_declhead_list(): type mismatch"};
+  throw std::logic_error{"then_declhead_top(): type mismatch"};
 }
 
 // @brief 条件が成り立った時に生成される要素リストの取得
-AstItemList
-CptItem::then_item_list() const
+const PtItem*
+CptItem::then_item_top() const
 {
-  throw std::logic_error{"then_item_list(): type mismatch"};
+  throw std::logic_error{"then_item_top(): type mismatch"};
 }
 
 // @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-AstDeclHeadList
-CptItem::else_declhead_list() const
+const PtDeclHead*
+CptItem::else_declhead_top() const
 {
-  throw std::logic_error{"else_declhead_list(): type mismatch"};
+  throw std::logic_error{"else_declhead_top(): type mismatch"};
 }
 
 // @brief 条件が成り立たなかった時に生成されるitemリストの取得
-AstItemList
-CptItem::else_item_list() const
+const PtItem*
+CptItem::else_item_top() const
 {
-  throw std::logic_error{"else_item_list(): type mismatch"};
+  throw std::logic_error{"else_item_top(): type mismatch"};
 }
 
 // @brief case item リストの取得
-AstGenCaseItemList
-CptItem::caseitem_list() const
+const PtGenCaseItem*
+CptItem::caseitem_top() const
 {
-  throw std::logic_error{"caseitem_list(): Not a GenCase type"};
+  throw std::logic_error{"caseitem_top(): Not a GenCase type"};
 }
 
 // @brief 繰り返し制御用の変数名の取得
@@ -234,14 +234,14 @@ CptItem::loop_var() const
 }
 
 // @brief 初期化文の右辺の取得
-const AstExpr*
+const PtExpr*
 CptItem::init_expr() const
 {
   throw std::logic_error{"init_expr(): Not a GenFor type"};
 }
 
 // @brief 増加文の右辺の取得
-const AstExpr*
+const PtExpr*
 CptItem::next_expr() const
 {
   throw std::logic_error{"next_expr(): Not a GenFor type"};

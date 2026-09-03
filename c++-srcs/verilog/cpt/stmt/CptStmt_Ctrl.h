@@ -25,8 +25,8 @@ protected:
   /// @brief コンストラクタ
   CptStmt_Ctrl(
     const FileRegion& file_region,
-    const AstControl* control,
-    const AstStmt* body
+    const PtControl* control,
+    const PtStmt* body
   ) : CptStmt(file_region),
       mControl{control},
       mBody{body}
@@ -45,15 +45,15 @@ protected:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の仮想関数
+  // PtStmt の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief コントロールを返す．
-  const AstControl*
+  const PtControl*
   control() const override;
 
   /// @brief 本体を取り出す．
-  const AstStmt*
+  const PtStmt*
   body() const override;
 
 
@@ -63,10 +63,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // コントロール
-  const AstControl* mControl;
+  const PtControl* mControl;
 
   // 本体
-  const AstStmt* mBody;
+  const PtStmt* mBody;
 
 };
 
@@ -83,8 +83,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_DelayControl(
     const FileRegion& file_region,
-    const AstControl* delay,
-    const AstStmt* body
+    const PtControl* delay,
+    const PtStmt* body
   ) : CptStmt_Ctrl(file_region, delay, body)
   {
   }
@@ -95,11 +95,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -117,8 +117,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_EventControl(
     const FileRegion& file_region,
-    const AstControl* event,
-    const AstStmt* body
+    const PtControl* event,
+    const PtStmt* body
   ) : CptStmt_Ctrl(file_region, event, body)
   {
   }
@@ -129,11 +129,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
 };
@@ -151,8 +151,8 @@ public:
   /// @brief コンストラクタ
   CptStmt_Wait(
     const FileRegion& file_region,
-    const AstExpr* expr,
-    const AstStmt* body
+    const PtExpr* expr,
+    const PtStmt* body
   ) : CptStmt(file_region),
       mExpr{expr},
       mBody{body}
@@ -171,19 +171,19 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstStmt の派生クラスのための仮想関数
+  // PtStmt の派生クラスのための仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief クラスの型を返す仮想関数
-  Type
+  AstStmt::Type
   type() const override;
 
   /// @brief 条件を返す．
-  const AstExpr*
+  const PtExpr*
   expr() const override;
 
   /// @brief 実行すべき本体を返す．
-  const AstStmt*
+  const PtStmt*
   body() const override;
 
 
@@ -193,10 +193,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 条件
-  const AstExpr* mExpr;
+  const PtExpr* mExpr;
 
   // 実行すべき本体
-  const AstStmt* mBody;
+  const PtStmt* mBody;
 
 };
 

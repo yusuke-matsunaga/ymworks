@@ -30,9 +30,9 @@ public:
   virtual
   void
   add_iodecl(
-    ElbIOHead* head,         ///< [in] ヘッダ
-    const AstIOItem* ast_item, ///< [in] パース木のIO宣言要素
-    const VlDecl* decl       ///< [in] 対応する宣言要素
+    ElbIOHead* head,           ///< [in] ヘッダ
+    const AstIOItem& ast_item, ///< [in] パース木のIO宣言要素
+    const VlDecl* decl         ///< [in] 対応する宣言要素
   ) = 0;
 
   /// @brief 本体のステートメントをセットする．

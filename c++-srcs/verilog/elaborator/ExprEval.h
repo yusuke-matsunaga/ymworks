@@ -47,8 +47,8 @@ public:
   /// * 定数式でなければ EvalConstError 例外を送出する．
   VlValue
   evaluate_expr(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価し int 値を返す．
@@ -58,8 +58,8 @@ public:
   /// * 評価結果が int でなければ EvalIntError 例外を送出する．
   int
   evaluate_int(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式ならばを評価し int 値を返す．
@@ -68,9 +68,9 @@ public:
   /// * 評価結果が int でなければ EvalIntError 例外を送出する．
   int
   evaluate_int_if_const(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr, ///< [in] 式を表すパース木
-    bool& is_const         ///< [out] 定数式の時に true を返す．
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstExpr& ast_expr, ///< [in] 式を表すパース木
+    bool& is_const           ///< [out] 定数式の時に true を返す．
   );
 
   /// @brief 定数式を評価しスカラー値を返す．
@@ -80,8 +80,8 @@ public:
   /// * いかなる型でもスカラー値に変換可能
   VlScalarVal
   evaluate_scalar(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価し bool 値を返す．
@@ -91,8 +91,8 @@ public:
   /// * いかなる型でも bool 値に変換可能
   bool
   evaluate_bool(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数式を評価しビットベクタ値を返す．
@@ -102,8 +102,8 @@ public:
   /// * 評価結果がビットベクタ型でなければ EvalError 例外を送出する．
   BitVector
   evaluate_bitvector(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 範囲を表す式を評価する．
@@ -113,8 +113,8 @@ public:
   /// * 評価結果が int でなければ EvalIntError 例外を送出する．
   RangeVal
   evaluate_range(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstRange* ast_range ///< [in] 範囲を表すパース木
+    const VlScope* parent,    ///< [in] 親のスコープ
+    const AstRange& ast_range ///< [in] 範囲を表すパース木
   );
 
   /// @brief 範囲を表す式を評価する．
@@ -125,8 +125,8 @@ public:
   /// * 評価結果が int でなければ EvalIntError 例外を送出する．
   RangeVal
   evaluate_range(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstPart* ast_part  ///< [in] 範囲指定を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstPart& ast_part ///< [in] 範囲指定を表すパース木
   );
 
 
@@ -138,29 +138,29 @@ private:
   /// @brief 演算子に対して式の値を評価する．
   VlValue
   evaluate_opr(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 定数に対して式の値を評価する．
   VlValue
   evaluate_const(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief 関数呼び出しに対して式の値を評価する．
   VlValue
   evaluate_funccall(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief プライマリに対して式の値を評価する．
   VlValue
   evaluate_primary(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstExpr* ast_expr  ///< [in] 式を表すパース木
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
 };

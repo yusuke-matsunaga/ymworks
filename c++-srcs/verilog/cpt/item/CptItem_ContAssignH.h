@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtContAssign.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,7 +26,7 @@ public:
   /// @brief コンストラクタ
   CptItem_ContAssignH(
     const FileRegion& file_region,
-    const AstContAssign* ca_top
+    const PtContAssign* ca_top
   ) : mFileRegion{file_region},
       mTop{ca_top}
   {
@@ -37,7 +38,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
@@ -45,22 +46,22 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
   /// @brief strength の取得
   /// @return 信号強度
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
   /// @brief delay の取得
   /// @return 遅延
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
   /// @brief continuous assign リストの取得
-  AstContAssignList
-  contassign_list() const override;
+  const PtContAssign*
+  contassign_top() const override;
 
 
 private:
@@ -72,7 +73,7 @@ private:
   FileRegion mFileRegion;
 
   // 要素の先頭
-  const AstContAssign* mTop;
+  const PtContAssign* mTop;
 
 };
 
@@ -89,8 +90,8 @@ public:
   /// @brief コンストラクタ
   CptItem_ContAssignHS(
     const FileRegion& file_region,
-    const AstStrength* strength,
-    const AstContAssign* ca_top
+    const PtStrength* strength,
+    const PtContAssign* ca_top
   ) : CptItem_ContAssignH(file_region, ca_top),
       mStrength{strength}
   {
@@ -102,11 +103,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
 
@@ -116,7 +117,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const AstStrength* mStrength;
+  const PtStrength* mStrength;
 
 };
 
@@ -133,8 +134,8 @@ public:
   /// @brief コンストラクタ
   CptItem_ContAssignHD(
     const FileRegion& file_region,
-    const AstDelay* delay,
-    const AstContAssign* ca_top
+    const PtDelay* delay,
+    const PtContAssign* ca_top
   ) : CptItem_ContAssignH(file_region, ca_top),
       mDelay{delay}
   {
@@ -146,11 +147,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief delay を返す．
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
 
@@ -160,7 +161,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // delay
-  const AstDelay* mDelay;
+  const PtDelay* mDelay;
 
 };
 
@@ -177,9 +178,9 @@ public:
   /// @brief コンストラクタ
   CptItem_ContAssignHSD(
     const FileRegion& file_region,
-    const AstStrength* strength,
-    const AstDelay* delay,
-    const AstContAssign* ca_top
+    const PtStrength* strength,
+    const PtDelay* delay,
+    const PtContAssign* ca_top
   ) : CptItem_ContAssignH(file_region, ca_top),
       mStrength{strength},
       mDelay{delay}
@@ -192,15 +193,15 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief strength を返す．
-  const AstStrength*
+  const PtStrength*
   strength() const override;
 
   /// @brief delay を返す．
-  const AstDelay*
+  const PtDelay*
   delay() const override;
 
 
@@ -210,10 +211,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // strength
-  const AstStrength* mStrength;
+  const PtStrength* mStrength;
 
   // delay
-  const AstDelay* mDelay;
+  const PtDelay* mDelay;
 
 };
 
@@ -229,8 +230,8 @@ public:
 
   /// @brief コンストラクタ
   CptContAssign(
-    const AstExpr* lhs,
-    const AstExpr* rhs
+    const PtExpr* lhs,
+    const PtExpr* rhs
   ) : mLhs{lhs},
       mRhs{rhs}
   {
@@ -242,7 +243,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstContAssign の仮想関数
+  // PtContAssign の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を取り出す．
@@ -250,11 +251,11 @@ public:
   file_region() const override;
 
   /// @brief 左辺式を取り出す．
-  const AstExpr*
+  const PtExpr*
   lhs() const override;
 
   /// @brief 右辺式を取り出す．
-  const AstExpr*
+  const PtExpr*
   rhs() const override;
 
 
@@ -264,10 +265,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 左辺式
-  const AstExpr* mLhs;
+  const PtExpr* mLhs;
 
   // 右辺式
-  const AstExpr* mRhs;
+  const PtExpr* mRhs;
 
 };
 

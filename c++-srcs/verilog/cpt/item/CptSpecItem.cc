@@ -28,7 +28,7 @@ CptSpecItem::file_region() const
 AstItem::Type
 CptSpecItem::type() const
 {
-  return SpecItem;
+  return AstItem::SpecItem;
 }
 
 // トークン番号を返す．??? たぶん変更される．
@@ -38,11 +38,11 @@ CptSpecItem::specitem_type() const
   return mId;
 }
 
-// @brief ターミナルリストの取得
-AstExprList
-CptSpecItem::terminal_list() const
+// @brief ターミナルリストの先頭の取得
+const PtExpr*
+CptSpecItem::terminal_top() const
 {
-  return AstExprList(mTerminalTop);
+  return mTerminalTop;
 }
 
 
@@ -61,7 +61,7 @@ CptSpecPath::file_region() const
 AstItem::Type
 CptSpecPath::type() const
 {
-  return SpecPath;
+  return AstItem::SpecPath;
 }
 
 // トークン番号を返す．??? たぶん変更される．
@@ -72,14 +72,14 @@ CptSpecPath::specpath_type() const
 }
 
 // モジュールパスの式を返す．
-const AstExpr*
+const PtExpr*
 CptSpecPath::cond_expr() const
 {
   return mExpr;
 }
 
 // パス記述を返す．
-const AstPathDecl*
+const PtPathDecl*
 CptSpecPath::path_decl() const
 {
   return mPathDecl;
@@ -104,11 +104,11 @@ CptPathDecl::edge() const
   return mEdge;
 }
 
-// @brief 入力のリストの取得
-AstExprList
-CptPathDecl::input_list() const
+// @brief 入力のリストの先頭の取得
+const PtExpr*
+CptPathDecl::input_top() const
 {
-  return AstExprList(mInputTop);
+  return mInputTop;
 }
 
 // 入力の極性を取り出す．
@@ -125,11 +125,11 @@ CptPathDecl::op() const
   return mOp;
 }
 
-// @brief 出力リストの取得
-AstExprList
-CptPathDecl::output_list() const
+// @brief 出力リストの先頭の取得
+const PtExpr*
+CptPathDecl::output_top() const
 {
-  return AstExprList(mOutputTop);
+  return mOutputTop;
 }
 
 // 出力の極性を取り出す．
@@ -140,14 +140,14 @@ CptPathDecl::output_pol() const
 }
 
 // 式を取り出す．
-const AstExpr*
+const PtExpr*
 CptPathDecl::expr() const
 {
   return mExpr;
 }
 
 // path_delay_value を取り出す．
-const AstPathDelay*
+const PtPathDelay*
 CptPathDecl::path_delay() const
 {
   return mPathDelay;
@@ -166,7 +166,7 @@ CptPathDelayBase::file_region() const
 }
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptPathDelayBase::value(
   SizeType index
 ) const
@@ -183,7 +183,7 @@ CptPathDelayBase::value(
 //////////////////////////////////////////////////////////////////////
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptPathDelay1::value(
   SizeType index
 ) const
@@ -200,7 +200,7 @@ CptPathDelay1::value(
 //////////////////////////////////////////////////////////////////////
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptPathDelay2::value(
   SizeType index
 ) const
@@ -217,7 +217,7 @@ CptPathDelay2::value(
 //////////////////////////////////////////////////////////////////////
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptPathDelay3::value(
   SizeType index
 ) const
@@ -234,7 +234,7 @@ CptPathDelay3::value(
 //////////////////////////////////////////////////////////////////////
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptPathDelay6::value(
   SizeType index
 ) const
@@ -251,7 +251,7 @@ CptPathDelay6::value(
 //////////////////////////////////////////////////////////////////////
 
 // 値を取り出す．
-const AstExpr*
+const PtExpr*
 CptPathDelay12::value(
   SizeType index
 ) const
@@ -273,7 +273,7 @@ PtItem*
 PtFactory::new_SpecItem(
   const FileRegion& file_region,
   VpiSpecItemType id,
-  PtExpr* terminal_top
+  const PtExpr* terminal_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecItem));
@@ -285,8 +285,8 @@ PtItem*
 PtFactory::new_SpecPath(
   const FileRegion& file_region,
   VpiSpecPathType id,
-  const AstExpr* expr,
-  const AstPathDecl* path_decl
+  const PtExpr* expr,
+  const PtPathDecl* path_decl
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptSpecPath));
@@ -298,13 +298,13 @@ PtPathDecl*
 PtFactory::new_PathDecl(
   const FileRegion& file_region,
   int edge,
-  PtExpr* input_top,
+  const PtExpr* input_top,
   int input_pol,
   VpiPathType op,
-  PtExpr* output_top,
+  const PtExpr* output_top,
   int output_pol,
-  const AstExpr* expr,
-  const AstPathDelay* path_delay
+  const PtExpr* expr,
+  const PtPathDelay* path_delay
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPathDecl));
@@ -319,7 +319,7 @@ PtFactory::new_PathDecl(
 PtPathDelay*
 PtFactory::new_PathDelay(
   const FileRegion& file_region,
-  const AstExpr* value
+  const PtExpr* value
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPathDelay1));
@@ -330,8 +330,8 @@ PtFactory::new_PathDelay(
 PtPathDelay*
 PtFactory::new_PathDelay(
   const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2
+  const PtExpr* value1,
+  const PtExpr* value2
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPathDelay2));
@@ -342,9 +342,9 @@ PtFactory::new_PathDelay(
 PtPathDelay*
 PtFactory::new_PathDelay(
   const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2,
-  const AstExpr* value3
+  const PtExpr* value1,
+  const PtExpr* value2,
+  const PtExpr* value3
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPathDelay3));
@@ -355,12 +355,12 @@ PtFactory::new_PathDelay(
 PtPathDelay*
 PtFactory::new_PathDelay(
   const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2,
-  const AstExpr* value3,
-  const AstExpr* value4,
-  const AstExpr* value5,
-  const AstExpr* value6
+  const PtExpr* value1,
+  const PtExpr* value2,
+  const PtExpr* value3,
+  const PtExpr* value4,
+  const PtExpr* value5,
+  const PtExpr* value6
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPathDelay6));
@@ -373,18 +373,18 @@ PtFactory::new_PathDelay(
 PtPathDelay*
 PtFactory::new_PathDelay(
   const FileRegion& file_region,
-  const AstExpr* value1,
-  const AstExpr* value2,
-  const AstExpr* value3,
-  const AstExpr* value4,
-  const AstExpr* value5,
-  const AstExpr* value6,
-  const AstExpr* value7,
-  const AstExpr* value8,
-  const AstExpr* value9,
-  const AstExpr* value10,
-  const AstExpr* value11,
-  const AstExpr* value12
+  const PtExpr* value1,
+  const PtExpr* value2,
+  const PtExpr* value3,
+  const PtExpr* value4,
+  const PtExpr* value5,
+  const PtExpr* value6,
+  const PtExpr* value7,
+  const PtExpr* value8,
+  const PtExpr* value9,
+  const PtExpr* value10,
+  const PtExpr* value11,
+  const PtExpr* value12
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptPathDelay12));

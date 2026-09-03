@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlScope*
 EiFactory::new_StmtBlockScope(
   const VlScope* parent,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 )
 {
   auto scope = new EiStmtBlockScope(parent, ast_stmt);
@@ -35,7 +35,7 @@ EiFactory::new_StmtBlockScope(
 // @brief コンストラクタ
 EiStmtBlockScope::EiStmtBlockScope(
   const VlScope* parent,
-  const AstStmt* ast_stmt
+  const AstStmt& ast_stmt
 ) : EiScope{parent},
     mAstStmt{ast_stmt}
 {
@@ -50,14 +50,14 @@ EiStmtBlockScope::~EiStmtBlockScope()
 FileRegion
 EiStmtBlockScope::file_region() const
 {
-  return mAstStmt->file_region();
+  return mAstStmt.file_region();
 }
 
 // @brief 名前の取得
 std::string
 EiStmtBlockScope::name() const
 {
-  return mAstStmt->name();
+  return mAstStmt.name();
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -9,8 +9,10 @@
 /// All rights reserved.
 
 #include "parser/PtUdp.h"
+#include "parser/PtUdpEntry.h"
+#include "parser/PtUdpValue.h"
 #include "parser/PtPort.h"
-#include "parser/PtDecl.h"
+#include "parser/PtIOHead.h"
 #include "ym/vl/VlUdpVal.h"
 #include "ym/FileRegion.h"
 
@@ -29,11 +31,11 @@ public:
   CptUdp(
     const FileRegion& file_region,
     const char* name,
-    PtPort* port_top,
-    PtIOHead* iohead_top,
+    const PtPort* port_top,
+    const PtIOHead* iohead_top,
     bool is_seq,
-    const AstExpr* init_value,
-    PtUdpEntry* entry_top
+    const PtExpr* init_value,
+    const PtUdpEntry* entry_top
   ) : mFileRegion{file_region},
       mName{name},
       mPortTop{port_top},
@@ -66,20 +68,20 @@ public:
   name() const override;
 
   /// @brief ポートのリストを取り出す．
-  AstPortList
-  port_list() const override;
+  const PtPort*
+  port_top() const override;
 
   /// @brief 入出力宣言ヘッダのリストの取得
-  AstIOHeadList
-  iohead_list() const override;
+  const PtIOHead*
+  iohead_top() const override;
 
   /// @brief 初期値を取出す．
-  const AstExpr*
+  const PtExpr*
   init_value() const override;
 
   /// @brief テーブルのリストを返す．
-  AstUdpEntryList
-  table_list() const override;
+  const PtUdpEntry*
+  table_top() const override;
 
 
 private:
@@ -94,19 +96,19 @@ private:
   const char* mName;
 
   // ポートの先頭
-  PtPort* mPortTop;
+  const PtPort* mPortTop;
 
   // 入出力宣言の先頭
-  PtIOHead* mIOHeadTop;
+  const PtIOHead* mIOHeadTop;
 
   // sequential primitive の時 true
   bool mSeq;
 
   // 初期値
-  const AstExpr* mInitValue;
+  const PtExpr* mInitValue;
 
   // テーブル要素の先頭
-  PtUdpEntry* mTableTop;
+  const PtUdpEntry* mTableTop;
 
 };
 
@@ -122,8 +124,8 @@ public:
   /// @brief コンストラクタ
   CptUdpEntry(
     const FileRegion& file_region,
-    PtUdpValue* input_top,
-    const AstUdpValue* output
+    const PtUdpValue* input_top,
+    const PtUdpValue* output
   ) : mFileRegion{file_region},
       mInputTop{input_top},
       mOutput{output}
@@ -144,15 +146,15 @@ public:
   file_region() const override;
 
   /// @brief 入力値のリストを取り出す．
-  AstUdpValueList
-  input_list() const override;
+  const PtUdpValue*
+  input_top() const override;
 
   /// @brief 現状態の値を取り出す．
-  const AstUdpValue*
+  const PtUdpValue*
   current() const override;
 
   /// @brief 出力の値を取り出す．
-  const AstUdpValue*
+  const PtUdpValue*
   output() const override;
 
 
@@ -165,10 +167,10 @@ private:
   FileRegion mFileRegion;
 
   // 入力パタンの先頭
-  PtUdpValue* mInputTop;
+  const PtUdpValue* mInputTop;
 
   // 出力のパタン
-  const AstUdpValue* mOutput;
+  const PtUdpValue* mOutput;
 
 };
 
@@ -184,9 +186,9 @@ public:
   /// @brief コンストラクタ
   CptUdpEntryS(
     const FileRegion& file_region,
-    PtUdpValue* input_top,
-    const AstUdpValue* current,
-    const AstUdpValue* output
+    const PtUdpValue* input_top,
+    const PtUdpValue* current,
+    const PtUdpValue* output
   ) : CptUdpEntry(file_region, input_top, output),
       mCurrent{current}
   {
@@ -198,11 +200,11 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstUdpEntry の仮想関数
+  // PtUdpEntry の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 現状態の値を取り出す．
-  const AstUdpValue*
+  const PtUdpValue*
   current() const override;
 
 
@@ -212,7 +214,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 現状態のパタン
-  const AstUdpValue* mCurrent;
+  const PtUdpValue* mCurrent;
 
 };
 
@@ -250,7 +252,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstUdpValue の仮想関数
+  // PtUdpValue の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．

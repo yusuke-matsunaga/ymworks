@@ -8,7 +8,7 @@
 
 #include "CptItem_MuH.h"
 #include "alloc/Alloc.h"
-#include "parser/PtMisc.h"
+//#include "parser/PtMisc.h"
 #include "parser/PtFactory.h"
 
 
@@ -29,7 +29,7 @@ CptItem_MuH::file_region() const
 AstItem::Type
 CptItem_MuH::type() const
 {
-  return MuInst;
+  return AstItem::MuInst;
 }
 
 // 定義名を返す．
@@ -40,31 +40,31 @@ CptItem_MuH::name() const
 }
 
 // @brief パラメータ割り当てのリストの取得
-AstConnectionList
-CptItem_MuH::paramassign_list() const
+const PtConnection*
+CptItem_MuH::paramassign_top() const
 {
-  return AstConnectionList(nullptr);
+  return nullptr;
 }
 
 // @brief strength を返す．
-const AstStrength*
+const PtStrength*
 CptItem_MuH::strength() const
 {
   return nullptr;
 }
 
 // @brief delay を返す．
-const AstDelay*
+const PtDelay*
 CptItem_MuH::delay() const
 {
   return nullptr;
 }
 
 // @brief module/UDP/gate instance リストの取得
-AstInstList
-CptItem_MuH::inst_list() const
+const PtInst*
+CptItem_MuH::inst_top() const
 {
-  return AstInstList(mInstTop);
+  return mInstTop;
 }
 
 
@@ -73,10 +73,10 @@ CptItem_MuH::inst_list() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief パラメータ割り当てのリストの取得
-AstConnectionList
-CptItem_MuHP::paramassign_list() const
+const PtConnection*
+CptItem_MuHP::paramassign_top() const
 {
-  return AstConnectionList(mParamAssignTop);
+  return mParamAssignTop;
 }
 
 
@@ -85,7 +85,7 @@ CptItem_MuHP::paramassign_list() const
 //////////////////////////////////////////////////////////////////////
 
 // strength を返す．
-const AstStrength*
+const PtStrength*
 CptItem_MuHS::strength() const
 {
   return mStrength;
@@ -97,7 +97,7 @@ CptItem_MuHS::strength() const
 //////////////////////////////////////////////////////////////////////
 
 // delay を返す．
-const AstDelay*
+const PtDelay*
 CptItem_MuHD::delay() const
 {
   return mDelay;
@@ -109,14 +109,14 @@ CptItem_MuHD::delay() const
 //////////////////////////////////////////////////////////////////////
 
 // strength を返す．
-const AstStrength*
+const PtStrength*
 CptItem_MuHSD::strength() const
 {
   return mStrength;
 }
 
 // delay を返す．
-const AstDelay*
+const PtDelay*
 CptItem_MuHSD::delay() const
 {
   return mDelay;
@@ -132,7 +132,7 @@ PtItem*
 PtFactory::new_MuH(
   const FileRegion& file_region,
   const char* def_name,
-  PtInst* inst_top
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_MuH));
@@ -144,8 +144,8 @@ PtItem*
 PtFactory::new_MuH(
   const FileRegion& file_region,
   const char* def_name,
-  PtConnection* paramassign_top,
-  PtInst* inst_top
+  const PtConnection* paramassign_top,
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_MuHP));
@@ -158,8 +158,8 @@ PtItem*
 PtFactory::new_MuH(
   const FileRegion& file_region,
   const char* def_name,
-  const AstDelay* delay,
-  PtInst* inst_top
+  const PtDelay* delay,
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_MuHD));
@@ -172,8 +172,8 @@ PtItem*
 PtFactory::new_MuH(
   const FileRegion& file_region,
   const char* def_name,
-  const AstStrength* strength,
-  PtInst* inst_top
+  const PtStrength* strength,
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_MuHS));
@@ -186,9 +186,9 @@ PtItem*
 PtFactory::new_MuH(
   const FileRegion& file_region,
   const char* def_name,
-  const AstStrength* strength,
-  const AstDelay* delay,
-  PtInst* inst_top
+  const PtStrength* strength,
+  const PtDelay* delay,
+  const PtInst* inst_top
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptItem_MuHSD));

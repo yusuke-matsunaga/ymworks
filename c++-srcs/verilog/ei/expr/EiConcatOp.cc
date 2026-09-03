@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 連結演算子を生成する．
 ElbExpr*
 EiFactory::new_ConcatOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const std::vector<ElbExpr*>& opr_list
 )
 {
@@ -31,7 +31,7 @@ EiFactory::new_ConcatOp(
 // @brief 反復連結演算子を生成する．
 ElbExpr*
 EiFactory::new_MultiConcatOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   SizeType rep_num,
   ElbExpr* rep_expr,
   const std::vector<ElbExpr*>& opr_list
@@ -47,7 +47,7 @@ EiFactory::new_MultiConcatOp(
 
 // @brief コンストラクタ
 EiConcatOp::EiConcatOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   const std::vector<ElbExpr*>& opr_list
 ) : EiOperation(ast_expr),
     mOprList{opr_list}
@@ -141,7 +141,7 @@ EiConcatOp::bit_size() const
 
 // @brief コンストラクタ
 EiMultiConcatOp::EiMultiConcatOp(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   SizeType rep_num,
   ElbExpr* rep_expr,
   const std::vector<ElbExpr*>& opr_list

@@ -7,6 +7,10 @@
 /// All rights reserved.
 
 #include "PtTest.h"
+#include "parser/PtControl.h"
+#include "parser/PtConnection.h"
+#include "parser/PtStrength.h"
+#include "parser/PtDelay.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -22,7 +26,7 @@ TEST_F(PtTest, DelayControl)
   EXPECT_EQ( FileRegion(fr, fr1), control->file_region() );
   EXPECT_EQ( AstControl::Delay, control->type() );
   EXPECT_EQ( expr, control->delay() );
-  EXPECT_THROW( control->event_list(),
+  EXPECT_THROW( control->event_top(),
 		std::logic_error );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
@@ -38,8 +42,8 @@ TEST_F(PtTest, EventControl1)
   EXPECT_EQ( AstControl::Event, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( std::vector<const AstExpr*>{},
-	     control->event_list().to_vector() );
+  EXPECT_EQ( std::vector<const PtExpr*>{},
+	     to_vector(control->event_top()) );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -57,11 +61,11 @@ TEST_F(PtTest, EventControl2)
   EXPECT_EQ( AstControl::Event, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  auto event0 = control->event_list().front();
+  auto event0 = control->event_top();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_EQ( name, event0->name() );
-  EXPECT_EQ( std::vector<const AstExpr*>{event0},
-	     control->event_list().to_vector() );
+  EXPECT_EQ( std::vector<const PtExpr*>{event0},
+	     to_vector(control->event_top()) );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -81,15 +85,15 @@ TEST_F(PtTest, EventControl3)
   EXPECT_EQ( AstControl::Event, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  auto event0 = control->event_list().front();
+  auto event0 = control->event_top();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_STREQ( name, event0->name() );
-  auto nb_list = event0->namebranch_list().to_vector();
+  auto nb_list = to_vector(event0->namebranch_top());
   EXPECT_EQ( 1, nb_list.size() );
   auto nb0 = nb_list[0];
   EXPECT_STREQ( head, nb0->name() );
-  EXPECT_EQ( std::vector<const AstExpr*>{event0},
-	     control->event_list().to_vector() );
+  EXPECT_EQ( std::vector<const PtExpr*>{event0},
+	     to_vector(control->event_top()) );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -113,8 +117,8 @@ TEST_F(PtTest, EventControl4)
   EXPECT_EQ( AstControl::Event, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  std::vector<const AstExpr*> expr_list{expr1, expr2};
-  EXPECT_EQ( expr_list, control->event_list().to_vector() );
+  std::vector<const PtExpr*> expr_list{expr1, expr2};
+  EXPECT_EQ( expr_list, to_vector(control->event_top()) );
   EXPECT_THROW( control->rep_expr(),
 		std::logic_error );
 }
@@ -131,8 +135,8 @@ TEST_F(PtTest, RepeatControl1)
   EXPECT_EQ( AstControl::Repeat, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  EXPECT_EQ( std::vector<const AstExpr*>{},
-	     control->event_list().to_vector() );
+  EXPECT_EQ( std::vector<const PtExpr*>{},
+	     to_vector(control->event_top()) );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -151,11 +155,11 @@ TEST_F(PtTest, RepeatControl2)
   EXPECT_EQ( AstControl::Repeat, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  auto event0 = control->event_list().front();
+  auto event0 = control->event_top();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_EQ( name, event0->name() );
-  EXPECT_EQ( std::vector<const AstExpr*>{event0},
-	     control->event_list().to_vector() );
+  EXPECT_EQ( std::vector<const PtExpr*>{event0},
+	     to_vector(control->event_top()) );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -176,15 +180,15 @@ TEST_F(PtTest, RepatControl3)
   EXPECT_EQ( AstControl::Repeat, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  auto event0 = control->event_list().front();
+  auto event0 = control->event_top();
   EXPECT_EQ( AstExpr::Primary, event0->type() );
   EXPECT_STREQ( name, event0->name() );
-  auto nb_list = event0->namebranch_list().to_vector();
+  auto nb_list = to_vector(event0->namebranch_top());
   EXPECT_EQ( 1, nb_list.size() );
   auto nb0 = nb_list[0];
   EXPECT_STREQ( head, nb0->name() );
-  EXPECT_EQ( std::vector<const AstExpr*>{event0},
-	     control->event_list().to_vector() );
+  EXPECT_EQ( std::vector<const PtExpr*>{event0},
+	     to_vector(control->event_top()) );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -209,8 +213,8 @@ TEST_F(PtTest, RepeatControl4)
   EXPECT_EQ( AstControl::Repeat, control->type() );
   EXPECT_THROW( control->delay(),
 		std::logic_error);
-  std::vector<const AstExpr*> expr_list{expr1, expr2};
-  EXPECT_EQ( expr_list, control->event_list().to_vector() );
+  std::vector<const PtExpr*> expr_list{expr1, expr2};
+  EXPECT_EQ( expr_list, to_vector(control->event_top()) );
   EXPECT_EQ( rep, control->rep_expr() );
 }
 
@@ -477,8 +481,8 @@ TEST_F(PtTest, AttrInst)
 
   ASSERT_TRUE( ai != nullptr );
   EXPECT_EQ( fr, ai->file_region() );
-  std::vector<const AstAttrSpec*> as_vec{as};
-  EXPECT_EQ( as_vec, ai->attrspec_list().to_vector() );
+  std::vector<const PtAttrSpec*> as_vec{as};
+  EXPECT_EQ( as_vec, to_vector(ai->attrspec_top()) );
 }
 
 END_NAMESPACE_YM_VERILOG

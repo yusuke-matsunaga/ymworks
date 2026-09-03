@@ -31,13 +31,17 @@ protected:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstExpr の仮想関数
+  // PtExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   // クラスの型を返す．
   // このクラスの場合は kOpr を返す．
-  Type
+  AstExpr::Type
   type() const override;
+
+  /// @brief 固定オペランド数の取得
+  SizeType
+  operand_num() const override;
 
 };
 

@@ -11,10 +11,6 @@
 #include "ElbError.h"
 #include "ErrorGen.h"
 
-#include "ym/vl/AstDecl.h"
-#include "ym/vl/AstExpr.h"
-#include "ym/vl/AstMisc.h"
-
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbGenvar.h"
@@ -56,7 +52,7 @@ DeclGen::phase1_decl(
 {
   for ( auto ast_head: ast_head_list ) {
     try {
-      switch ( ast_head->type() ) {
+      switch ( ast_head.type() ) {
       case AstDeclHead::Param:
 	instantiate_param_head(scope, ast_head, force_to_local);
 	break;
@@ -100,10 +96,10 @@ DeclGen::instantiate_iodecl(
   }
 
   for ( auto ast_head: ast_head_list ) {
-    auto def_aux_type = ast_head->aux_type();
-    auto sign = ast_head->is_signed();
-    auto ast_range = ast_head->range();
-    auto has_range = (ast_range != nullptr);
+    auto def_aux_type = ast_head.aux_type();
+    auto sign = ast_head.is_signed();
+    auto ast_range = ast_head.range();
+    auto has_range = ast_range.is_valid();
 
     // 範囲指定を持っている場合には範囲を計算する．
     RangeVal range;
@@ -124,9 +120,9 @@ DeclGen::instantiate_iodecl(
       throw std::logic_error{"head == nullptr"};
     }
 
-    for ( auto ast_item: ast_head->item_list() ) {
+    for ( auto ast_item: ast_head.item_list() ) {
       // IO定義と変数/ネット定義が一致しているか調べる．
-      auto handle = mgr().find_obj(scope, ast_item->name());
+      auto handle = mgr().find_obj(scope, ast_item.name());
       auto decl = (ElbDecl*){nullptr};
       if ( handle ) {
 	// 同名の要素が見つかった．
@@ -237,10 +233,10 @@ DeclGen::instantiate_iodecl(
 	}
 
 	// 初期値を生成する．
-	auto ast_init = ast_item->init_value();
+	auto ast_init = ast_item.init_value();
 	auto init = (ElbExpr*){nullptr};
 	if ( module ) {
-	  if ( ast_init != nullptr ) {
+	  if ( ast_init.is_valid() ) {
 	    // 初期値を持つ場合
 	    if ( aux_type == VpiAuxType::Net ) {
 	      // net 型の場合(ここに来るのは暗黙宣言のみ)は初期値を持てない．
@@ -253,7 +249,7 @@ DeclGen::instantiate_iodecl(
 	}
 	else {
 	  // task/function の IO 宣言には初期値はない．
-	  if ( ast_init != nullptr ) {
+	  if ( ast_init.is_valid() ) {
 	    throw std::logic_error{"ast_init != nullptr"};
 	  }
 	}
@@ -281,10 +277,10 @@ DeclGen::instantiate_iodecl(
 
       {
 	std::ostringstream buf;
-	buf << "IODecl(" << ast_item->name() << ")@"
+	buf << "IODecl(" << ast_item.name() << ")@"
 	    << scope->full_name() << " created.";
 	put_info(__FILE__, __LINE__,
-		 ast_head->file_region(),
+		 ast_head.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -301,7 +297,7 @@ DeclGen::instantiate_decl(
 {
   for ( auto ast_head: ast_head_list ) {
     try {
-      switch ( ast_head->type() ) {
+      switch ( ast_head.type() ) {
       case AstDeclHead::Param:
       case AstDeclHead::LocalParam:
 	// すでに処理済みのはず．
@@ -346,14 +342,14 @@ DeclGen::instantiate_decl(
 void
 DeclGen::instantiate_param_head(
   const VlScope* scope,
-  const AstDeclHead* ast_head,
+  const AstDeclHead& ast_head,
   bool is_local
 )
 {
   auto module = scope->parent_module();
-  auto ast_range = ast_head->range();
+  auto ast_range = ast_head.range();
   auto param_head = (ElbParamHead*)nullptr;
-  if ( ast_range != nullptr ) {
+  if ( ast_range.is_valid() ) {
     auto range = evaluate_range(scope, ast_range);
     param_head = mgr().new_ParamHead(scope, ast_head,
 				     ast_range, range);
@@ -362,8 +358,8 @@ DeclGen::instantiate_param_head(
     param_head = mgr().new_ParamHead(scope, ast_head);
   }
 
-  for ( auto ast_item: ast_head->item_list() ) {
-    const auto& file_region = ast_item->file_region();
+  for ( auto ast_item: ast_head.item_list() ) {
+    const auto& file_region = ast_item.file_region();
     auto param = mgr().new_Parameter(param_head,
 				     ast_item,
 				     is_local);
@@ -385,7 +381,7 @@ DeclGen::instantiate_param_head(
     }
 
     // 右辺の式は constant expression のはずなので今つくる．
-    auto ast_init_expr = ast_item->init_value();
+    auto ast_init_expr = ast_item.init_value();
     auto value = evaluate_expr(scope, ast_init_expr);
     param->set_init_expr(ast_init_expr, value);
 
@@ -400,15 +396,15 @@ DeclGen::instantiate_param_head(
 void
 DeclGen::instantiate_net_head(
   const VlScope* scope,
-  const AstDeclHead* ast_head
+  const AstDeclHead& ast_head
 )
 {
-  auto ast_range = ast_head->range();
-  auto ast_delay = ast_head->delay();
-  auto has_delay = (ast_delay != nullptr);
+  auto ast_range = ast_head.range();
+  auto ast_delay = ast_head.delay();
+  auto has_delay = ast_delay.is_valid();
 
   auto net_head = (ElbDeclHead*)nullptr;
-  if ( ast_range != nullptr ) {
+  if ( ast_range.is_valid() ) {
     auto range = evaluate_range(scope, ast_range);
     net_head = mgr().new_DeclHead(scope, ast_head,
 				  ast_range, range,
@@ -421,22 +417,21 @@ DeclGen::instantiate_net_head(
     throw std::logic_error{"net_head == nullptr"};
   }
 
-  if ( ast_delay ) {
-    add_phase3stub(make_stub(this, &DeclGen::link_net_delay,
-			     net_head, ast_delay));
+  if ( has_delay ) {
+    add_phase3stub(make_net_delay_stub(net_head, ast_delay));
   }
 
-  for ( auto ast_item: ast_head->item_list() ) {
+  for ( auto ast_item: ast_head.item_list() ) {
     // init_value() が 0 でなければ初期割り当てを持つということ．
-    auto ast_init = ast_item->init_value();
+    auto ast_init = ast_item.init_value();
 
-    auto dim_list = ast_item->range_list();
+    auto dim_list = ast_item.range_list();
     auto dim_size = dim_list.size();
     if ( dim_size > 0 ) {
       // 配列
 
       // 初期割り当ては構文規則上持てないはず
-      if ( ast_init != nullptr ) {
+      if ( ast_init.is_valid() ) {
 	throw std::logic_error{"ast_init != nullptr"};
       }
 
@@ -456,7 +451,7 @@ DeclGen::instantiate_net_head(
 	std::ostringstream buf;
 	buf << "NetArray(" << net_array->full_name() << ") created.";
 	put_info(__FILE__, __LINE__,
-		 ast_item->file_region(),
+		 ast_item.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -465,12 +460,11 @@ DeclGen::instantiate_net_head(
       // 単一の要素
       auto net = mgr().new_Decl(vpiNet, net_head, ast_item);
 
-      if ( ast_init ) {
+      if ( ast_init.is_valid() ) {
 	// 初期割り当てつき
 	// net の初期割り当ては continuous assignment と同等なので
 	// あとで作る．
-	add_phase3stub(make_stub(this, &DeclGen::link_net_assign,
-				 net, ast_item));
+	add_phase3stub(make_net_assign_stub(net, ast_item));
       }
 
       // attribute instance の生成
@@ -481,7 +475,7 @@ DeclGen::instantiate_net_head(
 	std::ostringstream buf;
 	buf << "Net(" << net->full_name() << ") created.";
 	put_info(__FILE__, __LINE__,
-		 ast_item->file_region(),
+		 ast_item.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -489,11 +483,24 @@ DeclGen::instantiate_net_head(
   }
 }
 
+// @brief link_net_delay() を起動するスタブを作る．
+ElbStub*
+DeclGen::make_net_delay_stub(
+  ElbDeclHead* net_head,
+  const AstDelay& ast_delay
+)
+{
+  return make_stub<DeclGen,
+		   ElbDeclHead*,
+		   const AstDelay&>(this, &DeclGen::link_net_delay,
+				    net_head, ast_delay);
+}
+
 // @brief net の遅延値を生成する．
 void
 DeclGen::link_net_delay(
   ElbDeclHead* net_head,
-  const AstDelay* ast_delay
+  const AstDelay& ast_delay
 )
 {
   auto scope = net_head->parent_scope();
@@ -501,17 +508,30 @@ DeclGen::link_net_delay(
   net_head->set_delay(delay);
 }
 
+// @brief link_net_delay() を起動するスタブを作る．
+ElbStub*
+DeclGen::make_net_assign_stub(
+  ElbDecl* net,
+  const AstDeclItem& ast_item
+)
+{
+  return make_stub<DeclGen,
+		   ElbDecl*,
+		   const AstDeclItem&>(this, &DeclGen::link_net_assign,
+				       net, ast_item);
+}
+
 // @brief net の初期値を生成する．
 void
 DeclGen::link_net_assign(
   ElbDecl* net,
-  const AstDeclItem* ast_item
+  const AstDeclItem& ast_item
 )
 {
   // 実体は左辺が net の代入文を作る．
   auto lhs = mgr().new_Primary(ast_item, net);
   auto scope = net->parent_scope();
-  auto ast_init = ast_item->init_value();
+  auto ast_init = ast_item.init_value();
   auto rhs = instantiate_rhs(scope, ElbEnv(), ast_init, lhs);
   if ( !rhs ) {
     return;
@@ -528,13 +548,13 @@ DeclGen::link_net_assign(
 void
 DeclGen::instantiate_reg_head(
   const VlScope* scope,
-  const AstDeclHead* ast_head
+  const AstDeclHead& ast_head
 )
 {
-  auto ast_range = ast_head->range();
+  auto ast_range = ast_head.range();
 
   auto reg_head = (ElbDeclHead*)nullptr;
-  if ( ast_range != nullptr ) {
+  if ( ast_range.is_valid() ) {
     auto range = evaluate_range(scope, ast_range);
     reg_head = mgr().new_DeclHead(scope, ast_head,
 				  ast_range, range);
@@ -546,14 +566,14 @@ DeclGen::instantiate_reg_head(
     throw std::logic_error{"reg_head == nullptr"};
   }
 
-  for ( auto ast_item: ast_head->item_list() ) {
-    auto ast_init = ast_item->init_value();
-    auto dim_size = ast_item->range_list().size();
+  for ( auto ast_item: ast_head.item_list() ) {
+    auto ast_init = ast_item.init_value();
+    auto dim_size = ast_item.range_list().size();
     if ( dim_size > 0 ) {
       // 配列の場合
 
       // 配列は初期値を持たない．
-      if ( ast_init != nullptr ) {
+      if ( ast_init.is_valid() ) {
 	throw std::logic_error{"ast_init != nullptr"};
       }
 
@@ -574,7 +594,7 @@ DeclGen::instantiate_reg_head(
 	std::ostringstream buf;
 	buf << "RegArray(" << reg_array->full_name() << ") created.";
 	put_info(__FILE__, __LINE__,
-		 ast_item->file_region(),
+		 ast_item.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -582,7 +602,7 @@ DeclGen::instantiate_reg_head(
     else {
       // 単独の要素
       auto init = (const VlExpr*){nullptr};
-      if ( ast_init != nullptr ) {
+      if ( ast_init.is_valid() ) {
 	// 初期値を持つ場合
 	// 初期値は constant_expression なので今作る．
 	init = instantiate_constant_expr(scope, ast_init);
@@ -598,7 +618,7 @@ DeclGen::instantiate_reg_head(
 	std::ostringstream buf;
 	buf << "Reg(" << reg->full_name() << ") created.";
 	put_info(__FILE__, __LINE__,
-		 ast_item->file_region(),
+		 ast_item.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -610,22 +630,22 @@ DeclGen::instantiate_reg_head(
 void
 DeclGen::instantiate_var_head(
   const VlScope* scope,
-  const AstDeclHead* ast_head
+  const AstDeclHead& ast_head
 )
 {
-  if ( ast_head->data_type() == VpiVarType::None ) {
+  if ( ast_head.data_type() == VpiVarType::None ) {
     throw std::logic_error{"ast_head->data_type() == VpiVarType::None"};
   }
 
   auto var_head = mgr().new_DeclHead(scope, ast_head);
-  for ( auto ast_item: ast_head->item_list() ) {
-    auto ast_init = ast_item->init_value();
-    auto dim_size = ast_item->range_list().size();
+  for ( auto ast_item: ast_head.item_list() ) {
+    auto ast_init = ast_item.init_value();
+    auto dim_size = ast_item.range_list().size();
     if ( dim_size > 0 ) {
       // 配列の場合
 
       // 配列は初期値を持たない．
-      if ( ast_init != nullptr ) {
+      if ( ast_init.is_valid() ) {
 	throw std::logic_error{"ast_init != nullptr"};
       }
 
@@ -646,7 +666,7 @@ DeclGen::instantiate_var_head(
 	std::ostringstream buf;
 	buf << "VarArray(" << var_array->full_name() << ") created.";
 	put_info(__FILE__, __LINE__,
-		 ast_item->file_region(),
+		 ast_item.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -654,7 +674,7 @@ DeclGen::instantiate_var_head(
     else {
       // 単独の変数
       auto init = (const VlExpr*){nullptr};
-      if ( ast_init != nullptr ) {
+      if ( ast_init.is_valid() ) {
 	// 初期値を持つ場合
 	// 初期値は constant_expression なので今作る．
 	init = instantiate_constant_expr(scope, ast_init);
@@ -670,7 +690,7 @@ DeclGen::instantiate_var_head(
 	std::ostringstream buf;
 	buf << "Var(" << var->full_name() << ") created.";
 	put_info(__FILE__, __LINE__,
-		 ast_item->file_region(),
+		 ast_item.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -682,12 +702,12 @@ DeclGen::instantiate_var_head(
 void
 DeclGen::instantiate_event_head(
   const VlScope* scope,
-  const AstDeclHead* ast_head
+  const AstDeclHead& ast_head
 )
 {
   auto event_head = mgr().new_DeclHead(scope, ast_head);
-  for ( auto ast_item: ast_head->item_list() ) {
-    auto dim_size = ast_item->range_list().size();
+  for ( auto ast_item: ast_head.item_list() ) {
+    auto dim_size = ast_item.range_list().size();
     if ( dim_size > 0 ) {
       // 配列
 
@@ -708,7 +728,7 @@ DeclGen::instantiate_event_head(
 	std::ostringstream buf;
 	buf << "NamedEventArray(" << ne_array->full_name() << ") created.";
 	put_info(__FILE__, __LINE__,
-		 ast_item->file_region(),
+		 ast_item.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -725,7 +745,7 @@ DeclGen::instantiate_event_head(
 	std::ostringstream buf;
 	buf << "NamedEvent(" << named_event->full_name() << ") created.";
 	put_info(__FILE__, __LINE__,
-		 ast_item->file_region(),
+		 ast_item.file_region(),
 		 "ELABXXX",
 		 buf.str());
       }
@@ -737,17 +757,17 @@ DeclGen::instantiate_event_head(
 void
 DeclGen::instantiate_genvar_head(
   const VlScope* scope,
-  const AstDeclHead* ast_head
+  const AstDeclHead& ast_head
 )
 {
-  for ( auto ast_item: ast_head->item_list() ) {
+  for ( auto ast_item: ast_head.item_list() ) {
     auto genvar = mgr().new_Genvar(scope, ast_item, 0);
 
     {
       std::ostringstream buf;
       buf << "Genvar(" << genvar->full_name() << ") created.";
       put_info(__FILE__, __LINE__,
-	       ast_item->file_region(),
+	       ast_item.file_region(),
 	       "ELABXXX",
 	       buf.str());
     }
@@ -758,17 +778,17 @@ DeclGen::instantiate_genvar_head(
 bool
 DeclGen::instantiate_dimension_list(
   const VlScope* scope,
-  const AstDeclItem* ast_item,
+  const AstDeclItem& ast_item,
   std::vector<ElbRangeSrc>& range_src
 )
 {
-  auto n = ast_item->range_list().size();
+  auto n = ast_item.range_list().size();
   range_src.reserve(n);
 
-  for ( auto ast_range: ast_item->range_list() ) {
+  for ( auto ast_range: ast_item.range_list() ) {
     auto range = evaluate_range(scope, ast_range);
     range_src.push_back(ElbRangeSrc(ast_range,
-				    ast_range->left(), ast_range->right(),
+				    ast_range.left(), ast_range.right(),
 				    range.left, range.right));
   }
 

@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtGenCaseItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -24,8 +25,8 @@ public:
 
   /// @brief コンストラクタ
   CptGenBody(
-    const AstDeclHead* declhead_top,
-    const AstItem* item_top
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   ) : mDeclHeadTop{declhead_top},
       mItemTop{item_top}
   {
@@ -37,18 +38,18 @@ public:
 
 public:
 
-  /// @brief 宣言ヘッダのリストの取得
-  AstDeclHeadList
-  declhead_list() const
+  /// @brief 宣言ヘッダのリストの先頭の取得
+  const PtDeclHead*
+  declhead_top() const
   {
-    return AstDeclHeadList(mDeclHeadTop);
+    return mDeclHeadTop;
   }
 
-  /// @brief item リストの取得
-  AstItemList
-  item_list() const
+  /// @brief item リストの先頭の取得
+  const PtItem*
+  item_top() const
   {
-    return AstItemList(mItemTop);
+    return mItemTop;
   }
 
 
@@ -58,10 +59,10 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 宣言の先頭
-  const AstDeclHead* mDeclHeadTop;
+  const PtDeclHead* mDeclHeadTop;
 
   // 要素の先頭
-  const AstItem* mItemTop;
+  const PtItem* mItemTop;
 
 };
 
@@ -77,8 +78,8 @@ public:
   /// @brief コンストラクタ
   CptItem_GenBase(
     const FileRegion& file_region,
-    const AstDeclHead* declhead_top,
-    const AstItem* item_top
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   ) : mFileRegion{file_region},
       mBody(declhead_top, item_top)
   {
@@ -90,20 +91,20 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
   FileRegion
   file_region() const override;
 
-  /// @brief 宣言ヘッダリストの取得
-  AstDeclHeadList
-  declhead_list() const override;
+  /// @brief 宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  declhead_top() const override;
 
-  /// @brief item リストの取得
-  AstItemList
-  item_list() const override;
+  /// @brief item リストの先頭の取得
+  const PtItem*
+  item_top() const override;
 
 
 private:
@@ -131,8 +132,8 @@ public:
   /// @brief コンストラクタ
   CptItem_Generate(
     const FileRegion& file_region,
-    const AstDeclHead* declhead_top,
-    const AstItem* item_top
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   ) : CptItem_GenBase(file_region, declhead_top, item_top)
   {
   }
@@ -147,7 +148,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
 };
@@ -164,8 +165,8 @@ public:
   /// @brief コンストラクタ
   CptItem_GenBlock(
     const FileRegion& file_region,
-    const AstDeclHead* declhead_top,
-    const AstItem* item_top
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   ) : CptItem_GenBase(file_region, declhead_top, item_top)
   {
   }
@@ -180,7 +181,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
 };
@@ -198,8 +199,8 @@ public:
   CptItem_GenBlockN(
     const FileRegion& file_region,
     const char* name,
-    const AstDeclHead* declhead_top,
-    const AstItem* item_top
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   ) : CptItem_GenBlock(file_region, declhead_top, item_top),
       mName{name}
   {
@@ -241,9 +242,9 @@ public:
   /// @brief コンストラクタ
   CptItem_GenIf(
     const FileRegion& file_region,
-    const AstExpr* cond,
-    const AstDeclHead* then_declhead_top,
-    const AstItem* then_item_top
+    const PtExpr* cond,
+    const PtDeclHead* then_declhead_top,
+    const PtItem* then_item_top
   ) : mFileRegion{file_region},
       mCond{cond},
       mThenBody(then_declhead_top, then_item_top)
@@ -256,7 +257,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
@@ -264,28 +265,28 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
   /// @brief 条件式を返す．
-  const AstExpr*
+  const PtExpr*
   cond_expr() const override;
 
-  /// @brief 条件が成り立った時に生成される宣言ヘッダリストの取得
-  AstDeclHeadList
-  then_declhead_list() const override;
+  /// @brief 条件が成り立った時に生成される宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  then_declhead_top() const override;
 
-  /// @brief 条件が成り立った時に生成される要素リストの取得
-  AstItemList
-  then_item_list() const override;
+  /// @brief 条件が成り立った時に生成される要素リストの先頭の取得
+  const PtItem*
+  then_item_top() const override;
 
-  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-  AstDeclHeadList
-  else_declhead_list() const override;
+  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  else_declhead_top() const override;
 
-  /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
-  AstItemList
-  else_item_list() const override;
+  /// @brief 条件が成り立たなかった時に生成されるitemリストの先頭の取得
+  const PtItem*
+  else_item_top() const override;
 
 
 private:
@@ -297,7 +298,7 @@ private:
   FileRegion mFileRegion;
 
   // 条件式
-  const AstExpr* mCond;
+  const PtExpr* mCond;
 
   // 成り立ったとき生成される本体
   CptGenBody mThenBody;
@@ -316,11 +317,11 @@ public:
   /// @brief コンストラクタ
   CptItem_GenIfElse(
     const FileRegion& file_region,
-    const AstExpr* cond,
-    const AstDeclHead* then_declhead_top,
-    const AstItem* then_item_top,
-    const AstDeclHead* else_declhead_top,
-    const AstItem* else_item_top
+    const PtExpr* cond,
+    const PtDeclHead* then_declhead_top,
+    const PtItem* then_item_top,
+    const PtDeclHead* else_declhead_top,
+    const PtItem* else_item_top
   ) : CptItem_GenIf(file_region, cond, then_declhead_top, then_item_top),
       mElseBody(else_declhead_top, else_item_top)
   {
@@ -332,16 +333,16 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの取得
-  AstDeclHeadList
-  else_declhead_list() const override;
+  /// @brief 条件が成り立たなかった時に生成される宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  else_declhead_top() const override;
 
-  /// @brief 条件が成り立たなかった時に生成されるitemリストの取得
-  AstItemList
-  else_item_list() const override;
+  /// @brief 条件が成り立たなかった時に生成されるitemリストの先頭の取得
+  const PtItem*
+  else_item_top() const override;
 
 
 private:
@@ -366,8 +367,8 @@ public:
   /// @brief コンストラクタ
   CptItem_GenCase(
     const FileRegion& file_region,
-    const AstExpr* expr,
-    PtGenCaseItem* item_top
+    const PtExpr* expr,
+    const PtGenCaseItem* item_top
   ) : mFileRegion{file_region},
       mExpr{expr},
       mCaseItemTop{item_top}
@@ -380,7 +381,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
@@ -388,22 +389,22 @@ public:
   file_region() const override;
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstGenCase の仮想関数
+  // PtGenCase の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 比較式を返す．
-  const AstExpr*
+  const PtExpr*
   cond_expr() const override;
 
-  /// @brief case item リストの取得
-  AstGenCaseItemList
-  caseitem_list() const override;
+  /// @brief case item リストの先頭の取得
+  const PtGenCaseItem*
+  caseitem_top() const override;
 
 
 private:
@@ -415,10 +416,10 @@ private:
   FileRegion mFileRegion;
 
   // 比較式
-  const AstExpr* mExpr;
+  const PtExpr* mExpr;
 
   // case item の先頭
-  PtGenCaseItem* mCaseItemTop;
+  const PtGenCaseItem* mCaseItemTop;
 
 };
 
@@ -434,9 +435,9 @@ public:
   /// @brief コンストラクタ
   CptGenCaseItem(
     const FileRegion& file_region,
-    const AstExpr* label_top,
-    const AstDeclHead* declhead_top,
-    const AstItem* item_top
+    const PtExpr* label_top,
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   ) : mFileRegion{file_region},
       mLabelTop{label_top},
       mBody(declhead_top, item_top)
@@ -449,24 +450,24 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstGenCaseItem の仮想関数
+  // PtGenCaseItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
   FileRegion
   file_region() const override;
 
-  /// @brief ラベルリストの取得
-  AstExprList
-  label_list() const override;
+  /// @brief ラベルリストの先頭の取得
+  const PtExpr*
+  label_top() const override;
 
-  /// @brief 宣言ヘッダリストの取得
-  AstDeclHeadList
-  declhead_list() const override;
+  /// @brief 宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  declhead_top() const override;
 
-  /// @brief item リストの取得
-  AstItemList
-  item_list() const override;
+  /// @brief item リストの先頭の取得
+  const PtItem*
+  item_top() const override;
 
 
 private:
@@ -478,7 +479,7 @@ private:
   FileRegion mFileRegion;
 
   // ラベルの先頭
-  const AstExpr* mLabelTop;
+  const PtExpr* mLabelTop;
 
   // 生成される本体
   CptGenBody mBody;
@@ -498,12 +499,12 @@ public:
   CptItem_GenFor(
     const FileRegion& file_region,
     const char* loop_var,
-    const AstExpr* init_expr,
-    const AstExpr* cond,
-    const AstExpr* next_expr,
+    const PtExpr* init_expr,
+    const PtExpr* cond,
+    const PtExpr* next_expr,
     const char* block_name,
-    const AstDeclHead* declhead_top,
-    const AstItem* item_top
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   ) : CptItem_GenBase(file_region, declhead_top, item_top),
       mName{block_name},
       mLoopVar{loop_var},
@@ -523,7 +524,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
   /// @brief 名前を返す．
@@ -535,15 +536,15 @@ public:
   loop_var() const override;
 
   /// @brief 初期化文の右辺を返す．
-  const AstExpr*
+  const PtExpr*
   init_expr() const override;
 
   /// @brief 繰り返し条件を返す．
-  const AstExpr*
+  const PtExpr*
   cond_expr() const override;
 
   /// @brief 増加文の右辺を返す．
-  const AstExpr*
+  const PtExpr*
   next_expr() const override;
 
 
@@ -559,13 +560,13 @@ private:
   const char* mLoopVar;
 
   // 初期化文の右辺
-  const AstExpr* mInitExpr;
+  const PtExpr* mInitExpr;
 
   // 繰り返し条件
-  const AstExpr* mCond;
+  const PtExpr* mCond;
 
   // 増加文の右辺
-  const AstExpr* mNextExpr;
+  const PtExpr* mNextExpr;
 
 };
 

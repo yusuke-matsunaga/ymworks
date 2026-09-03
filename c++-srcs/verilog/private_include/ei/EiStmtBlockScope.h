@@ -24,8 +24,8 @@ public:
 
   /// @brief コンストラクタ
   EiStmtBlockScope(
-    const VlScope* parent, ///< [in] 親のスコープ環境
-    const AstStmt* ast_stmt  ///< [in] 対応するパース木の要素
+    const VlScope* parent,  ///< [in] 親のスコープ環境
+    const AstStmt& ast_stmt ///< [in] 対応するパース木の要素
   );
 
   /// @brief デストラクタ
@@ -58,7 +58,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // パース木の要素
-  const AstStmt* mAstStmt;
+  AstStmt mAstStmt;
 
 };
 

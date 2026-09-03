@@ -22,9 +22,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief 固定ビット選択式を生成する．
 ElbExpr*
 EiFactory::new_BitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base_expr,
-  const AstExpr* index_expr,
+  const AstExpr& index_expr,
   int index_val
 )
 {
@@ -34,18 +34,19 @@ EiFactory::new_BitSelect(
 // @brief 固定ビット選択式を生成する．
 ElbExpr*
 EiFactory::new_BitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base_expr,
   int index_val
 )
 {
-  return new EiConstBitSelect(ast_expr, base_expr, nullptr, index_val);
+  return new EiConstBitSelect(ast_expr, base_expr,
+			      AstExpr(), index_val);
 }
 
 // @brief 可変ビット選択式を生成する．
 ElbExpr*
 EiFactory::new_BitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base_expr,
   ElbExpr* index_expr
 )
@@ -60,7 +61,7 @@ EiFactory::new_BitSelect(
 
 // @brief コンストラクタ
 EiBitSelect::EiBitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base_expr
 ) : EiExprBase(ast_expr),
     mBaseExpr{base_expr}
@@ -192,9 +193,9 @@ EiBitSelect::_set_reqsize(
 
 // @brief コンストラクタ
 EiConstBitSelect::EiConstBitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base_expr,
-  const AstExpr* index_expr,
+  const AstExpr& index_expr,
   int index_val
 ) : EiBitSelect(ast_expr, base_expr),
     mIndexExpr{index_expr},
@@ -235,7 +236,7 @@ EiConstBitSelect::index_val() const
 
 // @brief コンストラクタ
 EiVarBitSelect::EiVarBitSelect(
-  const AstExpr* ast_expr,
+  const AstExpr& ast_expr,
   ElbExpr* base_expr,
   ElbExpr* index_expr
 ) : EiBitSelect(ast_expr, base_expr),

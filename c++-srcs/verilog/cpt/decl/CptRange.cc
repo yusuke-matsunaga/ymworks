@@ -26,14 +26,14 @@ CptRange::file_region() const
 }
 
 // @brief 範囲の MSB を取り出す．
-const AstExpr*
+const PtExpr*
 CptRange::left() const
 {
   return mMsb;
 }
 
 // @brief 範囲の LSB を取り出す．
-const AstExpr*
+const PtExpr*
 CptRange::right() const
 {
   return mLsb;
@@ -47,8 +47,8 @@ CptRange::right() const
 PtRange*
 PtFactory::new_Range(
   const FileRegion& fr,
-  const AstExpr* msb,
-  const AstExpr* lsb
+  const PtExpr* msb,
+  const PtExpr* lsb
 )
 {
   void* p = mAlloc.get_memory(sizeof(CptRange));

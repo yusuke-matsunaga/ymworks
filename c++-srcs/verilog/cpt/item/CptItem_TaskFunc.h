@@ -9,6 +9,9 @@
 /// All rights reserved.
 
 #include "CptItem.h"
+#include "parser/PtIOHead.h"
+#include "parser/PtIOItem.h"
+#include "ym/vl/AstIOItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,9 +30,9 @@ protected:
     const FileRegion& file_region,
     const char* name,
     bool automatic,
-    const AstIOHead* iohead_top,
-    const AstDeclHead* declhead_top,
-    const AstStmt* stmt
+    const PtIOHead* iohead_top,
+    const PtDeclHead* declhead_top,
+    const PtStmt* stmt
   ) : mFileRegion{file_region},
       mName{name},
       mAutomatic{automatic},
@@ -38,8 +41,8 @@ protected:
       mBody{stmt}
   {
     int n = 0;
-    for ( auto head: AstIOHeadList(mIOHeadTop) ) {
-      n += head->item_list().size();
+    for ( auto head = iohead_top; head != nullptr; head = head->link() ) {
+      n += AstIOItemList(AstIOItem(head->item_top())).size();
     }
     mIOItemNum = n;
   }
@@ -50,7 +53,7 @@ protected:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ファイル位置を返す．
@@ -65,20 +68,20 @@ public:
   bool
   automatic() const override;
 
-  /// @brief IO宣言ヘッダリストの取得
-  AstIOHeadList
-  iohead_list() const override;
+  /// @brief IO宣言ヘッダリストの先頭の取得
+  const PtIOHead*
+  iohead_top() const override;
 
   /// @brief IO宣言の要素数の取得
   SizeType
   ioitem_num() const override;
 
-  /// @brief 宣言ヘッダリストの取得
-  AstDeclHeadList
-  declhead_list() const override;
+  /// @brief 宣言ヘッダリストの先頭の取得
+  const PtDeclHead*
+  declhead_top() const override;
 
   /// @brief 本体を取り出す．
-  const AstStmt*
+  const PtStmt*
   body() const override;
 
 
@@ -100,13 +103,13 @@ private:
   int mIOItemNum;
 
   // IO宣言の先頭
-  const AstIOHead* mIOHeadTop;
+  const PtIOHead* mIOHeadTop;
 
   // その他の宣言の先頭
-  const AstDeclHead* mDeclHeadTop;
+  const PtDeclHead* mDeclHeadTop;
 
   // 本体
-  const AstStmt* mBody;
+  const PtStmt* mBody;
 
 };
 
@@ -125,9 +128,9 @@ public:
     const FileRegion& file_region,
     const char* name,
     bool automatic,
-    const AstIOHead* iohead_top,
-    const AstDeclHead* declhead_top,
-    const AstStmt* stmt
+    const PtIOHead* iohead_top,
+    const PtDeclHead* declhead_top,
+    const PtStmt* stmt
   ) : CptItem_TaskFunc(file_region, name, automatic,
 	    iohead_top, declhead_top,
 	    stmt)
@@ -144,7 +147,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
 };
@@ -165,9 +168,9 @@ public:
     const char* name,
     bool automatic,
     bool sign,
-    const AstIOHead* iohead_top,
-    const AstDeclHead* declhead_top,
-    const AstStmt* stmt
+    const PtIOHead* iohead_top,
+    const PtDeclHead* declhead_top,
+    const PtStmt* stmt
   ) : CptItem_TaskFunc(file_region, name, automatic,
 	    iohead_top, declhead_top,
 	    stmt),
@@ -182,17 +185,17 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 型を返す．
-  Type
+  AstItem::Type
   type() const override;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // AstItem の仮想関数
+  // PtItem の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 符号の有無
@@ -201,7 +204,7 @@ public:
 
   /// @brief 範囲の取得
   /// @return 範囲
-  const AstRange*
+  const PtRange*
   range() const override;
 
   /// @brief 戻値のデータ型の取得
@@ -251,10 +254,10 @@ public:
     const char* name,
     bool automatic,
     bool sign,
-    const AstRange* range,
-    const AstIOHead* iohead_top,
-    const AstDeclHead* declhead_top,
-    const AstStmt* stmt
+    const PtRange* range,
+    const PtIOHead* iohead_top,
+    const PtDeclHead* declhead_top,
+    const PtStmt* stmt
   ) : CptItem_Function(file_region, name, automatic, sign,
 		       iohead_top, declhead_top,
 		       stmt),
@@ -272,7 +275,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 範囲を得る．
-  const AstRange*
+  const PtRange*
   range() const override;
 
 
@@ -282,7 +285,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 範囲
-  const AstRange* mRange;
+  const PtRange* mRange;
 
 };
 
@@ -303,9 +306,9 @@ public:
     bool automatic,
     bool sign,
     VpiVarType data_type,
-    const AstIOHead* iohead_top,
-    const AstDeclHead* declhead_top,
-    const AstStmt* stmt
+    const PtIOHead* iohead_top,
+    const PtDeclHead* declhead_top,
+    const PtStmt* stmt
   ) : CptItem_Function(file_region, name, automatic, sign,
 		       iohead_top, declhead_top,
 		       stmt),

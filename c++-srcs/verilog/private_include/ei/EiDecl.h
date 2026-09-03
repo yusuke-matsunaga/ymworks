@@ -24,8 +24,8 @@ public:
 
   /// @brief コンストラクタ
   EiDecl(
-    ElbDeclHead* head,         ///< [in] ヘッダ
-    const AstNamedBase* ast_item ///< [in] パース木の宣言要素
+    ElbDeclHead* head,           ///< [in] ヘッダ
+    const AstNamedBase& ast_item ///< [in] パース木の宣言要素
   );
 
   /// @brief デストラクタ
@@ -191,7 +191,7 @@ private:
   ElbDeclHead* mHead;
 
   // パース木の宣言要素
-  const AstNamedBase* mAstItem;
+  const AstNamedBase& mAstItem;
 
   // 符号付き属性の補正値
   bool mAuxSign;
@@ -210,9 +210,9 @@ public:
 
   /// @brief コンストラクタ
   EiDeclI(
-    ElbDeclHead* head,          ///< [in] ヘッダ
-    const AstNamedBase* ast_item, ///< [in] パース木の宣言要素
-    const VlExpr* init          ///< [in] 初期値
+    ElbDeclHead* head,            ///< [in] ヘッダ
+    const AstNamedBase& ast_item, ///< [in] パース木の宣言要素
+    const VlExpr* init            ///< [in] 初期値
   );
 
   /// @brief デストラクタ
