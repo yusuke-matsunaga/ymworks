@@ -37,14 +37,6 @@ AstModule::is_cell() const
   return mPtr->is_cell();
 }
 
-// @brief protect 情報の取得
-bool
-AstModule::is_protected() const
-{
-  _check_ptr();
-  return mPtr->is_protected();
-}
-
 // @brief time unit の取得
 int
 AstModule::time_unit() const
@@ -91,46 +83,6 @@ AstModule::decay_time() const
 {
   _check_ptr();
   return mPtr->decay_time();
-}
-
-// @brief portfaults 情報の取得
-bool
-AstModule::portfaults() const
-{
-  _check_ptr();
-  return mPtr->portfaults();
-}
-
-// @brief suppress_faults 情報の取得
-bool
-AstModule::suppress_faults() const
-{
-  _check_ptr();
-  return mPtr->suppress_faults();
-}
-
-// @brief config 情報の取得
-const std::string&
-AstModule::config() const
-{
-  _check_ptr();
-  return mPtr->config();
-}
-
-// @brief library 情報の取得
-const std::string&
-AstModule::library() const
-{
-  _check_ptr();
-  return mPtr->library();
-}
-
-// @brief cell 情報の取得
-const std::string&
-AstModule::cell() const
-{
-  _check_ptr();
-  return mPtr->cell();
 }
 
 // @brief パラメータポート宣言のリストの取得
@@ -181,53 +133,6 @@ AstModule::item_list() const
   return AstItemList(AstItem(mPtr->item_top()));
 }
 
-// @brief top_module フラグを下ろす
-void
-AstModule::clear_topmodule() const
-{
-  _check_ptr();
-  mPtr->clear_topmodule();
-}
-
-// @brief top module のチェック
-bool
-AstModule::is_topmodule() const
-{
-  _check_ptr();
-  return mPtr->is_topmodule();
-}
-
-// @brief in_use フラグの設定
-void
-AstModule::set_in_use() const
-{
-  _check_ptr();
-  mPtr->set_in_use();
-}
-
-// @brief in_use フラグの解除
-void
-AstModule::reset_in_use() const
-{
-  _check_ptr();
-  mPtr->reset_in_use();
-}
-
-// @brief in_use フラグの取得
-bool
-AstModule::is_in_use() const
-{
-  _check_ptr();
-  return mPtr->is_in_use();
-}
-
-// @brief ハッシュ値を返す．
-SizeType
-AstModule::hash() const
-{
-  return _key();
-}
-
 // @brief 適切な値を持っている時 true を返す．
 bool
 AstModule::is_valid() const
@@ -267,7 +172,6 @@ AstModule::json_sub(
   AstNamedBase::json_sub(jobj);
   jobj.add("is_macromodule", JsonValue(is_macromodule()));
   jobj.add("is_cell", JsonValue(is_cell()));
-  jobj.add("is_protected", JsonValue(is_protected()));
   jobj.add("time_unit", JsonValue(time_unit()));
   jobj.add("time_unit", JsonValue(time_precision()));
   JsonUtils::add(jobj, "nettype", nettype());
@@ -292,12 +196,6 @@ AstModule::json_sub(
   JsonUtils::add(jobj, "delay_mode", dm_str);
 
   jobj.add("decay_time", JsonValue(decay_time()));
-
-  // portfaults, suppress_faults は無視
-
-  jobj.add("config", JsonValue(config()));
-  jobj.add("library", JsonValue(library()));
-  jobj.add("cell", JsonValue(cell()));
 
   JsonUtils::add_list(jobj, "paramport_list", paramport_list());
   JsonUtils::add_list(jobj, "port_list", port_list());

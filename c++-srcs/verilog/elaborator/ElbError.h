@@ -29,10 +29,16 @@ public:
     const FileRegion& loc,    ///< [in] ファイル上の位置
     const std::string& label, ///< [in] ラベル
     const std::string& msg    ///< [in] メッセージ
-  );
+  ) : mFile{file},
+    mLine{line},
+    mFileRegion{loc},
+    mLabel{label},
+    mMessage{msg}
+  {
+  }
 
   /// @brief デストラクタ
-  ~ElbError();
+  ~ElbError() = default;
 
 
 public:
@@ -42,26 +48,41 @@ public:
 
   /// @brief エラーを送出したソースファイル名を返す．
   const char*
-  file() const;
+  file() const
+  {
+    return mFile;
+  }
 
   /// @brief エラーを送出したソースファイル上の行番号を返す．
   int
-  line() const;
+  line() const
+  {
+    return mLine;
+  }
 
   /// @brief ファイル上の位置を返す．
   const FileRegion&
-  file_region() const;
+  file_region() const
+  {
+    return mFileRegion;
+  }
 
   /// @brief エラーラベルを返す．
   std::string
-  label() const;
+  label() const
+  {
+    return mLabel;
+  }
 
   /// @brief エラーメッセージを返す．
   std::string
-  message() const;
+  message() const
+  {
+    return mMessage;
+  }
 
 
-private:
+protected:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
   //////////////////////////////////////////////////////////////////////
@@ -102,10 +123,12 @@ public:
     const FileRegion& loc,    ///< [in] ファイル上の位置
     const std::string& label, ///< [in] ラベル
     const std::string& msg    ///< [in] メッセージ
-  );
+  ) : ElbError(file, line, loc, label, msg)
+  {
+  }
 
   /// @brief デストラクタ
-  ~ElbConstError();
+  ~ElbConstError() = default;
 
 };
 
@@ -124,17 +147,21 @@ public:
     const char* file,     ///< [in] ファイル名
     int line,             ///< [in] 行番号
     const FileRegion& loc ///< [in] ファイル上の位置
-  );
+  ) : ElbError(file, line, loc,
+	       "ELAB_INT",
+	       "Integer value required")
+  {
+  }
 
   /// @brief デストラクタ
-  ~ElbIntError();
+  ~ElbIntError() = default;
 
 };
 
 
 //////////////////////////////////////////////////////////////////////
 /// @class ElbBvError ElbError.h "ElbError.h"
-/// @brief int型が要求される時にintでなかった場合のエラー
+/// @brief bitvect型が要求される時にbitvectでなかった場合のエラー
 //////////////////////////////////////////////////////////////////////
 class ElbBvError :
   public ElbError
@@ -146,35 +173,14 @@ public:
     const char* file,     ///< [in] ファイル名
     int line,             ///< [in] 行番号
     const FileRegion& loc ///< [in] ファイル上の位置
-  );
+  ) : ElbError(file, line, loc,
+	       "ELAB_BITVECT",
+	       "BitVector value required")
+  {
+  }
 
   /// @brief デストラクタ
-  ~ElbBvError();
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class ElbNameError ElbError.h "ElbError.h"
-/// @brief 識別子に関連したエラー
-//////////////////////////////////////////////////////////////////////
-class ElbNameError :
-  public ElbError
-{
-public:
-
-  /// @brief コンストラクタ
-  ElbNameError(
-    const char* file,      ///< [in] ファイル名
-    int line,              ///< [in] 行番号
-    const FileRegion& loc, ///< [in] ファイル上の位置
-    const std::string& label,   ///< [in] ラベル
-    const std::string& name,    ///< [in] 名前
-    const std::string& msg      ///< [in] メッセージ
-  );
-
-  /// @brief デストラクタ
-  ~ElbNameError();
+  ~ElbBvError() = default;
 
 };
 

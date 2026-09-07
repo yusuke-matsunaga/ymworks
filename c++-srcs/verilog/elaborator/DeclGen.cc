@@ -110,10 +110,10 @@ DeclGen::instantiate_iodecl(
     // ヘッダ情報の生成
     // ちなみに IOHead は範囲の情報を持たない．
     auto head = (ElbIOHead*){nullptr};
-    if ( module ) {
+    if ( module != nullptr ) {
       head = mgr().new_IOHead(module, ast_head);
     }
-    else if ( taskfunc ) {
+    else if ( taskfunc != nullptr ) {
       head = mgr().new_IOHead(taskfunc, ast_head);
     }
     if ( head == nullptr ) {
@@ -124,7 +124,7 @@ DeclGen::instantiate_iodecl(
       // IO定義と変数/ネット定義が一致しているか調べる．
       auto handle = mgr().find_obj(scope, ast_item.name());
       auto decl = (ElbDecl*){nullptr};
-      if ( handle ) {
+      if ( handle != nullptr ) {
 	// 同名の要素が見つかった．
 	if ( def_aux_type != VpiAuxType::None ) {
 	  // なのに IO 宣言の aux_type もある．
@@ -132,7 +132,7 @@ DeclGen::instantiate_iodecl(
 				   ast_item, handle->file_region());
 	}
 	decl = handle->decl();
-	if ( decl ) {
+	if ( decl != nullptr ) {
 	  // 対象が宣言要素だった場合．
 	  auto type = decl->type();
 	  if ( (module == nullptr || type != VpiObjType::Net) &&
@@ -147,8 +147,8 @@ DeclGen::instantiate_iodecl(
 	    decl = nullptr;
 	  }
 	}
-	if ( !decl ) {
-	  if ( handle->declarray() ) {
+	if ( decl == nullptr ) {
+	  if ( handle->declarray() != nullptr ) {
 	    // 対象が配列だった場合．
 	    ErrorGen::array_io(__FILE__, __LINE__, ast_item);
 	  }
@@ -343,7 +343,7 @@ void
 DeclGen::instantiate_param_head(
   const VlScope* scope,
   const AstDeclHead& ast_head,
-  bool is_local
+  bool force_local
 )
 {
   auto module = scope->parent_module();
@@ -362,7 +362,7 @@ DeclGen::instantiate_param_head(
     const auto& file_region = ast_item.file_region();
     auto param = mgr().new_Parameter(param_head,
 				     ast_item,
-				     is_local);
+				     force_local);
     if ( param == nullptr ) {
       throw std::logic_error{"param == nullptr"};
     }

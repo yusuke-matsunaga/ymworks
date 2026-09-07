@@ -111,11 +111,9 @@ public:
   new_Module(
     const FileRegion& fr,       ///< [in] ファイル位置の情報
     const char* name,           ///< [in] モジュール名
-    bool macro,                 ///< [in] macromodule の時 true となるフラグ
+    bool is_macro,              ///< [in] macromodule の時 true となるフラグ
     bool is_cell,               ///< [in] `celldefine - `endcelldefine
                                 ///<      で囲まれていたときに true となるフラグ
-    bool is_protected,          ///< [in] 保護されているときに true となるフラグ．
-                                ///<      verilog の構文にこんな情報はない．
     int time_unit,              ///< [in] 時刻の単位を表す数値．
     int time_precision,         ///< [in] 時刻の精度を表す数値．
                                 ///<      有効な値は 2 - -15 で 2 の時に 100秒を表す．
@@ -128,13 +126,6 @@ public:
     int decay,                  ///< [in] default_decay_time の値．
                                 ///<      意味のある値は正の整数もしくは無限大を
                                 ///<      あらわす -1
-    bool explicit_name,         ///< [in] ポートがすべて名前付きのときに true
-                                ///<      となるフラグ
-    bool portfaults,            ///< [in] Verifault 用．
-    bool suppress_faults,       ///< [in] Verifault 用
-    const std::string& config,  ///< [in] config 情報
-    const std::string& library, ///< [in] library 情報
-    const std::string& cell,    ///< [in] cell 情報
     const PtDeclHead* paramport_top , ///< [in] パラメータポートのリスト
     const PtPort* port_top,           ///< [in] ポートのリスト
     const PtIOHead* iodecl_top,       ///< [in] 入出力のリスト

@@ -42,6 +42,7 @@ AstPort::portref_list() const
   return AstExprList(AstExpr(mPtr->portref_top()));
 }
 
+#if 0
 // @brief 内部のポート結線の向きの取得
 VpiDir
 AstPort::portref_dir(
@@ -51,6 +52,7 @@ AstPort::portref_dir(
   _check_ptr();
   return mPtr->portref_dir(index);
 }
+#endif
 
 // @brief 適切な値を持っている時 true を返す．
 bool

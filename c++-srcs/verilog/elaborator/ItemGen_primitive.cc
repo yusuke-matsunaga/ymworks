@@ -45,6 +45,17 @@ END_NONAMESPACE
 
 //////////////////////////////////////////////////////////////////////
 // プリミティブインスタンス関係の instantiate 関数 (変な日本語)
+//
+// 具体的には以下の3種類がある．
+// - ゲートプリミティブ
+// - UDP
+// - セル
+//
+// 構文木の構造としては AstItem 型のヘッダと AstItem のリストから
+// なるのでヘッダ部分を処理する instantiate_XXXhead() 関数と
+// 要素を処理する instantaite_XXXinst() 関数を用意する．
+// instantite_XXXinst() が ElbError 例外を送出した場合には
+// そのインスタンスの処理をスキップするだけで処理を続ける．
 //////////////////////////////////////////////////////////////////////
 
 // @brief gate instance の生成を行う
@@ -62,69 +73,82 @@ ItemGen::instantiate_gateheader(
   }
 
   for ( auto ast_inst: ast_head.inst_list() ) {
-    const auto& fr = ast_inst.file_region();
-    SizeType port_num = ast_inst.port_list().size();
-    SizeType output_num;
-    SizeType inout_num;
-    SizeType input_num;
-    switch ( ElbPrimitive::get_port_size(ast_head.prim_type(), port_num,
-					 output_num, inout_num, input_num) ) {
-    case -1:
-      put_error(ElbError(__FILE__, __LINE__,
-			 ast_inst.file_region(),
-			 "ELAB",
-			 "Too few port connections."));
-      continue;
+    try {
+      instantiate_gateinst(parent, ast_head, ast_inst, prim_head);
+    }
+    catch ( const ElbError& error ) {
+      put_error(error);
+    }
+  }
+}
 
-    case 1:
-      put_error(ElbError(__FILE__, __LINE__,
-			 ast_inst.file_region(),
-			 "ELAB",
-			 "Too many port connections."));
-      continue;
+// @brief gate instance の生成を行う．
+void
+ItemGen::instantiate_gateinst(
+  const VlScope* parent,
+  const AstItem& ast_head,
+  const AstInst& ast_inst,
+  ElbPrimHead* prim_head
+)
+{
+  // 名前が重複していないかチェックする．
+  check_name(parent, ast_inst.name(), ast_inst.file_region());
+
+  // prim_type からポート数を求める．
+  SizeType port_num = ast_inst.port_list().size();
+  SizeType output_num;
+  SizeType inout_num;
+  SizeType input_num;
+  switch ( ElbPrimitive::get_port_size(ast_head.prim_type(), port_num,
+				       output_num, inout_num, input_num) ) {
+  case -1:
+    // ポート結合の数が少ない．
+    error_few_gate_conn(__FILE__, __LINE__, ast_inst);
+
+  case 1:
+    // ポート結合の数が多い
+    error_many_gate_conn(__FILE__, __LINE__, ast_inst);
+  }
+
+  auto ast_range = ast_inst.range();
+  if ( ast_range.is_valid() ) {
+    // 配列の場合
+    auto range = evaluate_range(parent, ast_range);
+    auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
+					       ast_range, range);
+
+    // attribute instance の生成
+    auto attr_list = attribute_list(ast_head);
+    mgr().reg_attr(prim_array, attr_list);
+
+    {
+      std::ostringstream buf;
+      buf << "instantiating primitive array: " << prim_array->full_name();
+      put_info(__FILE__, __LINE__,
+	       ast_inst.file_region(),
+	       "ELAB",
+	       buf.str());
     }
 
-    auto ast_range = ast_inst.range();
-    if ( ast_range.is_valid() ) {
-      // 配列の場合
-      auto range = evaluate_range(parent, ast_range);
-      auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
-						 ast_range, range);
+    add_phase3stub(make_prim_array_stub(prim_array, ast_inst));
+  }
+  else {
+    // 単一の要素の場合
+    auto prim = mgr().new_Primitive(prim_head, ast_inst);
 
-      // attribute instance の生成
-      auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(prim_array, attr_list);
+    // attribute instance の生成
+    auto attr_list = attribute_list(ast_head);
+    mgr().reg_attr(prim, attr_list);
 
-      {
-	std::ostringstream buf;
-	buf << "instantiating primitive array: " << prim_array->full_name();
-	put_info(__FILE__, __LINE__,
-		 fr,
-		 "ELAB",
-		 buf.str());
-      }
-
-      add_phase3stub(make_prim_array_stub(prim_array, ast_inst));
+    {
+      std::ostringstream buf;
+      buf << "instantiating primitive: " << prim->full_name();
+      put_info(__FILE__, __LINE__,
+	       ast_inst.file_region(),
+	       "ELAB",
+	       buf.str());
     }
-    else {
-      // 単一の要素の場合
-      auto prim = mgr().new_Primitive(prim_head, ast_inst);
-
-      // attribute instance の生成
-      auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(prim, attr_list);
-
-      {
-	std::ostringstream buf;
-	buf << "instantiating primitive: " << prim->full_name();
-	put_info(__FILE__, __LINE__,
-		 fr,
-		 "ELAB",
-		 buf.str());
-      }
-
-      add_phase3stub(make_primitive_stub(prim, ast_inst));
-    }
+    add_phase3stub(make_primitive_stub(prim, ast_inst));
   }
 }
 
@@ -148,44 +172,65 @@ ItemGen::instantiate_udpheader(
   }
 
   for ( auto ast_inst: ast_head.inst_list() ) {
-    auto port_num = ast_inst.port_list().size();
-    if ( port_num > 0 && ast_inst.port_list().front().name() != nullptr ) {
-      ErrorGen::named_port_in_udp_instance(__FILE__, __LINE__, ast_inst);
+    try {
+      instantiate_udpinst(parent, ast_head, ast_inst, prim_head, udpdefn);
     }
-
-    if ( udpdefn->port_num() != port_num ) {
-      ErrorGen::port_num_mismatch(__FILE__, __LINE__, ast_inst);
+    catch ( const ElbError& error ) {
+      put_error(error);
     }
+  }
+}
 
-    auto ast_range = ast_inst.range();
-    if ( ast_range.is_valid() ) {
-      // 配列
-      auto range = evaluate_range(parent, ast_range);
-      auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
-						 ast_range, range);
+// @brief UDP instance の生成を行う
+void
+ItemGen::instantiate_udpinst(
+  const VlScope* parent,
+  const AstItem& ast_head,
+  const AstInst& ast_inst,
+  ElbPrimHead* prim_head,
+  const VlUdpDefn* udpdefn
+)
+{
+  // 名前が重複していないかチェックする．
+  check_name(parent, ast_inst.name(), ast_inst.file_region());
 
-      // attribute instance の生成
-      auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(prim_array, attr_list);
+  auto port_num = ast_inst.port_list().size();
+  if ( port_num > 0 && ast_inst.port_list().front().name() != nullptr ) {
+    ErrorGen::named_port_in_udp_instance(__FILE__, __LINE__, ast_inst);
+  }
 
-      add_phase3stub(make_prim_array_stub(prim_array, ast_inst));
-    }
-    else {
-      // 単一の要素
-      auto primitive = mgr().new_Primitive(prim_head, ast_inst);
+  if ( udpdefn->port_num() != port_num ) {
+    ErrorGen::port_num_mismatch(__FILE__, __LINE__, ast_inst);
+  }
 
-      // attribute instance の生成
-      auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(primitive, attr_list);
+  auto ast_range = ast_inst.range();
+  if ( ast_range.is_valid() ) {
+    // 配列
+    auto range = evaluate_range(parent, ast_range);
+    auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
+					       ast_range, range);
 
-      add_phase3stub(make_primitive_stub(primitive, ast_inst));
-    }
+    // attribute instance の生成
+    auto attr_list = attribute_list(ast_head);
+    mgr().reg_attr(prim_array, attr_list);
+
+    add_phase3stub(make_prim_array_stub(prim_array, ast_inst));
+  }
+  else {
+    // 単一の要素
+    auto primitive = mgr().new_Primitive(prim_head, ast_inst);
+
+    // attribute instance の生成
+    auto attr_list = attribute_list(ast_head);
+    mgr().reg_attr(primitive, attr_list);
+
+    add_phase3stub(make_primitive_stub(primitive, ast_inst));
   }
 }
 
 // @brief セル instance の生成を行う
 void
-ItemGen::instantiate_cell(
+ItemGen::instantiate_cellhead(
   const VlScope* parent,
   const AstItem& ast_head,
   ClibCell cell
@@ -193,48 +238,69 @@ ItemGen::instantiate_cell(
 {
   auto prim_head = mgr().new_CellHead(parent, ast_head, cell);
   for ( auto ast_inst: ast_head.inst_list() ) {
-    // ポート数のチェックを行う．
-    SizeType port_num = ast_inst.port_list().size();
-    if ( port_num > 0 && ast_inst.port_list().front().name() != nullptr ) {
-      // 名前による結合
-      for ( auto ast_con: ast_inst.port_list() ) {
-	auto pin_name = ast_con.name();
-	auto pin = cell.pin(pin_name);
-	if ( pin.is_invalid() ) {
-	  ErrorGen::illegal_pin_name(__FILE__, __LINE__, ast_con);
-	}
+    try {
+      instantiate_cellinst(parent, ast_head, ast_inst, prim_head, cell);
+    }
+    catch ( const ElbError& error ) {
+      put_error(error);
+    }
+  }
+}
+
+// @brief セル instance の生成を行う
+void
+ItemGen::instantiate_cellinst(
+  const VlScope* parent,
+  const AstItem& ast_head,
+  const AstInst& ast_inst,
+  ElbPrimHead* prim_head,
+  ClibCell cell
+)
+{
+  // 名前が重複していないかチェックする．
+  check_name(parent, ast_inst.name(), ast_inst.file_region());
+
+  // ポート数のチェックを行う．
+  SizeType port_num = ast_inst.port_list().size();
+  if ( port_num > 0 && ast_inst.port_list().front().name() != nullptr ) {
+    // 名前による結合
+    for ( auto ast_con: ast_inst.port_list() ) {
+      auto pin_name = ast_con.name();
+      auto pin = cell.pin(pin_name);
+      if ( pin.is_invalid() ) {
+	ErrorGen::illegal_pin_name(__FILE__, __LINE__, ast_con);
       }
     }
-    else {
-      if ( cell.pin_num() != port_num ) {
-	ErrorGen::port_num_mismatch(__FILE__, __LINE__, ast_inst);
-      }
+  }
+  else {
+    if ( cell.pin_num() != port_num ) {
+      ErrorGen::port_num_mismatch(__FILE__, __LINE__, ast_inst);
     }
+  }
 
-    // インスタンスの生成を行う．
-    auto ast_range = ast_inst.range();
-    if ( ast_range.is_valid() ) {
-      // 配列
-      auto range = evaluate_range(parent, ast_range);
-      auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
-						 ast_range, range);
+  // インスタンスの生成を行う．
+  auto ast_range = ast_inst.range();
+  if ( ast_range.is_valid() ) {
+    // 配列
+    auto range = evaluate_range(parent, ast_range);
+    auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
+					       ast_range, range);
 
-      // attribute instance の生成
-      auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(prim_array, attr_list);
+    // attribute instance の生成
+    auto attr_list = attribute_list(ast_head);
+    mgr().reg_attr(prim_array, attr_list);
 
-      add_phase3stub(make_cell_array_stub(prim_array, ast_inst));
-    }
-    else {
-      // 単一の要素
-      auto primitive = mgr().new_Primitive(prim_head, ast_inst);
+    add_phase3stub(make_cell_array_stub(prim_array, ast_inst));
+  }
+  else {
+    // 単一の要素
+    auto primitive = mgr().new_Primitive(prim_head, ast_inst);
 
-      // attribute instance の生成
-      auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(primitive, attr_list);
+    // attribute instance の生成
+    auto attr_list = attribute_list(ast_head);
+    mgr().reg_attr(primitive, attr_list);
 
-      add_phase3stub(make_cell_stub(primitive, ast_inst));
-    }
+    add_phase3stub(make_cell_stub(primitive, ast_inst));
   }
 }
 

@@ -133,6 +133,115 @@ private:
 
 //////////////////////////////////////////////////////////////////////
 /// @class EiDeclPrimary EiPrimary.h "EiPrimary.h"
+/// @brief プライマリ式を表すクラス(もとが AstIOItem)
+//////////////////////////////////////////////////////////////////////
+class EiIOPrimary :
+  public EiExpr
+{
+public:
+
+  /// @brief コンストラクタ
+  EiIOPrimary(
+    const AstIOItem& ast_item, ///< [in] パース木の定義要素
+    const VlDecl* obj          ///< [in] 本体のオブジェクト
+  );
+
+  /// @brief デストラクタ
+  ~EiIOPrimary();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 型の取得
+  VpiObjType
+  type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 定数の時 true を返す．
+  bool
+  is_const() const override;
+
+  /// @brief プライマリ(net/reg/variables/parameter)の時に true を返す．
+  bool
+  is_primary() const override;
+
+  /// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
+  const VlDeclBase*
+  decl_base() const override;
+
+  /// @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
+  const VlDecl*
+  decl_obj() const override;
+
+  /// @brief Verilog-HDL の文字列を得る．
+  std::string
+  decompile() const override;
+
+  /// @brief 左辺式の要素数の取得
+  SizeType
+  lhs_elem_num() const override;
+
+  /// @brief 左辺式の要素の取得
+  const VlExpr*
+  lhs_elem(
+    SizeType pos ///< [in] 位置 ( 0 <= pos < lhs_elem_num() )
+  ) const override;
+
+  /// @brief 左辺式の要素のリストの取得
+  std::vector<const VlExpr*>
+  lhs_elem_list() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // EiExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief パース木の定義要素を返す．
+  const AstBase&
+  ast_obj() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // パース木の定義要素
+  AstIOItem mAstObj;
+
+  // 対象の宣言要素
+  const VlDecl* mObj;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiDeclPrimary EiPrimary.h "EiPrimary.h"
 /// @brief プライマリ式を表すクラス
 //////////////////////////////////////////////////////////////////////
 class EiDeclPrimary :

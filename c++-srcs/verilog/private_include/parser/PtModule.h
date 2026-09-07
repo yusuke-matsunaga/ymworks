@@ -51,12 +51,6 @@ public:
   bool
   is_cell() const = 0;
 
-  /// @brief protect 情報の取得
-  /// @return プロテクトされていたら true を返す．
-  virtual
-  bool
-  is_protected() const = 0;
-
   /// @brief time unit の取得
   /// @return 時間の単位を表す 2 〜 -15 の整数\n
   /// もしくは未定義を表す -16
@@ -95,36 +89,6 @@ public:
   int
   decay_time() const = 0;
 
-  /// @brief portfaults 情報の取得
-  /// @return true で enable_portfaults を表す．
-  virtual
-  bool
-  portfaults() const = 0;
-
-  /// @brief suppress_faults 情報の取得
-  /// @return true で suppress_faults が効いていることを表す．
-  virtual
-  bool
-  suppress_faults() const = 0;
-
-  /// @brief config 情報の取得
-  /// @return config 情報
-  virtual
-  const std::string&
-  config() const = 0;
-
-  /// @brief library 情報の取得
-  /// @return library 情報
-  virtual
-  const std::string&
-  library() const = 0;
-
-  /// @brief cell 情報の取得
-  /// @return cell 情報
-  virtual
-  const std::string&
-  cell() const = 0;
-
   /// @brief パラメータポート宣言のリストの取得
   virtual
   const PtDeclHead*
@@ -156,32 +120,6 @@ public:
   virtual
   const PtItem*
   item_top() const = 0;
-
-  /// @brief top_module フラグを下ろす
-  virtual
-  void
-  clear_topmodule() const = 0;
-
-  /// @brief top module のチェック
-  /// @return top module の場合に true を返す．
-  virtual
-  bool
-  is_topmodule() const = 0;
-
-  /// @brief in_use フラグの設定
-  virtual
-  void
-  set_in_use() const = 0;
-
-  /// @brief in_use フラグの解除
-  virtual
-  void
-  reset_in_use() const = 0;
-
-  /// @brief in_use フラグの取得
-  virtual
-  bool
-  is_in_use() const = 0;
 
 };
 

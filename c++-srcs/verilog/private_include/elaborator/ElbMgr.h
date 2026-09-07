@@ -492,7 +492,7 @@ public:
   new_Parameter(
     ElbParamHead* head,           ///< [in] ヘッダ
     const AstNamedBase& ast_item, ///< [in] パース木の宣言要素
-    bool is_local = false         ///< [in] localparam の時 true
+    bool force_local = false      ///< [in] localparam にする時 true
   );
 
   /// @brief genvar を生成する．
@@ -947,6 +947,13 @@ public:
   new_Primary(
     const AstExpr& ast_expr, ///< [in] パース木の定義要素
     const VlDecl* obj        ///< [in] 本体のオブジェクト
+  );
+
+  /// @brief プライマリ式を生成する(portdecl用)．
+  ElbExpr*
+  new_Primary(
+    const AstIOItem& ast_item, ///< [in] パース木の定義要素
+    const VlDecl* obj          ///< [in] 本体のオブジェクト
   );
 
   /// @brief プライマリ式を生成する(net decl の初期値用)．

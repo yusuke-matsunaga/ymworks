@@ -671,6 +671,13 @@ public:
     const VlDecl* obj        ///< [in] 本体のオブジェクト
   ) override;
 
+  /// @brief プライマリ式を生成する(portdecl 用)．
+  ElbExpr*
+  new_Primary(
+    const AstIOItem& ast_item, ///< [in] パース木の定義要素
+    const VlDecl* obj          ///< [in] 本体のオブジェクト
+  ) override;
+
   /// @brief プライマリ式を生成する(net decl の初期値用)．
   ElbExpr*
   new_Primary(

@@ -97,7 +97,7 @@ ElbProxy::instantiate_iodecl(
   const AstIOHeadList& ast_head_list
 )
 {
-  mDeclGen->instantiate_iodecl(module, nullptr, ast_head_list);
+  mDeclGen->instantiate_iodecl(module, ast_head_list);
 }
 
 // @brief IO宣言要素を実体化する．
@@ -107,7 +107,7 @@ ElbProxy::instantiate_iodecl(
   const AstIOHeadList& ast_head_list
 )
 {
-  mDeclGen->instantiate_iodecl(nullptr, taskfunc, ast_head_list);
+  mDeclGen->instantiate_iodecl(taskfunc, ast_head_list);
 }
 
 // @brief 宣言要素のリストをインスタンス化する．
@@ -365,6 +365,64 @@ ElbProxy::attribute_list(
   const auto& ans1 = mAttrGen->attribute_list(ast_obj2);
   ans.insert(ans.end(), ans1.begin(), ans1.end());
   return ans;
+}
+
+// @brief 同名のオブジェクトが定義されていないか調べる．
+void
+ElbProxy::check_name(
+  const VlScope* parent,
+  const char* name,
+  const FileRegion& file_region
+)
+{
+  if ( name == nullptr ) {
+    return;
+  }
+  auto prev_obj = find_obj(parent, name);
+  if ( prev_obj != nullptr ) {
+    error_dup_name(__FILE__, __LINE__,
+		   file_region,
+		   name,
+		   prev_obj->file_region());
+  }
+}
+
+// @brief 重複した名前を持つ．
+void
+ElbProxy::error_dup_name(
+  const char* file_name,
+  int line,
+  const FileRegion& loc,
+  const char* name,
+  const FileRegion& prev_loc
+)
+{
+  std::ostringstream buf;
+  buf << "\"" << name
+      << "\": redefined. previous location is "
+      << prev_loc;
+  throw ElbError(file_name, line,
+		 loc,
+		 "ELAB_DUP_NAME",
+		 buf.str());
+}
+
+// @brief 対象の要素が見つからない．
+void
+ElbProxy::error_not_found(
+  const char* file_name,
+  int line,
+  const FileRegion& file_region,
+  const char* name
+)
+{
+  std::ostringstream buf;
+  buf << "\"" << name
+      << "\": Not found";
+  throw ElbError(file_name, line,
+		 file_region,
+		 "ELAB_NOT_FOUND",
+		 buf.str());
 }
 
 // @brief エラーメッセージを出力する．

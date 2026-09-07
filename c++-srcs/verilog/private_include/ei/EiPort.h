@@ -9,8 +9,8 @@
 /// All rights reserved.
 
 #include "ym/vl/VlPort.h"
-#include "ym/vl/Ast.h"
 #include "ym/vl/AstPort.h"
+#include "ym/vl/AstIOItem.h"
 #include "elaborator/ElbFwd.h"
 
 
@@ -18,18 +18,23 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
 /// @class EiPort EiPort.h "EiPort.h"
-/// @brief VlPort の実装クラス
+/// @brief VlPort の実装クラスの基底クラス
 //////////////////////////////////////////////////////////////////////
-class EiPort :
+class EiPortBase :
   public VlPort
 {
 public:
 
   /// @brief コンストラクタ
-  EiPort();
+  EiPortBase(
+    const VlModule* parent,  ///< [in] 親のモジュール
+    SizeType index,          ///< [in] ポート番号
+    ElbExpr* low_conn,       ///< [in] 下位の接続
+    VpiDir dir               ///< [in] 向き
+  );
 
   /// @brief デストラクタ
-  ~EiPort() = default;
+  ~EiPortBase() {}
 
 
 public:
@@ -40,10 +45,6 @@ public:
   /// @brief 型の取得
   VpiObjType
   type() const override;
-
-  /// @brief ファイル位置を返す．
-  FileRegion
-  file_region() const override;
 
 
 public:
@@ -62,14 +63,6 @@ public:
   /// @brief 名前による接続を持つとき true を返す．
   bool
   is_conn_by_name() const override;
-
-  /// @brief 明示的に名前がついているとき true を返す．
-  bool
-  is_explicit_name() const override;
-
-  /// @brief 名前を返す．
-  std::string
-  name() const override;
 
   /// @brief 親のモジュールを取出す
   const VlModule*
@@ -90,18 +83,8 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // EiPortの関数
+  // EiPortBaseの関数
   //////////////////////////////////////////////////////////////////////
-
-  /// @brief 初期設定を行う．
-  void
-  init(
-    const VlModule* parent,  ///< [in] 親のモジュール
-    const AstPort& ast_port, ///< [in] パース木のポート定義
-    SizeType index,          ///< [in] ポート番号
-    ElbExpr* low_conn,       ///< [in] 下位の接続
-    VpiDir dir               ///< [in] 向き
-  );
 
   /// @brief high_conn を接続する．
   void
@@ -119,9 +102,6 @@ private:
   // 親のモジュール
   const VlModule* mModule;
 
-  // パース木のポート定義
-  AstPort mAstPort;
-
   // ポート番号
   SizeType mIndex;
 
@@ -136,6 +116,120 @@ private:
 
   // 名前による結合の時 true となるフラグ
   bool mConnByName;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiPort1 EiPort.h "EiPort.h"
+/// @brief AstPort から作られたポートを表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiPort1 :
+  public EiPortBase
+{
+public:
+
+  /// @brief コンストラクタ
+  EiPort1(
+    const VlModule* parent,  ///< [in] 親のモジュール
+    const AstPort& ast_port, ///< [in] パース木のポート定義
+    SizeType index,          ///< [in] ポート番号
+    ElbExpr* low_conn,       ///< [in] 下位の接続
+    VpiDir dir               ///< [in] 向き
+  );
+
+  /// @brief デストラクタ
+  ~EiPort1() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlPort の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 明示的に名前がついているとき true を返す．
+  bool
+  has_explicit_name() const override;
+
+  /// @brief 名前を返す．
+  std::string
+  name() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // パース木のポート定義
+  AstPort mAstPort;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiPort2 EiPort.h "EiPort.h"
+/// @brief AstIOItem から作られたポートを表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiPort2 :
+  public EiPortBase
+{
+public:
+
+  /// @brief コンストラクタ
+  EiPort2(
+    const VlModule* parent,  ///< [in] 親のモジュール
+    const AstIOItem& ast_ioitem, ///< [in] パース木のポート定義
+    SizeType index,          ///< [in] ポート番号
+    ElbExpr* low_conn,       ///< [in] 下位の接続
+    VpiDir dir               ///< [in] 向き
+  );
+
+  /// @brief デストラクタ
+  ~EiPort2() {}
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlPort の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 明示的に名前がついているとき true を返す．
+  bool
+  has_explicit_name() const override;
+
+  /// @brief 名前を返す．
+  std::string
+  name() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // パース木のIO要素定義
+  AstIOItem mAstIOItem;
 
 };
 

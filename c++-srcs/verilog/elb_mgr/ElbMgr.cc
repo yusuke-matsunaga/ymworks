@@ -100,12 +100,10 @@ ElbMgr::find_udp(
   const std::string& name
 ) const
 {
-  if ( mUdpHash.count(name) > 0 ) {
-    return mUdpHash.at(name);
-  }
-  else {
+  if ( mUdpHash.count(name) == 0 ) {
     return nullptr;
   }
+  return mUdpHash.at(name);
 }
 
 // @brief topmodule のリストを返す．
@@ -155,13 +153,11 @@ ElbMgr::find_namedobj(
   const std::string& name
 ) const
 {
-  auto handle{find_obj(parent, name)};
-  if ( handle != nullptr ) {
-    return handle->scope();
-  }
-  else {
+  auto handle = find_obj(parent, name);
+  if ( handle == nullptr ) {
     return nullptr;
   }
+  return handle->scope();
 }
 
 // @brief 名前によるオブジェクトの探索
@@ -1356,6 +1352,18 @@ ElbMgr::new_Primary(
 ElbExpr*
 ElbMgr::new_Primary(
   const AstDeclItem& ast_item,
+  const VlDecl* obj
+)
+{
+  auto expr = factory().new_Primary(ast_item, obj);
+  mObjList.push_back(expr);
+  return expr;
+}
+
+// @brief プライマリ式を生成する(net decl の初期値用)．
+ElbExpr*
+ElbMgr::new_Primary(
+  const AstIOItem& ast_item,
   const VlDecl* obj
 )
 {

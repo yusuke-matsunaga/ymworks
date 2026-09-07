@@ -55,11 +55,6 @@ public:
   bool
   is_cell() const;
 
-  /// @brief protect 情報の取得
-  /// @return プロテクトされていたら true を返す．
-  bool
-  is_protected() const;
-
   /// @brief time unit の取得
   /// @return 時間の単位を表す 2 〜 -15 の整数\n
   /// もしくは未定義を表す -16
@@ -92,31 +87,6 @@ public:
   int
   decay_time() const;
 
-  /// @brief portfaults 情報の取得
-  /// @return true で enable_portfaults を表す．
-  bool
-  portfaults() const;
-
-  /// @brief suppress_faults 情報の取得
-  /// @return true で suppress_faults が効いていることを表す．
-  bool
-  suppress_faults() const;
-
-  /// @brief config 情報の取得
-  /// @return config 情報
-  const std::string&
-  config() const;
-
-  /// @brief library 情報の取得
-  /// @return library 情報
-  const std::string&
-  library() const;
-
-  /// @brief cell 情報の取得
-  /// @return cell 情報
-  const std::string&
-  cell() const;
-
   /// @brief パラメータポート宣言のリストの取得
   AstDeclHeadList
   paramport_list() const;
@@ -142,31 +112,6 @@ public:
   /// @brief item のリストを返す．
   AstItemList
   item_list() const;
-
-  /// @brief top_module フラグを下ろす
-  void
-  clear_topmodule() const;
-
-  /// @brief top module のチェック
-  /// @return top module の場合に true を返す．
-  bool
-  is_topmodule() const;
-
-  /// @brief in_use フラグの設定
-  void
-  set_in_use() const;
-
-  /// @brief in_use フラグの解除
-  void
-  reset_in_use() const;
-
-  /// @brief in_use フラグの取得
-  bool
-  is_in_use() const;
-
-  /// @brief ハッシュ値を返す．
-  SizeType
-  hash() const;
 
 
 public:
@@ -223,7 +168,7 @@ struct hash<YM_NAMESPACE::nsVerilog::AstModule>
   SizeType
   operator()(const YM_NAMESPACE::nsVerilog::AstModule& module) const
   {
-    return module.hash();
+    return module.key();
   }
 };
 

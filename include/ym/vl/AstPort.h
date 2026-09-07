@@ -75,11 +75,13 @@ public:
   AstExprList
   portref_list() const;
 
+#if 0
   /// @brief 内部のポート結線の向きの取得
   VpiDir
   portref_dir(
     SizeType index ///< [in] インデックス ( 0 <= index < portref_size() )
   ) const;
+#endif
 
 
 public:

@@ -127,8 +127,7 @@ private:
   /// @brief ポート結線式を出力する．
   void
   put_portref(
-    const AstExpr& expr,
-    VpiDir dir
+    const AstExpr& expr
   );
 
   /// @brief 宣言を出力する．

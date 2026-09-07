@@ -88,19 +88,28 @@ private:
   void
   add_phase1stub(
     ElbStub* stub ///< [in] phase1 で行う処理を表すスタブ
-  );
+  )
+  {
+    mPhase1StubList1.push_back(stub);
+  }
 
   /// @brief phase2 で行う処理を登録する．
   void
   add_phase2stub(
     ElbStub* stub ///< [in] phase2 で行う処理を表すスタブ
-  );
+  )
+  {
+    mPhase2StubList.push_back(stub);
+  }
 
   /// @brief phase3 で行う処理を登録する．
   void
   add_phase3stub(
     ElbStub* stub ///< [in] phase3 で行う処理を表すスタブ
-  );
+  )
+  {
+    mPhase3StubList.push_back(stub);
+  }
 
 
 private:
@@ -114,7 +123,13 @@ private:
   AstModule
   find_moduledef(
     const std::string& name ///< [in] 名前
-  ) const;
+  ) const
+  {
+    if ( mModuleDict.count(name) == 0 ) {
+      return AstModule();
+    }
+    return mModuleDict.at(name);
+  }
 
   /// @brief 関数定義を探す．
   AstItem
@@ -132,6 +147,15 @@ private:
     const std::string& name ///< [in] 名前
   ) const;
 
+  /// @brief オブジェクトを探す．
+  ///
+  /// 見つからなかった時は nullptr を返す．
+  ObjHandle*
+  find_obj(
+    const VlScope* parent,  ///< [in] 検索対象のスコープ
+    const std::string& name ///< [in] 名前
+  ) const;
+
   /// @brief セルの探索
   /// @return name という名のセルを返す．
   ///
@@ -139,7 +163,10 @@ private:
   ClibCell
   find_cell(
     const std::string& name ///< [in] セル名
-  ) const;
+  ) const
+  {
+    return mCellLibrary.cell(name);
+  }
 
 
 public:
@@ -161,7 +188,34 @@ private:
   void
   reg_constant_function(
     const VlTaskFunc* func ///< [in] 関数
+  )
+  {
+    mCfDict.add(func);
+  }
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // モジュールのインスタンス化に関する操作
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief インスタンス化の印を付ける．
+  void
+  set_instance_mark(
+    const AstModule& ast_module
   );
+
+  /// @brief インスタンス化の印を消す．
+  void
+  clear_instance_mark(
+    const AstModule& ast_module
+  );
+
+  /// @brief インスタンス化の印を調べる．
+  bool
+  check_instance_mark(
+    const AstModule& ast_module
+  ) const;
 
 
 private:
@@ -201,6 +255,9 @@ private:
 
   // attribute instance 生成用のオブジェクト
   std::unique_ptr<AttrGen> mAttrGen;
+
+  // インスタンス展開中のフラグ
+  std::unordered_set<PtrIntType> mModuleMark;
 
   // 関数定義の辞書
   std::unordered_map<std::string, AstItem> mFuncDict;

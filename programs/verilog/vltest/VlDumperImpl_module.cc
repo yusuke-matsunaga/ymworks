@@ -177,7 +177,7 @@ VlDumperImpl::put_port(
   put("vpiModule", port->module()->full_name() );
   put("vpiConnByName", port->is_conn_by_name() );
   put("vpiDirection", port->direction() );
-  put("vpiExplicitName", port->is_explicit_name() );
+  put("vpiExplicitName", port->has_explicit_name() );
   put("vpiPortIndex", port->port_index() );
   if ( port->name() != std::string{} ) {
     put("vpiName", port->name() );

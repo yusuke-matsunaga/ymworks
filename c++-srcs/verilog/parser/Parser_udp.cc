@@ -210,9 +210,6 @@ Parser::new_Udp2001(
   }
   // 残りの要素は入力になっているはず．
 
-  // iohead_array から port_array を生成する．
-  auto port_array = new_PortArray(io_top);
-
   return new_Udp(file_region,
 		 udp_name,
 		 init_name,

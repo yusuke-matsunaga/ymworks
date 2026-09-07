@@ -41,6 +41,16 @@ public:
   // モジュール生成に関するエラー
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 同名のモジュール定義がある．
+  static
+  void
+  module_redefined(
+    const char* file,                  ///< [in] ファイル名
+    int line,                          ///< [in] 行番号
+    const AstModule& ast_module,       ///< [in] モジュール定義
+    const FileRegion& prev_file_region ///< [in] 前の定義位置
+  );
+
   /// @brief パラメータポートの割り当て数が多すぎる．
   static
   void

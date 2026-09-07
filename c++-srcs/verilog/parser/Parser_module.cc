@@ -29,15 +29,14 @@ Parser::new_Module1995(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  PtDeclHead* paramport_top,
-  PtPort* port_top,
-  PtIOHead* iohead_top,
-  PtDeclHead* declhead_top,
-  PtItem* item_top
+  const PtDeclHead* paramport_top,
+  const PtPort* port_top,
+  const PtIOHead* iohead_top,
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 )
 {
   bool is_cell = lex().cell_define();
-  bool is_protected = false; // これどうやって決めるの？
   int time_u = lex().time_unit();
   int time_p = lex().time_precision();
   VpiNetType nettype = lex().default_nettype();
@@ -45,18 +44,7 @@ Parser::new_Module1995(
   VpiDefDelayMode delay = lex().delay_mode();
   int decay = lex().default_decay_time();
 
-#if 0 // VERIFAULT
-  bool portfaults = lex().portfaults();
-  bool suppress_faults = lex().suppress_faults();
-#else
-  bool portfaults = false;
-  bool suppress_faults = false;
-#endif
-
-  std::string config;  // ?
-  std::string library; // ?
-  std::string cell;    // ?
-
+#if 0
   // ポート宣言とIO宣言のチェックを行う．
   std::unordered_map<std::string, VpiDir> iodecl_dirs;
   check_IO(port_top, iohead_top, iodecl_dirs);
@@ -65,7 +53,7 @@ Parser::new_Module1995(
   // 調べる．
   // 同時に名無しのポートがあるかどうかしらべる．
   bool named_port = true;
-  for ( auto port: PtPortList::new_obj(port_top) ) {
+  for ( auto port: PtList<const PtPort>::new_obj(port_top) ) {
     if ( port->ext_name() == nullptr ) {
       // 1つでも名前を持たないポートがあったら名前での結合はできない．
       named_port = false;
@@ -90,18 +78,14 @@ Parser::new_Module1995(
       ++ index;
     }
   }
+#endif
 
   return mFactory.new_Module(file_region,
 			     module_name,
-			     is_macro,
-			     is_cell,
-			     is_protected,
+			     is_macro, is_cell,
 			     time_u, time_p,
 			     nettype, unconn,
 			     delay, decay,
-			     named_port,
-			     portfaults, suppress_faults,
-			     config, library, cell,
 			     paramport_top,
 			     port_top,
 			     iohead_top,
@@ -115,14 +99,13 @@ Parser::new_Module2001(
   const FileRegion& file_region,
   bool is_macro,
   const char* module_name,
-  PtDeclHead* paramport_top,
-  PtIOHead* portdecl_top,
-  PtDeclHead* declhead_top,
-  PtItem* item_top
+  const PtDeclHead* paramport_top,
+  const PtIOHead* portdecl_top,
+  const PtDeclHead* declhead_top,
+  const PtItem* item_top
 )
 {
   bool is_cell = lex().cell_define();
-  bool is_protected = false; // これどうやって決めるの？
   int time_u = lex().time_unit();
   int time_p = lex().time_precision();
   VpiNetType nettype = lex().default_nettype();
@@ -130,45 +113,33 @@ Parser::new_Module2001(
   VpiDefDelayMode delay = lex().delay_mode();
   int decay = lex().default_decay_time();
 
-#if 0 // VERIFAULT
-  bool portfaults = lex().portfaults();
-  bool suppress_faults = lex().suppress_faults();
-#else
-  bool portfaults = false;
-  bool suppress_faults = false;
-#endif
-
-  std::string config;  // ?
-  std::string library; // ?
-  std::string cell;    // ?
-
+#if 0
   if ( !check_PortArray(portdecl_top) ) {
     return nullptr;
   }
 
   // iohead_array からポートリストを作る．
   auto port_list = new_PortArray(portdecl_top);
+#endif
 
   return mFactory.new_Module(file_region,
 			     module_name,
-			     is_macro, is_cell, is_protected,
+			     is_macro, is_cell,
 			     time_u, time_p, nettype,
 			     unconn, delay, decay,
-			     true,
-			     portfaults, suppress_faults,
-			     config, library, cell,
 			     paramport_top,
-			     port_list.top,
+			     nullptr,
 			     portdecl_top,
 			     declhead_top,
 			     item_top);
 }
 
+#if 0
 // @brief ポート宣言とIO宣言の齟齬をチェックする．
 void
 Parser::check_IO(
-  PtPort* port_top,
-  PtIOHead* iohead_top,
+  const PtPort* port_top,
+  const PtIOHead* iohead_top,
   std::unordered_map<std::string, VpiDir>& iodecl_dirs
 )
 {
@@ -187,7 +158,7 @@ Parser::check_IO(
   // 持たない場合にはデフォルトタイプのネットを生成する．
   for ( auto iohead: PtList<const PtIOHead>::new_obj(iohead_top) ) {
     // 名前をキーにして方向を記録しておく
-    VpiDir dir = iohead->direction();
+    auto dir = iohead->direction();
     for ( auto elem: PtList<const PtIOItem>::new_obj(iohead->item_top()) ) {
       auto elem_name = elem->name();
 
@@ -266,6 +237,6 @@ Parser::new_PortArray(
   }
   return port_list;
 }
-
+#endif
 
 END_NAMESPACE_YM_VERILOG

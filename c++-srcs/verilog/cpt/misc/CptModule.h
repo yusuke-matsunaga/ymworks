@@ -34,19 +34,12 @@ public:
     const char* name,
     bool macro,
     bool is_cell,
-    bool is_protected,
     int time_unit,
     int time_precision,
     VpiNetType net_type,
     VpiUnconnDrive unconn,
     VpiDefDelayMode delay,
     int decay,
-    bool explicit_name,
-    bool portfaults,
-    bool suppress_faults,
-    const std::string& config,
-    const std::string& library,
-    const std::string& cell,
     const PtDeclHead* paramport_top,
     const PtPort* port_top,
     const PtIOHead* iohead_top,
@@ -79,10 +72,6 @@ public:
   bool
   is_cell() const override;
 
-  /// @brief protect 情報の取得
-  bool
-  is_protected() const override;
-
   /// @brief time unit の取得
   int
   time_unit() const override;
@@ -106,26 +95,6 @@ public:
   /// @brief default decay time の取得
   int
   decay_time() const override;
-
-  /// @brief portfaults 情報の取得
-  bool
-  portfaults() const override;
-
-  /// @brief suppress_faults 情報の取得
-  bool
-  suppress_faults() const override;
-
-  /// @brief config 情報の取得
-  const std::string&
-  config() const override;
-
-  /// @brief library 情報の取得
-  const std::string&
-  library() const override;
-
-  /// @brief cell 情報の取得
-  const std::string&
-  cell() const override;
 
   /// @brief パラメータポート宣言のリストの取得
   const PtDeclHead*
@@ -153,39 +122,6 @@ public:
   const PtItem*
   item_top() const override;
 
-  /// @brief top_module フラグを下ろす．
-  void
-  clear_topmodule() const override;
-
-  /// @brief top module のチェック
-  bool
-  is_topmodule() const override;
-
-  /// @brief in_use フラグの設定
-  void
-  set_in_use() const override;
-
-  /// @brief in_use フラグの解除
-  void
-  reset_in_use() const override;
-
-  /// @brief in_use フラグの取得
-  bool
-  is_in_use() const override;
-
-
-private:
-
-  // すべてのポートが名前を持っていることを記録する．
-  void
-  set_named_port();
-
-  // すべてのポートが外部名を持っているときに true を返す．
-  // { a, b } のような名無しポートがあると false となる．
-  // true の時しか名前による結合は行えない．
-  bool
-  explicit_name() const;
-
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -199,20 +135,10 @@ private:
   const char* mName;
 
   // 様々な情報をパックしたもの
-  mutable
   std::uint32_t mFlags;
 
   // decay time
   std::int32_t mDefDecayTime;
-
-  // config 情報
-  std::string mConfig;
-
-  // library 情報
-  std::string mLibrary;
-
-  // cell 情報
-  std::string mCell;
 
   // パラメータポート宣言の先頭
   const PtDeclHead* mParamPortTop;

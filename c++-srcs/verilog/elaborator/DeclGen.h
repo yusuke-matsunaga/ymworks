@@ -47,15 +47,25 @@ public:
     bool force_to_local  ///< [in] true なら parameter を localparam にする．
   );
 
-  /// @brief IO宣言要素を実体化する．
-  ///
-  /// module と taskfunc はどちらか一方が nullptr
+  /// @brief IO宣言要素を実体化する(モジュール用)．
   void
   instantiate_iodecl(
-    ElbModule* module,      ///< [in] 親のモジュール
-    ElbTaskFunc* taskfunc,  ///< [in] 親のタスク/関数
+    ElbModule* module,                  ///< [in] 親のモジュール
     const AstIOHeadList& ast_head_array ///< [in] IO宣言ヘッダのリスト
-  );
+  )
+  {
+    instantiate_iodecl(module, nullptr, ast_head_array);
+  }
+
+  /// @brief IO宣言要素を実体化する(Task/Func用)．
+  void
+  instantiate_iodecl(
+    ElbTaskFunc* taskfunc,              ///< [in] 親のタスク/関数
+    const AstIOHeadList& ast_head_array ///< [in] IO宣言ヘッダのリスト
+  )
+  {
+    instantiate_iodecl(nullptr, taskfunc, ast_head_array);
+  }
 
   /// @brief 宣言要素のリストをインスタンス化する．
   void
@@ -70,12 +80,20 @@ private:
   // 下請け関数
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief instantiate_iodecl() の本体
+  void
+  instantiate_iodecl(
+    ElbModule* module,                  ///< [in] 親のモジュール
+    ElbTaskFunc* taskfunc,              ///< [in] 親のタスク/関数
+    const AstIOHeadList& ast_head_array ///< [in] IO宣言ヘッダのリスト
+  );
+
   /// @brief パラメータ用の instantiate 関数
   void
   instantiate_param_head(
     const VlScope* parent,       ///< [in] 親のスコープ
     const AstDeclHead& ast_head, ///< [in] 宣言ヘッダ
-    bool is_local                ///< [in] local_param にする時 true
+    bool force_local             ///< [in] local_param にする時 true
   );
 
   /// @brief net をインスタンス化する．

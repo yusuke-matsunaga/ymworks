@@ -33,6 +33,16 @@ EiFactory::new_Primary(
 // @brief プライマリ式を生成する．
 ElbExpr*
 EiFactory::new_Primary(
+  const AstIOItem& ast_item,
+  const VlDecl* obj
+)
+{
+  return new EiIOPrimary(ast_item, obj);
+}
+
+// @brief プライマリ式を生成する．
+ElbExpr*
+EiFactory::new_Primary(
   const AstDeclItem& ast_item,
   const VlDecl* obj
 )
@@ -213,6 +223,116 @@ std::vector<const VlExpr*>
 EiPrimary::lhs_elem_list() const
 {
   return {this};
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiIOPrimary
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+EiIOPrimary::EiIOPrimary(
+  const AstIOItem& ast_item,
+  const VlDecl* obj
+) : mAstObj{ast_item},
+    mObj{obj}
+{
+}
+
+// @brief デストラクタ
+EiIOPrimary::~EiIOPrimary()
+{
+}
+
+// @brief 型の取得
+VpiObjType
+EiIOPrimary::type() const
+{
+  return mObj->type();
+}
+
+// @brief 式のタイプを返す．
+VlValueType
+EiIOPrimary::value_type() const
+{
+  return mObj->value_type();
+}
+
+// @brief 定数の時 true を返す．
+bool
+EiIOPrimary::is_const() const
+{
+  return false;
+}
+
+// @brief プライマリ(net/reg/variables/parameter)の時に true を返す．
+bool
+EiIOPrimary::is_primary() const
+{
+  return true;
+}
+
+// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
+const VlDeclBase*
+EiIOPrimary::decl_base() const
+{
+  return mObj;;
+}
+
+// @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
+const VlDecl*
+EiIOPrimary::decl_obj() const
+{
+  return mObj;
+}
+
+// @brief Verilog-HDL の文字列を得る．
+std::string
+EiIOPrimary::decompile() const
+{
+  return mAstObj.name();
+}
+
+// @brief 左辺式の要素数の取得
+SizeType
+EiIOPrimary::lhs_elem_num() const
+{
+  return 1;
+}
+
+// @brief 左辺式の要素の取得
+const VlExpr*
+EiIOPrimary::lhs_elem(
+  SizeType pos
+) const
+{
+  if ( pos != 0 ) {
+    throw std::logic_error{"pos != 0"};
+  }
+  return this;
+}
+
+// @brief 左辺式の要素のリストの取得
+std::vector<const VlExpr*>
+EiIOPrimary::lhs_elem_list() const
+{
+  return {this};
+}
+
+// @brief 要求される式の型を計算してセットする．
+void
+EiIOPrimary::_set_reqsize(
+  const VlValueType& type
+)
+{
+  // なにもしない．
+}
+
+// @brief パース木の定義要素を返す．
+const AstBase&
+EiIOPrimary::ast_obj() const
+{
+  return mAstObj;
 }
 
 

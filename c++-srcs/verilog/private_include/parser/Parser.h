@@ -168,11 +168,11 @@ public:
     const FileRegion& file_region,
     bool is_macro,
     const char* name,
-    PtDeclHead* paramport_top,
-    PtPort* port_top,
-    PtIOHead* iohead_top,
-    PtDeclHead* declhead_top,
-    PtItem* item_top
+    const PtDeclHead* paramport_top,
+    const PtPort* port_top,
+    const PtIOHead* iohead_top,
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   );
 
   /// @brief Verilog2001 タイプのモジュール(のテンプレート)を生成する．
@@ -181,17 +181,25 @@ public:
     const FileRegion& file_region,
     bool is_macro,
     const char* name,
-    PtDeclHead* paramport_top,
-    PtIOHead* portdecl_top,
-    PtDeclHead* declhead_top,
-    PtItem* item_top
+    const PtDeclHead* paramport_top,
+    const PtIOHead* portdecl_top,
+    const PtDeclHead* declhead_top,
+    const PtItem* item_top
   );
 
-
+#if 0
 public:
   //////////////////////////////////////////////////////////////////////
   // ポート関連の要素の生成関数
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief ポート宣言とIO宣言の齟齬をチェックする．
+  void
+  check_IO(
+    const PtPort* port_top,      ///< [in] ポート宣言のリスト
+    const PtIOHead* iohead_top,  ///< [in] IO宣言のリスト
+    std::unordered_map<std::string, VpiDir>& iodecl_dirs ///< [in] IO宣言名をキーとして向きを保持する辞書
+  );
 
   /// @brief 入出力宣言中の重複チェックを行う．
   bool
@@ -204,13 +212,7 @@ public:
   new_PortArray(
     const PtIOHead* iohead_top
   );
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // GenFor の生成
-  //////////////////////////////////////////////////////////////////////
-
+#endif
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -378,14 +380,6 @@ public:
   //////////////////////////////////////////////////////////////////////
   // チェックを行う関数
   //////////////////////////////////////////////////////////////////////
-
-  /// @brief ポート宣言とIO宣言の齟齬をチェックする．
-  void
-  check_IO(
-    PtPort* port_top,        ///< [in] ポート宣言のリスト
-    PtIOHead* iohead_top,           ///< [in] IO宣言のリスト
-    std::unordered_map<std::string, VpiDir>& iodecl_dirs ///< [in] IO宣言名をキーとして向きを保持する辞書
-  );
 
   /// @brief 関数内で使えるステートメントかどうかのチェック
   bool

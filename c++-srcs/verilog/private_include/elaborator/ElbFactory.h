@@ -759,6 +759,14 @@ public:
     const VlDecl* obj        ///< [in] 本体のオブジェクト
   ) = 0;
 
+  /// @brief プライマリ式を生成する(portdecl用)．
+  virtual
+  ElbExpr*
+  new_Primary(
+    const AstIOItem& ast_item, ///< [in] パース木の定義要素
+    const VlDecl* obj            ///< [in] 本体のオブジェクト
+  ) = 0;
+
   /// @brief プライマリ式を生成する(net decl の初期値用)．
   virtual
   ElbExpr*

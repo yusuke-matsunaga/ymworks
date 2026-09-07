@@ -50,7 +50,7 @@ public:
   /// @brief 明示的に名前がついているとき true を返す．
   virtual
   bool
-  is_explicit_name() const = 0;
+  has_explicit_name() const = 0;
 
   /// @brief 名前を返す．
   virtual

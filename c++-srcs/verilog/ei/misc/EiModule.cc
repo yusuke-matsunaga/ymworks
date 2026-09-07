@@ -140,7 +140,8 @@ EiModuleHead::is_cell_instance() const
 bool
 EiModuleHead::is_protected() const
 {
-  return mAstModule.is_protected();
+  // ???
+  return false;
 }
 
 // @brief top module の時 true を返す．
@@ -196,21 +197,24 @@ EiModuleHead::def_decay_time() const
 std::string
 EiModuleHead::config() const
 {
-  return mAstModule.config();
+  // ???
+  return {};
 }
 
 // @brief library 情報を返す．
 std::string
 EiModuleHead::library() const
 {
-  return mAstModule.library();
+  // ???
+  return {};
 }
 
 // @brief cell 情報を返す．
 std::string
 EiModuleHead::cell() const
 {
-  return mAstModule.cell();
+  // ???
+  return {};
 }
 
 
@@ -235,7 +239,7 @@ EiModule::init(
   SizeType io_num
 )
 {
-  mPortList = std::vector<EiPort>(port_num);
+  mPortList.reserve(port_num);
   mIODeclList.reserve(io_num);
 }
 
@@ -374,7 +378,7 @@ EiModule::port(
   if ( pos >= port_num() ) {
     throw std::out_of_range{"pos is out of range"};
   }
-  return &mPortList[pos];
+  return mPortList[pos].get();
 }
 
 // @brief ポートのリストの取得
@@ -384,7 +388,7 @@ EiModule::port_list() const
   std::vector<const VlPort*> ans_list;
   ans_list.reserve(port_num());
   for ( auto& port: mPortList ) {
-    ans_list.push_back(&port);
+    ans_list.push_back(port.get());
   }
   return ans_list;
 }
@@ -445,19 +449,30 @@ EiModule::add_iodecl(
   mIODict.emplace(decl, io_decl);
 }
 
-// @brief ポートの初期設定を行う．
+// @brief ポートを追加する．
 void
-EiModule::init_port(
-  SizeType index,
+EiModule::add_port(
   const AstPort& ast_port,
   ElbExpr* low_conn,
   VpiDir dir
 )
 {
-  if ( index >= port_num() ) {
-    throw std::out_of_range{"index is out of range"};
-  }
-  mPortList[index].init(this, ast_port, index, low_conn, dir);
+  auto port_index = mPortList.size();
+  auto port = new EiPort1(this, ast_port, port_index, low_conn, dir);
+  mPortList.push_back(std::unique_ptr<EiPortBase>(port));
+}
+
+// @brief ポートを追加する．
+void
+EiModule::add_port(
+  const AstIOItem& ast_ioitem,
+  ElbExpr* low_conn,
+  VpiDir dir
+)
+{
+  auto port_index = mPortList.size();
+  auto port = new EiPort2(this, ast_ioitem, port_index, low_conn, dir);
+  mPortList.push_back(std::unique_ptr<EiPortBase>(port));
 }
 
 // @brief ポートの high_conn を接続する．
@@ -471,7 +486,7 @@ EiModule::set_port_high_conn(
   if ( index >= port_num() ) {
     throw std::out_of_range{"index is out of range"};
   }
-  mPortList[index].set_high_conn(high_conn, conn_by_name);
+  mPortList[index]->set_high_conn(high_conn, conn_by_name);
 }
 
 

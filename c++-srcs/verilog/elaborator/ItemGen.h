@@ -78,11 +78,19 @@ private:
     const AstItem& ast_item ///< [in] 要素定義
   );
 
+  /// @brief continous assignment ヘッダの生成を行う.
+  void
+  instantiate_cont_assign_head(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstItem& ast_head ///< [in] ヘッダ
+  );
+
   /// @brief continous assignment に関連した式の名前解決を行う．
   void
   instantiate_cont_assign(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem& ast_head ///< [in] ヘッダ
+    const VlScope* parent,                ///< [in] 親のスコープ
+    const AstContAssign& ast_cont_assign, ///< [in] パース木の定義
+    ElbCaHead* ca_head                    ///< [in] ヘッダ
   );
 
   /// @brief process 文の生成を行う．
@@ -146,11 +154,20 @@ private:
     const AstItem& ast_head ///< [in] ヘッダ
   );
 
-  /// @brief module instance の生成を行う．
+  /// @brief module instance ヘッダの生成を行う．
   void
-  phase1_module(
+  phase1_module_head(
     const VlScope* parent,      ///< [in] 親のスコープ
     const AstItem& ast_head,    ///< [in] ヘッダ
+    const AstModule& ast_module ///< [in] モジュールの構文木要素
+  );
+
+  /// @brief module instance の生成を行う．
+  void
+  phase1_module_inst(
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstItem& ast_head,    ///< [in] ヘッダ
+    const AstInst& ast_inst,    ///< [in] インスタンス記述
     const AstModule& ast_module ///< [in] モジュールの構文木要素
   );
 
@@ -220,7 +237,7 @@ private:
     return make_stub<ItemGen,
 		     const VlScope*,
 		     const AstItem&>(this,
-				     &ItemGen::instantiate_cont_assign,
+				     &ItemGen::instantiate_cont_assign_head,
 				     parent, ast_item);
   }
 
@@ -298,11 +315,20 @@ private:
     const AstInst& ast_inst      ///< [in] インスタンス定義
   );
 
-  /// @brief gate instance の生成を行う
+  /// @brief gate instance ヘッダの生成を行う
   void
   instantiate_gateheader(
     const VlScope* parent,  ///< [in] 親のスコープ
     const AstItem& ast_head ///< [in] ヘッダ
+  );
+
+  /// @brief gate instance の生成を行う．
+  void
+  instantiate_gateinst(
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
+    const AstInst& ast_inst, ///< [in] パース木のインスタンス定義
+    ElbPrimHead* prim_head   ///< [in] ヘッダ
   );
 
   /// @brief instantiate_udpheader() 用のスタブを作る．
@@ -320,11 +346,21 @@ private:
 				       parent, ast_head, udpdefn);
   }
 
-  /// @brief UDP instance の生成を行う
+  /// @brief UDP instance ヘッダの生成を行う
   void
   instantiate_udpheader(
     const VlScope* parent,   ///< [in] 親のスコープ
-    const AstItem& ast_head, ///< [in] ヘッダ
+    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
+    const VlUdpDefn* udpdefn ///< [in] UDP
+  );
+
+  /// @brief UDP instance の生成を行う
+  void
+  instantiate_udpinst(
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
+    const AstInst& ast_inst, ///< [in] パース木のインスタンス定義
+    ElbPrimHead* prim_head,  ///< [in] ヘッダ
     const VlUdpDefn* udpdefn ///< [in] UDP
   );
 
@@ -339,15 +375,25 @@ private:
     return make_stub<ItemGen,
 		     const VlScope*,
 		     const AstItem&,
-		     ClibCell>(this, &ItemGen::instantiate_cell,
+		     ClibCell>(this, &ItemGen::instantiate_cellhead,
 			       parent, ast_head, cell);
   }
 
+  /// @brief セル instance ヘッダの生成を行う
+  void
+  instantiate_cellhead(
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
+     ClibCell cell           ///< [in] セル
+  );
+
   /// @brief セル instance の生成を行う
   void
-  instantiate_cell(
+  instantiate_cellinst(
     const VlScope* parent,   ///< [in] 親のスコープ
-    const AstItem& ast_head, ///< [in] ヘッダ
+    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
+    const AstInst& ast_inst, ///< [in] パース木のインスタンス定義
+    ElbPrimHead* prim_head,  ///< [in] ヘッダ
     ClibCell cell            ///< [in] セル
   );
 
@@ -521,6 +567,140 @@ private:
   gen_param_con_list(
     const VlScope* parent,  ///< [in] 親のスコープ
     const AstItem& ast_head ///< [in] 構文木のヘッダ要素
+  );
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // エラー出力用の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief defparam の割り当て対象がパラメータではなかった．
+  void
+  error_not_a_parameter(
+    const char* file_name,
+    int line,
+    const AstDefParam& ast_defparam
+  );
+
+  /// @brief defparam の割り当て対象が localparameter だった．
+  void
+  error_localparam_override(
+    const char* file_name,
+    int line,
+    const AstDefParam& ast_defparam
+  );
+
+  /// @brief モジュールの依存関係がループしている．
+  void
+  error_cyclic_dependency(
+    const char* file,           ///< [in] ファイル名
+    int line,                   ///< [in] 行番号
+    const AstModule& ast_module ///< [in] モジュール定義
+  );
+
+  /// @brief 名無しのモジュールインスタンス
+  void
+  error_noname_module(
+    const char* file_name,
+    int line,
+    const AstInst& ast_inst
+  );
+
+  /// @brief UDP インスタンスにパラメータ割り当てがある．
+  void
+  error_udp_with_paramassign(
+    const char* file,        ///< [in] ファイル名
+    int line,                ///< [in] 行番号
+    const AstItem& ast_head  ///< [in] インスタンス記述のヘッダ
+  );
+
+  /// @brief セルインスタンスにパラメータ割り当てがある．
+  void
+  error_cell_with_paramassign(
+    const char* file,        ///< [in] ファイル名
+    int line,                ///< [in] 行番号
+    const AstItem& ast_head  ///< [in] インスタンス記述のヘッダ
+  );
+
+  /// @brief モジュールインスタンスのポート数が合わない．
+  void
+  error_port_num_mismatch(
+    const char* file,       ///< [in] ファイル名
+    int line,               ///< [in] 行番号
+    const AstInst& ast_inst ///< [in] インスタンス記述
+  );
+
+  /// @brief ポートが見つからない．
+  void
+  error_port_not_found(
+    const char* file,             ///< [in] ファイル名
+    int line,                     ///< [in] 行番号
+    const AstConnection& ast_conn ///< [in] ポート結合記述
+  );
+
+  /// @brief ポート結合式に real タイプの式が使われている．
+  void
+  error_real_type_in_port_list(
+    const char* file,       ///< [in] ファイル名
+    int line,               ///< [in] 行番号
+    const AstExpr& ast_expr ///< [in] ポート結合式
+  );
+
+  /// @brief モジュールインスタンスのポート結合式のビット幅が合わない．
+  void
+  error_port_size_mismatch(
+    const char* file,       ///< [in] ファイル名
+    int line,               ///< [in] 行番号
+    const AstExpr& ast_expr ///< [in] ポート結合式
+  );
+
+  /// @brief genvar が見つからなかった．
+  void
+  error_genvar_not_found(
+    const char* file_name,
+    int line,
+    const AstItem& ast_genfor
+  );
+
+  /// @brief genvar が見つからなかった．
+  void
+  error_not_a_genvar(
+    const char* file_name,
+    int line,
+    const AstItem& ast_genfor
+  );
+
+  /// @brief genvar が他のループで用いられている．
+  void
+  error_genvar_in_use(
+    const char* file_name,
+    int line,
+    const AstItem& ast_genfor
+  );
+
+  /// @brief genvar の値が負になった．
+  void
+  error_genvar_negative(
+    const char* file_name,
+    int line,
+    const AstItem& ast_genfor
+  );
+
+  /// @brief gate instance のポート結合の数が少ない．
+  void
+  error_few_gate_conn(
+    const char* file_name,
+    int line,
+    const AstInst& ast_inst
+  );
+
+  /// @brief gate instance のポート結合の数が多い．
+  void
+  error_many_gate_conn(
+    const char* file_name,
+    int line,
+    const AstInst& ast_inst
   );
 
 };

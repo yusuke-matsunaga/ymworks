@@ -17,7 +17,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 class EiModuleArray;
-class EiPort;
+class EiPortBase;
 class EiIODecl;
 class EiExpr;
 
@@ -321,13 +321,20 @@ public:
     const VlDecl* decl         ///< [in] 対応する宣言要素
   ) override;
 
-  /// @brief ポートの初期設定を行う．
+  /// @brief ポートを追加する．
   void
-  init_port(
-    SizeType index,          ///< [in] ポート番号
+  add_port(
     const AstPort& ast_port, ///< [in] パース木のポート定義
     ElbExpr* low_conn,       ///< [in] 下位の接続
     VpiDir dir               ///< [in] 向き
+  ) override;
+
+  /// @brief ポートを追加する．
+  void
+  add_port(
+    const AstIOItem& ast_ioitem, ///< [in] パース木のポート定義
+    ElbExpr* low_conn,           ///< [in] 下位の接続
+    VpiDir dir                   ///< [in] 向き
   ) override;
 
   /// @brief ポートの high_conn を接続する．
@@ -361,7 +368,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ポートの配列
-  std::vector<EiPort> mPortList;
+  std::vector<std::unique_ptr<EiPortBase>> mPortList;
 
   // 入出力の配列
   std::vector<EiIODecl> mIODeclList;

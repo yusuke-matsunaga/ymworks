@@ -223,10 +223,6 @@ AstDumper::put(
 
   put("mName", m.name());
 
-  put("mCellDefine", m.is_cell());
-  put("mProtected", m.is_protected());
-  put("mMacroModule", m.is_macromodule());
-
   if ( m.time_unit() != -16 ) {
     put("mTimeUnit", unit2str(m.time_unit()));
     put("mTimePrecision", unit2str(m.time_precision()));
@@ -236,9 +232,6 @@ AstDumper::put(
   put("mUnconnDrive", m.unconn_drive());
   put("mDelayMode", m.delay_mode());
   put("mDecayTime", m.decay_time());
-  put("config", m.config());
-  put("library", m.library());
-  put("cell", m.cell());
 
   for ( auto param: m.paramport_list() ) {
     put("mParamPort", param);
@@ -255,14 +248,12 @@ AstDumper::put(
     auto np = port.portref_list().size();
     if ( np == 1 ) {
       auto expr = port.expr();
-      auto dir = port.portref_dir(0);
-      put_portref(expr, dir);
+      put_portref(expr);
     }
     else if ( np > 1 ) {
       SizeType index = 0;
       for ( auto expr: port.portref_list() ) {
-	auto dir = port.portref_dir(index);
-	put_portref(expr, dir);
+	put_portref(expr);
 	++ index;
       }
     }
@@ -276,14 +267,12 @@ AstDumper::put(
 
 void
 AstDumper::put_portref(
-  const AstExpr& expr,
-  VpiDir dir
+  const AstExpr& expr
 )
 {
   AstHeader x(*this, "mPortRef", "PortRef");
 
   put("mFileRegion", expr.file_region());
-  put("mDir", dir);
   put("mName", expr.name());
   auto index_list = expr.index_list().to_vector();
   if ( index_list.size() == 1 ) {

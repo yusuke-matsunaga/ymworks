@@ -67,7 +67,11 @@ private:
     const AstModule& ast_module ///< [in] モジュール定義
   )
   {
-    auto stub = make_stub<ModuleGen, ElbModule*, const AstModule&>(this, &ModuleGen::phase2_module_item, module, ast_module);
+    auto stub = make_stub<ModuleGen,
+			  ElbModule*,
+			  const AstModule&>(this,
+					    &ModuleGen::phase2_module_item,
+					    module, ast_module);
     ElbProxy::add_phase2stub(stub);
   }
 
@@ -80,17 +84,26 @@ private:
 
   /// @brief port の生成を行う．
   void
-  instantiate_port(
-    ElbModule* module,      ///< [in] 親のモジュール
-    SizeType index,         ///< [in] インデックス
-    const AstPort& ast_port ///< [in] モジュール定義
+  instantiate_ports(
+    ElbModule* module,               ///< [in] 親のモジュール
+    const AstPortList& ast_port_list ///< [in] ポート定義のリスト
   );
 
   /// @brief AstPortRef から expression を生成する．
+  ///
+  /// 同時に向きを求める．
   ElbExpr*
   instantiate_portref(
-    ElbModule* module,         ///< [in] 親のモジュール
-    const AstExpr& ast_portref ///< [in] パース木の portref 定義
+    ElbModule* module,          ///< [in] 親のモジュール
+    const AstExpr& ast_portref, ///< [in] パース木の portref 定義
+    VpiDir& dir                 ///< [out] 向き
+  );
+
+  /// @brief port の生成を行う(Verilog2001用)．
+  void
+  instantiate_ports(
+    ElbModule* module,                   ///< [in] 親のモジュール
+    const AstIOHeadList& ast_iohead_list ///< [in] IO宣言のリスト
   );
 
 
@@ -99,38 +112,46 @@ private:
   // エラーメッセージを出力する関数
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief 同名のモジュール定義がある．
+  void
+  error_module_redefined(
+    const char* file,                  ///< [in] ファイル名
+    int line,                          ///< [in] 行番号
+    const AstModule& ast_module,       ///< [in] モジュール定義
+    const FileRegion& prev_file_region ///< [in] 前の定義位置
+  );
+
   /// @brief パラメータポートの割り当て数が多すぎる．
   void
-  error_too_many_param(
-    const std::vector<ElbParamCon>& param_con_list ///< [in] パラメータポートの割り当てリスト
+  error_too_many_params(
+    const char* file_name,          ///< [in] ファイル名
+    int line,                       ///< [in] 行番号
+    const std::vector<ElbParamCon>&
+    param_con_list                  ///< [in] パラメータポートの割り当てリスト
   );
 
   /// @brief パラメータポートに現れるパラメータが存在しない．
   void
-  error_no_param(
-    const AstConnection& ast_con, ///< [in] パラメータポート割り当てのパース木
-    const char* name              ///< [in] パラメータ名
-  );
-
-  /// @brief 対象の要素が見つからない．
-  void
-  error_not_found(
-    const FileRegion& file_region, ///< [in] ファイル位置
-    const char* name               ///< [in] 名前
+  error_param_not_found(
+    const char* file_name,       ///< [in] ファイル名
+    int line,                    ///< [in] 行番号
+    const AstConnection& ast_con ///< [in] パラメータポート割り当てのパース木
   );
 
   /// @brief ポートに配列が使われている．
   void
-  error_port_array(
-    const FileRegion& file_region, ///< [in] ファイル位置
-    const VlDeclArray* array       ///< [in] 配列
+  error_array_in_port_connection(
+    const char* file_name, ///< [in] ファイル名
+    int line,              ///< [in] 行番号
+    const FileRegion& loc  ///< [in] ファイル位置
   );
 
   /// @brief ポートに使われている要素が宣言要素でなかった．
   void
   error_illegal_port(
-    const FileRegion& file_region, ///< [in] ファイル位置
-    const char* name               ///< [in] 名前
+    const char* file_name, ///< [in] ファイル名
+    int line,              ///< [in] 行番号
+    const FileRegion& loc  ///< [in] ファイル位置
   );
 
   /// @brief 添字が範囲外
@@ -150,6 +171,15 @@ private:
   warning_right_index_out_of_range(
     const FileRegion& file_region ///< [in] ファイル位置
   );
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // インスタンス展開中のフラグ
+  std::unordered_set<PtrIntType> mMark;
 
 };
 

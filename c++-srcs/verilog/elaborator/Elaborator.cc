@@ -287,45 +287,6 @@ Elaborator::add_defparamstub(
   }
 }
 
-// @brief phase1 で行う処理を登録する．
-void
-Elaborator::add_phase1stub(
-  ElbStub* stub
-)
-{
-  mPhase1StubList1.push_back(stub);
-}
-
-// @brief phase2 で行う処理を登録する．
-void
-Elaborator::add_phase2stub(
-  ElbStub* stub
-)
-{
-  mPhase2StubList.push_back(stub);
-}
-
-// phase3 で行う処理を登録する．
-void
-Elaborator::add_phase3stub(
-  ElbStub* stub
-)
-{
-  mPhase3StubList.push_back(stub);
-}
-
-// @brief 名前からモジュール定義を取り出す．
-AstModule
-Elaborator::find_moduledef(
-  const std::string& name
-) const
-{
-  if ( mModuleDict.count(name) > 0 ) {
-    return mModuleDict.at(name);
-  }
-  return AstModule();
-}
-
 // @brief 関数定義を探す．
 AstItem
 Elaborator::find_funcdef(
@@ -358,22 +319,41 @@ Elaborator::find_constant_function(
   return nullptr;
 }
 
-// @brief constant function を登録する．
-void
-Elaborator::reg_constant_function(
-  const VlTaskFunc* func
-)
-{
-  mCfDict.add(func);
-}
-
-// @brief セルの探索
-ClibCell
-Elaborator::find_cell(
+// @brief オブジェクトを探す．
+ObjHandle*
+Elaborator::find_obj(
+  const VlScope* parent,
   const std::string& name
 ) const
 {
-  return mCellLibrary.cell(name);
+  return mMgr.find_obj(parent, name);
+}
+
+// @brief インスタンス化の印を付ける．
+void
+Elaborator::set_instance_mark(
+  const AstModule& ast_module
+)
+{
+  mModuleMark.insert(ast_module.key());
+}
+
+// @brief インスタンス化の印を消す．
+void
+Elaborator::clear_instance_mark(
+  const AstModule& ast_module
+)
+{
+  mModuleMark.erase(ast_module.key());
+}
+
+// @brief インスタンス化の印を調べる．
+bool
+Elaborator::check_instance_mark(
+  const AstModule& ast_module
+) const
+{
+  return mModuleMark.count(ast_module.key()) > 0;
 }
 
 END_NAMESPACE_YM_VERILOG

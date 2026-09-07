@@ -36,14 +36,22 @@ public:
     const VlDecl* decl         ///< [in] 対応する宣言要素
   ) = 0;
 
-  /// @brief ポートの初期設定を行う．
+  /// @brief ポートを追加する．
   virtual
   void
-  init_port(
-    SizeType index,          ///< [in] ポート番号
+  add_port(
     const AstPort& ast_port, ///< [in] パース木のポート定義
     ElbExpr* low_conn,       ///< [in] 下位の接続
     VpiDir dir               ///< [in] 向き
+  ) = 0;
+
+  /// @brief ポートを追加する．
+  virtual
+  void
+  add_port(
+    const AstIOItem& ast_port, ///< [in] パース木のポート定義
+    ElbExpr* low_conn,         ///< [in] 下位の接続
+    VpiDir dir                 ///< [in] 向き
   ) = 0;
 
   /// @brief ポートの high_conn を接続する．

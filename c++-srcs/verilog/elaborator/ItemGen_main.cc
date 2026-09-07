@@ -55,7 +55,12 @@ ItemGen::phase1_items(
 )
 {
   for ( auto ast_item: ast_item_list ) {
-    phase1_item(parent, ast_item);
+    try {
+      phase1_item(parent, ast_item);
+    }
+    catch ( const ElbError& error ) {
+      put_error(error);
+    }
   }
 }
 
@@ -66,75 +71,70 @@ ItemGen::phase1_item(
   const AstItem& ast_item
 )
 {
-  try {
-    switch ( ast_item.type() ) {
-    case AstItem::DefParam:
-      // 実際には登録するだけ
-      add_defparamstub(parent->parent_module(), ast_item);
-      break;
+  switch ( ast_item.type() ) {
+  case AstItem::DefParam:
+    // 実際には登録するだけ
+    add_defparamstub(parent->parent_module(), ast_item);
+    break;
 
-    case AstItem::ContAssign:
-      // phase3 で処理する．
-      add_phase3stub(cont_assign_stub(parent, ast_item));
-      break;
+  case AstItem::ContAssign:
+    // phase3 で処理する．
+    add_phase3stub(cont_assign_stub(parent, ast_item));
+    break;
 
-    case AstItem::Initial:
-    case AstItem::Always:
-      phase1_stmt(parent, ast_item.body());
-      // 本体の生成は phase3 で処理する．
-      add_phase3stub(process_stub(parent, ast_item));
-      break;
+  case AstItem::Initial:
+  case AstItem::Always:
+    phase1_stmt(parent, ast_item.body());
+    // 本体の生成は phase3 で処理する．
+    add_phase3stub(process_stub(parent, ast_item));
+    break;
 
-    case AstItem::Task:
-    case AstItem::Func:
-      phase1_tf(parent, ast_item);
-      break;
+  case AstItem::Task:
+  case AstItem::Func:
+    phase1_tf(parent, ast_item);
+    break;
 
-    case AstItem::GateInst:
-      // 今すぐには処理できないのでキューに積む．
-      add_phase2stub(gateheader_stub(parent, ast_item));
-      break;
+  case AstItem::GateInst:
+    // 今すぐには処理できないのでキューに積む．
+    add_phase2stub(gateheader_stub(parent, ast_item));
+    break;
 
-    case AstItem::MuInst:
-      phase1_muheader(parent, ast_item);
-      break;
+  case AstItem::MuInst:
+    phase1_muheader(parent, ast_item);
+    break;
 
-    case AstItem::Generate:
-      // 実際にはキューに積まれるだけ
-      add_phase1stub(generate_stub(parent, ast_item));
-      break;
+  case AstItem::Generate:
+    // 実際にはキューに積まれるだけ
+    add_phase1stub(generate_stub(parent, ast_item));
+    break;
 
-    case AstItem::GenBlock:
-      phase1_genblock(parent, ast_item);
-      break;
+  case AstItem::GenBlock:
+    phase1_genblock(parent, ast_item);
+    break;
 
-    case AstItem::GenIf:
-      phase1_genif(parent, ast_item);
-      break;
+  case AstItem::GenIf:
+    phase1_genif(parent, ast_item);
+    break;
 
-    case AstItem::GenCase:
-      phase1_gencase(parent, ast_item);
-      break;
+  case AstItem::GenCase:
+    phase1_gencase(parent, ast_item);
+    break;
 
-    case AstItem::GenFor:
-      phase1_genfor(parent, ast_item);
-      break;
+  case AstItem::GenFor:
+    phase1_genfor(parent, ast_item);
+    break;
 
-    case AstItem::SpecItem:
-      // 未対応
-      break;
+  case AstItem::SpecItem:
+    // 未対応
+    break;
 
-    case AstItem::SpecPath:
-      // 未対応
-      break;
+  case AstItem::SpecPath:
+    // 未対応
+    break;
 
-    default:
-      throw std::logic_error{"Should not be reached"};
-      break;
-    }
-  }
-  catch ( const ElbError& error ) {
-    put_error(error);
+  default:
+    throw std::logic_error{"Should not be reached"};
+    break;
   }
 }
 
@@ -145,21 +145,25 @@ ItemGen::defparam_override(
   const VlScope* ulimit
 )
 {
+  // この時点では階層展開が済んでいないため存在しない名前の場合があるので
+  // 即エラーとはせずに false を返す．
+
   auto module = stub.mModule;
   auto ast_header = stub.mAstHeader;
   auto ast_defparam = stub.mAstDefparam;
 
   auto handle = mgr().find_obj_up(module, ast_defparam, ulimit);
-  if ( !handle ) {
+  if ( handle == nullptr ) {
     // 見つからなかった．
+    // エラーとは限らない
     return false;
   }
 
   auto param = handle->parameter();
-  if ( !param ) {
+  if ( param == nullptr ) {
     // 対象がパラメータではなかった．
     try {
-      ErrorGen::not_a_parameter(__FILE__, __LINE__, ast_defparam);
+      error_not_a_parameter(__FILE__, __LINE__, ast_defparam);
     }
     // ただし無視する．
     catch ( const ElbError& error ) {
@@ -173,7 +177,7 @@ ItemGen::defparam_override(
   if ( param->is_local_param() ) {
     // 対象が localparam だった(書き換えできない)
     try {
-      ErrorGen::is_a_localparam(__FILE__, __LINE__, ast_defparam);
+      error_localparam_override(__FILE__, __LINE__, ast_defparam);
     }
     // ただし無視する．
     catch ( const ElbError& error ) {
@@ -210,7 +214,7 @@ ItemGen::defparam_override(
 
 // @brief continous assignment に関連した式の名前解決を行う．
 void
-ItemGen::instantiate_cont_assign(
+ItemGen::instantiate_cont_assign_head(
   const VlScope* parent,
   const AstItem& ast_header
 )
@@ -224,24 +228,24 @@ ItemGen::instantiate_cont_assign(
 
   ElbEnv env;
   ElbNetLhsEnv env1(env);
-  for ( auto ast_elem: ast_header.contassign_list() ) {
+  for ( auto ast_contassign: ast_header.contassign_list() ) {
     try {
       // 左辺式の生成
-      auto ast_lhs = ast_elem.lhs();
+      auto ast_lhs = ast_contassign.lhs();
       auto lhs = instantiate_lhs(parent, env1, ast_lhs);
 
       // 右辺式の生成
-      auto ast_rhs = ast_elem.rhs();
+      auto ast_rhs = ast_contassign.rhs();
       auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
 
-      auto ca = mgr().new_ContAssign(ca_head, ast_elem, lhs, rhs);
+      auto ca = mgr().new_ContAssign(ca_head, ast_contassign, lhs, rhs);
 
       {
 	std::ostringstream buf;
 	buf << "instantiating continuous assign: "
 	    << lhs->decompile() << " = " << rhs->decompile() << ".";
 	MsgMgr::put_msg(__FILE__, __LINE__,
-			ast_elem.file_region(),
+			ast_contassign.file_region(),
 			MsgType::Info,
 			"ELAB",
 			buf.str());
@@ -328,32 +332,27 @@ ItemGen::phase1_gencase(
 )
 {
   auto ast_expr = ast_gencase.cond_expr();
-  BitVector val{evaluate_bitvector(parent, ast_expr)};
+  auto val = evaluate_bitvector(parent, ast_expr);
 
-  bool already_matched = false;
   for ( auto ast_caseitem: ast_gencase.caseitem_list() ) {
     // default(ラベルリストが空) なら常にマッチする．
-    SizeType n = ast_caseitem.label_list().size();
-    bool match = (n == 0);
+    bool match = ast_caseitem.label_list().empty();
     for ( auto ast_expr: ast_caseitem.label_list() ) {
-      BitVector label_val{evaluate_bitvector(parent, ast_expr)};
+      auto label_val = evaluate_bitvector(parent, ast_expr);
       if ( label_val == val ) {
 	match = true;
 	break;
       }
     }
     if ( match ) {
-      if ( already_matched ) {
-	ErrorGen::duplicate_gencase_labels(__FILE__, __LINE__, ast_gencase);
-      }
-      else {
-	already_matched = true;
-	phase1_genitem(parent,
-		       ast_caseitem.declhead_list(),
-		       ast_caseitem.item_list());
-      }
+      // マッチした．
+      phase1_genitem(parent,
+		     ast_caseitem.declhead_list(),
+		     ast_caseitem.item_list());
+      return;
     }
   }
+  // マッチが見つからなかったらなにもしない
 }
 
 // @brief generate for に対応するインスタンスの生成を行う
@@ -394,19 +393,19 @@ ItemGen::phase1_genfor(
   }
 
   auto handle = mgr().find_obj(parent, ast_genfor.loop_var());
-  if ( !handle ) {
+  if ( handle == nullptr ) {
     // 見つからなかった．
-    ErrorGen::genvar_not_found(__FILE__, __LINE__, ast_genfor);
+    error_genvar_not_found(__FILE__, __LINE__, ast_genfor);
   }
 
   auto genvar = handle->genvar();
-  if ( !genvar ) {
+  if ( genvar == nullptr ) {
     // genvar ではなかった．
-    ErrorGen::not_a_genvar(__FILE__, __LINE__, ast_genfor);
+    error_not_a_genvar(__FILE__, __LINE__, ast_genfor);
   }
   if ( genvar->is_inuse() ) {
     // すでに他の generate-for loop が使用中
-    ErrorGen::genvar_in_use(__FILE__, __LINE__, ast_genfor);
+    error_genvar_in_use(__FILE__, __LINE__, ast_genfor);
   }
 
   // genvar を使用中にする．
@@ -418,7 +417,7 @@ ItemGen::phase1_genfor(
   auto ast_init_expr = ast_genfor.init_expr();
   auto init_val = evaluate_int(parent, ast_init_expr);
   if ( init_val < 0 ) {
-    ErrorGen::genvar_negative(__FILE__, __LINE__, ast_genfor);
+    error_genvar_negative(__FILE__, __LINE__, ast_genfor);
   }
   genvar->set_value(init_val);
 
@@ -446,9 +445,9 @@ ItemGen::phase1_genfor(
     auto ast_next_expr = ast_genfor.next_expr();
     auto next_val = evaluate_int(parent, ast_next_expr);
     if ( next_val < 0 ) {
-      ErrorGen::genvar_negative(__FILE__, __LINE__, ast_genfor);
-      genvar->set_value(next_val);
+      error_genvar_negative(__FILE__, __LINE__, ast_genfor);
     }
+    genvar->set_value(next_val);
   }
 }
 

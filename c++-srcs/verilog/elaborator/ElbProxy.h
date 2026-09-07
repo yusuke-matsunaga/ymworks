@@ -102,6 +102,18 @@ protected:
     return mElaborator.find_funcdef(module, name);
   }
 
+  /// @brief オブジェクトを探す．
+  ///
+  /// 見つからなかった時は nullptr を返す．
+  ObjHandle*
+  find_obj(
+    const VlScope* parent,  ///< [in] 検索対象のスコープ
+    const std::string& name ///< [in] 名前
+  ) const
+  {
+    return mElaborator.find_obj(parent, name);
+  }
+
   /// @brief constant function を取り出す．
   /// @return parent というスコープ内の name という関数を返す．
   /// @return なければ nullptr を返す．
@@ -139,6 +151,39 @@ protected:
   )
   {
     mElaborator.reg_constant_function(func);
+  }
+
+
+protected:
+  //////////////////////////////////////////////////////////////////////
+  // モジュールのインスタンス化に関する操作
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief インスタンス化の印を付ける．
+  void
+  set_instance_mark(
+    const AstModule& ast_module
+  )
+  {
+    mElaborator.set_instance_mark(ast_module);
+  }
+
+  /// @brief インスタンス化の印を消す．
+  void
+  clear_instance_mark(
+    const AstModule& ast_module
+  )
+  {
+    mElaborator.clear_instance_mark(ast_module);
+  }
+
+  /// @brief インスタンス化の印を調べる．
+  bool
+  check_instance_mark(
+    const AstModule& ast_module
+  ) const
+  {
+    return mElaborator.check_instance_mark(ast_module);
   }
 
 
@@ -279,14 +324,14 @@ public:
   /// @brief IO宣言要素を実体化する．
   void
   instantiate_iodecl(
-    ElbModule* module,  ///< [in] 親のモジュール
+    ElbModule* module,                 ///< [in] 親のモジュール
     const AstIOHeadList& ast_head_list ///< [in] IO宣言ヘッダの配列
   );
 
   /// @brief IO宣言要素を実体化する．
   void
   instantiate_iodecl(
-    ElbTaskFunc* taskfunc, ///< [in] 親のタスク/関数
+    ElbTaskFunc* taskfunc,             ///< [in] 親のタスク/関数
     const AstIOHeadList& ast_head_list ///< [in] IO宣言ヘッダの配列
   );
 
@@ -541,6 +586,46 @@ protected:
   attribute_list(
     const AstBase& ast_obj1,
     const AstBase& ast_obj2
+  );
+
+protected:
+  //////////////////////////////////////////////////////////////////////
+  // チェック関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 同名のオブジェクトが定義されていないか調べる．
+  ///
+  /// エラーの場合には ElbError 例外を送出する．
+  void
+  check_name(
+    const VlScope* parent,        ///< [in] 親のスコープ
+    const char* name,             ///< [in] 名前
+    const FileRegion& file_region ///< [in] name のファイル位置
+  );
+
+
+protected:
+  //////////////////////////////////////////////////////////////////////
+  // エラー出力
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 重複した名前を持つ．
+  void
+  error_dup_name(
+    const char* file_name,      ///< [in] ソースプログラムのファイル名
+    int line,                   ///< [in] ソースプログラムの行番号
+    const FileRegion& loc,      ///< [in] name のファイル位置
+    const char* name,           ///< [in] 対象の名前
+    const FileRegion& prev_loc  ///< [in] 直前に現れたファイル位置
+  );
+
+  /// @brief 対象の要素が見つからない．
+  void
+  error_not_found(
+    const char* file_name,         ///< [in] ファイル名
+    int line,                      ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    const char* name               ///< [in] 名前
   );
 
 
