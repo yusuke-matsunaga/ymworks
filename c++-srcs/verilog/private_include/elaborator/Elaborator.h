@@ -17,7 +17,6 @@
 #include "ObjDict.h"
 #include "AttrDict.h"
 #include "ElbStubList.h"
-
 #include "ElbFwd.h"
 
 
@@ -26,6 +25,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 class AstMgr;
 
 class ElbMgr;
+class ElbError;
 
 class UdpGen;
 class ModuleGen;
@@ -178,12 +178,6 @@ public:
   const VlScope*
   new_Toplevel();
 
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 要素を登録する関数
-  //////////////////////////////////////////////////////////////////////
-
   /// @brief constant function を登録する．
   void
   reg_constant_function(
@@ -192,6 +186,81 @@ private:
   {
     mCfDict.add(func);
   }
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // エラー出力関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 同名のモジュール定義がある．
+  void
+  error_module_redefined(
+    const char* file,                  ///< [in] ファイル名
+    int line,                          ///< [in] 行番号
+    const AstModule& ast_module,       ///< [in] モジュール定義
+    const FileRegion& prev_file_region ///< [in] 前の定義位置
+  );
+
+  /// @brief 同名の関数定義がある．
+  void
+  error_function_redefined(
+    const char* file,                  ///< [in] ファイル名
+    int line,                          ///< [in] 行番号
+    const AstItem& ast_funcdef,        ///< [in] 関数定義
+    const FileRegion& prev_file_region ///< [in] 前の定義位置
+  );
+
+  /// @brief 未解決の defparam 文がある．
+  void
+  error_defparam_unresolved(
+    const char* file_name,          ///< [in] ファイル名
+    int line,                       ///< [in] 行番号
+    const AstDefParam& ast_defparam ///< [in] defparam 定義
+  );
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // メッセージ出力関数
+  //////////////////////////////////////////////////////////////////////
+
+
+  /// @brief エラーメッセージを出力する．
+  void
+  put_error(
+    const ElbError& error ///< [in] エラー情報
+  );
+
+  /// @brief 警告メッセージを出力する．
+  void
+  put_warning(
+    const char* file,      ///< [in] ソースファイル名
+    int line,              ///< [in] ソースファイル上の行番号
+    const FileRegion& loc, ///< [in] 警告箇所
+    const char* label,     ///< [in] ラベル
+    const std::string& msg ///< [in] メッセージ
+  );
+
+  /// @brief 情報メッセージを出力する．
+  void
+  put_info(
+    const char* file,      ///< [in] ソースファイル名
+    int line,              ///< [in] ソースファイル上の行番号
+    const FileRegion& loc, ///< [in] 対象の箇所
+    const char* label,     ///< [in] ラベル
+    const std::string& msg ///< [in] メッセージ
+  );
+
+  /// @brief デバッグメッセージを出力する．
+  void
+  put_debug(
+    const char* file,      ///< [in] ソースファイル名
+    int line,              ///< [in] ソースファイル上の行番号
+    const FileRegion& loc, ///< [in] 対象の箇所
+    const char* label,     ///< [in] ラベル
+    const std::string& msg ///< [in] メッセージ
+  );
 
 
 private:

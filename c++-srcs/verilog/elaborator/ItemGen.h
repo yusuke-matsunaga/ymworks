@@ -703,6 +703,30 @@ private:
     const AstInst& ast_inst
   );
 
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // メッセージ出力用の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief モジュール配列のインスタンス生成
+  void
+  info_module_array_instantiate(
+    const char* file,
+    int line,
+    const AstItem& ast_head,
+    const AstInst& ast_inst,
+    const RangeVal& range
+  );
+
+  /// @brief モジュールのインスタンス生成
+  void
+  info_module_instantiate(
+    const char* file,
+    int line,
+    ElbModule* module
+  );
+
 };
 
 END_NAMESPACE_YM_VERILOG

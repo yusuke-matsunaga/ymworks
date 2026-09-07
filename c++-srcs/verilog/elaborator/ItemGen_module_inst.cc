@@ -163,16 +163,10 @@ ItemGen::phase1_module_array(
 					    ast_head, ast_inst,
 					    ast_range, range);
 
-  {
-    std::ostringstream buf;
-    buf << "instantiating module array \"" << name << "\" of \""
-	<< defname << "\" [" << range.left << " : " << range.right << "].";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    ast_head.file_region(),
-		    MsgType::Info,
-		    "ELAB",
-		    buf.str());
-  }
+  info_module_array(__FILE__, __LINE__,
+		    ast_head,
+		    ast_inst,
+		    range);
 
   add_phase3stub(make_link_module_array_stub(module_array, ast_module, ast_inst));
 
@@ -182,16 +176,7 @@ ItemGen::phase1_module_array(
   auto attr_list = attribute_list(ast_module, ast_head);
   for ( SizeType i = 0; i < n; ++ i ) {
     auto module = module_array->elem(i);
-
-    {
-      std::ostringstream buf;
-      buf << "\"" << module->full_name() << "\" has been created.";
-      MsgMgr::put_msg(__FILE__, __LINE__,
-		      module_array->file_region(),
-		      MsgType::Info,
-		      "ELAB",
-		      buf.str());
-    }
+    info_module(__FILE__, __LINE__, module);
 
     // モジュール要素を作る．
     phase1_module_item(module, ast_module, param_con_list);
@@ -219,7 +204,7 @@ ItemGen::phase1_udp(
   if ( (ast_delay.is_valid() && param_size > 0) || param_size > 1 ) {
     error_udp_with_paramassign(__FILE__, __LINE__, ast_head);
   }
-  // 順序づき paramassign が一つだけの場合は delay の場合があるので
+  // 順序付き paramassign が一つだけの場合は delay の場合があるので
   // ここではエラーにしない．
 
   // 今すぐには処理できないのでキューに積む．

@@ -128,8 +128,12 @@ DeclGen::instantiate_iodecl(
 	// 同名の要素が見つかった．
 	if ( def_aux_type != VpiAuxType::None ) {
 	  // なのに IO 宣言の aux_type もある．
-	  ErrorGen::duplicate_type(__FILE__, __LINE__,
-				   ast_item, handle->file_region());
+	  error_duplicate_type(__FILE__, __LINE__,
+			       ast_item, handle);
+	}
+	if ( handle->declarray() != nullptr ) {
+	  // 対象が配列だった場合．
+	  error_array_in_io_decl(__FILE__, __LINE__, ast_item);
 	}
 	decl = handle->decl();
 	if ( decl != nullptr ) {
@@ -148,17 +152,10 @@ DeclGen::instantiate_iodecl(
 	  }
 	}
 	if ( decl == nullptr ) {
-	  if ( handle->declarray() != nullptr ) {
-	    // 対象が配列だった場合．
-	    ErrorGen::array_io(__FILE__, __LINE__, ast_item);
-	  }
-
 	  // 不適切な型だった場合．
-	  // 上の decl = nullptr にした時もここに来る．
 	  auto is_module = module != nullptr;
-	  ErrorGen::illegal_io(__FILE__, __LINE__,
-			       ast_item, handle->full_name(),
-			       is_module);
+	  error_illegal_io_decl(__FILE__, __LINE__,
+				ast_item, handle, is_module);
 	}
 
 	// ここに来たら decl != nullptr
@@ -177,22 +174,19 @@ DeclGen::instantiate_iodecl(
 	      range.right = right_val2;
 	    }
 	    else {
-	      ErrorGen::conflict_io_range(__FILE__, __LINE__,
-					  ast_item);
+	      error_conflict_io_range(__FILE__, __LINE__, ast_item);
 	    }
 	  }
 	  else if ( range.left != left_val2 || range.right != right_val2 ) {
 	    // 範囲が異なっていた．
-	    ErrorGen::conflict_io_range(__FILE__, __LINE__,
-					ast_item);
+	    error_conflict_io_range(__FILE__, __LINE__, ast_item, decl);
 	    continue;
 	  }
 	}
 	else if ( has_range ) {
 	  // decl は範囲を持っていないが IO は持っている．
 	  // エラーとする．
-	  ErrorGen::conflict_io_range(__FILE__, __LINE__,
-				      ast_item);
+	  error_conflict_io_range(__FILE__, __LINE__, ast_item);
 	}
 	// どちらか一方でも符号付きなら両方符号付きにする．
 	// ちょっと ad-hoc な仕様
@@ -208,8 +202,7 @@ DeclGen::instantiate_iodecl(
 	    // モジュール IO の場合は `default_net_type を参照する．
 	    auto net_type = module->def_net_type();
 	    if ( net_type == VpiNetType::None ) {
-	      ErrorGen::no_impnet(__FILE__, __LINE__,
-				  ast_item);
+	      error_no_impnet(__FILE__, __LINE__, ast_item);
 	    }
 	    aux_type = VpiAuxType::Net;
 	  }
@@ -240,7 +233,7 @@ DeclGen::instantiate_iodecl(
 	    // 初期値を持つ場合
 	    if ( aux_type == VpiAuxType::Net ) {
 	      // net 型の場合(ここに来るのは暗黙宣言のみ)は初期値を持てない．
-	      ErrorGen::impnet_with_init(__FILE__, __LINE__, ast_item);
+	      error_impnet_with_init(__FILE__, __LINE__, ast_item);
 	    }
 	    // これは verilog_grammer.yy の list_of_variable_port_identifiers
 	    // に対応するので必ず constant_expression である．
@@ -275,6 +268,7 @@ DeclGen::instantiate_iodecl(
 	ASSERT_NOT_REACHED;
       }
 
+      info_iodecl(__FILE__, __LINE__, ast_item, scope);
       {
 	std::ostringstream buf;
 	buf << "IODecl(" << ast_item.name() << ")@"
@@ -371,6 +365,7 @@ DeclGen::instantiate_param_head(
     auto attr_list = attribute_list(ast_head);
     mgr().reg_attr(param, attr_list);
 
+    info_param(__FILE__, __LINE__, param);
     {
       std::ostringstream buf;
       buf << "Parameter(" << param->full_name() << ") created.";
@@ -447,6 +442,7 @@ DeclGen::instantiate_net_head(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(net_array, attr_list);
 
+      info_net_array(__FILE__, __LINE__, net_array);
       {
 	std::ostringstream buf;
 	buf << "NetArray(" << net_array->full_name() << ") created.";
@@ -471,6 +467,7 @@ DeclGen::instantiate_net_head(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(net, attr_list);
 
+      info_net(__FILE__, __LINE__, net);
       {
 	std::ostringstream buf;
 	buf << "Net(" << net->full_name() << ") created.";
@@ -590,6 +587,7 @@ DeclGen::instantiate_reg_head(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(reg_array, attr_list);
 
+      info_reg_array(__FILE__, __LINE__, reg_array);
       {
 	std::ostringstream buf;
 	buf << "RegArray(" << reg_array->full_name() << ") created.";
@@ -614,6 +612,7 @@ DeclGen::instantiate_reg_head(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(reg, attr_list);
 
+      info_reg(__FILE__, __LINE__, reg);
       {
 	std::ostringstream buf;
 	buf << "Reg(" << reg->full_name() << ") created.";
@@ -662,6 +661,7 @@ DeclGen::instantiate_var_head(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(var_array, attr_list);
 
+      info_var_array(__FILE__, __LINE__, var_array);
       {
 	std::ostringstream buf;
 	buf << "VarArray(" << var_array->full_name() << ") created.";
@@ -686,6 +686,7 @@ DeclGen::instantiate_var_head(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(var, attr_list);
 
+      info_var(__FILE__, __LINE__, var);
       {
 	std::ostringstream buf;
 	buf << "Var(" << var->full_name() << ") created.";
@@ -724,6 +725,7 @@ DeclGen::instantiate_event_head(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(ne_array, attr_list);
 
+      info_event_array(__FILE__, __LINE__, ne_array);
       {
 	std::ostringstream buf;
 	buf << "NamedEventArray(" << ne_array->full_name() << ") created.";
@@ -741,6 +743,7 @@ DeclGen::instantiate_event_head(
       auto attr_list = attribute_list(ast_head);
       mgr().reg_attr(named_event, attr_list);
 
+      info_event(__FILE__, __LINE__, named_event);
       {
 	std::ostringstream buf;
 	buf << "NamedEvent(" << named_event->full_name() << ") created.";
@@ -763,6 +766,7 @@ DeclGen::instantiate_genvar_head(
   for ( auto ast_item: ast_head.item_list() ) {
     auto genvar = mgr().new_Genvar(scope, ast_item, 0);
 
+    info_genvar(__FILE__, __LINE__, genvar);
     {
       std::ostringstream buf;
       buf << "Genvar(" << genvar->full_name() << ") created.";

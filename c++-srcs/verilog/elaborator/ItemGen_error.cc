@@ -7,6 +7,8 @@
 /// All rights reserved.
 
 #include "ItemGen.h"
+#include "elaborator/ElbModule.h"
+#include "elaborator/RangeVal.h"
 #include "ElbError.h"
 
 
@@ -257,6 +259,41 @@ ItemGen::error_many_gate_conn(
 		 ast_inst.file_region(),
 		 "ELAB_MANY_GATE_CONN",
 		 "Too many port connections.");
+}
+
+// @brief モジュール配列のインスタンス生成
+void
+ItemGen::info_module_array_instantiate(
+  const char* file,
+  int line,
+  const AstItem& ast_head,
+  const AstInst& ast_inst,
+  const RangeVal& range
+)
+{
+  std::ostringstream buf;
+  buf << "Instantiating module array \"" << ast_inst.name() << "\" of \""
+      << ast_head.name() << "\" [" << range.left << " : " << range.right << "].";
+  put_info(file, line,
+	   ast_inst.file_region(),
+	   "ELAB_MODULE_ARRAY_INSTANTIATE",
+	   buf.str());
+}
+
+// @brief モジュールのインスタンス生成
+void
+ItemGen::info_module_instantiate(
+  const char* file,
+  int line,
+  ElbModule* module
+)
+{
+  std::ostringstream buf;
+  buf << "\"" << module->full_name() << "\" has been created.";
+  put_info(file, line,
+	   module->file_region(),
+	   "ELAB_MODULE_INSTANTIATE",
+	   buf.str());
 }
 
 END_NAMESPACE_YM_VERILOG

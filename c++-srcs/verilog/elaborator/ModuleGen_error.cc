@@ -9,7 +9,6 @@
 #include "ModuleGen.h"
 #include "ElbParamCon.h"
 #include "ElbError.h"
-#include "ym/MsgMgr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -102,40 +101,43 @@ ModuleGen::error_illegal_port(
 // @brief 添字が範囲外
 void
 ModuleGen::warning_index_out_of_range(
+  const char* file,
+  int line,
   const FileRegion& file_region
 )
 {
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  file_region,
-		  MsgType::Warning,
-		  "ELAB",
-		  "Index is out of range.");
+  put_warning(file, line,
+	      file_region,
+	      "ELAB_INDEX_OUT_OF_RANGE",
+	      "Index is out of range.");
 }
 
 // @brief 左の範囲が範囲外
 void
 ModuleGen::warning_left_index_out_of_range(
+  const char* file,
+  int line,
   const FileRegion& file_region
 )
 {
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  file_region,
-		  MsgType::Warning,
-		  "ELAB",
-		  "Left index is out of range.");
+  put_warning(file, line,
+	      file_region,
+	      "ELAB_LEFT_INDEX_OUT_OF_RANGE",
+	      "Left index is out of range.");
 }
 
 // @brief 右の範囲が範囲外
 void
 ModuleGen::warning_right_index_out_of_range(
+  const char* file,
+  int line,
   const FileRegion& file_region
 )
 {
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  file_region,
-		  MsgType::Warning,
-		  "ELAB",
-		  "Right index is out of range.");
+  put_warning(file, line,
+	      file_region,
+	      "ELAB_RIGHT_INDEX_OUT_OF_RANGE",
+	      "Right index is out of range.");
 }
 
 END_NAMESPACE_YM_VERILOG

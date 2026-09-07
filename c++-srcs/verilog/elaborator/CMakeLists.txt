@@ -62,7 +62,6 @@ set ( elaborator_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/ItemGen_taskfunc.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ItemGen_error.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ModuleGen.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/ModuleGen_error.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ObjDict.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/StmtGen_assign.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/StmtGen_block.cc

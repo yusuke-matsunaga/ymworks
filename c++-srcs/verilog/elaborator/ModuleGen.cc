@@ -64,10 +64,9 @@ ModuleGen::phase1_topmodule(
 
   auto prev_obj = find_obj(toplevel, name);
   if ( prev_obj != nullptr ) {
-    // 同名のオブジェクト(たぶんモジュールかUDP)が存在した．
-    error_module_redefined(__FILE__, __LINE__,
-			   ast_module,
-			   prev_obj->file_region());
+    // トップモジュール名はモジュール定義名なので重複しないはず．
+    // (というか重複していたらそれ以前にエラーになっている)
+    throw std::logic_error{"prev_obj != nullptr"};
   }
 
   // モジュール本体の生成
@@ -80,15 +79,7 @@ ModuleGen::phase1_topmodule(
   const auto& attr_list = attribute_list(ast_module);
   mgr().reg_attr(module, attr_list);
 
-  {
-    std::ostringstream buf;
-    buf << "module \"" << module->full_name() << "\" has been created.";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    file_region,
-		    MsgType::Info,
-		    "ELAB",
-		    buf.str());
-  }
+  info_module(__FILE__, __LINE__, module);
 
   // 中身のうちスコープに関係する要素の生成
   phase1_module_item(module, ast_module, std::vector<ElbParamCon>());
@@ -327,7 +318,7 @@ ModuleGen::instantiate_portref(
     bool stat2 = decl->calc_bit_offset(index_val, offset);
     if ( !stat2 ) {
       // 添字が範囲外
-      warning_index_out_of_range(ast_index.file_region());
+      warning_index_out_of_range(__FILE__, __LINE__, ast_index.file_region());
     }
     return mgr().new_BitSelect(ast_expr, primary, ast_index, index_val);
   }
@@ -338,12 +329,12 @@ ModuleGen::instantiate_portref(
     bool stat1 = decl->calc_bit_offset(range.left, offset);
     if ( !stat1 ) {
       // 左の添字が範囲外
-      warning_left_index_out_of_range(ast_part.left().file_region());
+      warning_left_index_out_of_range(__FILE__, __LINE__, ast_part.left().file_region());
     }
     bool stat2 = decl->calc_bit_offset(range.right, offset);
     if ( !stat2 ) {
       // 右の添字が範囲外
-      warning_right_index_out_of_range(ast_part.right().file_region());
+      warning_right_index_out_of_range(__FILE__, __LINE__, ast_part.right().file_region());
     }
     return mgr().new_PartSelect(ast_expr, primary,
 				ast_part.left(), ast_part.right(),

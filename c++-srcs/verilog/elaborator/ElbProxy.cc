@@ -9,6 +9,7 @@
 #include "ElbProxy.h"
 #include "ElbEnv.h"
 #include "ElbError.h"
+#include "ElbParamCon.h"
 #include "ModuleGen.h"
 #include "DeclGen.h"
 #include "ItemGen.h"
@@ -17,11 +18,9 @@
 #include "ExprEval.h"
 #include "AttrGen.h"
 
+#include "elaborator/ElbModule.h"
 #include "elaborator/ElbExpr.h"
-#include "parser/AstDumper.h"
-
 #include "ym/vl/AstExpr.h"
-#include "ym/MsgMgr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -387,10 +386,71 @@ ElbProxy::check_name(
   }
 }
 
+// @brief パラメータポートの割り当て数が多すぎる．
+void
+ElbProxy::error_too_many_params(
+  const char* file,
+  int line,
+  const std::vector<ElbParamCon>& param_con_list
+)
+{
+  auto last = param_con_list.back();
+  throw ElbError(file, line,
+		 last.mAstCon.file_region(),
+		 "ELAB_TOO_MANY_PARAMS",
+		 "Too many parameters");
+}
+
+// @brief パラメータポートに現れるパラメータが存在しない．
+void
+ElbProxy::error_param_not_found(
+  const char* file,
+  int line,
+  const AstConnection& ast_con
+)
+{
+  std::ostringstream buf;
+  buf << "\""
+      << ast_con.name()
+      << "\": No such parameter.";
+  throw ElbError(file, line,
+		 ast_con.file_region(),
+		 "ELAB_PARAM_NOT_FOUND",
+		 buf.str());
+}
+
+// @brief ポートに配列が使われている．
+void
+ElbProxy::error_array_in_port_connection(
+  const char* file,
+  int line,
+  const FileRegion& file_region
+)
+{
+  throw ElbError(file, line,
+		 file_region,
+		 "ELAB_ARRAY_IN_PORT_CONNECTION",
+		 "Array shall not be connected to a module port.");
+}
+
+// @brief ポートに使われている要素が宣言要素でなかった．
+void
+ElbProxy::error_illegal_port(
+  const char* file,
+  int line,
+  const FileRegion& file_region
+)
+{
+  throw ElbError(file, line,
+		 file_region,
+		 "ELAB_ILLEGA_PORT",
+		 "Illegal type for port connection.");
+}
+
 // @brief 重複した名前を持つ．
 void
 ElbProxy::error_dup_name(
-  const char* file_name,
+  const char* file,
   int line,
   const FileRegion& loc,
   const char* name,
@@ -401,7 +461,7 @@ ElbProxy::error_dup_name(
   buf << "\"" << name
       << "\": redefined. previous location is "
       << prev_loc;
-  throw ElbError(file_name, line,
+  throw ElbError(file, line,
 		 loc,
 		 "ELAB_DUP_NAME",
 		 buf.str());
@@ -410,7 +470,7 @@ ElbProxy::error_dup_name(
 // @brief 対象の要素が見つからない．
 void
 ElbProxy::error_not_found(
-  const char* file_name,
+  const char* file,
   int line,
   const FileRegion& file_region,
   const char* name
@@ -419,10 +479,262 @@ ElbProxy::error_not_found(
   std::ostringstream buf;
   buf << "\"" << name
       << "\": Not found";
-  throw ElbError(file_name, line,
+  throw ElbError(file, line,
 		 file_region,
 		 "ELAB_NOT_FOUND",
 		 buf.str());
+}
+
+// @brief IO 宣言に aux_type と宣言が重複している．
+void
+ElbProxy::error_duplicate_type(
+  const char* file,
+  int line,
+  const AstIOItem& ast_item,
+  const ObjHandle* handle
+)
+{
+}
+
+// @brief IO 宣言に配列型の要素が現れている．
+void
+ElbProxy::error_array_in_io_decl(
+  const char* file,
+  int line,
+  const AstIOItem& ast_item
+)
+{
+}
+
+// @brief IO 宣言に不適切な型の要素が現れている．
+void
+ElbProxy::error_illegal_io_decl(
+  const char* file,
+  int line,
+  const AstIOItem& ast_item,
+  const ObjHandle* handle,
+  bool is_module
+)
+{
+}
+
+// @brief IO宣言と要素宣言の範囲が異なる．
+void
+ElbProxy::error_conflict_io_range(
+  const char* file,
+  int line,
+  const AstIOItem& ast_item,
+  ElbDecl* decl
+)
+{
+}
+
+// @brief 暗黙のネット宣言は許されていない．
+void
+ElbProxy::error_no_impnet(
+  const char* file,
+  int line,
+  const AstIOItem& ast_item
+)
+{
+}
+
+// @brief 暗黙のネット宣言は初期値を持てない．
+void
+ElbProxy::error_impnet_with_init(
+  const char* file,
+  int line,
+  const AstIOItem& ast_item
+)
+{
+}
+
+// @brief 添字が範囲外
+void
+ElbProxy::warning_index_out_of_range(
+  const char* file,
+  int line,
+  const FileRegion& file_region
+)
+{
+  put_warning(file, line,
+	      file_region,
+	      "ELAB_INDEX_OUT_OF_RANGE",
+	      "Index is out of range.");
+}
+
+// @brief 左の範囲が範囲外
+void
+ElbProxy::warning_left_index_out_of_range(
+  const char* file,
+  int line,
+  const FileRegion& file_region
+)
+{
+  put_warning(file, line,
+	      file_region,
+	      "ELAB_LEFT_INDEX_OUT_OF_RANGE",
+	      "Left index is out of range.");
+}
+
+// @brief 右の範囲が範囲外
+void
+ElbProxy::warning_right_index_out_of_range(
+  const char* file,
+  int line,
+  const FileRegion& file_region
+)
+{
+  put_warning(file, line,
+	      file_region,
+	      "ELAB_RIGHT_INDEX_OUT_OF_RANGE",
+	      "Right index is out of range.");
+}
+
+// @brief モジュール配列のインスタンス生成
+void
+ElbProxy::info_module_array(
+  const char* file,
+  int line,
+  const AstItem& ast_head,
+  const AstInst& ast_inst,
+  const RangeVal& range
+)
+{
+  std::ostringstream buf;
+  buf << "Instantiating module array \"" << ast_inst.name() << "\" of \""
+      << ast_head.name() << "\" [" << range.left << " : " << range.right << "].";
+  put_info(file, line,
+	   ast_inst.file_region(),
+	   "ELAB_MODULE_ARRAY_INSTANTIATE",
+	   buf.str());
+}
+
+// @brief モジュールのインスタンス生成
+void
+ElbProxy::info_module(
+  const char* file,
+  int line,
+  ElbModule* module
+)
+{
+  std::ostringstream buf;
+  buf << "\"" << module->full_name() << "\" has been created.";
+  put_info(file, line,
+	   module->file_region(),
+	   "ELAB_MODULE_INSTANTIATE",
+	   buf.str());
+}
+
+// @brief IO宣言のインスタンス生成
+void
+ElbProxy::info_iodecl(
+  const char* file,
+  int line,
+  const AstIOItem& ast_item,
+  const VlScope* scope
+)
+{
+}
+
+// @brief パラメータのインスタンス生成
+void
+ElbProxy::info_param(
+  const char* file,
+  int line,
+  const VlDecl* decl
+)
+{
+}
+
+// @brief ネット配列のインスタンス生成
+void
+ElbProxy::info_net_array(
+  const char* file,
+  int line,
+  const VlDeclArray* decl_array
+)
+{
+}
+
+// @brief ネットのインスタンス生成
+void
+ElbProxy::info_net(
+  const char* file,
+  int line,
+  const VlDecl* decl
+)
+{
+}
+
+// @brief Reg配列のインスタンス生成
+void
+ElbProxy::info_reg_array(
+  const char* file,
+  int line,
+  const VlDeclArray* decl_array
+)
+{
+}
+
+// @brief Regのインスタンス生成
+void
+ElbProxy::info_reg(
+  const char* file,
+  int line,
+  const VlDecl* decl
+)
+{
+}
+
+// @brief Var配列のインスタンス生成
+void
+ElbProxy::info_var_array(
+  const char* file,
+  int line,
+  const VlDeclArray* decl_array
+)
+{
+}
+
+// @brief Varのインスタンス生成
+void
+ElbProxy::info_var(
+  const char* file,
+  int line,
+  const VlDecl* decl
+)
+{
+}
+
+// @brief イベント配列のインスタンス生成
+void
+ElbProxy::info_event_array(
+  const char* file,
+  int line,
+  const VlDeclArray* decl_array
+)
+{
+}
+
+// @brief イベントのインスタンス生成
+void
+ElbProxy::info_event(
+  const char* file,
+  int line,
+  const VlDecl* decl
+)
+{
+}
+
+// @brief genvarのインスタンス生成
+void
+ElbProxy::info_genvar(
+  const char* file,
+  int line,
+  ElbGenvar* genvar
+)
+{
 }
 
 // @brief エラーメッセージを出力する．
@@ -431,11 +743,7 @@ ElbProxy::put_error(
   const ElbError& error
 )
 {
-  MsgMgr::put_msg(error.file(), error.line(),
-		  error.file_region(),
-		  MsgType::Error,
-		  error.label().c_str(),
-		  error.message());
+  mElaborator.put_error(error);
 }
 
 // @brief 警告メッセージを出力する．
@@ -449,11 +757,7 @@ ElbProxy::put_warning(
 )
 
 {
-  MsgMgr::put_msg(file, line,
-		  loc,
-		  MsgType::Warning,
-		  label,
-		  msg);
+  mElaborator.put_warning(file, line, loc, label, msg);
 }
 
 // @brief 情報メッセージを出力する．
@@ -466,11 +770,7 @@ ElbProxy::put_info(
   const std::string& msg
 )
 {
-  MsgMgr::put_msg(file, line,
-		  loc,
-		  MsgType::Info,
-		  label,
-		  msg);
+  mElaborator.put_info(file, line, loc, label, msg);
 }
 
 END_NAMESPACE_YM_VERILOG
