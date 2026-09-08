@@ -8,13 +8,11 @@
 
 #include "ExprGen.h"
 #include "ElbEnv.h"
-#include "ErrorGen.h"
-#include "ElbError.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstExpr.h"
-
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbError.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -25,9 +23,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 ExprGen::ExprGen(
-  Elaborator& elab,
-  ElbMgr& elb_mgr
-) : ElbProxy{elab, elb_mgr}
+  Elaborator& elab
+) : ElbProxy{elab}
 {
 }
 
@@ -56,7 +53,7 @@ ExprGen::instantiate_expr(
     return instantiate_opr(parent, env, ast_expr);
 
   case AstExpr::Const:
-    return mgr().new_Constant(ast_expr);
+    return elb_mgr().new_Constant(ast_expr);
 
   case AstExpr::FuncCall:
     return instantiate_funccall(parent, env, ast_expr);
@@ -64,11 +61,11 @@ ExprGen::instantiate_expr(
   case AstExpr::SysFuncCall:
     if ( env.inside_constant_function() ) {
       // constant_function 内では system function は使えない．
-      ErrorGen::illegal_sysfunccall_in_cf(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_illegal_sysfunccall_in_cf(__FILE__, __LINE__, ast_expr);
     }
     if ( env.is_constant() ) {
       // 定数式内では system function は使えない．
-      ErrorGen::illegal_sysfunccall_in_ce(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_illegal_sysfunccall_in_ce(__FILE__, __LINE__, ast_expr);
     }
     return instantiate_sysfunccall(parent, env, ast_expr);
 
@@ -119,11 +116,11 @@ ExprGen::instantiate_event_expr(
     case VpiOpType::Negedge:
     { // これのみがイベント式の特徴
       auto opr0 = instantiate_expr(parent, env, ast_expr.operand0());
-      auto expr = mgr().new_UnaryOp(ast_expr, ast_expr.op_type(), opr0);
+      auto expr = elb_mgr().new_UnaryOp(ast_expr, ast_expr.op_type(), opr0);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_expr);
-      mgr().reg_attr(expr, attr_list);
+      elb_mgr().reg_attr(expr, attr_list);
 
       return expr;
     }
@@ -143,17 +140,17 @@ ExprGen::instantiate_event_expr(
 
   case AstExpr::Const:
     // イベント式の根元には定数は使えない．
-    ErrorGen::illegal_constant_in_event_expression(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_illegal_constant_in_event_expression(__FILE__, __LINE__, ast_expr);
     break;
 
   case AstExpr::FuncCall:
     // イベント式の根元には関数呼び出しは使えない．
-    ErrorGen::illegal_funccall_in_event_expression(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_illegal_funccall_in_event_expression(__FILE__, __LINE__, ast_expr);
     break;
 
   case AstExpr::SysFuncCall:
     // イベント式の根元にはシステム関数呼び出しは使えない．
-    ErrorGen::illegal_sysfunccall_in_event_expression(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_illegal_sysfunccall_in_event_expression(__FILE__, __LINE__, ast_expr);
     break;
 
   default:
@@ -208,17 +205,17 @@ ExprGen::instantiate_lhs(
 	auto expr1 = instantiate_lhs_sub(parent, env, ast_expr1, elem_array);
 	opr_list[pos] = expr1;
       }
-      auto expr = mgr().new_Lhs(ast_expr, opr_list, elem_array);
+      auto expr = elb_mgr().new_Lhs(ast_expr, opr_list, elem_array);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_expr);
-      mgr().reg_attr(expr, attr_list);
+      elb_mgr().reg_attr(expr, attr_list);
 
       return expr;
     }
     else {
       // それ以外の演算子はエラー
-      ErrorGen::illegal_operator_in_lhs(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_illegal_operator_in_lhs(__FILE__, __LINE__, ast_expr);
     }
     break;
 
@@ -227,16 +224,13 @@ ExprGen::instantiate_lhs(
     return instantiate_primary(parent, env, ast_expr);
 
   case AstExpr::Const:
-    ErrorGen::illegal_constant_in_lhs(__FILE__, __LINE__, ast_expr);
-    break;
+    log_mgr().error_illegal_constant_in_lhs(__FILE__, __LINE__, ast_expr);
 
   case AstExpr::FuncCall:
-    ErrorGen::illegal_funccall_in_lhs(__FILE__, __LINE__, ast_expr);
-    break;
+    log_mgr().error_illegal_funccall_in_lhs(__FILE__, __LINE__, ast_expr);
 
   case AstExpr::SysFuncCall:
-    ErrorGen::illegal_sysfunccall_in_lhs(__FILE__, __LINE__, ast_expr);
-    break;
+    log_mgr().error_illegal_sysfunccall_in_lhs(__FILE__, __LINE__, ast_expr);
 
   default:
     break;
@@ -266,18 +260,18 @@ ExprGen::instantiate_lhs_sub(
 	auto ast_expr1 = ast_opr_list[pos];
 	  opr_list[pos] = instantiate_lhs_sub(parent, env, ast_expr1, elem_array);
       }
-      auto expr = mgr().new_ConcatOp(ast_expr, opr_list);
+      auto expr = elb_mgr().new_ConcatOp(ast_expr, opr_list);
       expr->set_selfsize();
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_expr);
-      mgr().reg_attr(expr, attr_list);
+      elb_mgr().reg_attr(expr, attr_list);
 
       return expr;
     }
     else {
       // それ以外の演算子はエラー
-      ErrorGen::illegal_operator_in_lhs(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_illegal_operator_in_lhs(__FILE__, __LINE__, ast_expr);
     }
     break;
 
@@ -290,16 +284,13 @@ ExprGen::instantiate_lhs_sub(
     }
 
   case AstExpr::Const:
-    ErrorGen::illegal_constant_in_lhs(__FILE__, __LINE__, ast_expr);
-    break;
+    log_mgr().error_illegal_constant_in_lhs(__FILE__, __LINE__, ast_expr);
 
   case AstExpr::FuncCall:
-    ErrorGen::illegal_funccall_in_lhs(__FILE__, __LINE__, ast_expr);
-    break;
+    log_mgr().error_illegal_funccall_in_lhs(__FILE__, __LINE__, ast_expr);
 
   case AstExpr::SysFuncCall:
-    ErrorGen::illegal_sysfunccall_in_lhs(__FILE__, __LINE__, ast_expr);
-    break;
+    log_mgr().error_illegal_sysfunccall_in_lhs(__FILE__, __LINE__, ast_expr);
 
   default:
     break;
@@ -384,12 +375,12 @@ ExprGen::instantiate_delay_sub(
       expr_list.push_back(instantiate_expr(parent, env, ast_expr));
     }
 
-    auto delay = mgr().new_Delay(ast_obj, expr_list);
+    auto delay = elb_mgr().new_Delay(ast_obj, expr_list);
 
     return delay;
   }
   catch ( const ElbError& error ) {
-    put_error(error);
+    log_mgr().put_error(error);
     return nullptr;
   }
 }

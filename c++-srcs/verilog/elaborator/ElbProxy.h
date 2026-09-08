@@ -40,8 +40,7 @@ protected:
 
   /// @brief コンストラクタ
   ElbProxy(
-    Elaborator& elab, ///< [in] 生成器
-    ElbMgr& elb_mgr   ///< [in] Elbオブジェクトを管理するクラス
+    Elaborator& elab ///< [in] 生成器
   );
 
   /// @brief デストラクタ
@@ -588,6 +587,7 @@ protected:
     const AstBase& ast_obj2
   );
 
+
 protected:
   //////////////////////////////////////////////////////////////////////
   // チェック関数
@@ -606,309 +606,21 @@ protected:
 
 protected:
   //////////////////////////////////////////////////////////////////////
-  // エラー出力
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief パラメータポートの割り当て数が多すぎる．
-  void
-  error_too_many_params(
-    const char* file_name,          ///< [in] ファイル名
-    int line,                       ///< [in] 行番号
-    const std::vector<ElbParamCon>&
-    param_con_list                  ///< [in] パラメータポートの割り当てリスト
-  );
-
-  /// @brief パラメータポートに現れるパラメータが存在しない．
-  void
-  error_param_not_found(
-    const char* file_name,       ///< [in] ファイル名
-    int line,                    ///< [in] 行番号
-    const AstConnection& ast_con ///< [in] パラメータポート割り当てのパース木
-  );
-
-  /// @brief ポートに配列が使われている．
-  void
-  error_array_in_port_connection(
-    const char* file_name, ///< [in] ファイル名
-    int line,              ///< [in] 行番号
-    const FileRegion& loc  ///< [in] ファイル位置
-  );
-
-  /// @brief ポートに使われている要素が宣言要素でなかった．
-  void
-  error_illegal_port(
-    const char* file_name, ///< [in] ファイル名
-    int line,              ///< [in] 行番号
-    const FileRegion& file_region ///< [in] ファイル位置
-  );
-
-  /// @brief 重複した名前を持つ．
-  void
-  error_dup_name(
-    const char* file,          ///< [in] ソースプログラムのファイル名
-    int line,                  ///< [in] ソースプログラムの行番号
-    const FileRegion& loc,     ///< [in] name のファイル位置
-    const char* name,          ///< [in] 対象の名前
-    const FileRegion& prev_loc ///< [in] 直前に現れたファイル位置
-  );
-
-  /// @brief 対象の要素が見つからない．
-  void
-  error_not_found(
-    const char* file,              ///< [in] ファイル名
-    int line,                      ///< [in] 行番号
-    const FileRegion& file_region, ///< [in] ファイル位置
-    const char* name               ///< [in] 名前
-  );
-
-  /// @brief IO 宣言に aux_type と宣言が重複している．
-  void
-  error_duplicate_type(
-    const char* file,          ///< [in] ファイル名
-    int line,                  ///< [in] 行番号
-    const AstIOItem& ast_item, ///< [in] IO要素定義
-    const ObjHandle* handle    ///< [in] 同名の要素
-  );
-
-  /// @brief IO 宣言に配列型の要素が現れている．
-  void
-  error_array_in_io_decl(
-    const char* file,         ///< [in] ファイル名
-    int line,                 ///< [in] 行番号
-    const AstIOItem& ast_item ///< [in] IO要素定義
-  );
-
-  /// @brief IO 宣言に不適切な型の要素が現れている．
-  void
-  error_illegal_io_decl(
-    const char* file,          ///< [in] ファイル名
-    int line,                  ///< [in] 行番号
-    const AstIOItem& ast_item, ///< [in] IO要素定義
-    const ObjHandle* handle,   ///< [in] 同名の要素
-    bool is_module             ///< [in] モジュールの時 true
-  );
-
-  /// @brief IO宣言と要素宣言の範囲が異なる．
-  void
-  error_conflict_io_range(
-    const char* file,          ///< [in] ファイル名
-    int line,                  ///< [in] 行番号
-    const AstIOItem& ast_item, ///< [in] IO要素定義
-    ElbDecl* decl = nullptr    ///< [in] 同名の要素
-  );
-
-  /// @brief 暗黙のネット宣言は許されていない．
-  void
-  error_no_impnet(
-    const char* file,          ///< [in] ファイル名
-    int line,                  ///< [in] 行番号
-    const AstIOItem& ast_item  ///< [in] IO要素定義
-  );
-
-  /// @brief 暗黙のネット宣言は初期値を持てない．
-  void
-  error_impnet_with_init(
-    const char* file,          ///< [in] ファイル名
-    int line,                  ///< [in] 行番号
-    const AstIOItem& ast_item  ///< [in] IO要素定義
-  );
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 警告出力
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 添字が範囲外
-  void
-  warning_index_out_of_range(
-    const char* file_name, ///< [in] ファイル名
-    int line,              ///< [in] 行番号
-    const FileRegion& file_region ///< [in] ファイル位置
-  );
-
-  /// @brief 左の範囲が範囲外
-  void
-  warning_left_index_out_of_range(
-    const char* file_name, ///< [in] ファイル名
-    int line,              ///< [in] 行番号
-    const FileRegion& file_region ///< [in] ファイル位置
-  );
-
-  /// @brief 右の範囲が範囲外
-  void
-  warning_right_index_out_of_range(
-    const char* file_name, ///< [in] ファイル名
-    int line,              ///< [in] 行番号
-    const FileRegion& file_region ///< [in] ファイル位置
-  );
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 情報出力
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief モジュール配列のインスタンス生成
-  void
-  info_module_array(
-    const char* file,
-    int line,
-    const AstItem& ast_head,
-    const AstInst& ast_inst,
-    const RangeVal& range
-  );
-
-  /// @brief モジュールのインスタンス生成
-  void
-  info_module(
-    const char* file,
-    int line,
-    ElbModule* module
-  );
-
-  /// @brief IO宣言のインスタンス生成
-  void
-  info_iodecl(
-    const char* file,
-    int line,
-    const AstIOItem& ast_item,
-    const VlScope* scope
-  );
-
-  /// @brief パラメータのインスタンス生成
-  void
-  info_param(
-    const char* file,
-    int line,
-    const VlDecl* decl
-  );
-
-  /// @brief ネット配列のインスタンス生成
-  void
-  info_net_array(
-    const char* file,
-    int line,
-    const VlDeclArray* decl_array
-  );
-
-  /// @brief ネットのインスタンス生成
-  void
-  info_net(
-    const char* file,
-    int line,
-    const VlDecl* decl
-  );
-
-  /// @brief Reg配列のインスタンス生成
-  void
-  info_reg_array(
-    const char* file,
-    int line,
-    const VlDeclArray* decl_array
-  );
-
-  /// @brief Regのインスタンス生成
-  void
-  info_reg(
-    const char* file,
-    int line,
-    const VlDecl* decl
-  );
-
-  /// @brief Var配列のインスタンス生成
-  void
-  info_var_array(
-    const char* file,
-    int line,
-    const VlDeclArray* decl_array
-  );
-
-  /// @brief Varのインスタンス生成
-  void
-  info_var(
-    const char* file,
-    int line,
-    const VlDecl* decl
-  );
-
-  /// @brief イベント配列のインスタンス生成
-  void
-  info_event_array(
-    const char* file,
-    int line,
-    const VlDeclArray* decl_array
-  );
-
-  /// @brief イベントのインスタンス生成
-  void
-  info_event(
-    const char* file,
-    int line,
-    const VlDecl* decl
-  );
-
-  /// @brief genvarのインスタンス生成
-  void
-  info_genvar(
-    const char* file,
-    int line,
-    ElbGenvar* genvar
-  );
-
-
-protected:
-  //////////////////////////////////////////////////////////////////////
-  // エラー/メッセージ出力
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief エラーメッセージを出力する．
-  void
-  put_error(
-    const ElbError& error ///< [in] エラー情報
-  );
-
-  /// @brief 警告メッセージを出力する．
-  void
-  put_warning(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 警告箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-  /// @brief 情報メッセージを出力する．
-  void
-  put_info(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-  /// @brief デバッグメッセージを出力する．
-  void
-  put_debug(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-
-protected:
-  //////////////////////////////////////////////////////////////////////
   // メンバに対するアクセス
   //////////////////////////////////////////////////////////////////////
 
   /// @brief ElbMgr を返す．
   ElbMgr&
-  mgr()
+  elb_mgr()
   {
-    return mMgr;
+    return mElbMgr;
+  }
+
+  /// @brief LogMgr を返す．
+  LogMgr&
+  log_mgr()
+  {
+    return mLogMgr;
   }
 
 
@@ -921,7 +633,10 @@ private:
   Elaborator& mElaborator;
 
   // 生成したオブジェクトを管理するマネージャクラス
-  ElbMgr& mMgr;
+  ElbMgr& mElbMgr;
+
+  // ログマネージャ
+  LogMgr& mLogMgr;
 
   // モジュール生成用のオブジェクト
   ModuleGen* mModuleGen;

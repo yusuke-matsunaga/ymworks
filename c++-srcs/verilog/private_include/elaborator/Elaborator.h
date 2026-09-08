@@ -13,6 +13,7 @@
 #include "ym/vl/VlFwd.h"
 #include "ym/ClibCellLibrary.h"
 #include "ym/ClibCell.h"
+#include "common/LogMgr.h"
 
 #include "ObjDict.h"
 #include "AttrDict.h"
@@ -53,6 +54,7 @@ public:
   /// @brief コンストラクタ
   Elaborator(
     ElbMgr& elb_mgr,                    ///< [in] Elbオブジェクトを管理するクラス
+    LogMgr& log_mgr,                    ///< [in] ログマネージャ
     const ClibCellLibrary& cell_library ///< [in] セルライブラリ
   );
 
@@ -190,77 +192,22 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // エラー出力関数
+  // 内部のデータメンバに対するアクセス
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 同名のモジュール定義がある．
-  void
-  error_module_redefined(
-    const char* file,                  ///< [in] ファイル名
-    int line,                          ///< [in] 行番号
-    const AstModule& ast_module,       ///< [in] モジュール定義
-    const FileRegion& prev_file_region ///< [in] 前の定義位置
-  );
+  /// @brief ElbMgr を得る．
+  ElbMgr&
+  elb_mgr()
+  {
+    return mElbMgr;
+  }
 
-  /// @brief 同名の関数定義がある．
-  void
-  error_function_redefined(
-    const char* file,                  ///< [in] ファイル名
-    int line,                          ///< [in] 行番号
-    const AstItem& ast_funcdef,        ///< [in] 関数定義
-    const FileRegion& prev_file_region ///< [in] 前の定義位置
-  );
-
-  /// @brief 未解決の defparam 文がある．
-  void
-  error_defparam_unresolved(
-    const char* file_name,          ///< [in] ファイル名
-    int line,                       ///< [in] 行番号
-    const AstDefParam& ast_defparam ///< [in] defparam 定義
-  );
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // メッセージ出力関数
-  //////////////////////////////////////////////////////////////////////
-
-
-  /// @brief エラーメッセージを出力する．
-  void
-  put_error(
-    const ElbError& error ///< [in] エラー情報
-  );
-
-  /// @brief 警告メッセージを出力する．
-  void
-  put_warning(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 警告箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-  /// @brief 情報メッセージを出力する．
-  void
-  put_info(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-  /// @brief デバッグメッセージを出力する．
-  void
-  put_debug(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
+  /// @brief LogMgr を得る．
+  LogMgr&
+  log_mgr()
+  {
+    return mLogMgr;
+  }
 
 
 private:
@@ -287,6 +234,7 @@ private:
   ) const;
 
 
+
 private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
@@ -296,7 +244,10 @@ private:
   bool mDone;
 
   // 生成したオブジェクトを管理するクラス
-  ElbMgr& mMgr;
+  ElbMgr& mElbMgr;
+
+  // ログマネージャ
+  LogMgr& mLogMgr;
 
   // セルライブラリ
   ClibCellLibrary mCellLibrary;

@@ -7,9 +7,7 @@
 /// All rights reserved.
 
 #include "CptItem_TaskFunc.h"
-#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
-//#include "parser/PtDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

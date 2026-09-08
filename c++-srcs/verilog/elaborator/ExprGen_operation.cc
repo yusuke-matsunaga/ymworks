@@ -8,7 +8,6 @@
 
 #include "ExprGen.h"
 #include "ElbEnv.h"
-#include "ErrorGen.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstExpr.h"
 #include "elaborator/ElbExpr.h"
@@ -34,7 +33,7 @@ ExprGen::instantiate_opr(
   switch ( op_type ) {
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
-    ErrorGen::illegal_edge_descriptor(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_illegal_edge_descriptor(__FILE__, __LINE__, ast_expr);
     break;
 
   case VpiOpType::BitNeg:
@@ -51,9 +50,9 @@ ExprGen::instantiate_opr(
   case VpiOpType::Not:
     opr0 = instantiate_expr(parent, env, ast_expr.operand0());
     if ( real_check && opr0->value_type().is_real_type() ) {
-      ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr.operand0());
+      log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr.operand0());
     }
-    return mgr().new_UnaryOp(ast_expr, op_type, opr0);
+    return elb_mgr().new_UnaryOp(ast_expr, op_type, opr0);
 
   case VpiOpType::BitAnd:
   case VpiOpType::BitOr:
@@ -85,13 +84,13 @@ ExprGen::instantiate_opr(
     opr1 = instantiate_expr(parent, env, ast_expr.operand1());
     if ( real_check ) {
       if ( opr0->value_type().is_real_type() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr.operand0());
+	log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr.operand0());
       }
       if ( opr1->value_type().is_real_type() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr.operand1());
+	log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr.operand1());
       }
     }
-    expr = mgr().new_BinaryOp(ast_expr, op_type, opr0, opr1);
+    expr = elb_mgr().new_BinaryOp(ast_expr, op_type, opr0, opr1);
     break;
 
   case VpiOpType::Condition:
@@ -99,7 +98,7 @@ ExprGen::instantiate_opr(
     opr0 = instantiate_expr(parent, env, ast_expr.operand0());
     opr1 = instantiate_expr(parent, env, ast_expr.operand1());
     opr2 = instantiate_expr(parent, env, ast_expr.operand2());
-    expr = mgr().new_TernaryOp(ast_expr, op_type, opr0, opr1, opr2);
+    expr = elb_mgr().new_TernaryOp(ast_expr, op_type, opr0, opr1, opr2);
     break;
 
   case VpiOpType::Concat:
@@ -111,12 +110,12 @@ ExprGen::instantiate_opr(
 	auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	auto type1 = expr1->value_type();
 	if ( type1.is_real_type() ) {
-	  ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr1);
+	  log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr1);
 	}
 	opr_list.push_back(expr1);
       }
 
-      expr = mgr().new_ConcatOp(ast_expr, opr_list);
+      expr = elb_mgr().new_ConcatOp(ast_expr, opr_list);
     }
     break;
 
@@ -132,11 +131,11 @@ ExprGen::instantiate_opr(
 	auto expr1 = instantiate_expr(parent, env, ast_expr1);
 	auto type1 = expr1->value_type();
 	if ( type1.is_real_type() ) {
-	  ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr1);
+	  log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr1);
 	}
 	opr_list.push_back(expr1);
       }
-      expr = mgr().new_MultiConcatOp(ast_expr, rep_num, rep_expr, opr_list);
+      expr = elb_mgr().new_MultiConcatOp(ast_expr, rep_num, rep_expr, opr_list);
     }
     break;
 
@@ -146,7 +145,7 @@ ExprGen::instantiate_opr(
 
   // attribute instance の生成
   auto attr_list = attribute_list(ast_expr);
-  mgr().reg_attr(expr, attr_list);
+  elb_mgr().reg_attr(expr, attr_list);
 
   return expr;
 }

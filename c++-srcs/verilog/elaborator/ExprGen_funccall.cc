@@ -8,7 +8,6 @@
 
 #include "ExprGen.h"
 #include "ElbEnv.h"
-#include "ErrorGen.h"
 
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstItem.h"
@@ -21,6 +20,7 @@
 #include "ym/vl/VlStmt.h"
 
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbError.h"
 #include "elaborator/ElbUserSystf.h"
 
 
@@ -84,7 +84,7 @@ ExprGen::instantiate_funccall(
     // 定数関数を探し出す．
     if ( ast_expr.namebranch_list().size() > 0 ) {
       // 階層名は受け付けない．
-      ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_hname_in_ce(__FILE__, __LINE__, ast_expr);
     }
 
     // 関数名
@@ -97,12 +97,12 @@ ExprGen::instantiate_funccall(
     auto ast_func = find_funcdef(module, name);
     if ( ast_func.is_invalid() ) {
       // 関数が見つからなかった．
-      ErrorGen::no_such_function(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_no_such_function(__FILE__, __LINE__, ast_expr);
     }
 
     if ( ast_func.is_in_use() ) {
       // 自分自身を呼び出している．
-      ErrorGen::uses_itself(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_uses_itself(__FILE__, __LINE__, ast_expr);
     }
 
     child_func = find_constant_function(module, name);
@@ -114,19 +114,19 @@ ExprGen::instantiate_funccall(
     }
     if ( child_func == nullptr ) {
       // 定数関数ではなかった．
-      ErrorGen::not_a_constant_function(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_not_a_constant_function(__FILE__, __LINE__, ast_expr);
     }
   }
   else {
     // 関数本体を探し出す．
-    auto handle = mgr().find_obj_up(parent, ast_expr, nullptr);
+    auto handle = elb_mgr().find_obj_up(parent, ast_expr, nullptr);
     if ( handle == nullptr ) {
       // 関数が見つからなかった．
-      ErrorGen::no_such_function(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_no_such_function(__FILE__, __LINE__, ast_expr);
     }
     if ( handle->type() != VpiObjType::Function ) {
       // 関数ではなかった．
-      ErrorGen::not_a_function(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_not_a_function(__FILE__, __LINE__, ast_expr);
     }
     child_func = handle->taskfunc();
     if ( child_func == nullptr ) {
@@ -138,7 +138,7 @@ ExprGen::instantiate_funccall(
   auto n = ast_expr.operand_list().size();
   if ( n != child_func->io_num() ) {
     // 引数の数が合わなかった．
-    ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_argument_num_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
   std::vector<ElbExpr*> arg_list;
@@ -156,17 +156,17 @@ ExprGen::instantiate_funccall(
 	put_value_type(dout, expr1->value_type());
 	dout << std::endl;
       }
-      ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_argument_type_mismatch(__FILE__, __LINE__, ast_expr);
     }
     arg_list.push_back(expr1);
   }
 
   // function call の生成
-  auto expr = mgr().new_FuncCall(ast_expr, child_func, arg_list);
+  auto expr = elb_mgr().new_FuncCall(ast_expr, child_func, arg_list);
 
   // attribute instance の生成
   auto attr_list = attribute_list(ast_expr);
-  mgr().reg_attr(expr, attr_list);
+  elb_mgr().reg_attr(expr, attr_list);
 
   return expr;
 }
@@ -182,15 +182,15 @@ ExprGen::instantiate_sysfunccall(
   auto name = ast_expr.name();
 
   // system function を探し出す．
-  auto user_systf = mgr().find_user_systf(name);
+  auto user_systf = elb_mgr().find_user_systf(name);
   if ( user_systf == nullptr ) {
-    ErrorGen::no_such_sysfunction(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_no_such_sysfunction(__FILE__, __LINE__, ast_expr);
   }
 
   // 引数の数のチェック
   auto n = ast_expr.operand_list().size();
   if ( !user_systf->check_n_of_args(n) ) {
-    ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_argument_num_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
   // 引数の生成
@@ -206,13 +206,13 @@ ExprGen::instantiate_sysfunccall(
       ;
     }
     if ( !user_systf->check_argument(arg_list.size(), arg) ) {
-      ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_argument_type_mismatch(__FILE__, __LINE__, ast_expr);
     }
     arg_list.push_back(arg);
   }
 
   // system function call の生成
-  return mgr().new_SysFuncCall(ast_expr, user_systf, arg_list);
+  return elb_mgr().new_SysFuncCall(ast_expr, user_systf, arg_list);
 }
 
 END_NAMESPACE_YM_VERILOG

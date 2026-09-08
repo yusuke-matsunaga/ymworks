@@ -8,8 +8,6 @@
 
 #include "DeclGen.h"
 #include "ElbEnv.h"
-#include "ElbError.h"
-#include "ErrorGen.h"
 
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbParameter.h"
@@ -19,6 +17,7 @@
 #include "elaborator/ElbRange.h"
 #include "elaborator/ElbExpr.h"
 #include "elaborator/RangeVal.h"
+#include "elaborator/ElbError.h"
 
 
 #define DOUT std::cout
@@ -31,9 +30,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 DeclGen::DeclGen(
-  Elaborator& elab,
-  ElbMgr& elb_mgr
-) : ElbProxy{elab, elb_mgr}
+  Elaborator& elab
+) : ElbProxy{elab}
 {
 }
 
@@ -71,7 +69,7 @@ DeclGen::phase1_decl(
       }
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 }
@@ -111,10 +109,10 @@ DeclGen::instantiate_iodecl(
     // ちなみに IOHead は範囲の情報を持たない．
     auto head = (ElbIOHead*){nullptr};
     if ( module != nullptr ) {
-      head = mgr().new_IOHead(module, ast_head);
+      head = elb_mgr().new_IOHead(module, ast_head);
     }
     else if ( taskfunc != nullptr ) {
-      head = mgr().new_IOHead(taskfunc, ast_head);
+      head = elb_mgr().new_IOHead(taskfunc, ast_head);
     }
     if ( head == nullptr ) {
       throw std::logic_error{"head == nullptr"};
@@ -122,18 +120,20 @@ DeclGen::instantiate_iodecl(
 
     for ( auto ast_item: ast_head.item_list() ) {
       // IO定義と変数/ネット定義が一致しているか調べる．
-      auto handle = mgr().find_obj(scope, ast_item.name());
+      auto handle = elb_mgr().find_obj(scope, ast_item.name());
       auto decl = (ElbDecl*){nullptr};
       if ( handle != nullptr ) {
 	// 同名の要素が見つかった．
 	if ( def_aux_type != VpiAuxType::None ) {
 	  // なのに IO 宣言の aux_type もある．
-	  error_duplicate_type(__FILE__, __LINE__,
-			       ast_item, handle);
+	  log_mgr().error_duplicate_type(__FILE__, __LINE__,
+					 ast_item,
+					 handle->file_region());
 	}
 	if ( handle->declarray() != nullptr ) {
 	  // 対象が配列だった場合．
-	  error_array_in_io_decl(__FILE__, __LINE__, ast_item);
+	  log_mgr().error_array_in_io_decl(__FILE__, __LINE__,
+					   ast_item);
 	}
 	decl = handle->decl();
 	if ( decl != nullptr ) {
@@ -154,8 +154,8 @@ DeclGen::instantiate_iodecl(
 	if ( decl == nullptr ) {
 	  // 不適切な型だった場合．
 	  auto is_module = module != nullptr;
-	  error_illegal_io_decl(__FILE__, __LINE__,
-				ast_item, handle, is_module);
+	  log_mgr().error_illegal_io_decl(__FILE__, __LINE__,
+					  ast_item, is_module);
 	}
 
 	// ここに来たら decl != nullptr
@@ -174,19 +174,19 @@ DeclGen::instantiate_iodecl(
 	      range.right = right_val2;
 	    }
 	    else {
-	      error_conflict_io_range(__FILE__, __LINE__, ast_item);
+	      log_mgr().error_conflict_io_range(__FILE__, __LINE__, ast_item);
 	    }
 	  }
 	  else if ( range.left != left_val2 || range.right != right_val2 ) {
 	    // 範囲が異なっていた．
-	    error_conflict_io_range(__FILE__, __LINE__, ast_item, decl);
+	    log_mgr().error_conflict_io_range(__FILE__, __LINE__, ast_item, decl);
 	    continue;
 	  }
 	}
 	else if ( has_range ) {
 	  // decl は範囲を持っていないが IO は持っている．
 	  // エラーとする．
-	  error_conflict_io_range(__FILE__, __LINE__, ast_item);
+	  log_mgr().error_conflict_io_range(__FILE__, __LINE__, ast_item);
 	}
 	// どちらか一方でも符号付きなら両方符号付きにする．
 	// ちょっと ad-hoc な仕様
@@ -202,7 +202,7 @@ DeclGen::instantiate_iodecl(
 	    // モジュール IO の場合は `default_net_type を参照する．
 	    auto net_type = module->def_net_type();
 	    if ( net_type == VpiNetType::None ) {
-	      error_no_impnet(__FILE__, __LINE__, ast_item);
+	      log_mgr().error_no_impnet(__FILE__, __LINE__, ast_item);
 	    }
 	    aux_type = VpiAuxType::Net;
 	  }
@@ -215,11 +215,11 @@ DeclGen::instantiate_iodecl(
 	// ヘッダを生成する．
 	auto head = (ElbDeclHead*){nullptr};
 	if ( has_range ) {
-	  head = mgr().new_DeclHead(scope, ast_head, aux_type,
+	  head = elb_mgr().new_DeclHead(scope, ast_head, aux_type,
 				    ast_range, range);
 	}
 	else {
-	  head = mgr().new_DeclHead(scope, ast_head, aux_type);
+	  head = elb_mgr().new_DeclHead(scope, ast_head, aux_type);
 	}
 	if ( head == nullptr ) {
 	  throw std::logic_error{"head == nullptr"};
@@ -233,7 +233,7 @@ DeclGen::instantiate_iodecl(
 	    // 初期値を持つ場合
 	    if ( aux_type == VpiAuxType::Net ) {
 	      // net 型の場合(ここに来るのは暗黙宣言のみ)は初期値を持てない．
-	      error_impnet_with_init(__FILE__, __LINE__, ast_item);
+	      log_mgr().error_impnet_with_init(__FILE__, __LINE__, ast_item);
 	    }
 	    // これは verilog_grammer.yy の list_of_variable_port_identifiers
 	    // に対応するので必ず constant_expression である．
@@ -255,7 +255,7 @@ DeclGen::instantiate_iodecl(
 	default:
 	  throw std::logic_error{"Should not be reached"};
 	}
-	decl = mgr().new_Decl(tag, head, ast_item, init);
+	decl = elb_mgr().new_Decl(tag, head, ast_item, init);
       }
 
       if ( module ) {
@@ -268,16 +268,7 @@ DeclGen::instantiate_iodecl(
 	ASSERT_NOT_REACHED;
       }
 
-      info_iodecl(__FILE__, __LINE__, ast_item, scope);
-      {
-	std::ostringstream buf;
-	buf << "IODecl(" << ast_item.name() << ")@"
-	    << scope->full_name() << " created.";
-	put_info(__FILE__, __LINE__,
-		 ast_head.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_iodecl(__FILE__, __LINE__, ast_item, scope);
     }
   }
 }
@@ -327,7 +318,7 @@ DeclGen::instantiate_decl(
       }
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 }
@@ -345,16 +336,16 @@ DeclGen::instantiate_param_head(
   auto param_head = (ElbParamHead*)nullptr;
   if ( ast_range.is_valid() ) {
     auto range = evaluate_range(scope, ast_range);
-    param_head = mgr().new_ParamHead(scope, ast_head,
+    param_head = elb_mgr().new_ParamHead(scope, ast_head,
 				     ast_range, range);
   }
   else {
-    param_head = mgr().new_ParamHead(scope, ast_head);
+    param_head = elb_mgr().new_ParamHead(scope, ast_head);
   }
 
   for ( auto ast_item: ast_head.item_list() ) {
     const auto& file_region = ast_item.file_region();
-    auto param = mgr().new_Parameter(param_head,
+    auto param = elb_mgr().new_Parameter(param_head,
 				     ast_item,
 				     force_local);
     if ( param == nullptr ) {
@@ -363,17 +354,9 @@ DeclGen::instantiate_param_head(
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_head);
-    mgr().reg_attr(param, attr_list);
+    elb_mgr().reg_attr(param, attr_list);
 
-    info_param(__FILE__, __LINE__, param);
-    {
-      std::ostringstream buf;
-      buf << "Parameter(" << param->full_name() << ") created.";
-      put_info(__FILE__, __LINE__,
-	       file_region,
-	       "ELABXXX",
-	       buf.str());
-    }
+    log_mgr().info_param(__FILE__, __LINE__, param);
 
     // 右辺の式は constant expression のはずなので今つくる．
     auto ast_init_expr = ast_item.init_value();
@@ -382,7 +365,7 @@ DeclGen::instantiate_param_head(
 
     // ダブっている感じがするけど同じことを表す parameter assign 文
     // をつくってモジュールに追加する．
-    auto pa = mgr().new_NamedParamAssign(module, ast_item, param,
+    auto pa = elb_mgr().new_NamedParamAssign(module, ast_item, param,
 					 ast_init_expr, value);
   }
 }
@@ -401,12 +384,12 @@ DeclGen::instantiate_net_head(
   auto net_head = (ElbDeclHead*)nullptr;
   if ( ast_range.is_valid() ) {
     auto range = evaluate_range(scope, ast_range);
-    net_head = mgr().new_DeclHead(scope, ast_head,
+    net_head = elb_mgr().new_DeclHead(scope, ast_head,
 				  ast_range, range,
 				  has_delay);
   }
   else {
-    net_head = mgr().new_DeclHead(scope, ast_head);
+    net_head = elb_mgr().new_DeclHead(scope, ast_head);
   }
   if ( net_head == nullptr ) {
     throw std::logic_error{"net_head == nullptr"};
@@ -436,25 +419,17 @@ DeclGen::instantiate_net_head(
 	continue;
       }
 
-      auto net_array = mgr().new_DeclArray(vpiNetArray, net_head, ast_item, range_src);
+      auto net_array = elb_mgr().new_DeclArray(vpiNetArray, net_head, ast_item, range_src);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(net_array, attr_list);
+      elb_mgr().reg_attr(net_array, attr_list);
 
-      info_net_array(__FILE__, __LINE__, net_array);
-      {
-	std::ostringstream buf;
-	buf << "NetArray(" << net_array->full_name() << ") created.";
-	put_info(__FILE__, __LINE__,
-		 ast_item.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_net_array(__FILE__, __LINE__, net_array);
     }
     else {
       // 単一の要素
-      auto net = mgr().new_Decl(vpiNet, net_head, ast_item);
+      auto net = elb_mgr().new_Decl(vpiNet, net_head, ast_item);
 
       if ( ast_init.is_valid() ) {
 	// 初期割り当てつき
@@ -465,17 +440,9 @@ DeclGen::instantiate_net_head(
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(net, attr_list);
+      elb_mgr().reg_attr(net, attr_list);
 
-      info_net(__FILE__, __LINE__, net);
-      {
-	std::ostringstream buf;
-	buf << "Net(" << net->full_name() << ") created.";
-	put_info(__FILE__, __LINE__,
-		 ast_item.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_net(__FILE__, __LINE__, net);
     }
   }
 }
@@ -526,7 +493,7 @@ DeclGen::link_net_assign(
 )
 {
   // 実体は左辺が net の代入文を作る．
-  auto lhs = mgr().new_Primary(ast_item, net);
+  auto lhs = elb_mgr().new_Primary(ast_item, net);
   auto scope = net->parent_scope();
   auto ast_init = ast_item.init_value();
   auto rhs = instantiate_rhs(scope, ElbEnv(), ast_init, lhs);
@@ -538,7 +505,7 @@ DeclGen::link_net_assign(
 
   // 対応する continuous assign 文を作る．
   auto module = scope->parent_module();
-  auto ca = mgr().new_ContAssign(module, ast_item, lhs, rhs);
+  auto ca = elb_mgr().new_ContAssign(module, ast_item, lhs, rhs);
 }
 
 // @brief reg をインスタンス化する．
@@ -553,11 +520,11 @@ DeclGen::instantiate_reg_head(
   auto reg_head = (ElbDeclHead*)nullptr;
   if ( ast_range.is_valid() ) {
     auto range = evaluate_range(scope, ast_range);
-    reg_head = mgr().new_DeclHead(scope, ast_head,
+    reg_head = elb_mgr().new_DeclHead(scope, ast_head,
 				  ast_range, range);
   }
   else {
-    reg_head = mgr().new_DeclHead(scope, ast_head);
+    reg_head = elb_mgr().new_DeclHead(scope, ast_head);
   }
   if ( reg_head == nullptr ) {
     throw std::logic_error{"reg_head == nullptr"};
@@ -580,22 +547,14 @@ DeclGen::instantiate_reg_head(
 	continue;
       }
 
-      auto reg_array = mgr().new_DeclArray(vpiRegArray, reg_head,
+      auto reg_array = elb_mgr().new_DeclArray(vpiRegArray, reg_head,
 					   ast_item, range_src);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(reg_array, attr_list);
+      elb_mgr().reg_attr(reg_array, attr_list);
 
-      info_reg_array(__FILE__, __LINE__, reg_array);
-      {
-	std::ostringstream buf;
-	buf << "RegArray(" << reg_array->full_name() << ") created.";
-	put_info(__FILE__, __LINE__,
-		 ast_item.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_reg_array(__FILE__, __LINE__, reg_array);
     }
     else {
       // 単独の要素
@@ -606,21 +565,13 @@ DeclGen::instantiate_reg_head(
 	init = instantiate_constant_expr(scope, ast_init);
       }
 
-      auto reg = mgr().new_Decl(vpiReg, reg_head, ast_item, init);
+      auto reg = elb_mgr().new_Decl(vpiReg, reg_head, ast_item, init);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(reg, attr_list);
+      elb_mgr().reg_attr(reg, attr_list);
 
-      info_reg(__FILE__, __LINE__, reg);
-      {
-	std::ostringstream buf;
-	buf << "Reg(" << reg->full_name() << ") created.";
-	put_info(__FILE__, __LINE__,
-		 ast_item.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_reg(__FILE__, __LINE__, reg);
     }
   }
 }
@@ -636,7 +587,7 @@ DeclGen::instantiate_var_head(
     throw std::logic_error{"ast_head->data_type() == VpiVarType::None"};
   }
 
-  auto var_head = mgr().new_DeclHead(scope, ast_head);
+  auto var_head = elb_mgr().new_DeclHead(scope, ast_head);
   for ( auto ast_item: ast_head.item_list() ) {
     auto ast_init = ast_item.init_value();
     auto dim_size = ast_item.range_list().size();
@@ -654,22 +605,14 @@ DeclGen::instantiate_var_head(
 	continue;
       }
 
-      auto var_array = mgr().new_DeclArray(vpiVariables, var_head,
+      auto var_array = elb_mgr().new_DeclArray(vpiVariables, var_head,
 					   ast_item, range_src);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(var_array, attr_list);
+      elb_mgr().reg_attr(var_array, attr_list);
 
-      info_var_array(__FILE__, __LINE__, var_array);
-      {
-	std::ostringstream buf;
-	buf << "VarArray(" << var_array->full_name() << ") created.";
-	put_info(__FILE__, __LINE__,
-		 ast_item.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_var_array(__FILE__, __LINE__, var_array);
     }
     else {
       // 単独の変数
@@ -680,21 +623,13 @@ DeclGen::instantiate_var_head(
 	init = instantiate_constant_expr(scope, ast_init);
       }
 
-      auto var = mgr().new_Decl(vpiVariables, var_head, ast_item, init);
+      auto var = elb_mgr().new_Decl(vpiVariables, var_head, ast_item, init);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(var, attr_list);
+      elb_mgr().reg_attr(var, attr_list);
 
-      info_var(__FILE__, __LINE__, var);
-      {
-	std::ostringstream buf;
-	buf << "Var(" << var->full_name() << ") created.";
-	put_info(__FILE__, __LINE__,
-		 ast_item.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_var(__FILE__, __LINE__, var);
     }
   }
 }
@@ -706,7 +641,7 @@ DeclGen::instantiate_event_head(
   const AstDeclHead& ast_head
 )
 {
-  auto event_head = mgr().new_DeclHead(scope, ast_head);
+  auto event_head = elb_mgr().new_DeclHead(scope, ast_head);
   for ( auto ast_item: ast_head.item_list() ) {
     auto dim_size = ast_item.range_list().size();
     if ( dim_size > 0 ) {
@@ -718,40 +653,24 @@ DeclGen::instantiate_event_head(
 	continue;
       }
 
-      auto ne_array = mgr().new_DeclArray(vpiNamedEventArray, event_head,
+      auto ne_array = elb_mgr().new_DeclArray(vpiNamedEventArray, event_head,
 					  ast_item, range_src);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(ne_array, attr_list);
+      elb_mgr().reg_attr(ne_array, attr_list);
 
-      info_event_array(__FILE__, __LINE__, ne_array);
-      {
-	std::ostringstream buf;
-	buf << "NamedEventArray(" << ne_array->full_name() << ") created.";
-	put_info(__FILE__, __LINE__,
-		 ast_item.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_event_array(__FILE__, __LINE__, ne_array);
     }
     else {
       // 単一の要素
-      auto named_event = mgr().new_Decl(vpiNamedEvent, event_head, ast_item);
+      auto named_event = elb_mgr().new_Decl(vpiNamedEvent, event_head, ast_item);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);
-      mgr().reg_attr(named_event, attr_list);
+      elb_mgr().reg_attr(named_event, attr_list);
 
-      info_event(__FILE__, __LINE__, named_event);
-      {
-	std::ostringstream buf;
-	buf << "NamedEvent(" << named_event->full_name() << ") created.";
-	put_info(__FILE__, __LINE__,
-		 ast_item.file_region(),
-		 "ELABXXX",
-		 buf.str());
-      }
+      log_mgr().info_event(__FILE__, __LINE__, named_event);
     }
   }
 }
@@ -764,17 +683,9 @@ DeclGen::instantiate_genvar_head(
 )
 {
   for ( auto ast_item: ast_head.item_list() ) {
-    auto genvar = mgr().new_Genvar(scope, ast_item, 0);
+    auto genvar = elb_mgr().new_Genvar(scope, ast_item, 0);
 
-    info_genvar(__FILE__, __LINE__, genvar);
-    {
-      std::ostringstream buf;
-      buf << "Genvar(" << genvar->full_name() << ") created.";
-      put_info(__FILE__, __LINE__,
-	       ast_item.file_region(),
-	       "ELABXXX",
-	       buf.str());
-    }
+    log_mgr().info_genvar(__FILE__, __LINE__, genvar);
   }
 }
 
@@ -798,80 +709,5 @@ DeclGen::instantiate_dimension_list(
 
   return true;
 }
-
-#if 0
-// @brief IO 宣言に aux_type と宣言が重複している．
-void
-DeclGen::error_duplicate_type(
-  const AstIOItem* ast_item,
-  const ObjHandle* handle
-)
-{
-  std::ostringstream buf;
-  buf << ast_item->name() << " : has an aux-type declaration"
-      << ", while it also has another declaration in "
-      << handle->file_region() << ".";
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  ast_item->file_region(),
-		  MsgType::Error,
-		  "ELAB",
-		  buf.str());
-}
-
-// @brief 配列要素が IO 宣言として現れていた．
-void
-DeclGen::error_array_io(
-  const AstIOItem* ast_item,
-  const VlDeclArray* declarray
-)
-{
-  std::ostringstream buf;
-  buf << ast_item->name()
-      << ": Array object shall not be connected to IO port.";
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  declarray->file_region(),
-		  MsgType::Error,
-		  "ELAB",
-		  buf.str());
-}
-
-// @brief IO 宣言に不適切な宣言要素が使われていた．
-void
-DeclGen::error_illegal_io(
-  const AstIOItem* ast_item,
-  const ObjHandle* handle,
-  const VlModule* module
-)
-{
-  std::ostringstream buf;
-  buf << handle->full_name()
-      << ": Should be a ";
-  if ( module ) {
-    buf << "net, ";
-  }
-  buf << "reg or integer/time variable.";
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  ast_item->file_region(),
-		  MsgType::Error,
-		  "ELAB",
-		  buf.str());
-}
-
-// @brief IO 宣言と宣言要素の範囲指定が異なる．
-void
-DeclGen::error_conflict_io_range(
-  const AstIOItem* ast_item
-)
-{
-  std::ostringstream buf;
-  buf << "Conflictive range declaration of \""
-      << ast_item->name() << "\".";
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  ast_item->file_region(),
-		  MsgType::Error,
-		  "ELAB",
-		  buf.str());
-}
-#endif
 
 END_NAMESPACE_YM_VERILOG

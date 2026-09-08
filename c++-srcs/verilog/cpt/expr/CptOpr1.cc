@@ -20,7 +20,6 @@
 #include "CptOpr_UnaryNor.h"
 #include "CptOpr_UnaryXor.h"
 #include "CptOpr_UnaryXNor.h"
-#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 
 

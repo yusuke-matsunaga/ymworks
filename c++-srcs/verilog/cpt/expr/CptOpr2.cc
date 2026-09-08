@@ -31,7 +31,6 @@
 #include "CptOpr_ArithLShift.h"
 #include "CptOpr_ArithRShift.h"
 #include "CptOpr_Power.h"
-#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 
 

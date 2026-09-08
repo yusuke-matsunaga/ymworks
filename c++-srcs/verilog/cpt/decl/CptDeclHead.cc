@@ -7,7 +7,6 @@
 /// All rights reserved.
 
 #include "CptDeclHead.h"
-#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 
 

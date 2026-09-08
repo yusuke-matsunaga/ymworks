@@ -11,7 +11,7 @@
 #include "ym/vl/AstBase.h"
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstUdp.h"
-#include "alloc/Alloc.h"
+#include "common/Alloc.h"
 #include "PtAttrInfo.h"
 
 

@@ -7,8 +7,6 @@
 /// All rights reserved.
 
 #include "CptItem_GateH.h"
-#include "alloc/Alloc.h"
-//#include "parser/PtMisc.h"
 #include "parser/PtFactory.h"
 
 

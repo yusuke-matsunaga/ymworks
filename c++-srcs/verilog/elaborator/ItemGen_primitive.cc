@@ -8,8 +8,6 @@
 
 #include "ItemGen.h"
 #include "ElbEnv.h"
-#include "ErrorGen.h"
-#include "ElbError.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstInst.h"
@@ -20,6 +18,7 @@
 #include "elaborator/ElbPrimitive.h"
 #include "elaborator/ElbExpr.h"
 #include "elaborator/RangeVal.h"
+#include "elaborator/ElbError.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -67,7 +66,7 @@ ItemGen::instantiate_gateheader(
 {
   auto ast_delay = ast_head.delay();
   bool has_delay = ast_delay.is_valid();
-  auto prim_head = mgr().new_PrimHead(parent, ast_head, has_delay);
+  auto prim_head = elb_mgr().new_PrimHead(parent, ast_head, has_delay);
   if ( has_delay ) {
     add_phase3stub(make_gate_delay_stub(prim_head, ast_delay));
   }
@@ -77,7 +76,7 @@ ItemGen::instantiate_gateheader(
       instantiate_gateinst(parent, ast_head, ast_inst, prim_head);
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 }
@@ -103,51 +102,38 @@ ItemGen::instantiate_gateinst(
 				       output_num, inout_num, input_num) ) {
   case -1:
     // ポート結合の数が少ない．
-    error_few_gate_conn(__FILE__, __LINE__, ast_inst);
+    log_mgr().error_few_gate_conn(__FILE__, __LINE__, ast_inst);
 
   case 1:
     // ポート結合の数が多い
-    error_many_gate_conn(__FILE__, __LINE__, ast_inst);
+    log_mgr().error_many_gate_conn(__FILE__, __LINE__, ast_inst);
   }
 
   auto ast_range = ast_inst.range();
   if ( ast_range.is_valid() ) {
     // 配列の場合
     auto range = evaluate_range(parent, ast_range);
-    auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
+    auto prim_array = elb_mgr().new_PrimitiveArray(prim_head, ast_inst,
 					       ast_range, range);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_head);
-    mgr().reg_attr(prim_array, attr_list);
+    elb_mgr().reg_attr(prim_array, attr_list);
 
-    {
-      std::ostringstream buf;
-      buf << "instantiating primitive array: " << prim_array->full_name();
-      put_info(__FILE__, __LINE__,
-	       ast_inst.file_region(),
-	       "ELAB",
-	       buf.str());
-    }
-
+    log_mgr().info_prim_array(__FILE__, __LINE__,
+			      prim_array);
     add_phase3stub(make_prim_array_stub(prim_array, ast_inst));
   }
   else {
     // 単一の要素の場合
-    auto prim = mgr().new_Primitive(prim_head, ast_inst);
+    auto prim = elb_mgr().new_Primitive(prim_head, ast_inst);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_head);
-    mgr().reg_attr(prim, attr_list);
+    elb_mgr().reg_attr(prim, attr_list);
 
-    {
-      std::ostringstream buf;
-      buf << "instantiating primitive: " << prim->full_name();
-      put_info(__FILE__, __LINE__,
-	       ast_inst.file_region(),
-	       "ELAB",
-	       buf.str());
-    }
+    log_mgr().info_primitive(__FILE__, __LINE__,
+			     prim);
     add_phase3stub(make_primitive_stub(prim, ast_inst));
   }
 }
@@ -163,7 +149,7 @@ ItemGen::instantiate_udpheader(
   SizeType param_size = ast_head.paramassign_list().size();
   auto ast_delay = ast_head.delay();
   bool has_delay = ( ast_delay.is_valid() || param_size == 1 );
-  auto prim_head = mgr().new_UdpHead(parent,
+  auto prim_head = elb_mgr().new_UdpHead(parent,
 				     ast_head,
 				     udpdefn,
 				     has_delay);
@@ -176,7 +162,7 @@ ItemGen::instantiate_udpheader(
       instantiate_udpinst(parent, ast_head, ast_inst, prim_head, udpdefn);
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 }
@@ -196,33 +182,33 @@ ItemGen::instantiate_udpinst(
 
   auto port_num = ast_inst.port_list().size();
   if ( port_num > 0 && ast_inst.port_list().front().name() != nullptr ) {
-    ErrorGen::named_port_in_udp_instance(__FILE__, __LINE__, ast_inst);
+    log_mgr().error_named_port_in_udp_instance(__FILE__, __LINE__, ast_inst);
   }
 
   if ( udpdefn->port_num() != port_num ) {
-    ErrorGen::port_num_mismatch(__FILE__, __LINE__, ast_inst);
+    log_mgr().error_port_num_mismatch(__FILE__, __LINE__, ast_inst);
   }
 
   auto ast_range = ast_inst.range();
   if ( ast_range.is_valid() ) {
     // 配列
     auto range = evaluate_range(parent, ast_range);
-    auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
+    auto prim_array = elb_mgr().new_PrimitiveArray(prim_head, ast_inst,
 					       ast_range, range);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_head);
-    mgr().reg_attr(prim_array, attr_list);
+    elb_mgr().reg_attr(prim_array, attr_list);
 
     add_phase3stub(make_prim_array_stub(prim_array, ast_inst));
   }
   else {
     // 単一の要素
-    auto primitive = mgr().new_Primitive(prim_head, ast_inst);
+    auto primitive = elb_mgr().new_Primitive(prim_head, ast_inst);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_head);
-    mgr().reg_attr(primitive, attr_list);
+    elb_mgr().reg_attr(primitive, attr_list);
 
     add_phase3stub(make_primitive_stub(primitive, ast_inst));
   }
@@ -236,13 +222,13 @@ ItemGen::instantiate_cellhead(
   ClibCell cell
 )
 {
-  auto prim_head = mgr().new_CellHead(parent, ast_head, cell);
+  auto prim_head = elb_mgr().new_CellHead(parent, ast_head, cell);
   for ( auto ast_inst: ast_head.inst_list() ) {
     try {
       instantiate_cellinst(parent, ast_head, ast_inst, prim_head, cell);
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 }
@@ -268,13 +254,13 @@ ItemGen::instantiate_cellinst(
       auto pin_name = ast_con.name();
       auto pin = cell.pin(pin_name);
       if ( pin.is_invalid() ) {
-	ErrorGen::illegal_pin_name(__FILE__, __LINE__, ast_con);
+	log_mgr().error_pin_name_not_found(__FILE__, __LINE__, ast_con);
       }
     }
   }
   else {
     if ( cell.pin_num() != port_num ) {
-      ErrorGen::port_num_mismatch(__FILE__, __LINE__, ast_inst);
+      log_mgr().error_port_num_mismatch(__FILE__, __LINE__, ast_inst);
     }
   }
 
@@ -283,22 +269,22 @@ ItemGen::instantiate_cellinst(
   if ( ast_range.is_valid() ) {
     // 配列
     auto range = evaluate_range(parent, ast_range);
-    auto prim_array = mgr().new_PrimitiveArray(prim_head, ast_inst,
+    auto prim_array = elb_mgr().new_PrimitiveArray(prim_head, ast_inst,
 					       ast_range, range);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_head);
-    mgr().reg_attr(prim_array, attr_list);
+    elb_mgr().reg_attr(prim_array, attr_list);
 
     add_phase3stub(make_cell_array_stub(prim_array, ast_inst));
   }
   else {
     // 単一の要素
-    auto primitive = mgr().new_Primitive(prim_head, ast_inst);
+    auto primitive = elb_mgr().new_Primitive(prim_head, ast_inst);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_head);
-    mgr().reg_attr(primitive, attr_list);
+    elb_mgr().reg_attr(primitive, attr_list);
 
     add_phase3stub(make_cell_stub(primitive, ast_inst));
   }
@@ -356,7 +342,7 @@ ItemGen::link_prim_array(
     auto ast_expr = ast_con.expr();
     if ( ast_expr.is_invalid() ) {
       // 空の接続式は許されない．
-      ErrorGen::empty_port_expression(__FILE__, __LINE__, ast_con);
+      log_mgr().error_empty_port_expression(__FILE__, __LINE__, ast_con);
     }
 
     auto term = prim->prim_term(index);
@@ -376,7 +362,7 @@ ItemGen::link_prim_array(
 
     auto type = tmp->value_type();
     if ( type.is_real_type() ) {
-      ErrorGen::real_type_in_port_list(__FILE__, __LINE__, tmp);
+      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
     }
 
     SizeType expr_size = type.size();
@@ -399,14 +385,14 @@ ItemGen::link_prim_array(
       // tmp を 1 ビットずつに分割して接続する．
       for ( SizeType i = 0; i < arraysize; ++ i ) {
 	auto prim = prim_array->_primitive_by_offset(i);
-	auto bit = mgr().new_BitSelect(ast_expr, tmp, i);
+	auto bit = elb_mgr().new_BitSelect(ast_expr, tmp, i);
 	prim->connect(index, bit);
       }
     }
     else {
       auto def_name = prim_array->head()->def_name();
-      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con.expr(),
-				   def_name, index);
+      log_mgr().error_port_size_mismatch(__FILE__, __LINE__,
+					 ast_con.expr());
     }
   }
 }
@@ -444,7 +430,7 @@ ItemGen::link_primitive(
 
     auto type = tmp->value_type();
     if ( type.is_real_type() ) {
-      ErrorGen::real_type_in_port_list(__FILE__, __LINE__, tmp);
+      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
     }
 
     SizeType expr_size = type.size();
@@ -459,8 +445,7 @@ ItemGen::link_primitive(
     }
     else {
       auto def_name = primitive->head()->def_name();
-      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con.expr(),
-				   def_name, index);
+      log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_con.expr());
     }
   }
 }
@@ -491,7 +476,7 @@ ItemGen::link_cell_array(
     if ( conn_by_name ) {
       auto pin = cell.pin(ast_con.name());
       if ( pin.is_invalid() ) {
-	ErrorGen::illegal_pin_name(__FILE__, __LINE__, ast_con);
+	log_mgr().error_pin_name_not_found(__FILE__, __LINE__, ast_con);
       }
       index = pin.pin_id();
     }
@@ -502,7 +487,7 @@ ItemGen::link_cell_array(
     auto ast_expr = ast_con.expr();
     if ( ast_expr.is_invalid() ) {
       // 空の接続式は許されない．
-      ErrorGen::empty_port_expression(__FILE__, __LINE__, ast_con);
+      log_mgr().error_empty_port_expression(__FILE__, __LINE__, ast_con);
     }
 
     auto term = prim->prim_term(index);
@@ -518,7 +503,7 @@ ItemGen::link_cell_array(
 
     auto type = tmp->value_type();
     if ( type.is_real_type() ) {
-      ErrorGen::real_type_in_port_list(__FILE__, __LINE__, tmp);
+      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
     }
 
     SizeType expr_size = type.size();
@@ -541,14 +526,13 @@ ItemGen::link_cell_array(
       // tmp を 1 ビットずつに分割して接続する．
       for ( SizeType i = 0; i < arraysize; ++ i ) {
 	auto prim = prim_array->_primitive_by_offset(i);
-	auto bit = mgr().new_BitSelect(ast_expr, tmp, i);
+	auto bit = elb_mgr().new_BitSelect(ast_expr, tmp, i);
 	prim->connect(index, bit);
       }
     }
     else {
       auto def_name = prim_array->head()->def_name();
-      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con.expr(),
-				   def_name, index);
+      log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_con.expr());
     }
   }
 }
@@ -575,7 +559,7 @@ ItemGen::link_cell(
     if ( conn_by_name ) {
       auto pin = cell.pin(ast_con.name());
       if ( pin.is_invalid() ) {
-	ErrorGen::illegal_pin_name(__FILE__, __LINE__, ast_con);
+	log_mgr().error_pin_name_not_found(__FILE__, __LINE__, ast_con);
       }
       index = pin.pin_id();
     }
@@ -605,7 +589,7 @@ ItemGen::link_cell(
 
     auto type = tmp->value_type();
     if ( type.is_real_type() ) {
-      ErrorGen::real_type_in_port_list(__FILE__, __LINE__, tmp);
+      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
     }
 
     SizeType expr_size = type.size();
@@ -620,8 +604,7 @@ ItemGen::link_cell(
     }
     else {
       auto def_name = primitive->head()->def_name();
-      ErrorGen::port_size_mismatch(__FILE__, __LINE__, ast_con.expr(),
-				   def_name, index);
+      log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_con.expr());
     }
   }
 }

@@ -28,9 +28,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 UdpGen::UdpGen(
-  Elaborator& elab,
-  ElbMgr& elb_mgr
-) : ElbProxy{elab, elb_mgr}
+  Elaborator& elab
+) : ElbProxy{elab}
 {
 }
 
@@ -67,7 +66,7 @@ UdpGen::instantiate_udp(
   auto ptype = ast_udp.prim_type();
   bool is_protected{true}; // 何これ?
 
-  auto udp = mgr().new_UdpDefn(ast_udp, is_protected);
+  auto udp = elb_mgr().new_UdpDefn(ast_udp, is_protected);
 
   // 最初のポート名 = 出力のポート名
   auto outname = ast_udp.port_list().front().ext_name();

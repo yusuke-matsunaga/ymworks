@@ -29,8 +29,7 @@ public:
 
   /// @brief コンストラクタ
   ExprGen(
-    Elaborator& elab, ///< [in] 生成器
-    ElbMgr& elb_mgr   ///< [in] Elbオブジェクトを管理するクラス
+    Elaborator& elab ///< [in] 生成器
   );
 
   /// @brief デストラクタ

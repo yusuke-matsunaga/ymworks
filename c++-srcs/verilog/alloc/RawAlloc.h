@@ -8,7 +8,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "alloc/Alloc.h"
+#include "common/Alloc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

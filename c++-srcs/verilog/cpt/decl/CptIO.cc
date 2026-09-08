@@ -7,7 +7,6 @@
 /// All rights reserved.
 
 #include "CptIO.h"
-#include "alloc/Alloc.h"
 #include "parser/PtExpr.h"
 #include "parser/PtFactory.h"
 

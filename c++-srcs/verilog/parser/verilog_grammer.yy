@@ -2608,7 +2608,7 @@ function_declaration
 				       $7);
   }
   else {
-    $$ = nullptr;
+    YYERROR;
   }
 }
 | FUNCTION opt_auto sign range IDENTIFIER ';'
@@ -2624,7 +2624,7 @@ function_declaration
 					$8);
   }
   else {
-    $$ = nullptr;
+    YYERROR;
   }
 }
 | FUNCTION opt_auto sign data_type IDENTIFIER ';'
@@ -2640,7 +2640,7 @@ function_declaration
 					$8);
   }
   else {
-    $$ = nullptr;
+    YYERROR;
   }
 }
 | FUNCTION opt_auto sign IDENTIFIER '(' function_port_list ')' ';'
@@ -2660,7 +2660,7 @@ function_declaration
 				       $10);
   }
   else {
-    $$ = nullptr;
+    YYERROR;
   }
 }
 | FUNCTION opt_auto sign range
@@ -2680,7 +2680,7 @@ function_declaration
 					$11);
   }
   else {
-    $$ = nullptr;
+    YYERROR;
   }
 }
 | FUNCTION opt_auto sign data_type IDENTIFIER '(' function_port_list ')' ';'
@@ -2699,7 +2699,7 @@ function_declaration
 					$11);
   }
   else {
-    $$ = nullptr;
+    YYERROR;
   }
 }
 | FUNCTION error ENDFUNCTION
@@ -4313,7 +4313,7 @@ generate_item
 				     $16.item_list.top);
   }
   else {
-    $$ = nullptr;
+    YYERROR;
   }
 }
 | FOR '(' IDENTIFIER '=' expression ';' expression ';'
@@ -7502,22 +7502,7 @@ yyerror(
   const char* s
 )
 {
-  std::string s2;
-  // 好みの問題だけど "parse error" よりは "syntax error" の方が好き．
-  if ( !strncmp(s, "parse error", 11) ) {
-    s2 ="syntax error";
-    s2 += (s + 11);
-  }
-  else {
-    s2 = s;
-  }
-
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  *llocp,
-		  MsgType::Error,
-		  "PARS",
-		  s2);
-
+  parser.put_error(__FILE__, __LINE__, *llocp, s);
   return 1;
 }
 

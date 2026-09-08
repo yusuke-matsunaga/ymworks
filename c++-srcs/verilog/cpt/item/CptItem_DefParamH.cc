@@ -7,10 +7,8 @@
 /// All rights reserved.
 
 #include "CptItem_DefParamH.h"
-#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 #include "parser/PtExpr.h"
-//#include "parser/PtMisc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

@@ -19,6 +19,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 class AstMgr;
 class ElbMgr;
+class LogMgr;
 
 //////////////////////////////////////////////////////////////////////
 /// @class VlMgr VlMgr.h "ym/vl/VlMgr.h"
@@ -270,6 +271,9 @@ private:
 
   // Elb オブジェクトを管理するクラス
   std::unique_ptr<ElbMgr> mElbMgr;
+
+  // ログを管理するクラス
+  std::unique_ptr<LogMgr> mLogMgr;
 
 };
 

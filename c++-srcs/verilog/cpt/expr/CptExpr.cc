@@ -8,7 +8,6 @@
 
 #include "CptExpr.h"
 #include "CptFuncCall.h"
-#include "alloc/Alloc.h"
 #include "ym/vl/BitVector.h"
 #include "parser/PtFactory.h"
 

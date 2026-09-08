@@ -14,6 +14,7 @@
 #include "elaborator/ElbMgr.h"
 #include "elaborator/ElbFactory.h"
 #include "elaborator/ElbUserSystf.h"
+#include "common/LogMgr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -21,7 +22,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief コンストラクタ
 VlMgr::VlMgr() :
   mAstMgr{new AstMgr},
-  mElbMgr{new ElbMgr()}
+  mElbMgr{new ElbMgr},
+  mLogMgr{new LogMgr}
 {
 }
 
@@ -46,7 +48,7 @@ VlMgr::read_file(
   const std::vector<VlLineWatcher*> watcher_list
 )
 {
-  Parser parser(*mAstMgr);
+  Parser parser(*mAstMgr, *mLogMgr);
 
   return parser.read_file(filename, searchpath, watcher_list);
 }
@@ -81,7 +83,7 @@ VlMgr::elaborate(
   const ClibCellLibrary& cell_library
 )
 {
-  Elaborator elab(*mElbMgr, cell_library);
+  Elaborator elab(*mElbMgr, *mLogMgr, cell_library);
 
   return elab(*mAstMgr);
 }

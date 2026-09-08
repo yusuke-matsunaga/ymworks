@@ -48,7 +48,7 @@ public:
 
   // コンストラクタ
   PtTest(
-  ) : parser(astmgr),
+  ) : parser(astmgr, logmgr),
       factory(parser.factory()),
       file_info("filename1")
   {
@@ -177,6 +177,8 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   AstMgr astmgr;
+
+  LogMgr logmgr;
 
   Parser parser;
 

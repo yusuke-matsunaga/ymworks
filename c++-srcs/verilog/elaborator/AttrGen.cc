@@ -19,9 +19,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 AttrGen::AttrGen(
-  Elaborator& elab,
-  ElbMgr& elb_mgr
-) : ElbProxy(elab, elb_mgr)
+  Elaborator& elab
+) : ElbProxy(elab)
 {
 }
 
@@ -50,7 +49,7 @@ AttrGen::instantiate_attribute(
 	  // でも無視する．
 	}
 	// attr_list に ast_as, expr, def を追加
-	auto attr = mgr().new_Attribute(ast_as, expr, def);
+	auto attr = elb_mgr().new_Attribute(ast_as, expr, def);
 	attr_list.push_back(attr);
       }
     }

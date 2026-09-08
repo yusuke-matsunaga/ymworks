@@ -7,7 +7,6 @@
 /// All rights reserved.
 
 #include "CptItem_ContAssignH.h"
-#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 #include "parser/PtExpr.h"
 

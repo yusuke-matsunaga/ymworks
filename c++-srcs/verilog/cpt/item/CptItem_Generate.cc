@@ -7,7 +7,6 @@
 /// All rights reserved.
 
 #include "CptItem_Generate.h"
-#include "alloc/Alloc.h"
 #include "parser/PtDeclHead.h"
 #include "parser/PtExpr.h"
 #include "parser/PtFactory.h"

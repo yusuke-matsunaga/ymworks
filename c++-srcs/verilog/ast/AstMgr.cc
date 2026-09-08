@@ -9,7 +9,6 @@
 #include "parser/AstMgr.h"
 #include "parser/PtModule.h"
 #include "parser/PtUdp.h"
-#include "alloc/Alloc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

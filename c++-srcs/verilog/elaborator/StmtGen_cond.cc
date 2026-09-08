@@ -47,7 +47,7 @@ StmtGen::instantiate_if(
     return nullptr;
   }
 
-  return mgr().new_IfStmt(parent, process, ast_stmt,
+  return elb_mgr().new_IfStmt(parent, process, ast_stmt,
 			  cond, then_stmt, else_stmt);
 }
 
@@ -125,7 +125,7 @@ StmtGen::instantiate_case(
     }
 
     // caseitem の生成
-    auto caseitem = mgr().new_CaseItem(ast_item, label_list, body);
+    auto caseitem = elb_mgr().new_CaseItem(ast_item, label_list, body);
     caseitem_list.push_back(caseitem);
   }
 
@@ -178,7 +178,7 @@ StmtGen::instantiate_case(
   }
 
   // case statement の生成
-  return mgr().new_CaseStmt(parent, process, ast_stmt,
+  return elb_mgr().new_CaseStmt(parent, process, ast_stmt,
 			    cond, caseitem_list);
 }
 
@@ -201,7 +201,7 @@ StmtGen::instantiate_wait(
     return nullptr;
   }
 
-  return mgr().new_WaitStmt(parent, process, ast_stmt, cond, body);
+  return elb_mgr().new_WaitStmt(parent, process, ast_stmt, cond, body);
 }
 
 // @brief forever 文のインスタンス化を行う．
@@ -220,7 +220,7 @@ StmtGen::instantiate_forever(
     return nullptr;
   }
 
-  return mgr().new_ForeverStmt(parent, process, ast_stmt, body);
+  return elb_mgr().new_ForeverStmt(parent, process, ast_stmt, body);
 }
 
 // @brief repeat 文のインスタンス化を行う．
@@ -242,7 +242,7 @@ StmtGen::instantiate_repeat(
     return nullptr;
   }
 
-  return mgr().new_RepeatStmt(parent, process, ast_stmt, expr, body);
+  return elb_mgr().new_RepeatStmt(parent, process, ast_stmt, expr, body);
 }
 
 // @brief while 文のインスタンス化を行う．
@@ -264,7 +264,7 @@ StmtGen::instantiate_while(
     return nullptr;
   }
 
-  return mgr().new_WhileStmt(parent, process, ast_stmt, cond, body);
+  return elb_mgr().new_WhileStmt(parent, process, ast_stmt, cond, body);
 }
 
 // @brief for 文のインスタンス化を行う．
@@ -292,7 +292,7 @@ StmtGen::instantiate_for(
     return nullptr;
   }
 
-  auto stmt = mgr().new_ForStmt(parent, process, ast_stmt, cond, init, next, body);
+  auto stmt = elb_mgr().new_ForStmt(parent, process, ast_stmt, cond, init, next, body);
   return stmt;
 }
 

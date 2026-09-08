@@ -8,26 +8,23 @@
 
 #include "ExprEval.h"
 #include "FuncEval.h"
-#include "ErrorGen.h"
-#include "ElbError.h"
 #include "elaborator/ElbGenvar.h"
 #include "elaborator/ElbParameter.h"
+#include "elaborator/ElbError.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstExpr.h"
 #include "ym/vl/AstPart.h"
 #include "ym/vl/VlStmt.h"
 #include "ym/vl/VlTaskFunc.h"
 #include "ym/vl/VlIODecl.h"
-#include "ym/MsgMgr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 ExprEval::ExprEval(
-  Elaborator& elab,
-  ElbMgr& elb_mgr
-) : ElbProxy{elab, elb_mgr}
+  Elaborator& elab
+) : ElbProxy{elab}
 {
 }
 
@@ -45,7 +42,7 @@ ExprEval::evaluate_int(
 {
   auto val = evaluate_expr(parent, ast_expr);
   if ( !val.is_int_compat() ) {
-    ErrorGen::int_required(__FILE__, __LINE__, ast_expr.file_region());
+    log_mgr().error_int_required(__FILE__, __LINE__, ast_expr.file_region());
   }
 
   return val.int_value();
@@ -62,12 +59,12 @@ ExprEval::evaluate_int_if_const(
   try {
     auto val = evaluate_expr(parent, ast_expr);
     if ( !val.is_int_compat() ) {
-      ErrorGen::int_required(__FILE__, __LINE__, ast_expr.file_region());
+      log_mgr().error_int_required(__FILE__, __LINE__, ast_expr.file_region());
     }
     is_const = true;
     return val.int_value();
   }
-  catch ( ElbConstError ) {
+  catch ( const ElbConstError& error ) {
     is_const = false;
   }
   catch ( ... ) {
@@ -109,7 +106,7 @@ ExprEval::evaluate_bitvector(
 {
   auto val = evaluate_expr(parent, ast_expr);
   if ( !val.is_bitvector_compat() ) {
-    ErrorGen::bv_required(__FILE__, __LINE__, ast_expr.file_region());
+    log_mgr().error_bv_required(__FILE__, __LINE__, ast_expr.file_region());
   }
 
   return val.bitvector_value();
@@ -166,7 +163,7 @@ ExprEval::evaluate_expr(
     return evaluate_funccall(parent, ast_expr);
 
   case AstExpr::SysFuncCall:
-    ErrorGen::illegal_sysfunccall_in_ce(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_illegal_sysfunccall_in_ce(__FILE__, __LINE__, ast_expr);
 
   case AstExpr::Primary:
     return evaluate_primary(parent, ast_expr);
@@ -200,7 +197,7 @@ ExprEval::evaluate_opr(
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
     // この演算は使えない．
-    ErrorGen::illegal_edge_descriptor(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_illegal_edge_descriptor(__FILE__, __LINE__, ast_expr);
     break;
 
   case VpiOpType::BitNeg:
@@ -226,7 +223,7 @@ ExprEval::evaluate_opr(
     SizeType i = 0;
     for ( auto ast_expr1: ast_expr.operand_list() ) {
       if ( !val[i].is_bitvector_compat() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr1);
+	log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr1);
       }
       ++ i;
     }
@@ -397,7 +394,7 @@ ExprEval::evaluate_primary(
   // 識別子の階層
   if ( ast_expr.has_hierarchical_name() ) {
     // 階層つき識別子はだめ
-    ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_hname_in_ce(__FILE__, __LINE__, ast_expr);
   }
 
   auto isize = ast_expr.index_list().size();
@@ -407,7 +404,7 @@ ExprEval::evaluate_primary(
 
   if (  isize > 1 || (isize == 1 && has_range_select) ) {
     // 配列型ではない．
-    ErrorGen::dimension_mismatch(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_dimension_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
   int index1 = 0;
@@ -423,10 +420,12 @@ ExprEval::evaluate_primary(
   }
 
   // モジュール内の識別子を探索する．
-  auto handle = mgr().find_obj_up(parent, ast_expr, parent->parent_module());
-  if ( !handle ) {
+  auto handle = elb_mgr().find_obj_up(parent, ast_expr, parent->parent_module());
+  if ( handle == nullptr ) {
     // 見つからなかった．
-    ErrorGen::not_found(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_not_found(__FILE__, __LINE__,
+			      ast_expr.file_region(),
+			      ast_expr.name());
   }
 
   // そのオブジェクトが genvar の場合
@@ -441,7 +440,7 @@ ExprEval::evaluate_primary(
       // 範囲選択
       auto bv = BitVector(genvar->value());
       if ( index1 < index2 ) {
-	ErrorGen::range_order(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_range_order(__FILE__, __LINE__, ast_expr);
       }
       return VlValue(bv.part_select_op(index1, index2));
     }
@@ -453,24 +452,24 @@ ExprEval::evaluate_primary(
   // それ以外の宣言要素の場合
   // しかしこの場合には parameter でなければならない．
   auto param = handle->parameter();
-  if ( !param ) {
-    ErrorGen::not_a_parameter(__FILE__, __LINE__, ast_expr);
-    return VlValue();
+  if ( param == nullptr ) {
+    log_mgr().error_not_a_parameter(__FILE__, __LINE__,
+				    ast_expr.file_region(),
+				    ast_expr.decompile());
   }
 
   auto ast_init_expr = param->init_expr();
   auto val = evaluate_expr(parent, ast_init_expr);
   if ( param->value_type().is_real_type() ) {
     if ( has_bit_select || has_range_select ) {
-      ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr);
-      return VlValue();
+      log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr);
     }
   }
   else {
     if ( has_bit_select ) {
       // ビット選択
       if ( !val.is_bitvector_compat() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr);
       }
       SizeType offset = 0;
       if ( !param->calc_bit_offset(index1, offset) ) {
@@ -482,14 +481,14 @@ ExprEval::evaluate_primary(
     }
     else if ( has_range_select ) {
       if ( !val.is_bitvector_compat() ) {
-	ErrorGen::illegal_real_type(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr);
       }
       switch ( ast_part.mode() ) {
       case VpiRangeMode::Const:
 	{
 	  bool big = (index1 >= index2);
 	  if ( big ^ param->is_big_endian() ) {
-	    ErrorGen::range_order(__FILE__, __LINE__, ast_expr);
+	    log_mgr().error_range_order(__FILE__, __LINE__, ast_expr);
 	  }
 	}
 	break;
@@ -615,7 +614,7 @@ ExprEval::evaluate_funccall(
 {
   if ( ast_expr.has_hierarchical_name() ) {
     // 階層名は使えない．
-    ErrorGen::hname_in_ce(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_hname_in_ce(__FILE__, __LINE__, ast_expr);
   }
 
   // 関数名
@@ -628,12 +627,12 @@ ExprEval::evaluate_funccall(
   auto ast_func = find_funcdef(module, name);
   if ( ast_func.is_invalid() ) {
     // 関数が見つからなかった．
-    ErrorGen::no_such_function(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_no_such_function(__FILE__, __LINE__, ast_expr);
   }
 
   if ( ast_func.is_in_use() ) {
     // 再帰的な呼び出しも行えない．
-    ErrorGen::uses_itself(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_uses_itself(__FILE__, __LINE__, ast_expr);
   }
 
   // 定数関数を探し出す．
@@ -647,14 +646,14 @@ ExprEval::evaluate_funccall(
   if ( child_func != nullptr ) {
     // instantiate_constant_function が失敗した．
     // たぶん constant function ではなかった．
-    ErrorGen::not_a_constant_function(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_not_a_constant_function(__FILE__, __LINE__, ast_expr);
   }
 
   // 引数の生成
   auto n = ast_expr.operand_list().size();
   if ( n != child_func->io_num() ) {
     // 引数の数が合わなかった．
-    ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_argument_num_mismatch(__FILE__, __LINE__, ast_expr);
   }
 
   std::vector<VlValue> arg_list;
@@ -667,20 +666,20 @@ ExprEval::evaluate_funccall(
     if ( decl_type.is_real_type() ) {
       if ( !val1.is_real_compat() ) {
 	// 型が異なる．
-	ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr1);
+	log_mgr().error_argument_type_mismatch(__FILE__, __LINE__, ast_expr1);
       }
     }
     else if ( decl_type.is_bitvector_type() ) {
       if ( !val1.is_bitvector_compat() ) {
 	// 型が異なる．
-	ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr1);
+	log_mgr().error_argument_type_mismatch(__FILE__, __LINE__, ast_expr1);
       }
     }
     arg_list.push_back(val1);
   }
 
   // 関数の評価を行う．
-  FuncEval eval(child_func);
+  FuncEval eval(log_mgr(), child_func);
   auto val = eval(arg_list);
   return val;
 }

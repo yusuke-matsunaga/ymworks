@@ -31,9 +31,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 ModuleGen::ModuleGen(
-  Elaborator& elab,
-  ElbMgr& elb_mgr
-) : ElbProxy{elab, elb_mgr}
+  Elaborator& elab
+) : ElbProxy{elab}
 {
 }
 
@@ -70,16 +69,16 @@ ModuleGen::phase1_topmodule(
   }
 
   // モジュール本体の生成
-  auto module = mgr().new_Module(toplevel,
-				 ast_module,
-				 AstItem(),
-				 AstInst());
+  auto module = elb_mgr().new_Module(toplevel,
+				     ast_module,
+				     AstItem(),
+				     AstInst());
 
   // attribute instance の生成
   const auto& attr_list = attribute_list(ast_module);
-  mgr().reg_attr(module, attr_list);
+  elb_mgr().reg_attr(module, attr_list);
 
-  info_module(__FILE__, __LINE__, module);
+  log_mgr().info_module(__FILE__, __LINE__, module);
 
   // 中身のうちスコープに関係する要素の生成
   phase1_module_item(module, ast_module, std::vector<ElbParamCon>());
@@ -137,7 +136,9 @@ ModuleGen::phase1_module_item(
     }
     if ( paramport_list.size() < param_con_list.size() ) {
       // 実際のパラメータの数より割り当てリストの要素数が多い．
-      error_too_many_params(__FILE__, __LINE__, param_con_list);
+      auto last = param_con_list[paramport_list.size()];
+      log_mgr().error_too_many_params(__FILE__, __LINE__,
+				      last.mAstCon.file_region());
     }
   }
 
@@ -149,7 +150,7 @@ ModuleGen::phase1_module_item(
     auto name = paramport_list[index]; ++ index;
     auto handle = find_obj(module, name);
     if ( handle == nullptr || handle->type() != VpiObjType::Parameter ) {
-      error_param_not_found(__FILE__, __LINE__, ast_con);
+      log_mgr().error_param_not_found(__FILE__, __LINE__, ast_con);
     }
 
     auto param = handle->parameter();
@@ -162,8 +163,8 @@ ModuleGen::phase1_module_item(
     auto value = param_con.mValue;
     param->set_init_expr(expr, value);
     // 仮想的な パラメータ割り当て文があるものとみなす．
-    auto pa = mgr().new_NamedParamAssign(module, ast_con,
-					 param, expr, value);
+    auto pa = elb_mgr().new_NamedParamAssign(module, ast_con,
+					     param, expr, value);
   }
 
   // それ以外の要素を実体化する．
@@ -213,10 +214,10 @@ ModuleGen::instantiate_ports(
     auto name = ast_port.ext_name();
     if ( name != nullptr && port_dict.count(name) > 0 ) {
       auto prev_port = port_dict.at(name);
-      error_dup_name(__FILE__, __LINE__,
-		     ast_port.file_region(),
-		     name,
-		     prev_port.file_region());
+      log_mgr().error_dup_name(__FILE__, __LINE__,
+			       ast_port.file_region(),
+			       name,
+			       prev_port.file_region());
     }
   }
 
@@ -262,7 +263,7 @@ ModuleGen::instantiate_ports(
 	lhs_elem_array[n - i - 1] = expr;
       }
 
-      auto low_conn = mgr().new_Lhs(ast_port.expr(), expr_list, lhs_elem_array);
+      auto low_conn = elb_mgr().new_Lhs(ast_port.expr(), expr_list, lhs_elem_array);
       module->add_port(ast_port, low_conn, dir);
     }
   }
@@ -280,32 +281,32 @@ ModuleGen::instantiate_portref(
   auto handle = find_obj(module, name);
   if ( handle == nullptr ) {
     // name という名の要素がなかった．
-    error_not_found(__FILE__, __LINE__,
-		    ast_expr.file_region(), name);
+    log_mgr().error_not_found(__FILE__, __LINE__,
+			      ast_expr.file_region(), name);
   }
 
   if ( handle->declarray() ) {
     // 配列要素は IO ポートに使えない．
-    error_array_in_port_connection(__FILE__, __LINE__,
-				   ast_expr.file_region());
+    log_mgr().error_array_in_port_connection(__FILE__, __LINE__,
+					     ast_expr.file_region());
   }
 
   auto decl = handle->decl();
   if ( decl == nullptr ) {
     // 宣言要素ではなかった．
-    error_illegal_port(__FILE__, __LINE__,
-		       ast_expr.file_region());
+    log_mgr().error_illegal_port(__FILE__, __LINE__,
+				 ast_expr.file_region());
 
   }
   auto io_decl = module->find_io(decl);
   if ( io_decl == nullptr ) {
     // 入出力宣言ではなかった．
-    error_illegal_port(__FILE__, __LINE__,
-		       ast_expr.file_region());
+    log_mgr().error_illegal_port(__FILE__, __LINE__,
+				 ast_expr.file_region());
   }
   dir = io_decl->direction();
 
-  auto primary = mgr().new_Primary(ast_expr, decl);
+  auto primary = elb_mgr().new_Primary(ast_expr, decl);
 
   // 添字の部分を実体化する．
   AstExpr ast_index;
@@ -318,9 +319,10 @@ ModuleGen::instantiate_portref(
     bool stat2 = decl->calc_bit_offset(index_val, offset);
     if ( !stat2 ) {
       // 添字が範囲外
-      warning_index_out_of_range(__FILE__, __LINE__, ast_index.file_region());
+      log_mgr().warning_index_out_of_range(__FILE__, __LINE__,
+					   ast_index.file_region());
     }
-    return mgr().new_BitSelect(ast_expr, primary, ast_index, index_val);
+    return elb_mgr().new_BitSelect(ast_expr, primary, ast_index, index_val);
   }
   auto ast_part = ast_expr.part();
   if ( ast_part.is_valid() ) {
@@ -329,16 +331,18 @@ ModuleGen::instantiate_portref(
     bool stat1 = decl->calc_bit_offset(range.left, offset);
     if ( !stat1 ) {
       // 左の添字が範囲外
-      warning_left_index_out_of_range(__FILE__, __LINE__, ast_part.left().file_region());
+      log_mgr().warning_left_index_out_of_range(__FILE__, __LINE__,
+						ast_part.left().file_region());
     }
     bool stat2 = decl->calc_bit_offset(range.right, offset);
     if ( !stat2 ) {
       // 右の添字が範囲外
-      warning_right_index_out_of_range(__FILE__, __LINE__, ast_part.right().file_region());
+      log_mgr().warning_right_index_out_of_range(__FILE__, __LINE__,
+						 ast_part.right().file_region());
     }
-    return mgr().new_PartSelect(ast_expr, primary,
-				ast_part.left(), ast_part.right(),
-				range.left, range.right);
+    return elb_mgr().new_PartSelect(ast_expr, primary,
+				    ast_part.left(), ast_part.right(),
+				    range.left, range.right);
   }
   return primary;
 }
@@ -359,14 +363,14 @@ ModuleGen::instantiate_ports(
       auto name = ast_ioitem.name();
       auto handle = find_obj(module, name);
       if ( handle == nullptr ) {
-	error_not_found(__FILE__, __LINE__,
-			ast_ioitem.file_region(),
-			name);
+	log_mgr().error_not_found(__FILE__, __LINE__,
+				  ast_ioitem.file_region(),
+				  name);
       }
 
       if ( handle->declarray() ) {
-	error_array_in_port_connection(__FILE__, __LINE__,
-				       ast_ioitem.file_region());
+	log_mgr().error_array_in_port_connection(__FILE__, __LINE__,
+						 ast_ioitem.file_region());
       }
 
       auto decl = handle->decl();
@@ -380,7 +384,7 @@ ModuleGen::instantiate_ports(
 	throw std::logic_error{"decl == nullptr"};
       }
 
-      auto low_conn = mgr().new_Primary(ast_ioitem, decl);
+      auto low_conn = elb_mgr().new_Primary(ast_ioitem, decl);
       module->add_port(ast_ioitem, low_conn, dir);
     }
   }

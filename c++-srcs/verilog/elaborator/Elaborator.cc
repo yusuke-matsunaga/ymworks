@@ -18,8 +18,6 @@
 #include "AttrGen.h"
 #include "DefParamStub.h"
 #include "ElbStub.h"
-#include "ElbError.h"
-
 
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstItem.h"
@@ -38,6 +36,7 @@
 #include "elaborator/ElbPrimitive.h"
 #include "elaborator/ElbProcess.h"
 #include "elaborator/ElbGenvar.h"
+#include "elaborator/ElbError.h"
 
 #include "ym/MsgMgr.h"
 
@@ -74,18 +73,20 @@ END_NONAMESPACE
 // @brief コンストラクタ
 Elaborator::Elaborator(
   ElbMgr& elb_mgr,
+  LogMgr& log_mgr,
   const ClibCellLibrary& cell_library
 ) : mDone{false},
-    mMgr{elb_mgr},
+    mElbMgr{elb_mgr},
+    mLogMgr{log_mgr},
     mCellLibrary{cell_library},
-    mUdpGen{new UdpGen(*this, elb_mgr)},
-    mModuleGen{new ModuleGen(*this, elb_mgr)},
-    mDeclGen{new DeclGen(*this, elb_mgr)},
-    mItemGen{new ItemGen(*this, elb_mgr)},
-    mStmtGen{new StmtGen(*this, elb_mgr)},
-    mExprGen{new ExprGen(*this, elb_mgr)},
-    mExprEval{new ExprEval(*this, elb_mgr)},
-    mAttrGen{new AttrGen(*this, elb_mgr)}
+    mUdpGen{new UdpGen(*this)},
+    mModuleGen{new ModuleGen(*this)},
+    mDeclGen{new DeclGen(*this)},
+    mItemGen{new ItemGen(*this)},
+    mStmtGen{new StmtGen(*this)},
+    mExprGen{new ExprGen(*this)},
+    mExprEval{new ExprEval(*this)},
+    mAttrGen{new AttrGen(*this)}
 {
   mAllowEmptyIORange = true;
 
@@ -142,17 +143,17 @@ Elaborator::operator()(
   for ( auto ast_module: ast_module_list ) {
     try {
       auto name = ast_module.name();
-      auto prev_udp = mMgr.find_udp(name);
+      auto prev_udp = mElbMgr.find_udp(name);
       auto prev_module = mModuleDict.at(name);
       if ( prev_udp != nullptr ) {
-	error_module_redefined(__FILE__, __LINE__,
-			       ast_module,
-			       prev_udp->file_region());
+	log_mgr().error_module_redefined(__FILE__, __LINE__,
+					 ast_module,
+					 prev_udp->file_region());
       }
       else if ( prev_module.is_valid() ) {
-	error_module_redefined(__FILE__, __LINE__,
-			       ast_module,
-			       prev_module.file_region());
+	log_mgr().error_module_redefined(__FILE__, __LINE__,
+					 ast_module,
+					 prev_module.file_region());
       }
       else {
 	// モジュール名をキーにして登録する．
@@ -164,16 +165,16 @@ Elaborator::operator()(
 	  auto key = gen_funckey(ast_module, item.name());
 	  if ( mFuncDict.count(key) > 0 ) {
 	    auto prev_func = mFuncDict.at(key);
-	    error_function_redefined(__FILE__, __LINE__,
-				     item,
-				     prev_func.file_region());
+	    log_mgr().error_function_redefined(__FILE__, __LINE__,
+					       item,
+					       prev_func.file_region());
 	  }
 	  mFuncDict.emplace(key, item);
 	}
       }
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
       ++ nerr;
     }
   }
@@ -184,7 +185,7 @@ Elaborator::operator()(
 
   // トップレベル階層の生成
   /// toplevel は実体を持たない仮想的なスコープ
-  auto toplevel = mMgr.new_Toplevel();
+  auto toplevel = mElbMgr.new_Toplevel();
 
   // トップモジュールの生成
   for ( auto ast_module: ast_module_list ) {
@@ -206,10 +207,10 @@ Elaborator::operator()(
   // これを繰り返す．
   for ( ; ; ) {
     // defparam 文で適用できるものがあれば適用する．
-    put_debug(__FILE__, __LINE__,
-	      FileRegion(),
-	      "ELAB_DEFPARAM",
-	      "\"instantiate_defparam\" starts.");
+    log_mgr().put_debug(__FILE__, __LINE__,
+			FileRegion(),
+			"ELAB_DEFPARAM",
+			"\"instantiate_defparam\" starts.");
 
     // 未処理の defparam 文を処理する．
     // 処理された要素は mDefParamList から削除される．
@@ -228,10 +229,10 @@ Elaborator::operator()(
 
     // その結果にもとづいてモジュール配列インスタンスや
     // generate block の生成を行う．
-    put_debug(__FILE__, __LINE__,
-	      FileRegion(),
-	      "ELAB_PHASE1",
-	      "Phase 1 starts.");
+    log_mgr().put_debug(__FILE__, __LINE__,
+			FileRegion(),
+			"ELAB_PHASE1",
+			"Phase 1 starts.");
 
     if ( mPhase1StubList1.empty() ) {
       // 処理する要素が残っていない．
@@ -248,30 +249,30 @@ Elaborator::operator()(
   for ( auto stub: mDefParamStubList ) {
     auto ast_defparam = stub.mAstDefparam;
     try {
-      error_defparam_unresolved(__FILE__, __LINE__,
-				ast_defparam);
+      log_mgr().error_defparam_unresolved(__FILE__, __LINE__,
+					  ast_defparam);
     }
     // 処理は続行する．
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 
   // Phase 2
   // 配列要素やビット要素の生成を行う．
-  put_debug(__FILE__, __LINE__,
-	    FileRegion(),
-	    "ELAB_PHASE2",
-	    "Phase 2 starts.");
+  log_mgr().put_debug(__FILE__, __LINE__,
+		      FileRegion(),
+		      "ELAB_PHASE2",
+		      "Phase 2 starts.");
 
   mPhase2StubList.eval();
 
   // Phase 3
   // 名前の解決(リンク)を行う．
-  put_debug(__FILE__, __LINE__,
-	    FileRegion(),
-	    "ELAB_PHASE3",
-	    "Phase 3 starts.");
+  log_mgr().put_debug(__FILE__, __LINE__,
+		      FileRegion(),
+		      "ELAB_PHASE3",
+		      "Phase 3 starts.");
 
   mPhase3StubList.eval();
 
@@ -329,7 +330,7 @@ Elaborator::find_obj(
   const std::string& name
 ) const
 {
-  return mMgr.find_obj(parent, name);
+  return mElbMgr.find_obj(parent, name);
 }
 
 // @brief インスタンス化の印を付ける．
@@ -357,127 +358,6 @@ Elaborator::check_instance_mark(
 ) const
 {
   return mModuleMark.count(ast_module.key()) > 0;
-}
-
-// @brief 同名のモジュール定義がある．
-void
-Elaborator::error_module_redefined(
-  const char* file,
-  int line,
-  const AstModule& ast_module,
-  const FileRegion& prev_file_region
-)
-{
-  std::ostringstream buf;
-  buf << "Module \""
-      << ast_module.name()
-      << "\": Redefined. previous definition is "
-      << prev_file_region;
-  throw ElbError(file, line,
-		 ast_module.file_region(),
-		 "ELAB_MODULE_REDEFINED",
-		 buf.str());
-}
-
-// @brief 同名の関数定義がある．
-void
-Elaborator::error_function_redefined(
-  const char* file,
-  int line,
-  const AstItem& ast_funcdef,
-  const FileRegion& prev_file_region
-)
-{
-  std::ostringstream buf;
-  buf << "Function \"" << ast_funcdef.name()
-      << "\": Redefined. previsous definition is "
-      << prev_file_region;
-  throw ElbError(file, line,
-		 ast_funcdef.file_region(),
-		 "ELAB_FUNCTION_REDEFINED",
-		 buf.str());
-}
-
-// @brief 未解決の defparam 文
-void
-Elaborator::error_defparam_unresolved(
-  const char* file,
-  int line,
-  const AstDefParam& ast_defparam
-)
-{
-  std::ostringstream buf;
-  buf << "\"" << ast_defparam.decompile_name()
-      << "\": Not found";
-  throw ElbError(file, line,
-		 ast_defparam.file_region(),
-		 "ELAB_DEFPARAM_NOT_FOUND",
-		 buf.str());
-}
-
-// @brief エラーメッセージを出力する．
-void
-Elaborator::put_error(
-  const ElbError& error
-)
-{
-  MsgMgr::put_msg(error.file(), error.line(),
-		  error.file_region(),
-		  MsgType::Error,
-		  error.label().c_str(),
-		  error.message());
-}
-
-// @brief 警告メッセージを出力する．
-void
-Elaborator::put_warning(
-  const char* file,
-  int line,
-  const FileRegion& loc,
-  const char* label,
-  const std::string& msg
-)
-
-{
-  MsgMgr::put_msg(file, line,
-		  loc,
-		  MsgType::Warning,
-		  label,
-		  msg);
-}
-
-// @brief 情報メッセージを出力する．
-void
-Elaborator::put_info(
-  const char* file,
-  int line,
-  const FileRegion& loc,
-  const char* label,
-  const std::string& msg
-)
-{
-  MsgMgr::put_msg(file, line,
-		  loc,
-		  MsgType::Info,
-		  label,
-		  msg);
-}
-
-// @brief デバッグメッセージを出力する．
-void
-Elaborator::put_debug(
-  const char* file,
-  int line,
-  const FileRegion& loc,
-  const char* label,
-  const std::string& msg
-)
-{
-  MsgMgr::put_msg(file, line,
-		  loc,
-		  MsgType::Debug,
-		  label,
-		  msg);
 }
 
 END_NAMESPACE_YM_VERILOG

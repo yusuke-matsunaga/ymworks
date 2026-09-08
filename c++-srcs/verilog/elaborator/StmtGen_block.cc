@@ -59,7 +59,7 @@ StmtGen::instantiate_parblock(
 )
 {
   auto stmt_list = instantiate_stmt_list(parent, process, env, ast_stmt);
-  return mgr().new_Fork(parent, process, ast_stmt, stmt_list);
+  return elb_mgr().new_Fork(parent, process, ast_stmt, stmt_list);
 }
 
 // @brief sequential block のインスタンス化を行う．
@@ -72,7 +72,7 @@ StmtGen::instantiate_seqblock(
 )
 {
   auto stmt_list = instantiate_stmt_list(parent, process, env, ast_stmt);
-  return mgr().new_Begin(parent, process, ast_stmt, stmt_list);
+  return elb_mgr().new_Begin(parent, process, ast_stmt, stmt_list);
 }
 
 // @brief 名前つき parallel block のインスタンス化を行う．
@@ -84,13 +84,13 @@ StmtGen::instantiate_namedparblock(
   const AstStmt& ast_stmt
 )
 {
-  auto block = mgr().find_namedobj(parent, ast_stmt.name());
+  auto block = elb_mgr().find_namedobj(parent, ast_stmt.name());
   if ( block == nullptr ) {
     throw std::logic_error{"block == nullptr"};
   }
 
   auto stmt_list = instantiate_stmt_list(block, process, env, ast_stmt);
-  return mgr().new_NamedFork(block, process, ast_stmt, stmt_list);
+  return elb_mgr().new_NamedFork(block, process, ast_stmt, stmt_list);
 }
 
 // @brief 名前つき sequential block のインスタンス化を行う．
@@ -102,13 +102,13 @@ StmtGen::instantiate_namedseqblock(
   const AstStmt& ast_stmt
 )
 {
-  auto block = mgr().find_namedobj(parent, ast_stmt.name());
+  auto block = elb_mgr().find_namedobj(parent, ast_stmt.name());
   if ( block == nullptr ) {
     throw std::logic_error{"block == nullptr"};
   }
 
   auto stmt_list = instantiate_stmt_list(block, process, env, ast_stmt);
-  return mgr().new_NamedBegin(block, process, ast_stmt, stmt_list);
+  return elb_mgr().new_NamedBegin(block, process, ast_stmt, stmt_list);
 }
 
 // @brief Stmt のリストのインスタンス化を行う．
@@ -141,7 +141,7 @@ StmtGen::new_StmtBlockScope(
   const AstStmt& ast_stmt
 )
 {
-  return mgr().new_StmtBlockScope(parent, ast_stmt);
+  return elb_mgr().new_StmtBlockScope(parent, ast_stmt);
 }
 
 END_NAMESPACE_YM_VERILOG

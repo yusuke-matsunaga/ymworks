@@ -11,8 +11,6 @@
 #include "DefParamStub.h"
 #include "ElbEnv.h"
 #include "ElbStub.h"
-#include "ElbError.h"
-#include "ErrorGen.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstContAssign.h"
@@ -24,6 +22,7 @@
 #include "elaborator/ElbGfRoot.h"
 #include "elaborator/ElbGenvar.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbError.h"
 
 #include "ym/MsgMgr.h"
 
@@ -36,9 +35,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 ItemGen::ItemGen(
-  Elaborator& elab,
-  ElbMgr& elb_mgr
-) : ElbProxy{elab, elb_mgr}
+  Elaborator& elab
+) : ElbProxy{elab}
 {
 }
 
@@ -59,7 +57,7 @@ ItemGen::phase1_items(
       phase1_item(parent, ast_item);
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 }
@@ -152,7 +150,7 @@ ItemGen::defparam_override(
   auto ast_header = stub.mAstHeader;
   auto ast_defparam = stub.mAstDefparam;
 
-  auto handle = mgr().find_obj_up(module, ast_defparam, ulimit);
+  auto handle = elb_mgr().find_obj_up(module, ast_defparam, ulimit);
   if ( handle == nullptr ) {
     // 見つからなかった．
     // エラーとは限らない
@@ -163,11 +161,13 @@ ItemGen::defparam_override(
   if ( param == nullptr ) {
     // 対象がパラメータではなかった．
     try {
-      error_not_a_parameter(__FILE__, __LINE__, ast_defparam);
+      log_mgr().error_not_a_parameter(__FILE__, __LINE__,
+				      ast_defparam.file_region(),
+				      ast_defparam.decompile_name());
     }
     // ただし無視する．
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
 
     // もうこれ以降は処理したくないので true を返す．
@@ -177,11 +177,11 @@ ItemGen::defparam_override(
   if ( param->is_local_param() ) {
     // 対象が localparam だった(書き換えできない)
     try {
-      error_localparam_override(__FILE__, __LINE__, ast_defparam);
+      log_mgr().error_localparam_override(__FILE__, __LINE__, ast_defparam);
     }
     // ただし無視する．
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
 
     // もうこれ以降は処理したくないので true を返す．
@@ -191,23 +191,15 @@ ItemGen::defparam_override(
   auto ast_rhs_expr = ast_defparam.expr();
   auto value = evaluate_expr(module, ast_rhs_expr);
 
-  {
-    std::ostringstream buf;
-    buf << "instantiating defparam: " << param->full_name()
-	<< " = " << ast_rhs_expr.decompile() << ".";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    ast_defparam.file_region(),
-		    MsgType::Info,
-		    "ELAB",
-		    buf.str());
-  }
-
+  log_mgr().info_defparam(__FILE__, __LINE__,
+			  ast_defparam.file_region(),
+			  param, ast_rhs_expr);
   param->set_init_expr(ast_rhs_expr, value);
 
-  auto dp = mgr().new_DefParam(module,
-			       ast_header,
-			       ast_defparam,
-			       param, ast_rhs_expr, value);
+  auto dp = elb_mgr().new_DefParam(module,
+				   ast_header,
+				   ast_defparam,
+				   param, ast_rhs_expr, value);
 
   return true;
 }
@@ -224,7 +216,7 @@ ItemGen::instantiate_cont_assign_head(
   auto module = parent->parent_module();
   auto ast_delay = ast_header.delay();
   auto delay = instantiate_delay(parent, ast_delay);
-  auto ca_head = mgr().new_CaHead(module, ast_header, delay);
+  auto ca_head = elb_mgr().new_CaHead(module, ast_header, delay);
 
   ElbEnv env;
   ElbNetLhsEnv env1(env);
@@ -238,21 +230,13 @@ ItemGen::instantiate_cont_assign_head(
       auto ast_rhs = ast_contassign.rhs();
       auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
 
-      auto ca = mgr().new_ContAssign(ca_head, ast_contassign, lhs, rhs);
+      auto ca = elb_mgr().new_ContAssign(ca_head, ast_contassign, lhs, rhs);
 
-      {
-	std::ostringstream buf;
-	buf << "instantiating continuous assign: "
-	    << lhs->decompile() << " = " << rhs->decompile() << ".";
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			ast_contassign.file_region(),
-			MsgType::Info,
-			"ELAB",
-			buf.str());
-      }
+      log_mgr().info_contassign(__FILE__, __LINE__,
+				ca);
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 }
@@ -265,7 +249,7 @@ ItemGen::instantiate_process(
 )
 {
   try {
-    auto process = mgr().new_Process(parent, ast_item);
+    auto process = elb_mgr().new_Process(parent, ast_item);
 
     ElbEnv env;
     auto body = instantiate_stmt(parent, process, env,
@@ -273,7 +257,7 @@ ItemGen::instantiate_process(
     process->set_stmt(body);
   }
   catch ( const ElbError& error ) {
-    put_error(error);
+    log_mgr().put_error(error);
   }
 }
 
@@ -298,7 +282,7 @@ ItemGen::phase1_genblock(
 {
   auto* name = ast_genblock.name();
   if ( name != nullptr ) {
-    parent = mgr().new_GenBlock(parent, ast_genblock);
+    parent = elb_mgr().new_GenBlock(parent, ast_genblock);
   }
   phase1_generate(parent, ast_genblock);
 }
@@ -392,32 +376,32 @@ ItemGen::phase1_genfor(
     throw std::logic_error{"name0 == nullptr"};
   }
 
-  auto handle = mgr().find_obj(parent, ast_genfor.loop_var());
+  auto handle = elb_mgr().find_obj(parent, ast_genfor.loop_var());
   if ( handle == nullptr ) {
     // 見つからなかった．
-    error_genvar_not_found(__FILE__, __LINE__, ast_genfor);
+    log_mgr().error_genvar_not_found(__FILE__, __LINE__, ast_genfor);
   }
 
   auto genvar = handle->genvar();
   if ( genvar == nullptr ) {
     // genvar ではなかった．
-    error_not_a_genvar(__FILE__, __LINE__, ast_genfor);
+    log_mgr().error_not_a_genvar(__FILE__, __LINE__, ast_genfor);
   }
   if ( genvar->is_inuse() ) {
     // すでに他の generate-for loop が使用中
-    error_genvar_in_use(__FILE__, __LINE__, ast_genfor);
+    log_mgr().error_genvar_in_use(__FILE__, __LINE__, ast_genfor);
   }
 
   // genvar を使用中にする．
   GenvarHolder holder(genvar);
 
   // 子供のスコープの検索用オブジェクト
-  auto gfroot = mgr().new_GfRoot(parent, ast_genfor);
+  auto gfroot = elb_mgr().new_GfRoot(parent, ast_genfor);
 
   auto ast_init_expr = ast_genfor.init_expr();
   auto init_val = evaluate_int(parent, ast_init_expr);
   if ( init_val < 0 ) {
-    error_genvar_negative(__FILE__, __LINE__, ast_genfor);
+    log_mgr().error_genvar_negative(__FILE__, __LINE__, ast_genfor);
   }
   genvar->set_value(init_val);
 
@@ -432,11 +416,11 @@ ItemGen::phase1_genfor(
     // スコープ名生成のために genvar の値を取得
     {
       int gvi = genvar->value();
-      auto genblock = mgr().new_GfBlock(parent, ast_genfor, gvi);
+      auto genblock = elb_mgr().new_GfBlock(parent, ast_genfor, gvi);
       gfroot->add(gvi, genblock);
 
       auto ast_item = genvar->ast_item();
-      auto genvar1 = mgr().new_Genvar(genblock, ast_item, gvi);
+      auto genvar1 = elb_mgr().new_Genvar(genblock, ast_item, gvi);
 
       phase1_generate(genblock, ast_genfor);
     }
@@ -445,7 +429,7 @@ ItemGen::phase1_genfor(
     auto ast_next_expr = ast_genfor.next_expr();
     auto next_val = evaluate_int(parent, ast_next_expr);
     if ( next_val < 0 ) {
-      error_genvar_negative(__FILE__, __LINE__, ast_genfor);
+      log_mgr().error_genvar_negative(__FILE__, __LINE__, ast_genfor);
     }
     genvar->set_value(next_val);
   }

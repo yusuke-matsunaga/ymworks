@@ -7,7 +7,6 @@
 /// All rights reserved.
 
 #include "CptStmt_Assign.h"
-#include "alloc/Alloc.h"
 #include "parser/PtFactory.h"
 
 

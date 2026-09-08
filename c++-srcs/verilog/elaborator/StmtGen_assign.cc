@@ -58,7 +58,7 @@ StmtGen::instantiate_assign(
   }
 
   auto control = instantiate_control(parent, env, ast_control);
-  return mgr().new_Assignment(parent, process, ast_stmt,
+  return elb_mgr().new_Assignment(parent, process, ast_stmt,
 			      lhs, rhs, block, control);
 }
 
@@ -84,7 +84,7 @@ StmtGen::instantiate_pca(
     return nullptr;
   }
 
-  return mgr().new_AssignStmt(parent, process, ast_stmt, lhs, rhs);
+  return elb_mgr().new_AssignStmt(parent, process, ast_stmt, lhs, rhs);
 }
 
 // @brief deassign 文のインスタンス化を行う．
@@ -103,7 +103,7 @@ StmtGen::instantiate_deassign(
     return nullptr;
   }
 
-  return mgr().new_DeassignStmt(parent, process, ast_stmt, lhs);
+  return elb_mgr().new_DeassignStmt(parent, process, ast_stmt, lhs);
 }
 
 // @brief force 文のインスタンス化を行う．
@@ -128,7 +128,7 @@ StmtGen::instantiate_force(
     return nullptr;
   }
 
-  auto stmt = mgr().new_ForceStmt(parent, process, ast_stmt, lhs, rhs);
+  auto stmt = elb_mgr().new_ForceStmt(parent, process, ast_stmt, lhs, rhs);
 
   return stmt;
 }
@@ -149,7 +149,7 @@ StmtGen::instantiate_release(
     return nullptr;
   }
 
-  return mgr().new_ReleaseStmt(parent, process, ast_stmt, lhs);
+  return elb_mgr().new_ReleaseStmt(parent, process, ast_stmt, lhs);
 }
 
 END_NAMESPACE_YM_VERILOG

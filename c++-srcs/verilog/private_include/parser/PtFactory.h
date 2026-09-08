@@ -11,11 +11,10 @@
 #include "ym/FileRegion.h"
 #include "ym/vl/Ast.h"
 #include "parser/PtFwd.h"
+#include "common/Alloc.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
-
-class Alloc;
 
 //////////////////////////////////////////////////////////////////////
 /// @class PtFactory PtFactory.h "PtFactory.h"

@@ -7,7 +7,6 @@
 /// All rights reserved.
 
 #include "CptStmt.h"
-#include "alloc/Alloc.h"
 #include "parser/PtDeclHead.h"
 #include "parser/PtFactory.h"
 #include "parser/PtHierName.h"

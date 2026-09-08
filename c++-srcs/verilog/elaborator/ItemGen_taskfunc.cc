@@ -50,7 +50,7 @@ ItemGen::phase1_tf(
 
   auto taskfunc = (ElbTaskFunc*)nullptr;
   if ( ast_item.type() == AstItem::Task ) {
-    taskfunc = mgr().new_Task(parent, ast_item);
+    taskfunc = elb_mgr().new_Task(parent, ast_item);
   }
   else {
     if ( ast_item.type() != AstItem::Func ) {
@@ -60,11 +60,11 @@ ItemGen::phase1_tf(
     auto ast_range = ast_item.range();
     if ( ast_range.is_valid() ) {
       auto range = evaluate_range(parent, ast_range);
-      taskfunc = mgr().new_Function(parent, ast_item,
+      taskfunc = elb_mgr().new_Function(parent, ast_item,
 				    ast_range, range, false);
     }
     else {
-      taskfunc = mgr().new_Function(parent, ast_item, false);
+      taskfunc = elb_mgr().new_Function(parent, ast_item, false);
     }
     if ( taskfunc == nullptr ) {
       throw std::logic_error{"taskfunc == nullptr"};
@@ -76,15 +76,15 @@ ItemGen::phase1_tf(
 
   // attribute instance の生成
   auto attr_list = attribute_list(ast_item);
-  mgr().reg_attr(taskfunc, attr_list);
+  elb_mgr().reg_attr(taskfunc, attr_list);
 
   {
     std::ostringstream buf;
     buf << "instantiating task/func : " << taskfunc->full_name() << ".";
-    put_info(__FILE__, __LINE__,
-	     ast_item.file_region(),
-	     "ELAB",
-	     buf.str());
+    log_mgr().put_info(__FILE__, __LINE__,
+		       ast_item.file_region(),
+		       "ELAB",
+		       buf.str());
   }
 
   // 本体のステートメント内部のスコープの生成
@@ -131,18 +131,18 @@ ItemGen::phase2_tf(
     RangeVal range{left_val, right_val};
     auto head = (ElbDeclHead*)nullptr;
     if ( taskfunc->has_range() ) {
-      head = mgr().new_DeclHead(taskfunc, ast_item,
+      head = elb_mgr().new_DeclHead(taskfunc, ast_item,
 				ast_item.range(), range);
     }
     else {
-      head = mgr().new_DeclHead(taskfunc, ast_item);
+      head = elb_mgr().new_DeclHead(taskfunc, ast_item);
     }
     if ( head == nullptr ) {
       throw std::logic_error{"head == nullptr"};
     }
 
     int tag{ (ast_item.data_type() == VpiVarType::None) ? vpiReg : vpiVariables };
-    auto decl = mgr().new_Decl(tag, head, ast_item);
+    auto decl = elb_mgr().new_Decl(tag, head, ast_item);
 
     taskfunc->set_ovar(decl);
   }
@@ -211,14 +211,14 @@ ItemGen::instantiate_constant_function(
   auto head = (ElbDeclHead*)nullptr;
   if ( ast_range.is_valid() ) {
     auto range = evaluate_range(parent, ast_range);
-    func = mgr().new_Function(parent, ast_function,
+    func = elb_mgr().new_Function(parent, ast_function,
 			      ast_range, range, true);
-    head = mgr().new_DeclHead(func, ast_function,
+    head = elb_mgr().new_DeclHead(func, ast_function,
 			      ast_range, range);
   }
   else {
-    func = mgr().new_Function(parent, ast_function, true);
-    head = mgr().new_DeclHead(func, ast_function);
+    func = elb_mgr().new_Function(parent, ast_function, true);
+    head = elb_mgr().new_DeclHead(func, ast_function);
   }
   if ( func == nullptr ) {
     throw std::logic_error{"func == nullptr"};
@@ -238,7 +238,7 @@ ItemGen::instantiate_constant_function(
 
   // 関数名と同名の変数の生成
   int tag{ (ast_function.data_type() == VpiVarType::None) ? vpiReg : vpiVariables };
-  auto decl = mgr().new_Decl(tag, head, ast_function);
+  auto decl = elb_mgr().new_Decl(tag, head, ast_function);
 
   func->set_ovar(decl);
 

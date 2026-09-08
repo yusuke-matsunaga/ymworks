@@ -7,7 +7,6 @@
 /// All rights reserved.
 
 #include "CptModule.h"
-#include "alloc/Alloc.h"
 #include "parser/PtPort.h"
 #include "parser/PtIOHead.h"
 #include "parser/PtDeclHead.h"

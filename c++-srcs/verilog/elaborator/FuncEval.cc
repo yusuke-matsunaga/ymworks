@@ -7,7 +7,6 @@
 /// All rights reserved.
 
 #include "FuncEval.h"
-#include "ErrorGen.h"
 #include "ym/vl/VlTaskFunc.h"
 #include "ym/vl/VlIODecl.h"
 #include "ym/vl/VlDecl.h"
@@ -15,14 +14,18 @@
 #include "ym/vl/VlStmt.h"
 #include "ym/vl/VlExpr.h"
 #include "ym/Range.h"
+#include "common/LogMgr.h"
+#include "elaborator/ElbError.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 FuncEval::FuncEval(
+  LogMgr& log_mgr,
   const VlTaskFunc* function
-) : mFunction{function}
+) : mLogMgr{log_mgr},
+    mFunction{function}
 {
 }
 
@@ -664,7 +667,7 @@ FuncEval::evaluate_funccall(
     arg_list[i] = evaluate_expr(expr->argument(i));
   }
 
-  FuncEval eval(func);
+  FuncEval eval(mLogMgr, func);
   return eval(arg_list);
 }
 
@@ -676,7 +679,7 @@ FuncEval::evaluate_int(
 {
   auto val = evaluate_expr(expr);
   if ( !val.is_int_compat() ) {
-    ErrorGen::int_required(__FILE__, __LINE__, expr->file_region());
+    mLogMgr.error_int_required(__FILE__, __LINE__, expr->file_region());
   }
   return val.int_value();
 }

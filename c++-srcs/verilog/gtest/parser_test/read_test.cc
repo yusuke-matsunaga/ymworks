@@ -6,7 +6,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include <gtest/gtest.h>
+#include "ParserTest.h"
 #include "parser/Parser.h"
 #include "parser/AstMgr.h"
 #include "parser/AstDumper.h"
@@ -14,11 +14,8 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
-TEST(ParserTest, read1)
+TEST_F(ParserTest, read1)
 {
-  AstMgr mgr;
-  Parser parser(mgr);
-
   auto data_dir = std::filesystem::path{DATA_DIR} / "verilog";
   auto filename = data_dir / "udp1.v";
 
@@ -29,7 +26,7 @@ TEST(ParserTest, read1)
 
   //dumper.put(mgr.udp_list(), mgr.module_list());
 
-  auto json_obj = mgr.json_obj();
+  auto json_obj = astmgr.json_obj();
 
   json_obj.write(std::cout, true);
 }

@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/Ast.h"
+#include "ym/FileRegion.h"
 #include "ym/PathList.h"
 #include "parser/AstMgr.h"
 #include "parser/PtAttrInst.h"
@@ -37,7 +38,7 @@
 #include "parser/PtUdp.h"
 #include "parser/PtUdpEntry.h"
 #include "parser/PtUdpValue.h"
-#include "ym/MsgMgr.h"
+#include "common/LogMgr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -64,7 +65,8 @@ public:
 
   /// @brief コンストラクタ
   Parser(
-    AstMgr& astmgr ///< [in] 読んだ結果のパース木を登録するマネージャ
+    AstMgr& ast_mgr, ///< [in] 読んだ結果のパース木を登録するマネージャ
+    LogMgr& log_mgr  ///< [in] ログマネージャ
   );
 
   /// @brief デストラクタ
@@ -187,32 +189,6 @@ public:
     const PtItem* item_top
   );
 
-#if 0
-public:
-  //////////////////////////////////////////////////////////////////////
-  // ポート関連の要素の生成関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief ポート宣言とIO宣言の齟齬をチェックする．
-  void
-  check_IO(
-    const PtPort* port_top,      ///< [in] ポート宣言のリスト
-    const PtIOHead* iohead_top,  ///< [in] IO宣言のリスト
-    std::unordered_map<std::string, VpiDir>& iodecl_dirs ///< [in] IO宣言名をキーとして向きを保持する辞書
-  );
-
-  /// @brief 入出力宣言中の重複チェックを行う．
-  bool
-  check_PortArray(
-    const PtIOHead* iohead_top
-  );
-
-  /// @brief 入出力宣言からポートリストを作る．
-  PtPortList
-  new_PortArray(
-    const PtIOHead* iohead_top
-  );
-#endif
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -382,12 +358,16 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 関数内で使えるステートメントかどうかのチェック
+  ///
+  /// エラーが起きた時は例外を送出＊せず＊に put_error() を呼ぶ．
   bool
   check_function_statement(
     const PtStmt* stmt
   );
 
   /// @briefdefault ラベルが2つ以上含まれていないかどうかのチェック
+  ///
+  /// エラーが起きた時は例外を送出＊せず＊に put_error() を呼ぶ．
   bool
   check_default_label(
     const PtCaseItem* caseitem_top
@@ -396,30 +376,28 @@ public:
   /// @brief GenFor 文のチェックを行う．
   ///
   /// 具体的には loop_var と next_var が同一かチェックする．
+  /// エラーが起きた時は例外を送出＊せず＊に put_error() を呼ぶ．
   bool
   check_GenFor(
     const FileRegion& fr, ///< [in] ファイル位置の情報
     const char* loop_var, ///< [in] ループ変数
     const char* next_var  ///< [in] 増加式の左辺の変数
-  )
-  {
-    if ( strcmp(loop_var, next_var) == 0 ) {
-      return true;
-    }
+  );
 
-    std::ostringstream buf;
-    buf << "Lhs of the increment statement ("
-	<< next_var
-	<< ") does not match with Lhs of the initial statement ("
-	<< loop_var
-	<< ")";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    fr,
-		    MsgType::Error,
-		    "PARSER",
-		    buf.str());
-    return false;
-  }
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // エラー出力
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief パーサーのエラー
+  void
+  put_error(
+    const char* file,      ///< [in] ソースプログラムのファイル名
+    int line,              ///< [in] ソースプログラムの行番号
+    const FileRegion& loc, ///< [in] 対象のファイル位置
+    const char* message    ///< [in] メッセージ文字列
+  );
 
 
 private:
@@ -432,6 +410,9 @@ private:
 
   // パース木を保持するクラス
   AstMgr& mAstMgr;
+
+  // ログマネージャ
+  LogMgr& mLogMgr;
 
   // パース木の要素の生成を行うクラス
   PtFactory mFactory;

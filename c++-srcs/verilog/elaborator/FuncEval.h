@@ -16,6 +16,8 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+class LogMgr;
+
 //////////////////////////////////////////////////////////////////////
 /// @class FuncEval FuncEval.h "FuncEval.h"
 /// @brief 関数の値の評価を行うクラス
@@ -38,6 +40,7 @@ public:
 
   /// @brief コンストラクタ
   FuncEval(
+    LogMgr& log_mgr,           ///< [in] ログマネージャ
     const VlTaskFunc* function ///< [in] 関数
   );
 
@@ -342,6 +345,9 @@ private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
   //////////////////////////////////////////////////////////////////////
+
+  // ログマネージャ
+  LogMgr& mLogMgr;
 
   // 対象の関数
   const VlTaskFunc* mFunction;

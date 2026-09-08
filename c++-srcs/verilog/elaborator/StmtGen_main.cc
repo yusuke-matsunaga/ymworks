@@ -9,7 +9,6 @@
 #include "StmtGen.h"
 #include "ElbEnv.h"
 #include "ElbStub.h"
-#include "ErrorGen.h"
 
 #include "ym/vl/AstStmt.h"
 #include "ym/vl/AstCaseItem.h"
@@ -31,9 +30,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 StmtGen::StmtGen(
-  Elaborator& elab,
-  ElbMgr& elb_mgr
-) : ElbProxy{elab, elb_mgr}
+  Elaborator& elab
+) : ElbProxy{elab}
 {
 }
 
@@ -290,7 +288,7 @@ StmtGen::instantiate_stmt(
   if ( stmt ) {
     // attribute instance の生成
     auto attr_list = attribute_list(ast_stmt);
-    mgr().reg_attr(stmt, attr_list);
+    elb_mgr().reg_attr(stmt, attr_list);
   }
 
   return stmt;
@@ -327,8 +325,8 @@ StmtGen::instantiate_disable(
 
   // disable はモジュール境界を越えない？
   // 仕様書には何も書いていないのでたぶん越えられる．
-  auto handle = mgr().find_obj_up(parent, ast_stmt, nullptr);
-  if ( !handle ) {
+  auto handle = elb_mgr().find_obj_up(parent, ast_stmt, nullptr);
+  if ( handle == nullptr ) {
     std::ostringstream buf;
     buf << ast_stmt.decompile_name() << " : Not found.";
     MsgMgr::put_msg(__FILE__, __LINE__,
@@ -355,7 +353,7 @@ StmtGen::instantiate_disable(
   }
 
   auto scope = handle->scope();
-  return mgr().new_DisableStmt(parent, process, ast_stmt, scope);
+  return elb_mgr().new_DisableStmt(parent, process, ast_stmt, scope);
 }
 
 // @brief enable の実体化を行う．
@@ -371,7 +369,7 @@ StmtGen::instantiate_enable(
 
   // タスクを探し出して設定する．
   // タスク名の探索はモジュール境界を越える．
-  auto handle = mgr().find_obj_up(parent, ast_stmt, nullptr);
+  auto handle = elb_mgr().find_obj_up(parent, ast_stmt, nullptr);
   if ( !handle ) {
     std::ostringstream buf;
     buf << ast_stmt.decompile_name() << " : Not found.";
@@ -411,7 +409,7 @@ StmtGen::instantiate_enable(
   }
 
   // task call ステートメントの生成
-  return mgr().new_TaskCall(parent, process, ast_stmt, task, arg_list);
+  return elb_mgr().new_TaskCall(parent, process, ast_stmt, task, arg_list);
 }
 
 // @brief system enable 文の実体化を行う．
@@ -427,15 +425,15 @@ StmtGen::instantiate_sysenable(
   auto name = ast_stmt.name();
 
   // UserSystf を取り出す．
-  auto user_systf = mgr().find_user_systf(name);
+  auto user_systf = elb_mgr().find_user_systf(name);
   if ( user_systf == nullptr ) {
-    ErrorGen::no_such_systask(__FILE__, __LINE__, ast_stmt);
+    log_mgr().error_no_such_systask(__FILE__, __LINE__, ast_stmt);
   }
 
   // 引数の数のチェック
   auto n = ast_stmt.arg_list().size();
   if ( !user_systf->check_n_of_args(n) ) {
-    ErrorGen::n_of_arguments_mismatch(__FILE__, __LINE__, ast_stmt);
+    log_mgr().error_argument_num_mismatch(__FILE__, __LINE__, ast_stmt);
   }
 
   // 引数を生成する．
@@ -448,13 +446,13 @@ StmtGen::instantiate_sysenable(
       arg = instantiate_arg(parent, env, ast_expr);
     }
     if ( !user_systf->check_argument(arg_list.size(), arg) ) {
-      ErrorGen::illegal_argument_type(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_argument_type_mismatch(__FILE__, __LINE__, ast_expr);
     }
     arg_list.push_back(arg);
   }
 
   // system task call ステートメントの生成
-  return mgr().new_SysTaskCall(parent, process, ast_stmt,
+  return elb_mgr().new_SysTaskCall(parent, process, ast_stmt,
 			       user_systf, arg_list);
 }
 
@@ -477,7 +475,7 @@ StmtGen::instantiate_ctrlstmt(
   }
 
   // delay / event control ステートメントの生成
-  return mgr().new_CtrlStmt(parent, process, ast_stmt, control, body);
+  return elb_mgr().new_CtrlStmt(parent, process, ast_stmt, control, body);
 }
 
 // @brief コントロールを生成する．
@@ -495,7 +493,7 @@ StmtGen::instantiate_control(
   if ( ast_control.type() == AstControl::Delay ) {
     auto delay = instantiate_expr(parent, env, ast_control.delay());
     if ( delay ) {
-      return mgr().new_DelayControl(ast_control, delay);
+      return elb_mgr().new_DelayControl(ast_control, delay);
     }
     return nullptr;
   }
@@ -513,14 +511,14 @@ StmtGen::instantiate_control(
   }
 
   if ( ast_control.type() == AstControl::Event ) {
-    return mgr().new_EventControl(ast_control, event_list);
+    return elb_mgr().new_EventControl(ast_control, event_list);
   }
 
   auto rep = instantiate_expr(parent, env, ast_control.rep_expr());
   if ( !rep ) {
     return nullptr;
   }
-  return mgr().new_RepeatControl(ast_control, rep, event_list);
+  return elb_mgr().new_RepeatControl(ast_control, rep, event_list);
 }
 
 // @brief event statement の実体化を行う．
@@ -537,7 +535,7 @@ StmtGen::instantiate_eventstmt(
     return nullptr;
   }
 
-  return mgr().new_EventStmt(parent, process, ast_stmt, named_event);
+  return elb_mgr().new_EventStmt(parent, process, ast_stmt, named_event);
 }
 
 // @brief null statement の実体化を行う．
@@ -548,7 +546,7 @@ StmtGen::instantiate_nullstmt(
   const AstStmt& ast_stmt
 )
 {
-  return mgr().new_NullStmt(parent, process, ast_stmt);
+  return elb_mgr().new_NullStmt(parent, process, ast_stmt);
 }
 
 END_NAMESPACE_YM_VERILOG

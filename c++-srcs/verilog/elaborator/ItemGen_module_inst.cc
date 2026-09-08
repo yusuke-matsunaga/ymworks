@@ -9,7 +9,6 @@
 #include "ItemGen.h"
 #include "ElbEnv.h"
 #include "ElbParamCon.h"
-#include "ElbError.h"
 
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstModule.h"
@@ -22,6 +21,7 @@
 #include "elaborator/ElbModuleArray.h"
 #include "elaborator/ElbExpr.h"
 #include "elaborator/RangeVal.h"
+#include "elaborator/ElbError.h"
 
 #include "ym/MsgMgr.h"
 
@@ -50,7 +50,7 @@ ItemGen::phase1_muheader(
   }
 
   // 次に udp を探す．
-  auto udpdefn = mgr().find_udp(defname);
+  auto udpdefn = elb_mgr().find_udp(defname);
   if ( udpdefn != nullptr ) {
     phase1_udp(parent, ast_head, udpdefn);
     return;
@@ -64,9 +64,9 @@ ItemGen::phase1_muheader(
   }
 
   // どれもなければエラー
-  error_not_found(__FILE__, __LINE__,
-		  ast_head.file_region(),
-		  defname);
+  log_mgr().error_not_found(__FILE__, __LINE__,
+			    ast_head.file_region(),
+			    defname);
 }
 
 // @brief module instance のヘッダの生成を行う．
@@ -79,7 +79,7 @@ ItemGen::phase1_module_head(
 {
   if ( check_instance_mark(ast_module) ) {
     // 依存関係が循環している．
-    error_cyclic_dependency(__FILE__, __LINE__, ast_module);
+    log_mgr().error_cyclic_dependency(__FILE__, __LINE__, ast_module);
   }
 
   for ( auto ast_inst: ast_head.inst_list() ) {
@@ -87,7 +87,7 @@ ItemGen::phase1_module_head(
       phase1_module_inst(parent, ast_head, ast_inst, ast_module);
     }
     catch ( const ElbError& error ) {
-      put_error(error);
+      log_mgr().put_error(error);
     }
   }
 }
@@ -104,7 +104,7 @@ ItemGen::phase1_module_inst(
   auto name = ast_inst.name();
   if ( name == nullptr ) {
     // 名無しのモジュールインスタンスはない
-    error_noname_module(__FILE__, __LINE__, ast_inst);
+    log_mgr().error_noname_module(__FILE__, __LINE__, ast_inst);
   }
   // 名前が重複していないかチェックする．
   check_name(parent, name, ast_inst.file_region());
@@ -117,14 +117,14 @@ ItemGen::phase1_module_inst(
   }
   else {
     // 単一の要素
-    auto module1 = mgr().new_Module(parent,
-				    ast_module,
-				    ast_head,
-				    ast_inst);
+    auto module1 = elb_mgr().new_Module(parent,
+					ast_module,
+					ast_head,
+					ast_inst);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_module, ast_head);
-    mgr().reg_attr(module1, attr_list);
+    elb_mgr().reg_attr(module1, attr_list);
 
     {
       std::ostringstream buf;
@@ -159,14 +159,14 @@ ItemGen::phase1_module_array(
   auto ast_range = ast_inst.range();
 
   auto range = evaluate_range(parent, ast_range);
-  auto module_array = mgr().new_ModuleArray(parent, ast_module,
-					    ast_head, ast_inst,
-					    ast_range, range);
+  auto module_array = elb_mgr().new_ModuleArray(parent, ast_module,
+						ast_head, ast_inst,
+						ast_range, range);
 
-  info_module_array(__FILE__, __LINE__,
-		    ast_head,
-		    ast_inst,
-		    range);
+  log_mgr().info_module_array(__FILE__, __LINE__,
+			      ast_head,
+			      ast_inst,
+			      range);
 
   add_phase3stub(make_link_module_array_stub(module_array, ast_module, ast_inst));
 
@@ -176,12 +176,12 @@ ItemGen::phase1_module_array(
   auto attr_list = attribute_list(ast_module, ast_head);
   for ( SizeType i = 0; i < n; ++ i ) {
     auto module = module_array->elem(i);
-    info_module(__FILE__, __LINE__, module);
+    log_mgr().info_module(__FILE__, __LINE__, module);
 
     // モジュール要素を作る．
     phase1_module_item(module, ast_module, param_con_list);
     // attribute instance の登録
-    mgr().reg_attr(module, attr_list);
+    elb_mgr().reg_attr(module, attr_list);
   }
 }
 
@@ -199,10 +199,10 @@ ItemGen::phase1_udp(
   auto param_size = pa_list.size();
   auto ast_delay = ast_head.delay();
   if ( param_size > 0 && pa_list.front().name() != nullptr ) {
-    error_udp_with_paramassign(__FILE__, __LINE__, ast_head);
+    log_mgr().error_udp_with_paramassign(__FILE__, __LINE__, ast_head);
   }
   if ( (ast_delay.is_valid() && param_size > 0) || param_size > 1 ) {
-    error_udp_with_paramassign(__FILE__, __LINE__, ast_head);
+    log_mgr().error_udp_with_paramassign(__FILE__, __LINE__, ast_head);
   }
   // 順序付き paramassign が一つだけの場合は delay の場合があるので
   // ここではエラーにしない．
@@ -222,7 +222,7 @@ ItemGen::phase1_cell(
   // この場合, parameter 割り当てリストは空でなければならない．
   auto pa_list = ast_head.paramassign_list();
   if ( pa_list.size() > 0 ) {
-    error_cell_with_paramassign(__FILE__, __LINE__, ast_head);
+    log_mgr().error_cell_with_paramassign(__FILE__, __LINE__, ast_head);
   }
 
   // 今すぐには処理できないのでキューに積む．
@@ -261,7 +261,7 @@ ItemGen::link_module_array(
     }
   }
   if ( n > port_num ) {
-    error_port_num_mismatch(__FILE__, __LINE__, ast_inst);
+    log_mgr().error_port_num_mismatch(__FILE__, __LINE__, ast_inst);
   }
   // どうやら実際のポート数よりも少ないのはいいらしい
 
@@ -298,7 +298,7 @@ ItemGen::link_module_array(
 	throw std::logic_error{"part_name == nullptr"};
       }
       if ( port_index.count(port_name) == 0 ) {
-	error_port_not_found(__FILE__, __LINE__, ast_con);
+	log_mgr().error_port_not_found(__FILE__, __LINE__, ast_con);
       }
       index = port_index.at(port_name);
       if ( index >= port_num ) {
@@ -329,7 +329,7 @@ ItemGen::link_module_array(
       auto type = tmp->value_type();
       // ただし real 型は駄目
       if ( type.is_real_type() ) {
-	error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
       }
 
       SizeType expr_size = type.size();
@@ -355,19 +355,19 @@ ItemGen::link_module_array(
 	for ( SizeType i = 0; i < module_size; ++ i ) {
 	  ElbExpr* tmp1 = nullptr;
 	  if ( port_size == 1 ) {
-	    tmp1 = mgr().new_BitSelect(ast_expr, tmp, i);
+	    tmp1 = elb_mgr().new_BitSelect(ast_expr, tmp, i);
 	  }
 	  else {
 	    int lsb = i;
 	    int msb = lsb + port_size - 1;
-	    tmp1 = mgr().new_PartSelect(ast_expr, tmp, msb, lsb);
+	    tmp1 = elb_mgr().new_PartSelect(ast_expr, tmp, msb, lsb);
 	  }
 	  auto module = module_array->elem(i);
 	  module->set_port_high_conn(index, tmp1, conn_by_name);
 	}
       }
       else {
-	error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
       }
     }
     else {
@@ -375,7 +375,7 @@ ItemGen::link_module_array(
       auto tmp = instantiate_lhs(parent, env, ast_expr);
       auto type = tmp->value_type();
       if ( type.is_real_type() ) {
-	error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
       }
 
       auto expr_size = type.size();
@@ -395,13 +395,13 @@ ItemGen::link_module_array(
 	  auto module = module_array->elem(i);
 	  int index1 = i * port_size;
 	  int index2 = index2 + port_size - 1;
-	  auto expr1 = mgr().new_PartSelect(ast_expr, tmp, index1, index2);
+	  auto expr1 = elb_mgr().new_PartSelect(ast_expr, tmp, index1, index2);
 	  module->set_port_high_conn(index, expr1, conn_by_name);
 	}
       }
       else {
 	// サイズが合わない．
-	error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
       }
     }
 
@@ -412,7 +412,7 @@ ItemGen::link_module_array(
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_con);
-      mgr().reg_attr(port, attr_list);
+      elb_mgr().reg_attr(port, attr_list);
     }
   }
 }
@@ -444,7 +444,7 @@ ItemGen::link_module(
     }
   }
   if ( n > port_num ) {
-    error_port_num_mismatch(__FILE__, __LINE__, ast_inst);
+    log_mgr().error_port_num_mismatch(__FILE__, __LINE__, ast_inst);
   }
   // どうやら実際のポート数よりも少ないのはいいらしい
 
@@ -481,7 +481,7 @@ ItemGen::link_module(
 	throw std::logic_error{"port_name == nullptr"};
       }
       if ( port_index.count(port_name) == 0 ) {
-	error_port_not_found(__FILE__, __LINE__, ast_con);
+	log_mgr().error_port_not_found(__FILE__, __LINE__, ast_con);
       }
       index = port_index.at(port_name);
       if ( index < 0 || index >= port_num ) {
@@ -511,7 +511,7 @@ ItemGen::link_module(
       auto type = tmp->value_type();
       if ( type.is_real_type() ) {
 	// ただし real 型は駄目
-	error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
       }
 
       SizeType expr_size = type.size();
@@ -529,7 +529,7 @@ ItemGen::link_module(
 			    "ELAB",
 			    buf.str());
 	  }
-	  error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
+	  log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
 	}
 	tmp->set_reqsize(VlValueType(false, true, port_size));
       }
@@ -540,7 +540,7 @@ ItemGen::link_module(
       auto tmp = instantiate_lhs(parent, env, ast_expr);
       auto type = tmp->value_type();
       if ( type.is_real_type() ) {
-	error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
+	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
       }
       // 左辺はサイズの補正をしても意味がないのでそのまま接続する．
       module->set_port_high_conn(index, tmp, conn_by_name);
@@ -548,7 +548,7 @@ ItemGen::link_module(
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_con);
-    mgr().reg_attr(port, attr_list);
+    elb_mgr().reg_attr(port, attr_list);
   }
 }
 

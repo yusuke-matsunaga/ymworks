@@ -23,18 +23,17 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 #include "verilog_grammer.hh"
 
-// メモリリークのチェックを行うとき 1 にする．
-const int check_memory_leak = 0;
-
 //////////////////////////////////////////////////////////////////////
 // Verilog-HDL のパーサークラス
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
 Parser::Parser(
-  AstMgr& astmgr
-) : mAlloc{astmgr.alloc()},
-    mAstMgr{astmgr},
+  AstMgr& ast_mgr,
+  LogMgr& log_mgr
+) : mAlloc{ast_mgr.alloc()},
+    mAstMgr{ast_mgr},
+    mLogMgr{log_mgr},
     mFactory(mAlloc),
     mLex{new Lex}
 {
@@ -66,11 +65,10 @@ Parser::read_file(
   if ( !lex().open_file(filename) ) {
     std::ostringstream buf;
     buf << filename << " : No such file.";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    FileRegion(),
-		    MsgType::Failure,
-		    "VLPARSER",
-		    buf.str());
+    mLogMgr.put_failure(__FILE__, __LINE__,
+			FileRegion(),
+			"PARS_OPEN",
+			buf.str());
     return false;
   }
 
@@ -180,14 +178,14 @@ Parser::check_function_statement(
   default:
     break;
   }
+
   std::ostringstream buf;
   buf << AstStmt(stmt).stmt_name()
       << " cannot be used in function declaration.";
-  MsgMgr::put_msg(__FILE__, __LINE__,
-		  stmt->file_region(),
-		  MsgType::Error,
-		  "PARS",
-		  buf.str());
+  mLogMgr.put_error(__FILE__, __LINE__,
+		    stmt->file_region(),
+		    "PARS_ILLEGAL_STMT_IN_CF",
+		    buf.str());
   return false;
 }
 
@@ -202,16 +200,64 @@ Parser::check_default_label(
     if ( ci->label_top() == nullptr ) {
       ++ n;
       if ( n > 1 ) {
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			ci->file_region(),
-			MsgType::Error,
-			"PARS",
-			" more than one 'default' labels.");
+	mLogMgr.put_error(__FILE__, __LINE__,
+			  ci->file_region(),
+			  "PARS_DUP_DEFAULT_LABEL",
+			  "More than one 'default' label.");
 	return false;
       }
     }
   }
   return true;
+}
+
+// @brief GenFor 文のチェックを行う．
+bool
+Parser::check_GenFor(
+  const FileRegion& fr,
+  const char* loop_var,
+  const char* next_var
+)
+{
+  if ( strcmp(loop_var, next_var) == 0 ) {
+    return true;
+  }
+
+  std::ostringstream buf;
+  buf << "Lhs of the increment statement ("
+      << next_var
+      << ") does not match with Lhs of the initial statement ("
+      << loop_var
+      << ")";
+  mLogMgr.put_error(__FILE__, __LINE__,
+		    fr,
+		    "PARS_GENFOR_VAR_MISMATCH",
+		    buf.str());
+  return false;
+}
+
+// @brief パーサーのエラー
+void
+Parser::put_error(
+  const char* file,
+  int line,
+  const FileRegion& loc,
+  const char* message
+)
+{
+  std::string message2;
+  // 好みの問題だけど "parse error" よりは "syntax error" の方が好き．
+  if ( !strncmp(message, "parse error", 11) ) {
+    message2 ="syntax error";
+    message2 += (message + 11);
+  }
+  else {
+    message2 = message;
+  }
+
+  mLogMgr.put_error(file, line, loc,
+		    "PARS_SYMTAX_ERROR",
+		    message2);
 }
 
 END_NAMESPACE_YM_VERILOG
