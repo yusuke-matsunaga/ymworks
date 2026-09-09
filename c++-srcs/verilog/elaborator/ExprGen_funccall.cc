@@ -97,7 +97,7 @@ ExprGen::instantiate_funccall(
     auto ast_func = find_funcdef(module, name);
     if ( ast_func.is_invalid() ) {
       // 関数が見つからなかった．
-      log_mgr().error_no_such_function(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_function_not_found(__FILE__, __LINE__, ast_expr);
     }
 
     if ( ast_func.is_in_use() ) {
@@ -122,7 +122,7 @@ ExprGen::instantiate_funccall(
     auto handle = elb_mgr().find_obj_up(parent, ast_expr, nullptr);
     if ( handle == nullptr ) {
       // 関数が見つからなかった．
-      log_mgr().error_no_such_function(__FILE__, __LINE__, ast_expr);
+      log_mgr().error_function_not_found(__FILE__, __LINE__, ast_expr);
     }
     if ( handle->type() != VpiObjType::Function ) {
       // 関数ではなかった．
@@ -184,7 +184,7 @@ ExprGen::instantiate_sysfunccall(
   // system function を探し出す．
   auto user_systf = elb_mgr().find_user_systf(name);
   if ( user_systf == nullptr ) {
-    log_mgr().error_no_such_sysfunction(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_sysfunc_not_found(__FILE__, __LINE__, ast_expr);
   }
 
   // 引数の数のチェック

@@ -8,6 +8,7 @@
 
 #include "StmtGen.h"
 #include "ElbEnv.h"
+#include "elaborator/ElbError.h"
 
 #include "ym/vl/AstStmt.h"
 
@@ -124,11 +125,14 @@ StmtGen::instantiate_stmt_list(
   std::vector<const VlStmt*> stmt_list;
   stmt_list.reserve(stmt_num);
   for ( auto ast_stmt1: ast_stmt.stmt_list() ) {
-    auto stmt1 = instantiate_stmt(parent, process, env, ast_stmt1);
-    if ( !stmt1 ) {
-      return std::vector<const VlStmt*>{};
+    try {
+      auto stmt1 = instantiate_stmt(parent, process, env, ast_stmt1);
+      stmt_list.push_back(stmt1);
     }
-    stmt_list.push_back(stmt1);
+    catch ( const ElbError& error ) {
+      log_mgr().put_error(error);
+      // エラーが起きたらそのステートメントだけスキップする．
+    }
   }
 
   return stmt_list;

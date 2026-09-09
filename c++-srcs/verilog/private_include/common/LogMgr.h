@@ -15,6 +15,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 class AstConnection;
+class AstControl;
 class AstDefParam;
 class AstExpr;
 class AstIOItem;
@@ -25,7 +26,6 @@ class AstStmt;
 class ElbDecl;
 class ElbError;
 class ElbGenvar;
-class ElbModule;
 class ElbParamCon;
 class ElbParameter;
 class ElbPrimitive;
@@ -35,6 +35,9 @@ class RangeVal;
 class VlContAssign;
 class VlDecl;
 class VlDeclArray;
+class VlExpr;
+class VlModule;
+class VlObj;
 class VlScope;
 
 //////////////////////////////////////////////////////////////////////
@@ -349,12 +352,109 @@ public:
     const AstInst& ast_inst
   );
 
+  /// @brief function 内で使えないステートメント
+  void
+  error_illegal_stmt_in_function(
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
+    const AstStmt& ast_stmt ///< [in] 対象の構文木要素
+  );
+
+  /// @brief constant function 内で使えないステートメント
+  void
+  error_illegal_stmt_in_constfunc(
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
+    const AstStmt& ast_stmt ///< [in] 対象の構文木要素
+  );
+
+  /// @brief 該当するタスクが存在しない．
+  void
+  error_task_not_found(
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
+    const AstStmt& ast_stmt ///< [in] 対象の構文木要素
+  );
+
+  /// @brief 対象がタスクではなかった．
+  void
+  error_not_a_task(
+    const char* file,              ///< [in] ファイル名
+    int line,	                   ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    const ObjHandle* handle        ///< [in] 対象の要素
+  );
+
+  /// @brief 対象が名前付きブロックではなかった．
+  void
+  error_not_a_namedblock(
+    const char* file,              ///< [in] ファイル名
+    int line,	                   ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    const ObjHandle* handle        ///< [in] 対象の要素
+  );
+
+  /// @brief 該当するシステムタスクが存在しない．
+  void
+  error_systask_not_found(
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
+    const AstStmt& ast_stmt ///< [in] 対象の構文木要素
+  );
+
+  /// @brief 引数の数が合わない．
+  void
+  error_argument_num_mismatch(
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
+    const AstStmt& ast_stmt ///< [in] 対象の構文木要素
+  );
+
+  /// @brief function の内部ではコントロールを持てない．
+  void
+  error_ctrl_in_function(
+    const char* file,          ///< [in] ファイル名
+    int line,		       ///< [in] 行番号
+    const AstControl& ast_ctrl ///< [in] 対象の構文木要素
+  );
+
+  /// @brief case 文の評価式に real 型は使えない．
+  void
+  error_real_in_case_expr(
+    const char* file,  ///< [in] ファイル名
+    int line,	       ///< [in] 行番号
+    const VlExpr* expr ///< [in] 式
+  );
+
+  /// @brief case 文のラベル式に real 型は使えない．
+  void
+  error_real_in_case_label(
+    const char* file,  ///< [in] ファイル名
+    int line,	       ///< [in] 行番号
+    const VlExpr* expr ///< [in] 式
+  );
+
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstExpr の elaboration に関するエラー
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief int 型が要求されている所で互換性のない型があった．
+  void
+  error_int_required(
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
+    const AstExpr& ast_expr ///< [in] 対象の構文木要素
+  );
+
   /// @brief int 型が要求されている所で互換性のない型があった．
   void
   error_int_required(
     const char* file,     ///< [in] ファイル名
     int line,		  ///< [in] 行番号
-    const FileRegion& loc ///< [in] エラー箇所
+    const VlExpr* expr    ///< [in] 対象の式
   );
 
   /// @brief ビットベクタ型が要求されている所で互換性のない型があった．
@@ -368,272 +468,256 @@ public:
   /// @brief 通常の式中に edge descriptor
   void
   error_illegal_edge_descriptor(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief real 型のオペランドをとれない
   void
   error_illegal_real_type(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 該当する関数が存在しない．
   void
-  error_no_such_function(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+  error_function_not_found(
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 該当するシステム関数が存在しない．
   void
-  error_no_such_sysfunction(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+  error_sysfunc_not_found(
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
-  );
-
-  /// @brief 該当するシステムタスクが存在しない．
-  void
-  error_no_such_systask(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
-    const AstStmt& ast_stmt ///< [in] 対象の構文木要素
   );
 
   /// @brief 関数ではない．
   void
   error_not_a_function(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 引数の数が合わない．
   void
   error_argument_num_mismatch(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
-  );
-
-  /// @brief 引数の数が合わない．
-  void
-  error_argument_num_mismatch(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
-    const AstStmt& ast_stmt ///< [in] 対象の構文木要素
   );
 
   /// @brief 引数の型が合わない．
   void
   error_argument_type_mismatch(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトの型が不適切
   void
   error_illegal_object(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトが named-event でなかった
   void
   error_not_a_namedevent(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 要素の範囲の順番と範囲指定の順番が異なる．
   void
   error_range_order(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief named-event に対する範囲指定
   void
   error_select_for_namedevent(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief assign/deassign に不適切なビット/範囲指定
   void
   error_select_in_pca(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief force/release に不適切なビット/範囲指定
   void
   error_select_in_force(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief assign/deassign に不適切な配列要素
   void
   error_array_in_pca(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief force/release に不適切な配列要素
   void
   error_array_in_force(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 配列の次元が合わない
   void
   error_dimension_mismatch(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief real 型に対するビット選択あるいは部分選択があった
   void
   error_select_for_real(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief constant function 中にシステム関数呼び出し
   void
   error_illegal_sysfunccall_in_cf(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief constant expression 中にシステム関数呼び出し
   void
   error_illegal_sysfunccall_in_ce(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 定数関数は自己再帰できない．
   void
   error_uses_itself(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 定数関数ではない．
   void
   error_not_a_constant_function(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトの型が constant function 用として不適切
   void
   error_illegal_object_cf(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 階層名が constant expression 中にあった
   void
   error_hname_in_ce(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 階層名が constant function 中にあった
   void
   error_hname_in_cf(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief オブジェクトが parameter でなかった
   void
   error_not_a_parameter(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief イベント式の根元に定数
   void
   error_illegal_constant_in_event_expression(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief イベント式の根元に関数呼び出し
   void
   error_illegal_funccall_in_event_expression(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief イベント式の根元にシステム関数呼び出し
   void
   error_illegal_sysfunccall_in_event_expression(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 左辺式で用いることのできない演算子
   void
   error_illegal_operator_in_lhs(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 左辺式に定数
   void
   error_illegal_constant_in_lhs(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 左辺式に関数呼び出し
   void
   error_illegal_funccall_in_lhs(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
   /// @brief 左辺式にシステム関数呼び出し
   void
   error_illegal_sysfunccall_in_lhs(
-    const char* file,     ///< [in] ファイル名
-    int line,		  ///< [in] 行番号
+    const char* file,       ///< [in] ファイル名
+    int line,		    ///< [in] 行番号
     const AstExpr& ast_expr ///< [in] 対象の構文木要素
   );
 
@@ -648,24 +732,24 @@ public:
   /// @brief 添字が範囲外
   void
   warning_index_out_of_range(
-    const char* file_name, ///< [in] ファイル名
-    int line,              ///< [in] 行番号
+    const char* file_name,        ///< [in] ファイル名
+    int line,                     ///< [in] 行番号
     const FileRegion& file_region ///< [in] ファイル位置
   );
 
   /// @brief 左の範囲が範囲外
   void
   warning_left_index_out_of_range(
-    const char* file_name, ///< [in] ファイル名
-    int line,              ///< [in] 行番号
+    const char* file_name,        ///< [in] ファイル名
+    int line,                     ///< [in] 行番号
     const FileRegion& file_region ///< [in] ファイル位置
   );
 
   /// @brief 右の範囲が範囲外
   void
   warning_right_index_out_of_range(
-    const char* file_name, ///< [in] ファイル名
-    int line,              ///< [in] 行番号
+    const char* file_name,        ///< [in] ファイル名
+    int line,                     ///< [in] 行番号
     const FileRegion& file_region ///< [in] ファイル位置
   );
 
@@ -692,7 +776,7 @@ public:
   info_module(
     const char* file,
     int line,
-    ElbModule* module
+    const VlModule* module
   );
 
   /// @brief IO宣言のインスタンス生成
@@ -878,6 +962,22 @@ public:
     const FileRegion& loc, ///< [in] 対象の箇所
     const char* label,     ///< [in] ラベル
     const std::string& msg ///< [in] メッセージ
+  );
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // 内部で用いられる関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief AstExpr 系のエラーの下請け関数
+  void
+  expr_common(
+    const char* file,
+    int line,
+    const AstExpr& ast_expr,
+    const char* label,
+    const std::string& msg
   );
 
 

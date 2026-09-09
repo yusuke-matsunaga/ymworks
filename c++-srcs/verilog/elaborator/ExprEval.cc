@@ -42,7 +42,7 @@ ExprEval::evaluate_int(
 {
   auto val = evaluate_expr(parent, ast_expr);
   if ( !val.is_int_compat() ) {
-    log_mgr().error_int_required(__FILE__, __LINE__, ast_expr.file_region());
+    log_mgr().error_int_required(__FILE__, __LINE__, ast_expr);
   }
 
   return val.int_value();
@@ -59,7 +59,7 @@ ExprEval::evaluate_int_if_const(
   try {
     auto val = evaluate_expr(parent, ast_expr);
     if ( !val.is_int_compat() ) {
-      log_mgr().error_int_required(__FILE__, __LINE__, ast_expr.file_region());
+      log_mgr().error_int_required(__FILE__, __LINE__, ast_expr);
     }
     is_const = true;
     return val.int_value();
@@ -627,7 +627,7 @@ ExprEval::evaluate_funccall(
   auto ast_func = find_funcdef(module, name);
   if ( ast_func.is_invalid() ) {
     // 関数が見つからなかった．
-    log_mgr().error_no_such_function(__FILE__, __LINE__, ast_expr);
+    log_mgr().error_function_not_found(__FILE__, __LINE__, ast_expr);
   }
 
   if ( ast_func.is_in_use() ) {

@@ -679,7 +679,7 @@ FuncEval::evaluate_int(
 {
   auto val = evaluate_expr(expr);
   if ( !val.is_int_compat() ) {
-    mLogMgr.error_int_required(__FILE__, __LINE__, expr->file_region());
+    mLogMgr.error_int_required(__FILE__, __LINE__, expr);
   }
   return val.int_value();
 }

@@ -14,6 +14,7 @@
 #include "elaborator/ElbError.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbPrimitive.h"
+#include "elaborator/ObjHandle.h"
 #include "elaborator/RangeVal.h"
 #include "ym/vl/AstExpr.h"
 #include "ym/vl/VlContAssign.h"
@@ -593,101 +594,42 @@ LogMgr::error_many_gate_conn(
 		 "Too many port connections.");
 }
 
-// @brief int 型が要求されている所で互換性のない型があった．
+// @brief function 内で使えないステートメント
 void
-LogMgr::error_int_required(
+LogMgr::error_illegal_stmt_in_function(
   const char* file,
   int line,
-  const FileRegion& loc
+  const AstStmt& ast_stmt
 )
 {
   throw ElbError(file, line,
-		 loc,
-		 "ELAB_INT_REQUIRED",
-		 "Integer value is required");
+		 ast_stmt.file_region(),
+		 "ELAB_ILLEAGAL_STMT_IN_FUNC",
+		 "Illegal statement inside function block");
 }
 
-// @brief ビットベクタ型が要求されている所で互換性のない型があった．
+// @brief 該当するタスクが存在しない．
 void
-LogMgr::error_bv_required(
+LogMgr::error_task_not_found(
   const char* file,
   int line,
-  const FileRegion& loc
-)
-{
-  throw ElbError(file, line,
-		 loc,
-		 "ELAB_BV_REQUIRED",
-		 "Bit vector value is required");
-}
-
-// @brief 通常の式中に edge descriptor
-void
-LogMgr::error_illegal_edge_descriptor(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ILLEGAL_EDGE_DESCRIPTOR",
-		 "Edge descriptor in an expression");
-}
-
-// @brief real 型のオペランドをとれない
-void
-LogMgr::error_illegal_real_type(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ILLEGAL_REAL_TYPE",
-		 "Shall not have a real-type operand");
-}
-
-// @brief 該当する関数が存在しない．
-void
-LogMgr::error_no_such_function(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
+  const AstStmt& ast_stmt
 )
 {
   std::ostringstream buf;
   buf << "\""
-      << ast_expr.decompile()
-      << "\": No such function";
+      << ast_stmt.decompile_name()
+      << "\": Not found";
   throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_NO_SUCH_FUNCTION",
+		 ast_stmt.file_region(),
+		 "ELAB_TASK_NOT_FOUND",
 		 buf.str());
 }
 
-// @brief 該当するシステム関数が存在しない．
-void
-LogMgr::error_no_such_sysfunction(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": No such system function";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_NO_SUCH_SYSFUNC",
-		 buf.str());
-}
 
 // @brief 該当するシステムタスクが存在しない．
 void
-LogMgr::error_no_such_systask(
+LogMgr::error_systask_not_found(
   const char* file,
   int line,
   const AstStmt& ast_stmt
@@ -699,43 +641,43 @@ LogMgr::error_no_such_systask(
       << "\": No such system task";
   throw ElbError(file, line,
 		 ast_stmt.file_region(),
-		 "ELAB_NO_SUCH_SYSTASK",
+		 "ELAB_SYSTASK_NOT_FOUND",
 		 buf.str());
 }
 
-// @brief 関数ではない．
+// @brief 対象がタスクではなかった．
 void
-LogMgr::error_not_a_function(
+LogMgr::error_not_a_task(
   const char* file,
   int line,
-  const AstExpr& ast_expr
+  const FileRegion& file_region,
+  const ObjHandle* handle
 )
 {
   std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Not a function";
+  buf << handle->full_name()
+      << " : Not a task";
   throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_NOT_A_FUNCTION",
+		 file_region,
+		 "ELAB_NOT_A_TASK",
 		 buf.str());
 }
 
-// @brief 引数の数が合わない．
+// @brief 対象が名前付きブロックではなかった．
 void
-LogMgr::error_argument_num_mismatch(
+LogMgr::error_not_a_namedblock(
   const char* file,
   int line,
-  const AstExpr& ast_expr
+  const FileRegion& file_region,
+  const ObjHandle* handle
 )
 {
   std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": # of argments mismatch";
+  buf << handle->full_name()
+      << " : Not a namedblock, nor a task";
   throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ARG_NUM_MISMATCH",
+		 file_region,
+		 "ELAB_NOT_A_NAMEDBLOCK",
 		 buf.str());
 }
 
@@ -763,811 +705,54 @@ LogMgr::error_argument_num_mismatch(
 		 buf.str());
 }
 
-// @brief 引数の型が合わない．
+// @brief function の内部ではコントロールを持てない．
 void
-LogMgr::error_argument_type_mismatch(
+LogMgr::error_ctrl_in_function(
   const char* file,
   int line,
-  const AstExpr& ast_expr
+  const AstControl& ast_ctrl
+)
+{
+  throw ElbError(file, line,
+		 ast_ctrl.file_region(),
+		 "ELAB_CTRL_IN_FUNCTION",
+		 "Control inside function is not allowed");
+}
+
+// @brief case 文の評価式に real 型は使えない．
+void
+LogMgr::error_real_in_case_expr(
+  const char* file,  ///< [in] ファイル名
+  int line,	       ///< [in] 行番号
+  const VlExpr* expr ///< [in] 式
 )
 {
   std::ostringstream buf;
   buf << "\""
-      << ast_expr.decompile()
-      << "\": Argument type mismatch";
+      << expr->decompile()
+      << "\": Real type cannot be used in case expression";
   throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ARG_TYPE_MISMATCH",
+		 expr->file_region(),
+		 "ELAB_REAL_IN_CASE_EXPR",
 		 buf.str());
 }
 
-// @brief オブジェクトの型が不適切
+/// @brief case 文のラベル式に real 型は使えない．
 void
-LogMgr::error_illegal_object(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
+LogMgr::error_real_in_case_label(
+  const char* file,  ///< [in] ファイル名
+  int line,	       ///< [in] 行番号
+  const VlExpr* expr ///< [in] 式
 )
 {
   std::ostringstream buf;
   buf << "\""
-      << ast_expr.decompile()
-      << "\": Illegal type";
+      << expr->decompile()
+      << "\": Real type cannot be used in case label";
   throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ILLEGAL_OBJECT",
+		 expr->file_region(),
+		 "ELAB_REAL_IN_CASE_LABEL",
 		 buf.str());
-}
-
-// @brief オブジェクトが named-event でなかった
-void
-LogMgr::error_not_a_namedevent(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Named event expected";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_NOT_A_NAMEDEVENT",
-		 buf.str());
-}
-
-// @brief 要素の範囲の順番と範囲指定の順番が異なる．
-void
-LogMgr::error_range_order(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Range order mismatch";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_RANGE_ORDER",
-		 buf.str());
-}
-
-// @brief named-event に対する範囲指定
-void
-LogMgr::error_select_for_namedevent(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Named event cannot have a part-select";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_SELECT_FOR_NAMEDEVENT",
-		 buf.str());
-}
-
-// @brief assign/deassign に不適切なビット/範囲指定
-void
-LogMgr::error_select_in_pca(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Bit/part-select shall not be used"
-      << " in LHS of assign/deassign statement.";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_SELECT_FOR_PCA",
-		 buf.str());
-}
-
-// @brief force/release に不適切なビット/範囲指定
-void
-LogMgr::error_select_in_force(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Bit/part-select shall not be used"
-      << " in LHS of force/release statement.";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_SELECT_FOR_FORCE",
-		 buf.str());
-}
-
-// @brief assign/deassign に不適切な配列要素
-void
-LogMgr::error_array_in_pca(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Array element shall not be used"
-      << " in LHS of assign/deassign statement.";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ARRAY_IN_PCA",
-		 buf.str());
-}
-
-// @brief force/release に不適切な配列要素
-void
-LogMgr::error_array_in_force(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Array element shall not be used"
-      << " in LHS of force/release statement.";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ARRAY_IN_FORCE",
-		 buf.str());
-}
-
-// @brief 配列の次元が合わない
-void
-LogMgr::error_dimension_mismatch(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Dimension mismatch";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_DIM_MISMATCH",
-		 buf.str());
-}
-
-// @brief real 型に対するビット選択あるいは部分選択があった
-void
-LogMgr::error_select_for_real(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Real type cannot have a part-select";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_SELECT_FOR_REAL",
-		 buf.str());
-}
-
-// @brief constant function 中にシステム関数呼び出し
-void
-LogMgr::error_illegal_sysfunccall_in_cf(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": sysfunc cannot be used in constant function";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_SYSFUNC_IN_CF",
-		 buf.str());
-}
-
-// @brief constant expression 中にシステム関数呼び出し
-void
-LogMgr::error_illegal_sysfunccall_in_ce(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": sysfunc cannot be used in constant expression";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_SYSFUNC_IN_CE",
-		 buf.str());
-}
-
-// @brief 定数関数は自己再帰できない．
-void
-LogMgr::error_uses_itself(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Uses itself";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_USES_ITSELF",
-		 buf.str());
-}
-
-// @brief 定数関数ではない．
-void
-LogMgr::error_not_a_constant_function(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Not a constant function";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_NOT_A_CF",
-		 buf.str());
-}
-
-// @brief オブジェクトの型が constant function 用として不適切
-void
-LogMgr::error_illegal_object_cf(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Illegal object type inside constant function";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ILLEGAL_TYPE_IN_CF",
-		 buf.str());
-}
-
-// @brief 階層名が constant expression 中にあった
-void
-LogMgr::error_hname_in_ce(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Hierarchical name shall not be used"
-      << " inside constant expression";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_HNAME_IN_CE",
-		 buf.str());
-}
-
-// @brief 階層名が constant function 中にあった
-void
-LogMgr::error_hname_in_cf(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Hierarchical name shall not be used"
-      << " inside constant function";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_HNAME_IN_CF",
-		 buf.str());
-}
-
-// @brief オブジェクトが parameter でなかった
-void
-LogMgr::error_not_a_parameter(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Parameter type expected";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_NOT_A_PARAMETER",
-		 buf.str());
-}
-
-// @brief イベント式の根元に定数
-void
-LogMgr::error_illegal_constant_in_event_expression(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Constant shall not be used in event description";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_CONST_IN_EVENT",
-		 buf.str());
-}
-
-// @brief イベント式の根元に関数呼び出し
-void
-LogMgr::error_illegal_funccall_in_event_expression(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Function call shall not be used in event description";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_FUNCCALL_IN_EVENT",
-		 buf.str());
-}
-
-// @brief イベント式の根元にシステム関数呼び出し
-void
-LogMgr::error_illegal_sysfunccall_in_event_expression(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Sysfunc call shall not be used in event description";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_SYSFUNCCALL_IN_EVENT",
-		 buf.str());
-}
-
-// @brief 左辺式で用いることのできない演算子
-void
-LogMgr::error_illegal_operator_in_lhs(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Illegal operator in LHS";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_ILLEGAL_OPERATOR_IN_LHS",
-		 buf.str());
-}
-
-// @brief 左辺式に定数
-void
-LogMgr::error_illegal_constant_in_lhs(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Constant shall not be in LHS";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_CONST_IN_LHS",
-		 buf.str());
-}
-
-// @brief 左辺式に関数呼び出し
-void
-LogMgr::error_illegal_funccall_in_lhs(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Function call shall not be used in LHS";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_FUNCCALL_IN_LHS",
-		 buf.str());
-}
-
-// @brief 左辺式にシステム関数呼び出し
-void
-LogMgr::error_illegal_sysfunccall_in_lhs(
-  const char* file,
-  int line,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "\""
-      << ast_expr.decompile()
-      << "\": Sysfunc call shall not be used in LHS";
-  throw ElbError(file, line,
-		 ast_expr.file_region(),
-		 "ELAB_SYSFUNCCALL_IN_LHS",
-		 buf.str());
-}
-
-// @brief 添字が範囲外
-void
-LogMgr::warning_index_out_of_range(
-  const char* file,
-  int line,
-  const FileRegion& file_region
-)
-{
-  put_warning(file, line,
-	      file_region,
-	      "ELAB_INDEX_OUT_OF_RANGE",
-	      "Index is out of range.");
-}
-
-// @brief 左の範囲が範囲外
-void
-LogMgr::warning_left_index_out_of_range(
-  const char* file,
-  int line,
-  const FileRegion& file_region
-)
-{
-  put_warning(file, line,
-	      file_region,
-	      "ELAB_LEFT_INDEX_OUT_OF_RANGE",
-	      "Left index is out of range.");
-}
-
-// @brief 右の範囲が範囲外
-void
-LogMgr::warning_right_index_out_of_range(
-  const char* file,
-  int line,
-  const FileRegion& file_region
-)
-{
-  put_warning(file, line,
-	      file_region,
-	      "ELAB_RIGHT_INDEX_OUT_OF_RANGE",
-	      "Right index is out of range.");
-}
-
-// @brief モジュール配列のインスタンス生成
-void
-LogMgr::info_module_array(
-  const char* file,
-  int line,
-  const AstItem& ast_head,
-  const AstInst& ast_inst,
-  const RangeVal& range
-)
-{
-  std::ostringstream buf;
-  buf << "Instantiating module array \"" << ast_inst.name() << "\" of \""
-      << ast_head.name() << "\" [" << range.left << " : " << range.right << "].";
-  put_info(file, line,
-	   ast_inst.file_region(),
-	   "ELAB_MODULE_ARRAY_INSTANTIATE",
-	   buf.str());
-}
-
-// @brief モジュールのインスタンス生成
-void
-LogMgr::info_module(
-  const char* file,
-  int line,
-  ElbModule* module
-)
-{
-  std::ostringstream buf;
-  buf << "\"" << module->full_name() << "\" has been created.";
-  put_info(file, line,
-	   module->file_region(),
-	   "ELAB_MODULE_INSTANTIATE",
-	   buf.str());
-}
-
-// @brief IO宣言のインスタンス生成
-void
-LogMgr::info_iodecl(
-  const char* file,
-  int line,
-  const AstIOItem& ast_item,
-  const VlScope* scope
-)
-{
-  std::ostringstream buf;
-  buf << "IODecl(" << ast_item.name() << ")@"
-      << scope->full_name() << " created.";
-  put_info(file, line,
-	   ast_item.file_region(),
-	   "INFO_IODECL",
-	   buf.str());
-}
-
-// @brief パラメータのインスタンス生成
-void
-LogMgr::info_param(
-  const char* file,
-  int line,
-  const VlDecl* decl
-)
-{
-  std::ostringstream buf;
-  buf << "Parameter(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_PARAM",
-	   buf.str());
-}
-
-// @brief ネット配列のインスタンス生成
-void
-LogMgr::info_net_array(
-  const char* file,
-  int line,
-  const VlDeclArray* decl_array
-)
-{
-  std::ostringstream buf;
-  buf << "NetArray(" << decl_array->full_name() << ") created.";
-  put_info(file, line,
-	   decl_array->file_region(),
-	   "INFO_NET_ARRAY",
-	   buf.str());
-}
-
-// @brief ネットのインスタンス生成
-void
-LogMgr::info_net(
-  const char* file,
-  int line,
-  const VlDecl* decl
-)
-{
-  std::ostringstream buf;
-  buf << "Net(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_NET",
-	   buf.str());
-}
-
-// @brief Reg配列のインスタンス生成
-void
-LogMgr::info_reg_array(
-  const char* file,
-  int line,
-  const VlDeclArray* decl_array
-)
-{
-  std::ostringstream buf;
-  buf << "RegArray(" << decl_array->full_name() << ") created.";
-  put_info(file, line,
-	   decl_array->file_region(),
-	   "INFO_REG_ARRAY",
-	   buf.str());
-}
-
-// @brief Regのインスタンス生成
-void
-LogMgr::info_reg(
-  const char* file,
-  int line,
-  const VlDecl* decl
-)
-{
-  std::ostringstream buf;
-  buf << "Reg(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_REG",
-	   buf.str());
-}
-
-// @brief Var配列のインスタンス生成
-void
-LogMgr::info_var_array(
-  const char* file,
-  int line,
-  const VlDeclArray* decl_array
-)
-{
-  std::ostringstream buf;
-  buf << "VarArray(" << decl_array->full_name() << ") created.";
-  put_info(file, line,
-	   decl_array->file_region(),
-	   "INFO_VAR_ARRAY",
-	   buf.str());
-}
-
-// @brief Varのインスタンス生成
-void
-LogMgr::info_var(
-  const char* file,
-  int line,
-  const VlDecl* decl
-)
-{
-  std::ostringstream buf;
-  buf << "Var(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_VAR",
-	   buf.str());
-}
-
-// @brief イベント配列のインスタンス生成
-void
-LogMgr::info_event_array(
-  const char* file,
-  int line,
-  const VlDeclArray* decl_array
-)
-{
-  std::ostringstream buf;
-  buf << "EventArray(" << decl_array->full_name() << ") created.";
-  put_info(file, line,
-	   decl_array->file_region(),
-	   "INFO_EVENT_ARRAY",
-	   buf.str());
-}
-
-// @brief イベントのインスタンス生成
-void
-LogMgr::info_event(
-  const char* file,
-  int line,
-  const VlDecl* decl
-)
-{
-  std::ostringstream buf;
-  buf << "Event(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_EVENT",
-	   buf.str());
-}
-
-// @brief genvarのインスタンス生成
-void
-LogMgr::info_genvar(
-  const char* file,
-  int line,
-  ElbGenvar* genvar
-)
-{
-  std::ostringstream buf;
-  buf << "Genvar(" << genvar->full_name() << ") created.";
-  put_info(file, line,
-	   genvar->file_region(),
-	   "INFO_GENVER",
-	   buf.str());
-}
-
-// @brief defparam の生成
-void
-LogMgr::info_defparam(
-  const char* file,
-  int line,
-  const FileRegion& file_region,
-  ElbParameter* param,
-  const AstExpr& ast_expr
-)
-{
-  std::ostringstream buf;
-  buf << "DefParam("
-      << param->full_name()
-      << " = "
-      << ast_expr.decompile()
-      << ")";
-  put_info(file, line,
-	   file_region,
-	   "INFO_DEFPARAM",
-	   buf.str());
-}
-
-// @brief continuous assign の生成
-void
-LogMgr::info_contassign(
-  const char* file,
-  int line,
-  const VlContAssign* cont_assign
-)
-{
-  std::ostringstream buf;
-  buf << "ContAssign("
-      << cont_assign->lhs()->decompile()
-      << " = "
-      << cont_assign->rhs()->decompile()
-      << ")";
-  put_info(file, line,
-	   cont_assign->file_region(),
-	   "INFO_CONTASSIGN",
-	   buf.str());
-}
-
-// @brief プリミティブ配列インスタンスの生成
-void
-LogMgr::info_prim_array(
-  const char* file,
-  int line,
-  ElbPrimArray* prim_array
-)
-{
-  std::ostringstream buf;
-  buf << "PrimArray("
-      << prim_array->full_name()
-      << ")";
-  put_info(file, line,
-	   prim_array->file_region(),
-	   "INFO_PRIMARRAY",
-	   buf.str());
-}
-
-// @brief プリミティブインスタンスの生成
-void
-LogMgr::info_primitive(
-  const char* file,
-  int line,
-  ElbPrimitive* prim
-)
-{
-  std::ostringstream buf;
-  buf << "Primitive("
-      << prim->full_name()
-      << ")";
-  put_info(file, line,
-	   prim->file_region(),
-	   "INFO_PRIMITIVE",
-	   buf.str());
 }
 
 // @brief エラーメッセージを出力する．

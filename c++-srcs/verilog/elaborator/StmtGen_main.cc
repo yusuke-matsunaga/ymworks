@@ -18,8 +18,7 @@
 #include "elaborator/ElbTaskFunc.h"
 #include "elaborator/ElbUserSystf.h"
 #include "elaborator/ElbExpr.h"
-
-#include "ym/MsgMgr.h"
+#include "elaborator/ElbError.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -107,7 +106,7 @@ StmtGen::phase1_stmt(
   case AstStmt::NamedParBlock:
   case AstStmt::NamedSeqBlock:
     {
-      auto block_scope{new_StmtBlockScope(parent, ast_stmt)};
+      auto block_scope = new_StmtBlockScope(parent, ast_stmt);
 
       for ( auto ast_stmt1: ast_stmt.stmt_list() ) {
 	phase1_stmt(block_scope, ast_stmt1);
@@ -153,7 +152,7 @@ StmtGen::instantiate_stmt(
 
   case AstStmt::Enable:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_enable(parent, process, env, ast_stmt);
     break;
@@ -175,14 +174,14 @@ StmtGen::instantiate_stmt(
 
   case AstStmt::NbAssign:
     if ( env.inside_function() ) {
-      throw std::logic_error{"env.inside_function()"};
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_assign(parent, process, env, ast_stmt, false);
     break;
 
   case AstStmt::Event:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_eventstmt(parent, process, ast_stmt);
     break;
@@ -193,28 +192,28 @@ StmtGen::instantiate_stmt(
 
   case AstStmt::PcAssign:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_pca(parent, process, env, ast_stmt);
     break;
 
   case AstStmt::Deassign:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_deassign(parent, process, env, ast_stmt);
     break;
 
   case AstStmt::Force:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_force(parent, process, env, ast_stmt);
     break;
 
   case AstStmt::Release:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_release(parent, process, env, ast_stmt);
     break;
@@ -222,14 +221,14 @@ StmtGen::instantiate_stmt(
   case AstStmt::DelayControl:
   case AstStmt::EventControl:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_ctrlstmt(parent, process, env, ast_stmt);
     break;
 
   case AstStmt::Wait:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_wait(parent, process, env, ast_stmt);
     break;
@@ -262,7 +261,7 @@ StmtGen::instantiate_stmt(
 
   case AstStmt::ParBlock:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_parblock(parent, process, env, ast_stmt);
     break;
@@ -273,7 +272,7 @@ StmtGen::instantiate_stmt(
 
   case AstStmt::NamedParBlock:
     if ( env.inside_function() ) {
-      goto error;
+      log_mgr().error_illegal_stmt_in_function(__FILE__, __LINE__, ast_stmt);
     }
     stmt = instantiate_namedparblock(parent, process, env, ast_stmt);
     break;
@@ -292,20 +291,6 @@ StmtGen::instantiate_stmt(
   }
 
   return stmt;
-
- error:
-  // 使えません．
-  {
-    std::ostringstream buf;
-    buf << ast_stmt.stmt_name()
-	<< " : cannot be used in a constant function.";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    ast_stmt.file_region(),
-		    MsgType::Error,
-		    "ELAB",
-		    buf.str());
-  }
-  return nullptr;
 }
 
 
@@ -327,29 +312,14 @@ StmtGen::instantiate_disable(
   // 仕様書には何も書いていないのでたぶん越えられる．
   auto handle = elb_mgr().find_obj_up(parent, ast_stmt, nullptr);
   if ( handle == nullptr ) {
-    std::ostringstream buf;
-    buf << ast_stmt.decompile_name() << " : Not found.";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    fr,
-		    MsgType::Error,
-		    "ELAB",
-		    buf.str());
-    return nullptr;
+    log_mgr().error_task_not_found(__FILE__, __LINE__, ast_stmt);
   }
 
   auto type = handle->type();
   if ( type != VpiObjType::NamedBegin &&
        type != VpiObjType::NamedFork &&
        type != VpiObjType::Task ) {
-    std::ostringstream buf;
-    buf << handle->full_name()
-	<< " : Not a named block, nor a task.";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    fr,
-		    MsgType::Error,
-		    "ELAB",
-		    buf.str());
-    return nullptr;
+    log_mgr().error_not_a_namedblock(__FILE__, __LINE__, fr, handle);
   }
 
   auto scope = handle->scope();
@@ -370,29 +340,16 @@ StmtGen::instantiate_enable(
   // タスクを探し出して設定する．
   // タスク名の探索はモジュール境界を越える．
   auto handle = elb_mgr().find_obj_up(parent, ast_stmt, nullptr);
-  if ( !handle ) {
-    std::ostringstream buf;
-    buf << ast_stmt.decompile_name() << " : Not found.";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    fr,
-		    MsgType::Error,
-		    "ELAB",
-		    buf.str());
-    return nullptr;
+  if ( handle == nullptr ) {
+    log_mgr().error_task_not_found(__FILE__, __LINE__, ast_stmt);
   }
   if ( handle->type() != VpiObjType::Task ) {
-    std::ostringstream buf;
-    buf << ast_stmt.decompile_name() << " : Not a task.";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    fr,
-		    MsgType::Error,
-		    "ELAB",
-		    buf.str());
-    return nullptr;
+    log_mgr().error_not_a_task(__FILE__, __LINE__, fr, handle);
   }
 
   auto task = handle->taskfunc();
   if ( task == nullptr ) {
+    // handle->type == VpiObjType::Task なのでありえない．
     throw std::logic_error{"task == nullptr"};
   }
 
@@ -401,10 +358,6 @@ StmtGen::instantiate_enable(
   arg_list.reserve(ast_stmt.arg_list().size());
   for ( auto ast_expr: ast_stmt.arg_list() ) {
     auto expr = instantiate_expr(parent, env, ast_expr);
-    if ( !expr ) {
-      // エラーが起った．
-      return nullptr;
-    }
     arg_list.push_back(expr);
   }
 
@@ -427,7 +380,7 @@ StmtGen::instantiate_sysenable(
   // UserSystf を取り出す．
   auto user_systf = elb_mgr().find_user_systf(name);
   if ( user_systf == nullptr ) {
-    log_mgr().error_no_such_systask(__FILE__, __LINE__, ast_stmt);
+    log_mgr().error_systask_not_found(__FILE__, __LINE__, ast_stmt);
   }
 
   // 引数の数のチェック
@@ -453,7 +406,7 @@ StmtGen::instantiate_sysenable(
 
   // system task call ステートメントの生成
   return elb_mgr().new_SysTaskCall(parent, process, ast_stmt,
-			       user_systf, arg_list);
+				   user_systf, arg_list);
 }
 
 // @brief delay / event control statement の実体化を行う．
@@ -468,11 +421,8 @@ StmtGen::instantiate_ctrlstmt(
   auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
   auto ast_control = ast_stmt.control();
-  auto control = instantiate_control(parent, env, ast_control);
 
-  if ( !body || !control ) {
-    return nullptr;
-  }
+  auto control = instantiate_control(parent, env, ast_control);
 
   // delay / event control ステートメントの生成
   return elb_mgr().new_CtrlStmt(parent, process, ast_stmt, control, body);
@@ -490,35 +440,38 @@ StmtGen::instantiate_control(
     return nullptr;
   }
 
-  if ( ast_control.type() == AstControl::Delay ) {
-    auto delay = instantiate_expr(parent, env, ast_control.delay());
-    if ( delay ) {
+  // 基本的にコントロールの生成でエラーが起きたらエラーを記録して nullptr を返す．
+  try {
+    if ( env.inside_function() ) {
+      // 関数内ではコントロールは使えない．
+      log_mgr().error_ctrl_in_function(__FILE__, __LINE__, ast_control);
+    }
+
+    if ( ast_control.type() == AstControl::Delay ) {
+      auto delay = instantiate_expr(parent, env, ast_control.delay());
       return elb_mgr().new_DelayControl(ast_control, delay);
     }
-    return nullptr;
-  }
 
-  // イベントリストの生成を行う．
-  SizeType event_num = ast_control.event_list().size();
-  std::vector<ElbExpr*> event_list;
-  event_list.reserve(event_num);
-  for ( auto ast_expr: ast_control.event_list() ) {
-    auto expr = instantiate_event_expr(parent, env, ast_expr);
-    if ( !expr ) {
-      return nullptr;
+    // イベントリストの生成を行う．
+    SizeType event_num = ast_control.event_list().size();
+    std::vector<ElbExpr*> event_list;
+    event_list.reserve(event_num);
+    for ( auto ast_expr: ast_control.event_list() ) {
+      auto expr = instantiate_event_expr(parent, env, ast_expr);
+      event_list.push_back(expr);
     }
-    event_list.push_back(expr);
-  }
 
-  if ( ast_control.type() == AstControl::Event ) {
-    return elb_mgr().new_EventControl(ast_control, event_list);
-  }
+    if ( ast_control.type() == AstControl::Event ) {
+      return elb_mgr().new_EventControl(ast_control, event_list);
+    }
 
-  auto rep = instantiate_expr(parent, env, ast_control.rep_expr());
-  if ( !rep ) {
+    auto rep = instantiate_expr(parent, env, ast_control.rep_expr());
+    return elb_mgr().new_RepeatControl(ast_control, rep, event_list);
+  }
+  catch ( const ElbError& error ) {
+    log_mgr().put_error(error);
     return nullptr;
   }
-  return elb_mgr().new_RepeatControl(ast_control, rep, event_list);
 }
 
 // @brief event statement の実体化を行う．
@@ -531,10 +484,6 @@ StmtGen::instantiate_eventstmt(
 {
   auto ast_expr = ast_stmt.primary();
   auto named_event = instantiate_namedevent(parent, ast_expr);
-  if ( !named_event ) {
-    return nullptr;
-  }
-
   return elb_mgr().new_EventStmt(parent, process, ast_stmt, named_event);
 }
 

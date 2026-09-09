@@ -15,8 +15,6 @@
 #include "ym/vl/AstExpr.h"
 #include "ym/vl/AstCaseItem.h"
 
-#include "ym/MsgMgr.h"
-
 
 BEGIN_NAMESPACE_YM_VERILOG
 
@@ -42,11 +40,6 @@ StmtGen::instantiate_if(
   auto ast_else = ast_stmt.else_body();
   auto else_stmt = instantiate_stmt(parent, process, env, ast_else);
 
-  if ( !cond || !then_stmt || ( ast_else.is_valid() && !else_stmt ) ) {
-    // たぶんエラー
-    return nullptr;
-  }
-
   return elb_mgr().new_IfStmt(parent, process, ast_stmt,
 			  cond, then_stmt, else_stmt);
 }
@@ -63,10 +56,6 @@ StmtGen::instantiate_case(
   // 条件式の生成
   auto ast_cond = ast_stmt.expr();
   auto cond = instantiate_expr(parent, env, ast_cond);
-  if ( !cond ) {
-    // たぶんエラー
-    return nullptr;
-  }
 
   // この case 文に関係する全ての式のリスト
   // あとでサイズ調整をするために用いる．
@@ -104,10 +93,6 @@ StmtGen::instantiate_case(
   for ( auto ast_item: ast_caseitem_list ) {
     auto ast_body = ast_item.body();
     auto body = instantiate_stmt(parent, process, env, ast_body);
-    if ( ast_body.is_valid() && !body ) {
-      // たぶんエラー
-      return nullptr;
-    }
     // ast_body が空の場合はあり．
 
     // ラベルの生成と設定
@@ -116,10 +101,6 @@ StmtGen::instantiate_case(
     label_list.reserve(n);
     for ( auto ast_expr: ast_item.label_list() ) {
       auto expr = instantiate_expr(parent, env, ast_expr);
-      if ( !expr ) {
-	// たぶんエラー
-	return nullptr;
-      }
       label_list.push_back(expr);
       expr_list.push_back(expr);
     }
@@ -137,12 +118,7 @@ StmtGen::instantiate_case(
   auto value_type0 = cond->value_type();
   if ( value_type0.is_real_type() ) {
     // real 型は駄目
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    cond->file_region(),
-		    MsgType::Error,
-		    "ELAB",
-		    "Case expression should not be real-type.");
-    return nullptr;
+    log_mgr().error_real_in_case_expr(__FILE__, __LINE__, cond);
   }
   bool sign = value_type0.is_signed();
   SizeType size = value_type0.size();
@@ -151,12 +127,7 @@ StmtGen::instantiate_case(
     auto value_type1 = expr->value_type();
     if ( value_type1.is_real_type() ) {
       // real 型は駄目
-      MsgMgr::put_msg(__FILE__, __LINE__,
-		      expr->file_region(),
-		      MsgType::Error,
-		      "ELAB",
-		      "Case-item expression should not be real-type.");
-      return nullptr;
+      log_mgr().error_real_in_case_label(__FILE__, __LINE__, expr);
     }
 
     if ( value_type1.is_signed() ) {
@@ -197,10 +168,6 @@ StmtGen::instantiate_wait(
   auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
 
-  if ( !cond || !body ) {
-    return nullptr;
-  }
-
   return elb_mgr().new_WaitStmt(parent, process, ast_stmt, cond, body);
 }
 
@@ -215,10 +182,6 @@ StmtGen::instantiate_forever(
 {
   auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
-
-  if ( !body ) {
-    return nullptr;
-  }
 
   return elb_mgr().new_ForeverStmt(parent, process, ast_stmt, body);
 }
@@ -238,10 +201,6 @@ StmtGen::instantiate_repeat(
   auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
 
-  if ( !expr || !body ) {
-    return nullptr;
-  }
-
   return elb_mgr().new_RepeatStmt(parent, process, ast_stmt, expr, body);
 }
 
@@ -259,10 +218,6 @@ StmtGen::instantiate_while(
 
   auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
-
-  if ( !cond || !body ) {
-    return nullptr;
-  }
 
   return elb_mgr().new_WhileStmt(parent, process, ast_stmt, cond, body);
 }
@@ -287,10 +242,6 @@ StmtGen::instantiate_for(
 
   auto ast_body = ast_stmt.body();
   auto body = instantiate_stmt(parent, process, env, ast_body);
-
-  if ( !cond || !init || !next || !body ) {
-    return nullptr;
-  }
 
   auto stmt = elb_mgr().new_ForStmt(parent, process, ast_stmt, cond, init, next, body);
   return stmt;
