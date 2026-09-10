@@ -55,6 +55,7 @@ set ( elaborator_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/ExprGen_primary.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ExprEval.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/FuncEval.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/ItemGen_generate.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ItemGen_main.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ItemGen_module_inst.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ItemGen_primitive.cc
@@ -65,6 +66,7 @@ set ( elaborator_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/StmtGen_block.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/StmtGen_cond.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/StmtGen_main.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/StmtGen_misc.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/UdpGen.cc
   PARENT_SCOPE
   )

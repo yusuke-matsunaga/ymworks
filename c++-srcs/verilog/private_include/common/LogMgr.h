@@ -10,10 +10,12 @@
 
 #include "ym/verilog.h"
 #include "ym/FileRegion.h"
+#include "ym/MsgType.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+class AstCaseItem;
 class AstConnection;
 class AstControl;
 class AstDefParam;
@@ -23,6 +25,8 @@ class AstInst;
 class AstItem;
 class AstModule;
 class AstStmt;
+class AstUdpEntry;
+class AstUdpValue;
 class ElbDecl;
 class ElbError;
 class ElbGenvar;
@@ -30,6 +34,7 @@ class ElbParamCon;
 class ElbParameter;
 class ElbPrimitive;
 class ElbPrimArray;
+class ElbTaskFunc;
 class ObjHandle;
 class RangeVal;
 class VlContAssign;
@@ -48,6 +53,19 @@ class LogMgr
 {
 public:
 
+  /// @brief ログ情報
+  struct Data {
+    const char* file;       ///< ソースプログラムのファイル名(__FILE__)
+    int line;               ///< ソースプログラムの行番号(__LINE__)
+    FileRegion file_region; ///< [in] ファイル位置
+    MsgType type;           ///< [in] 種類
+    const char* label;      ///< [in] ラベル
+    std::string message;    ///< [in] メッセージ
+  };
+
+
+public:
+
   /// @brief コンストラクタ
   LogMgr() = default;
 
@@ -57,18 +75,37 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  /// エラー出力
-  ///
-  /// これらの関数は ElbError 例外を送出する．
-  /// ログに出力するためには以下のようなコードを用いる．
-  /// @code
-  /// try {
-  ///   error_XXXX(....);
-  /// }
-  /// catch ( const ElbError& error ) {
-  ///   put_error(error);
-  /// }
-  /// @endcode
+  // 情報を取得する関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 全メッセージ数を得る．
+  SizeType
+  msg_num() const;
+
+  /// @brief エラーメッセージ数を得る．
+  SizeType
+  error_num() const;
+
+  /// @brief 警告メッセージ数を得る．
+  SizeType
+  warning_num() const;
+
+  /// @brief 情報メッセージ数を得る．
+  SizeType
+  info_num() const;
+
+  /// @brief 失敗メッセージ数を得る．
+  SizeType
+  fail_num() const;
+
+  /// @brief デバッグメッセージ数を得る．
+  SizeType
+  debug_num() const;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  /// エラー用の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 同名のモジュール定義がある．
@@ -148,9 +185,95 @@ public:
     const char* name               ///< [in] 名前
   );
 
+  /// @brief UDP のテーブルサイズが合わない．
+  void
+  error_udp_tablesize_mismatch(
+    const char* file,
+    int line,
+    const FileRegion& file_region
+  );
+
+  /// @brief 組み合わせ回路用UDPに遷移シンボルは使えない．
+  void
+  error_udp_trans_sym(
+    const char* file,
+    int line,
+    const AstUdpValue& ast_val
+  );
+
+  /// @brief UDPテーブルの入力フィールドにNCシンボルは使えない．
+  void
+  error_udp_nc_sym_in_input(
+    const char* file,
+    int line,
+    const AstUdpValue& ast_val
+  );
+
+  /// @brief 組み合わせ回路用UDPは現状態を持てない．
+  void
+  error_udp_wrong_cur_state(
+    const char* file,
+    int line,
+    const AstUdpEntry& ast_udp_entry
+  );
+
+  /// @brief UDPテーブルの出力フィールドに複合シンボルは使えない．
+  void
+  error_udp_composite_sym_in_output(
+    const char* file,
+    int line,
+    const AstUdpValue& ast_val
+  );
+
+  /// @brief UDPテーブルの出力フィールドに遷移シンボルは使えない．
+  void
+  error_udp_trans_sym_in_output(
+    const char* file,
+    int line,
+    const AstUdpValue& ast_val
+  );
+
+  /// @brief UDPテーブルの1行に複数の遷移シンボル
+  void
+  error_udp_dup_trans_sym(
+    const char* file,
+    int line,
+    const AstUdpEntry& ast_udp_entry
+  );
+
+  /// @brief 順序回路用UDPなのに現状態がない．
+  void
+  error_udp_no_cur_state(
+    const char* file,
+    int line,
+    const AstUdpEntry& ast_udp_entry
+  );
+
+  /// @brief UDPテーブルの現状態フィールドに遷移シンボルは使えない．
+  void
+  error_udp_trans_sym_in_cur_state(
+    const char* file,
+    int line,
+    const AstUdpValue& ast_val
+  );
+
+  /// @brief UDPテーブルの現状態フィールドに NCシンボルは使えない．
+  void
+  error_udp_nc_sym_in_cur_state(
+    const char* file,
+    int line,
+    const AstUdpValue& ast_val
+  );
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 宣言要素系の elaboration に関するエラー
+  //////////////////////////////////////////////////////////////////////
+
   /// @brief IO 宣言に aux_type と宣言が重複している．
   void
-  error_duplicate_type(
+  error_dup_type(
     const char* file,          ///< [in] ファイル名
     int line,                  ///< [in] 行番号
     const AstIOItem& ast_item, ///< [in] IO要素定義
@@ -198,6 +321,12 @@ public:
     int line,                  ///< [in] 行番号
     const AstIOItem& ast_item  ///< [in] IO要素定義
   );
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstItem の elaboration に関するエラー
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 対象がパラメータではなかった．
   void
@@ -352,6 +481,12 @@ public:
     const AstInst& ast_inst
   );
 
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // AstStmt の elaboration に関するエラー
+  //////////////////////////////////////////////////////////////////////
+
   /// @brief function 内で使えないステートメント
   void
   error_illegal_stmt_in_function(
@@ -434,6 +569,29 @@ public:
     const VlExpr* expr ///< [in] 式
   );
 
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // Parser 関係のエラー
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief case 文のデフォルトラベルが2つ以上存在する．
+  void
+  error_dup_default_label(
+    const char* file,           ///< [in] ファイル名
+    int line,	                ///< [in] 行番号
+    const AstCaseItem& caseitem ///< [in] caseitem
+  );
+
+  /// @brief GenFor の変数名が異なる．
+  void
+  error_genvar_mismatch(
+    const char* file,              ///< [in] ファイル名
+    int line,			   ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    const char* loop_var,          ///< [in] ループ変数
+    const char* next_var           ///< [in] 更新式の変数
+  );
 
 
 public:
@@ -724,9 +882,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // 警告出力
-  //
-  // 内部で put_warning() を呼ぶ．
+  // 警告出力用の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 添字が範囲外
@@ -756,10 +912,17 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // 情報出力
-  //
-  // 内部で put_info() を呼ぶ．
+  // 情報出力用の関数
   //////////////////////////////////////////////////////////////////////
+
+  /// @brief トップモジュールのインスタンス生成
+  void
+  info_topmodule(
+    const char* file,
+    int line,
+    const FileRegion& file_region,
+    const char* name
+  );
 
   /// @brief モジュール配列のインスタンス生成
   void
@@ -777,6 +940,15 @@ public:
     const char* file,
     int line,
     const VlModule* module
+  );
+
+  /// @brief UDP のインスタンス生成
+  void
+  info_udp(
+    const char* file,
+    int line,
+    const FileRegion& file_region,
+    const char* name
   );
 
   /// @brief IO宣言のインスタンス生成
@@ -902,90 +1074,106 @@ public:
     ElbPrimitive* prim
   );
 
+  /// @brief task/function の生成
+  void
+  info_taskfunc(
+    const char* file,
+    int line,
+    ElbTaskFunc* tf
+  );
+
 
 public:
+  //////////////////////////////////////////////////////////////////////
+  // 各タイプの汎用関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief エラー用の汎用関数
+  void
+  error(
+    const char* file,       ///< ソースプログラムのファイル名(__FILE__)
+    int line,               ///< ソースプログラムの行番号(__LINE__)
+    FileRegion file_region, ///< [in] ファイル位置
+    const char* label,      ///< [in] ラベル
+    std::string message     ///< [in] メッセージ
+  );
+
+  //// @brief 失敗用の汎用関数
+  void
+  failure(
+    const char* file,              ///< [in] ファイル名
+    int line,                      ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    const char* label,             ///< [in] ラベル
+    const std::string& msg         ///< [in] メッセージ
+  )
+  {
+    put_msg(file, line, file_region,
+	    MsgType::Failure,
+	    label, msg);
+  }
+
+  //// @brief 警告用の汎用関数
+  void
+  warning(
+    const char* file,              ///< [in] ファイル名
+    int line,                      ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    const char* label,             ///< [in] ラベル
+    const std::string& msg         ///< [in] メッセージ
+  )
+  {
+    put_msg(file, line, file_region,
+	    MsgType::Warning,
+	    label, msg);
+  }
+
+  //// @brief 情報用の汎用関数
+  void
+  info(
+    const char* file,              ///< [in] ファイル名
+    int line,                      ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    const char* label,             ///< [in] ラベル
+    const std::string& msg         ///< [in] メッセージ
+  )
+  {
+    put_msg(file, line, file_region,
+	    MsgType::Info,
+	    label, msg);
+  }
+
+  //// @brief デバッグ用の汎用関数
+  void
+  debug(
+    const char* file,              ///< [in] ファイル名
+    int line,                      ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    const char* label,             ///< [in] ラベル
+    const std::string& msg         ///< [in] メッセージ
+  )
+  {
+    put_msg(file, line, file_region,
+	    MsgType::Debug,
+	    label, msg);
+  }
+
+
+private:
   //////////////////////////////////////////////////////////////////////
   // 低レベルの関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief エラーメッセージを出力する．
+  /// @brief メッセージを出力する．
   void
-  put_error(
-    const ElbError& error ///< [in] エラー情報
+  put_msg(
+    const char* file,              ///< [in] ファイル名
+    int line,                      ///< [in] 行番号
+    const FileRegion& file_region, ///< [in] ファイル位置
+    MsgType type,                  ///< [in] 種類
+    const char* label,             ///< [in] ラベル
+    const std::string& msg         ///< [in] メッセージ
   );
-
-  /// @brief 失敗メッセージを出力する．
-  void
-  put_error(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-  /// @brief 失敗メッセージを出力する．
-  void
-  put_failure(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-  /// @brief 警告メッセージを出力する．
-  void
-  put_warning(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-  /// @brief 情報メッセージを出力する．
-  void
-  put_info(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-  /// @brief デバッグメッセージを出力する．
-  void
-  put_debug(
-    const char* file,      ///< [in] ソースファイル名
-    int line,              ///< [in] ソースファイル上の行番号
-    const FileRegion& loc, ///< [in] 対象の箇所
-    const char* label,     ///< [in] ラベル
-    const std::string& msg ///< [in] メッセージ
-  );
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief AstExpr 系のエラーの下請け関数
-  void
-  expr_common(
-    const char* file,
-    int line,
-    const AstExpr& ast_expr,
-    const char* label,
-    const std::string& msg
-  );
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
 
 };
 

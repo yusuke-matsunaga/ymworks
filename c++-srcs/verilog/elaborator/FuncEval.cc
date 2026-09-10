@@ -14,8 +14,6 @@
 #include "ym/vl/VlStmt.h"
 #include "ym/vl/VlExpr.h"
 #include "ym/Range.h"
-#include "common/LogMgr.h"
-#include "elaborator/ElbError.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

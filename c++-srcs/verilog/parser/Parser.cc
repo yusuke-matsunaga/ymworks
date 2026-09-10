@@ -13,7 +13,7 @@
 #include "parser/PtCaseItem.h"
 #include "parser/PtModule.h"
 #include "parser/PtUdp.h"
-
+#include "elaborator/ElbError.h"
 
 const int debug = 0;
 #define dout cout
@@ -65,10 +65,10 @@ Parser::read_file(
   if ( !lex().open_file(filename) ) {
     std::ostringstream buf;
     buf << filename << " : No such file.";
-    mLogMgr.put_failure(__FILE__, __LINE__,
-			FileRegion(),
-			"PARS_OPEN",
-			buf.str());
+    mLogMgr.failure(__FILE__, __LINE__,
+		    FileRegion(),
+		    "PARS_OPEN",
+		    buf.str());
     return false;
   }
 
@@ -179,13 +179,16 @@ Parser::check_function_statement(
     break;
   }
 
-  std::ostringstream buf;
-  buf << AstStmt(stmt).stmt_name()
-      << " cannot be used in function declaration.";
-  mLogMgr.put_error(__FILE__, __LINE__,
-		    stmt->file_region(),
-		    "PARS_ILLEGAL_STMT_IN_CF",
-		    buf.str());
+  // ここに来たということは function で使えない種類のステートメント
+  try {
+    mLogMgr.error_illegal_stmt_in_function(__FILE__, __LINE__,
+					   AstStmt(stmt));
+  }
+  catch ( const ElbError& error ) {
+    // 例外の代わりに false を返す．
+    return false;
+  }
+  // ダミー
   return false;
 }
 
@@ -200,11 +203,14 @@ Parser::check_default_label(
     if ( ci->label_top() == nullptr ) {
       ++ n;
       if ( n > 1 ) {
-	mLogMgr.put_error(__FILE__, __LINE__,
-			  ci->file_region(),
-			  "PARS_DUP_DEFAULT_LABEL",
-			  "More than one 'default' label.");
-	return false;
+	try {
+	  mLogMgr.error_dup_default_label(__FILE__, __LINE__,
+					  AstCaseItem(ci));
+	}
+	catch ( const ElbError& error ) {
+	  // 例外の代わりに false を返す．
+	  return false;
+	}
       }
     }
   }
@@ -223,16 +229,15 @@ Parser::check_GenFor(
     return true;
   }
 
-  std::ostringstream buf;
-  buf << "Lhs of the increment statement ("
-      << next_var
-      << ") does not match with Lhs of the initial statement ("
-      << loop_var
-      << ")";
-  mLogMgr.put_error(__FILE__, __LINE__,
-		    fr,
-		    "PARS_GENFOR_VAR_MISMATCH",
-		    buf.str());
+  try {
+    mLogMgr.error_genvar_mismatch(__FILE__, __LINE__,
+				  fr, loop_var, next_var);
+  }
+  catch ( const ElbError& error ) {
+    // 例外の代わりに false を返す．
+    return false;
+  }
+  // ダミー
   return false;
 }
 
@@ -255,9 +260,15 @@ Parser::put_error(
     message2 = message;
   }
 
-  mLogMgr.put_error(file, line, loc,
-		    "PARS_SYMTAX_ERROR",
-		    message2);
+  try {
+    mLogMgr.error(file, line,
+		  loc,
+		  "PARS_SYMTAX_ERROR",
+		  message2);
+  }
+  catch ( const ElbError& error ) {
+    // でも無視
+  }
 }
 
 END_NAMESPACE_YM_VERILOG

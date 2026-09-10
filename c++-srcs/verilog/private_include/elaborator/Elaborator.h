@@ -65,10 +65,10 @@ public:
 public:
 
   /// @brief エラボレーションを行う．
-  /// @return エラー数を返す．
+  /// @return 成功したら true を返す．
   ///
   /// この関数は一度しか呼べない．
-  int
+  bool
   operator()(
     const AstMgr& ast_mgr ///< [in] パース木を管理するクラス
   );

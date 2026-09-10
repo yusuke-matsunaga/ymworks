@@ -78,14 +78,7 @@ ItemGen::phase1_tf(
   auto attr_list = attribute_list(ast_item);
   elb_mgr().reg_attr(taskfunc, attr_list);
 
-  {
-    std::ostringstream buf;
-    buf << "instantiating task/func : " << taskfunc->full_name() << ".";
-    log_mgr().put_info(__FILE__, __LINE__,
-		       ast_item.file_region(),
-		       "ELAB",
-		       buf.str());
-  }
+  log_mgr().info_taskfunc(__FILE__, __LINE__, taskfunc);
 
   // 本体のステートメント内部のスコープの生成
   auto ast_body = ast_item.body();

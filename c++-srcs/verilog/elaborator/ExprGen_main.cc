@@ -380,7 +380,7 @@ ExprGen::instantiate_delay_sub(
     return delay;
   }
   catch ( const ElbError& error ) {
-    log_mgr().put_error(error);
+    // エラーは無視して nullptr を返す．
     return nullptr;
   }
 }

@@ -87,7 +87,7 @@ ItemGen::phase1_module_head(
       phase1_module_inst(parent, ast_head, ast_inst, ast_module);
     }
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
+      // 無視して処理を続ける．
     }
   }
 }

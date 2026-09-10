@@ -1,6 +1,6 @@
 ﻿
 /// @file DeclGen.cc
-/// @brief ElbMgr の実装ファイル(宣言要素の elaboration)
+/// @brief DeclGen の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2025 Yusuke Matsunaga
@@ -69,7 +69,7 @@ DeclGen::phase1_decl(
       }
     }
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
+      // エラーは無視して処理を続ける．
     }
   }
 }
@@ -126,9 +126,9 @@ DeclGen::instantiate_iodecl(
 	// 同名の要素が見つかった．
 	if ( def_aux_type != VpiAuxType::None ) {
 	  // なのに IO 宣言の aux_type もある．
-	  log_mgr().error_duplicate_type(__FILE__, __LINE__,
-					 ast_item,
-					 handle->file_region());
+	  log_mgr().error_dup_type(__FILE__, __LINE__,
+				   ast_item,
+				   handle->file_region());
 	}
 	if ( handle->declarray() != nullptr ) {
 	  // 対象が配列だった場合．
@@ -265,7 +265,7 @@ DeclGen::instantiate_iodecl(
 	taskfunc->add_iodecl(head, ast_item, decl);
       }
       else {
-	ASSERT_NOT_REACHED;
+	throw std::logic_error{"Should not be reached"};
       }
 
       log_mgr().info_iodecl(__FILE__, __LINE__, ast_item, scope);
@@ -318,7 +318,7 @@ DeclGen::instantiate_decl(
       }
     }
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
+      // 無視して処理を続ける．
     }
   }
 }
@@ -402,7 +402,6 @@ DeclGen::instantiate_net_head(
   for ( auto ast_item: ast_head.item_list() ) {
     // init_value() が 0 でなければ初期割り当てを持つということ．
     auto ast_init = ast_item.init_value();
-
     auto dim_list = ast_item.range_list();
     auto dim_size = dim_list.size();
     if ( dim_size > 0 ) {
@@ -419,7 +418,8 @@ DeclGen::instantiate_net_head(
 	continue;
       }
 
-      auto net_array = elb_mgr().new_DeclArray(vpiNetArray, net_head, ast_item, range_src);
+      auto net_array = elb_mgr().new_DeclArray(vpiNetArray, net_head,
+					       ast_item, range_src);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);

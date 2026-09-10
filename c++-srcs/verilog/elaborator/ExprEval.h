@@ -8,10 +8,9 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/verilog.h"
-#include "ym/vl/VlValue.h"
-#include "ym/vl/Ast.h"
 #include "ElbProxy.h"
+#include "ym/vl/VlValue.h"
+#include "ym/vl/AstExpr.h"
 #include "elaborator/RangeVal.h"
 
 

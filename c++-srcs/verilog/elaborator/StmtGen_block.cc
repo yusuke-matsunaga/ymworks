@@ -130,7 +130,6 @@ StmtGen::instantiate_stmt_list(
       stmt_list.push_back(stmt1);
     }
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
       // エラーが起きたらそのステートメントだけスキップする．
     }
   }

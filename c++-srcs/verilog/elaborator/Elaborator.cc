@@ -114,7 +114,7 @@ Elaborator::~Elaborator()
 }
 
 // @brief エラボレーションを行う．
-int
+bool
 Elaborator::operator()(
   const AstMgr& ast_mgr
 )
@@ -139,7 +139,6 @@ Elaborator::operator()(
   // モジュールテンプレートの辞書を作る．
   // と同時に UDP 名とモジュール名の重複チェックを行う．
   // と同時に関数定義の辞書を作る．
-  int nerr = 0;
   for ( auto ast_module: ast_module_list ) {
     try {
       auto name = ast_module.name();
@@ -174,13 +173,12 @@ Elaborator::operator()(
       }
     }
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
-      ++ nerr;
+      // 無視して処理を続ける．
     }
   }
 
-  if ( nerr > 0 ) {
-    return nerr;
+  if ( log_mgr().error_num() > 0 ) {
+    return false;
   }
 
   // トップレベル階層の生成
@@ -207,10 +205,10 @@ Elaborator::operator()(
   // これを繰り返す．
   for ( ; ; ) {
     // defparam 文で適用できるものがあれば適用する．
-    log_mgr().put_debug(__FILE__, __LINE__,
-			FileRegion(),
-			"ELAB_DEFPARAM",
-			"\"instantiate_defparam\" starts.");
+    log_mgr().debug(__FILE__, __LINE__,
+		    FileRegion(),
+		    "ELAB_DEFPARAM",
+		    "\"instantiate_defparam\" starts.");
 
     // 未処理の defparam 文を処理する．
     // 処理された要素は mDefParamList から削除される．
@@ -229,10 +227,10 @@ Elaborator::operator()(
 
     // その結果にもとづいてモジュール配列インスタンスや
     // generate block の生成を行う．
-    log_mgr().put_debug(__FILE__, __LINE__,
-			FileRegion(),
-			"ELAB_PHASE1",
-			"Phase 1 starts.");
+    log_mgr().debug(__FILE__, __LINE__,
+		    FileRegion(),
+		    "ELAB_PHASE1",
+		    "Phase 1 starts.");
 
     if ( mPhase1StubList1.empty() ) {
       // 処理する要素が残っていない．
@@ -247,36 +245,35 @@ Elaborator::operator()(
 
   // 適用できなかった defparam 文のチェック
   for ( auto stub: mDefParamStubList ) {
-    auto ast_defparam = stub.mAstDefparam;
     try {
+      auto ast_defparam = stub.mAstDefparam;
       log_mgr().error_defparam_unresolved(__FILE__, __LINE__,
 					  ast_defparam);
     }
-    // 処理は続行する．
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
+      // 処理は続行する．
     }
   }
 
   // Phase 2
   // 配列要素やビット要素の生成を行う．
-  log_mgr().put_debug(__FILE__, __LINE__,
-		      FileRegion(),
-		      "ELAB_PHASE2",
-		      "Phase 2 starts.");
+  log_mgr().debug(__FILE__, __LINE__,
+		  FileRegion(),
+		  "ELAB_PHASE2",
+		  "Phase 2 starts.");
 
   mPhase2StubList.eval();
 
   // Phase 3
   // 名前の解決(リンク)を行う．
-  log_mgr().put_debug(__FILE__, __LINE__,
-		      FileRegion(),
-		      "ELAB_PHASE3",
-		      "Phase 3 starts.");
+  log_mgr().debug(__FILE__, __LINE__,
+		  FileRegion(),
+		  "ELAB_PHASE3",
+		  "Phase 3 starts.");
 
   mPhase3StubList.eval();
 
-  return nerr;
+  return log_mgr().error_num() == 0;
 }
 
 // 後で処理する defparam 文を登録する．

@@ -85,7 +85,9 @@ VlMgr::elaborate(
 {
   Elaborator elab(*mElbMgr, *mLogMgr, cell_library);
 
-  return elab(*mAstMgr);
+  elab(*mAstMgr);
+
+  return mLogMgr->error_num();
 }
 
 // @brief UDP 定義のリストを返す．

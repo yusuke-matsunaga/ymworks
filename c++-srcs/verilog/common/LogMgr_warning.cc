@@ -19,10 +19,10 @@ LogMgr::warning_index_out_of_range(
   const FileRegion& file_region
 )
 {
-  put_warning(file, line,
-	      file_region,
-	      "ELAB_INDEX_OUT_OF_RANGE",
-	      "Index is out of range.");
+  warning(file, line,
+	  file_region,
+	  "ELAB_INDEX_OUT_OF_RANGE",
+	  "Index is out of range.");
 }
 
 // @brief 左の範囲が範囲外
@@ -33,10 +33,10 @@ LogMgr::warning_left_index_out_of_range(
   const FileRegion& file_region
 )
 {
-  put_warning(file, line,
-	      file_region,
-	      "ELAB_LEFT_INDEX_OUT_OF_RANGE",
-	      "Left index is out of range.");
+  warning(file, line,
+	  file_region,
+	  "ELAB_LEFT_INDEX_OUT_OF_RANGE",
+	  "Left index is out of range.");
 }
 
 // @brief 右の範囲が範囲外
@@ -47,10 +47,10 @@ LogMgr::warning_right_index_out_of_range(
   const FileRegion& file_region
 )
 {
-  put_warning(file, line,
-	      file_region,
-	      "ELAB_RIGHT_INDEX_OUT_OF_RANGE",
-	      "Right index is out of range.");
+  warning(file, line,
+	  file_region,
+	  "ELAB_RIGHT_INDEX_OUT_OF_RANGE",
+	  "Right index is out of range.");
 }
 
 END_NAMESPACE_YM_VERILOG

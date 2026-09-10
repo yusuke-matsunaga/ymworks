@@ -11,6 +11,7 @@
 #include "elaborator/ElbGenvar.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbPrimitive.h"
+#include "elaborator/ElbTaskFunc.h"
 #include "elaborator/RangeVal.h"
 #include "ym/vl/VlContAssign.h"
 #include "ym/vl/VlExpr.h"
@@ -18,6 +19,23 @@
 
 
 BEGIN_NAMESPACE_YM_VERILOG
+
+// @brief トップモジュールのインスタンス生成
+void
+LogMgr::info_topmodule(
+  const char* file,
+  int line,
+  const FileRegion& file_region,
+  const char* name
+)
+{
+  std::ostringstream buf;
+  buf << "instantiating top module \"" << name << "\".";
+  info(file, line,
+       file_region,
+       "INFO_TOPMODULE",
+       buf.str());
+}
 
 // @brief モジュール配列のインスタンス生成
 void
@@ -32,10 +50,10 @@ LogMgr::info_module_array(
   std::ostringstream buf;
   buf << "Instantiating module array \"" << ast_inst.name() << "\" of \""
       << ast_head.name() << "\" [" << range.left << " : " << range.right << "].";
-  put_info(file, line,
-	   ast_inst.file_region(),
-	   "ELAB_MODULE_ARRAY_INSTANTIATE",
-	   buf.str());
+  info(file, line,
+       ast_inst.file_region(),
+       "INFO_MODULE_ARRAY_INSTANTIATE",
+       buf.str());
 }
 
 // @brief モジュールのインスタンス生成
@@ -48,10 +66,27 @@ LogMgr::info_module(
 {
   std::ostringstream buf;
   buf << "\"" << module->full_name() << "\" has been created.";
-  put_info(file, line,
-	   module->file_region(),
-	   "ELAB_MODULE_INSTANTIATE",
-	   buf.str());
+  info(file, line,
+       module->file_region(),
+       "INFO_MODULE_INSTANTIATE",
+       buf.str());
+}
+
+// @brief UDP のインスタンス生成
+void
+LogMgr::info_udp(
+  const char* file,
+  int line,
+  const FileRegion& file_region,
+  const char* name
+)
+{
+  std::ostringstream buf;
+  buf << "instantiating UDP \"" << name << "\".";
+  info(file, line,
+       file_region,
+       "INFO_UDP",
+       buf.str());
 }
 
 // @brief IO宣言のインスタンス生成
@@ -66,10 +101,10 @@ LogMgr::info_iodecl(
   std::ostringstream buf;
   buf << "IODecl(" << ast_item.name() << ")@"
       << scope->full_name() << " created.";
-  put_info(file, line,
-	   ast_item.file_region(),
-	   "INFO_IODECL",
-	   buf.str());
+  info(file, line,
+       ast_item.file_region(),
+       "INFO_IODECL",
+       buf.str());
 }
 
 // @brief パラメータのインスタンス生成
@@ -82,10 +117,10 @@ LogMgr::info_param(
 {
   std::ostringstream buf;
   buf << "Parameter(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_PARAM",
-	   buf.str());
+  info(file, line,
+       decl->file_region(),
+       "INFO_PARAM",
+       buf.str());
 }
 
 // @brief ネット配列のインスタンス生成
@@ -98,10 +133,10 @@ LogMgr::info_net_array(
 {
   std::ostringstream buf;
   buf << "NetArray(" << decl_array->full_name() << ") created.";
-  put_info(file, line,
-	   decl_array->file_region(),
-	   "INFO_NET_ARRAY",
-	   buf.str());
+  info(file, line,
+       decl_array->file_region(),
+       "INFO_NET_ARRAY",
+       buf.str());
 }
 
 // @brief ネットのインスタンス生成
@@ -114,10 +149,10 @@ LogMgr::info_net(
 {
   std::ostringstream buf;
   buf << "Net(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_NET",
-	   buf.str());
+  info(file, line,
+       decl->file_region(),
+       "INFO_NET",
+       buf.str());
 }
 
 // @brief Reg配列のインスタンス生成
@@ -130,10 +165,10 @@ LogMgr::info_reg_array(
 {
   std::ostringstream buf;
   buf << "RegArray(" << decl_array->full_name() << ") created.";
-  put_info(file, line,
-	   decl_array->file_region(),
-	   "INFO_REG_ARRAY",
-	   buf.str());
+  info(file, line,
+       decl_array->file_region(),
+       "INFO_REG_ARRAY",
+       buf.str());
 }
 
 // @brief Regのインスタンス生成
@@ -146,10 +181,10 @@ LogMgr::info_reg(
 {
   std::ostringstream buf;
   buf << "Reg(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_REG",
-	   buf.str());
+  info(file, line,
+       decl->file_region(),
+       "INFO_REG",
+       buf.str());
 }
 
 // @brief Var配列のインスタンス生成
@@ -162,10 +197,10 @@ LogMgr::info_var_array(
 {
   std::ostringstream buf;
   buf << "VarArray(" << decl_array->full_name() << ") created.";
-  put_info(file, line,
-	   decl_array->file_region(),
-	   "INFO_VAR_ARRAY",
-	   buf.str());
+  info(file, line,
+       decl_array->file_region(),
+       "INFO_VAR_ARRAY",
+       buf.str());
 }
 
 // @brief Varのインスタンス生成
@@ -178,10 +213,10 @@ LogMgr::info_var(
 {
   std::ostringstream buf;
   buf << "Var(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_VAR",
-	   buf.str());
+  info(file, line,
+       decl->file_region(),
+       "INFO_VAR",
+       buf.str());
 }
 
 // @brief イベント配列のインスタンス生成
@@ -194,10 +229,10 @@ LogMgr::info_event_array(
 {
   std::ostringstream buf;
   buf << "EventArray(" << decl_array->full_name() << ") created.";
-  put_info(file, line,
-	   decl_array->file_region(),
-	   "INFO_EVENT_ARRAY",
-	   buf.str());
+  info(file, line,
+       decl_array->file_region(),
+       "INFO_EVENT_ARRAY",
+       buf.str());
 }
 
 // @brief イベントのインスタンス生成
@@ -210,10 +245,10 @@ LogMgr::info_event(
 {
   std::ostringstream buf;
   buf << "Event(" << decl->full_name() << ") created.";
-  put_info(file, line,
-	   decl->file_region(),
-	   "INFO_EVENT",
-	   buf.str());
+  info(file, line,
+       decl->file_region(),
+       "INFO_EVENT",
+       buf.str());
 }
 
 // @brief genvarのインスタンス生成
@@ -226,10 +261,10 @@ LogMgr::info_genvar(
 {
   std::ostringstream buf;
   buf << "Genvar(" << genvar->full_name() << ") created.";
-  put_info(file, line,
-	   genvar->file_region(),
-	   "INFO_GENVER",
-	   buf.str());
+  info(file, line,
+       genvar->file_region(),
+       "INFO_GENVER",
+       buf.str());
 }
 
 // @brief defparam の生成
@@ -248,10 +283,10 @@ LogMgr::info_defparam(
       << " = "
       << ast_expr.decompile()
       << ")";
-  put_info(file, line,
-	   file_region,
-	   "INFO_DEFPARAM",
-	   buf.str());
+  info(file, line,
+       file_region,
+       "INFO_DEFPARAM",
+       buf.str());
 }
 
 // @brief continuous assign の生成
@@ -268,10 +303,10 @@ LogMgr::info_contassign(
       << " = "
       << cont_assign->rhs()->decompile()
       << ")";
-  put_info(file, line,
-	   cont_assign->file_region(),
-	   "INFO_CONTASSIGN",
-	   buf.str());
+  info(file, line,
+       cont_assign->file_region(),
+       "INFO_CONTASSIGN",
+       buf.str());
 }
 
 // @brief プリミティブ配列インスタンスの生成
@@ -286,10 +321,10 @@ LogMgr::info_prim_array(
   buf << "PrimArray("
       << prim_array->full_name()
       << ")";
-  put_info(file, line,
-	   prim_array->file_region(),
-	   "INFO_PRIMARRAY",
-	   buf.str());
+  info(file, line,
+       prim_array->file_region(),
+       "INFO_PRIMARRAY",
+       buf.str());
 }
 
 // @brief プリミティブインスタンスの生成
@@ -304,10 +339,28 @@ LogMgr::info_primitive(
   buf << "Primitive("
       << prim->full_name()
       << ")";
-  put_info(file, line,
-	   prim->file_region(),
-	   "INFO_PRIMITIVE",
-	   buf.str());
+  info(file, line,
+       prim->file_region(),
+       "INFO_PRIMITIVE",
+       buf.str());
+}
+
+// @brief task/function の生成
+void
+LogMgr::info_taskfunc(
+  const char* file,
+  int line,
+  ElbTaskFunc* tf
+)
+{
+  std::ostringstream buf;
+  buf << "Task/Func("
+      << tf->full_name()
+      << ")";
+  info(file, line,
+       tf->file_region(),
+       "INFO_TASKFUNC",
+       buf.str());
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -20,8 +20,6 @@
 #include "elaborator/ElbExpr.h"
 #include "elaborator/RangeVal.h"
 
-#include "ym/MsgMgr.h"
-
 
 BEGIN_NAMESPACE_YM_VERILOG
 
@@ -51,15 +49,9 @@ ModuleGen::phase1_topmodule(
   const auto& file_region = ast_module.file_region();
   auto name = ast_module.name();
 
-  {
-    std::ostringstream buf;
-    buf << "instantiating top module \"" << name << "\".";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    file_region,
-		    MsgType::Info,
-		    "ELAB",
-		    buf.str());
-  }
+  log_mgr().info_topmodule(__FILE__, __LINE__,
+			   file_region,
+			   name);
 
   auto prev_obj = find_obj(toplevel, name);
   if ( prev_obj != nullptr ) {

@@ -9,6 +9,7 @@
 /// All rights reserved.
 
 #include "ym/vl/AstBase.h"
+#include "ym/vl/VlUdpVal.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

@@ -12,11 +12,10 @@
 #include "ym/vl/Ast.h"
 #include "ym/vl/VlFwd.h"
 #include "ym/vl/VlValue.h"
+#include "common/LogMgr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
-
-class LogMgr;
 
 //////////////////////////////////////////////////////////////////////
 /// @class FuncEval FuncEval.h "FuncEval.h"

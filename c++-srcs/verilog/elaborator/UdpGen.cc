@@ -17,8 +17,6 @@
 #include "elaborator/ElbUdp.h"
 #include "elaborator/ElbExpr.h"
 
-#include "ym/MsgMgr.h"
-
 
 BEGIN_NAMESPACE_YM_VERILOG
 
@@ -50,15 +48,9 @@ UdpGen::instantiate_udp(
   const auto& file_region = ast_udp.file_region();
   auto def_name = ast_udp.name();
 
-  {
-    std::ostringstream buf;
-    buf << "instantiating UDP \"" << def_name << "\".";
-    MsgMgr::put_msg(__FILE__, __LINE__,
-		    file_region,
-		    MsgType::Info,
-		    "ELAB",
-		    buf.str());
-  }
+  log_mgr().info_udp(__FILE__, __LINE__,
+		     file_region,
+		     def_name);
 
   SizeType io_size = ast_udp.port_list().size();
 
@@ -136,14 +128,8 @@ UdpGen::instantiate_udp(
       auto input_list = ast_udp_entry.input_list();
       if ( input_list.size() != isize ) {
 	// サイズが合わない．
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			tfr,
-			MsgType::Error,
-			"ELAB",
-			"Number of input symbols mimatch.");
-	return;
+	log_mgr().error_udp_tablesize_mismatch(__FILE__, __LINE__, tfr);
       }
-
 
       // 一行文のデータを保持しておくためのバッファ
       std::vector<VlUdpVal> row_data;
@@ -153,40 +139,19 @@ UdpGen::instantiate_udp(
 	auto symbol = ast_v.symbol();
 	if ( symbol.is_edge_symbol() ) {
 	  // 組合せ回路の場合にはエッジタイプの値は使えない．
-	  std::ostringstream buf;
-	  buf << symbol.to_string()
-	      << " : transition symbol for combinational UDP";
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  ast_v.file_region(),
-			  MsgType::Error,
-			  "ELAB",
-			  buf.str());
-	  return;
+	  log_mgr().error_udp_trans_sym(__FILE__, __LINE__, ast_v);
 	}
 	if ( symbol.is_nc_symbol() ) {
 	  // NC は状態出力にしか使えない
-	  std::ostringstream buf;
-	  buf << symbol.to_string() << " : illegal symbol for input field.";
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  ast_v.file_region(),
-			  MsgType::Error,
-			  "ELAB",
-			  buf.str());
-	  return;
+	  log_mgr().error_udp_nc_sym_in_input(__FILE__, __LINE__, ast_v);
 	}
-
 	row_data.push_back(symbol);
       }
 
-      { // 現状態
+      { // 組み合わせ回路は現状態を持たない．
 	if ( ast_udp_entry.current().is_valid() ) {
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  ast_udp_entry.file_region(),
-			  MsgType::Error,
-			  "ELAB",
-			  "Combinational UDP should not have "
-			  "\'current state\' value.");
-	  return;
+	  log_mgr().error_udp_wrong_cur_state(__FILE__, __LINE__,
+					      ast_udp_entry);
 	}
       }
 
@@ -195,14 +160,7 @@ UdpGen::instantiate_udp(
 	auto symbol = ast_v.symbol();
 	if ( symbol.is_composite_symbol() ) {
 	  // 出力には複合値は使えない
-	  std::ostringstream buf;
-	  buf << symbol.to_string() << " : illegal symbol for output field.";
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  ast_v.file_region(),
-			  MsgType::Error,
-			  "ELAB",
-			  buf.str());
-	  return;
+	  log_mgr().error_udp_composite_sym_in_output(__FILE__, __LINE__, ast_v);
 	}
 
 	row_data.push_back(symbol);
@@ -230,12 +188,7 @@ UdpGen::instantiate_udp(
       const auto& tfr = ast_udp_entry.file_region();
       if ( ast_udp_entry.input_list().size() != isize ) {
 	// サイズが合わない．
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			tfr,
-			MsgType::Error,
-			"ELAB",
-			"Number of input symbols mimatch.");
-	return;
+	log_mgr().error_udp_tablesize_mismatch(__FILE__, __LINE__, tfr);
       }
 
       // 一行中に含まれるエッジタイプのシンボルの数
@@ -251,13 +204,9 @@ UdpGen::instantiate_udp(
 	if ( symbol.is_edge_symbol() ) {
 	  ++ nt;
 	  if ( nt > 1 ) {
-	    MsgMgr::put_msg(__FILE__, __LINE__,
-			    ast_v.file_region(),
-			    MsgType::Error,
-			    "ELAB",
-			    "More than one transition symbols "
-			    "in the same row.");
-	    return;
+	    // 1行に複数の遷移シンボルがある．
+	    log_mgr().error_udp_dup_trans_sym(__FILE__, __LINE__,
+					      ast_udp_entry);
 	  }
 	}
 
@@ -268,38 +217,21 @@ UdpGen::instantiate_udp(
       { // 現状態
 	auto ast_v = ast_udp_entry.current();
 	if ( ast_v.is_invalid() ) {
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  tfr,
-			  MsgType::Error,
-			  "ELAB",
-			  "Sequential UDP requires \'current state\' value.");
-	  return;
+	  // 現状態がない．
+	  log_mgr().error_udp_no_cur_state(__FILE__, __LINE__,
+					   ast_udp_entry);
 	}
 
 	auto symbol = ast_v.symbol();
 	if ( symbol.is_edge_symbol() ) {
 	  // エッジタイプの値は使えない．
-	  std::ostringstream buf;
-	  buf << symbol.to_string()
-	      << " : transition symbol for current state field.";
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  ast_v.file_region(),
-			  MsgType::Error,
-			  "ELAB",
-			  buf.str());
-	  return;
+	  log_mgr().error_udp_trans_sym_in_cur_state(__FILE__, __LINE__,
+						     ast_v);
 	}
 	if ( symbol.is_nc_symbol() ) {
 	  // NC は状態出力にしか使えない
-	  std::ostringstream buf;
-	  buf << symbol.to_string()
-	      << " : illegal symbol for current state field.";
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  ast_v.file_region(),
-			  MsgType::Error,
-			  "ELAB",
-			  buf.str());
-	  return;
+	  log_mgr().error_udp_nc_sym_in_cur_state(__FILE__, __LINE__,
+						  ast_v);
 	}
 
 	row_data.push_back(symbol);
@@ -310,27 +242,13 @@ UdpGen::instantiate_udp(
 	auto symbol = ast_v.symbol();
 	if ( !symbol.is_nc_symbol() && symbol.is_edge_symbol() ) {
 	  // エッジタイプの値は使えない．
-	  std::ostringstream buf;
-	  buf << symbol.to_string()
-	      << " : transition symbol for output field.";
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  ast_v.file_region(),
-			  MsgType::Error,
-			  "ELAB",
-			  buf.str());
-	  return;
+	  log_mgr().error_udp_trans_sym_in_output(__FILE__, __LINE__,
+						  ast_v);
 	}
 	if ( symbol.is_composite_symbol() ) {
 	  // 出力には複合値は使えない
-	  std::ostringstream buf;
-	  buf << symbol.to_string()
-	      << " : illegal symbol for output field.";
-	  MsgMgr::put_msg(__FILE__, __LINE__,
-			  ast_v.file_region(),
-			  MsgType::Error,
-			  "ELAB",
-			  buf.str());
-	  return;
+	  log_mgr().error_udp_composite_sym_in_output(__FILE__, __LINE__,
+						      ast_v);
 	}
 
 	row_data.push_back(symbol);

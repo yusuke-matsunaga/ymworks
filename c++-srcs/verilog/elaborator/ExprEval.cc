@@ -167,9 +167,6 @@ ExprEval::evaluate_expr(
 
   case AstExpr::Primary:
     return evaluate_primary(parent, ast_expr);
-
-  default:
-    ASSERT_NOT_REACHED;
   }
 
   return VlValue{};

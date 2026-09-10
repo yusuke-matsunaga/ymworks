@@ -8,6 +8,7 @@
 
 #include "AttrGen.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbError.h"
 #include "ym/vl/VlAttribute.h"
 
 
@@ -43,14 +44,16 @@ AttrGen::instantiate_attribute(
     std::vector<const VlAttribute*> attr_list;
     for ( auto ast_ai: ast_attr_list ) {
       for ( auto ast_as: ast_ai.attrspec_list() ) {
-	auto expr = instantiate_constant_expr(nullptr, ast_as.expr());
-	if ( !expr ) {
+	try {
+	  auto expr = instantiate_constant_expr(nullptr, ast_as.expr());
+	  // attr_list に ast_as, expr, def を追加
+	  auto attr = elb_mgr().new_Attribute(ast_as, expr, def);
+	  attr_list.push_back(attr);
+	}
+	catch ( const ElbError& error ) {
 	  // エラー．たぶん expr() が constant_expression ではなかった．
 	  // でも無視する．
 	}
-	// attr_list に ast_as, expr, def を追加
-	auto attr = elb_mgr().new_Attribute(ast_as, expr, def);
-	attr_list.push_back(attr);
       }
     }
     // attr_list が空でも処理済みの意味で追加する．

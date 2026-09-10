@@ -76,7 +76,7 @@ ItemGen::instantiate_gateheader(
       instantiate_gateinst(parent, ast_head, ast_inst, prim_head);
     }
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
+      // 無視して処理を続ける．
     }
   }
 }
@@ -162,7 +162,7 @@ ItemGen::instantiate_udpheader(
       instantiate_udpinst(parent, ast_head, ast_inst, prim_head, udpdefn);
     }
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
+      // 無視して処理を続ける．
     }
   }
 }
@@ -228,7 +228,7 @@ ItemGen::instantiate_cellhead(
       instantiate_cellinst(parent, ast_head, ast_inst, prim_head, cell);
     }
     catch ( const ElbError& error ) {
-      log_mgr().put_error(error);
+      // 無視して処理を続ける．
     }
   }
 }
