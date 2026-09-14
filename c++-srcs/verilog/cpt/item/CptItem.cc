@@ -19,7 +19,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 const char*
 CptItem::name() const
 {
-  throw std::logic_error{"name(): type mismatch"};
+  return nullptr;
 }
 
 // @brief パラメータ割り当てのリストの先頭の取得

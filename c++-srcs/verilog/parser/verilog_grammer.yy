@@ -857,7 +857,7 @@ list_of_paramport_decl
 | list_of_paramport_decl ',' paramport_assignment
 {
   $$ = $1;
-  $1.add_item($3);
+  $$.add_item($3);
 }
 ;
 
@@ -1031,13 +1031,13 @@ list_of_port_declarations
 | list_of_port_declarations ',' ai_list portdecl_head
 {
   $$ = $1;
-  $1.add_head($4.head, $4.item);
+  $$.add_head($4.head, $4.item);
   parser.reg_attrinst($4.head, $3);
 }
 | list_of_port_declarations ',' variable_port_identifier_item
 {
   $$ = $1;
-  $1.add_item($3);
+  $$.add_item($3);
 }
 ;
 
@@ -1190,17 +1190,17 @@ list_of_module_items
 | list_of_module_items io_declaration
 {
   $$ = $1;
-  $1.iohead_list.add($2);
+  $$.add_io($2);
 }
 | list_of_module_items module_decl
 {
   $$ = $1;
-  $1.declhead_list.add($2);
+  $$.add_decl($2);
 }
 | list_of_module_items module_item
 {
   $$ = $1;
-  $1.item_list.add($2);
+  $$.add_item($2);
 }
 ;
 
@@ -1215,12 +1215,12 @@ list_of_module_items2
 | list_of_module_items2 module_decl
 {
   $$ = $1;
-  $1.declhead_list.add($2);
+  $$.add_decl($2);
 }
 | list_of_module_items2 module_item
 {
   $$ = $1;
-  $1.item_list.add($2);
+  $$.add_item($2);
 }
 ;
 
@@ -2722,22 +2722,22 @@ nzlist_of_fitem_decl
 : block_item_declaration
 {
   $$ = PtHeadList();
-  $$.declhead_list.add($1);
+  $$.add_decl($1);
 }
 | tf_input_declaration
 {
   $$ = PtHeadList();
-  $$.iohead_list.add($1);
+  $$.add_io($1);
 }
 | nzlist_of_fitem_decl block_item_declaration
 {
   $$ = $1;
-  $1.declhead_list.add($2);
+  $$.add_decl($2);
 }
 | nzlist_of_fitem_decl tf_input_declaration
 {
   $$ = $1;
-  $1.iohead_list.add($2);
+  $$.add_io($2);
 }
 ;
 
@@ -2750,7 +2750,7 @@ list_of_bitem_decl
 | list_of_bitem_decl block_item_declaration
 {
   $$ = $1;
-  $1.declhead_list.add($2);
+  $$.add_decl($2);
 }
 ;
 
@@ -2778,7 +2778,7 @@ function_port_list
 | function_port_list ',' port_identifier_item
 {
   $$ = $1;
-  $1.add_item($3);
+  $$.add_item($3);
 }
 ;
 
@@ -2905,12 +2905,12 @@ list_of_titem_decl
 | list_of_titem_decl block_item_declaration
 {
   $$ = $1;
-  $1.declhead_list.add($2);
+  $$.add_decl($2);
 }
 | list_of_titem_decl tf_io_declaration
 {
   $$ = $1;
-  $1.iohead_list.add($2);
+  $$.add_io($2);
 }
 ;
 
@@ -2973,7 +2973,7 @@ task_port_list
 | task_port_list ',' port_identifier_item
 {
   $$ = $1;
-  $1.add_item($3);
+  $$.add_item($3);
 }
 ;
 
@@ -4221,12 +4221,12 @@ list_of_generate_items
 | list_of_generate_items generate_item
 {
   $$ = $1;
-  $1.item_list.add($2);
+  $$.add_item($2);
 }
 | list_of_generate_items module_or_generate_decl
 {
   $$ = $1;
-  $1.declhead_list.add($2);
+  $$.add_decl($2);
 }
 ;
 
@@ -4239,12 +4239,12 @@ generate_item_or_null
 | generate_item
 {
   $$ = PtHeadList();
-  $$.item_list.add($1);
+  $$.add_item($1);
 }
 | module_or_generate_decl
 {
   $$ = PtHeadList();
-  $$.declhead_list.add($1);
+  $$.add_decl($1);
 }
 ;
 
@@ -4525,37 +4525,37 @@ nzlist_of_uport_decl
 : ai_list udp_output_declaration
 {
   $$ = PtHeadList::new_obj();
-  $$.iohead_list.add($2);
+  $$.add_io($2);
   parser.reg_attrinst($2, $1);
 }
 | ai_list udp_input_declaration
 {
   $$ = PtHeadList::new_obj();
-  $$.iohead_list.add($2);
+  $$.add_io($2);
   parser.reg_attrinst($2, $1);
 }
 | ai_list udp_reg_declaration
 {
   $$ = PtHeadList::new_obj();
-  $$.declhead_list.add($2);
+  $$.add_decl($2);
   parser.reg_attrinst($2, $1);
 }
 | nzlist_of_uport_decl ai_list udp_output_declaration
 {
   $$ = $1;
-  $$.iohead_list.add($3);
+  $$.add_io($3);
   parser.reg_attrinst($3, $2);
 }
 | nzlist_of_uport_decl ai_list udp_input_declaration
 {
   $$ = $1;
-  $$.iohead_list.add($3);
+  $$.add_io($3);
   parser.reg_attrinst($3, $2);
 }
 | nzlist_of_uport_decl ai_list udp_reg_declaration
 {
   $$ = $1;
-  $$.declhead_list.add($3);
+  $$.add_decl($3);
   parser.reg_attrinst($3, $2);
 }
 ;
@@ -7434,7 +7434,7 @@ hierarchical_identifier
 | hierarchical_identifier '.' IDENTIFIER
 {
   $$ = $1;
-  parser.add_HierName($1, $3);
+  parser.add_HierName($$, $3);
 }
 | hierarchical_identifier '[' expression ']' '.' IDENTIFIER
 {
@@ -7450,7 +7450,7 @@ hierarchical_identifier
   }
   else {
     $$ = $1;
-    parser.add_HierName($1, $3->index_value(), $6);
+    parser.add_HierName($$, $3->index_value(), $6);
   }
 }
 ;

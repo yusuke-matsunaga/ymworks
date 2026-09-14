@@ -57,6 +57,30 @@ struct PtHeadList
     item_list._init();
   }
 
+  void
+  add_io(
+    PtIOHead* io
+  )
+  {
+    iohead_list.add(io);
+  }
+
+  void
+  add_decl(
+    PtDeclHead* decl
+  )
+  {
+    declhead_list.add(decl);
+  }
+
+  void
+  add_item(
+    PtItem* item
+  )
+  {
+    item_list.add(item);
+  }
+
 };
 
 END_NAMESPACE_YM_VERILOG

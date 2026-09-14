@@ -70,6 +70,9 @@ LogMgr::error(
   std::string message
 )
 {
+  {
+    std::cout << "error(" << message << ")" << std::endl;
+  }
   put_msg(file, line,
 	  file_region,
 	  MsgType::Error,

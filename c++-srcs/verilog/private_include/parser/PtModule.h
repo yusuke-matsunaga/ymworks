@@ -8,7 +8,6 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-//#include "ym/vl/AstModule.h"
 #include "parser/PtBase.h"
 
 

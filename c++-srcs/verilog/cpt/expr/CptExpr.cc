@@ -22,14 +22,14 @@ BEGIN_NAMESPACE_YM_VERILOG
 const PtNameBranch*
 CptExpr::namebranch_top() const
 {
-  throw std::logic_error{"namebranch_top(): type mismatch"};
+  return nullptr;
 }
 
 // @brief 末尾の名前の取得
 const char*
 CptExpr::name() const
 {
-  throw std::logic_error{"name(): type mismatch"};
+  return nullptr;
 }
 
 // @brief 演算子の種類の取得

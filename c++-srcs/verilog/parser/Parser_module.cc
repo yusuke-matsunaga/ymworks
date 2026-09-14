@@ -44,42 +44,6 @@ Parser::new_Module1995(
   VpiDefDelayMode delay = lex().delay_mode();
   int decay = lex().default_decay_time();
 
-#if 0
-  // ポート宣言とIO宣言のチェックを行う．
-  std::unordered_map<std::string, VpiDir> iodecl_dirs;
-  check_IO(port_top, iohead_top, iodecl_dirs);
-
-  // 今度はポートリストに現れている信号線が入出力ポート宣言されているか
-  // 調べる．
-  // 同時に名無しのポートがあるかどうかしらべる．
-  bool named_port = true;
-  for ( auto port: PtList<const PtPort>::new_obj(port_top) ) {
-    if ( port->ext_name() == nullptr ) {
-      // 1つでも名前を持たないポートがあったら名前での結合はできない．
-      named_port = false;
-    }
-    SizeType index = 0;
-    for ( auto expr: PtList<const PtExpr>::new_obj(port->portref_top()) ) {
-      auto name = expr->name();
-      if ( iodecl_dirs.count(name) == 0 ) {
-	// name は IOH リストに存在しない．
-	std::ostringstream buf;
-	buf << "\"" << name << "\" is in the port list but not declared.";
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			port->file_region(),
-			MsgType::Error,
-			"ELAB",
-			buf.str());
-      }
-      else {
-	auto dir = iodecl_dirs.at(name);
-	port->set_portref_dir(index, dir);
-      }
-      ++ index;
-    }
-  }
-#endif
-
   return mFactory.new_Module(file_region,
 			     module_name,
 			     is_macro, is_cell,
@@ -113,15 +77,6 @@ Parser::new_Module2001(
   VpiDefDelayMode delay = lex().delay_mode();
   int decay = lex().default_decay_time();
 
-#if 0
-  if ( !check_PortArray(portdecl_top) ) {
-    return nullptr;
-  }
-
-  // iohead_array からポートリストを作る．
-  auto port_list = new_PortArray(portdecl_top);
-#endif
-
   return mFactory.new_Module(file_region,
 			     module_name,
 			     is_macro, is_cell,
@@ -133,110 +88,5 @@ Parser::new_Module2001(
 			     declhead_top,
 			     item_top);
 }
-
-#if 0
-// @brief ポート宣言とIO宣言の齟齬をチェックする．
-void
-Parser::check_IO(
-  const PtPort* port_top,
-  const PtIOHead* iohead_top,
-  std::unordered_map<std::string, VpiDir>& iodecl_dirs
-)
-{
-  // port_array をスキャンして中で用いられている名前を portref_dic
-  // に登録する．
-  std::unordered_set<std::string> portref_dic;
-  for ( auto port: PtList<const PtPort>::new_obj(port_top) ) {
-    for ( auto expr: PtList<const PtExpr>::new_obj(port->portref_top()) ) {
-      auto name = expr->name();
-      portref_dic.insert(name);
-    }
-  }
-
-  // 入出力ポート宣言に現れる名前を iodecl_names に入れる．
-  // ポート宣言が型を持つ場合にはモジュール内部の宣言要素を生成する．
-  // 持たない場合にはデフォルトタイプのネットを生成する．
-  for ( auto iohead: PtList<const PtIOHead>::new_obj(iohead_top) ) {
-    // 名前をキーにして方向を記録しておく
-    auto dir = iohead->direction();
-    for ( auto elem: PtList<const PtIOItem>::new_obj(iohead->item_top()) ) {
-      auto elem_name = elem->name();
-
-      // まず未定義/多重定義のエラーをチェックする．
-      if ( portref_dic.count(elem_name) == 0 ) {
-	// port expression に現れない信号線名
-	// 未定義エラー
-	std::ostringstream buf;
-	buf << "\"" << elem_name << "\" is not defined in the port list.";
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			elem->file_region(),
-			MsgType::Error,
-			"ELAB",
-			buf.str());
-      }
-      if ( iodecl_dirs.count(elem_name) > 0 ) {
-	// 二重登録エラー
-	std::ostringstream buf;
-	buf << "\"" << elem_name << "\" is redefined.";
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			elem->file_region(),
-			MsgType::Error,
-			"ELAB",
-			buf.str());
-      }
-      else {
-	iodecl_dirs[elem_name] = dir;
-      }
-    }
-  }
-}
-
-// @brief 入出力宣言中の重複チェックを行う．
-bool
-Parser::check_PortArray(
-  const PtIOHead* iohead_top
-)
-{
-  std::unordered_set<std::string> portref_dic;
-  for ( auto head: PtList<const PtIOHead>::new_obj(iohead_top) ) {
-    for ( auto elem: PtList<const PtIOItem>::new_obj(head->item_top()) ) {
-      auto name = elem->name();
-      if ( portref_dic.count(name) > 0 ) {
-	std::ostringstream buf;
-	buf << "\"" << name << "\" is redefined.";
-	MsgMgr::put_msg(__FILE__, __LINE__,
-			elem->file_region(),
-			MsgType::Error,
-			"ELAB",
-			buf.str());
-	return false;
-      }
-      portref_dic.insert(name);
-    }
-  }
-  return true;
-}
-
-// @brief 入出力宣言からポートリストを作る．
-PtPortList
-Parser::new_PortArray(
-  const PtIOHead* iohead_top
-)
-{
-  // ポートを生成し vec に格納する．
-  auto port_list = PtPortList::new_obj();
-  for ( auto head: PtList<const PtIOHead>::new_obj(iohead_top) ) {
-    for ( auto elem: PtList<const PtIOItem>::new_obj(head->item_top()) ) {
-      auto name = elem->name();
-      auto portref = mFactory.new_Primary(elem->file_region(), name);
-      auto port = mFactory.new_Port(elem->file_region(), name, portref);
-      auto dir = head->direction();
-      port->set_portref_dir(0, dir);
-      port_list.add(port);
-    }
-  }
-  return port_list;
-}
-#endif
 
 END_NAMESPACE_YM_VERILOG

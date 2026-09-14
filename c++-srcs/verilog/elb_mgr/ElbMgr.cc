@@ -373,6 +373,11 @@ ElbMgr::new_Module(
   const AstInst& ast_inst
 )
 {
+  {
+    std::cerr << "ElbMgr::new_Module("
+	      << ast_module.name()
+	      << ")" << std::endl;
+  }
   auto module = factory().new_Module(parent, ast_module, ast_head, ast_inst);
   reg_obj(module);
   mObjDict.add(module);
