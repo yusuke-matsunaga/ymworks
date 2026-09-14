@@ -13,6 +13,7 @@
 #include "ym/clib.h"
 
 #include "elaborator/ElbFactory.h"
+#include "elaborator/ElbHead.h"
 #include "elaborator/ObjDict.h"
 #include "elaborator/ModDefDict.h"
 #include "elaborator/TagDict.h"
@@ -281,6 +282,12 @@ public:
   void
   reg_internalscope(
     const VlScope* obj
+  );
+
+  /// @brief function を登録する．
+  void
+  reg_func(
+    const VlTaskFunc* func
   );
 
 
@@ -1137,6 +1144,24 @@ private:
     return *mFactory;
   }
 
+  /// @brief ヘッダを登録する．
+  void
+  reg_head(
+    const ElbHead* head
+  )
+  {
+    mHeadList.push_back(std::unique_ptr<const ElbHead>{head});
+  }
+
+  /// @brief オブジェクトを登録する．
+  void
+  reg_obj(
+    const VlObj* obj
+  )
+  {
+    mObjList.push_back(std::unique_ptr<const VlObj>{obj});
+  }
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -1164,11 +1189,11 @@ private:
   // UserSystf の辞書
   std::unordered_map<std::string, const ElbUserSystf*> mSystfHash;
 
-  // ヘッダのリスト
-  std::vector<const ElbHead*> mHeadList;
+  // ヘッダのリスト(所有権の管理用)
+  std::vector<std::unique_ptr<const ElbHead>> mHeadList;
 
-  // 全てのオブジェクトのリスト
-  std::vector<const VlObj*> mObjList;
+  // 全てのオブジェクトのリスト(所有権の管理用)
+  std::vector<std::unique_ptr<const VlObj>> mObjList;
 
   // タグをキーにした各スコープごとのオブジェクトのリストの辞書
   TagDict mTagDict;

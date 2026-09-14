@@ -260,11 +260,21 @@ public:
     const VlObj* obj ///< [in] 対象のオブジェクト
   ) const;
 
+  /// @brief セルライブラリを得る．
+  ClibCellLibrary
+  cell_library() const
+  {
+    return mCellLibrary;
+  }
+
 
 private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
   //////////////////////////////////////////////////////////////////////
+
+  // セルライブラリ
+  ClibCellLibrary mCellLibrary;
 
   // Ast オブジェクトを管理するクラス
   std::unique_ptr<AstMgr> mAstMgr;

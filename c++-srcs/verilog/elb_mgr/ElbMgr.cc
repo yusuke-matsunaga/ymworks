@@ -68,14 +68,7 @@ ElbMgr::~ElbMgr()
 void
 ElbMgr::clear()
 {
-  for ( auto head: mHeadList ) {
-    delete head;
-  }
   mHeadList.clear();
-
-  for ( auto obj: mObjList ) {
-    delete obj;
-  }
   mObjList.clear();
 
   mUdpList.clear();
@@ -299,7 +292,7 @@ const VlScope*
 ElbMgr::new_Toplevel()
 {
   auto scope = factory().new_Toplevel();
-  mObjList.push_back(scope);
+  reg_obj(scope);
   mTopLevel = scope;
   return scope;
 }
@@ -312,7 +305,7 @@ ElbMgr::new_StmtBlockScope(
 )
 {
   auto scope = factory().new_StmtBlockScope(parent, ast_stmt);
-  mObjList.push_back(scope);
+  reg_obj(scope);
   reg_internalscope(scope);
   return scope;
 }
@@ -325,7 +318,7 @@ ElbMgr::new_GenBlock(
 )
 {
   auto scope = factory().new_GenBlock(parent, ast_item);
-  mObjList.push_back(scope);
+  reg_obj(scope);
   reg_internalscope(scope);
   return scope;
 }
@@ -338,7 +331,7 @@ ElbMgr::new_GfRoot(
 )
 {
   auto gfroot = factory().new_GfRoot(parent, ast_item);
-  mObjList.push_back(gfroot);
+  reg_obj(gfroot);
   mObjDict.add(gfroot);
   return gfroot;
 }
@@ -352,7 +345,7 @@ ElbMgr::new_GfBlock(
 )
 {
   auto gfblock = factory().new_GfBlock(parent, ast_item, gvi);
-  mObjList.push_back(gfblock);
+  reg_obj(gfblock);
   reg_internalscope(gfblock);
   return gfblock;
 }
@@ -365,7 +358,7 @@ ElbMgr::new_UdpDefn(
 )
 {
   auto udp = factory().new_UdpDefn(ast_udp, is_protected);
-  mObjList.push_back(udp);
+  reg_obj(udp);
   mUdpList.push_back(udp);
   mUdpHash[ast_udp.name()] = udp;
   return udp;
@@ -381,7 +374,7 @@ ElbMgr::new_Module(
 )
 {
   auto module = factory().new_Module(parent, ast_module, ast_head, ast_inst);
-  mObjList.push_back(module);
+  reg_obj(module);
   mObjDict.add(module);
   mModuleDefDict.add(module);
   mTagDict.add_module(module);
@@ -405,7 +398,7 @@ ElbMgr::new_ModuleArray(
   auto modulearray = factory().new_ModuleArray(parent, ast_module,
 					       ast_head, ast_inst,
 					       ast_range, range);
-  mObjList.push_back(modulearray);
+  reg_obj(modulearray);
   mObjDict.add(modulearray);
   mTagDict.add_modulearray(modulearray);
   return modulearray;
@@ -419,7 +412,7 @@ ElbMgr::new_IOHead(
 )
 {
   auto head = factory().new_IOHead(module, ast_header);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -431,7 +424,7 @@ ElbMgr::new_IOHead(
 )
 {
   auto head = factory().new_IOHead(taskfunc, ast_header);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -444,7 +437,7 @@ ElbMgr::new_DeclHead(
 )
 {
   auto head = factory().new_DeclHead(parent, ast_head, has_delay);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -461,7 +454,7 @@ ElbMgr::new_DeclHead(
   auto head = factory().new_DeclHead(parent, ast_head,
 				     ast_range, range,
 				     has_delay);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -474,7 +467,7 @@ ElbMgr::new_DeclHead(
 )
 {
   auto head = factory().new_DeclHead(parent, ast_head, aux_type);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -490,7 +483,7 @@ ElbMgr::new_DeclHead(
 {
   auto head = factory().new_DeclHead(parent, ast_head, aux_type,
 				     ast_range, range);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -502,7 +495,7 @@ ElbMgr::new_DeclHead(
 )
 {
   auto head = factory().new_DeclHead(parent, ast_item);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -516,7 +509,7 @@ ElbMgr::new_DeclHead(
 )
 {
   auto head = factory().new_DeclHead(parent, ast_item, ast_range, range);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -530,7 +523,7 @@ ElbMgr::new_Decl(
 )
 {
   auto decl = factory().new_Decl(head, ast_item, init);
-  mObjList.push_back(decl);
+  reg_obj(decl);
   mObjDict.add(decl);
   mTagDict.add_decl(tag, decl);
   return decl;
@@ -545,7 +538,7 @@ ElbMgr::new_ImpNet(
 )
 {
   auto decl = factory().new_ImpNet(parent, ast_expr, net_type);
-  mObjList.push_back(decl);
+  reg_obj(decl);
   mTagDict.add_decl(vpiNet, decl);
   return decl;
 }
@@ -560,7 +553,7 @@ ElbMgr::new_DeclArray(
 )
 {
   auto decl = factory().new_DeclArray(head, ast_item, range_src);
-  mObjList.push_back(decl);
+  reg_obj(decl);
   mObjDict.add(decl);
   if ( tag == vpiVariables ) {
     // ちょっと汚い補正
@@ -578,7 +571,7 @@ ElbMgr::new_ParamHead(
 )
 {
   auto head = factory().new_ParamHead(parent, ast_head);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -592,7 +585,7 @@ ElbMgr::new_ParamHead(
 )
 {
   auto head = factory().new_ParamHead(parent, ast_head, ast_range, range);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -605,7 +598,7 @@ ElbMgr::new_Parameter(
 )
 {
   auto param = factory().new_Parameter(head, ast_item, is_local);
-  mObjList.push_back(param);
+  reg_obj(param);
   mObjDict.add(param);
   mTagDict.add_decl(vpiParameter, param);
   return param;
@@ -620,7 +613,7 @@ ElbMgr::new_Genvar(
 )
 {
   auto genvar = factory().new_Genvar(parent, ast_item, val);
-  mObjList.push_back(genvar);
+  reg_obj(genvar);
   mObjDict.add(genvar);
   return genvar;
 }
@@ -634,7 +627,7 @@ ElbMgr::new_CaHead(
 )
 {
   auto head = factory().new_CaHead(module, ast_head, delay);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -648,7 +641,7 @@ ElbMgr::new_ContAssign(
 )
 {
   auto contassign = factory().new_ContAssign(head, ast_obj, lhs, rhs);
-  mObjList.push_back(contassign);
+  reg_obj(contassign);
   mTagDict.add_contassign(contassign);
   return contassign;
 }
@@ -663,7 +656,7 @@ ElbMgr::new_ContAssign(
 )
 {
   auto contassign = factory().new_ContAssign(module, ast_obj, lhs, rhs);
-  mObjList.push_back(contassign);
+  reg_obj(contassign);
   mTagDict.add_contassign(contassign);
   return contassign;
 }
@@ -680,7 +673,7 @@ ElbMgr::new_ParamAssign(
 {
   auto paramassign = factory().new_ParamAssign(module, ast_obj, param,
 					       rhs_expr, rhs_value);
-  mObjList.push_back(paramassign);
+  reg_obj(paramassign);
   mTagDict.add_paramassign(paramassign);
   return paramassign;
 }
@@ -697,7 +690,7 @@ ElbMgr::new_NamedParamAssign(
 {
   auto paramassign = factory().new_NamedParamAssign(module, ast_obj, param,
 						    rhs_expr, rhs_value);
-  mObjList.push_back(paramassign);
+  reg_obj(paramassign);
   mTagDict.add_paramassign(paramassign);
   return paramassign;
 }
@@ -715,7 +708,7 @@ ElbMgr::new_DefParam(
 {
   auto defparam = factory().new_DefParam(module, ast_header, ast_defparam,
 					 param, rhs_expr, rhs_value);
-  mObjList.push_back(defparam);
+  reg_obj(defparam);
   mTagDict.add_defparam(defparam);
   return defparam;
 }
@@ -729,7 +722,7 @@ ElbMgr::new_PrimHead(
 )
 {
   auto head = factory().new_PrimHead(parent, ast_header, has_delay);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -743,7 +736,7 @@ ElbMgr::new_UdpHead(
 )
 {
   auto head = factory().new_UdpHead(parent, ast_header, udp, has_delay);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -756,7 +749,7 @@ ElbMgr::new_CellHead(
 )
 {
   auto head = factory().new_CellHead(parent, ast_header, cell);
-  mHeadList.push_back(head);
+  reg_head(head);
   return head;
 }
 
@@ -768,7 +761,7 @@ ElbMgr::new_Primitive(
 )
 {
   auto prim = factory().new_Primitive(head, ast_inst);
-  mObjList.push_back(prim);
+  reg_obj(prim);
   mObjDict.add(prim);
   mTagDict.add_primitive(prim);
   return prim;
@@ -784,7 +777,7 @@ ElbMgr::new_PrimitiveArray(
 )
 {
   auto prim = factory().new_PrimitiveArray(head, ast_inst, ast_range, range);
-  mObjList.push_back(prim);
+  reg_obj(prim);
   mTagDict.add_primarray(prim);
   return prim;
 }
@@ -798,7 +791,7 @@ ElbMgr::new_CellPrimitive(
 )
 {
   auto prim = factory().new_CellPrimitive(head, cell, ast_inst);
-  mObjList.push_back(prim);
+  reg_obj(prim);
   return prim;
 }
 
@@ -814,7 +807,7 @@ ElbMgr::new_CellPrimitiveArray(
 {
   auto prim = factory().new_CellPrimitiveArray(head, cell, ast_inst,
 					       ast_range, range);
-  mObjList.push_back(prim);
+  reg_obj(prim);
   return prim;
 }
 
@@ -827,10 +820,7 @@ ElbMgr::new_Function(
 )
 {
   auto func = factory().new_Function(parent, ast_item, const_func);
-  #warning "reg_Function" で共通化すべき
-  mObjList.push_back(func);
-  mObjDict.add(func);
-  mTagDict.add_function(func);
+  reg_func(func);
   return func;
 }
 
@@ -847,10 +837,19 @@ ElbMgr::new_Function(
   auto func = factory().new_Function(parent, ast_item,
 				     ast_range, range,
 				     const_func);
-  mObjList.push_back(func);
+  reg_func(func);
+  return func;
+}
+
+// @brief function を登録する．
+void
+ElbMgr::reg_func(
+  const VlTaskFunc* func
+)
+{
+  reg_obj(func);
   mObjDict.add(func);
   mTagDict.add_function(func);
-  return func;
 }
 
 // @brief task を生成する．
@@ -861,7 +860,7 @@ ElbMgr::new_Task(
 )
 {
   auto task = factory().new_Task(parent, ast_item);
-  mObjList.push_back(task);
+  reg_obj(task);
   mObjDict.add(task);
   mTagDict.add_task(task);
   return task;
@@ -875,7 +874,7 @@ ElbMgr::new_Process(
 )
 {
   auto process = factory().new_Process(parent, ast_item);
-  mObjList.push_back(process);
+  reg_obj(process);
   mTagDict.add_process(process);
   return process;
 }
@@ -894,7 +893,7 @@ ElbMgr::new_Assignment(
 {
   auto stmt = factory().new_Assignment(parent, process, ast_stmt,
 				       lhs, rhs, block, control);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -910,7 +909,7 @@ ElbMgr::new_AssignStmt(
 {
   auto stmt = factory().new_AssignStmt(parent, process, ast_stmt,
 				       lhs, rhs);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -924,7 +923,7 @@ ElbMgr::new_DeassignStmt(
 )
 {
   auto stmt = factory().new_DeassignStmt(parent, process, ast_stmt, lhs);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -939,7 +938,7 @@ ElbMgr::new_ForceStmt(
 )
 {
   auto stmt = factory().new_ForceStmt(parent, process, ast_stmt, lhs, rhs);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -953,7 +952,7 @@ ElbMgr::new_ReleaseStmt(
 )
 {
   auto stmt = factory().new_ReleaseStmt(parent, process, ast_stmt, lhs);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -967,7 +966,7 @@ ElbMgr::new_Begin(
 )
 {
   auto stmt = factory().new_Begin(parent, process, ast_stmt, stmt_list);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -981,7 +980,7 @@ ElbMgr::new_Fork(
 )
 {
   auto stmt = factory().new_Fork(parent, process, ast_stmt, stmt_list);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -995,7 +994,7 @@ ElbMgr::new_NamedBegin(
 )
 {
   auto stmt = factory().new_NamedBegin(block, process, ast_stmt, stmt_list);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1009,7 +1008,7 @@ ElbMgr::new_NamedFork(
 )
 {
   auto stmt = factory().new_NamedFork(block, process, ast_stmt, stmt_list);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1024,7 +1023,7 @@ ElbMgr::new_WhileStmt(
 )
 {
   auto stmt = factory().new_WhileStmt(parent, process, ast_stmt, cond, body);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1039,7 +1038,7 @@ ElbMgr::new_RepeatStmt(
 )
 {
   auto stmt = factory().new_RepeatStmt(parent, process, ast_stmt, cond, body);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1054,7 +1053,7 @@ ElbMgr::new_WaitStmt(
 )
 {
   auto stmt = factory().new_WaitStmt(parent, process, ast_stmt, cond, body);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1072,7 +1071,7 @@ ElbMgr::new_ForStmt(
 {
   auto stmt = factory().new_ForStmt(parent, process, ast_stmt, cond,
 				    init_stmt, inc_stmt, body);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1086,7 +1085,7 @@ ElbMgr::new_ForeverStmt(
 )
 {
   auto stmt = factory().new_ForeverStmt(parent, process, ast_stmt, body);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1103,7 +1102,7 @@ ElbMgr::new_IfStmt(
 {
   auto stmt = factory().new_IfStmt(parent, process, ast_stmt,
 				   cond, then_stmt, else_stmt);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1119,7 +1118,7 @@ ElbMgr::new_CaseStmt(
 {
   auto stmt = factory().new_CaseStmt(parent, process, ast_stmt,
 				     expr, caseitem_list);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1132,7 +1131,7 @@ ElbMgr::new_CaseItem(
 )
 {
   auto caseitem = factory().new_CaseItem(ast_item, label_list, body);
-  mObjList.push_back(caseitem);
+  reg_obj(caseitem);
   return caseitem;
 }
 
@@ -1147,7 +1146,7 @@ ElbMgr::new_EventStmt(
 {
   auto stmt = factory().new_EventStmt(parent, process, ast_stmt,
 				      named_event);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1160,7 +1159,7 @@ ElbMgr::new_NullStmt(
 )
 {
   auto stmt = factory().new_NullStmt(parent, process, ast_stmt);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1176,7 +1175,7 @@ ElbMgr::new_TaskCall(
 {
   auto stmt = factory().new_TaskCall(parent, process, ast_stmt,
 				     task, arg_array);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1192,7 +1191,7 @@ ElbMgr::new_SysTaskCall(
 {
   auto stmt = factory().new_SysTaskCall(parent, process, ast_stmt,
 					user_systf, arg_array);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1206,7 +1205,7 @@ ElbMgr::new_DisableStmt(
 )
 {
   auto stmt = factory().new_DisableStmt(parent, process, ast_stmt, target);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1222,7 +1221,7 @@ ElbMgr::new_CtrlStmt(
 {
   auto stmt = factory().new_CtrlStmt(parent, process, ast_stmt,
 				     control, body);
-  mObjList.push_back(stmt);
+  reg_obj(stmt);
   return stmt;
 }
 
@@ -1234,7 +1233,7 @@ ElbMgr::new_DelayControl(
 )
 {
   auto control = factory().new_DelayControl(ast_control, delay);
-  mObjList.push_back(control);
+  reg_obj(control);
   return control;
 }
 
@@ -1246,7 +1245,7 @@ ElbMgr::new_EventControl(
 )
 {
   auto control = factory().new_EventControl(ast_control, event_list);
-  mObjList.push_back(control);
+  reg_obj(control);
   return control;
 }
 
@@ -1259,7 +1258,7 @@ ElbMgr::new_RepeatControl(
 )
 {
   auto control = factory().new_RepeatControl(ast_control, rep, event_list);
-  mObjList.push_back(control);
+  reg_obj(control);
   return control;
 }
 
@@ -1273,7 +1272,7 @@ ElbMgr::new_UnaryOp(
 {
   auto expr = factory().new_UnaryOp(ast_expr, op_type,
 				    opr1);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1288,7 +1287,7 @@ ElbMgr::new_BinaryOp(
 {
   auto expr = factory().new_BinaryOp(ast_expr, op_type,
 				     opr1, opr2);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1304,7 +1303,7 @@ ElbMgr::new_TernaryOp(
 {
   auto expr = factory().new_TernaryOp(ast_expr, op_type,
 				      opr1, opr2, opr3);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1316,7 +1315,7 @@ ElbMgr::new_ConcatOp(
 )
 {
   auto expr = factory().new_ConcatOp(ast_expr, opr_list);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1332,7 +1331,7 @@ ElbMgr::new_MultiConcatOp(
   auto expr = factory().new_MultiConcatOp(ast_expr,
 					  rep_num, rep_expr,
 					  opr_list);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1344,7 +1343,7 @@ ElbMgr::new_Primary(
 )
 {
   auto expr = factory().new_Primary(ast_expr, obj);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1356,7 +1355,7 @@ ElbMgr::new_Primary(
 )
 {
   auto expr = factory().new_Primary(ast_item, obj);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1368,7 +1367,7 @@ ElbMgr::new_Primary(
 )
 {
   auto expr = factory().new_Primary(ast_item, obj);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1380,7 +1379,7 @@ ElbMgr::new_Primary(
 )
 {
   auto expr = factory().new_Primary(ast_expr, obj);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1393,7 +1392,7 @@ ElbMgr::new_Primary(
 )
 {
   auto expr = factory().new_Primary(ast_expr, obj, index_list);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1406,7 +1405,7 @@ ElbMgr::new_Primary(
 )
 {
   auto expr = factory().new_Primary(ast_expr, obj, offset);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1421,7 +1420,7 @@ ElbMgr::new_BitSelect(
 {
   auto expr = factory().new_BitSelect(ast_expr, base,
 				      bit_index, bit_index_val);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1434,7 +1433,7 @@ ElbMgr::new_BitSelect(
 )
 {
   auto expr = factory().new_BitSelect(ast_expr, base, bit_index_val);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1447,7 +1446,7 @@ ElbMgr::new_BitSelect(
 )
 {
   auto expr = factory().new_BitSelect(ast_expr, base, bit_index);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1465,7 +1464,7 @@ ElbMgr::new_PartSelect(
   auto expr = factory().new_PartSelect(ast_expr, obj,
 				       index1, index2,
 				       index1_val, index2_val);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1480,7 +1479,7 @@ ElbMgr::new_PartSelect(
 {
   auto expr = factory().new_PartSelect(ast_expr, base,
 				       index1, index2);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1496,7 +1495,7 @@ ElbMgr::new_PlusPartSelect(
 {
   auto expr = factory().new_PlusPartSelect(ast_expr, obj, base,
 					   range_expr, range_val);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1512,7 +1511,7 @@ ElbMgr::new_MinusPartSelect(
 {
   auto expr = factory().new_MinusPartSelect(ast_expr, obj, base,
 					    range_expr, range_val);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1523,7 +1522,7 @@ ElbMgr::new_Constant(
 )
 {
   auto expr = factory().new_Constant(ast_expr);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1535,7 +1534,7 @@ ElbMgr::new_GenvarConstant(
 )
 {
   auto expr = factory().new_GenvarConstant(ast_primary, val);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1548,7 +1547,7 @@ ElbMgr::new_FuncCall(
 )
 {
   auto expr = factory().new_FuncCall(ast_expr, func, arg_list);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1562,7 +1561,7 @@ ElbMgr::new_SysFuncCall(
 {
   auto expr = factory().new_SysFuncCall(ast_expr, user_systf,
 					arg_list);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1574,7 +1573,7 @@ ElbMgr::new_ArgHandle(
 )
 {
   auto expr = factory().new_ArgHandle(ast_expr, arg);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1586,7 +1585,7 @@ ElbMgr::new_ArgHandle(
 )
 {
   auto expr = factory().new_ArgHandle(ast_expr, arg);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1598,7 +1597,7 @@ ElbMgr::new_ArgHandle(
 )
 {
   auto expr = factory().new_ArgHandle(ast_expr, arg);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1611,7 +1610,7 @@ ElbMgr::new_Lhs(
 )
 {
   auto expr = factory().new_Lhs(ast_expr, opr_array, lhs_elem_array);
-  mObjList.push_back(expr);
+  reg_obj(expr);
   return expr;
 }
 
@@ -1623,7 +1622,7 @@ ElbMgr::new_Delay(
 )
 {
   auto delay = factory().new_Delay(ast_obj, expr_list);
-  mObjList.push_back(delay);
+  reg_obj(delay);
   return delay;
 }
 
@@ -1636,7 +1635,7 @@ ElbMgr::new_Attribute(
 )
 {
   auto attr = factory().new_Attribute(ast_attr, expr, def);
-  mObjList.push_back(attr);
+  reg_obj(attr);
   return attr;
 }
 

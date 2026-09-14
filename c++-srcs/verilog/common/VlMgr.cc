@@ -87,6 +87,8 @@ VlMgr::elaborate(
 
   elab(*mAstMgr);
 
+  mCellLibrary = cell_library;
+
   return mLogMgr->error_num();
 }
 
