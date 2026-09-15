@@ -133,7 +133,12 @@ Elaborator::operator()(
 
   // UDP の生成
   for ( auto ast_udp: ast_udp_list ) {
-    mUdpGen->instantiate_udp(ast_udp);
+    try {
+      mUdpGen->instantiate_udp(ast_udp);
+    }
+    catch ( const ElbError& error ) {
+      // 処理を続ける．
+    }
   }
 
   // モジュールテンプレートの辞書を作る．

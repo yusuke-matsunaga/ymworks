@@ -301,10 +301,8 @@ private:
   )
   {
     check_Base(expr, file_region);
-    EXPECT_THROW( expr->name(),
-		  std::logic_error );
-    EXPECT_THROW( expr->namebranch_top(),
-		  std::logic_error );
+    EXPECT_EQ( nullptr, expr->name() );
+    EXPECT_EQ( nullptr, expr->namebranch_top() );
     check_common_sub(expr, type);
   }
 
@@ -319,8 +317,7 @@ private:
   {
     check_Base(expr, file_region);
     EXPECT_STREQ( name, expr->name() );
-    EXPECT_THROW( expr->namebranch_top(),
-		  std::logic_error );
+    EXPECT_EQ( nullptr, expr->namebranch_top() );
     check_common_sub(expr, type);
   }
 

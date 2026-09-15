@@ -307,8 +307,7 @@ public:
   {
     ASSERT_TRUE( item != nullptr );
     check_Base(item, file_region);
-    EXPECT_THROW( item->name(),
-		  std::logic_error );
+    EXPECT_EQ( nullptr, item->name() );
     check_common_sub(item, type);
   }
 
