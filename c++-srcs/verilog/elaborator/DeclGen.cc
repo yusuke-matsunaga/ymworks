@@ -382,8 +382,9 @@ DeclGen::instantiate_param_head(
 
     // ダブっている感じがするけど同じことを表す parameter assign 文
     // をつくってモジュールに追加する．
-    auto pa = elb_mgr().new_NamedParamAssign(module, ast_item, param,
-					 ast_init_expr, value);
+    auto loc = ast_item.file_region();
+    auto pa = elb_mgr().new_NamedParamAssign(module, loc, param,
+					     ast_init_expr, value);
   }
 }
 
@@ -402,8 +403,8 @@ DeclGen::instantiate_net_head(
   if ( ast_range.is_valid() ) {
     auto range = evaluate_range(scope, ast_range);
     net_head = elb_mgr().new_DeclHead(scope, ast_head,
-				  ast_range, range,
-				  has_delay);
+				      ast_range, range,
+				      has_delay);
   }
   else {
     net_head = elb_mgr().new_DeclHead(scope, ast_head);
@@ -522,7 +523,8 @@ DeclGen::link_net_assign(
 
   // 対応する continuous assign 文を作る．
   auto module = scope->parent_module();
-  auto ca = elb_mgr().new_ContAssign(module, ast_item, lhs, rhs);
+  auto loc = ast_item.file_region();
+  auto ca = elb_mgr().new_ContAssign(module, loc, lhs, rhs);
 }
 
 // @brief reg をインスタンス化する．
@@ -565,7 +567,7 @@ DeclGen::instantiate_reg_head(
       }
 
       auto reg_array = elb_mgr().new_DeclArray(vpiRegArray, reg_head,
-					   ast_item, range_src);
+					       ast_item, range_src);
 
       // attribute instance の生成
       auto attr_list = attribute_list(ast_head);

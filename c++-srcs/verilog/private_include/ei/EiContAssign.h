@@ -122,7 +122,7 @@ protected:
 
   /// @brief コンストラクタ
   EiContAssign(
-    const AstBase& ast_obj, ///< [in] 対応するパース木中の定義要素
+    const FileRegion& loc,  ///< [in] ファイル位置
     const VlExpr* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   );
@@ -168,8 +168,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 対応するパース木の定義要素
-  const AstBase& mAstObj;
+  // ファイル位置
+  FileRegion mFileRegion;
 
   // 左辺式
   const VlExpr* mLhs;
@@ -192,7 +192,7 @@ public:
   /// @brief コンストラクタ
   EiContAssign1(
     ElbCaHead* head,        ///< [in] ヘッダ
-    const AstBase& ast_obj, ///< [in] 対応するパース木中の定義要素
+    const FileRegion& loc,  ///< [in] ファイル位置
     const VlExpr* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   );
@@ -250,7 +250,7 @@ public:
   /// @brief コンストラクタ
   EiContAssign2(
     const VlModule* module, ///< [in] 親のモジュール
-    const AstBase& ast_obj, ///< [in] パース木の定義要素
+    const FileRegion& loc,  ///< [in] ファイル位置
     const VlExpr* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   );

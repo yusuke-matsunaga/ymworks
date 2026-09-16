@@ -26,26 +26,26 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlParamAssign*
 EiFactory::new_ParamAssign(
   const VlModule* module,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   ElbParameter* param,
   const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
-  return new EiParamAssign(module, ast_obj, param, rhs_expr, rhs_value);
+  return new EiParamAssign(module, loc, param, rhs_expr, rhs_value);
 }
 
 // @brief 名前によるパラメータ割り当て文を生成する．
 const VlParamAssign*
 EiFactory::new_NamedParamAssign(
   const VlModule* module,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   ElbParameter* param,
   const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
-  return new EiParamAssign2(module, ast_obj, param, rhs_expr, rhs_value);
+  return new EiParamAssign2(module, loc, param, rhs_expr, rhs_value);
 }
 
 // @brief defparam 文を生成する．
@@ -71,12 +71,12 @@ EiFactory::new_DefParam(
 // @brief コンストラクタ
 EiParamAssign::EiParamAssign(
   const VlModule* parent,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   ElbParameter* param,
   const AstExpr& rhs_expr,
   const VlValue& rhs_value
 ) : mModule{parent},
-    mAstObj{ast_obj},
+    mFileRegion{loc},
     mLhs{param},
     mRhsExpr{rhs_expr},
     mRhsValue{rhs_value}
@@ -99,7 +99,7 @@ EiParamAssign::type() const
 FileRegion
 EiParamAssign::file_region() const
 {
-  return mAstObj.file_region();
+  return mFileRegion;
 }
 
 // @brief 親のモジュールを返す．
@@ -145,11 +145,11 @@ EiParamAssign::is_conn_by_name() const
 // @brief コンストラクタ
 EiParamAssign2::EiParamAssign2(
   const VlModule* parent,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   ElbParameter* param,
   const AstExpr& rhs_expr,
   const VlValue& rhs_value
-) : EiParamAssign(parent, ast_obj, param, rhs_expr, rhs_value)
+) : EiParamAssign(parent, loc, param, rhs_expr, rhs_value)
 {
 }
 

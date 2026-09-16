@@ -129,14 +129,12 @@ public:
 
   /// @brief instantiate_delay の下請け関数
   ///
-  /// * ast_obj は AstDelay か AstItem のどちらか
   /// * 配列の要素数は最大で 3
-  ///
   /// 不適切な式ならば内部でエラーメッセージを出力して nullptr を返す．
   const VlDelay*
   instantiate_delay_sub(
-    const VlScope* parent,           ///< [in] 親のスコープ
-    const AstBase& ast_obj,          ///< [in] 遅延式を表すパース木
+    const VlScope* parent,                    ///< [in] 親のスコープ
+    const FileRegion& loc,                    ///< [in] ファイル位置
     const std::vector<AstExpr>& ast_expr_list ///< [in] 遅延式の配列
   );
 

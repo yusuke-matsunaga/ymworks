@@ -254,7 +254,7 @@ public:
   const VlContAssign*
   new_ContAssign(
     ElbCaHead* head,        ///< [in] ヘッダ
-    const AstBase& ast_obj, ///< [in] 対応するパース木中の定義要素
+    const FileRegion& loc,  ///< [in] ファイル位置
     const VlExpr* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   ) override;
@@ -263,7 +263,7 @@ public:
   const VlContAssign*
   new_ContAssign(
     const VlModule* module, ///< [in] 親のモジュール
-    const AstBase& ast_obj, ///< [in] パース木の定義要素
+    const FileRegion& loc,  ///< [in] ファイル位置
     const VlExpr* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   ) override;
@@ -272,7 +272,7 @@ public:
   const VlParamAssign*
   new_ParamAssign(
     const VlModule* module,  ///< [in] 親のモジュール
-    const AstBase& ast_obj,  ///< [in] パース木の定義要素
+    const FileRegion& loc,   ///< [in] ファイル位置
     ElbParameter* param,     ///< [in] 対象の parameter
     const AstExpr& rhs_expr, ///< [in] 割り当て式の右辺
     const VlValue& rhs_value ///< [in] 右辺の値
@@ -282,7 +282,7 @@ public:
   const VlParamAssign*
   new_NamedParamAssign(
     const VlModule* module,  ///< [in] 親のモジュール
-    const AstBase& ast_obj,  ///< [in] パース木の定義要素
+    const FileRegion& loc,   ///< [in] ファイル位置
     ElbParameter* param,     ///< [in] 対象の parameter
     const AstExpr& rhs_expr, ///< [in] 割り当て式の右辺
     const VlValue& rhs_value ///< [in] 右辺の値
@@ -849,7 +849,7 @@ public:
   /// @brief 遅延値を生成する．
   const VlDelay*
   new_Delay(
-    const AstBase& ast_obj,                ///< [in] パース木の定義要素
+    const FileRegion& loc,                 ///< [in] ファイル位置
     const std::vector<ElbExpr*>& expr_list ///< [in] 式のリスト
   ) override;
 

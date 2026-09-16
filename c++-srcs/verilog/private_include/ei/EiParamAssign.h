@@ -27,7 +27,7 @@ public:
   /// @brief コンストラクタ
   EiParamAssign(
     const VlModule* module,  ///< [in] 親のモジュール
-    const AstBase& ast_obj,  ///< [in] パース木の宣言要素
+    const FileRegion& loc,   ///< [in] ファイル位置
     ElbParameter* param,     ///< [in] 対象の parameter
     const AstExpr& rhs_expr, ///< [in] 割り当て式の右辺
     const VlValue& rhs_value ///< [in] 右辺の値
@@ -85,8 +85,8 @@ private:
   // 親のモジュール
   const VlModule* mModule;
 
-  // パース木中の対応するオブジェクト
-  const AstBase& mAstObj;
+  // ファイル位置
+  FileRegion mFileRegion;
 
   // パラメータ
   ElbParameter* mLhs;
@@ -112,9 +112,9 @@ public:
   /// @brief コンストラクタ
   EiParamAssign2(
     const VlModule* module,  ///< [in] 親のモジュール
-    const AstBase& ast_obj,    ///< [in] パース木の接続を表す要素
+    const FileRegion& loc,   ///< [in] ファイル位置
     ElbParameter* param,     ///< [in] 対象の parameter
-    const AstExpr& rhs_expr,  ///< [in] 割り当て式の右辺
+    const AstExpr& rhs_expr, ///< [in] 割り当て式の右辺
     const VlValue& rhs_value ///< [in] 右辺の値
   );
 

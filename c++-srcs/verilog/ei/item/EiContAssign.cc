@@ -40,24 +40,24 @@ EiFactory::new_CaHead(
 const VlContAssign*
 EiFactory::new_ContAssign(
   ElbCaHead* head,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  return  new EiContAssign1(head, ast_obj, lhs, rhs);
+  return  new EiContAssign1(head, loc, lhs, rhs);
 }
 
 // @brief net 宣言中の continuous assignment を生成する．
 const VlContAssign*
 EiFactory::new_ContAssign(
   const VlModule* module,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  return new EiContAssign2(module, ast_obj, lhs, rhs);
+  return new EiContAssign2(module, loc, lhs, rhs);
 }
 
 
@@ -148,10 +148,10 @@ EiCaHeadD::delay() const
 
 // @brief コンストラクタ
 EiContAssign::EiContAssign(
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : mAstObj{ast_obj},
+) : mFileRegion{loc},
     mLhs{lhs},
     mRhs{rhs}
 {
@@ -173,7 +173,7 @@ EiContAssign::type() const
 FileRegion
 EiContAssign::file_region() const
 {
-  return mAstObj.file_region();
+  return mFileRegion;
 }
 
 // @brief ビット幅を返す．
@@ -205,10 +205,10 @@ EiContAssign::rhs() const
 // @brief コンストラクタ
 EiContAssign1::EiContAssign1(
   ElbCaHead* head,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiContAssign(ast_obj, lhs, rhs),
+) : EiContAssign(loc, lhs, rhs),
     mHead{head}
 {
 }
@@ -261,10 +261,10 @@ EiContAssign1::has_net_decl_assign() const
 // @brief コンストラクタ
 EiContAssign2::EiContAssign2(
   const VlModule* module,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
-) : EiContAssign(ast_obj, lhs, rhs),
+) : EiContAssign(loc, lhs, rhs),
     mModule{module}
 {
 }

@@ -218,7 +218,8 @@ ItemGen::instantiate_cont_assign_head(
       auto ast_rhs = ast_contassign.rhs();
       auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
 
-      auto ca = elb_mgr().new_ContAssign(ca_head, ast_contassign, lhs, rhs);
+      auto loc = ast_contassign.file_region();
+      auto ca = elb_mgr().new_ContAssign(ca_head, loc, lhs, rhs);
 
       log_mgr().info_contassign(__FILE__, __LINE__, ca);
     }

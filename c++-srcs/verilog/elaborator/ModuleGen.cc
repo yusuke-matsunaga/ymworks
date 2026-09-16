@@ -155,7 +155,8 @@ ModuleGen::phase1_module_item(
     auto value = param_con.mValue;
     param->set_init_expr(expr, value);
     // 仮想的な パラメータ割り当て文があるものとみなす．
-    auto pa = elb_mgr().new_NamedParamAssign(module, ast_con,
+    auto loc = ast_con.file_region();
+    auto pa = elb_mgr().new_NamedParamAssign(module, loc,
 					     param, expr, value);
   }
 

@@ -327,7 +327,8 @@ ExprGen::instantiate_delay(
       expr_array.push_back(expr2);
     }
   }
-  return instantiate_delay_sub(parent, ast_delay, expr_array);
+  auto loc = ast_delay.file_region();
+  return instantiate_delay_sub(parent, loc, expr_array);
 }
 
 // @brief AstOrderedCon から ElbExpr を生成する．
@@ -350,15 +351,15 @@ ExprGen::instantiate_delay(
 
   auto ast_con = ast_header.paramassign_list().front();
   std::vector<AstExpr> expr_array{ast_con.expr()};
-
-  return instantiate_delay_sub(parent, ast_header, expr_array);
+  auto loc = ast_header.file_region();
+  return instantiate_delay_sub(parent, loc, expr_array);
 }
 
 // @brief instantiate_delay の下請け関数
 const VlDelay*
 ExprGen::instantiate_delay_sub(
   const VlScope* parent,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const std::vector<AstExpr>& ast_expr_array
 )
 {
@@ -375,8 +376,7 @@ ExprGen::instantiate_delay_sub(
       expr_list.push_back(instantiate_expr(parent, env, ast_expr));
     }
 
-    auto delay = elb_mgr().new_Delay(ast_obj, expr_list);
-
+    auto delay = elb_mgr().new_Delay(loc, expr_list);
     return delay;
   }
   catch ( const ElbError& error ) {

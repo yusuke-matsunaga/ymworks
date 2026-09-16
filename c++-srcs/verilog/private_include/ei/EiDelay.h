@@ -24,7 +24,7 @@ public:
 
   /// @brief コンストラクタ
   EiDelay(
-    const AstBase& ast_obj,                ///< [in] パース木の定義要素
+    const FileRegion& loc,                 ///< [in] ファイル位置
     const std::vector<ElbExpr*>& expr_list ///< [in] 式の配列
   );
 
@@ -75,8 +75,8 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // パース木の定義要素
-  const AstBase& mAstObj;
+  // ファイル位置
+  FileRegion mFileRegion;
 
   // 要素の配列
   std::vector<ElbExpr*> mElemList;

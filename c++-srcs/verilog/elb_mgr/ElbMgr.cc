@@ -666,12 +666,12 @@ ElbMgr::new_CaHead(
 const VlContAssign*
 ElbMgr::new_ContAssign(
   ElbCaHead* head,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  auto contassign = factory().new_ContAssign(head, ast_obj, lhs, rhs);
+  auto contassign = factory().new_ContAssign(head, loc, lhs, rhs);
   reg_obj(contassign);
   mTagDict.add_contassign(contassign);
   return contassign;
@@ -681,12 +681,12 @@ ElbMgr::new_ContAssign(
 const VlContAssign*
 ElbMgr::new_ContAssign(
   const VlModule* module,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  auto contassign = factory().new_ContAssign(module, ast_obj, lhs, rhs);
+  auto contassign = factory().new_ContAssign(module, loc, lhs, rhs);
   reg_obj(contassign);
   mTagDict.add_contassign(contassign);
   return contassign;
@@ -696,13 +696,13 @@ ElbMgr::new_ContAssign(
 const VlParamAssign*
 ElbMgr::new_ParamAssign(
   const VlModule* module,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   ElbParameter* param,
   const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
-  auto paramassign = factory().new_ParamAssign(module, ast_obj, param,
+  auto paramassign = factory().new_ParamAssign(module, loc, param,
 					       rhs_expr, rhs_value);
   reg_obj(paramassign);
   mTagDict.add_paramassign(paramassign);
@@ -713,13 +713,13 @@ ElbMgr::new_ParamAssign(
 const VlParamAssign*
 ElbMgr::new_NamedParamAssign(
   const VlModule* module,
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   ElbParameter* param,
   const AstExpr& rhs_expr,
   const VlValue& rhs_value
 )
 {
-  auto paramassign = factory().new_NamedParamAssign(module, ast_obj, param,
+  auto paramassign = factory().new_NamedParamAssign(module, loc, param,
 						    rhs_expr, rhs_value);
   reg_obj(paramassign);
   mTagDict.add_paramassign(paramassign);
@@ -1648,11 +1648,11 @@ ElbMgr::new_Lhs(
 // @brief 遅延値を生成する．
 const VlDelay*
 ElbMgr::new_Delay(
-  const AstBase& ast_obj,
+  const FileRegion& loc,
   const std::vector<ElbExpr*>& expr_list
 )
 {
-  auto delay = factory().new_Delay(ast_obj, expr_list);
+  auto delay = factory().new_Delay(loc, expr_list);
   reg_obj(delay);
   return delay;
 }
