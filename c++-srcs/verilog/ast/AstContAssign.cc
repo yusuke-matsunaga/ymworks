@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExpr
 AstContAssign::lhs() const
 {
-  _check_ptr();
+  _check_ptr("AstContAssign::lhs()");
   return AstExpr(mPtr->lhs());
 }
 
@@ -29,7 +29,7 @@ AstContAssign::lhs() const
 AstExpr
 AstContAssign::rhs() const
 {
-  _check_ptr();
+  _check_ptr("AstContAssign::rhs()");
   return AstExpr(mPtr->rhs());
 }
 
@@ -44,7 +44,7 @@ AstContAssign::is_valid() const
 FileRegion
 AstContAssign::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstContAssign::file_region()");
   return mPtr->file_region();
 }
 
@@ -59,7 +59,7 @@ AstContAssign::key() const
 AstContAssign
 AstContAssign::next() const
 {
-  _check_ptr();
+  _check_ptr("AstContAssign::next()");
   return AstContAssign(mPtr->link());
 }
 

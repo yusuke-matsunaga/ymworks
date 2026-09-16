@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstControl::Type
 AstControl::type() const
 {
-  _check_ptr();
+  _check_ptr("AstControl::type()");
   return mPtr->type();
 }
 
@@ -29,7 +29,7 @@ AstControl::type() const
 AstExpr
 AstControl::delay() const
 {
-  _check_ptr();
+  _check_ptr("AstControl::delay()");
   return AstExpr(mPtr->delay());
 }
 
@@ -37,7 +37,7 @@ AstControl::delay() const
 AstExprList
 AstControl::event_list() const
 {
-  _check_ptr();
+  _check_ptr("AstControl::event_list()");
   return AstExprList(AstExpr(mPtr->event_top()));
 }
 
@@ -45,7 +45,7 @@ AstControl::event_list() const
 AstExpr
 AstControl::rep_expr() const
 {
-  _check_ptr();
+  _check_ptr("AstControl::rep_expr()");
   return AstExpr(mPtr->rep_expr());
 }
 
@@ -60,7 +60,7 @@ AstControl::is_valid() const
 FileRegion
 AstControl::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstControl::file_region()");
   return mPtr->file_region();
 }
 

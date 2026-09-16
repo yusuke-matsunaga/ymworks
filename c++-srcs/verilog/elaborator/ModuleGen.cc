@@ -182,6 +182,15 @@ ModuleGen::phase2_module_item(
   // IODecl を実体化する．
   instantiate_iodecl(module, ast_module.iohead_list());
 
+  {
+    std::cout << "BBB" << std::endl;
+    for ( auto iohead: ast_module.iohead_list() ) {
+      for ( auto ioitem: iohead.item_list() ) {
+	auto h = find_obj(module, ioitem.name());
+      }
+    }
+  }
+
   // ポートを実体化する
   if ( ast_module.port_list().empty() ) {
     // Verilog2001 形式

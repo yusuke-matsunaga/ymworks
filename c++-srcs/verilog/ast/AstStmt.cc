@@ -26,7 +26,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstStmt::Type
 AstStmt::type() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::type()");
   return mPtr->type();
 }
 
@@ -69,7 +69,7 @@ AstStmt::stmt_name() const
 AstStmt
 AstStmt::body() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::body()");
   return AstStmt(mPtr->body());
 }
 
@@ -77,7 +77,7 @@ AstStmt::body() const
 AstExpr
 AstStmt::expr() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::expr()");
   return AstExpr(mPtr->expr());
 }
 
@@ -85,7 +85,7 @@ AstStmt::expr() const
 AstExprList
 AstStmt::arg_list() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::arg_list()");
   return AstExprList(AstExpr(mPtr->arg_top()));
 }
 
@@ -93,7 +93,7 @@ AstStmt::arg_list() const
 AstControl
 AstStmt::control() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::control()");
   return AstControl(mPtr->control());
 }
 
@@ -101,7 +101,7 @@ AstStmt::control() const
 AstExpr
 AstStmt::lhs() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::lhs()");
   return AstExpr(mPtr->lhs());
 }
 
@@ -109,7 +109,7 @@ AstStmt::lhs() const
 AstExpr
 AstStmt::rhs() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::rhs()");
   return AstExpr(mPtr->rhs());
 }
 
@@ -117,7 +117,7 @@ AstStmt::rhs() const
 AstExpr
 AstStmt::primary() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::primary()");
   return AstExpr(mPtr->primary());
 }
 
@@ -125,7 +125,7 @@ AstStmt::primary() const
 AstStmt
 AstStmt::else_body() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::else_body()");
   return AstStmt(mPtr->else_body());
 }
 
@@ -133,7 +133,7 @@ AstStmt::else_body() const
 AstCaseItemList
 AstStmt::caseitem_list() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::caseitem_list()");
   return AstCaseItemList(AstCaseItem(mPtr->caseitem_top()));
 }
 
@@ -141,7 +141,7 @@ AstStmt::caseitem_list() const
 AstStmt
 AstStmt::init_stmt() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::init_stmt()");
   return AstStmt(mPtr->init_stmt());
 }
 
@@ -149,7 +149,7 @@ AstStmt::init_stmt() const
 AstStmt
 AstStmt::next_stmt() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::next_stmt()");
   return AstStmt(mPtr->next_stmt());
 }
 
@@ -157,7 +157,7 @@ AstStmt::next_stmt() const
 AstDeclHeadList
 AstStmt::declhead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::declhead_list()");
   return AstDeclHeadList(AstDeclHead(mPtr->declhead_top()));
 }
 
@@ -165,7 +165,7 @@ AstStmt::declhead_list() const
 AstStmtList
 AstStmt::stmt_list() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::stmt_list()");
   return AstStmtList(AstStmt(mPtr->stmt_top()));
 }
 
@@ -180,7 +180,7 @@ AstStmt::is_valid() const
 FileRegion
 AstStmt::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::file_region()");
   return mPtr->file_region();
 }
 
@@ -195,7 +195,7 @@ AstStmt::key() const
 const char*
 AstStmt::name() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::name()");
   return mPtr->name();
 }
 
@@ -203,7 +203,7 @@ AstStmt::name() const
 AstNameBranchList
 AstStmt::namebranch_list() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::namebranch_list()");
   return AstNameBranchList(AstNameBranch(mPtr->namebranch_top()));
 }
 
@@ -211,7 +211,7 @@ AstStmt::namebranch_list() const
 AstStmt
 AstStmt::next() const
 {
-  _check_ptr();
+  _check_ptr("AstStmt::next()");
   return AstStmt(mPtr->link());
 }
 

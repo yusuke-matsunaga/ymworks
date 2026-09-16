@@ -9,6 +9,7 @@
 #include "ym/vl/AstUdp.h"
 #include "ym/vl/AstExpr.h"
 #include "ym/vl/AstIOHead.h"
+#include "ym/vl/AstIOItem.h"
 #include "ym/vl/AstPort.h"
 #include "ym/vl/AstUdpEntry.h"
 #include "ym/vl/AstUdpValue.h"
@@ -26,7 +27,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 VpiPrimType
 AstUdp::prim_type() const
 {
-  _check_ptr();
+  _check_ptr("AstUdp::prim_type()");
   return mPtr->prim_type();
 }
 
@@ -34,7 +35,7 @@ AstUdp::prim_type() const
 AstPortList
 AstUdp::port_list() const
 {
-  _check_ptr();
+  _check_ptr("AstUdp::port_list()");
   return AstPortList(AstPort(mPtr->port_top()));
 }
 
@@ -42,15 +43,26 @@ AstUdp::port_list() const
 AstIOHeadList
 AstUdp::iohead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstUdp::iohead_list()");
   return AstIOHeadList(AstIOHead(mPtr->iohead_top()));
+}
+
+// @brief 入出力数の取得
+SizeType
+AstUdp::io_num() const
+{
+  SizeType num = 0;
+  for ( auto iohead: iohead_list() ) {
+    num += iohead.item_list().size();
+  }
+  return num;
 }
 
 // @brief 初期値を取出す．
 AstExpr
 AstUdp::init_value() const
 {
-  _check_ptr();
+  _check_ptr("AstUdp::init_value()");
   return AstExpr(mPtr->init_value());
 }
 
@@ -58,7 +70,7 @@ AstUdp::init_value() const
 AstUdpEntryList
 AstUdp::table_list() const
 {
-  _check_ptr();
+  _check_ptr("AstUdp::table_list()");
   return AstUdpEntryList(AstUdpEntry(mPtr->table_top()));
 }
 
@@ -73,7 +85,7 @@ AstUdp::is_valid() const
 FileRegion
 AstUdp::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstUdp::file_region()");
   return mPtr->file_region();
 }
 
@@ -88,7 +100,7 @@ AstUdp::key() const
 const char*
 AstUdp::name() const
 {
-  _check_ptr();
+  _check_ptr("AstUdp::name()");
   return mPtr->name();
 }
 

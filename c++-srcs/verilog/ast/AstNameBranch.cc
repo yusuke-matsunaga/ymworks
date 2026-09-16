@@ -20,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 const char*
 AstNameBranch::name() const
 {
-  _check_ptr();
+  _check_ptr("AstNameBranch::name()");
   return mPtr->name();
 }
 
@@ -28,7 +28,7 @@ AstNameBranch::name() const
 bool
 AstNameBranch::has_index() const
 {
-  _check_ptr();
+  _check_ptr("AstNameBranch::has_index()");
   return mPtr->has_index();
 }
 
@@ -36,7 +36,7 @@ AstNameBranch::has_index() const
 int
 AstNameBranch::index() const
 {
-  _check_ptr();
+  _check_ptr("AstNameBranch::index()");
   return mPtr->index();
 }
 
@@ -52,6 +52,14 @@ AstNameBranch::decompile() const
   return buf.str();
 }
 
+// @brief 次の要素を返す．
+AstNameBranch
+AstNameBranch::next() const
+{
+  _check_ptr("AstNameBranch::next()");
+  return AstNameBranch(mPtr->link());
+}
+
 // @brief 内容を JsonValue に変換する．
 JsonValue
 AstNameBranch::json_obj() const
@@ -62,14 +70,6 @@ AstNameBranch::json_obj() const
     jobj.add("index", JsonValue(index()));
   }
   return jobj;
-}
-
-// @brief 次の要素を返す．
-AstNameBranch
-AstNameBranch::next() const
-{
-  _check_ptr();
-  return AstNameBranch(mPtr->link());
 }
 
 END_NAMESPACE_YM_VERILOG

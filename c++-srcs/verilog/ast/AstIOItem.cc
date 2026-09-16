@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExpr
 AstIOItem::init_value() const
 {
-  _check_ptr();
+  _check_ptr("AstIOItem::init_value()");
   return AstExpr(mPtr->init_value());
 }
 
@@ -37,7 +37,7 @@ AstIOItem::is_valid() const
 FileRegion
 AstIOItem::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstIOItem::file_region()");
   return mPtr->file_region();
 }
 
@@ -52,7 +52,7 @@ AstIOItem::key() const
 const char*
 AstIOItem::name() const
 {
-  _check_ptr();
+  _check_ptr("AstIOItem::name()");
   return mPtr->name();
 }
 
@@ -60,7 +60,7 @@ AstIOItem::name() const
 AstIOItem
 AstIOItem::next() const
 {
-  _check_ptr();
+  _check_ptr("AstIOItem::next()");
   return AstIOItem(mPtr->link());
 }
 

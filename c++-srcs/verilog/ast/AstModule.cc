@@ -25,7 +25,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 bool
 AstModule::is_macromodule() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::is_macromodule()");
   return mPtr->is_macromodule();
 }
 
@@ -33,7 +33,7 @@ AstModule::is_macromodule() const
 bool
 AstModule::is_cell() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::is_cell()");
   return mPtr->is_cell();
 }
 
@@ -41,7 +41,7 @@ AstModule::is_cell() const
 int
 AstModule::time_unit() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::time_unit()");
   return mPtr->time_unit();
 }
 
@@ -49,7 +49,7 @@ AstModule::time_unit() const
 int
 AstModule::time_precision() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::time_precision()");
   return mPtr->time_precision();
 }
 
@@ -57,7 +57,7 @@ AstModule::time_precision() const
 VpiNetType
 AstModule::nettype() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::nettype()");
   return mPtr->nettype();
 }
 
@@ -65,7 +65,7 @@ AstModule::nettype() const
 VpiUnconnDrive
 AstModule::unconn_drive() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::unconn_drive()");
   return mPtr->unconn_drive();
 }
 
@@ -73,7 +73,7 @@ AstModule::unconn_drive() const
 VpiDefDelayMode
 AstModule::delay_mode() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::delay_mode()");
   return mPtr->delay_mode();
 }
 
@@ -81,7 +81,7 @@ AstModule::delay_mode() const
 int
 AstModule::decay_time() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::decay_time()");
   return mPtr->decay_time();
 }
 
@@ -89,7 +89,7 @@ AstModule::decay_time() const
 AstDeclHeadList
 AstModule::paramport_list() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::paramport_list()");
   return AstDeclHeadList(AstDeclHead(mPtr->paramport_top()));
 }
 
@@ -97,7 +97,7 @@ AstModule::paramport_list() const
 AstPortList
 AstModule::port_list() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::port_list()");
   return AstPortList(AstPort(mPtr->port_top()));
 }
 
@@ -105,7 +105,7 @@ AstModule::port_list() const
 AstIOHeadList
 AstModule::iohead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::iohead_list()");
   return AstIOHeadList(AstIOHead(mPtr->iohead_top()));
 }
 
@@ -113,7 +113,7 @@ AstModule::iohead_list() const
 SizeType
 AstModule::iodecl_num() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::iodecl_num()");
   return mPtr->iodecl_num();
 }
 
@@ -121,7 +121,7 @@ AstModule::iodecl_num() const
 AstDeclHeadList
 AstModule::declhead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::declhead_list()");
   return AstDeclHeadList(AstDeclHead(mPtr->declhead_top()));
 }
 
@@ -129,7 +129,7 @@ AstModule::declhead_list() const
 AstItemList
 AstModule::item_list() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::item_list()");
   return AstItemList(AstItem(mPtr->item_top()));
 }
 
@@ -144,7 +144,7 @@ AstModule::is_valid() const
 FileRegion
 AstModule::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::file_region()");
   return mPtr->file_region();
 }
 
@@ -159,7 +159,7 @@ AstModule::key() const
 const char*
 AstModule::name() const
 {
-  _check_ptr();
+  _check_ptr("AstModule::name()");
   return mPtr->name();
 }
 

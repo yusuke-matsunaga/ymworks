@@ -23,7 +23,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstRangeList
 AstDeclItem::range_list() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclItem::range_list()");
   return AstRangeList(AstRange(mPtr->range_top()));
 }
 
@@ -31,7 +31,7 @@ AstDeclItem::range_list() const
 AstExpr
 AstDeclItem::init_value() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclItem::init_value()");
   return AstExpr(mPtr->init_value());
 }
 
@@ -46,7 +46,7 @@ AstDeclItem::is_valid() const
 FileRegion
 AstDeclItem::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclItem::file_region()");
   return mPtr->file_region();
 }
 
@@ -61,7 +61,7 @@ AstDeclItem::key() const
 const char*
 AstDeclItem::name() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclItem::name()");
   return mPtr->name();
 }
 
@@ -69,7 +69,7 @@ AstDeclItem::name() const
 AstDeclItem
 AstDeclItem::next() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclItem::next()");
   return AstDeclItem(mPtr->link());
 }
 

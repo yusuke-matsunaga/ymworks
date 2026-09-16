@@ -73,10 +73,14 @@ protected:
 
   /// @brief 有効な値を持っているか調べる．
   void
-  _check_ptr() const
+  _check_ptr(
+    const char* label
+  ) const
   {
     if ( is_invalid() ) {
-      throw std::logic_error{"is_invalid()"};
+      std::ostringstream buf;
+      buf << label << ": is_invalid()";
+      throw std::logic_error{buf.str()};
     }
   }
 

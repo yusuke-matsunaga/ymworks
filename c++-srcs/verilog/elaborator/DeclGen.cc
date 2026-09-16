@@ -107,16 +107,7 @@ DeclGen::instantiate_iodecl(
 
     // ヘッダ情報の生成
     // ちなみに IOHead は範囲の情報を持たない．
-    auto head = (ElbIOHead*){nullptr};
-    if ( module != nullptr ) {
-      head = elb_mgr().new_IOHead(module, ast_head);
-    }
-    else if ( taskfunc != nullptr ) {
-      head = elb_mgr().new_IOHead(taskfunc, ast_head);
-    }
-    if ( head == nullptr ) {
-      throw std::logic_error{"head == nullptr"};
-    }
+    auto head = new_IOHead(module, taskfunc, ast_head);
 
     for ( auto ast_item: ast_head.item_list() ) {
       // IO定義と変数/ネット定義が一致しているか調べる．
@@ -148,6 +139,7 @@ DeclGen::instantiate_iodecl(
 	    // - reg/integer/time は OK
 	    // ということになる．
 	    // それ以外は nullptr にしておく．
+	    // 直後の error_illegal_io_decl() が起動される．
 	    decl = nullptr;
 	  }
 	}
@@ -180,7 +172,6 @@ DeclGen::instantiate_iodecl(
 	  else if ( range.left != left_val2 || range.right != right_val2 ) {
 	    // 範囲が異なっていた．
 	    log_mgr().error_conflict_io_range(__FILE__, __LINE__, ast_item, decl);
-	    continue;
 	  }
 	}
 	else if ( has_range ) {
@@ -213,17 +204,7 @@ DeclGen::instantiate_iodecl(
 	}
 
 	// ヘッダを生成する．
-	auto head = (ElbDeclHead*){nullptr};
-	if ( has_range ) {
-	  head = elb_mgr().new_DeclHead(scope, ast_head, aux_type,
-				    ast_range, range);
-	}
-	else {
-	  head = elb_mgr().new_DeclHead(scope, ast_head, aux_type);
-	}
-	if ( head == nullptr ) {
-	  throw std::logic_error{"head == nullptr"};
-	}
+	auto head = new_DeclHead(scope, ast_head, aux_type, ast_range, range);
 
 	// 初期値を生成する．
 	auto ast_init = ast_item.init_value();
@@ -267,9 +248,65 @@ DeclGen::instantiate_iodecl(
       else {
 	throw std::logic_error{"Should not be reached"};
       }
+      {
+	std::cout << "ZZZ" << std::endl;
+	auto h = find_obj(module, ast_item.name());
+      }
 
       log_mgr().info_iodecl(__FILE__, __LINE__, ast_item, scope);
+      {
+	std::cout << "AAA'" << std::endl;
+	for ( auto iohead: ast_head_list ) {
+	  for ( auto ioitem: iohead.item_list() ) {
+	    auto h = find_obj(module, ioitem.name());
+	  }
+	}
+      }
     }
+  }
+  {
+    std::cout << "AAA" << std::endl;
+    for ( auto iohead: ast_head_list ) {
+      for ( auto ioitem: iohead.item_list() ) {
+	auto h = find_obj(module, ioitem.name());
+      }
+    }
+  }
+}
+
+// @brief IOヘッダを作る．
+ElbIOHead*
+DeclGen::new_IOHead(
+  const ElbModule* module,
+  const ElbTaskFunc* taskfunc,
+  const AstIOHead& ast_head
+)
+{
+  if ( module != nullptr ) {
+    return elb_mgr().new_IOHead(module, ast_head);
+  }
+  if ( taskfunc != nullptr ) {
+    return elb_mgr().new_IOHead(taskfunc, ast_head);
+  }
+  throw std::logic_error{"module == nullptr && taskfunc == nullptr"};
+}
+
+// @brief 宣言ヘッダを作る．
+ElbDeclHead*
+DeclGen::new_DeclHead(
+  const VlScope* scope,
+  const AstIOHead& ast_head,
+  VpiAuxType aux_type,
+  const AstRange& ast_range,
+  const RangeVal& range
+)
+{
+  if ( ast_range.is_valid() ) {
+    return elb_mgr().new_DeclHead(scope, ast_head, aux_type,
+				  ast_range, range);
+  }
+  else {
+    return elb_mgr().new_DeclHead(scope, ast_head, aux_type);
   }
 }
 

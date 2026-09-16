@@ -29,7 +29,7 @@ const int debug_objdict    = 0x00000001;
 const int debug_find_scope = 0x00000010;
 const int debug_all        = 0xFFFFFFFF;
 
-#if 1
+#if 0
 const int debug = debug_none;
 #else
 const int debug = debug_all;
@@ -255,6 +255,14 @@ NamedObjHandle::parent_scope() const
 std::string
 NamedObjHandle::name() const
 {
+  std::cout << "NamedObjHandle::name()" << std::endl
+	    << _namedobj()->name()
+	    << "("
+	    << std::hex
+	    << _namedobj()
+	    << ")"
+	    << std::dec
+	    << std::endl;
   return _namedobj()->name();
 }
 
@@ -783,7 +791,27 @@ ObjDict::add_handle(
   ObjHandle* handle
 )
 {
-  mHash.emplace(handle);
+  {
+    std::cout << "before add_handle" << std::endl;
+    for ( auto obj: mHash ) {
+      std::cout << std::hex
+		<< obj
+		<< std::dec
+		<< ": "
+		<< obj->name() << std::endl;
+    }
+  }
+  mHash.insert(handle);
+  {
+    std::cout << "after add_handle" << std::endl;
+    for ( auto obj: mHash ) {
+      std::cout << std::hex
+		<< obj
+		<< std::dec
+		<< ": "
+		<< obj->name() << std::endl;
+    }
+  }
 }
 
 // @brief 名前から該当する要素を検索する．

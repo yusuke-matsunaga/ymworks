@@ -25,7 +25,7 @@ EiFactory::new_Decl(
   const VlExpr* init
 )
 {
-  if ( init ) {
+  if ( init != nullptr ) {
     return new EiDeclI(head, ast_item, init);
   }
   else {

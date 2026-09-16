@@ -23,7 +23,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 int
 AstPathDecl::edge() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::edge()");
   return mPtr->edge();
 }
 
@@ -31,7 +31,7 @@ AstPathDecl::edge() const
 AstExprList
 AstPathDecl::input_list() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::input_list()");
   return AstExprList(AstExpr(mPtr->input_top()));
 }
 
@@ -39,7 +39,7 @@ AstPathDecl::input_list() const
 int
 AstPathDecl::input_pol() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::input_pol()");
   return mPtr->input_pol();
 }
 
@@ -47,7 +47,7 @@ AstPathDecl::input_pol() const
 VpiPathType
 AstPathDecl::op() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::op()");
   return mPtr->op();
 }
 
@@ -55,7 +55,7 @@ AstPathDecl::op() const
 AstExprList
 AstPathDecl::output_list() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::output_list()");
   return AstExprList(AstExpr(mPtr->output_top()));
 }
 
@@ -63,7 +63,7 @@ AstPathDecl::output_list() const
 int
 AstPathDecl::output_pol() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::output_pol()");
   return mPtr->output_pol();
 }
 
@@ -71,7 +71,7 @@ AstPathDecl::output_pol() const
 AstExpr
 AstPathDecl::expr() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::expr()");
   return AstExpr(mPtr->expr());
 }
 
@@ -79,7 +79,7 @@ AstPathDecl::expr() const
 AstPathDelay
 AstPathDecl::path_delay() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::path_delay()");
   return AstPathDelay(mPtr->path_delay());
 }
 
@@ -94,7 +94,7 @@ AstPathDecl::is_valid() const
 FileRegion
 AstPathDecl::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDecl::file_region()");
   return mPtr->file_region();
 }
 

@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExpr
 AstDefParam::expr() const
 {
-  _check_ptr();
+  _check_ptr("AstDefParam::expr()");
   return AstExpr(mPtr->expr());
 }
 
@@ -37,7 +37,7 @@ AstDefParam::is_valid() const
 FileRegion
 AstDefParam::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstDefParam::file_region()");
   return mPtr->file_region();
 }
 
@@ -52,7 +52,7 @@ AstDefParam::key() const
 const char*
 AstDefParam::name() const
 {
-  _check_ptr();
+  _check_ptr("AstDefParam::name()");
   return mPtr->name();
 }
 
@@ -60,7 +60,7 @@ AstDefParam::name() const
 AstNameBranchList
 AstDefParam::namebranch_list() const
 {
-  _check_ptr();
+  _check_ptr("AstDefParam::namebranch_list()");
   return AstNameBranchList(AstNameBranch(mPtr->namebranch_top()));
 }
 
@@ -68,7 +68,7 @@ AstDefParam::namebranch_list() const
 AstDefParam
 AstDefParam::next() const
 {
-  _check_ptr();
+  _check_ptr("AstDefParam::next()");
   return AstDefParam(mPtr->link());
 }
 

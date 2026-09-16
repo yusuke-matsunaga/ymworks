@@ -25,7 +25,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstDeclHead::Type
 AstDeclHead::type() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::type()");
   return mPtr->type();
 }
 
@@ -33,7 +33,7 @@ AstDeclHead::type() const
 bool
 AstDeclHead::is_signed() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::is_signed()");
   return mPtr->is_signed();
 }
 
@@ -41,7 +41,7 @@ AstDeclHead::is_signed() const
 AstRange
 AstDeclHead::range() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::range()");
   return AstRange(mPtr->range());
 }
 
@@ -49,7 +49,7 @@ AstDeclHead::range() const
 VpiVarType
 AstDeclHead::data_type() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::data_type()");
   return mPtr->data_type();
 }
 
@@ -57,7 +57,7 @@ AstDeclHead::data_type() const
 VpiNetType
 AstDeclHead::net_type() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::net_type()");
   return mPtr->net_type();
 }
 
@@ -65,7 +65,7 @@ AstDeclHead::net_type() const
 VpiVsType
 AstDeclHead::vs_type() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::vs_type()");
   return mPtr->vs_type();
 }
 
@@ -73,7 +73,7 @@ AstDeclHead::vs_type() const
 AstStrength
 AstDeclHead::strength() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::strength()");
   return AstStrength(mPtr->strength());
 }
 
@@ -81,7 +81,7 @@ AstDeclHead::strength() const
 AstDelay
 AstDeclHead::delay() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::delay()");
   return AstDelay(mPtr->delay());
 }
 
@@ -89,7 +89,7 @@ AstDeclHead::delay() const
 AstDeclItemList
 AstDeclHead::item_list() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::item_list()");
   return AstDeclItemList(AstDeclItem(mPtr->item_top()));
 }
 
@@ -104,7 +104,7 @@ AstDeclHead::is_valid() const
 FileRegion
 AstDeclHead::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::file_region()");
   return mPtr->file_region();
 }
 
@@ -119,7 +119,7 @@ AstDeclHead::key() const
 AstDeclHead
 AstDeclHead::next() const
 {
-  _check_ptr();
+  _check_ptr("AstDeclHead::next()");
   return AstDeclHead(mPtr->link());
 }
 

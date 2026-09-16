@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExprList
 AstCaseItem::label_list() const
 {
-  _check_ptr();
+  _check_ptr("AstCaseItem::label_list()");
   return AstExprList(AstExpr(mPtr->label_top()));
 }
 
@@ -30,7 +30,7 @@ AstCaseItem::label_list() const
 AstStmt
 AstCaseItem::body() const
 {
-  _check_ptr();
+  _check_ptr("AstCaseItem::body()");
   return AstStmt(mPtr->body());
 }
 
@@ -45,7 +45,7 @@ AstCaseItem::is_valid() const
 FileRegion
 AstCaseItem::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstCaseItem::file_region()");
   return mPtr->file_region();
 }
 
@@ -60,7 +60,7 @@ AstCaseItem::key() const
 AstCaseItem
 AstCaseItem::next() const
 {
-  _check_ptr();
+  _check_ptr("AstCaseItem::next()");
   return AstCaseItem(mPtr->link());
 }
 

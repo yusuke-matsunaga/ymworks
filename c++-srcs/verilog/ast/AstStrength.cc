@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 VpiStrength
 AstStrength::drive0() const
 {
-  _check_ptr();
+  _check_ptr("AstStrength::driver0()");
   return mPtr->drive0();
 }
 
@@ -29,7 +29,7 @@ AstStrength::drive0() const
 VpiStrength
 AstStrength::drive1() const
 {
-  _check_ptr();
+  _check_ptr("AstStrength::driver1()");
   return mPtr->drive1();
 }
 
@@ -37,7 +37,7 @@ AstStrength::drive1() const
 VpiStrength
 AstStrength::charge() const
 {
-  _check_ptr();
+  _check_ptr("AstStrength::charge()");
   return mPtr->charge();
 }
 
@@ -52,7 +52,7 @@ AstStrength::is_valid() const
 FileRegion
 AstStrength::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstStrength::file_region()");
   return mPtr->file_region();
 }
 

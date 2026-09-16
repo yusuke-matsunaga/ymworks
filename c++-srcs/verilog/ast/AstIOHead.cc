@@ -24,7 +24,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 VpiDir
 AstIOHead::direction() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::direction()");
   return mPtr->direction();
 }
 
@@ -32,7 +32,7 @@ AstIOHead::direction() const
 VpiAuxType
 AstIOHead::aux_type() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::aut_type()");
   return mPtr->aux_type();
 }
 
@@ -40,7 +40,7 @@ AstIOHead::aux_type() const
 VpiNetType
 AstIOHead::net_type() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::net_type()");
   return mPtr->net_type();
 }
 
@@ -48,7 +48,7 @@ AstIOHead::net_type() const
 VpiVarType
 AstIOHead::var_type() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::var_type()");
   return mPtr->var_type();
 }
 
@@ -56,7 +56,7 @@ AstIOHead::var_type() const
 bool
 AstIOHead::is_signed() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::is_signed()");
   return mPtr->is_signed();
 }
 
@@ -64,7 +64,7 @@ AstIOHead::is_signed() const
 AstRange
 AstIOHead::range() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::range()");
   return AstRange(mPtr->range());
 }
 
@@ -72,7 +72,7 @@ AstIOHead::range() const
 AstIOItemList
 AstIOHead::item_list() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::item_list()");
   return AstIOItemList(AstIOItem(mPtr->item_top()));
 }
 
@@ -87,7 +87,7 @@ AstIOHead::is_valid() const
 FileRegion
 AstIOHead::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::file_region()");
   return mPtr->file_region();
 }
 
@@ -102,7 +102,7 @@ AstIOHead::key() const
 AstIOHead
 AstIOHead::next() const
 {
-  _check_ptr();
+  _check_ptr("AstIOHead::next()");
   return AstIOHead(mPtr->link());
 }
 

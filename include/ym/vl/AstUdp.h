@@ -48,12 +48,18 @@ public:
   prim_type() const;
 
   /// @brief ポートのリストを取り出す．
+  ///
+  /// Verilog2001 タイプの定義の場合には空リストとなっている．
   AstPortList
   port_list() const;
 
   /// @brief 入出力宣言ヘッダのリストの取得
   AstIOHeadList
   iohead_list() const;
+
+  /// @brief 入出力数の取得
+  SizeType
+  io_num() const;
 
   /// @brief 初期値を取出す．
   AstExpr

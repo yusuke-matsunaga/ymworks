@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 VpiRangeMode
 AstPart::mode() const
 {
-  _check_ptr();
+  _check_ptr("AstPart::mode()");
   return mPtr->mode();
 }
 
@@ -29,7 +29,7 @@ AstPart::mode() const
 AstExpr
 AstPart::left() const
 {
-  _check_ptr();
+  _check_ptr("AstPart::left()");
   return AstExpr(mPtr->left());
 }
 
@@ -37,7 +37,7 @@ AstPart::left() const
 AstExpr
 AstPart::right() const
 {
-  _check_ptr();
+  _check_ptr("AstPart::right()");
   return AstExpr(mPtr->right());
 }
 
@@ -52,7 +52,7 @@ AstPart::is_valid() const
 FileRegion
 AstPart::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstPart::file_region()");
   return mPtr->file_region();
 }
 

@@ -23,7 +23,7 @@ AstPathDelay::value(
   SizeType pos
 ) const
 {
-  _check_ptr();
+  _check_ptr("AstPathDelay::value(pos)");
   return AstExpr(mPtr->value(pos));
 }
 
@@ -38,7 +38,7 @@ AstPathDelay::is_valid() const
 FileRegion
 AstPathDelay::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstPathDelay::file_region()");
   return mPtr->file_region();
 }
 

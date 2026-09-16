@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 VlUdpVal
 AstUdpValue::symbol() const
 {
-  _check_ptr();
+  _check_ptr("AstUdpValue::symbol()");
   return mPtr->symbol();
 }
 
@@ -36,7 +36,7 @@ AstUdpValue::is_valid() const
 FileRegion
 AstUdpValue::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstUdpValue::file_region()");
   return mPtr->file_region();
 }
 
@@ -51,7 +51,7 @@ AstUdpValue::key() const
 AstUdpValue
 AstUdpValue::next() const
 {
-  _check_ptr();
+  _check_ptr("AstUdpValue::next()");
   return AstUdpValue(mPtr->link());
 }
 

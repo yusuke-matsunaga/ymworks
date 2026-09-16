@@ -131,6 +131,11 @@ Elaborator::operator()(
     mAttrGen->instantiate_attribute(attr_info);
   }
 
+  log_mgr().debug(__FILE__, __LINE__,
+		  FileRegion(),
+		  "ELAB_UDP",
+		  "\"instantiate_udp\" starts.");
+
   // UDP の生成
   for ( auto ast_udp: ast_udp_list ) {
     try {
@@ -148,13 +153,13 @@ Elaborator::operator()(
     try {
       auto name = ast_module.name();
       auto prev_udp = mElbMgr.find_udp(name);
-      auto prev_module = mModuleDict.at(name);
       if ( prev_udp != nullptr ) {
 	log_mgr().error_module_redefined(__FILE__, __LINE__,
 					 ast_module,
 					 prev_udp->file_region());
       }
-      else if ( prev_module.is_valid() ) {
+      else if ( mModuleDict.count(name) > 0 ) {
+	auto prev_module = mModuleDict.at(name);
 	log_mgr().error_module_redefined(__FILE__, __LINE__,
 					 ast_module,
 					 prev_module.file_region());

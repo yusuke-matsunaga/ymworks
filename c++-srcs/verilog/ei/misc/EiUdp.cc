@@ -25,10 +25,10 @@ EiFactory::new_UdpDefn(
   bool is_protected
 )
 {
-  auto port_num = ast_udp.port_list().size();
+  auto io_num = ast_udp.io_num();
   auto table_size = ast_udp.table_list().size();
   return new EiUdpDefn(ast_udp, is_protected,
-		       port_num, table_size);
+		       io_num, table_size);
 }
 
 
@@ -44,11 +44,11 @@ EiUdpDefn::EiUdpDefn(
   SizeType table_num
 ) : mAstUdp{ast_udp},
     mProtected{is_protected},
-    mIODeclList(io_num),
     mInitExpr{nullptr},
-    mInitVal{VlScalarVal::x()},
-    mTableEntryList(table_num)
+    mInitVal{VlScalarVal::x()}
 {
+  mIODeclList.reserve(io_num);
+  mTableEntryList.reserve(table_num);
 }
 
 // @brief デストラクタ
@@ -153,18 +153,14 @@ EiUdpDefn::table_entry(
   return &mTableEntryList[pos];
 }
 
-// @brief 入出力オブジェクトの内容を設定する．
+// @brief 入出力オブジェクトを追加する．
 void
-EiUdpDefn::set_io(
-  SizeType pos,
+EiUdpDefn::add_io(
   const AstIOHead& ast_header,
   const AstIOItem& ast_item
 )
 {
-  if ( pos >= table_size() ) {
-    throw std::out_of_range{"pos is out of range"};
-  }
-  mIODeclList[pos].set(ast_header, ast_item);
+  mIODeclList.push_back(EiUdpIO(this, ast_header, ast_item));
 }
 
 // @brief 初期値を設定する．
@@ -178,31 +174,20 @@ EiUdpDefn::set_initial(
   mInitVal = init_val;
 }
 
-// @brief table entry の内容を設定する．
+// @brief table entry の内容を追加する．
 void
-EiUdpDefn::set_tableentry(
-  SizeType pos,
+EiUdpDefn::add_tableentry(
   const AstUdpEntry& ast_udp_entry,
   const std::vector<VlUdpVal>& vals
 )
 {
-  mTableEntryList[pos].set(ast_udp_entry, vals);
+  mTableEntryList.push_back(EiTableEntry(this, ast_udp_entry, vals));
 }
 
 
 //////////////////////////////////////////////////////////////////////
 /// クラス EiUdpIO
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiUdpIO::EiUdpIO()
-{
-}
-
-// @brief デストラクタ
-EiUdpIO::~EiUdpIO()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -319,40 +304,10 @@ EiUdpIO::function() const
   return nullptr;
 }
 
-// @brief 親のUDPを設定する．
-void
-EiUdpIO::set_udp(
-  ElbUdpDefn* udp
-)
-{
-  mUdp = udp;
-}
-
-// @brief 内容を設定する．
-void
-EiUdpIO::set(
-  const AstIOHead& ast_header,
-  const AstIOItem& ast_item
-)
-{
-  mAstHeader = ast_header;
-  mAstItem = ast_item;
-}
-
 
 //////////////////////////////////////////////////////////////////////
 /// クラス EiTableEntry
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiTableEntry::EiTableEntry()
-{
-}
-
-// @brief デストラクタ
-EiTableEntry::~EiTableEntry()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -413,26 +368,6 @@ EiTableEntry::str() const
     }
   }
   return s;
-}
-
-// @brief 初期化する．
-void
-EiTableEntry::init(
-  ElbUdpDefn* udp
-)
-{
-  mUdp = udp;
-}
-
-// @brief 設定する．
-void
-EiTableEntry::set(
-  const AstUdpEntry& ast_entry,
-  const std::vector<VlUdpVal>& vals
-)
-{
-  mAstUdpEntry = ast_entry;
-  mValArray = vals;
 }
 
 END_NAMESPACE_YM_VERILOG

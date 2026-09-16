@@ -24,7 +24,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExprList
 AstGenCaseItem::label_list() const
 {
-  _check_ptr();
+  _check_ptr("AstGenCaseItem::label_list()");
   return AstExprList(AstExpr(mPtr->label_top()));
 }
 
@@ -32,7 +32,7 @@ AstGenCaseItem::label_list() const
 AstDeclHeadList
 AstGenCaseItem::declhead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstGencaseItem::declhead_list()");
   return AstDeclHeadList(AstDeclHead(mPtr->declhead_top()));
 }
 
@@ -40,7 +40,7 @@ AstGenCaseItem::declhead_list() const
 AstItemList
 AstGenCaseItem::item_list() const
 {
-  _check_ptr();
+  _check_ptr("AstGenCaseItem::item_list()");
   return AstItemList(AstItem(mPtr->item_top()));
 }
 
@@ -55,7 +55,7 @@ AstGenCaseItem::is_valid() const
 FileRegion
 AstGenCaseItem::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstGenCaseItem::file_region()");
   return mPtr->file_region();
 }
 
@@ -70,7 +70,7 @@ AstGenCaseItem::key() const
 AstGenCaseItem
 AstGenCaseItem::next() const
 {
-  _check_ptr();
+  _check_ptr("AstGenCaseItem::next()");
   return AstGenCaseItem(mPtr->link());
 }
 

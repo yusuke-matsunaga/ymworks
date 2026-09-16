@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExpr
 AstDelay::value0() const
 {
-  _check_ptr();
+  _check_ptr("AstDelay::value0()");
   return AstExpr(mPtr->value0());
 }
 
@@ -30,7 +30,7 @@ AstDelay::value0() const
 AstExpr
 AstDelay::value1() const
 {
-  _check_ptr();
+  _check_ptr("AstDelay::value1()");
   return AstExpr(mPtr->value1());
 }
 
@@ -38,7 +38,7 @@ AstDelay::value1() const
 AstExpr
 AstDelay::value2() const
 {
-  _check_ptr();
+  _check_ptr("AstDelay::value2()");
   return AstExpr(mPtr->value2());
 }
 
@@ -53,7 +53,7 @@ AstDelay::is_valid() const
 FileRegion
 AstDelay::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstDelay::file_region()");
   return mPtr->file_region();
 }
 

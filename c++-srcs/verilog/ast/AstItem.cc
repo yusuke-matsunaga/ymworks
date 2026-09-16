@@ -35,7 +35,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstItem::Type
 AstItem::type() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::type()");
   return mPtr->type();
 }
 
@@ -43,7 +43,7 @@ AstItem::type() const
 AstExpr
 AstItem::cond_expr() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::cond_expr()");
   return AstExpr(mPtr->cond_expr());
 }
 
@@ -51,7 +51,7 @@ AstItem::cond_expr() const
 AstStmt
 AstItem::body() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::body()");
   return AstStmt(mPtr->body());
 }
 
@@ -59,7 +59,7 @@ AstItem::body() const
 AstStrength
 AstItem::strength() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::strength()");
   return AstStrength(mPtr->strength());
 }
 
@@ -67,7 +67,7 @@ AstItem::strength() const
 AstDelay
 AstItem::delay() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::delay()");
   return AstDelay(mPtr->delay());
 }
 
@@ -75,7 +75,7 @@ AstItem::delay() const
 AstDefParamList
 AstItem::defparam_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::defparam_list()");
   return AstDefParamList(AstDefParam(mPtr->defparam_top()));
 }
 
@@ -83,7 +83,7 @@ AstItem::defparam_list() const
 AstContAssignList
 AstItem::contassign_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::contassign_list()");
   return AstContAssignList(AstContAssign(mPtr->contassign_top()));
 }
 
@@ -91,7 +91,7 @@ AstItem::contassign_list() const
 VpiPrimType
 AstItem::prim_type() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::prim_type()");
   return mPtr->prim_type();
 }
 
@@ -99,7 +99,7 @@ AstItem::prim_type() const
 AstConnectionList
 AstItem::paramassign_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::paramassign_list()");
   return AstConnectionList(AstConnection(mPtr->paramassign_top()));
 }
 
@@ -107,7 +107,7 @@ AstItem::paramassign_list() const
 AstInstList
 AstItem::inst_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::inst_list()");
   return AstInstList(AstInst(mPtr->inst_top()));
 }
 
@@ -115,7 +115,7 @@ AstItem::inst_list() const
 AstDeclHeadList
 AstItem::declhead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::declhead_list()");
   return AstDeclHeadList(AstDeclHead(mPtr->declhead_top()));
 }
 
@@ -123,7 +123,7 @@ AstItem::declhead_list() const
 AstItemList
 AstItem::item_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::item_list()");
   return AstItemList(AstItem(mPtr->item_top()));
 }
 
@@ -131,7 +131,7 @@ AstItem::item_list() const
 bool
 AstItem::automatic() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::automatic()");
   return mPtr->automatic();
 }
 
@@ -139,7 +139,7 @@ AstItem::automatic() const
 AstIOHeadList
 AstItem::iohead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::iohead_list()");
   return AstIOHeadList(AstIOHead(mPtr->iohead_top()));
 }
 
@@ -147,6 +147,7 @@ AstItem::iohead_list() const
 SizeType
 AstItem::ioitem_num() const
 {
+  _check_ptr("AstItem::ioitem_num()");
   return mPtr->ioitem_num();
 }
 
@@ -154,7 +155,7 @@ AstItem::ioitem_num() const
 bool
 AstItem::is_signed() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::is_signed()");
   return mPtr->is_signed();
 }
 
@@ -162,7 +163,7 @@ AstItem::is_signed() const
 AstRange
 AstItem::range() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::range()");
   return AstRange(mPtr->range());
 }
 
@@ -170,7 +171,7 @@ AstItem::range() const
 VpiVarType
 AstItem::data_type() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::data_type()");
   return mPtr->data_type();
 }
 
@@ -178,7 +179,7 @@ AstItem::data_type() const
 void
 AstItem::set_in_use() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::set_in_use()");
   mPtr->set_in_use();
 }
 
@@ -186,7 +187,7 @@ AstItem::set_in_use() const
 void
 AstItem::clear_in_use() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::clear_in_use()");
   mPtr->clear_in_use();
 }
 
@@ -194,7 +195,7 @@ AstItem::clear_in_use() const
 bool
 AstItem::is_in_use() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::is_in_use()");
   return mPtr->is_in_use();
 }
 
@@ -202,7 +203,7 @@ AstItem::is_in_use() const
 VpiSpecItemType
 AstItem::specitem_type() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::specitem_type()");
   return mPtr->specitem_type();
 }
 
@@ -210,7 +211,7 @@ AstItem::specitem_type() const
 AstExprList
 AstItem::terminal_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::terminal_list()");
   return AstExprList(AstExpr(mPtr->terminal_top()));
 }
 
@@ -218,7 +219,7 @@ AstItem::terminal_list() const
 VpiSpecPathType
 AstItem::specpath_type() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::specpath_type()");
   return mPtr->specpath_type();
 }
 
@@ -226,7 +227,7 @@ AstItem::specpath_type() const
 AstPathDecl
 AstItem::path_decl() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::path_decl()");
   return AstPathDecl(mPtr->path_decl());
 }
 
@@ -234,7 +235,7 @@ AstItem::path_decl() const
 AstDeclHeadList
 AstItem::then_declhead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::then_declhead_list()");
   return AstDeclHeadList(AstDeclHead(mPtr->then_declhead_top()));
 }
 
@@ -242,7 +243,7 @@ AstItem::then_declhead_list() const
 AstItemList
 AstItem::then_item_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::then_item_list()");
   return AstItemList(AstItem(mPtr->then_item_top()));
 }
 
@@ -250,7 +251,7 @@ AstItem::then_item_list() const
 AstDeclHeadList
 AstItem::else_declhead_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::else_declhead_list()");
   return AstDeclHeadList(AstDeclHead(mPtr->else_declhead_top()));
 }
 
@@ -258,7 +259,7 @@ AstItem::else_declhead_list() const
 AstItemList
 AstItem::else_item_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::else_item_list()");
   return AstItemList(AstItem(mPtr->else_item_top()));
 }
 
@@ -266,7 +267,7 @@ AstItem::else_item_list() const
 AstGenCaseItemList
 AstItem::caseitem_list() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::caseitem_list()");
   return AstGenCaseItemList(AstGenCaseItem(mPtr->caseitem_top()));
 }
 
@@ -274,7 +275,7 @@ AstItem::caseitem_list() const
 const char*
 AstItem::loop_var() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::loop_var()");
   return mPtr->loop_var();
 }
 
@@ -282,7 +283,7 @@ AstItem::loop_var() const
 AstExpr
 AstItem::init_expr() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::init_expr()");
   return AstExpr(mPtr->init_expr());
 }
 
@@ -290,7 +291,7 @@ AstItem::init_expr() const
 AstExpr
 AstItem::next_expr() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::next_expr()");
   return AstExpr(mPtr->next_expr());
 }
 
@@ -305,7 +306,7 @@ AstItem::is_valid() const
 FileRegion
 AstItem::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::file_region()");
   return mPtr->file_region();
 }
 
@@ -320,7 +321,7 @@ AstItem::key() const
 const char*
 AstItem::name() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::name()");
   return mPtr->name();
 }
 
@@ -328,7 +329,7 @@ AstItem::name() const
 AstItem
 AstItem::next() const
 {
-  _check_ptr();
+  _check_ptr("AstItem::next()");
   return AstItem(mPtr->link());
 }
 

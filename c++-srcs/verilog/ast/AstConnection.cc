@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 const char*
 AstConnection::name() const
 {
-  _check_ptr();
+  _check_ptr("AstConnection::name()");
   return mPtr->name();
 }
 
@@ -30,7 +30,7 @@ AstConnection::name() const
 AstExpr
 AstConnection::expr() const
 {
-  _check_ptr();
+  _check_ptr("AstConnection::expr()");
   return AstExpr(mPtr->expr());
 }
 
@@ -45,7 +45,7 @@ AstConnection::is_valid() const
 FileRegion
 AstConnection::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstConnection::file_region()");
   return mPtr->file_region();
 }
 
@@ -60,7 +60,7 @@ AstConnection::key() const
 AstConnection
 AstConnection::next() const
 {
-  _check_ptr();
+  _check_ptr("AstConnection()");
   return AstConnection(mPtr->link());
 }
 

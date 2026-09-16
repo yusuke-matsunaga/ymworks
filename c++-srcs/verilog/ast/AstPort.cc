@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 const char*
 AstPort::ext_name() const
 {
-  _check_ptr();
+  _check_ptr("AstPort::expr_name()");
   return mPtr->ext_name();
 }
 
@@ -30,7 +30,7 @@ AstPort::ext_name() const
 AstExpr
 AstPort::expr() const
 {
-  _check_ptr();
+  _check_ptr("AstPort::expr()");
   return AstExpr(mPtr->expr());
 }
 
@@ -38,21 +38,9 @@ AstPort::expr() const
 AstExprList
 AstPort::portref_list() const
 {
-  _check_ptr();
+  _check_ptr("AstPort::portref_list()");
   return AstExprList(AstExpr(mPtr->portref_top()));
 }
-
-#if 0
-// @brief 内部のポート結線の向きの取得
-VpiDir
-AstPort::portref_dir(
-  SizeType index
-) const
-{
-  _check_ptr();
-  return mPtr->portref_dir(index);
-}
-#endif
 
 // @brief 適切な値を持っている時 true を返す．
 bool
@@ -65,7 +53,7 @@ AstPort::is_valid() const
 FileRegion
 AstPort::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstPort::file_region()");
   return mPtr->file_region();
 }
 
@@ -80,7 +68,7 @@ AstPort::key() const
 AstPort
 AstPort::next() const
 {
-  _check_ptr();
+  _check_ptr("AstPort::next()");
   return AstPort(mPtr->link());
 }
 

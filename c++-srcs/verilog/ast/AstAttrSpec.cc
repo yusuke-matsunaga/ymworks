@@ -22,7 +22,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstExpr
 AstAttrSpec::expr() const
 {
-  _check_ptr();
+  _check_ptr("AstAttrSpec::expr()");
   return AstExpr(mPtr->expr());
 }
 
@@ -37,7 +37,7 @@ AstAttrSpec::is_valid() const
 FileRegion
 AstAttrSpec::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstAttrSpec::file_region()");
   return mPtr->file_region();
 }
 
@@ -52,7 +52,7 @@ AstAttrSpec::key() const
 const char*
 AstAttrSpec::name() const
 {
-  _check_ptr();
+  _check_ptr("AstAttrSpec::name()");
   return mPtr->name();
 }
 
@@ -60,7 +60,7 @@ AstAttrSpec::name() const
 AstAttrSpec
 AstAttrSpec::next() const
 {
-  _check_ptr();
+  _check_ptr("AstAttrSpec::next()");
   return AstAttrSpec(mPtr->link());
 }
 

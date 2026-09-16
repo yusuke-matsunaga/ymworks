@@ -23,7 +23,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstUdpValueList
 AstUdpEntry::input_list() const
 {
-  _check_ptr();
+  _check_ptr("AstUdpEntry::input_list()");
   return AstUdpValueList(AstUdpValue(mPtr->input_top()));
 }
 
@@ -31,7 +31,7 @@ AstUdpEntry::input_list() const
 AstUdpValue
 AstUdpEntry::current() const
 {
-  _check_ptr();
+  _check_ptr("AstUdpEntry::current()");
   return AstUdpValue(mPtr->current());
 }
 
@@ -39,7 +39,7 @@ AstUdpEntry::current() const
 AstUdpValue
 AstUdpEntry::output() const
 {
-  _check_ptr();
+  _check_ptr("AstUdpEntry::output()");
   return AstUdpValue(mPtr->output());
 }
 
@@ -54,7 +54,7 @@ AstUdpEntry::is_valid() const
 FileRegion
 AstUdpEntry::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstUdpEntry::file_region()");
   return mPtr->file_region();
 }
 
@@ -69,7 +69,7 @@ AstUdpEntry::key() const
 AstUdpEntry
 AstUdpEntry::next() const
 {
-  _check_ptr();
+  _check_ptr("AstUdpEntry::next()");
   return AstUdpEntry(mPtr->link());
 }
 

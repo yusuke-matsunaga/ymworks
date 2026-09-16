@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstAttrSpecList
 AstAttrInst::attrspec_list() const
 {
-  _check_ptr();
+  _check_ptr("AstAttrInst::attrspec_list()");
   return AstAttrSpecList(AstAttrSpec(mPtr->attrspec_top()));
 }
 
@@ -36,7 +36,7 @@ AstAttrInst::is_valid() const
 FileRegion
 AstAttrInst::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstAttrInst::file_region()");
   return mPtr->file_region();
 }
 
@@ -51,7 +51,7 @@ AstAttrInst::key() const
 AstAttrInst
 AstAttrInst::next() const
 {
-  _check_ptr();
+  _check_ptr("AstAttrInst::next()");
   return AstAttrInst(mPtr->link());
 }
 

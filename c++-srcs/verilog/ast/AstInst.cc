@@ -23,7 +23,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 AstRange
 AstInst::range() const
 {
-  _check_ptr();
+  _check_ptr("AstInst::range()");
   return AstRange(mPtr->range());
 }
 
@@ -31,7 +31,7 @@ AstInst::range() const
 AstConnectionList
 AstInst::port_list() const
 {
-  _check_ptr();
+  _check_ptr("AstInst::port_list()");
   return AstConnectionList(AstConnection(mPtr->port_top()));
 }
 
@@ -46,7 +46,7 @@ AstInst::is_valid() const
 FileRegion
 AstInst::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstInst::file_region()");
   return mPtr->file_region();
 }
 
@@ -61,7 +61,7 @@ AstInst::key() const
 const char*
 AstInst::name() const
 {
-  _check_ptr();
+  _check_ptr("AstInst::name()");
   return mPtr->name();
 }
 
@@ -69,7 +69,7 @@ AstInst::name() const
 AstInst
 AstInst::next() const
 {
-  _check_ptr();
+  _check_ptr("AstInst::next()");
   return AstInst(mPtr->link());
 }
 

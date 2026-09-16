@@ -35,11 +35,10 @@ public:
   // ElbUdpDefn の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 入出力オブジェクトの内容を設定する．
+  /// @brief 入出力オブジェクトを追加する．
   virtual
   void
-  set_io(
-    SizeType pos,                ///< [in] ポート中の位置
+  add_io(
     const AstIOHead& ast_header, ///< [in] パース木のヘッダ
     const AstIOItem& ast_item    ///< [in] パース木の要素
   ) = 0;
@@ -52,11 +51,10 @@ public:
     const VlScalarVal& init_val ///< [in] 初期値
   ) = 0;
 
-  /// @brief table entry の内容を設定する．
+  /// @brief table entry の内容を追加する．
   virtual
   void
-  set_tableentry(
-    SizeType pos,                     ///< [in] 行番号
+  add_tableentry(
     const AstUdpEntry& ast_udp_entry, ///< [in] パース木の一行分の定義
     const std::vector<VlUdpVal>& vals ///< [in] シンボル値の配列
   ) = 0;
@@ -78,20 +76,6 @@ public:
 
   /// @brief デストラクタ
   ~ElbTableEntry() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // ElbTableEntry の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 設定する．
-  virtual
-  void
-  set(
-    const AstUdpEntry& ast_entry,     ///< [in] パース木の要素
-    const std::vector<VlUdpVal>& vals ///< [in] 値の配列
-  ) = 0;
 
 };
 

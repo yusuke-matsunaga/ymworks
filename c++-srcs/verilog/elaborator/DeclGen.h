@@ -166,6 +166,24 @@ private:
     std::vector<ElbRangeSrc>& range_src ///< [in] 範囲の情報を設定する配列
   );
 
+  /// @brief IOヘッダを作る．
+  ElbIOHead*
+  new_IOHead(
+    const ElbModule* module,
+    const ElbTaskFunc* taskfunc,
+    const AstIOHead& ast_head
+  );
+
+  /// @brief 宣言ヘッダを作る．
+  ElbDeclHead*
+  new_DeclHead(
+    const VlScope* scope,
+    const AstIOHead& ast_head,
+    VpiAuxType aux_type,
+    const AstRange& ast_range,
+    const RangeVal& range
+  );
+
 };
 
 END_NAMESPACE_YM_VERILOG

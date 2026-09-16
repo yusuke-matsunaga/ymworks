@@ -114,10 +114,9 @@ public:
   // 設定用の関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 入出力オブジェクトの内容を設定する．
+  /// @brief 入出力オブジェクトを追加する．
   void
-  set_io(
-    SizeType pos,                ///< [in] ポート中の位置
+  add_io(
     const AstIOHead& ast_header, ///< [in] パース木の宣言ヘッダ
     const AstIOItem& ast_item    ///< [in] パース木の宣言要素
   ) override;
@@ -129,10 +128,9 @@ public:
     const VlScalarVal& init_val ///< [in] 初期値
   ) override;
 
-  /// @brief table entry の内容を設定する．
+  /// @brief table entry の内容を追加する．
   void
-  set_tableentry(
-    SizeType pos,                     ///< [in] 行番号
+  add_tableentry(
     const AstUdpEntry& ast_udp_entry, ///< [in] パース木の一行分の定義
     const std::vector<VlUdpVal>& vals ///< [in] シンボル値の配列
   ) override;
@@ -175,11 +173,22 @@ class EiUdpIO :
 {
 public:
 
+  /// @brief 空のコンストラクタ
+  EiUdpIO() = default;
+
   /// @brief コンストラクタ
-  EiUdpIO();
+  EiUdpIO(
+    ElbUdpDefn* udp,             ///< [in] 親のUDP
+    const AstIOHead& ast_header, ///< [in] パース木のIO宣言ヘッダ
+    const AstIOItem& ast_item    ///< [in] パース木のIO宣言定義
+  ) : mUdp{udp},
+      mAstHeader{ast_header},
+      mAstItem{ast_item}
+  {
+  }
 
   /// @brief デストラクタ
-  ~EiUdpIO();
+  ~EiUdpIO() = default;
 
 
 public:
@@ -260,25 +269,6 @@ public:
   function() const override;
 
 
-public:
-  //////////////////////////////////////////////////////////////////////
-  // 設定用の関数 (EiUdpDefn が使う)
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 親のUDPを設定する．
-  void
-  set_udp(
-    ElbUdpDefn* udp
-  );
-
-  /// @brief 内容を設定する．
-  void
-  set(
-    const AstIOHead& ast_header, ///< [in] パース木のIO宣言ヘッダ
-    const AstIOItem& ast_item    ///< [in] パース木のIO宣言定義
-  );
-
-
 private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
@@ -306,10 +296,21 @@ class EiTableEntry :
 public:
 
   /// @brief コンストラクタ
-  EiTableEntry();
+  EiTableEntry() = default;
+
+  /// @brief 内容を指定したコンストラクタ
+  EiTableEntry(
+    ElbUdpDefn* udp,
+    const AstUdpEntry& ast_entry,
+    const std::vector<VlUdpVal>& vals
+  ) : mUdp{udp},
+      mAstUdpEntry{ast_entry},
+      mValArray{vals}
+  {
+  }
 
   /// @brief デストラクタ
-  ~EiTableEntry();
+  ~EiTableEntry() = default;
 
 
 public:
@@ -344,25 +345,6 @@ public:
   /// @brief 一行文の内容を表す文字列をつくる．
   std::string
   str() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // ElbTableEntry の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 初期化する．
-  void
-  init(
-    ElbUdpDefn* udp
-  );
-
-  /// @brief 設定する．
-  void
-  set(
-    const AstUdpEntry& ast_entry,
-    const std::vector<VlUdpVal>& vals
-  ) override;
 
 
 private:

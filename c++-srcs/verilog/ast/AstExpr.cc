@@ -360,7 +360,7 @@ END_NONAMESPACE
 AstExpr::Type
 AstExpr::type() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::type()");
   return mPtr->type();
 }
 
@@ -368,7 +368,7 @@ AstExpr::type() const
 bool
 AstExpr::is_index_expr() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::is_index_expr()");
   return mPtr->is_index_expr();
 }
 
@@ -376,7 +376,7 @@ AstExpr::is_index_expr() const
 int
 AstExpr::index_value() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::index_value()");
   return mPtr->index_value();
 }
 
@@ -398,7 +398,7 @@ AstExpr::decompile() const
 VpiOpType
 AstExpr::op_type() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::op_type()");
   return mPtr->op_type();
 }
 
@@ -406,7 +406,7 @@ AstExpr::op_type() const
 SizeType
 AstExpr::operand_num() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::operand_num()");
   return mPtr->operand_num();
 }
 
@@ -414,7 +414,7 @@ AstExpr::operand_num() const
 AstExpr
 AstExpr::operand0() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::operand0()");
   return AstExpr(mPtr->operand0());
 }
 
@@ -422,7 +422,7 @@ AstExpr::operand0() const
 AstExpr
 AstExpr::operand1() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::operand1()");
   return AstExpr(mPtr->operand1());
 }
 
@@ -430,7 +430,7 @@ AstExpr::operand1() const
 AstExpr
 AstExpr::operand2() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::operand2()");
   return AstExpr(mPtr->operand2());
 }
 
@@ -438,7 +438,7 @@ AstExpr::operand2() const
 AstExprList
 AstExpr::operand_list() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::operand_list()");
   return AstExprList(AstExpr(mPtr->operand_top()));
 }
 
@@ -446,7 +446,7 @@ AstExpr::operand_list() const
 AstExpr
 AstExpr::rep() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::rep()");
   return AstExpr(mPtr->rep());
 }
 
@@ -454,7 +454,7 @@ AstExpr::rep() const
 AstExprList
 AstExpr::arg_list() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::arg_list()");
   return AstExprList(AstExpr(mPtr->arg_top()));
 }
 
@@ -462,7 +462,7 @@ AstExpr::arg_list() const
 bool
 AstExpr::is_const_index() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::is_const_index()");
   return mPtr->is_const_index();
 }
 
@@ -470,7 +470,7 @@ AstExpr::is_const_index() const
 AstExprList
 AstExpr::index_list() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::index_list()");
   return AstExprList(AstExpr(mPtr->index_top()));
 }
 
@@ -478,7 +478,7 @@ AstExpr::index_list() const
 AstPart
 AstExpr::part() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::part()");
   return AstPart(mPtr->part());
 }
 
@@ -486,7 +486,7 @@ AstExpr::part() const
 bool
 AstExpr::is_simple() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::is_simple()");
   return mPtr->is_simple();
 }
 
@@ -494,7 +494,7 @@ AstExpr::is_simple() const
 VpiConstType
 AstExpr::const_type() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::const_type()");
   return mPtr->const_type();
 }
 
@@ -502,7 +502,7 @@ AstExpr::const_type() const
 SizeType
 AstExpr::const_size() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::const_size()");
   return mPtr->const_size();
 }
 
@@ -510,7 +510,7 @@ AstExpr::const_size() const
 BitVector
 AstExpr::const_bitvect() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::const_bitvect()");
   return mPtr->const_bitvect();
 }
 
@@ -518,7 +518,7 @@ AstExpr::const_bitvect() const
 const char*
 AstExpr::const_str() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::const_str()");
   return mPtr->const_str();
 }
 
@@ -526,7 +526,7 @@ AstExpr::const_str() const
 double
 AstExpr::const_real() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::const_real()");
   return mPtr->const_real();
 }
 
@@ -541,7 +541,7 @@ AstExpr::is_valid() const
 FileRegion
 AstExpr::file_region() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::file_region()");
   return mPtr->file_region();
 }
 
@@ -556,7 +556,7 @@ AstExpr::key() const
 const char*
 AstExpr::name() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::name()");
   return mPtr->name();
 }
 
@@ -564,7 +564,7 @@ AstExpr::name() const
 AstNameBranchList
 AstExpr::namebranch_list() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::namebranch_list()");
   return AstNameBranchList(AstNameBranch(mPtr->namebranch_top()));
 }
 
@@ -572,7 +572,7 @@ AstExpr::namebranch_list() const
 AstExpr
 AstExpr::next() const
 {
-  _check_ptr();
+  _check_ptr("AstExpr::next()");
   return AstExpr(mPtr->link());
 }
 
