@@ -248,28 +248,8 @@ DeclGen::instantiate_iodecl(
       else {
 	throw std::logic_error{"Should not be reached"};
       }
-      {
-	std::cout << "ZZZ" << std::endl;
-	auto h = find_obj(module, ast_item.name());
-      }
 
       log_mgr().info_iodecl(__FILE__, __LINE__, ast_item, scope);
-      {
-	std::cout << "AAA'" << std::endl;
-	for ( auto iohead: ast_head_list ) {
-	  for ( auto ioitem: iohead.item_list() ) {
-	    auto h = find_obj(module, ioitem.name());
-	  }
-	}
-      }
-    }
-  }
-  {
-    std::cout << "AAA" << std::endl;
-    for ( auto iohead: ast_head_list ) {
-      for ( auto ioitem: iohead.item_list() ) {
-	auto h = find_obj(module, ioitem.name());
-      }
     }
   }
 }

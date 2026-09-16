@@ -37,7 +37,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 void
 ItemGen::phase1_generate(
   const VlScope* parent,
-  const AstItem& ast_generate
+  AstItem ast_generate
 )
 {
   phase1_genitem(parent,

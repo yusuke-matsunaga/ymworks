@@ -371,7 +371,7 @@ private:
   std::vector<std::unique_ptr<EiPortBase>> mPortList;
 
   // 入出力の配列
-  std::vector<EiIODecl> mIODeclList;
+  std::vector<std::unique_ptr<EiIODecl>> mIODeclList;
 
   // 宣言要素と入出力の対応を持つ辞書
   std::unordered_map<const VlDecl*, const VlIODecl*> mIODict;

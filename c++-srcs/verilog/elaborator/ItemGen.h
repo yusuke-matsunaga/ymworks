@@ -77,11 +77,25 @@ private:
     const AstItem& ast_item ///< [in] 要素定義
   );
 
+  /// @brief continuous assignment のスタブを作る．
+  ElbStub*
+  cont_assign_stub(
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstItem ast_item       ///< [in] 要素定義
+  )
+  {
+    return make_stub<ItemGen,
+		     const VlScope*,
+		     AstItem>(this,
+			      &ItemGen::instantiate_cont_assign_head,
+			      parent, ast_item);
+  }
+
   /// @brief continous assignment ヘッダの生成を行う.
   void
   instantiate_cont_assign_head(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem& ast_head ///< [in] ヘッダ
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstItem ast_head       ///< [in] ヘッダ
   );
 
   /// @brief continous assignment に関連した式の名前解決を行う．
@@ -92,11 +106,25 @@ private:
     ElbCaHead* ca_head                    ///< [in] ヘッダ
   );
 
+  /// @brief process のスタブを作る．
+  ElbStub*
+  process_stub(
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstItem ast_item       ///< [in] 要素定義
+  )
+  {
+    return make_stub<ItemGen,
+		     const VlScope*,
+		     AstItem>(this,
+			      &ItemGen::instantiate_process,
+			      parent, ast_item);
+  }
+
   /// @brief process 文の生成を行う．
   void
   instantiate_process(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem& ast_item ///< [in] パース木の定義
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstItem ast_item       ///< [in] パース木の定義
   );
 
   /// @brief task/function の生成を行う．
@@ -115,15 +143,15 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbTaskFunc*,
-		     const AstItem&>(this, &ItemGen::phase2_tf,
-				     taskfunc, ast_item);
+		     AstItem>(this, &ItemGen::phase2_tf,
+			      taskfunc, ast_item);
   }
 
   /// @param[in] task/function 内の宣言要素の生成を行う．
   void
   phase2_tf(
-    ElbTaskFunc* taskfunc,  ///< [in] タスク/関数本体
-    const AstItem& ast_item ///< [in] パース木の関数定義
+    ElbTaskFunc* taskfunc, ///< [in] タスク/関数本体
+    AstItem ast_item       ///< [in] パース木の関数定義
   );
 
   /// @brief phase3_tf() 用のスタブを作る．
@@ -135,15 +163,15 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbTaskFunc*,
-		     const AstItem&>(this, &ItemGen::phase3_tf,
-				     taskfunc, ast_item);
+		     AstItem>(this, &ItemGen::phase3_tf,
+			      taskfunc, ast_item);
   }
 
   /// @param[in] task/function 内のステートメントの生成を行う．
   void
   phase3_tf(
-    ElbTaskFunc* task,      ///< [in] タスク/関数本体
-    const AstItem& ast_item ///< [in] パース木の関数定義
+    ElbTaskFunc* task, ///< [in] タスク/関数本体
+    AstItem ast_item   ///< [in] パース木の関数定義
   );
 
   /// @brief module/Udp instance の生成を行う
@@ -197,19 +225,19 @@ private:
   {
     return make_stub<ItemGen,
 		     const VlScope*,
-		     const AstModule&,
-		     const AstItem&,
-		     const AstInst&>(this, &ItemGen::phase1_module_array,
-				     parent, ast_module, ast_head, ast_inst);
+		     AstModule,
+		     AstItem,
+		     AstInst>(this, &ItemGen::phase1_module_array,
+			      parent, ast_module, ast_head, ast_inst);
   }
 
   /// @brief module array のインスタンス化を行う．
   void
   phase1_module_array(
-    const VlScope* parent,       ///< [in] 親のスコープ
-    const AstModule& ast_module, ///< [in] モジュール定義
-    const AstItem& ast_head,     ///< [in] ヘッダ
-    const AstInst& ast_inst      ///< [in] インスタンス定義
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstModule ast_module,  ///< [in] モジュール定義
+    AstItem ast_head,      ///< [in] ヘッダ
+    AstInst ast_inst       ///< [in] インスタンス定義
   );
 
   /// @brief gate instance のスタブを作る．
@@ -221,51 +249,9 @@ private:
   {
     return make_stub<ItemGen,
 		     const VlScope*,
-		     const AstItem&>(this,
-				     &ItemGen::instantiate_gateheader,
-				     parent, ast_item);
-  }
-
-  /// @brief continuous assignment のスタブを作る．
-  ElbStub*
-  cont_assign_stub(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem& ast_item ///< [in] 要素定義
-  )
-  {
-    return make_stub<ItemGen,
-		     const VlScope*,
-		     const AstItem&>(this,
-				     &ItemGen::instantiate_cont_assign_head,
-				     parent, ast_item);
-  }
-
-  /// @brief process のスタブを作る．
-  ElbStub*
-  process_stub(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem& ast_item ///< [in] 要素定義
-  )
-  {
-    return make_stub<ItemGen,
-		     const VlScope*,
-		     const AstItem&>(this,
-				     &ItemGen::instantiate_process,
-				     parent, ast_item);
-  }
-
-  /// @brief generate のスタブを作る．
-  ElbStub*
-  generate_stub(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem& ast_item ///< [in] 要素定義
-  )
-  {
-    return make_stub<ItemGen,
-		     const VlScope*,
-		     const AstItem&>(this,
-				     &ItemGen::phase1_generate,
-				     parent, ast_item);
+		     AstItem>(this,
+			      &ItemGen::instantiate_gateheader,
+			      parent, ast_item);
   }
 
   /// @brief link_module_array() 用のスタブを作る．
@@ -278,17 +264,17 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbModuleArray*,
-		     const AstModule&,
-		     const AstInst&>(this, &ItemGen::link_module_array,
-				     module_array, ast_module, ast_inst);
+		     AstModule,
+		     AstInst>(this, &ItemGen::link_module_array,
+			      module_array, ast_module, ast_inst);
   }
 
   /// @brief module array instance の入出力端子の接続を行う．
   void
   link_module_array(
     ElbModuleArray* module_array, ///< [in] モジュール配列
-    const AstModule& ast_module,  ///< [in] モジュール定義
-    const AstInst& ast_inst       ///< [in] インスタンス定義
+    AstModule ast_module,         ///< [in] モジュール定義
+    AstInst ast_inst              ///< [in] インスタンス定義
   );
 
   /// @brief link_module() 用のスタブを作る．
@@ -301,24 +287,24 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbModule*,
-		     const AstModule&,
-		     const AstInst&>(this, &ItemGen::link_module,
-				     module, ast_module, ast_inst);
+		     AstModule,
+		     AstInst>(this, &ItemGen::link_module,
+			      module, ast_module, ast_inst);
   }
 
   /// @brief module instance の入出力端子の接続を行う．
   void
   link_module(
-    ElbModule* module,           ///< [in] モジュール
-    const AstModule& ast_module, ///< [in] モジュール定義
-    const AstInst& ast_inst      ///< [in] インスタンス定義
+    ElbModule* module,    ///< [in] モジュール
+    AstModule ast_module, ///< [in] モジュール定義
+    AstInst ast_inst      ///< [in] インスタンス定義
   );
 
   /// @brief gate instance ヘッダの生成を行う
   void
   instantiate_gateheader(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstItem& ast_head ///< [in] ヘッダ
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstItem ast_head       ///< [in] ヘッダ
   );
 
   /// @brief gate instance の生成を行う．
@@ -340,7 +326,7 @@ private:
   {
     return make_stub<ItemGen,
 		     const VlScope*,
-		     const AstItem&,
+		     AstItem,
 		     const VlUdpDefn*>(this, &ItemGen::instantiate_udpheader,
 				       parent, ast_head, udpdefn);
   }
@@ -349,7 +335,7 @@ private:
   void
   instantiate_udpheader(
     const VlScope* parent,   ///< [in] 親のスコープ
-    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
+    AstItem ast_head,        ///< [in] パース木のヘッダ定義
     const VlUdpDefn* udpdefn ///< [in] UDP
   );
 
@@ -373,7 +359,7 @@ private:
   {
     return make_stub<ItemGen,
 		     const VlScope*,
-		     const AstItem&,
+		     AstItem,
 		     ClibCell>(this, &ItemGen::instantiate_cellhead,
 			       parent, ast_head, cell);
   }
@@ -381,9 +367,9 @@ private:
   /// @brief セル instance ヘッダの生成を行う
   void
   instantiate_cellhead(
-    const VlScope* parent,   ///< [in] 親のスコープ
-    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
-     ClibCell cell           ///< [in] セル
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstItem ast_head,      ///< [in] パース木のヘッダ定義
+     ClibCell cell         ///< [in] セル
   );
 
   /// @brief セル instance の生成を行う
@@ -405,15 +391,15 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbPrimHead*,
-		     const AstDelay&>(this, &ItemGen::link_gate_delay,
-				      prim_head, ast_delay);
+		     AstDelay>(this, &ItemGen::link_gate_delay,
+			       prim_head, ast_delay);
   }
 
   /// @brief gate delay の生成を行う
   void
   link_gate_delay(
-    ElbPrimHead* prim_head,   ///< [in] ゲートプリミティブのヘッダ
-    const AstDelay& ast_delay ///< [in] パース木の遅延式
+    ElbPrimHead* prim_head, ///< [in] ゲートプリミティブのヘッダ
+    AstDelay ast_delay      ///< [in] パース木の遅延式
   );
 
   /// @brief link_udp_delay() 用のスタブを作る．
@@ -425,15 +411,15 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbPrimHead*,
-		     const AstItem&>(this, &ItemGen::link_udp_delay,
-				     prim_head, ast_head);
+		     AstItem>(this, &ItemGen::link_udp_delay,
+			      prim_head, ast_head);
   }
 
   /// @brief UDP instance に付随する遅延式の生成を行う．
   void
   link_udp_delay(
     ElbPrimHead* prim_head, ///< [in] ゲートプリミティブのヘッダ
-    const AstItem& ast_head ///< [in] パース木のインスタンス定義ヘッダ
+    AstItem ast_head        ///< [in] パース木のインスタンス定義ヘッダ
   );
 
   /// @brief link_prim_array() 用のスタブを作る．
@@ -445,15 +431,15 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbPrimArray*,
-		     const AstInst&>(this, &ItemGen::link_prim_array,
-				     prim_array, ast_inst);
+		     AstInst>(this, &ItemGen::link_prim_array,
+			      prim_array, ast_inst);
   }
 
   /// @brief gate array instance で使われている式の名前解決を行う．
   void
   link_prim_array(
     ElbPrimArray* prim_array, ///< [in] プリミティブ配列
-    const AstInst& ast_inst   ///< [in] インスタンス定義
+    AstInst ast_inst          ///< [in] インスタンス定義
   );
 
   /// @brief link_primitive 用のスタブを作る．
@@ -465,15 +451,15 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbPrimitive*,
-		     const AstInst&>(this, &ItemGen::link_primitive,
-				     primitive, ast_inst);
+		     AstInst>(this, &ItemGen::link_primitive,
+			      primitive, ast_inst);
   }
 
   /// @brief gate instance で使われている式の名前解決を行う．
   void
   link_primitive(
     ElbPrimitive* primitive, ///< [in] プリミティブ配列
-    const AstInst& ast_inst  ///< [in] インスタンス定義
+    AstInst ast_inst         ///< [in] インスタンス定義
   );
 
   /// @brief link_cell_array() 用のスタブを作る．
@@ -485,15 +471,15 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbPrimArray*,
-		     const AstInst&>(this, &ItemGen::link_cell_array,
-				     prim_array, ast_inst);
+		     AstInst>(this, &ItemGen::link_cell_array,
+			      prim_array, ast_inst);
   }
 
   /// @brief cell array instance で使われている式の名前解決を行う．
   void
   link_cell_array(
     ElbPrimArray* prim_array, ///< [in] プリミティブ配列
-    const AstInst& ast_inst   ///< [in]インスタンス定義
+    AstInst ast_inst          ///< [in]インスタンス定義
   );
 
   /// @brief link_cell() 用のスタブを作る．
@@ -505,22 +491,36 @@ private:
   {
     return make_stub<ItemGen,
 		     ElbPrimitive*,
-		     const AstInst&>(this, &ItemGen::link_cell,
-				     primitive, ast_inst);
+		     AstInst>(this, &ItemGen::link_cell,
+			      primitive, ast_inst);
   }
 
   /// @brief cell instance で使われている式の名前解決を行う．
   void
   link_cell(
     ElbPrimitive* primitive, ///< [in] プリミティブ
-    const AstInst& ast_inst  ///< [in] インスタンス定義
+    AstInst ast_inst         ///< [in] インスタンス定義
   );
+
+  /// @brief phase1_generate のスタブを作る．
+  ElbStub*
+  generate_stub(
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstItem ast_item       ///< [in] 要素定義
+  )
+  {
+    return make_stub<ItemGen,
+		     const VlScope*,
+		     AstItem>(this,
+			      &ItemGen::phase1_generate,
+			      parent, ast_item);
+  }
 
   /// @brief generate block を実際にインスタンス化を行う．
   void
   phase1_generate(
-    const VlScope* parent,      ///< [in] 親のスコープ
-    const AstItem& ast_genblock ///< [in] generate block 定義
+    const VlScope* parent, ///< [in] 親のスコープ
+    AstItem ast_genblock   ///< [in] generate block 定義
   );
 
   /// @brief AstGenBlock に対応するインスタンスの生成を行う

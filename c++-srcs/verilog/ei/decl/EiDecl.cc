@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 ElbDecl*
 EiFactory::new_Decl(
   ElbDeclHead* head,
-  const AstNamedBase& ast_item,
+  const AstDeclItem& ast_item,
   const VlExpr* init
 )
 {
@@ -33,57 +33,67 @@ EiFactory::new_Decl(
   }
 }
 
+// @brief 宣言要素を生成する．
+ElbDecl*
+EiFactory::new_Decl(
+  ElbDeclHead* head,
+  const AstIOItem& ast_item,
+  const VlExpr* init
+)
+{
+  if ( init != nullptr ) {
+    return new EiDecl2I(head, ast_item, init);
+  }
+  else {
+    return new EiDecl2(head, ast_item);
+  }
+}
+
+// @brief 宣言要素を生成する．
+ElbDecl*
+EiFactory::new_Decl(
+  ElbDeclHead* head,
+  const AstItem& ast_item
+)
+{
+  return new EiDecl3(head, ast_item);
+}
+
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiDecl
+// クラス EiDeclBase
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-EiDecl::EiDecl(
-  ElbDeclHead* head,
-  const AstNamedBase& ast_item
+EiDeclBase::EiDeclBase(
+  ElbDeclHead* head
 ) : mHead{head},
-    mAstItem{ast_item},
     mAuxSign{false}
 {
 }
 
 // @brief デストラクタ
-EiDecl::~EiDecl()
+EiDeclBase::~EiDeclBase()
 {
 }
 
 // @brief 型の取得
 VpiObjType
-EiDecl::type() const
+EiDeclBase::type() const
 {
   return mHead->type();
 }
 
-// @brief ファイル位置の取得
-FileRegion
-EiDecl::file_region() const
-{
-  return mAstItem.file_region();
-}
-
 // @brief このオブジェクトの属しているスコープを返す．
 const VlScope*
-EiDecl::parent_scope() const
+EiDeclBase::parent_scope() const
 {
   return mHead->parent_scope();
 }
 
-// @brief 名前の取得
-std::string
-EiDecl::name() const
-{
-  return mAstItem.name();
-}
-
 // @brief 値の型を返す．
 VlValueType
-EiDecl::value_type() const
+EiDeclBase::value_type() const
 {
   switch ( type() ) {
   case VpiObjType::Net:
@@ -116,70 +126,70 @@ EiDecl::value_type() const
 
 // @brief 符号の取得
 bool
-EiDecl::is_signed() const
+EiDeclBase::is_signed() const
 {
   return mHead->is_signed() || mAuxSign;
 }
 
 // @brief 範囲指定を持つとき true を返す．
 bool
-EiDecl::has_range() const
+EiDeclBase::has_range() const
 {
   return mHead->has_range();
 }
 
 // @brief 範囲の MSB の値を返す．
 int
-EiDecl::left_range_val() const
+EiDeclBase::left_range_val() const
 {
   return mHead->left_range_val();
 }
 
 // @brief 範囲の LSB の値を返す．
 int
-EiDecl::right_range_val() const
+EiDeclBase::right_range_val() const
 {
   return mHead->right_range_val();
 }
 
 // @brief 範囲のMSBを表す文字列の取得
 std::string
-EiDecl::left_range_string() const
+EiDeclBase::left_range_string() const
 {
   return mHead->left_range_string();
 }
 
 // @brief 範囲のLSBを表す文字列の取得
 std::string
-EiDecl::right_range_string() const
+EiDeclBase::right_range_string() const
 {
   return mHead->right_range_string();
 }
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiDecl::is_big_endian() const
+EiDeclBase::is_big_endian() const
 {
   return mHead->is_big_endian();
 }
 
 // @brief left_range <= right_range の時に true を返す．
 bool
-EiDecl::is_little_endian() const
+EiDeclBase::is_little_endian() const
 {
   return mHead->is_little_endian();
 }
 
 // @brief ビット幅を返す．
 SizeType
-EiDecl::bit_size() const
+EiDeclBase::bit_size() const
 {
   return mHead->bit_size();
 }
 
 // @brief オフセット値の取得
 bool
-EiDecl::calc_bit_offset(
+EiDeclBase::calc_bit_offset(
   int index,
   SizeType& offset
 ) const
@@ -189,79 +199,112 @@ EiDecl::calc_bit_offset(
 
 // @brief データ型の取得
 VpiVarType
-EiDecl::data_type() const
+EiDeclBase::data_type() const
 {
   return mHead->data_type();
 }
 
 // @brief net 型の取得
 VpiNetType
-EiDecl::net_type() const
+EiDeclBase::net_type() const
 {
   return mHead->net_type();
 }
 
 // @brief vectored|scalared 属性の取得
 VpiVsType
-EiDecl::vs_type() const
+EiDeclBase::vs_type() const
 {
   return mHead->vs_type();
 }
 
 // @brief drive0 strength の取得
 VpiStrength
-EiDecl::drive0() const
+EiDeclBase::drive0() const
 {
   return mHead->drive0();
 }
 
 // @brief drive1 strength の取得
 VpiStrength
-EiDecl::drive1() const
+EiDeclBase::drive1() const
 {
   return mHead->drive1();
 }
 
 // @brief charge strength の取得
 VpiStrength
-EiDecl::charge() const
+EiDeclBase::charge() const
 {
   return mHead->charge();
 }
 
 // @brief delay の取得
 const VlDelay*
-EiDecl::delay() const
+EiDeclBase::delay() const
 {
   return mHead->delay();
 }
 
 // @brief 定数値を持つ型のときに true を返す．
 bool
-EiDecl::is_consttype() const
+EiDeclBase::is_consttype() const
 {
   return false;
 }
 
 // @brief 初期値の取得
 const VlExpr*
-EiDecl::init_value() const
+EiDeclBase::init_value() const
 {
   return nullptr;
 }
 
 // @brief localparam のときに true 返す．
 bool
-EiDecl::is_local_param() const
+EiDeclBase::is_local_param() const
 {
   return false;
 }
 
 // @brief 符号付きに補正する．
 void
-EiDecl::set_signed()
+EiDeclBase::set_signed()
 {
   mAuxSign = true;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiDecl
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+EiDecl::EiDecl(
+  ElbDeclHead* head,
+  const AstDeclItem& ast_item
+) : EiDeclBase(head),
+    mAstItem{ast_item}
+{
+}
+
+// @brief デストラクタ
+EiDecl::~EiDecl()
+{
+}
+
+// @brief ファイル位置の取得
+FileRegion
+EiDecl::file_region() const
+{
+  return mAstItem.file_region();
+}
+
+// @brief 名前の取得
+std::string
+EiDecl::name() const
+{
+  return mAstItem.name();
 }
 
 
@@ -272,7 +315,7 @@ EiDecl::set_signed()
 // @brief コンストラクタ
 EiDeclI::EiDeclI(
   ElbDeclHead* head,
-  const AstNamedBase& ast_item,
+  const AstDeclItem& ast_item,
   const VlExpr* init
 ) : EiDecl(head, ast_item),
     mInit{init}
@@ -298,6 +341,108 @@ EiDeclI::set_init(
 )
 {
   mInit = expr;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiDecl2
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+EiDecl2::EiDecl2(
+  ElbDeclHead* head,
+  const AstIOItem& ast_item
+) : EiDeclBase(head),
+    mAstItem{ast_item}
+{
+}
+
+// @brief デストラクタ
+EiDecl2::~EiDecl2()
+{
+}
+
+// @brief ファイル位置の取得
+FileRegion
+EiDecl2::file_region() const
+{
+  return mAstItem.file_region();
+}
+
+// @brief 名前の取得
+std::string
+EiDecl2::name() const
+{
+  return mAstItem.name();
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiDecl2I
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+EiDecl2I::EiDecl2I(
+  ElbDeclHead* head,
+  const AstIOItem& ast_item,
+  const VlExpr* init
+) : EiDecl2(head, ast_item),
+    mInit{init}
+{
+}
+
+// @brief デストラクタ
+EiDecl2I::~EiDecl2I()
+{
+}
+
+// @brief 初期値の取得
+const VlExpr*
+EiDecl2I::init_value() const
+{
+  return mInit;
+}
+
+// @brief 初期値の設定
+void
+EiDecl2I::set_init(
+  const VlExpr* expr
+)
+{
+  mInit = expr;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiDecl3
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+EiDecl3::EiDecl3(
+  ElbDeclHead* head,
+  const AstItem& ast_item
+) : EiDeclBase(head),
+    mAstItem{ast_item}
+{
+}
+
+// @brief デストラクタ
+EiDecl3::~EiDecl3()
+{
+}
+
+// @brief ファイル位置の取得
+FileRegion
+EiDecl3::file_region() const
+{
+  return mAstItem.file_region();
+}
+
+// @brief 名前の取得
+std::string
+EiDecl3::name() const
+{
+  return mAstItem.name();
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -47,7 +47,7 @@ EiFactory::new_ParamHead(
 ElbParameter*
 EiFactory::new_Parameter(
   ElbParamHead* head,
-  const AstNamedBase& ast_item,
+  const AstDeclItem& ast_item,
   bool is_local
 )
 {
@@ -417,7 +417,7 @@ EiParamHeadV::value_type(
 // @brief コンストラクタ
 EiParameter::EiParameter(
   ElbParamHead* head,
-  const AstNamedBase& ast_item
+  const AstDeclItem& ast_item
 ) : mHead{head},
     mAstItem{ast_item},
     mExpr{nullptr}
@@ -661,7 +661,7 @@ EiParameter::set_init_expr(
 // @brief コンストラクタ
 EiLocalParam::EiLocalParam(
   ElbParamHead* head,
-  const AstNamedBase& ast_item
+  const AstDeclItem& ast_item
 ) : EiParameter(head, ast_item)
 {
 }

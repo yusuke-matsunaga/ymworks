@@ -373,11 +373,6 @@ ElbMgr::new_Module(
   const AstInst& ast_inst
 )
 {
-  {
-    std::cerr << "ElbMgr::new_Module("
-	      << ast_module.name()
-	      << ")" << std::endl;
-  }
   auto module = factory().new_Module(parent, ast_module, ast_head, ast_inst);
   reg_obj(module);
   mObjDict.add(module);
@@ -523,11 +518,42 @@ ElbDecl*
 ElbMgr::new_Decl(
   int tag,
   ElbDeclHead* head,
-  const AstNamedBase& ast_item,
+  const AstDeclItem& ast_item,
   const VlExpr* init
 )
 {
   auto decl = factory().new_Decl(head, ast_item, init);
+  reg_obj(decl);
+  mObjDict.add(decl);
+  mTagDict.add_decl(tag, decl);
+  return decl;
+}
+
+// @brief 宣言要素を生成する．
+ElbDecl*
+ElbMgr::new_Decl(
+  int tag,
+  ElbDeclHead* head,
+  const AstIOItem& ast_item,
+  const VlExpr* init
+)
+{
+  auto decl = factory().new_Decl(head, ast_item, init);
+  reg_obj(decl);
+  mObjDict.add(decl);
+  mTagDict.add_decl(tag, decl);
+  return decl;
+}
+
+// @brief 宣言要素を生成する．
+ElbDecl*
+ElbMgr::new_Decl(
+  int tag,
+  ElbDeclHead* head,
+  const AstItem& ast_item
+)
+{
+  auto decl = factory().new_Decl(head, ast_item);
   reg_obj(decl);
   mObjDict.add(decl);
   mTagDict.add_decl(tag, decl);
@@ -553,7 +579,7 @@ const VlDeclArray*
 ElbMgr::new_DeclArray(
   int tag,
   ElbDeclHead* head,
-  const AstNamedBase& ast_item,
+  const AstDeclItem& ast_item,
   const std::vector<ElbRangeSrc>& range_src
 )
 {
@@ -598,7 +624,7 @@ ElbMgr::new_ParamHead(
 ElbParameter*
 ElbMgr::new_Parameter(
   ElbParamHead* head,
-  const AstNamedBase& ast_item,
+  const AstDeclItem& ast_item,
   bool is_local
 )
 {

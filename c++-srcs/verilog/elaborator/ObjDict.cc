@@ -29,7 +29,7 @@ const int debug_objdict    = 0x00000001;
 const int debug_find_scope = 0x00000010;
 const int debug_all        = 0xFFFFFFFF;
 
-#if 0
+#if 1
 const int debug = debug_none;
 #else
 const int debug = debug_all;
@@ -196,13 +196,17 @@ ElbScopeHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbScopeHandle("
+  s << "ElbScopeHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
     << std::dec
-    << ")" << std::endl;
+    << ": "
+    << std::hex
+    << this
+    << std::dec
+    << std::endl;
 }
 
 
@@ -260,11 +264,15 @@ KeyObjHandle::print(
   std::ostream& s
 ) const
 {
-  s << "KeyObjHandle("
+  s << "KeyObjHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -285,14 +293,6 @@ NamedObjHandle::parent_scope() const
 std::string
 NamedObjHandle::name() const
 {
-  std::cout << "NamedObjHandle::name()" << std::endl
-	    << _namedobj()->name()
-	    << "("
-	    << std::hex
-	    << _namedobj()
-	    << ")"
-	    << std::dec
-	    << std::endl;
   return _namedobj()->name();
 }
 
@@ -349,11 +349,15 @@ ElbTaskFuncHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbTaskFuncHandle("
+  s << "ElbTaskFuncHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -390,13 +394,24 @@ ElbDeclHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbDeclHandle("
+  s << "ElbDeclHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
     << std::dec
-    << ")" << std::endl;
+    << ": "
+    << std::hex
+    << this
+    << std::dec
+    << ": mObj = "
+    << std::hex
+    << mObj
+    << std::dec
+    << ": name = "
+    << std::hex
+    << mObj
+    << std::endl;
 }
 
 
@@ -431,11 +446,15 @@ ElbDeclArrayHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbDeclArrayHandle("
+  s << "ElbDeclArrayHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -472,11 +491,15 @@ ElbParamHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbParamHandle("
+  s << "ElbParamHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -513,11 +536,15 @@ ElbModuleHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbModuleHandle("
+  s << "ElbModuleHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -563,11 +590,15 @@ ElbModuleArrayHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbModuleArrayHandle("
+  s << "ElbModuleArrayHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -604,11 +635,15 @@ ElbPrimArrayHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbPrimArrayHandle("
+  s << "ElbPrimArrayHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -645,11 +680,15 @@ ElbPrimitiveHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbPrimitiveHandle("
+  s << "ElbPrimitiveHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -695,11 +734,15 @@ ElbGfRootHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbGfRootHandle("
+  s << "ElbGfRootHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -737,11 +780,15 @@ ElbGenvarHandle::print(
   std::ostream& s
 ) const
 {
-  s << "ElbGenvarHandle("
+  s << "ElbGenvarHandle: "
     << name()
-    << "@"
+    << " @"
     << std::hex
     << parent_scope()
+    << std::dec
+    << ": "
+    << std::hex
+    << this
     << std::dec
     << ")" << std::endl;
 }
@@ -971,27 +1018,7 @@ ObjDict::add_handle(
   ObjHandle* handle
 )
 {
-  {
-    std::cout << "before add_handle" << std::endl;
-    for ( auto obj: mHash ) {
-      std::cout << std::hex
-		<< obj
-		<< std::dec
-		<< ": "
-		<< obj->name() << std::endl;
-    }
-  }
   mHash.insert(handle);
-  {
-    std::cout << "after add_handle" << std::endl;
-    for ( auto obj: mHash ) {
-      std::cout << std::hex
-		<< obj
-		<< std::dec
-		<< ": "
-		<< obj->name() << std::endl;
-    }
-  }
 }
 
 // @brief 名前から該当する要素を検索する．

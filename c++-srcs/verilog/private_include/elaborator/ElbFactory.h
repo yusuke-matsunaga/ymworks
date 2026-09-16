@@ -200,9 +200,26 @@ public:
   virtual
   ElbDecl*
   new_Decl(
-    ElbDeclHead* head,            ///< [in] ヘッダ
-    const AstNamedBase& ast_item, ///< [in] パース木の宣言要素
-    const VlExpr* init = nullptr  ///< [in] 初期値
+    ElbDeclHead* head,           ///< [in] ヘッダ
+    const AstDeclItem& ast_item, ///< [in] パース木の宣言要素
+    const VlExpr* init = nullptr ///< [in] 初期値
+  ) = 0;
+
+  /// @brief 宣言要素を生成する．
+  virtual
+  ElbDecl*
+  new_Decl(
+    ElbDeclHead* head,           ///< [in] ヘッダ
+    const AstIOItem& ast_item, ///< [in] パース木の宣言要素
+    const VlExpr* init = nullptr ///< [in] 初期値
+  ) = 0;
+
+  /// @brief 宣言要素を生成する．
+  virtual
+  ElbDecl*
+  new_Decl(
+    ElbDeclHead* head,      ///< [in] ヘッダ
+    const AstItem& ast_item ///< [in] パース木の宣言要素
   ) = 0;
 
   /// @brief 暗黙のネットを生成する．
@@ -219,7 +236,7 @@ public:
   const VlDeclArray*
   new_DeclArray(
     ElbDeclHead* head,                        ///< [in] ヘッダ
-    const AstNamedBase& ast_item,             ///< [in] パース木の宣言要素
+    const AstDeclItem& ast_item,              ///< [in] パース木の宣言要素
     const std::vector<ElbRangeSrc>& range_src ///< [in] 範囲の配列
   ) = 0;
 
@@ -245,9 +262,9 @@ public:
   virtual
   ElbParameter*
   new_Parameter(
-    ElbParamHead* head,           ///< [in] ヘッダ
-    const AstNamedBase& ast_item, ///< [in] パース木の宣言要素
-    bool is_local = false         ///< [in] localparam の時 true
+    ElbParamHead* head,          ///< [in] ヘッダ
+    const AstDeclItem& ast_item, ///< [in] パース木の宣言要素
+    bool is_local = false        ///< [in] localparam の時 true
   ) = 0;
 
   /// @brief genvar を生成する．

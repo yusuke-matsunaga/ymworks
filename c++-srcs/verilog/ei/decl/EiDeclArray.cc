@@ -23,7 +23,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 const VlDeclArray*
 EiFactory::new_DeclArray(
   ElbDeclHead* head,
-  const AstNamedBase& ast_item,
+  const AstDeclItem& ast_item,
   const std::vector<ElbRangeSrc>& range_src
 )
 {
@@ -44,7 +44,7 @@ EiFactory::new_DeclArray(
 // @brief コンストラクタ
 EiDeclArray::EiDeclArray(
   ElbDeclHead* head,
-  const AstNamedBase& ast_item,
+  const AstDeclItem& ast_item,
   const std::vector<EiRange>& range_array
 ) : mHead{head},
     mAstItem{ast_item},

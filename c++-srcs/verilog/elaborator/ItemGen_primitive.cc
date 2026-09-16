@@ -61,7 +61,7 @@ END_NONAMESPACE
 void
 ItemGen::instantiate_gateheader(
   const VlScope* parent,
-  const AstItem& ast_head
+  AstItem ast_head
 )
 {
   auto ast_delay = ast_head.delay();
@@ -142,7 +142,7 @@ ItemGen::instantiate_gateinst(
 void
 ItemGen::instantiate_udpheader(
   const VlScope* parent,
-  const AstItem& ast_head,
+  AstItem ast_head,
   const VlUdpDefn* udpdefn
 )
 {
@@ -218,7 +218,7 @@ ItemGen::instantiate_udpinst(
 void
 ItemGen::instantiate_cellhead(
   const VlScope* parent,
-  const AstItem& ast_head,
+  AstItem ast_head,
   ClibCell cell
 )
 {
@@ -294,7 +294,7 @@ ItemGen::instantiate_cellinst(
 void
 ItemGen::link_gate_delay(
   ElbPrimHead* prim_head,
-  const AstDelay& ast_delay
+  AstDelay ast_delay
 )
 {
   auto parent = prim_head->parent_scope();
@@ -306,7 +306,7 @@ ItemGen::link_gate_delay(
 void
 ItemGen::link_udp_delay(
   ElbPrimHead* prim_head,
-  const AstItem& ast_head
+  AstItem ast_head
 )
 {
   auto parent = prim_head->parent_scope();
@@ -326,7 +326,7 @@ ItemGen::link_udp_delay(
 void
 ItemGen::link_prim_array(
   ElbPrimArray* prim_array,
-  const AstInst& ast_inst
+  AstInst ast_inst
 )
 {
   auto parent = prim_array->parent_scope();
@@ -401,7 +401,7 @@ ItemGen::link_prim_array(
 void
 ItemGen::link_primitive(
   ElbPrimitive* primitive,
-  const AstInst& ast_inst
+  AstInst ast_inst
 )
 {
   auto parent = primitive->parent_scope();
@@ -454,7 +454,7 @@ ItemGen::link_primitive(
 void
 ItemGen::link_cell_array(
   ElbPrimArray* prim_array,
-  const AstInst& ast_inst
+  AstInst ast_inst
 )
 {
   auto parent = prim_array->parent_scope();
@@ -541,7 +541,7 @@ ItemGen::link_cell_array(
 void
 ItemGen::link_cell(
   ElbPrimitive* primitive,
-  const AstInst& ast_inst
+  AstInst ast_inst
 )
 {
   auto parent = primitive->parent_scope();

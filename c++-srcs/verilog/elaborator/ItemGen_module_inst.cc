@@ -148,9 +148,9 @@ ItemGen::phase1_module_inst(
 void
 ItemGen::phase1_module_array(
   const VlScope* parent,
-  const AstModule& ast_module,
-  const AstItem& ast_head,
-  const AstInst& ast_inst
+  AstModule ast_module,
+  AstItem ast_head,
+  AstInst ast_inst
 )
 {
   auto defname = ast_head.name();
@@ -233,8 +233,8 @@ ItemGen::phase1_cell(
 void
 ItemGen::link_module_array(
   ElbModuleArray* module_array,
-  const AstModule& ast_module,
-  const AstInst& ast_inst
+  AstModule ast_module,
+  AstInst ast_inst
 )
 {
   auto parent = module_array->parent_scope();
@@ -421,8 +421,8 @@ ItemGen::link_module_array(
 void
 ItemGen::link_module(
   ElbModule* module,
-  const AstModule& ast_module,
-  const AstInst& ast_inst
+  AstModule ast_module,
+  AstInst ast_inst
 )
 {
   auto parent = module->parent_scope();

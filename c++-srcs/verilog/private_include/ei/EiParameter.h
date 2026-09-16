@@ -241,8 +241,8 @@ public:
 
   /// @brief コンストラクタ
   EiParameter(
-    ElbParamHead* head,          ///< [in] ヘッダ
-    const AstNamedBase& ast_item ///< [in] パース木の宣言要素
+    ElbParamHead* head,         ///< [in] ヘッダ
+    const AstDeclItem& ast_item ///< [in] パース木の宣言要素
   );
 
   /// @brief デストラクタ
@@ -421,7 +421,7 @@ private:
   ElbParamHead* mHead;
 
   // パース木の宣言要素
-  const AstNamedBase& mAstItem;
+  AstDeclItem mAstItem;
 
   // 式
   AstExpr mExpr;
@@ -443,8 +443,8 @@ public:
 
   /// @brief コンストラクタ
   EiLocalParam(
-    ElbParamHead* head,          ///< [in] ヘッダ
-    const AstNamedBase& ast_item ///< [in] パース木の宣言要素
+    ElbParamHead* head,         ///< [in] ヘッダ
+    const AstDeclItem& ast_item ///< [in] パース木の宣言要素
   );
 
   /// @brief デストラクタ

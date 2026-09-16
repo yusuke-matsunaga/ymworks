@@ -18,6 +18,11 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+BEGIN_NONAMESPACE
+static
+const int debug_msg = 0;
+END_NONAMESPACE
+
 // @brief 全メッセージ数を得る．
 SizeType
 LogMgr::msg_num() const
@@ -284,7 +289,7 @@ LogMgr::put_msg(
   const std::string& message
 )
 {
-  {
+  if ( debug_msg ) {
     std::cout << file_region << std::endl
 	      << type << std::endl
 	      << label << std::endl

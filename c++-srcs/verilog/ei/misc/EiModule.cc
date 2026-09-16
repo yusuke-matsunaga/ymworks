@@ -409,7 +409,7 @@ EiModule::io(
   if ( pos >= io_num() ) {
     throw std::out_of_range{"pos is out of range"};
   }
-  return &mIODeclList[pos];
+  return mIODeclList[pos].get();
 }
 
 // @brief 入出力のリストの取得
@@ -419,7 +419,7 @@ EiModule::io_list() const
   std::vector<const VlIODecl*> ans_list;
   ans_list.reserve(io_num());
   for ( auto& io: mIODeclList ) {
-    ans_list.push_back(&io);
+    ans_list.push_back(io.get());
   }
   return ans_list;
 }
@@ -430,10 +430,10 @@ EiModule::find_io(
   const VlDecl* decl
 ) const
 {
-  if ( mIODict.count(decl) > 0 ) {
-    return mIODict.at(decl);
+  if ( mIODict.count(decl) == 0 ) {
+    return nullptr;
   }
-  return nullptr;
+  return mIODict.at(decl);
 }
 
 // @brief 入出力を追加する．
@@ -444,8 +444,8 @@ EiModule::add_iodecl(
   const VlDecl* decl
 )
 {
-  mIODeclList.push_back({head, ast_item, decl});
-  auto io_decl = &mIODeclList.back();
+  auto io_decl = new EiIODecl(head, ast_item, decl);
+  mIODeclList.push_back(std::unique_ptr<EiIODecl>{io_decl});
   mIODict.emplace(decl, io_decl);
 }
 
