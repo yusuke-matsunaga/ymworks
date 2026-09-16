@@ -151,6 +151,13 @@ public:
   SizeType
   hash() const;
 
+  /// @brief 内容を出力する．
+  virtual
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const = 0;
+
 };
 
 /// @brief ObjHandle のハッシュ関数クラス

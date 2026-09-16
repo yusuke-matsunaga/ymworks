@@ -112,6 +112,12 @@ public:
     const std::string& name
   ) const;
 
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const;
+
 
 private:
   //////////////////////////////////////////////////////////////////////

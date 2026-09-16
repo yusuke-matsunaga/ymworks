@@ -57,6 +57,12 @@ public:
   std::string
   full_name() const override;
 
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -114,6 +120,12 @@ public:
   /// @brief VlScope を返す．
   const VlScope*
   scope() const override;
+
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
 
 
 private:
@@ -199,6 +211,12 @@ public:
   const VlTaskFunc*
   taskfunc() const override;
 
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -245,6 +263,12 @@ public:
   ElbDecl*
   decl() const override;
 
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -289,6 +313,12 @@ public:
   /// @brief ElbDeclArray を返す．
   const VlDeclArray*
   declarray() const override;
+
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
 
 
 private:
@@ -335,6 +365,12 @@ public:
   ElbParameter*
   parameter() const override;
 
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -379,6 +415,12 @@ public:
   /// @brief VlModule を返す．
   const VlModule*
   module() const override;
+
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
 
 
 private:
@@ -431,6 +473,12 @@ public:
   const VlModuleArray*
   module_array() const override;
 
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -476,6 +524,12 @@ public:
   const VlPrimArray*
   prim_array() const override;
 
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -520,6 +574,12 @@ public:
   /// @brief ElbPrimitive を返す．
   const VlPrimitive*
   primitive() const override;
+
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
 
 
 private:
@@ -572,6 +632,12 @@ public:
   ElbGfRoot*
   gfroot() const override;
 
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -616,6 +682,12 @@ public:
   /// @brief ElbGenvar を返す．
   ElbGenvar*
   genvar() const override;
+
+  /// @brief 内容を出力する．
+  void
+  print(
+    std::ostream& s ///< [in] 出力ストリーム
+  ) const override;
 
 
 private:

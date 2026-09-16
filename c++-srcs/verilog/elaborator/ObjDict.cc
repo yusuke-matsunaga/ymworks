@@ -190,6 +190,21 @@ ElbScopeHandle::scope() const
   return mObj;
 }
 
+// @brief 内容を出力する．
+void
+ElbScopeHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbScopeHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス KeyObjHandle
@@ -237,6 +252,21 @@ std::string
 KeyObjHandle::full_name() const
 {
   return {};
+}
+
+// @brief 内容を出力する．
+void
+KeyObjHandle::print(
+  std::ostream& s
+) const
+{
+  s << "KeyObjHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
 }
 
 
@@ -313,6 +343,21 @@ ElbTaskFuncHandle::_namedobj() const
   return mObj;
 }
 
+// @brief 内容を出力する．
+void
+ElbTaskFuncHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbTaskFuncHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス ElbDeclHandle
@@ -337,6 +382,21 @@ const VlNamedObj*
 ElbDeclHandle::_namedobj() const
 {
   return mObj;
+}
+
+// @brief 内容を出力する．
+void
+ElbDeclHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbDeclHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
 }
 
 
@@ -365,6 +425,21 @@ ElbDeclArrayHandle::_namedobj() const
   return mObj;
 }
 
+// @brief 内容を出力する．
+void
+ElbDeclArrayHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbDeclArrayHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス ElbParamHandle
@@ -391,6 +466,21 @@ ElbParamHandle::_namedobj() const
   return mObj;
 }
 
+// @brief 内容を出力する．
+void
+ElbParamHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbParamHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス ElbModuleHandle
@@ -415,6 +505,21 @@ const VlNamedObj*
 ElbModuleHandle::_namedobj() const
 {
   return mObj;
+}
+
+// @brief 内容を出力する．
+void
+ElbModuleHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbModuleHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
 }
 
 
@@ -452,6 +557,21 @@ ElbModuleArrayHandle::_namedobj() const
   return mObj;
 }
 
+// @brief 内容を出力する．
+void
+ElbModuleArrayHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbModuleArrayHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス ElbPrimArrayHandle
@@ -478,6 +598,21 @@ ElbPrimArrayHandle::_namedobj() const
   return mObj;
 }
 
+// @brief 内容を出力する．
+void
+ElbPrimArrayHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbPrimArrayHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス VlPrimitive
@@ -502,6 +637,21 @@ const VlNamedObj*
 ElbPrimitiveHandle::_namedobj() const
 {
   return mObj;
+}
+
+// @brief 内容を出力する．
+void
+ElbPrimitiveHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbPrimitiveHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
 }
 
 
@@ -539,6 +689,21 @@ ElbGfRootHandle::_namedobj() const
   return mObj;
 }
 
+// @brief 内容を出力する．
+void
+ElbGfRootHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbGfRootHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス ElbGenvarHandle
@@ -564,6 +729,21 @@ const VlNamedObj*
 ElbGenvarHandle::_namedobj() const
 {
   return mObj;
+}
+
+// @brief 内容を出力する．
+void
+ElbGenvarHandle::print(
+  std::ostream& s
+) const
+{
+  s << "ElbGenvarHandle("
+    << name()
+    << "@"
+    << std::hex
+    << parent_scope()
+    << std::dec
+    << ")" << std::endl;
 }
 
 
@@ -846,6 +1026,17 @@ ObjDict::find(
     }
 
     return nullptr;
+  }
+}
+
+// @brief 内容を出力する．
+void
+ObjDict::print(
+  std::ostream& s
+) const
+{
+  for ( auto h: mHash ) {
+    h->print(s);
   }
 }
 
