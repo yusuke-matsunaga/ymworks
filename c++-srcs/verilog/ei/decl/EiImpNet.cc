@@ -237,7 +237,16 @@ EiImpNet::is_local_param() const
 void
 EiImpNet::set_signed()
 {
-  // なにもしない．
+  throw std::logic_error{"EiImpNet::set_signed()"};
+}
+
+// @brief 初期値の設定
+void
+EiImpNet::set_init(
+  const VlExpr* expr
+)
+{
+  throw std::logic_error{"EiDeclBase::set_init()"};
 }
 
 END_NAMESPACE_YM_VERILOG

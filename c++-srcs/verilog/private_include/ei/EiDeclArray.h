@@ -5,18 +5,19 @@
 /// @brief EiDeclArray のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/vl/VlDeclArray.h"
+#include "elaborator/ElbDeclArray.h"
+#include "elaborator/ElbDeclHead.h"
+#include "ym/vl/AstDeclItem.h"
 #include "ei/EiRange.h"
-#include "ym/vl/BitVector.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiDeclArray EiDeclArray.h "EiDeclArray.h"
+/// @class EiDeclArray EiDeclArray.h "ei/EiDeclArray.h"
 /// @brief 配列型の ElbDecl
 //////////////////////////////////////////////////////////////////////
 class EiDeclArray :

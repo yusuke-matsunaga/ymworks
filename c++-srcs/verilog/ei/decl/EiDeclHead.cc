@@ -8,7 +8,7 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiDeclHead.h"
-#include "ym/vl/VlDelay.h"
+#include "ym/vl/VlValueType.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -407,6 +407,15 @@ EiDeclHeadAst::charge() const
   return mAstHead.strength().charge();
 }
 
+// @brief 遅延式の設定
+void
+EiDeclHeadAst::set_delay(
+  const VlDelay* delay
+)
+{
+  throw std::logic_error{"EiDeclHeadAst::set_delay()"};
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclHeadAstD
@@ -753,6 +762,15 @@ EiDeclHeadAst2::net_type() const
   return mAstHead.net_type();
 }
 
+// @brief 遅延式の設定
+void
+EiDeclHeadAst2::set_delay(
+  const VlDelay* delay
+)
+{
+  throw std::logic_error{"EiDeclHeadAst2::set_delay()"};
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclHeadAst2V
@@ -1005,6 +1023,15 @@ EiDeclHeadAst3::net_type() const
 {
 
   return VpiNetType::None;
+}
+
+// @brief 遅延式の設定
+void
+EiDeclHeadAst3::set_delay(
+  const VlDelay* delay
+)
+{
+  throw std::logic_error{"EiDeclHeadAst3::set_delay()"};
 }
 
 

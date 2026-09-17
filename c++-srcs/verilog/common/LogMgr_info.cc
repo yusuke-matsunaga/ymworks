@@ -14,6 +14,7 @@
 #include "elaborator/ElbTaskFunc.h"
 #include "elaborator/RangeVal.h"
 #include "ym/vl/VlContAssign.h"
+#include "ym/vl/VlDeclArray.h"
 #include "ym/vl/VlExpr.h"
 #include "ym/vl/VlModule.h"
 

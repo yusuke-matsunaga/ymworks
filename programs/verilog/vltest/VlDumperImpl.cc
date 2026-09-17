@@ -11,7 +11,7 @@
 #include "ym/vl/VlMgr.h"
 #include "ym/vl/VlValue.h"
 #include "ym/vl/VlModule.h"
-#include "ym/vl/VlUdp.h"
+#include "ym/vl/VlUdpDefn.h"
 
 #include <queue>
 

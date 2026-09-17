@@ -8,7 +8,8 @@
 
 #include "VlDumperImpl.h"
 #include "ym/vl/VlMgr.h"
-#include "ym/vl/VlUdp.h"
+#include "ym/vl/VlUdpDefn.h"
+#include "ym/vl/VlTableEntry.h"
 #include "ym/vl/VlPrimitive.h"
 #include "ym/vl/VlScope.h"
 #include "ym/vl/VlTaskFunc.h"

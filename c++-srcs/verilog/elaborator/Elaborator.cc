@@ -22,7 +22,7 @@
 #include "ym/vl/AstModule.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/VlTaskFunc.h"
-#include "ym/vl/VlUdp.h"
+#include "ym/vl/VlUdpDefn.h"
 
 #include "ym/ClibCellLibrary.h"
 

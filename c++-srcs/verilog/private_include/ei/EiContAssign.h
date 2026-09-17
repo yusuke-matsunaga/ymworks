@@ -5,118 +5,20 @@
 /// @brief EiContAssign のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/vl/VlContAssign.h"
-#include "elaborator/ElbCaHead.h"
+#include "elaborator/ElbContAssign.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiCaHead EiContAssign.h "EiContAssign.h"
-/// @brief 継続的代入文のヘッダ
-//////////////////////////////////////////////////////////////////////
-class EiCaHead :
-  public ElbCaHead
-{
-public:
-
-  /// @brief コンストラクタ
-  EiCaHead(
-    const VlModule* module, ///< [in] 親のモジュール
-    const AstItem& ast_head ///< [in] パース木のヘッダ定義
-  );
-
-  /// @brief デストラクタ
-  ~EiCaHead();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // EiCaHead の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 親のモジュールを返す．
-  const VlModule*
-  module() const override;
-
-  /// @brief 0の強さを返す．
-  VpiStrength
-  drive0() const override;
-
-  /// @brief 1の強さを返す．
-  VpiStrength
-  drive1() const override;
-
-  /// @brief 遅延を表す式を返す．
-  /// @note このクラスでは nullptr を返す．
-  const VlDelay*
-  delay() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 親のモジュール
-  const VlModule* mModule;
-
-  // パース木のヘッダ定義
-  AstItem mAstHead;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class EiCaHeadD EiContAssign.h "EiContAssign.h"
-/// @brief 遅延付きの継続的代入文のヘッダ
-//////////////////////////////////////////////////////////////////////
-class EiCaHeadD :
-  public EiCaHead
-{
-public:
-
-  /// @brief コンストラクタ
-  EiCaHeadD(
-    const VlModule* module,  ///< [in] 親のモジュール
-    const AstItem& ast_head, ///< [in] パース木のヘッダ定義
-    const VlDelay* delay     ///< [in] 遅延値
-  );
-
-  /// @brief デストラクタ
-  ~EiCaHeadD();
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // EiCaHead の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 遅延を表す式を返す．
-  const VlDelay*
-  delay() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 遅延値
-  const VlDelay* mDelay;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class EiContAssign EiContAssign.h "EiContAssign.h"
+/// @class EiContAssign EiContAssign.h "ei/EiContAssign.h"
 /// @brief 継続的代入文の実装クラス
 //////////////////////////////////////////////////////////////////////
 class EiContAssign :
-  public VlContAssign
+  public ElbContAssign
 {
 protected:
 
@@ -181,7 +83,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiContAssign EiContAssign.h "EiContAssign.h"
+/// @class EiContAssign EiContAssign.h "ei/EiContAssign.h"
 /// @brief 継続的代入文の実装クラス
 //////////////////////////////////////////////////////////////////////
 class EiContAssign1 :
@@ -239,7 +141,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiContAssign2 EiContAssign.h "EiContAssign.h"
+/// @class EiContAssign2 EiContAssign.h "ei/EiContAssign.h"
 /// @brief net 宣言中の継続的代入文
 //////////////////////////////////////////////////////////////////////
 class EiContAssign2 :
@@ -297,4 +199,4 @@ private:
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // ELBCONTASSIGN_H
+#endif // EICONTASSIGN_H

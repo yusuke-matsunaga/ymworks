@@ -5,19 +5,17 @@
 /// @brief EiGenBlock のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/vl/VlNamedObj.h"
 #include "elaborator/ElbGfRoot.h"
-
-#include "ym/vl/Ast.h"
+#include "ym/vl/AstItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiGfRoot EiGfRoot.h "EiGfRoot.h"
+/// @class EiGfRoot EiGfRoot.h "ei/EiGfRoot.h"
 /// @brief GfBlock の親となるクラス
 ///
 /// スコープとしての親ではなく，名前による検索のためのオブジェクト

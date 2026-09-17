@@ -274,6 +274,15 @@ EiDeclBase::set_signed()
   mAuxSign = true;
 }
 
+// @brief 初期値の設定
+void
+EiDeclBase::set_init(
+  const VlExpr* expr
+)
+{
+  throw std::logic_error{"EiDeclBase::set_init()"};
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDecl

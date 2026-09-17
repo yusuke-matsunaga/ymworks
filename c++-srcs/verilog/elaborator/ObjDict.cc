@@ -11,6 +11,7 @@
 
 #include "ym/vl/VlNamedObj.h"
 #include "ym/vl/VlDecl.h"
+#include "ym/vl/VlDeclArray.h"
 #include "ym/vl/VlTaskFunc.h"
 
 #include "elaborator/ElbParameter.h"

@@ -8,13 +8,13 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiExpr.h"
+#include "ei/EiExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiBitSelect EiBitSelect.h "EiBitSelect.h"
+/// @class EiBitSelect EiBitSelect.h "ei/EiBitSelect.h"
 /// @brief ビット選択式を表す基底クラス
 //////////////////////////////////////////////////////////////////////
 class EiBitSelect :
@@ -124,7 +124,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiConstBitSelect EiBitSelect.h "EiBitSelect.h"
+/// @class EiConstBitSelect EiBitSelect.h "ei/EiBitSelect.h"
 /// @brief 固定ビット選択式を表すクラス
 //////////////////////////////////////////////////////////////////////
 class EiConstBitSelect :
@@ -177,7 +177,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiVarBitSelect EiBitSelect.h "EiBitSelect.h"
+/// @class EiVarBitSelect EiBitSelect.h "ei/EiBitSelect.h"
 /// @brief 可変ビット選択式を表すクラス
 //////////////////////////////////////////////////////////////////////
 class EiVarBitSelect :

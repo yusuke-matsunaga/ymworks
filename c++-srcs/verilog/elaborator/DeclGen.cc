@@ -9,7 +9,9 @@
 #include "DeclGen.h"
 #include "ElbEnv.h"
 
+#include "elaborator/ElbDeclHead.h"
 #include "elaborator/ElbDecl.h"
+#include "elaborator/ElbDeclArray.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbGenvar.h"
 #include "elaborator/ElbModule.h"

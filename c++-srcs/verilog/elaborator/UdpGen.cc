@@ -14,7 +14,7 @@
 #include "ym/vl/AstPort.h"
 #include "ym/vl/VlExpr.h"
 
-#include "elaborator/ElbUdp.h"
+#include "elaborator/ElbUdpDefn.h"
 #include "elaborator/ElbExpr.h"
 
 

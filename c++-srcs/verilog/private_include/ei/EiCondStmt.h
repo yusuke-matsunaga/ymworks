@@ -15,14 +15,14 @@
 // IEEE Std 1364-2001 26.6.35 If, if-else
 // IEEE Std 1364-2001 26.6.36 Case
 
-#include "EiStmt.h"
+#include "ei/EiStmt.h"
 #include "ym/vl/AstCaseItem.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiLoopStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiLoopStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief while 文/ repeat 文/ wait 文 の基底クラス
 /// IEEE Std 1364-2001 26.6.32 While, repeat, wait
 //////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiWhileStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiWhileStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief while 文を表すクラス
 /// IEEE Std 1364-2001 26.6.32 While, repeat, wait
 //////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiRepeatStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiRepeatStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief repeat 文を表すクラス
 /// IEEE Std 1364-2001 26.6.32 While, repeat, wait
 //////////////////////////////////////////////////////////////////////
@@ -143,7 +143,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiWaitStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiWaitStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief wait 文を表すクラス
 /// IEEE Std 1364-2001 26.6.32 While, repeat, wait
 //////////////////////////////////////////////////////////////////////
@@ -178,7 +178,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiForStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiForStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief for statement を表すクラス
 /// IEEE Std 1364-2001 26.6.33 For
 //////////////////////////////////////////////////////////////////////
@@ -241,7 +241,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiForeverStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiForeverStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief forever statement を表すクラス
 /// IEEE Std 1364-2001 26.6.34 Forever
 //////////////////////////////////////////////////////////////////////
@@ -294,7 +294,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiIfStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiIfStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief if statement を表すクラス
 /// IEEE Std 1364-2001 26.6.35 If, if-else
 //////////////////////////////////////////////////////////////////////
@@ -355,7 +355,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiIfElseStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiIfElseStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief if else statement を表すクラス
 /// IEEE Std 1364-2001 26.6.35 If, if-else
 //////////////////////////////////////////////////////////////////////
@@ -410,7 +410,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiCaseItem EiCondStmt.h "EiCondStmt.h"
+/// @class EiCaseItem EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief case item を表すクラス
 /// IEEE Std 1364-2001 26.6.36 Case
 //////////////////////////////////////////////////////////////////////
@@ -486,7 +486,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiCaseStmt EiCondStmt.h "EiCondStmt.h"
+/// @class EiCaseStmt EiCondStmt.h "ei/EiCondStmt.h"
 /// @brief case statement を表すクラス
 /// IEEE Std 1364-2001 26.6.36 Case
 //////////////////////////////////////////////////////////////////////

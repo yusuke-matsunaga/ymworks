@@ -186,6 +186,12 @@ public:
   void
   set_signed() override;
 
+  /// @brief 初期値の設定
+  void
+  set_init(
+    const VlExpr* expr ///< [in] 初期値
+  ) override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////

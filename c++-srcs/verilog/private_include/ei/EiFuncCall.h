@@ -14,7 +14,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiFcBase EiFuncCall.h "EiFuncCall.h"
+/// @class EiFcBase EiFuncCall.h "ei/EiFuncCall.h"
 /// @brief function call/system-function call に共通な基底クラス
 //////////////////////////////////////////////////////////////////////
 class EiFcBase :

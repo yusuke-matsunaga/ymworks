@@ -15,7 +15,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiGenBlockScope EiGenBlockScope.h "EiGenBlockScope.h"
+/// @class EiGenBlockScope EiGenBlockScope.h "ei/EiGenBlockScope.h"
 /// @brief generate block に対応するスコープ
 //////////////////////////////////////////////////////////////////////
 class EiGenBlockScope :

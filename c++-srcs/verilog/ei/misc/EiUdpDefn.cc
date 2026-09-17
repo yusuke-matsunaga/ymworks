@@ -1,15 +1,15 @@
 ﻿
-/// @file EiUdp.cc
-/// @brief EiUdp の実装ファイル
+/// @file EiUdpDefn.cc
+/// @brief EiUdpDefn の実装ファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiUdp.h"
-#include "elaborator/ElbExpr.h"
-#include "ym/vl/AstPort.h"
+#include "ei/EiUdpDefn.h"
+#include "ei/EiUdpIO.h"
+#include "ei/EiTableEntry.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -182,192 +182,6 @@ EiUdpDefn::add_tableentry(
 )
 {
   mTableEntryList.push_back(EiTableEntry(this, ast_udp_entry, vals));
-}
-
-
-//////////////////////////////////////////////////////////////////////
-/// クラス EiUdpIO
-//////////////////////////////////////////////////////////////////////
-
-// @brief 型の取得
-VpiObjType
-EiUdpIO::type() const
-{
-  return VpiObjType::IODecl;
-}
-
-// ファイル位置を返す．
-FileRegion
-EiUdpIO::file_region() const
-{
-  return mAstItem.file_region();
-}
-
-// @brief 名前を返す．
-std::string
-EiUdpIO::name() const
-{
-  return mAstItem.name();
-}
-
-// @brief 方向を返す．
-VpiDir
-EiUdpIO::direction() const
-{
-  if ( mAstHeader.direction() == VpiDir::Inout ) {
-    throw std::logic_error{"mAstHeader->direction() == VpiDir::Inout"};
-  }
-  return mAstHeader.direction();
-}
-
-// @brief 符号の属性の取得
-bool
-EiUdpIO::is_signed() const
-{
-  return false;
-}
-
-// @brief 範囲指定を持つとき true を返す．
-bool
-EiUdpIO::has_range() const
-{
-  return false;
-}
-
-// @brief MSB の値を返す．
-int
-EiUdpIO::left_range_val() const
-{
-  return 0;
-}
-
-// @brief LSB の値を返す．
-int
-EiUdpIO::right_range_val() const
-{
-  return 0;
-}
-
-// @brief 範囲のMSBを表す文字列の取得
-std::string
-EiUdpIO::left_range_string() const
-{
-  return {};
-}
-
-// @brief 範囲のLSBを表す文字列の取得
-std::string
-EiUdpIO::right_range_string() const
-{
-  return {};
-}
-
-// @brief サイズを返す．
-SizeType
-EiUdpIO::bit_size() const
-{
-  return 1;
-}
-
-// @brief 対応する宣言要素を返す．
-const VlDecl*
-EiUdpIO::decl() const
-{
-  return nullptr;
-}
-
-// @brief 親のモジュールの取得
-const VlModule*
-EiUdpIO::module() const
-{
-  return nullptr;
-}
-
-// @brief 親のUDP定義を返す．
-const VlUdpDefn*
-EiUdpIO::udp_defn() const
-{
-  return mUdp;
-}
-
-// @brief 親のタスク/の取得
-const VlTaskFunc*
-EiUdpIO::task() const
-{
-  return nullptr;
-}
-
-// @brief 親の関数の取得
-const VlTaskFunc*
-EiUdpIO::function() const
-{
-  return nullptr;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-/// クラス EiTableEntry
-//////////////////////////////////////////////////////////////////////
-
-// @brief 型の取得
-VpiObjType
-EiTableEntry::type() const
-{
-  return VpiObjType::TableEntry;
-}
-
-// @brief ファイル位置を返す．
-FileRegion
-EiTableEntry::file_region() const
-{
-  return mAstUdpEntry.file_region();
-}
-
-// @brief 一行の要素数を返す．
-SizeType
-EiTableEntry::size() const
-{
-  SizeType row_size = mUdp->port_num();
-  if ( mUdp->prim_type() == VpiPrimType::Seq ) {
-    ++ row_size;
-  }
-  return row_size;
-}
-
-// @brief pos 番目の位置の値を返す．
-VlUdpVal
-EiTableEntry::val(
-  SizeType pos
-) const
-{
-  if ( pos >= size() ) {
-    throw std::out_of_range{"pos is out of range"};
-  }
-  return mValArray[pos];
-}
-
-// @brief 一行文の内容を表す文字列をつくる．
-std::string
-EiTableEntry::str() const
-{
-  auto n = size();
-  auto in = n - 1; // 出力変数の分を減らす
-  if ( mUdp->prim_type() == VpiPrimType::Seq ) {
-    -- in; // さらに状態変数の分を減らす．
-  }
-  auto in1 = in - 1;
-  auto n1 = n - 1;
-  std::string s;
-  for ( int pos = 0; pos < n; ++ pos ) {
-    s += val(pos).to_string();
-    if ( pos < in1 ) {
-      s += " ";
-    }
-    else if ( pos < n1 ) {
-      s += " : ";
-    }
-  }
-  return s;
 }
 
 END_NAMESPACE_YM_VERILOG

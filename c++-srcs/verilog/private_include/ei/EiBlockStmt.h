@@ -11,13 +11,13 @@
 // ステートメントを表すクラス
 // IEEE Std 1364-2001 26.6.27 Process, block, statement, event statement
 
-#include "EiStmt.h"
+#include "ei/EiStmt.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiBlockStmt EiBlockStmtStmt.h "EiBlockStmtStmt.h"
+/// @class EiBlockStmt EiBlockStmtStmt.h "ei/EiBlockStmtStmt.h"
 /// @brief ブロックを表すクラス
 /// IEEE Std 1364-2001 26.6.27 Process, block, statement, event statement
 //////////////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiBegin EiBlockStmtStmt.h "EiBlockStmtStmt.h"
+/// @class EiBegin EiBlockStmtStmt.h "ei/EiBlockStmtStmt.h"
 /// @brief sequential blockstatement を表すクラス
 /// IEEE Std 1364-2001 26.6.27 Process, block, statement, event statement
 //////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiFork EiBlockStmtStmt.h "EiBlockStmtStmt.h"
+/// @class EiFork EiBlockStmtStmt.h "ei/EiBlockStmtStmt.h"
 /// @brief parallel blockstatement を表すクラス
 /// IEEE Std 1364-2001 26.6.27 Process, block, statement, event statement
 //////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiNamedBlockStmt EiBlockStmtStmt.h "EiBlockStmtStmt.h"
+/// @class EiNamedBlockStmt EiBlockStmtStmt.h "ei/EiBlockStmtStmt.h"
 /// @brief 名前つきのブロックを表すクラス
 /// IEEE Std 1364-2001 26.6.27 Process, block, statement, event statement
 //////////////////////////////////////////////////////////////////////
@@ -181,7 +181,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiNamedBegin EiBlockStmtStmt.h "EiBlockStmtStmt.h"
+/// @class EiNamedBegin EiBlockStmtStmt.h "ei/EiBlockStmtStmt.h"
 /// @brief 名前付き sequential blockstatement を表すクラス
 /// IEEE Std 1364-2001 26.6.27 Process, block, statement, event statement
 //////////////////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiNamedFork ElbStmt.h "ElbStmt.h"
+/// @class EiNamedFork EiBlockStmtStmt.h "ei/EiBlockStmtStmt.h"
 /// @brief 名前付き parallel blockstatement を表すクラス
 /// IEEE Std 1364-2001 26.6.27 Process, block, statement, event statement
 //////////////////////////////////////////////////////////////////////

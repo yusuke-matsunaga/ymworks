@@ -19,7 +19,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiControl EiControl.h "EiControl.h"
+/// @class EiControl EiControl.h "ei/EiControl.h"
 /// @brief VlControl の実装クラス
 //////////////////////////////////////////////////////////////////////
 class EiControl :
@@ -86,7 +86,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiDelayControl EiControl.h "EiControl.h"
+/// @class EiDelayControl EiControl.h "ei/EiControl.h"
 /// @brief delay control statement を表すクラス
 /// IEEE1364-2001 では procedural timing control
 /// とこれを混同している．
@@ -139,7 +139,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiEventControl EiControl.h "EiControl.h"
+/// @class EiEventControl EiControl.h "ei/EiControl.h"
 /// @brief event control statement を表すクラス
 /// IEEE1364-2001 では procedural timing control
 /// とこれを混同している．
@@ -202,7 +202,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiRepeatControl EiControl.h "EiControl.h"
+/// @class EiRepeatControl EiControl.h "ei/EiControl.h"
 /// @brief repeat control を表すクラス
 /// IEEE Std 1364-2001 26.6.31 Repeat control
 //////////////////////////////////////////////////////////////////////

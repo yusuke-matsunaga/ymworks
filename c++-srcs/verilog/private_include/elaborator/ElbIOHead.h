@@ -13,6 +13,9 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+class VlModule;
+class VlTaskFunc;
+
 //////////////////////////////////////////////////////////////////////
 /// @class ElbIOHead  ElbIODecl.h "ElbIODecl.h"
 /// @brief IO のヘッダの基底クラス

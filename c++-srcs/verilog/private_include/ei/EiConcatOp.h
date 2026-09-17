@@ -8,13 +8,13 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiOperation.h"
+#include "ei/EiOperation.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiConcatOp EiConcatOp.h "EiConcatOp.h"
+/// @class EiConcatOp EiConcatOp.h "ei/EiConcatOp.h"
 /// @brief 結合演算子
 //////////////////////////////////////////////////////////////////////
 class EiConcatOp :
@@ -97,7 +97,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiMultiConcatOp EiConcatOp.h "EiConcatOp.h"
+/// @class EiMultiConcatOp EiConcatOp.h "ei/EiConcatOp.h"
 /// @brief マルチ結合演算子
 //////////////////////////////////////////////////////////////////////
 class EiMultiConcatOp :

@@ -1,20 +1,21 @@
-﻿#ifndef ELBUDP_H
-#define ELBUDP_H
+﻿#ifndef ELBUDPDEFN_H
+#define ELBUDPDEFN_H
 
-/// @file ElbUdp.h
-/// @brief ElbUdp のヘッダファイル
+/// @file ElbUdpDefn.h
+/// @brief ElbUdpDefn のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/vl/VlUdp.h"
+#include "ym/vl/VlUdpDefn.h"
+#include "ym/vl/AstIOHead.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class ElbUdpDefn ElbUdp.h "ElbUdp.h"
+/// @class ElbUdpDefn ElbUdpDefn.h "ElbUdpDefn.h"
 /// @brief UDP定義を表すクラス
 /// IEEE Std 1364-2001 26.6.14 UDP
 //////////////////////////////////////////////////////////////////////
@@ -61,24 +62,6 @@ public:
 
 };
 
-
-//////////////////////////////////////////////////////////////////////
-/// @class ElbTableEntry ElbUdp.h "ElbUdp.h"
-/// @brief UDP の table entry を表すクラス
-//////////////////////////////////////////////////////////////////////
-class ElbTableEntry :
-  public VlTableEntry
-{
-public:
-
-  /// @brief コンストラクタ
-  ElbTableEntry() = default;
-
-  /// @brief デストラクタ
-  ~ElbTableEntry() = default;
-
-};
-
 END_NAMESPACE_YM_VERILOG
 
-#endif // ELBUDP_H
+#endif // ELBUDPDEFN_H

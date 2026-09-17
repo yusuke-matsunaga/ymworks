@@ -14,14 +14,14 @@
 // IEEE Std 1364-2001 26.6.30 Event control
 // IEEE Std 1364-2001 26.6.37 Assign statement, deassign, force, release
 
-#include "EiStmt.h"
+#include "ei/EiStmt.h"
 #include "elaborator/ElbFwd.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiAssignBase EiAssignment.h "EiAssignment.h"
+/// @class EiAssignBase EiAssignment.h "ei/EiAssignment.h"
 /// @brief 代入文の基底クラス
 //////////////////////////////////////////////////////////////////////
 class EiAssignBase :
@@ -71,7 +71,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiNbAssignment EiAssignment.h "EiAssignment.h"
+/// @class EiNbAssignment EiAssignment.h "ei/EiAssignment.h"
 /// @brief non-blocking assignment を表すクラス
 /// IEEE Std 1364-2001 26.6.28 Assignment
 //////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiAssignment EiAssignment.h "EiAssignment.h"
+/// @class EiAssignment EiAssignment.h "ei/EiAssignment.h"
 /// @brief blocking assignment を表すクラス
 /// IEEE Std 1364-2001 26.6.28 Assignment
 //////////////////////////////////////////////////////////////////////
@@ -163,7 +163,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiAssignStmt EiAssignment.h "EiAssignment.h"
+/// @class EiAssignStmt EiAssignment.h "ei/EiAssignment.h"
 /// @brief assign statement を表すクラス
 /// assignment とは別物
 /// IEEE Std 1364-2001 26.6.37 Assign statement, deassign, force, release
@@ -199,7 +199,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiForceStmt EiAssignment.h "EiAssignment.h"
+/// @class EiForceStmt EiAssignment.h "ei/EiAssignment.h"
 /// @brief force statement を表すクラス
 /// IEEE Std 1364-2001 26.6.37 Assign statement, deassign, force, release
 //////////////////////////////////////////////////////////////////////
@@ -234,7 +234,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class ElbDeassignBase EiAssignment.h "EiAssignment.h"
+/// @class ElbDeassignBase EiAssignment.h "ei/EiAssignment.h"
 /// @brief deassign/release の基底クラス
 //////////////////////////////////////////////////////////////////////
 class EiDeassignBase :
@@ -276,7 +276,7 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiDeassignStmt EiAssignment.h "EiAssignment.h"
+/// @class EiDeassignStmt EiAssignment.h "ei/EiAssignment.h"
 /// @brief deassign statement を表すクラス
 /// IEEE Std 1364-2001 26.6.37 Assign statement, deassign, force, release
 //////////////////////////////////////////////////////////////////////
@@ -310,7 +310,7 @@ public:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiReleaseStmt EiAssignment.h "EiAssignment.h"
+/// @class EiReleaseStmt EiAssignment.h "ei/EiAssignment.h"
 /// @brief release statement を表すクラス
 /// IEEE Std 1364-2001 26.6.37 Assign statement, deassign, force, release
 //////////////////////////////////////////////////////////////////////

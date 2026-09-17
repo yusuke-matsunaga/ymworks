@@ -14,11 +14,18 @@
 // IEEE Std 1364-2001 26.6.30 Event control
 // IEEE Std 1364-2001 26.6.37 Assign statement, deassign, force, release
 
-#include "ym/vl/VlStmt.h"
-#include "ym/vl/Ast.h"
+#include "elaborator/ElbStmt.h"
+#include "ym/vl/AstStmt.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
+
+class VlCaseItem;
+class VlExpr;
+class VlProcess;
+class VlScope;
+class VlTaskFunc;
+class VlUserSystf;
 
 //////////////////////////////////////////////////////////////////////
 /// @class EiStmt EiStmt.h "EiStmt.h"
@@ -27,7 +34,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// 仮想関数のデフォルト実装を行っている．
 //////////////////////////////////////////////////////////////////////
 class EiStmt :
-  public VlStmt
+  public ElbStmt
 {
 protected:
 

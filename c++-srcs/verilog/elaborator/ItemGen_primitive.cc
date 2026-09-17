@@ -14,7 +14,7 @@
 #include "ym/vl/AstExpr.h"
 #include "ym/ClibCell.h"
 #include "ym/ClibPin.h"
-#include "elaborator/ElbUdp.h"
+#include "elaborator/ElbUdpDefn.h"
 #include "elaborator/ElbPrimitive.h"
 #include "elaborator/ElbExpr.h"
 #include "elaborator/RangeVal.h"

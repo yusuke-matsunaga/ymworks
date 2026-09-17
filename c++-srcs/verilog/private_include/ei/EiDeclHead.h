@@ -8,14 +8,14 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "elaborator/ElbDecl.h"
+#include "elaborator/ElbDeclHead.h"
 #include "ei/EiRange.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiDeclHead.h EiDeclHead.h "EiDeclHead.h"
+/// @class EiDeclHead.h EiDeclHead.h "ei/EiDeclHead.h"
 /// @brief 宣言要素のヘッダを表すクラス
 //////////////////////////////////////////////////////////////////////
 class EiDeclHead :
@@ -164,6 +164,18 @@ public:
   /// @retval kVpiNoStrength strength の指定なし
   VpiStrength
   charge() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 設定用の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 遅延式の設定
+  void
+  set_delay(
+    const VlDelay* delay ///< [in] 遅延式
+  ) override;
 
 
 private:
@@ -456,6 +468,18 @@ public:
   net_type() const override;
 
 
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 設定用の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 遅延式の設定
+  void
+  set_delay(
+    const VlDelay* delay ///< [in] 遅延式
+  ) override;
+
+
 private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
@@ -639,6 +663,18 @@ public:
   /// このクラスでは kVpiNone を返す．
   VpiNetType
   net_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 設定用の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 遅延式の設定
+  void
+  set_delay(
+    const VlDelay* delay ///< [in] 遅延式
+  ) override;
 
 
 private:

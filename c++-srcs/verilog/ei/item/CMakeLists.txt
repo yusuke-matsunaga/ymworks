@@ -43,9 +43,11 @@
 # ===================================================================
 
 set ( ei_item_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/EiCaHead.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/EiContAssign.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/EiGfRoot.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/EiParamAssign.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/EiPrimHead.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/EiPrimitive.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/EiProcess.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/EiTaskFunc.cc

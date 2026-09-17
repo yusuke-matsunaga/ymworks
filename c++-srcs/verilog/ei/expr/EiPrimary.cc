@@ -8,9 +8,10 @@
 
 #include "ei/EiFactory.h"
 #include "ei/EiPrimary.h"
-#include "elaborator/ElbDecl.h"
 #include "elaborator/ElbParameter.h"
-#include "elaborator/ElbPrimitive.h"
+#include "ym/vl/VlDecl.h"
+#include "ym/vl/VlDeclArray.h"
+#include "ym/vl/VlPrimitive.h"
 #include "ym/vl/VlValue.h"
 
 
@@ -251,6 +252,13 @@ EiIOPrimary::type() const
   return mObj->type();
 }
 
+// @brief ファイル位置を返す．
+FileRegion
+EiIOPrimary::file_region() const
+{
+  return mAstObj.file_region();
+}
+
 // @brief 式のタイプを返す．
 VlValueType
 EiIOPrimary::value_type() const
@@ -328,13 +336,6 @@ EiIOPrimary::_set_reqsize(
   // なにもしない．
 }
 
-// @brief パース木の定義要素を返す．
-const AstBase&
-EiIOPrimary::ast_obj() const
-{
-  return mAstObj;
-}
-
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclPrimary
@@ -359,6 +360,13 @@ VpiObjType
 EiDeclPrimary::type() const
 {
   return mObj->type();
+}
+
+// @brief ファイル位置を返す．
+FileRegion
+EiDeclPrimary::file_region() const
+{
+  return mAstObj.file_region();
 }
 
 // @brief 式のタイプを返す．
@@ -438,13 +446,6 @@ EiDeclPrimary::_set_reqsize(
   // なにもしない．
 }
 
-// @brief パース木の定義要素を返す．
-const AstBase&
-EiDeclPrimary::ast_obj() const
-{
-  return mAstObj;
-}
-
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclArrayPrimary
@@ -469,6 +470,13 @@ VpiObjType
 EiDeclArrayPrimary::type() const
 {
   return mObj->type();
+}
+
+// @brief ファイル位置を返す．
+FileRegion
+EiDeclArrayPrimary::file_region() const
+{
+  return mAstObj.file_region();
 }
 
 // @brief 式のタイプを返す．
@@ -547,13 +555,6 @@ EiDeclArrayPrimary::_set_reqsize(
 )
 {
   // なにもしない．
-}
-
-// @brief パース木の定義要素を返す．
-const AstBase&
-EiDeclArrayPrimary::ast_obj() const
-{
-  return mAstObj;
 }
 
 

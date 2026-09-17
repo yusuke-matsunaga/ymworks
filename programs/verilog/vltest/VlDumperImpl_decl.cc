@@ -15,7 +15,7 @@
 #include "ym/vl/VlParamAssign.h"
 #include "ym/vl/VlModule.h"
 #include "ym/vl/VlScope.h"
-#include "ym/vl/VlUdp.h"
+#include "ym/vl/VlUdpDefn.h"
 #include "ym/vl/VlTaskFunc.h"
 
 

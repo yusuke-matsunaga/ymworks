@@ -44,7 +44,7 @@
 
 set ( elb_mgr_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/AttrHash.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/ElbDecl.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/ElbDeclHead.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ElbExpr.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ElbMgr.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ElbPrimitive.cc

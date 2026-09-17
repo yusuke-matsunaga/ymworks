@@ -1,38 +1,49 @@
-﻿#ifndef EIIODECL_H
-#define EIIODECL_H
+﻿#ifndef EIUDPIO_H
+#define EIUDPIO_H
 
-/// @file EiIODecl.h
-/// @brief EiIODecl のヘッダファイル
+/// @file EiUdpDefn.h
+/// @brief EiUdpDefn のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
+// UDP定義を表すクラス
+// IEEE Std 1364-2001 26.6.14 UDP
+
 #include "ym/vl/VlIODecl.h"
-#include "elaborator/ElbIOHead.h"
-#include "ei/EiRange.h"
+#include "ym/vl/AstIOHead.h"
+#include "ym/vl/AstIOItem.h"
+#include "elaborator/ElbUdpDefn.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiIODecl EiIODecl.h "EiIODecl.h"
-/// @brief IO 要素を表すクラス
+/// @class EiUdpIO EiUdpIO.h "ei/EiUdpIO.h"
+/// @brief UDP 用 IO decl の基底クラス
 //////////////////////////////////////////////////////////////////////
-class EiIODecl :
+class EiUdpIO :
   public VlIODecl
 {
 public:
 
+  /// @brief 空のコンストラクタ
+  EiUdpIO() = default;
+
   /// @brief コンストラクタ
-  EiIODecl(
-    ElbIOHead* head,           ///< [in] ヘッダ
-    const AstIOItem& ast_item, ///< [in] パース木のIO宣言要素
-    const VlDecl* decl         ///< [in] 対応する宣言要素
-  );
+  EiUdpIO(
+    ElbUdpDefn* udp,             ///< [in] 親のUDP
+    const AstIOHead& ast_header, ///< [in] パース木のIO宣言ヘッダ
+    const AstIOItem& ast_item    ///< [in] パース木のIO宣言定義
+  ) : mUdp{udp},
+      mAstHeader{ast_header},
+      mAstItem{ast_item}
+  {
+  }
 
   /// @brief デストラクタ
-  ~EiIODecl();
+  ~EiUdpIO() = default;
 
 
 public:
@@ -51,7 +62,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // VlIODecl の仮想関数
+  // VlIODecl に固有の仮想関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 名前を返す．
@@ -62,9 +73,8 @@ public:
   VpiDir
   direction() const override;
 
-  /// @brief 符号の取得
-  /// @retval true 符号つき
-  /// @retval false 符号なし
+  /// @brief 符号の属性の取得
+  /// @return 符号付きのとき true を返す．
   bool
   is_signed() const override;
 
@@ -72,11 +82,11 @@ public:
   bool
   has_range() const override;
 
-  /// @brief 範囲の MSB の値を返す．
+  /// @brief MSB の値を返す．
   int
   left_range_val() const override;
 
-  /// @brief 範囲の LSB の値を返す．
+  /// @brief LSB の値を返す．
   int
   right_range_val() const override;
 
@@ -88,7 +98,8 @@ public:
   std::string
   right_range_string() const override;
 
-  /// @brief ビット幅を返す．
+  /// @brief サイズを返す．
+  /// このクラスは 1 を返す．
   SizeType
   bit_size() const override;
 
@@ -100,7 +111,7 @@ public:
   const VlModule*
   module() const override;
 
-  /// @brief 親の UDP の取得
+  /// @brief 親のUDP定義を返す．
   const VlUdpDefn*
   udp_defn() const override;
 
@@ -118,17 +129,17 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // ヘッダ
-  ElbIOHead* mHead;
+  // 親の UDP
+  ElbUdpDefn* mUdp;
 
-  // パース木の IO 宣言
+  // パース木のIO宣言ヘッダ
+  AstIOHead mAstHeader;
+
+  // パース木のIO宣言定義
   AstIOItem mAstItem;
-
-  // 対応する宣言要素
-  const VlDecl* mDecl;
 
 };
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // EIIODECL_H
+#endif // EIUDPIO_H

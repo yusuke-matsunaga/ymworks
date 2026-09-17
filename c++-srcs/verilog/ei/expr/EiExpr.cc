@@ -30,13 +30,6 @@ EiExpr::~EiExpr()
 {
 }
 
-// @brief ファイル位置を返す．
-FileRegion
-EiExpr::file_region() const
-{
-  return ast_obj().file_region();
-}
-
 // @brief 定数の時 true を返す．
 bool
 EiExpr::is_const() const
@@ -350,18 +343,18 @@ EiExprBase::~EiExprBase()
 {
 }
 
+// @brief ファイル位置を返す．
+FileRegion
+EiExprBase::file_region() const
+{
+  return ast_expr().file_region();
+}
+
 // @brief Verilog-HDL の文字列を得る．
 std::string
 EiExprBase::decompile() const
 {
   return ast_expr().decompile();
-}
-
-/// @brief パース木の定義要素を返す．
-const AstBase&
-EiExprBase::ast_obj() const
-{
-  return ast_expr();
 }
 
 
