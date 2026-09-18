@@ -20,7 +20,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 BEGIN_NONAMESPACE
 static
-const int debug_msg = 1;
+const int debug_msg = 0;
 END_NONAMESPACE
 
 // @brief 全メッセージ数を得る．
