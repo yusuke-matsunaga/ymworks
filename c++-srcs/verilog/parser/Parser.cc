@@ -74,7 +74,7 @@ Parser::read_file(
 
   int stat = yyparse(*this);
 
-  return (stat == 0);
+  return mLogMgr.error_num() == 0;
 }
 
 // @brief yylex とのインターフェイス

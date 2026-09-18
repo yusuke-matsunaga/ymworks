@@ -11,10 +11,6 @@
 #include "ym/FileRegion.h"
 #include "parser/Parser.h"
 
-
-// より詳細なエラー情報を出力させる．
-#define YYERROR_VERBOSE 1
-
 // 位置を表す型
 // (yylloc の型)
 #define YYLTYPE FileRegion
@@ -83,6 +79,9 @@ fr_merge(
 
 // "pure" parser にする．
 %define api.pure
+
+// より詳細なエラー情報を出力させる．
+%define parse.error verbose
 
 // 位置のトラッキングを行う．
 %locations
@@ -7503,7 +7502,7 @@ yyerror(
 )
 {
   parser.put_error(__FILE__, __LINE__, *llocp, s);
-  return 1;
+  return 0;
 }
 
 END_NAMESPACE_YM_VERILOG

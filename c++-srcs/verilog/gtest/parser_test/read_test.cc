@@ -65,4 +65,13 @@ TEST_F(ParserTest, read_and2)
   json_obj.write(std::cout, true);
 }
 
+TEST_F(ParserTest, read_bad1)
+{
+  auto data_dir = std::filesystem::path{DATA_DIR} / "verilog";
+  auto filename = data_dir / "bad1.v";
+
+  auto r = parser.read_file(filename);
+  ASSERT_FALSE( r );
+}
+
 END_NAMESPACE_YM_VERILOG
