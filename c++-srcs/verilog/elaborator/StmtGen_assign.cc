@@ -1,9 +1,9 @@
 ﻿
 /// @file StmtGen_assign.cc
-/// @brief ElbMgr の実装ファイル(assign statement の実体化)
+/// @brief StmtGen の実装ファイル(assign statement の実体化)
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
-/// Copyright (C) 2025 Yusuke Matsunaga
+/// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "StmtGen.h"

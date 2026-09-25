@@ -62,14 +62,14 @@ public:
     SizeType& offset ///< [out] index に対するオフセット値
   ) const = 0;
 
-  /// @brief 他次元配列の場合にインデックスのリストからオフセットを計算する．
+  /// @brief 多次元配列の場合にインデックスのリストからオフセットを計算する．
   /// @retval true オフセットが正しく計算できた．
   /// @retval false index_list のいずれかの値が範囲外だった．
   virtual
   bool
   calc_array_offset(
     const std::vector<int>& index_list, ///< [in] インデックスのリスト
-    SizeType& offset               ///< [out] index_list に対するオフセット値
+    SizeType& offset                    ///< [out] index_list に対するオフセット値
   ) const = 0;
 
 };
