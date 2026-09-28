@@ -25,7 +25,7 @@ public:
   std::string
   get_path() const
   {
-    return std::filesystem::path{DATAPATH} / "texts" / mFileName;
+    return std::filesystem::path(DATAPATH) / "texts" / mFileName;
   }
 
 
