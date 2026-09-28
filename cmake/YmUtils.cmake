@@ -594,7 +594,6 @@ function( ym_add_gtest )
     ${_sources}
     )
 
-
   target_compile_options ( ${_target_name}
     PRIVATE "-g" "-fPIC"
     )
@@ -621,7 +620,6 @@ function( ym_add_gtest )
 
   target_link_libraries ( ${_target_name}
     ${YM_LIB_DEPENDS}
-    pthread
     ${GTEST_BOTH_LIBRARIES}
     )
 

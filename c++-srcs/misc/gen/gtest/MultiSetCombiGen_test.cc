@@ -6,7 +6,7 @@
 /// Copyright (C) 2017, 2018, 2021 Yusuke Matsunaga
 /// All rights reserved.
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include "ym/MultiSetCombiGen.h"
 
 

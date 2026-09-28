@@ -31,6 +31,9 @@
 #include <utility>
 #include <chrono>
 #include <filesystem>
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
 #include <algorithm>
 #include <functional>
 

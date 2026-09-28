@@ -19,7 +19,8 @@ TEST_F(PtItemTest, Inst)
   auto con = factory.new_OrderedCon(expr);
   auto inst = factory.new_Inst(fr0, con);
 
-  check_Inst(inst, fr0, nullptr, nullptr, {con});
+  auto con_list = std::vector<const PtConnection*>{con};
+  check_Inst(inst, fr0, nullptr, nullptr, con_list);
 }
 
 TEST_F(PtItemTest, Inst1)
@@ -29,7 +30,8 @@ TEST_F(PtItemTest, Inst1)
   auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto inst = factory.new_Inst(fr0, expr1);
 
-  check_Inst(inst, fr0, nullptr, nullptr, {expr1});
+  auto expr_list = std::vector<const PtExpr*>{expr1};
+  check_Inst(inst, fr0, nullptr, nullptr, expr_list);
 }
 
 TEST_F(PtItemTest, Inst2)
@@ -41,7 +43,8 @@ TEST_F(PtItemTest, Inst2)
   auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto inst = factory.new_Inst(fr0, expr1, expr2);
 
-  check_Inst(inst, fr0, nullptr, nullptr, {expr1, expr2});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2};
+  check_Inst(inst, fr0, nullptr, nullptr, expr_list);
 }
 
 TEST_F(PtItemTest, Inst3)
@@ -55,7 +58,8 @@ TEST_F(PtItemTest, Inst3)
   auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   auto inst = factory.new_Inst(fr0, expr1, expr2, expr3);
 
-  check_Inst(inst, fr0, nullptr, nullptr, {expr1, expr2, expr3});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2, expr3};
+  check_Inst(inst, fr0, nullptr, nullptr, expr_list);
 }
 
 TEST_F(PtItemTest, Inst4)
@@ -71,7 +75,8 @@ TEST_F(PtItemTest, Inst4)
   auto expr4 = parser.factory().new_IntConst(fr3, 456U);
   auto inst = factory.new_Inst(fr0, expr1, expr2, expr3, expr4);
 
-  check_Inst(inst, fr0, nullptr, nullptr, {expr1, expr2, expr3, expr4});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2, expr3, expr4};
+  check_Inst(inst, fr0, nullptr, nullptr, expr_list);
 }
 
 TEST_F(PtItemTest, InstN)
@@ -94,7 +99,8 @@ TEST_F(PtItemTest, InstN1)
   auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto inst = factory.new_Inst(fr0, name, expr1);
 
-  check_Inst(inst, fr0, name, nullptr, {expr1});
+  auto expr_list = std::vector<const PtExpr*>{expr1};
+  check_Inst(inst, fr0, name, nullptr, expr_list);
 }
 
 TEST_F(PtItemTest, InstN2)
@@ -107,7 +113,8 @@ TEST_F(PtItemTest, InstN2)
   auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto inst = factory.new_Inst(fr0, name, expr1, expr2);
 
-  check_Inst(inst, fr0, name, nullptr, {expr1, expr2});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2};
+  check_Inst(inst, fr0, name, nullptr, expr_list);
 }
 
 TEST_F(PtItemTest, InstN3)
@@ -122,7 +129,8 @@ TEST_F(PtItemTest, InstN3)
   auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   auto inst = factory.new_Inst(fr0, name, expr1, expr2, expr3);
 
-  check_Inst(inst, fr0, name, nullptr, {expr1, expr2, expr3});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2, expr3};
+  check_Inst(inst, fr0, name, nullptr, expr_list);
 }
 
 TEST_F(PtItemTest, InstN4)
@@ -139,7 +147,8 @@ TEST_F(PtItemTest, InstN4)
   auto expr4 = parser.factory().new_IntConst(fr3, 456U);
   auto inst = factory.new_Inst(fr0, name, expr1, expr2, expr3, expr4);
 
-  check_Inst(inst, fr0, name, nullptr, {expr1, expr2, expr3, expr4});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2, expr3, expr4};
+  check_Inst(inst, fr0, name, nullptr, expr_list);
 }
 
 TEST_F(PtItemTest, InstV)
@@ -168,7 +177,8 @@ TEST_F(PtItemTest, InstV1)
   auto expr1 = parser.factory().new_IntConst(fr1, 123U);
   auto inst = factory.new_Inst(fr0, name, range, expr1);
 
-  check_Inst(inst, fr0, name, range, {expr1});
+  auto expr_list = std::vector<const PtExpr*>{expr1};
+  check_Inst(inst, fr0, name, range, expr_list);
 }
 
 TEST_F(PtItemTest, InstV2)
@@ -184,7 +194,8 @@ TEST_F(PtItemTest, InstV2)
   auto expr2 = parser.factory().new_IntConst(fr2, 456U);
   auto inst = factory.new_Inst(fr0, name, range, expr1, expr2);
 
-  check_Inst(inst, fr0, name, range, {expr1, expr2});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2};
+  check_Inst(inst, fr0, name, range, expr_list);
 }
 
 TEST_F(PtItemTest, InstV3)
@@ -202,7 +213,8 @@ TEST_F(PtItemTest, InstV3)
   auto expr3 = parser.factory().new_IntConst(fr3, 456U);
   auto inst = factory.new_Inst(fr0, name, range, expr1, expr2, expr3);
 
-  check_Inst(inst, fr0, name, range, {expr1, expr2, expr3});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2, expr3};
+  check_Inst(inst, fr0, name, range, expr_list);
 }
 
 TEST_F(PtItemTest, InstV4)
@@ -222,7 +234,8 @@ TEST_F(PtItemTest, InstV4)
   auto expr4 = parser.factory().new_IntConst(fr3, 456U);
   auto inst = factory.new_Inst(fr0, name, range, expr1, expr2, expr3, expr4);
 
-  check_Inst(inst, fr0, name, range, {expr1, expr2, expr3, expr4});
+  auto expr_list = std::vector<const PtExpr*>{expr1, expr2, expr3, expr4};
+  check_Inst(inst, fr0, name, range, expr_list);
 }
 
 END_NAMESPACE_YM_VERILOG

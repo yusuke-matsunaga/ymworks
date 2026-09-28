@@ -15,8 +15,8 @@ BEGIN_NAMESPACE_YM
 
 TEST(ShStringTest, test1)
 {
-  ShString a{"abc"};
-  ShString b{"abc"};
+  auto a = ShString("abc");
+  auto b = ShString("abc");
 
   EXPECT_TRUE( a == b );
 }
