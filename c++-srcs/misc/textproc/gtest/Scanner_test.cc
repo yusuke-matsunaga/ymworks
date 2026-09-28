@@ -7,6 +7,7 @@
 /// All rights reserved.
 
 #include <gtest/gtest.h>
+#include <filesystem>
 #include "ym/Scanner.h"
 
 
