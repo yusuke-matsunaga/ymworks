@@ -269,13 +269,12 @@ AigParser::open(
   const std::string& filename
 )
 {
-  mS = new std::ifstream{filename};
+  mS = std::unique_ptr<std::istream>{new std::ifstream{filename}};
   if ( !*mS ) {
     std::ostringstream buf;
     buf << filename << ": No such file";
     MsgMgr::put_msg(__FILE__, __LINE__,
 		    MsgType::Failure, "AIG_PARSER", buf.str());
-    delete mS;
     mS = nullptr;
     return false;
   }

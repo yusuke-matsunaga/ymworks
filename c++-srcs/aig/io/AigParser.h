@@ -205,7 +205,7 @@ private:
   };
 
   // 入力ストリーム
-  std::istream* mS{nullptr};
+  std::unique_ptr<std::istream> mS;
 
   // ファイルの情報
   FileInfo mFileInfo;
@@ -217,6 +217,7 @@ private:
   int mLastCol;
 
   // 対象のマネージャ
+  // このクラスでは所有権を持たない参照のみ
   AigMgrImpl* mMgr{nullptr};
 
   // ノード番号をキーにして定義済みの印を格納する配列
