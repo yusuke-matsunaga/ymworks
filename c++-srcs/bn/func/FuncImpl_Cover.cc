@@ -17,7 +17,7 @@ BEGIN_NAMESPACE_YM_BN
 //////////////////////////////////////////////////////////////////////
 
 // @brief カバー型のインスタンスを作る．
-FuncImpl*
+std::unique_ptr<FuncImpl>
 FuncImpl::new_cover(
   const ModelImpl* model,
   SizeType id,
@@ -25,7 +25,8 @@ FuncImpl::new_cover(
   bool output_inv
 )
 {
-  return new FuncImpl_Cover(model, id, input_cover, output_inv);
+  auto impl = new FuncImpl_Cover(model, id, input_cover, output_inv);
+  return std::unique_ptr<FuncImpl>{impl};
 }
 
 

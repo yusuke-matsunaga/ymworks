@@ -107,24 +107,25 @@ FuncMgr::reg_bdd(
 // @brief 関数情報を登録する．
 const FuncImpl*
 FuncMgr::reg_func(
-  std::function<FuncImpl*(SizeType id)> new_func
+  std::function<std::unique_ptr<FuncImpl>(SizeType id)> new_func
 )
 {
   // 関数情報を生成する．
   auto id = mFuncArray.size();
   auto func = new_func(id);
+  auto func_ref = func.get();
   // 重複のチェック
-  auto p = mFuncMap.find(func);
+  auto p = mFuncMap.find(func_ref);
   if ( p != mFuncMap.end() ) {
     // 既に同じ関数が登録されていた．
-    delete func;
     id = p->second;
     return mFuncArray[id].get();
   }
   // 新規に登録する．
-  mFuncArray.push_back(std::unique_ptr<FuncImpl>{func});
-  mFuncMap.emplace(func, id);
-  return func;
+  // func の中身の所有権は mFuncArray に移る．
+  mFuncArray.push_back(std::move(func));
+  mFuncMap.emplace(func_ref, id);
+  return func_ref;
 }
 
 END_NAMESPACE_YM_BN

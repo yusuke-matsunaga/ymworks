@@ -18,14 +18,15 @@ BEGIN_NAMESPACE_YM_BN
 //////////////////////////////////////////////////////////////////////
 
 // @brief BDD型のインスタンスを作る．
-FuncImpl*
+std::unique_ptr<FuncImpl>
 FuncImpl::new_bdd(
   const ModelImpl* model,
   SizeType id,
   const Bdd& bdd
 )
 {
-  return new FuncImpl_Bdd(model, id, bdd);
+  auto impl = new FuncImpl_Bdd(model, id, bdd);
+  return std::unique_ptr<FuncImpl>{impl};
 }
 
 

@@ -17,14 +17,15 @@ BEGIN_NAMESPACE_YM_BN
 //////////////////////////////////////////////////////////////////////
 
 // @brief 真理値表型のインスタンスを作る．
-FuncImpl*
+std::unique_ptr<FuncImpl>
 FuncImpl::new_tvfunc(
   const ModelImpl* model,
   SizeType id,
   const TvFunc& func
 )
 {
-  return new FuncImpl_TvFunc(model, id, func);
+  auto impl = new FuncImpl_TvFunc(model, id, func);
+  return std::unique_ptr<FuncImpl>{impl};
 }
 
 

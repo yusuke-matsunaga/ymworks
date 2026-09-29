@@ -17,14 +17,15 @@ BEGIN_NAMESPACE_YM_BN
 //////////////////////////////////////////////////////////////////////
 
 // @brief 論理式型のインスタンスを作る．
-FuncImpl*
+std::unique_ptr<FuncImpl>
 FuncImpl::new_expr(
   const ModelImpl* model,
   SizeType id,
   const Expr& expr
 )
 {
-  return new FuncImpl_Expr(model, id, expr);
+  auto impl = new FuncImpl_Expr(model, id, expr);
+  return std::unique_ptr<FuncImpl>{impl};
 }
 
 

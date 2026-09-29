@@ -17,7 +17,7 @@ BEGIN_NAMESPACE_YM_BN
 //////////////////////////////////////////////////////////////////////
 
 // @brief プリミティブ型のインスタンスを作る．
-FuncImpl*
+std::unique_ptr<FuncImpl>
 FuncImpl::new_primitive(
   const ModelImpl* model,
   SizeType id,
@@ -25,7 +25,8 @@ FuncImpl::new_primitive(
   PrimType primitive_type
 )
 {
-  return new FuncImpl_Primitive(model, id, input_num, primitive_type);
+  auto impl = new FuncImpl_Primitive(model, id, input_num, primitive_type);
+  return std::unique_ptr<FuncImpl>{impl};
 }
 
 

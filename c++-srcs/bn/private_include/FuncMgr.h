@@ -120,7 +120,7 @@ private:
   /// @return 関数を返す．
   const FuncImpl*
   reg_func(
-    std::function<FuncImpl*(SizeType id)> new_func ///< [in] 生成関数
+    std::function<std::unique_ptr<FuncImpl>(SizeType id)> new_func ///< [in] 生成関数
   );
 
 

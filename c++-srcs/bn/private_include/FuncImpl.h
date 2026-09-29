@@ -52,7 +52,7 @@ public:
 
   /// @brief プリミティブ型のインスタンスを作る．
   static
-  FuncImpl*
+  std::unique_ptr<FuncImpl>
   new_primitive(
     const ModelImpl* model, ///< [in] 親のモデル
     SizeType id,            ///< [in] ID番号
@@ -62,7 +62,7 @@ public:
 
   /// @brief カバー型のインスタンスを作る．
   static
-  FuncImpl*
+  std::unique_ptr<FuncImpl>
   new_cover(
     const ModelImpl* model,      ///< [in] 親のモデル
     SizeType id,                 ///< [in] ID番号
@@ -72,7 +72,7 @@ public:
 
   /// @brief 論理式型のインスタンスを作る．
   static
-  FuncImpl*
+  std::unique_ptr<FuncImpl>
   new_expr(
     const ModelImpl* model, ///< [in] 親のモデル
     SizeType id,            ///< [in] ID番号
@@ -81,7 +81,7 @@ public:
 
   /// @brief 真理値表型のインスタンスを作る．
   static
-  FuncImpl*
+  std::unique_ptr<FuncImpl>
   new_tvfunc(
     const ModelImpl* model, ///< [in] 親のモデル
     SizeType id,            ///< [in] ID番号
@@ -90,7 +90,7 @@ public:
 
   /// @brief BDD型のインスタンスを作る．
   static
-  FuncImpl*
+  std::unique_ptr<FuncImpl>
   new_bdd(
     const ModelImpl* model, ///< [in] 親のモデル
     SizeType id,            ///< [in] ID番号
