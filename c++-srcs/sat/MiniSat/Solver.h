@@ -166,7 +166,12 @@ public:
 
    ~Solver() {
        for (int i = 0; i < learnts.size(); i++) remove(learnts[i], true);
-       for (int i = 0; i < clauses.size(); i++) if (clauses[i] != NULL) remove(clauses[i], true); }
+       for (int i = 0; i < clauses.size(); i++) if (clauses[i] != NULL) remove(clauses[i], true);
+       // added by MAT 2026/09/29
+       remove(propagate_tmpbin, true);
+       remove(analyze_tmpbin, true);
+       remove(solve_tmpunit, true);
+   }
 
     // Helpers: (semi-internal)
     //
