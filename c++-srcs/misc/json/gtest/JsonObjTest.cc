@@ -15,7 +15,7 @@ BEGIN_NAMESPACE_YM_JSON
 TEST(JsonObjTest, string1)
 {
   const char* value = "abcde";
-  auto json_obj = new JsonString{value};
+  std::unique_ptr<JsonObj> json_obj{new JsonString(value)};
 
   EXPECT_TRUE( json_obj->is_string() );
   EXPECT_FALSE( json_obj->is_int() );
@@ -30,7 +30,7 @@ TEST(JsonObjTest, string1)
 TEST(JsonObjTest, string2)
 {
   std::string value = "abcde";
-  auto json_obj = new JsonString{value};
+  std::unique_ptr<JsonObj> json_obj{new JsonString(value)};
 
   EXPECT_TRUE( json_obj->is_string() );
   EXPECT_FALSE( json_obj->is_int() );
@@ -45,7 +45,7 @@ TEST(JsonObjTest, string2)
 TEST(JsonObjTest, int)
 {
   int value = 99;
-  auto json_obj = new JsonInt{value};
+  std::unique_ptr<JsonObj> json_obj{new JsonInt(value)};
 
   EXPECT_FALSE( json_obj->is_string() );
   EXPECT_TRUE( json_obj->is_int() );
@@ -60,7 +60,7 @@ TEST(JsonObjTest, int)
 TEST(JsonObjTest, float)
 {
   double value = 1.2345;
-  auto json_obj = new JsonFloat{value};
+  std::unique_ptr<JsonObj> json_obj{new JsonFloat(value)};
 
   EXPECT_FALSE( json_obj->is_string() );
   EXPECT_FALSE( json_obj->is_int() );
@@ -74,7 +74,7 @@ TEST(JsonObjTest, float)
 
 TEST(JsonObjTest, bool_true)
 {
-  auto json_obj = new JsonTrue;
+  std::unique_ptr<JsonObj> json_obj{new JsonTrue};
 
   EXPECT_FALSE( json_obj->is_string() );
   EXPECT_FALSE( json_obj->is_int() );
@@ -88,7 +88,7 @@ TEST(JsonObjTest, bool_true)
 
 TEST(JsonObjTest, bool_false)
 {
-  auto json_obj = new JsonFalse;
+  std::unique_ptr<JsonObj> json_obj{new JsonFalse};
 
   EXPECT_FALSE( json_obj->is_string() );
   EXPECT_FALSE( json_obj->is_int() );
@@ -112,7 +112,7 @@ TEST(JsonObjTest, array1)
   JsonValue json3{value3};
 
   std::vector<JsonValue> value{json1, json2, json3};
-  auto json_obj = new JsonArray{value};
+  std::unique_ptr<JsonObj> json_obj{new JsonArray(value)};
 
   EXPECT_FALSE( json_obj->is_string() );
   EXPECT_FALSE( json_obj->is_int() );
@@ -130,20 +130,20 @@ TEST(JsonObjTest, array1)
 TEST(JsonObjTest, object1)
 {
   std::string value1 = "xyz";
-  JsonValue json1{value1};
+  JsonValue json1(value1);
 
   int value2 = 2;
-  JsonValue json2{value2};
+  JsonValue json2(value2);
 
   float value3 = 0.99;
-  JsonValue json3{value3};
+  JsonValue json3(value3);
 
   std::unordered_map<std::string, JsonValue> value{
     {"key1", json1},
     {"key2", json2},
     {"key3", json3}
   };
-  auto json_obj = new JsonDict{value};
+  std::unique_ptr<JsonObj> json_obj{new JsonDict(value)};
 
   EXPECT_FALSE( json_obj->is_string() );
   EXPECT_FALSE( json_obj->is_int() );
