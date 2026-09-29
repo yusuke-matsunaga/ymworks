@@ -559,6 +559,9 @@ TEST_P(TvFuncTest_base, cube2)
 {
   init_values();
   SizeType ni = GetParam();
+  if ( ni < 1 ) {
+    return;
+  }
   auto ni_exp = 1U << ni;
   SizeType nsample = ni < 13 ? 100 : ni < 14 ? 20 : 5;
   std::uniform_int_distribution<SizeType> rd(0, ni - 1);
@@ -597,6 +600,9 @@ TEST_P(TvFuncTest_base, cover1)
 {
   init_values();
   SizeType ni = GetParam();
+  if ( ni < 1 ) {
+    return;
+  }
   auto ni_exp = 1U << ni;
   SizeType nsample = ni < 13 ? 100 : ni < 14 ? 20 : 5;
   std::uniform_int_distribution<SizeType> rd(0, ni - 1);
@@ -966,7 +972,7 @@ check_sym(
 TEST_P(TvFuncTest_base, check_sym)
 {
   SizeType ni = GetParam();
-  if ( ni > 15 ) {
+  if ( ni < 2 || ni > 15 ) {
     return;
   }
   std::uniform_int_distribution<int> rd(0, ni - 1);
