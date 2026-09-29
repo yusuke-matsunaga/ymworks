@@ -271,7 +271,7 @@ PtFactory::new_SysFuncCall(
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptSysFuncCall));
-  return new CptSysFuncCall(file_region, name, nullptr);
+  return new (p) CptSysFuncCall(file_region, name, nullptr);
 }
 
 // system function call を生成する．
@@ -283,7 +283,7 @@ PtFactory::new_SysFuncCall(
 )
 {
   auto p = mAlloc.get_memory(sizeof(CptSysFuncCall));
-  return new CptSysFuncCall(file_region, name, arg_top);
+  return new (p) CptSysFuncCall(file_region, name, arg_top);
 }
 
 END_NAMESPACE_YM_VERILOG

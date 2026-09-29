@@ -337,8 +337,8 @@ public:
   /// @brief 宣言要素のリストをインスタンス化する．
   void
   instantiate_decl(
-    const VlScope* parent, ///< [in] 親のスコープ
-    const AstDeclHeadList& ast_head_list ///< [in] 宣言ヘッダの配列
+    const VlScope* parent,        ///< [in] 親のスコープ
+    AstDeclHeadList ast_head_list ///< [in] 宣言ヘッダの配列
   );
 
 

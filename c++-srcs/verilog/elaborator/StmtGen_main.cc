@@ -109,10 +109,10 @@ StmtGen::phase1_stmt(
       else {
 	auto stub = make_stub<StmtGen,
 			      const VlScope*,
-			      const AstDeclHeadList&>(this,
-						      &StmtGen::phase2_namedblock,
-						      block_scope,
-						      ast_stmt.declhead_list());
+			      AstDeclHeadList>(this,
+					       &StmtGen::phase2_namedblock,
+					       block_scope,
+					       ast_stmt.declhead_list());
 	add_phase2stub(stub);
       }
     }

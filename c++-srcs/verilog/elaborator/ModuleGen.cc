@@ -174,7 +174,7 @@ ModuleGen::phase1_module_item(
 void
 ModuleGen::phase2_module_item(
   ElbModule* module,
-  const AstModule& ast_module
+  AstModule ast_module
 )
 {
   // 宣言要素を実体化する．

@@ -218,9 +218,9 @@ ItemGen::phase1_genitem(
   phase1_items(parent, ast_item_list);
   auto stub = make_stub<ElbProxy,
 			const VlScope*,
-			const AstDeclHeadList&>(static_cast<ElbProxy*>(this),
-						&ElbProxy::instantiate_decl,
-						parent, ast_decl_list);
+			AstDeclHeadList>(static_cast<ElbProxy*>(this),
+					 &ElbProxy::instantiate_decl,
+					 parent, ast_decl_list);
   add_phase2stub(stub);
 }
 

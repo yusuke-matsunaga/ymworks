@@ -68,17 +68,17 @@ private:
   {
     auto stub = make_stub<ModuleGen,
 			  ElbModule*,
-			  const AstModule&>(this,
-					    &ModuleGen::phase2_module_item,
-					    module, ast_module);
+			  AstModule>(this,
+				     &ModuleGen::phase2_module_item,
+				     module, ast_module);
     ElbProxy::add_phase2stub(stub);
   }
 
   /// @brief module の中身のインスタンス化を行う．
   void
   phase2_module_item(
-    ElbModule* module,          ///< [in] モジュール
-    const AstModule& ast_module ///< [in] モジュール定義
+    ElbModule* module,   ///< [in] モジュール
+    AstModule ast_module ///< [in] モジュール定義
   );
 
   /// @brief port の生成を行う．

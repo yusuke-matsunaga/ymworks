@@ -30,7 +30,7 @@ END_NONAMESPACE
 void
 StmtGen::phase2_namedblock(
   const VlScope* parent,
-  const AstDeclHeadList& ast_head_list
+  AstDeclHeadList ast_head_list
 )
 {
   if ( debug ) {

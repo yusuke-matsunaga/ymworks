@@ -46,7 +46,7 @@ DeclGen::~DeclGen()
 void
 DeclGen::phase1_decl(
   const VlScope* scope,
-  const AstDeclHeadList& ast_head_list,
+  AstDeclHeadList ast_head_list,
   bool force_to_local
 )
 {
@@ -81,7 +81,7 @@ void
 DeclGen::instantiate_iodecl(
   ElbModule* module,
   ElbTaskFunc* taskfunc,
-  const AstIOHeadList& ast_head_list
+  AstIOHeadList ast_head_list
 )
 {
   auto scope = (const VlScope*){nullptr};
@@ -261,7 +261,7 @@ ElbIOHead*
 DeclGen::new_IOHead(
   const ElbModule* module,
   const ElbTaskFunc* taskfunc,
-  const AstIOHead& ast_head
+  AstIOHead ast_head
 )
 {
   if ( module != nullptr ) {
@@ -277,9 +277,9 @@ DeclGen::new_IOHead(
 ElbDeclHead*
 DeclGen::new_DeclHead(
   const VlScope* scope,
-  const AstIOHead& ast_head,
+  AstIOHead ast_head,
   VpiAuxType aux_type,
-  const AstRange& ast_range,
+  AstRange ast_range,
   const RangeVal& range
 )
 {
@@ -296,7 +296,7 @@ DeclGen::new_DeclHead(
 void
 DeclGen::instantiate_decl(
   const VlScope* scope,
-  const AstDeclHeadList& ast_head_list
+  AstDeclHeadList ast_head_list
 )
 {
   for ( auto ast_head: ast_head_list ) {
@@ -346,7 +346,7 @@ DeclGen::instantiate_decl(
 void
 DeclGen::instantiate_param_head(
   const VlScope* scope,
-  const AstDeclHead& ast_head,
+  AstDeclHead ast_head,
   bool force_local
 )
 {
@@ -394,7 +394,7 @@ DeclGen::instantiate_param_head(
 void
 DeclGen::instantiate_net_head(
   const VlScope* scope,
-  const AstDeclHead& ast_head
+  AstDeclHead ast_head
 )
 {
   auto ast_range = ast_head.range();
@@ -471,20 +471,20 @@ DeclGen::instantiate_net_head(
 ElbStub*
 DeclGen::make_net_delay_stub(
   ElbDeclHead* net_head,
-  const AstDelay& ast_delay
+  AstDelay ast_delay
 )
 {
   return make_stub<DeclGen,
 		   ElbDeclHead*,
-		   const AstDelay&>(this, &DeclGen::link_net_delay,
-				    net_head, ast_delay);
+		   AstDelay>(this, &DeclGen::link_net_delay,
+			     net_head, ast_delay);
 }
 
 // @brief net の遅延値を生成する．
 void
 DeclGen::link_net_delay(
   ElbDeclHead* net_head,
-  const AstDelay& ast_delay
+  AstDelay ast_delay
 )
 {
   auto scope = net_head->parent_scope();
@@ -496,20 +496,20 @@ DeclGen::link_net_delay(
 ElbStub*
 DeclGen::make_net_assign_stub(
   ElbDecl* net,
-  const AstDeclItem& ast_item
+  AstDeclItem ast_item
 )
 {
   return make_stub<DeclGen,
 		   ElbDecl*,
-		   const AstDeclItem&>(this, &DeclGen::link_net_assign,
-				       net, ast_item);
+		   AstDeclItem>(this, &DeclGen::link_net_assign,
+				net, ast_item);
 }
 
 // @brief net の初期値を生成する．
 void
 DeclGen::link_net_assign(
   ElbDecl* net,
-  const AstDeclItem& ast_item
+  AstDeclItem ast_item
 )
 {
   // 実体は左辺が net の代入文を作る．
@@ -533,7 +533,7 @@ DeclGen::link_net_assign(
 void
 DeclGen::instantiate_reg_head(
   const VlScope* scope,
-  const AstDeclHead& ast_head
+  AstDeclHead ast_head
 )
 {
   auto ast_range = ast_head.range();
@@ -601,7 +601,7 @@ DeclGen::instantiate_reg_head(
 void
 DeclGen::instantiate_var_head(
   const VlScope* scope,
-  const AstDeclHead& ast_head
+  AstDeclHead ast_head
 )
 {
   if ( ast_head.data_type() == VpiVarType::None ) {
@@ -659,7 +659,7 @@ DeclGen::instantiate_var_head(
 void
 DeclGen::instantiate_event_head(
   const VlScope* scope,
-  const AstDeclHead& ast_head
+  AstDeclHead ast_head
 )
 {
   auto event_head = elb_mgr().new_DeclHead(scope, ast_head);
@@ -700,7 +700,7 @@ DeclGen::instantiate_event_head(
 void
 DeclGen::instantiate_genvar_head(
   const VlScope* scope,
-  const AstDeclHead& ast_head
+  AstDeclHead ast_head
 )
 {
   for ( auto ast_item: ast_head.item_list() ) {
@@ -714,7 +714,7 @@ DeclGen::instantiate_genvar_head(
 bool
 DeclGen::instantiate_dimension_list(
   const VlScope* scope,
-  const AstDeclItem& ast_item,
+  AstDeclItem ast_item,
   std::vector<ElbRangeSrc>& range_src
 )
 {
