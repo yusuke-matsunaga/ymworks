@@ -61,7 +61,7 @@ END_NONAMESPACE
 void
 ItemGen::instantiate_gateheader(
   const VlScope* parent,
-  AstItem ast_head
+  const AstItem& ast_head
 )
 {
   auto ast_delay = ast_head.delay();
@@ -142,7 +142,7 @@ ItemGen::instantiate_gateinst(
 void
 ItemGen::instantiate_udpheader(
   const VlScope* parent,
-  AstItem ast_head,
+  const AstItem& ast_head,
   const VlUdpDefn* udpdefn
 )
 {
@@ -218,8 +218,8 @@ ItemGen::instantiate_udpinst(
 void
 ItemGen::instantiate_cellhead(
   const VlScope* parent,
-  AstItem ast_head,
-  ClibCell cell
+  const AstItem& ast_head,
+  const ClibCell& cell
 )
 {
   auto prim_head = elb_mgr().new_CellHead(parent, ast_head, cell);
@@ -240,7 +240,7 @@ ItemGen::instantiate_cellinst(
   const AstItem& ast_head,
   const AstInst& ast_inst,
   ElbPrimHead* prim_head,
-  ClibCell cell
+  const ClibCell& cell
 )
 {
   // 名前が重複していないかチェックする．
@@ -270,7 +270,7 @@ ItemGen::instantiate_cellinst(
     // 配列
     auto range = evaluate_range(parent, ast_range);
     auto prim_array = elb_mgr().new_PrimitiveArray(prim_head, ast_inst,
-					       ast_range, range);
+						   ast_range, range);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_head);
@@ -294,7 +294,7 @@ ItemGen::instantiate_cellinst(
 void
 ItemGen::link_gate_delay(
   ElbPrimHead* prim_head,
-  AstDelay ast_delay
+  const AstDelay& ast_delay
 )
 {
   auto parent = prim_head->parent_scope();
@@ -306,7 +306,7 @@ ItemGen::link_gate_delay(
 void
 ItemGen::link_udp_delay(
   ElbPrimHead* prim_head,
-  AstItem ast_head
+  const AstItem& ast_head
 )
 {
   auto parent = prim_head->parent_scope();
@@ -326,7 +326,7 @@ ItemGen::link_udp_delay(
 void
 ItemGen::link_prim_array(
   ElbPrimArray* prim_array,
-  AstInst ast_inst
+  const AstInst& ast_inst
 )
 {
   auto parent = prim_array->parent_scope();
@@ -401,7 +401,7 @@ ItemGen::link_prim_array(
 void
 ItemGen::link_primitive(
   ElbPrimitive* primitive,
-  AstInst ast_inst
+  const AstInst& ast_inst
 )
 {
   auto parent = primitive->parent_scope();
@@ -454,7 +454,7 @@ ItemGen::link_primitive(
 void
 ItemGen::link_cell_array(
   ElbPrimArray* prim_array,
-  AstInst ast_inst
+  const AstInst& ast_inst
 )
 {
   auto parent = prim_array->parent_scope();
@@ -541,7 +541,7 @@ ItemGen::link_cell_array(
 void
 ItemGen::link_cell(
   ElbPrimitive* primitive,
-  AstInst ast_inst
+  const AstInst& ast_inst
 )
 {
   auto parent = primitive->parent_scope();

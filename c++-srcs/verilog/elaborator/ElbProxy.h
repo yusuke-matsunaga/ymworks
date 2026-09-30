@@ -230,47 +230,53 @@ protected:
 
   /// @brief 1引数版の ElbStub を作る．
   template<typename T,
-	   typename A>
+	   typename A,
+	   typename A1 = A>
   ElbStub*
   make_stub(
     T* obj,
-    void (T::*memfunc)(A),
+    void (T::*memfunc)(A1),
     A a
   )
   {
-    return new ElbStubT1<T, A>(obj, memfunc, a);
+    return new ElbStubT1<T, A, A1>(obj, memfunc, a);
   }
 
   /// @brief 2引数版の ElbStub を作る．
   template<typename T,
 	   typename A,
-	   typename B>
+	   typename B,
+	   typename A1 = A,
+	   typename B1 = B>
   ElbStub*
   make_stub(
     T* obj,
-    void (T::*memfunc)(A, B),
+    void (T::*memfunc)(A1, B1),
     A a,
     B b
   )
   {
-    return new ElbStubT2<T, A, B>(obj, memfunc, a, b);
+    return new ElbStubT2<T, A, B, A1, B1>(obj, memfunc, a, b);
   }
 
   /// @brief 3引数版の ElbStub を作る．
   template<typename T,
 	   typename A,
 	   typename B,
-	   typename C>
+	   typename C,
+	   typename A1 = A,
+	   typename B1 = B,
+	   typename C1 = C>
   ElbStub*
   make_stub(
     T* obj,
-    void (T::*memfunc)(A, B, C),
+    void (T::*memfunc)(A1, B1, C1),
     A a,
     B b,
     C c
   )
   {
-    return new ElbStubT3<T, A, B, C>(obj, memfunc, a, b, c);
+    return new ElbStubT3<T, A, B, C, A1, B1, C1>(obj, memfunc, a, b, c);
   }
 
   /// @brief 4引数版の ElbStub を作る．
@@ -278,18 +284,22 @@ protected:
 	   typename A,
 	   typename B,
 	   typename C,
-	   typename D>
+	   typename D,
+	   typename A1 = A,
+	   typename B1 = B,
+	   typename C1 = C,
+	   typename D1 = D>
   ElbStub*
   make_stub(
     T* obj,
-    void (T::*memfunc)(A, B, C, D),
+    void (T::*memfunc)(A1, B1, C1, D1),
     A a,
     B b,
     C c,
     D d
   )
   {
-    return new ElbStubT4<T, A, B, C, D>(obj, memfunc, a, b, c, d);
+    return new ElbStubT4<T, A, B, C, D, A1, B1, C1, D1>(obj, memfunc, a, b, c, d);
   }
 
 
@@ -337,8 +347,8 @@ public:
   /// @brief 宣言要素のリストをインスタンス化する．
   void
   instantiate_decl(
-    const VlScope* parent,        ///< [in] 親のスコープ
-    AstDeclHeadList ast_head_list ///< [in] 宣言ヘッダの配列
+    const VlScope* parent,               ///< [in] 親のスコープ
+    const AstDeclHeadList& ast_head_list ///< [in] 宣言ヘッダの配列
   );
 
 

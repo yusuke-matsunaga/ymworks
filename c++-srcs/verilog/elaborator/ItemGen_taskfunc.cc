@@ -98,7 +98,7 @@ ItemGen::phase1_tf(
 void
 ItemGen::phase2_tf(
   ElbTaskFunc* taskfunc,
-  AstItem ast_item
+  const AstItem& ast_item
 )
 {
   if ( debug ) {
@@ -150,7 +150,7 @@ ItemGen::phase2_tf(
 void
 ItemGen::phase3_tf(
   ElbTaskFunc* taskfunc,
-  AstItem ast_item
+  const AstItem& ast_item
 )
 {
   if ( debug ) {

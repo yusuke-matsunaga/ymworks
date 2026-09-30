@@ -40,14 +40,15 @@ public:
 
 /// @brief 引数が1つのタイプ
 template<typename T,
-	 typename A>
+	 typename A,
+	 typename A1 = A>
 class ElbStubT1 :
   public ElbStub
 {
 public:
 
   /// @brief 引数が1つの ElbMgrImpl のメンバ関数
-  using ElbFunc = void (T::*)(A);
+  using ElbFunc = void (T::*)(A1);
 
 public:
 
@@ -94,14 +95,16 @@ private:
 /// @brief 引数が2つのタイプ
 template<typename T,
 	 typename A,
-	 typename B>
+	 typename B,
+	 typename A1 = A,
+	 typename B1 = B>
 class ElbStubT2 :
   public ElbStub
 {
 public:
 
   /// @brief 引数が2つの ElbMgrImpl のメンバ関数
-  using ElbFunc = void(T::*)(A, B);
+  using ElbFunc = void(T::*)(A1, B1);
 
 public:
 
@@ -153,14 +156,17 @@ private:
 template<typename T,
 	 typename A,
 	 typename B,
-	 typename C>
+	 typename C,
+	 typename A1 = A,
+	 typename B1 = B,
+	 typename C1 = C>
 class ElbStubT3 :
   public ElbStub
 {
 public:
 
   /// @brief 引数が3つの ElbMgrImpl のメンバ関数
-  using ElbFunc = void (T::*)(A, B, C);
+  using ElbFunc = void (T::*)(A1, B1, C1);
 
 public:
 
@@ -215,14 +221,18 @@ template<typename T,
 	 typename A,
 	 typename B,
 	 typename C,
-	 typename D>
+	 typename D,
+	 typename A1 = A,
+	 typename B1 = B,
+	 typename C1 = C,
+	 typename D1 = D>
 class ElbStubT4 :
   public ElbStub
 {
 public:
 
   /// @brief 引数が4つの ElbMgrImpl のメンバ関数
-  using ElbFunc = void (T::*)(A, B, C, D);
+  using ElbFunc = void (T::*)(A1, B1, C1, D1);
 
 public:
 

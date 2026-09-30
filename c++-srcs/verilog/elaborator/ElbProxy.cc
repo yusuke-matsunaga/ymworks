@@ -112,7 +112,7 @@ ElbProxy::instantiate_iodecl(
 void
 ElbProxy::instantiate_decl(
   const VlScope* parent,
-  AstDeclHeadList ast_head_list
+  const AstDeclHeadList& ast_head_list
 )
 {
   mDeclGen->instantiate_decl(parent, ast_head_list);

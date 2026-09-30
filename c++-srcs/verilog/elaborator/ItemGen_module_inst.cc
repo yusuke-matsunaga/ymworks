@@ -148,9 +148,9 @@ ItemGen::phase1_module_inst(
 void
 ItemGen::phase1_module_array(
   const VlScope* parent,
-  AstModule ast_module,
-  AstItem ast_head,
-  AstInst ast_inst
+  const AstModule& ast_module,
+  const AstItem& ast_head,
+  const AstInst& ast_inst
 )
 {
   auto defname = ast_head.name();
@@ -216,7 +216,7 @@ void
 ItemGen::phase1_cell(
   const VlScope* parent,
   const AstItem& ast_head,
-  ClibCell cell
+  const ClibCell& cell
 )
 {
   // この場合, parameter 割り当てリストは空でなければならない．
@@ -233,8 +233,8 @@ ItemGen::phase1_cell(
 void
 ItemGen::link_module_array(
   ElbModuleArray* module_array,
-  AstModule ast_module,
-  AstInst ast_inst
+  const AstModule& ast_module,
+  const AstInst& ast_inst
 )
 {
   auto parent = module_array->parent_scope();
@@ -421,8 +421,8 @@ ItemGen::link_module_array(
 void
 ItemGen::link_module(
   ElbModule* module,
-  AstModule ast_module,
-  AstInst ast_inst
+  const AstModule& ast_module,
+  const AstInst& ast_inst
 )
 {
   auto parent = module->parent_scope();

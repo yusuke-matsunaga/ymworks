@@ -196,7 +196,7 @@ ItemGen::defparam_override(
 void
 ItemGen::instantiate_cont_assign_head(
   const VlScope* parent,
-  AstItem ast_header
+  const AstItem& ast_header
 )
 {
   // delay の実体化でエラーが置きても nullptr になっているだけで処理を続ける．
@@ -233,7 +233,7 @@ ItemGen::instantiate_cont_assign_head(
 void
 ItemGen::instantiate_process(
   const VlScope* parent,
-  AstItem ast_item
+  const AstItem& ast_item
 )
 {
   try {
