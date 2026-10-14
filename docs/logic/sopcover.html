@@ -1,28 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="ja">
+<html lang="ja" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.3.5. SopCover &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/translations.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.3.6. KIX (Kernel Intersection eXtracter)" href="kix.html" />
     <link rel="prev" title="1.2.3.4. SopCube" href="sopcube.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -51,15 +47,15 @@
           <div class="body" role="main">
             
   <section id="sopcover">
-<h1><span class="section-number">1.2.3.5. </span>SopCover<a class="headerlink" href="#sopcover" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.2.3.5. </span>SopCover<a class="headerlink" href="#sopcover" title="Link to this heading">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv48SopCover">
 <span id="_CPPv38SopCover"></span><span id="_CPPv28SopCover"></span><span id="SopCover"></span><span class="target" id="da/d04/classSopCover"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SopCover</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv47SopBase" title="SopBase"><span class="n"><span class="pre">SopBase</span></span></a><br /></dt>
 <dd><p>カバー(積和形論理式)を表すクラス </p>
 <p><p>中身は positional cube matrix 表現を用いたビットベクタ</p>
 <p>ビットベクタの内容は一旦，設定されたら変わることはない</p>
-
- キューブはワードレベルの順序で整列しているものと仮定している</p>
+<p>キューブはワードレベルの順序で整列しているものと仮定している</p>
+</p>
 <p>実装としてはパタンの実体は <a class="reference internal" href="../all_classes.html#d7/da2/classSopBase_1a5ab12f561392f6e939aee70ee25cfbaa"><span class="std std-ref">SopBase::Chunk</span></a> が持つ． </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-生成と破壊">生成と破壊</p>
@@ -1081,8 +1077,95 @@ right のみに含まれる要素があっても無視される． </p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.3.5. SopCover</a><ul>
+<li><a class="reference internal" href="#_CPPv48SopCover"><code class="docutils literal notranslate"><span class="pre">SopCover</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N8SopCover8SopCoverE8SizeType"><code class="docutils literal notranslate"><span class="pre">SopCover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover8SopCoverE8SizeTypeRKNSt6vectorI7SopCubeEE"><code class="docutils literal notranslate"><span class="pre">SopCover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover8SopCoverE8SizeTypeRKNSt6vectorINSt6vectorI7LiteralEEEE"><code class="docutils literal notranslate"><span class="pre">SopCover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover8SopCoverE8SizeTypeR11initializer"><code class="docutils literal notranslate"><span class="pre">SopCover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover8SopCoverERK8SopCover"><code class="docutils literal notranslate"><span class="pre">SopCover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveraSERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover8SopCoverERR8SopCover"><code class="docutils literal notranslate"><span class="pre">SopCover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveraSERR8SopCover"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover8SopCoverERK7SopCube"><code class="docutils literal notranslate"><span class="pre">SopCover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoverD0Ev"><code class="docutils literal notranslate"><span class="pre">~SopCover()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover8cube_numEv"><code class="docutils literal notranslate"><span class="pre">cube_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11literal_numEv"><code class="docutils literal notranslate"><span class="pre">literal_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11literal_numE7Literal"><code class="docutils literal notranslate"><span class="pre">literal_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11literal_numE8SizeTypeb"><code class="docutils literal notranslate"><span class="pre">literal_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover12literal_listEv"><code class="docutils literal notranslate"><span class="pre">literal_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover8get_cubeE8SizeType"><code class="docutils literal notranslate"><span class="pre">get_cube()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover9cube_listEv"><code class="docutils literal notranslate"><span class="pre">cube_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover7get_patE8SizeType8SizeType"><code class="docutils literal notranslate"><span class="pre">get_pat()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover4exprEv"><code class="docutils literal notranslate"><span class="pre">expr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover6tvfuncEv"><code class="docutils literal notranslate"><span class="pre">tvfunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover5chunkEv"><code class="docutils literal notranslate"><span class="pre">chunk()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover5chunkEv"><code class="docutils literal notranslate"><span class="pre">chunk()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover4hashEv"><code class="docutils literal notranslate"><span class="pre">hash()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover5printERNSt7ostreamERKNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">print()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11debug_printERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">debug_print()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover5writeERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">write()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover4readERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">read()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCoverorERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveroRERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator|=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCoverorERK7SopCube"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveroRERK7SopCube"><code class="docutils literal notranslate"><span class="pre">operator|=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCovermiERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCovermIERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator-=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCovermiERK7SopCube"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCovermIERK7SopCube"><code class="docutils literal notranslate"><span class="pre">operator-=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCoveranERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveraNERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&amp;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCoveranERK7SopCube"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveraNERK7SopCube"><code class="docutils literal notranslate"><span class="pre">operator&amp;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCoveranE7Literal"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveraNE7Literal"><code class="docutils literal notranslate"><span class="pre">operator&amp;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover6algdivERK8SopCover"><code class="docutils literal notranslate"><span class="pre">algdiv()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover10algdiv_intERK8SopCover"><code class="docutils literal notranslate"><span class="pre">algdiv_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover6algdivERK7SopCube"><code class="docutils literal notranslate"><span class="pre">algdiv()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover10algdiv_intERK7SopCube"><code class="docutils literal notranslate"><span class="pre">algdiv_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover6algdivE7Literal"><code class="docutils literal notranslate"><span class="pre">algdiv()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover10algdiv_intE7Literal"><code class="docutils literal notranslate"><span class="pre">algdiv_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11common_cubeEv"><code class="docutils literal notranslate"><span class="pre">common_cube()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover8cofactorERK7SopCube"><code class="docutils literal notranslate"><span class="pre">cofactor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover12cofactor_intERK7SopCube"><code class="docutils literal notranslate"><span class="pre">cofactor_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover8cofactorE7Literal"><code class="docutils literal notranslate"><span class="pre">cofactor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover12cofactor_intE7Literal"><code class="docutils literal notranslate"><span class="pre">cofactor_int()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCovereqERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoverneERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCoverltERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&lt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCovergtERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&gt;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCoverleERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&lt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCovergeERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&gt;=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11all_kernelsEv"><code class="docutils literal notranslate"><span class="pre">all_kernels()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11best_kernelEv"><code class="docutils literal notranslate"><span class="pre">best_kernel()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11best_kernelE10KernelEval"><code class="docutils literal notranslate"><span class="pre">best_kernel()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover12quick_factorEv"><code class="docutils literal notranslate"><span class="pre">quick_factor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11good_factorEv"><code class="docutils literal notranslate"><span class="pre">good_factor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SopCover11bool_factorEv"><code class="docutils literal notranslate"><span class="pre">bool_factor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCover11initializerE"><code class="docutils literal notranslate"><span class="pre">initializer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoverorERK7SopCubeRK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator|()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCovermiERR8SopCoverRK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCovermiERR8SopCoverRK7SopCube"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveranERR8SopCoverRK7SopCube"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveranERK7SopCubeRK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveranERK7SopCubeRR8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveranERR8SopCover7Literal"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveranE7LiteralRK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoveranE7LiteralRR8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&amp;()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N8SopCoverlsERNSt7ostreamERK8SopCover"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="sopcube.html"
@@ -1100,7 +1183,7 @@ right のみに含まれる要素があっても無視される． </p>
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -1108,13 +1191,13 @@ right のみに含まれる要素があっても無視される． </p>
       <input type="submit" value="検索" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -1137,8 +1220,8 @@ right のみに含まれる要素があっても無視される． </p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
     </div>
   </body>
 </html>

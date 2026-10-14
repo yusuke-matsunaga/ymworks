@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>5.2. チュートリアル &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="5.3. クラス一覧" href="classes.html" />
+    <link rel="prev" title="5.1. 概要" href="intro.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="classes.html" title="5.3. クラス一覧"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="5.1. 概要"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" accesskey="U"><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2. </span>チュートリアル</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1><span class="section-number">5.2. </span>チュートリアル<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<section id="sat">
+<h2><span class="section-number">5.2.1. </span>簡単なSAT問題<a class="headerlink" href="#sat" title="Link to this heading">¶</a></h2>
+<p>以下のCNF式に対するSAT問題を考える．</p>
+<div class="math notranslate nohighlight">
+\[(a \lor b) \land (\lnot b \lor \lnot c) \land (\lnot a \lor c)\]</div>
+<p>この式は例えば <span class="math notranslate nohighlight">\(a = 1, b = 0, c = 1\)</span> という割り当てで全ての
+節を充足することができる．
+この問題を SatSolver を用いて解くには以下のようなコードを用いる．</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// SATソルバの生成</span>
+<span class="n">SatSolver</span><span class="w"> </span><span class="nf">solver</span><span class="p">();</span>
+
+<span class="c1">// 変数(正リテラル)の生成</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">new_variable</span><span class="p">();</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">new_variable</span><span class="p">();</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">new_variable</span><span class="p">();</span>
+
+<span class="c1">// 節の追加</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">add_clause</span><span class="p">(</span><span class="o">~</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="o">~</span><span class="n">c</span><span class="p">);</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">add_clause</span><span class="p">(</span><span class="o">~</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+
+<span class="c1">// 解を求める．</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">();</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SatBool3</span><span class="o">::</span><span class="n">True</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 解が求められた．</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">model</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SatBool3</span><span class="o">::</span><span class="n">False</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 充足不能</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SatBool3</span><span class="o">::</span><span class="n">X</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// アボート</span>
+<span class="w">    </span><span class="c1">// 時間制約などの制約違反が起こった．</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>まず， <cite>SatSolver</cite> インスタンスの生成を行う．
+この例では引数を与えずにデフォルトパラメータを用いているが，
+様々な初期化オプションが存在する．
+詳しくは <cite>SatInitParam</cite> を参照すること．</p>
+<p>変数は <cite>SatSolver::new_variable()</cite> で生成する．
+返り値の型は <cite>SatLiteral</cite> でこの関数は常に正リテラルを返す．
+負リテラルを作るには演算子 <cite>~</cite> を用いる．</p>
+<p><cite>SatSolver</cite> に節を追加するには <cite>SatSolver::add_clause()</cite>
+を用いる．
+この例では <cite>solver.add_clause(~a, b)</cite> のように2つの <cite>SatLiteral</cite>
+を引数にしている．
+<cite>SatSolver::add_clause()</cite> はオーバーロードされた別バージョンが
+用意されていて <cite>SatLiteral</cite> を1個から6個まで指定することが
+できる．
+また， <cite>std::vector&lt;SatLiteral&gt;&amp;</cite> を指定することもできる．
+例えば <cite>solver.add_clause(~a, b)</cite> と同様のことは以下のコードでも
+行える．</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SatLiteral</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lits</span><span class="p">{</span><span class="o">~</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">};</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">lits</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><cite>SatSolver::solve()</cite> で現在保持しているCNF式に対する充足可能性
+を調べる．
+返り値の型は <cite>SatBool3</cite> で <cite>SatBool3::True</cite> が充足可，
+<cite>SatBool3::False</cite> が充足不可，
+<cite>SatBool3::X</cite> が不明を表す．
+通常は充足可か充足不可となるが，
+時間やメモリ制限を超えた場合は途中で処理が中断するため
+不明となる．</p>
+<p>直前の <cite>SatSolver::solve()</cite> が充足可だった場合には，
+CNF式を充足させる割り当てを <cite>SatSolver::model()</cite>
+を用いて取得することができる．
+この関数の返り値は <cite>const SatModel&amp;</cite> である．
+<cite>SatModel</cite> は意味的には <cite>SatLiteral</cite> をキーにして
+対応する値( <cite>SatBool3</cite> )を保持する辞書である．
+結果の値は <cite>SatBool3</cite> となっているが，
+通常の <cite>SatSolver::solve()</cite> 関数の結果は
+<cite>SatBool3::True</cite> か <cite>SatBool3::False</cite> の二択となっている．
+なお， <cite>SatSolver::model()</cite> は <cite>SatSolver</cite> 内部のデータメンバ
+への参照を返しているため，
+その後の <cite>SatSolver::solve()</cite> の起動により内容が変化する．
+外部でこの結果を利用する時は一旦コピーを作成する必要がある．</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">危険な例</span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// 充足解を求める．</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SatBool3</span><span class="o">::</span><span class="n">True</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 参照をそのまま使う．</span>
+<span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">model</span><span class="p">();</span>
+<span class="c1">// 今は大丈夫</span>
+
+<span class="c1">// 新たな節を追加</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">);</span>
+
+<span class="c1">// 新しい問題に対する充足解を求める．</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">();</span>
+
+<span class="c1">// この時点で model は別の解に変化している．</span>
+</pre></div>
+</div>
+</div>
+<p>上のコード例では最初の問題に対する充足解のつもりで <cite>model</cite>
+という変数を使っているが，
+2度めの <cite>SatSolver::solve()</cite> を呼んだ時点でその内容が変化している．
+これを防ぐには以下のようなコードを用いる．</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">正しい例</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">SatBool3</span><span class="o">::</span><span class="n">True</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// コピーを作る．</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">model</span><span class="p">();</span>
+
+<span class="c1">// 新たな節を追加</span>
+<span class="n">solver</span><span class="p">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">z</span><span class="p">);</span>
+
+<span class="c1">// 新しい問題に対する充足解を求める．</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solver</span><span class="p">.</span><span class="n">solve</span><span class="p">();</span>
+
+<span class="c1">// model は変化していない．</span>
+</pre></div>
+</div>
+</div>
+<p>違いは参照を表す <cite>&amp;</cite> の有無だけなので注意すること．
+<cite>SatSolver::model()</cite> の結果を参照ではなく実体としてコピーしているので
+以降の動作に関係なく <cite>model</cite> は独立したインスタンスとなる．
+ただし， <cite>SatModel</cite> は <cite>SatSolver</cite> が保持している全ての変数に対する
+割り当て結果を保持した辞書なので問題のサイズに比例した容量を必要とする．
+またコピーも同様に問題のサイズに比例した時間を必要とする．
+充足解をその場で利用するだけならば，
+最初の例のように参照を用いた方が効率がよい．</p>
+<p><cite>SatModel</cite> の内容を取り出すには <cite>[]</cite> 演算子を用いる．</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">SatModel の使い方</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">val_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">val_b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">val_c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+
+<span class="c1">// val_a = SatBool3::True</span>
+<span class="c1">// val_b = SatBool3::False</span>
+<span class="c1">// val_c = SatBool3::True</span>
+<span class="c1">// のようになっている．</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">val_avar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">model</span><span class="p">[</span><span class="o">~</span><span class="n">a</span><span class="p">];</span>
+
+<span class="c1">// val_avar = SatBool3::False のはず</span>
+</pre></div>
+</div>
+</div>
+<p><cite>SatModel::operator[]()</cite> の引数は <cite>SatLiteral</cite> なので
+最後の行のように負リテラルを用いることもできる．
+この場合，正リテラルに対する値の否定の値となる．</p>
+</section>
+<section id="tseitin">
+<h2><span class="section-number">5.2.2. </span>Tseitin 符号化<a class="headerlink" href="#tseitin" title="Link to this heading">¶</a></h2>
+<p>前述のようにSATソルバはCNF式を入力として用いている．
+そこで，CNF式以外の形式の命題論理式が与えられた場合には
+それをCNF式に変換する必要がある．
+ここで言う変換とは <cite>equisatisfiable</cite> と呼ばれる関係を満たすもので，
+変換前の論理式を <span class="math notranslate nohighlight">\(\phi_1\)</span> ，
+変換後の論理式を <span class="math notranslate nohighlight">\(\phi_2\)</span>
+とした時に <span class="math notranslate nohighlight">\(\phi_1\)</span> が充足可能な場合にのみ
+<span class="math notranslate nohighlight">\(\phi_2\)</span> も充足可能となる，
+という条件を満たすもののことである．
+論理式が表す論理関数が等価なものではないことに注意．
+このような一件複雑な変換を用いる理由は，
+任意の命題論理式を等価なCNF式に変換すると最悪の場合，
+式のサイズの指数乗に比例した節を必要とするからである．</p>
+<p>このような変換で用いられるのが Tseitin 符号化である．
+例えば <span class="math notranslate nohighlight">\((a \land b) \lor (c \land d)\)</span>
+という論理式をCNF式に変換することを考える．
+単純には分配則を用いて
+<span class="math notranslate nohighlight">\((a \lor c) \land (a \lor d) \land (b \lor c) \land (b \lor d)\)</span>
+という等価なCNF式に変換することも可能だが，
+この方法では結果の節の数が変換前の論理式のサイズの指数乗に比例する．
+そこで， <span class="math notranslate nohighlight">\(s = a \land b\)</span> ， <span class="math notranslate nohighlight">\(t = c \land d\)</span> という
+補助的な変数を導入する．
+<span class="math notranslate nohighlight">\(s = a \land b\)</span> の関係をCNF式で表すと以下のようになる．</p>
+<div class="math notranslate nohighlight">
+\[(a \lor \lnot s) \land
+(b \lor \lnot s) \land
+(\lnot a \lor \lnot b \lor s)\]</div>
+<p><span class="math notranslate nohighlight">\(t = c \land d\)</span> の関係も同様に表される．
+最後に元の式を表す <span class="math notranslate nohighlight">\((s \lor t)\)</span> を加えればよい．
+論理積以外の演算も同様に変換することができる．</p>
+<p>このような変換を Tseitin 符号化と呼ぶ．
+<cite>SatSolver</cite> は Tseitin 符号化を行うメンバ関数を用意している．
+例えば，先程の <span class="math notranslate nohighlight">\(s = a \land b\)</span> に相当するCNF式を生成するには
+以下のようなコードを用いる．</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">ANDゲートの Tseitin 符号化</span><a class="headerlink" href="#id5" title="Link to this code">¶</a></div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">solver</span><span class="p">.</span><span class="n">add_andgate</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><cite>SatSolver::add_andgate()</cite> には入力数が2入力から4入力までのバージョン
+と <cite>std::vector&lt;SatLiteral&gt;&amp;</cite> を用いたバージョンが用意されている．</p>
+<p>その他，BUFFゲート，NOTゲート，NANDゲート，ORゲート，NORゲート，XORゲート，
+XNORゲート用のメンバ関数が用意されている．</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5.2. チュートリアル</a><ul>
+<li><a class="reference internal" href="#sat">5.2.1. 簡単なSAT問題</a></li>
+<li><a class="reference internal" href="#tseitin">5.2.2. Tseitin 符号化</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="intro.html"
+                          title="前の章へ"><span class="section-number">5.1. </span>概要</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="classes.html"
+                          title="次の章へ"><span class="section-number">5.3. </span>クラス一覧</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/sat/tutorial.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="classes.html" title="5.3. クラス一覧"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="5.1. 概要"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="sat.html" ><span class="section-number">5. </span>SAT Solver</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5.2. </span>チュートリアル</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    </div>
+  </body>
+</html>

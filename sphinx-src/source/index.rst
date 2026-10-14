@@ -16,6 +16,7 @@ Ymworks
    aig/aig
    clib/clib
    sat/sat
+   verilog/verilog
 
 ..   all_classes
 

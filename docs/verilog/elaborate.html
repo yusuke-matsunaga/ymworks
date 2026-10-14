@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>6.3. elaboration のアルゴリズム &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="prev" title="6.2. 構文解析" href="parser.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="6.2. 構文解析"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="verilog.html" accesskey="U"><span class="section-number">6. </span>Verilog-HDL Reader</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.3. </span>elaboration のアルゴリズム</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="elaboration">
+<h1><span class="section-number">6.3. </span>elaboration のアルゴリズム<a class="headerlink" href="#elaboration" title="Link to this heading">¶</a></h1>
+<p>○Verilog-HDLのソースをコンパイルするためにまず最初に行わなければならな
+いことは parameter の値を確定すること</p>
+<p>○普通は parameter は定数式が代入されており，定数式はその module 内にロー
+カルな定数(parameter)のみからなるので簡単に確定可能であるように思われる
+が，defparam 文があるためにそう簡単ではない．</p>
+<p>○defparam 文を処理するためには階層構造の生成が必要となる．</p>
+<p>○問題は genereate 文や配列構造の module instanciation の時には
+parameter の値が用いられるということ．</p>
+<p>○つまり，階層構造の生成と parameter 値の確定の依存関係がループを構成し
+てしまう可能性がある．</p>
+<p>○IEEE1364-2001 ではこれを防ぐために generate scope と配列型の module
+instance 内のスコープの defparam 文はその外側の parameter の値を上書きで
+きないと定めている．</p>
+<p>○こうすることで top module から generate 文や配列型の module instance
+を用いないで生成可能な名前空間内のみの defparam 文で parameter の値を確
+定し，下位構造の名前空間の生成ができるようになる．</p>
+<p>○このとき，各下位構造の生成の際には各々の defparam 文は他の構造には影響
+を与えないので，各自が独立に処理を行うことができる．つまり，instance 化
+の順番に制約がない．</p>
+<p>○ということで，elaboration の第一段階としてはこの名前空間の構造の生成と
+parameter の値の確定を行う．</p>
+<p>○各 PtModule, PtItem, PtStmt に make_skeleton() という仮想関数を作る．</p>
+<p>○主に Scope 関係のクラスのインスタンス化を行う．scope を作らない要素は
+この make_skeleton() で何もしない．つまり PtItem の派生クラスで
+make_skeleton() が必要なのは PtFunction と PtTask および PtModuleInst の
+み．PtModuleInst も配列型の場合にはここでは処理せずにキューに積んでおく．
+PtGenerate はここでは処理せずにキューに積んでおく．</p>
+<p>○PtStmt の派生クラスで本当に処理が必要なのは VpiNamedBegin,
+VpiNamedFork であるが，それらの親の PtStmt が必要なので，結局，すべての
+PtStmt のオブジェクトを生成する．ただし，この時点では中身の
+expression を生成することはできないので空にしておく．</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="parser.html"
+                          title="前の章へ"><span class="section-number">6.2. </span>構文解析</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/verilog/elaborate.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="6.2. 構文解析"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="verilog.html" ><span class="section-number">6. </span>Verilog-HDL Reader</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">6.3. </span>elaboration のアルゴリズム</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    </div>
+  </body>
+</html>

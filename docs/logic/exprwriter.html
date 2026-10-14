@@ -1,28 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="ja">
+<html lang="ja" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>1.2.2.2. ExprWriter &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/translations.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="1.2.3. 積和形論理式を扱うサブグループ" href="sop_grp.html" />
     <link rel="prev" title="1.2.2.1. Expr" href="expr.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -51,7 +47,7 @@
           <div class="body" role="main">
             
   <section id="exprwriter">
-<h1><span class="section-number">1.2.2.2. </span>ExprWriter<a class="headerlink" href="#exprwriter" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">1.2.2.2. </span>ExprWriter<a class="headerlink" href="#exprwriter" title="Link to this heading">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv410ExprWriter">
 <span id="_CPPv310ExprWriter"></span><span id="_CPPv210ExprWriter"></span><span id="ExprWriter"></span><span class="target" id="d1/db0/classExprWriter"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExprWriter</span></span></span><br /></dt>
@@ -222,8 +218,33 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">1.2.2.2. ExprWriter</a><ul>
+<li><a class="reference internal" href="#_CPPv410ExprWriter"><code class="docutils literal notranslate"><span class="pre">ExprWriter</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N10ExprWriter11VarNameDictE"><code class="docutils literal notranslate"><span class="pre">VarNameDict</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10ExprWriter10ExprWriterEv"><code class="docutils literal notranslate"><span class="pre">ExprWriter()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10ExprWriterD0Ev"><code class="docutils literal notranslate"><span class="pre">~ExprWriter()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter4dumpERNSt7ostreamERK4Expr"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter4dumpERNSt7ostreamERK4ExprRK11VarNameDict"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter14dump_to_stringERK4Expr"><code class="docutils literal notranslate"><span class="pre">dump_to_string()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter14dump_to_stringERK4ExprRK11VarNameDict"><code class="docutils literal notranslate"><span class="pre">dump_to_string()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10ExprWriter9set_opstrERKNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">set_opstr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter5opstrEv"><code class="docutils literal notranslate"><span class="pre">opstr()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter7not_strEv"><code class="docutils literal notranslate"><span class="pre">not_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter7and_strEv"><code class="docutils literal notranslate"><span class="pre">and_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter6or_strEv"><code class="docutils literal notranslate"><span class="pre">or_str()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10ExprWriter7xor_strEv"><code class="docutils literal notranslate"><span class="pre">xor_str()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="expr.html"
@@ -241,7 +262,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -249,13 +270,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -278,8 +299,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
     </div>
   </body>
 </html>

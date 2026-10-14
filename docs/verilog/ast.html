@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>構文木を表すクラス構造について &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">構文木を表すクラス構造について</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1>構文木を表すクラス構造について<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>yacc/bison では異なるデータ型が混在した構文木要素を表すために
+<cite>YYSTYPE</cite> という共用型を用意している．
+この YYSTYPE は実装方法として C言語の <cite>union</cite> を用いているため，
+C++ 言語のコンストラクタ/デストラクタを持ったクラスを直接用いることが
+できない．
+そのため，メモリ確保や開放などのリソース管理を明示的に行う必要があるが，
+yacc/bison の処理中に構文エラーが起こった場合などの全てのケースに
+対応することは難しい．
+そこで，構文木を表すクラスのメモリ確保に関してはパーサー用に用意した
+メモリプールを用いるようにしている．
+個々のクラスは明示的なコンストラクタ/デストラクタを持たず，
+最終的にメモリプールそのものを開放することで全てのメモリを開放すること
+ができる．
+ただし，構文木構造にアクセスする際にはこのクラスのポインタを直接
+用いることはせず，そのポインタを持つプロキシクラスを用いることにしてい
+る．
+前者のクラスは <cite>PtModule</cite> のような名前を持つ．
+後者のクラスは <cite>Astmodule</cite> のような名前を持つ．</p>
+</section>
+<section id="id2">
+<h1>識別子(文字列)について<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h1>
+<p>識別子は可変長の文字列領域を持つためメモリ管理を行う必要がある．
+さらに同一の内容の文字列が多数存在する場合にそれらを別々に
+確保するのはメモリ効率が悪い．
+そこで，<cite>std::unordered_set&lt;std::string&gt;</cite> を用いて同一の文字列を
+共有するようにしている．
+ただし， <cite>YYSTYPE</cite> には <cite>std::string</cite> を用いることはできないため，
+<cite>std::string::c_str()</cite> を用いて <cite>const char*</cite> に変換している．</p>
+</section>
+<section id="id3">
+<h1>リスト構造について<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h1>
+<p>リスト構造はリンクトリストを用いる．
+そのため，リスト構造の要素となるクラスは <cite>PtListElem&lt;T&gt;</cite>
+を継承してリンクポインタを持たせる．
+構文解析中にリストの要素を追加するためには
+末尾の要素を記憶しておく必要がある．
+そのため，<cite>PtList&lt;T&gt;</cite> というクラスを用いる．
+このクラスは先頭と末尾の要素のポインタを持つ．
+前述のように <cite>YYSTYPE</cite> に用いることのできる
+型はコンストラクタ/デストラクタを持てないため，
+このクラスのオブジェクトを用いるためには
+明示的に初期化する必要がある．
+そのため <cite>PtList&lt;T&gt;::new_obj(elem)</cite> という
+クラス関数を用いる．
+最終的には先頭要素のポインタを用いたリスト構造全体を表すことができる．</p>
+</section>
+<section id="verilog2001">
+<h1>Verilog2001 形式のポート宣言について<a class="headerlink" href="#verilog2001" title="Link to this heading">¶</a></h1>
+<p>Verilog2001 で導入されたモジュールなどの入出力ポートの宣言形式
+では <cite>(input a, b, output c)</cite> の様に
+<cite>(input, output)</cite> のIOヘッダのリストと <cite>(input a, b)</cite>
+のIO要素のリストの二重構造を持つ．
+この二重構造を扱うために <cite>PtDList&lt;T1, T2&gt;</cite> というテンプレート
+クラスを用いる．
+<cite>T1</cite> は <cite>PtIOHead</cite> のようなヘッダのクラス，
+<cite>T2</cite> は <cite>PtIOItem</cite> のような要素のをクラスを指定する．
+ヘッダを追加する時は <cite>PtDList&lt;T1, T2&gt;::add_head(head, elem)</cite>
+の様に最初の要素も同時に追加する．
+要素を追加する時は <cite>PtDList&lt;T1, T2&gt;::add_item(elem)</cite>
+を用いる．</p>
+</section>
+<section id="id4">
+<h1>構成要素のリストについて<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h1>
+<p>モジュールの本体には以下の要素が含まれる．</p>
+<ul class="simple">
+<li><p>IO header</p></li>
+<li><p>decl header</p></li>
+<li><p>item</p></li>
+</ul>
+<p>これらはそれぞれ <cite>PtIOHead</cite> ， <cite>PtDeclHead</cite> ， <cite>PtItem</cite>
+という異なるクラスで表される．
+ただし構文規則上，これらの型を区別することはできないので，
+上記の異なるクラスが順不同に現れることになる．
+そこで， <cite>PtHeadList</cite> というクラスを用意している．
+このクラスは <cite>PtIOHeadList</cite> ， <cite>PtDeclHeadList</cite> ，
+<cite>PtItemList</cite> の3つのリストを持つ．
+それぞれの要素の型に応じた要素に追加するようにしている．</p>
+</section>
+<section id="attribute-instance">
+<h1>attribute instance について<a class="headerlink" href="#attribute-instance" title="Link to this heading">¶</a></h1>
+<p><cite>(*</cite> <cite>*)</cite> で囲まれた部分に attribute instance のリストを記述することが
+できる．
+ただし，多くの場合は記述なしなので attribute instance 用にポインタを用
+意するのはメモリ効率が悪い．
+そこで， <cite>AstMgr</cite> に構文木要素のポインタをキーにして attribute
+instance のリストを持つ辞書を用意している．</p>
+</section>
+<section id="id5">
+<h1>公開用構文木要素のクラス<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h1>
+<p>内部的には <cite>PtModule</cite> のようなクラスが構文木要素の内容を表している．
+<cite>YYSTYPE</cite> としては <cite>PtModule*</cite> のようにポインタを用いる．
+これをそのまま公開インターフェイスをして用いるのは好ましくないので
+<cite>AstModule</cite> というクラスを用意している．
+<cite>AstModule</cite> は内部のデータメンバで <cite>const PtModule*</cite> を持つ．
+<cite>AstModule</cite> のメンバ関数はほと <cite>PtModule</cite> のメンバ関数と同じだが
+リストのみ異なる．
+たとえば <cite>PtModule</cite> はポートリストの先頭要素のポインタを返す
+<cite>const PtPort* PtModule::port_top()</cite> というメンバ関数を持つが，
+<cite>AstModule</cite> は <cite>AstPortList AstModule::port_list()</cite> という
+メンバ関数を持つ．
+<cite>AstPortList</cite> は先頭のポート要素を表す <cite>const PtPort*</cite>
+をデータメンバとして持つクラスで，
+<cite>AstPortList::empty()</cite> ， <cite>AstPortList::size()</cite> ，
+<cite>AstPortList::begin()</cite> ， <cite>AstPortList::end()</cite>
+などのメンバ関数を持つ．
+ほぼ通常のコンテナクラスとしてもちいることができる．
+ただし， <cite>AstPortList::size()</cite> は要素数に比例した時間を要するので
+注意が必要である．</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">構文木を表すクラス構造について</a></li>
+<li><a class="reference internal" href="#id2">識別子(文字列)について</a></li>
+<li><a class="reference internal" href="#id3">リスト構造について</a></li>
+<li><a class="reference internal" href="#verilog2001">Verilog2001 形式のポート宣言について</a></li>
+<li><a class="reference internal" href="#id4">構成要素のリストについて</a></li>
+<li><a class="reference internal" href="#attribute-instance">attribute instance について</a></li>
+<li><a class="reference internal" href="#id5">公開用構文木要素のクラス</a></li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/verilog/ast.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">構文木を表すクラス構造について</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    </div>
+  </body>
+</html>

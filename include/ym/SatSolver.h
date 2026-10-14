@@ -73,7 +73,7 @@ public:
   /// * lingeling においては decision = true のリテラルは freeze される．
   SatLiteral
   new_variable(
-    bool decision = false ///< [in] 決定変数の時に true とする．
+    bool decision = true ///< [in] 決定変数の時に true とする．
   );
 
   /// @brief 節を追加する．

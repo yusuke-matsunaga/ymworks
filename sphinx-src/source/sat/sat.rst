@@ -5,4 +5,5 @@ SAT Solver
    :maxdepth: 2
 
    intro
+   tutorial
    classes

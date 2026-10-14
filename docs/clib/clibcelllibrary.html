@@ -1,28 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="ja">
+<html lang="ja" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>4.2.5. ClibCellLibrary &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/translations.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="next" title="4.2.6. ClibCellClass" href="clibcellclass.html" />
     <link rel="prev" title="4.2.4. ClibTime" href="clibtime.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -50,7 +46,7 @@
           <div class="body" role="main">
             
   <section id="clibcelllibrary">
-<h1><span class="section-number">4.2.5. </span>ClibCellLibrary<a class="headerlink" href="#clibcelllibrary" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">4.2.5. </span>ClibCellLibrary<a class="headerlink" href="#clibcelllibrary" title="Link to this heading">¶</a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv415ClibCellLibrary">
 <span id="_CPPv315ClibCellLibrary"></span><span id="_CPPv215ClibCellLibrary"></span><span id="ClibCellLibrary"></span><span class="target" id="d9/d5e/classClibCellLibrary"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ClibCellLibrary</span></span></span><br /></dt>
@@ -1056,7 +1052,7 @@ src と同じ実体を共有する'浅い'コピーを行う． </p>
 <span id="_CPPv3N15ClibCellLibrary11read_mislibERKNSt6stringE"></span><span id="_CPPv2N15ClibCellLibrary11read_mislibERKNSt6stringE"></span><span id="ClibCellLibrary::read_mislib__ssCR"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ac61ad52894d4e0611a497c96b7202678"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_mislib</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>mislib 形式のファイルを読み込む． </p>
 <p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span> <span class="p">{</span>
-  <span class="n">auto</span> <span class="n">lib</span> <span class="o">=</span> <span class="n">ClibCellLibrary</span><span class="p">::</span><span class="n">read_mislib</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+<span class="n">auto</span> <span class="n">lib</span> <span class="o">=</span> <span class="n">ClibCellLibrary</span><span class="p">::</span><span class="n">read_mislib</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
   <span class="o">...</span>
 <span class="p">}</span>
 <span class="n">catch</span> <span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span> <span class="n">e</span> <span class="p">)</span> <span class="p">{</span>
@@ -1084,7 +1080,7 @@ src と同じ実体を共有する'浅い'コピーを行う． </p>
 <span id="_CPPv3N15ClibCellLibrary12read_libertyERKNSt6stringE"></span><span id="_CPPv2N15ClibCellLibrary12read_libertyERKNSt6stringE"></span><span id="ClibCellLibrary::read_liberty__ssCR"></span><span class="target" id="d9/d5e/classClibCellLibrary_1ae6c2ad8e24f45affb3af99e458cc074e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv415ClibCellLibrary" title="ClibCellLibrary"><span class="n"><span class="pre">ClibCellLibrary</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_liberty</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../all_classes.html#_CPPv4St" title="std"><span class="n"><span class="pre">std</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">filename</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>liberty 形式のファイルを読み込む． </p>
 <p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">try</span> <span class="p">{</span>
-  <span class="n">auto</span> <span class="n">lib</span> <span class="o">=</span> <span class="n">ClibCellLibrary</span><span class="p">::</span><span class="n">read_liberty</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
+<span class="n">auto</span> <span class="n">lib</span> <span class="o">=</span> <span class="n">ClibCellLibrary</span><span class="p">::</span><span class="n">read_liberty</span><span class="p">(</span><span class="n">filename</span><span class="p">);</span>
   <span class="o">...</span>
 <span class="p">}</span>
 <span class="n">catch</span> <span class="p">(</span> <span class="n">std</span><span class="p">::</span><span class="n">invalid_argument</span> <span class="n">e</span> <span class="p">)</span> <span class="p">{</span>
@@ -1190,8 +1186,87 @@ src と同じ実体を共有する'浅い'コピーを行う． </p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">4.2.5. ClibCellLibrary</a><ul>
+<li><a class="reference internal" href="#_CPPv415ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">ClibCellLibrary</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary15ClibCellLibraryEv"><code class="docutils literal notranslate"><span class="pre">ClibCellLibrary()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary15ClibCellLibraryE14ClibLibraryPtr"><code class="docutils literal notranslate"><span class="pre">ClibCellLibrary()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary15ClibCellLibraryERK15ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">ClibCellLibrary()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibraryaSERK15ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">operator=()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibraryD0Ev"><code class="docutils literal notranslate"><span class="pre">~ClibCellLibrary()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8is_validEv"><code class="docutils literal notranslate"><span class="pre">is_valid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10is_invalidEv"><code class="docutils literal notranslate"><span class="pre">is_invalid()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4nameEv"><code class="docutils literal notranslate"><span class="pre">name()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10technologyEv"><code class="docutils literal notranslate"><span class="pre">technology()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11delay_modelEv"><code class="docutils literal notranslate"><span class="pre">delay_model()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10piece_typeEv"><code class="docutils literal notranslate"><span class="pre">piece_type()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12piece_defineEv"><code class="docutils literal notranslate"><span class="pre">piece_define()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary16bus_naming_styleEv"><code class="docutils literal notranslate"><span class="pre">bus_naming_style()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4dateEv"><code class="docutils literal notranslate"><span class="pre">date()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8revisionEv"><code class="docutils literal notranslate"><span class="pre">revision()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary7commentEv"><code class="docutils literal notranslate"><span class="pre">comment()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9time_unitEv"><code class="docutils literal notranslate"><span class="pre">time_unit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12voltage_unitEv"><code class="docutils literal notranslate"><span class="pre">voltage_unit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12current_unitEv"><code class="docutils literal notranslate"><span class="pre">current_unit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary23pulling_resistance_unitEv"><code class="docutils literal notranslate"><span class="pre">pulling_resistance_unit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary20capacitive_load_unitEv"><code class="docutils literal notranslate"><span class="pre">capacitive_load_unit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary18leakage_power_unitEv"><code class="docutils literal notranslate"><span class="pre">leakage_power_unit()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8cell_numEv"><code class="docutils literal notranslate"><span class="pre">cell_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4cellE8SizeType"><code class="docutils literal notranslate"><span class="pre">cell()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4cellERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">cell()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9cell_listEv"><code class="docutils literal notranslate"><span class="pre">cell_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary14cell_group_numEv"><code class="docutils literal notranslate"><span class="pre">cell_group_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10cell_groupE8SizeType"><code class="docutils literal notranslate"><span class="pre">cell_group()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary15cell_group_listEv"><code class="docutils literal notranslate"><span class="pre">cell_group_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary13npn_class_numEv"><code class="docutils literal notranslate"><span class="pre">npn_class_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9npn_classE8SizeType"><code class="docutils literal notranslate"><span class="pre">npn_class()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary14npn_class_listEv"><code class="docutils literal notranslate"><span class="pre">npn_class_list()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11const0_funcEv"><code class="docutils literal notranslate"><span class="pre">const0_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11const1_funcEv"><code class="docutils literal notranslate"><span class="pre">const1_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8buf_funcEv"><code class="docutils literal notranslate"><span class="pre">buf_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8inv_funcEv"><code class="docutils literal notranslate"><span class="pre">inv_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8and_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">and_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9nand_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">nand_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary7or_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">or_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8nor_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">nor_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary8xor_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">xor_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9xnor_funcE8SizeType"><code class="docutils literal notranslate"><span class="pre">xnor_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9mux2_funcEv"><code class="docutils literal notranslate"><span class="pre">mux2_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary9mux4_funcEv"><code class="docutils literal notranslate"><span class="pre">mux4_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10pg_pat_numEv"><code class="docutils literal notranslate"><span class="pre">pg_pat_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary6pg_patE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_pat()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12pg_max_inputEv"><code class="docutils literal notranslate"><span class="pre">pg_max_input()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_node_numEv"><code class="docutils literal notranslate"><span class="pre">pg_node_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12pg_node_typeE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_node_type()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_input_idE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_input_id()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary13pg_input_nodeE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_input_node()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_edge_numEv"><code class="docutils literal notranslate"><span class="pre">pg_edge_num()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary12pg_edge_fromE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_edge_from()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary10pg_edge_toE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_edge_to()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_edge_posE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_edge_pos()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary11pg_edge_invE8SizeType"><code class="docutils literal notranslate"><span class="pre">pg_edge_inv()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4dumpERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary4dumpERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">dump()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary7displayERNSt7ostreamE"><code class="docutils literal notranslate"><span class="pre">display()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary7restoreERNSt7istreamE"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary7restoreERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">restore()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary11read_mislibERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_mislib()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15ClibCellLibrary12read_libertyERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">read_liberty()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary13find_ff_classE11ClibSeqAttr"><code class="docutils literal notranslate"><span class="pre">find_ff_class()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibrary16find_latch_classE11ClibSeqAttr"><code class="docutils literal notranslate"><span class="pre">find_latch_class()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibraryeqE15ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">operator==()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15ClibCellLibraryneE15ClibCellLibrary"><code class="docutils literal notranslate"><span class="pre">operator!=()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <div>
     <h4>前のトピックへ</h4>
     <p class="topless"><a href="clibtime.html"
@@ -1209,7 +1284,7 @@ src と同じ実体を共有する'浅い'コピーを行う． </p>
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -1217,13 +1292,13 @@ src と同じ実体を共有する'浅い'コピーを行う． </p>
       <input type="submit" value="検索" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -1245,8 +1320,8 @@ src と同じ実体を共有する'浅い'コピーを行う． </p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
     </div>
   </body>
 </html>

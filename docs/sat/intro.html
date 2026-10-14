@@ -1,28 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="ja">
+<html lang="ja" data-content_root="../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>5.1. 概要 &#8212; ymworks 1.0.0 ドキュメント</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/translations.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
-    <link rel="next" title="5.2. クラス一覧" href="classes.html" />
+    <link rel="next" title="5.2. チュートリアル" href="tutorial.html" />
     <link rel="prev" title="5. SAT Solver" href="sat.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -32,7 +28,7 @@
           <a href="../py-modindex.html" title="Pythonモジュール索引"
              >モジュール</a> |</li>
         <li class="right" >
-          <a href="classes.html" title="5.2. クラス一覧"
+          <a href="tutorial.html" title="5.2. チュートリアル"
              accesskey="N">次へ</a> |</li>
         <li class="right" >
           <a href="sat.html" title="5. SAT Solver"
@@ -49,7 +45,69 @@
           <div class="body" role="main">
             
   <section id="id1">
-<h1><span class="section-number">5.1. </span>概要<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<h1><span class="section-number">5.1. </span>概要<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+<p>SATとは Satisfiability の略で与えられた命題論理式を充足(satisfy)するこ
+とができるかどうかを調べる問題を表す．
+SAT問題を解くプログラムをSATソルバと呼ぶ．
+SAT問題はNP完全問題であることが知られており，
+厳密解法の最悪オーダーは変数の数の指数乗となるが，
+現在のアルゴリズムではかなり大規模な問題でも
+実用的な時間で解くことが可能となっている．</p>
+<p>一般にSAT問題はCNF(Conjunctive Normal Form)と呼ばれる形の論理式で
+表される．
+CNFとは論理和で構成された節の論理積である．
+任意の命題論理式はもとの式のサイズに比例したサイズのCNF式に変換
+できることが知られており，
+SATソルバがCNF式のみを扱うように制限することのデメリットはほとんどない．</p>
+<p>SAT に関係したクラスで主要なものは <cite>SatSolver</cite> である．
+<cite>SatSolver</cite> はSAT問題を解くソルバであり，同時にSAT問題を保持しているクラ
+スでもある．
+SATソルバは内部で効率的な処理を行うため，対象となっているSAT問題の情報
+を常に内部に保持している．
+特に重要なものが「学習節」と呼ばれる人工的に追加される節で，
+これは以前の探索の結果，矛盾を引き起こすとわかった変数の組み合わせが
+再び選ばれることを禁止するものである．
+そのため，異なるSAT問題を並行して解く場合には問題ごとに異なるSATソルバ
+のインスタンスを生成する必要がある．</p>
+<p>前述のように <cite>SatSolver</cite> クラスがSAT問題を保持するので，SAT問題を表す
+クラスは存在しない．
+唯一，命題変数を表すために <cite>SatLiteral</cite> というクラスが用意されている．
+<cite>SatLiteral</cite> は正確にはリテラルを表す．
+リテラルとは命題変数か命題変数の否定を表す．
+命題変数を表すリテラルを「正リテラル」，
+命題変数の否定を表すリテラルを「負リテラル」と呼ぶ．</p>
+<p>SAT問題で用いる値は命題論理なので「真」か「偽」の2値であるが，
+「不明」を加えた3値にすると都合がよい．
+そこで <cite>SatBool3</cite> という列挙型を定義している．
+<cite>SatBool3</cite> の値は <cite>SatBool3::True</cite>
+<cite>SatBool3::False</cite>
+<cite>SatBool3::X</cite> の3値である．
+否定を表す <cite>~</cite> 演算子および排他的論理和(XOR)演算子
+<cite>^</cite> が定義されている．</p>
+<p>SAT問題を解いた結果が「充足可」だった場合，
+問題のCNF式を充足させる変数の割り当てが少なくとも1つ存在する．
+その割り当て結果を表すクラスが <cite>SatModel</cite> である．
+<cite>SatModel</cite> は意味的には命題変数をキーとして
+その命題変数の割当結果の値を保持する辞書である．
+ただし実際のキーの型は <cite>SatLiteral</cite> となっている．</p>
+<p>上記のクラスを用いれば単純なSAT問題を扱うことができるが，
+一般的には複雑な制約条件を命題論理に変換して解く場合が多い．
+そこで，そのような変換(符号化とも言う)を行うために以下のような
+クラスを用意している．</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><cite>SatBinaryNum</cite><span class="classifier">整数を二進符号化してビットベクタとして表す</span></dt><dd><p>ためのクラス</p>
+</dd>
+</dl>
+</li>
+<li><p><cite>SatOneHotVar</cite> : 離散値を one hot 符号化して表すためのクラス</p></li>
+<li><dl class="simple">
+<dt><cite>SatOneHotMatrix</cite><span class="classifier">M通りの離散値からN通りの離散値を選び出す</span></dt><dd><p>割り当てを one hot 符号化するためのクラス</p>
+</dd>
+</dl>
+</li>
+<li><p><cite>SatOrderedSet</cite> : 全順序関係を持つ離散値を符号化するためのクラス</p></li>
+</ul>
 </section>
 
 
@@ -57,7 +115,7 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>前のトピックへ</h4>
@@ -66,8 +124,8 @@
   </div>
   <div>
     <h4>次のトピックへ</h4>
-    <p class="topless"><a href="classes.html"
-                          title="次の章へ"><span class="section-number">5.2. </span>クラス一覧</a></p>
+    <p class="topless"><a href="tutorial.html"
+                          title="次の章へ"><span class="section-number">5.2. </span>チュートリアル</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
@@ -76,7 +134,7 @@
             rel="nofollow">ソースコードを表示</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">クイック検索</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
@@ -84,13 +142,13 @@
       <input type="submit" value="検索" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
+    <div class="related" role="navigation" aria-label="Related">
       <h3>ナビゲーション</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -100,7 +158,7 @@
           <a href="../py-modindex.html" title="Pythonモジュール索引"
              >モジュール</a> |</li>
         <li class="right" >
-          <a href="classes.html" title="5.2. クラス一覧"
+          <a href="tutorial.html" title="5.2. チュートリアル"
              >次へ</a> |</li>
         <li class="right" >
           <a href="sat.html" title="5. SAT Solver"
@@ -111,8 +169,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2026, Yusuke Matsunaga.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
     </div>
   </body>
 </html>
