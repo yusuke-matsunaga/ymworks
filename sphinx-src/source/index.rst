@@ -17,6 +17,7 @@ Ymworks
    clib/clib
    sat/sat
    verilog/verilog
+   python/index
 
 ..   all_classes
 

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>7.8. SATサブモジュール &#8212; ymworks 1.0.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
+    <script src="../_static/documentation_options.js?v=144c8c96"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="prev" title="7.7. MISC サブモジュール" href="misc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="7.7. MISC サブモジュール"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U"><span class="section-number">7. </span>概要</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7.8. </span>SATサブモジュール</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="sat">
+<h1><span class="section-number">7.8. </span>SATサブモジュール<a class="headerlink" href="#sat" title="Link to this heading">¶</a></h1>
+<p>C++ バージョンとほぼ同様のインターフェイスを用意している．
+<cite>SatSolver</cite> クラスはその名の通りSATソルバを表すクラスであり，
+同時にSAT問題を保持するクラスでもある．
+<cite>SatLiteral</cite> クラスがSAT問題の変数(リテラル)を表す．
+SAT問題で扱われる値は <cite>SatBool3</cite> クラスを用いる．
+SAT問題の解 <cite>SatModel</cite> クラスが表す．</p>
+<section id="id1">
+<h2><span class="section-number">7.8.1. </span>インポートの仕方<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">インポートの仕方</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ymworks</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">ymworks</span><span class="o">.</span><span class="n">sat</span><span class="o">.</span><span class="n">SatSolver</span><span class="p">()</span>
+<span class="o">...</span>
+
+<span class="c1"># または</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ymworks.sat</span><span class="w"> </span><span class="kn">import</span> <span class="n">SatSolver</span>
+
+<span class="n">solver</span> <span class="o">=</span> <span class="n">SatSolver</span><span class="p">()</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<p>以下のコード例ではこのインポート記述は省略する．</p>
+</section>
+<section id="id2">
+<h2><span class="section-number">7.8.2. </span>簡単なSAT問題<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<p>以下のCNF式に対するSAT問題を考える．</p>
+<div class="math notranslate nohighlight">
+\[(a \lor b) \land (\lnot b \lor \lnot c) \land (\lnot a \lor c)\]</div>
+<p>この式は例えば <span class="math notranslate nohighlight">\(a = 1, b = 0, c = 1\)</span> という割り当てで全ての
+節を充足することができる．
+この問題を <cite>SatSolver</cite> を用いて解くには以下のようなコードを用いる．</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># SATソルバの生成</span>
+<span class="n">solver</span> <span class="o">=</span> <span class="n">SatSolver</span><span class="p">();</span>
+
+<span class="c1"># 変数(正リテラル)の生成</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">new_variable</span><span class="p">();</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">new_variable</span><span class="p">();</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">new_variable</span><span class="p">();</span>
+
+<span class="c1"># 節の追加</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="o">~</span><span class="n">b</span><span class="p">,</span> <span class="o">~</span><span class="n">c</span><span class="p">);</span>
+<span class="n">solver</span><span class="o">.</span><span class="n">add_clause</span><span class="p">(</span><span class="o">~</span><span class="n">a</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+
+<span class="c1"># 解を求める．</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">();</span>
+
+<span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="n">SatBool3</span><span class="o">.</span><span class="n">true</span><span class="p">:</span>
+    <span class="c1"># 解が求められた．</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">model</span><span class="p">();</span>
+<span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="n">SatBool3</span><span class="o">.</span><span class="n">false</span><span class="p">:</span>
+    <span class="c1"># 充足不能</span>
+<span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="n">SatBool3</span><span class="o">.</span><span class="n">x</span><span class="p">:</span>
+    <span class="c1"># アボート</span>
+    <span class="c1"># 時間制約などの制約違反が起こった．</span>
+</pre></div>
+</div>
+<p>まず， <cite>SatSolver</cite> インスタンスの生成を行う．
+この例では引数を与えずにデフォルトパラメータを用いているが，
+様々な初期化オプションが存在する．
+詳しくは <cite>SatInitParam</cite> を参照すること．</p>
+<p>変数は <cite>SatSolver.new_variable()</cite> で生成する．
+返り値の型は <cite>SatLiteral</cite> でこの関数は常に正リテラルを返す．
+負リテラルを作るには演算子 <cite>~</cite> を用いる．</p>
+<p><cite>SatSolver</cite> に節を追加するには <cite>SatSolver.add_clause()</cite>
+を用いる．
+この例では <cite>solver.add_clause(~a, b)</cite> のように2つの <cite>SatLiteral</cite>
+を引数にしている．
+<cite>SatSolver.add_clause()</cite> は可変引数を受け取ることができるように
+なっているので任意の要素数のリテラルを与えることができる．
+また， <cite>[~a, b, c]</cite> のようにリテラルのリストを与えることもできる．
+さらに以下のようにリテラルとリストを混在させることも可能である．</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">add_clause() でリテラルとリストを混在させる．</span><a class="headerlink" href="#id4" title="Link to this code">¶</a></div>
+<div class="highlight-pythone notranslate"><div class="highlight"><pre><span></span>solver.add_clause(a, [b, c], (d, e))
+</pre></div>
+</div>
+</div>
+<p>結果は <cite>solver.add_clause(a, b, c, d, e)</cite> と同一となる．
+この例で示されているようにリストだけでなくタプルも使用可能である．
+厳密には <cite>シーケンス</cite> プロトコルを実装している型ならなんでもよい．</p>
+<p><cite>SatSolver.solve()</cite> で現在保持しているCNF式に対する充足可能性
+を調べる．
+返り値の型は <cite>SatBool3</cite> で <cite>SatBool3.true</cite> が充足可，
+<cite>SatBool3.false</cite> が充足不可，
+<cite>SatBool3.x</cite> が不明を表す．
+通常は充足可か充足不可となるが，
+時間やメモリ制限を超えた場合は途中で処理が中断するため
+不明となる．</p>
+<p>直前の <cite>SatSolver.solve()</cite> が充足可だった場合には，
+CNF式を充足させる割り当てを <cite>SatSolver.model()</cite>
+を用いて取得することができる．
+この関数の返り値は <cite>SatModel</cite> である．
+<cite>SatModel</cite> は意味的には <cite>SatLiteral</cite> をキーにして
+対応する値( <cite>SatBool3</cite> )を保持する辞書である．
+結果の値は <cite>SatBool3</cite> となっているが，
+通常の <cite>SatSolver.solve()</cite> 関数の結果は
+<cite>SatBool3.true</cite> か <cite>SatBool3.false</cite> の二択となっている．</p>
+<p><cite>SatSolver.model()</cite> の値は <cite>SatSolver.solve()</cite> を呼ぶ度に変化するので
+以前の結果をあとで参照する場合には <cite>m = solver.model()</cite> のように
+変数にコピーしておくこと．</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">7.8. SATサブモジュール</a><ul>
+<li><a class="reference internal" href="#id1">7.8.1. インポートの仕方</a></li>
+<li><a class="reference internal" href="#id2">7.8.2. 簡単なSAT問題</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="misc.html"
+                          title="前の章へ"><span class="section-number">7.7. </span>MISC サブモジュール</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/python/sat.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="7.7. MISC サブモジュール"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" ><span class="section-number">7. </span>概要</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7.8. </span>SATサブモジュール</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; 著作権 2026, Yusuke Matsunaga.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.0.4.
+    </div>
+  </body>
+</html>
