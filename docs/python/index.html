@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>7. 概要 &#8212; ymworks 1.0.0 ドキュメント</title>
+    <title>7. Python インターフェイス &#8212; ymworks 1.0.0 ドキュメント</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=34905f61" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=96226336" />
@@ -34,7 +34,7 @@
           <a href="../verilog/elaborate.html" title="6.3. elaboration のアルゴリズム"
              accesskey="P">前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>概要</a></li> 
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>Python インターフェイス</a></li> 
       </ul>
     </div>  
 
@@ -43,8 +43,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="id1">
-<h1><span class="section-number">7. </span>概要<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h1>
+  <section id="python">
+<h1><span class="section-number">7. </span>Python インターフェイス<a class="headerlink" href="#python" title="Link to this heading">¶</a></h1>
 <p>ymworks は <cite>Python</cite> からも利用するためのパッケージが
 ビルドディレクトリの下の <cite>ymworks/py_capi/ymworks.so</cite>
 に用意されている．
@@ -62,15 +62,15 @@
 <cite>py_ymworks</cite> を起動するのはほぼ同じ動作をする．</p>
 <p><cite>ymworks</cite> パッケージを利用するためには他のパッケージ同様にインポートする
 必要がある．</p>
-<div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">ymworks のインポート</span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">ymworks のインポート</span><a class="headerlink" href="#id1" title="Link to this code">¶</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ymworks</span>
 </pre></div>
 </div>
 </div>
 <p>通常のパッケージ同様 <cite>from</cite> 文を使うこともできる．</p>
-<div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">from 文の使用例</span><a class="headerlink" href="#id3" title="Link to this code">¶</a></div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">from 文の使用例</span><a class="headerlink" href="#id2" title="Link to this code">¶</a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ymworks.logic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Expr</span>
 
 <span class="c1"># Expr が使用可能になった．</span>
@@ -150,7 +150,7 @@
           <a href="../verilog/elaborate.html" title="6.3. elaboration のアルゴリズム"
              >前へ</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">ymworks 1.0.0 ドキュメント</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>概要</a></li> 
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">7. </span>Python インターフェイス</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -1,5 +1,5 @@
-概要
-=====
+Python インターフェイス
+========================
 
 ymworks は `Python` からも利用するためのパッケージが
 ビルドディレクトリの下の `ymworks/py_capi/ymworks.so`
