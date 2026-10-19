@@ -21,7 +21,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @brief 配列型の ElbDecl
 //////////////////////////////////////////////////////////////////////
 class EiDeclArray :
-  public VlDeclArray
+  public ElbDeclArray
 {
 public:
 
@@ -66,7 +66,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // VlDecl の関数
+  // VlDeclBase の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値の型を返す．
@@ -163,6 +163,16 @@ public:
   const VlDelay*
   delay() const override;
 
+  /// @brief この要素に対する代入のタイプを返す．
+  VlAssignType
+  assign_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlDeclArray の関数
+  //////////////////////////////////////////////////////////////////////
+
   /// @brief 配列型オブジェクトの時に true を返す．
   bool
   is_array() const override;
@@ -204,6 +214,18 @@ public:
   ) const override;
 
 
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbDeclArray の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 代入タイプをセットする．
+  void
+  set_assign_type(
+    VlAssignType assign_type ///< [in] 代入タイプ
+  ) override;
+
+
 private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
@@ -217,6 +239,9 @@ private:
 
   // dimension の配列
   EiRangeArray mRangeList;
+
+  // 代入タイプ
+  VlAssignType mAssignType{VlAssignType::NONE};
 
 };
 

@@ -1067,6 +1067,33 @@ operator<<(
   return s;
 }
 
+//////////////////////////////////////////////////////////////////////
+/// @brief 代入の種類を表す列挙型
+//////////////////////////////////////////////////////////////////////
+enum class VlAssignType : std::uint8_t {
+  NONE = 0, ///< 不正値
+  CONT,     ///< 継続的代入
+  BLOCK,    ///< ブロッキング
+  NONBLOCK  ///< ノンブロッキング
+};
+
+/// @brief VlAssignType のストリーム出力演算子
+inline
+std::ostream&
+operator<(
+  std::ostream& s, ///< [in] 出力ストリーム
+  VlAssignType val ///< [in] 値
+)
+{
+  switch ( val ) {
+  case VlAssignType::NONE:     s << "NONE"; break;
+  case VlAssignType::CONT:     s << "CONT"; break;
+  case VlAssignType::BLOCK:    s << "BLOCK"; break;
+  case VlAssignType::NONBLOCK: s << "NONBLOCK"; break;
+  }
+  return s;
+}
+
 /// @}
 
 using nsVerilog::BitVector;

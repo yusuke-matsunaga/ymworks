@@ -212,6 +212,13 @@ EiImpNet::delay() const
   return nullptr;
 }
 
+// @brief この要素に対する代入のタイプを返す．
+VlAssignType
+EiImpNet::assign_type() const
+{
+  return mAssignType;
+}
+
 // @brief 定数値を持つ型のときに true を返す．
 bool
 EiImpNet::is_consttype() const
@@ -247,6 +254,15 @@ EiImpNet::set_init(
 )
 {
   throw std::logic_error{"EiDeclBase::set_init()"};
+}
+
+// @brief 代入タイプをセットする．
+void
+EiImpNet::set_assign_type(
+  VlAssignType assign_type
+)
+{
+  mAssignType = assign_type;
 }
 
 END_NAMESPACE_YM_VERILOG

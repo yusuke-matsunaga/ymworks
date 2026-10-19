@@ -607,6 +607,13 @@ EiParameter::delay() const
   return nullptr;
 }
 
+// @brief この要素に対する代入のタイプを返す．
+VlAssignType
+EiParameter::assign_type() const
+{
+  return VlAssignType::NONE;
+}
+
 // @brief 定数値を持つ型のときに true を返す．
 bool
 EiParameter::is_consttype() const

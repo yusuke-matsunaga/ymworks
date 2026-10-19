@@ -65,7 +65,7 @@ public:
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // VlDecl の関数
+  // VlDeclBase の関数
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値の型を返す．
@@ -162,6 +162,16 @@ public:
   const VlDelay*
   delay() const override;
 
+  /// @brief この要素に対する代入のタイプを返す．
+  VlAssignType
+  assign_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlDecl の関数
+  //////////////////////////////////////////////////////////////////////
+
   /// @brief 定数値を持つ型のときに true を返す．
   bool
   is_consttype() const override;
@@ -192,6 +202,13 @@ public:
     const VlExpr* expr ///< [in] 初期値
   ) override;
 
+  /// @brief 代入タイプをセットする．
+  void
+  set_assign_type(
+    VlAssignType assign_type ///< [in] 代入タイプ
+  ) override;
+
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -209,6 +226,9 @@ private:
 
   // 値
   VlScalarVal mVal;
+
+  // 代入タイプ
+  VlAssignType mAssignType{VlAssignType::NONE};
 
 };
 

@@ -258,7 +258,7 @@ ExprGen::instantiate_lhs_sub(
       for ( SizeType i = 0; i < opr_size; ++ i ) {
 	SizeType pos = opr_size - i - 1;
 	auto ast_expr1 = ast_opr_list[pos];
-	  opr_list[pos] = instantiate_lhs_sub(parent, env, ast_expr1, elem_array);
+	opr_list[pos] = instantiate_lhs_sub(parent, env, ast_expr1, elem_array);
       }
       auto expr = elb_mgr().new_ConcatOp(ast_expr, opr_list);
       expr->set_selfsize();

@@ -153,6 +153,11 @@ public:
   const VlDelay*
   delay() const = 0;
 
+  /// @brief この要素に対する代入のタイプを返す．
+  virtual
+  VlAssignType
+  assign_type() const = 0;
+
 };
 
 END_NAMESPACE_YM_VERILOG
