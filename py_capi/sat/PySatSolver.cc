@@ -1629,7 +1629,7 @@ get_clause_num(
 // getter/setter定義
 PyGetSetDef getsets[] = {
   {"variable_num", get_variable_num, nullptr, PyDoc_STR("number of variables"), nullptr},
-  {"clausee_num", get_clause_num, nullptr, PyDoc_STR("number of clauses"), nullptr},
+  {"clause_num", get_clause_num, nullptr, PyDoc_STR("number of clauses"), nullptr},
   // end-marker
   {nullptr, nullptr, nullptr, nullptr}
 };

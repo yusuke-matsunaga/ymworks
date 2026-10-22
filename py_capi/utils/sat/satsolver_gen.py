@@ -557,7 +557,7 @@ class SatSolverGen(PyObjGen):
             writer.gen_return_py_ulong('val.clause_num()')
         self.add_getter('get_clause_num',
                         func_body=get_clause_num)
-        self.add_attr('clausee_num',
+        self.add_attr('clause_num',
                       getter_name='get_clause_num',
                       doc_str='number of clauses')
 
