@@ -545,6 +545,22 @@ class SatSolverGen(PyObjGen):
                         func_body=meth_conflict_literal,
                         doc_str="return conflict literals of the last SAT problem")
 
+        def get_variable_num(writer):
+            writer.gen_return_py_ulong('val.variable_num()')
+        self.add_getter('get_variable_num',
+                        func_body=get_variable_num)
+        self.add_attr('variable_num',
+                      getter_name='get_variable_num',
+                      doc_str='number of variables')
+
+        def get_clause_num(writer):
+            writer.gen_return_py_ulong('val.clause_num()')
+        self.add_getter('get_clause_num',
+                        func_body=get_clause_num)
+        self.add_attr('clausee_num',
+                      getter_name='get_clause_num',
+                      doc_str='number of clauses')
+
 
 if __name__ == '__main__':
 

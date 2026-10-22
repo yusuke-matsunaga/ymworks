@@ -1590,6 +1590,50 @@ PyMethodDef methods[] = {
   {nullptr, nullptr, 0, nullptr}
 };
 
+PyObject*
+get_variable_num(
+  PyObject* self,
+  void* Py_UNUSED(closure)
+)
+{
+  auto& val = PySatSolver::_get_ref(self);
+  try {
+    return PyUlong::ToPyObject(val.variable_num());
+  }
+  catch ( std::exception err ) {
+    std::ostringstream buf;
+    buf << "exception" << ": " << err.what();
+    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
+    return nullptr;
+  }
+}
+
+PyObject*
+get_clause_num(
+  PyObject* self,
+  void* Py_UNUSED(closure)
+)
+{
+  auto& val = PySatSolver::_get_ref(self);
+  try {
+    return PyUlong::ToPyObject(val.clause_num());
+  }
+  catch ( std::exception err ) {
+    std::ostringstream buf;
+    buf << "exception" << ": " << err.what();
+    PyErr_SetString(PyExc_ValueError, buf.str().c_str());
+    return nullptr;
+  }
+}
+
+// getter/setter定義
+PyGetSetDef getsets[] = {
+  {"variable_num", get_variable_num, nullptr, PyDoc_STR("number of variables"), nullptr},
+  {"clausee_num", get_clause_num, nullptr, PyDoc_STR("number of clauses"), nullptr},
+  // end-marker
+  {nullptr, nullptr, nullptr, nullptr}
+};
+
 // new 関数
 PyObject*
 new_func(
@@ -1653,6 +1697,7 @@ PySatSolver::init(
   SatSolver_Type.tp_flags = Py_TPFLAGS_DEFAULT;
   SatSolver_Type.tp_doc = PyDoc_STR("Python extended object for SatSolver");
   SatSolver_Type.tp_methods = methods;
+  SatSolver_Type.tp_getset = getsets;
   SatSolver_Type.tp_new = new_func;
   if ( !PyModule::reg_type(m, "SatSolver", &SatSolver_Type) ) {
     goto error;
