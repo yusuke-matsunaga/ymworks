@@ -1,0 +1,466 @@
+﻿#ifndef EIBINARYOP_H
+#define EIBINARYOP_H
+
+/// @file EiBinaryOp.h
+/// @brief EiExpr の2項演算子の派生クラスのヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+//////////////////////////////////////////////////////////////////////
+/// expression を表すクラス
+/// IEEE Std 1364-2001 26.6.25 Simple expressions
+/// IEEE Std 1364-2001 26.6.26 Expressions
+///
+/// operation の分類
+/// オペランドの数
+///
+/// - 2個
+///   - 返り値 scalar, オペランド any
+///     - EqOp, NeqOp, CaseEqOp, CaseNeqOp, GtOp, GeOp, LtOp, LeOp
+///   - 返り値 scalar, オペランド scalar
+///     - LogAndOp, LogOrOp
+///   - 返り値 オペランドと同一, オペランド bitvector
+///     - BitAndOp, BitOrOp, BitXorOp, BitXNorOp
+///   - 返り値 オペランドと同一, オペランド any
+///     - AddOp, SubOp, MultOp, DivOp, ModOp
+///     - PowerOp
+///   - 返り値 第1オペランドと同一, オペランド any
+///     - LShiftOp, RShiftOp, ArithLShiftOp, ArithRShiftOp
+//////////////////////////////////////////////////////////////////////
+
+#include "EiOperation.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiBinaryOp EiBinaryOp.h "EiBinaryOp.h"
+/// @brief 二項演算子を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiBinaryOp :
+  public EiOperation
+{
+public:
+
+  /// @brief コンストラクタ
+  EiBinaryOp(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,           ///< [in] オペランド1
+    ElbExpr* opr2            ///< [in] オペランド2
+  ) : EiOperation(ast_expr),
+    mOpr{opr1, opr2}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiBinaryOp() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 定数の時 true を返す．
+  bool
+  is_const() const override;
+
+  /// @brief オペランド数を返す．
+  SizeType
+  operand_num() const override;
+
+  /// @brief オペランドを返す．
+  const VlExpr*
+  operand(
+    SizeType pos
+  ) const override;
+
+  /// @brief オペランドのリストを返す．
+  std::vector<const VlExpr*>
+  operand_list() const override;
+
+
+protected:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // オペランド
+  ElbExpr* mOpr[2];
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiCompareOp EiBinaryOp.h "EiBinaryOp.h"
+/// @brief 比較演算子の基底クラス
+//////////////////////////////////////////////////////////////////////
+class EiCompareOp :
+  public EiBinaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiCompareOp(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,           ///< [in] オペランド1
+    ElbExpr* opr2            ///< [in] オペランド2
+  ) : EiBinaryOp(ast_expr, opr1, opr2)
+  {
+    // 比較演算は大きい方の型を用いる．
+    auto type1 = opr1->value_type();
+    auto type2 = opr2->value_type();
+
+    mOprType = calc_type(type1, type2);
+
+    opr1->set_reqsize(mOprType);
+    opr2->set_reqsize(mOprType);
+  }
+
+  /// @brief デストラクタ
+  ~EiCompareOp() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の設定用の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // オペランドの型
+  VlValueType mOprType;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiBinaryLogOp EiBinaryOp.h "EiBinaryOp.h"
+/// @brief 2項論理演算子の基底クラス
+//////////////////////////////////////////////////////////////////////
+class EiBinaryLogOp :
+  public EiBinaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiBinaryLogOp(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,           ///< [in] オペランド1
+    ElbExpr* opr2            ///< [in] オペランド2
+  ) : EiBinaryOp(ast_expr, opr1, opr2)
+  {
+    // 論理演算の場合はオペランドも1ビットスカラーのはずだが
+    // 仕様書には max(L(i), L(j)) なんて書いてある．
+    // これは == などと一緒に表記しているからだと思う．
+    // 実際には self determined で計算しておいて
+    // 評価時に true/false/X に分類する．
+    opr1->set_selfsize();
+    opr2->set_selfsize();
+  }
+
+  /// @brief デストラクタ
+  ~EiBinaryLogOp() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiBinaryBitOp EiBinaryOp.h "EiBinaryOp.h"
+/// @brief 2項論理演算子の基底クラス
+//////////////////////////////////////////////////////////////////////
+class EiBinaryBitOp :
+  public EiBinaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiBinaryBitOp(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,	     ///< [in] オペランド1
+    ElbExpr* opr2	     ///< [in] オペランド2
+  ) : EiBinaryOp(ast_expr, opr1, opr2)
+  {
+    // オペランドのサイズの大きい方で決まる．
+    auto type1 = opr1->value_type();
+    auto type2 = opr2->value_type();
+
+    mType = calc_type(type1, type2);
+
+    if ( mType.is_real_type() ) {
+      throw std::logic_error{"mType.is_real_type()"};
+    }
+  }
+
+  /// @brief デストラクタ
+  ~EiBinaryBitOp() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 式の型
+  VlValueType mType;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiBinaryArithOp EiBinaryOp.h "EiBinaryOp.h"
+/// @brief 2項算術演算子の基底クラス
+//////////////////////////////////////////////////////////////////////
+class EiBinaryArithOp :
+  public EiBinaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiBinaryArithOp(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,	     ///< [in] オペランド1
+    ElbExpr* opr2	     ///< [in] オペランド2
+  ) : EiBinaryOp(ast_expr, opr1, opr2)
+  {
+    // オペランドのサイズの大きい方で決まる．
+    auto type1 = opr1->value_type();
+    auto type2 = opr2->value_type();
+
+    mType = calc_type(type1, type2);
+  }
+
+  /// @brief デストラクタ
+  ~EiBinaryArithOp() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 式の型
+  VlValueType mType;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiPowerOp EiBinaryOp.h "EiBinaryOp.h"
+/// @brief べき乗算演算子
+//////////////////////////////////////////////////////////////////////
+class EiPowerOp :
+  public EiBinaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiPowerOp(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,	     ///< [in] オペランド1
+    ElbExpr* opr2	     ///< [in] オペランド2
+  ) : EiBinaryOp(ast_expr, opr1, opr2)
+  {
+    // 巾乗演算の場合, どちらかのオペランドが real, integer, signed
+    // なら結果は real, どちらも unsigned の時のみ unsigned となる．
+    auto type1 = opr1->value_type();
+    auto type2 = opr2->value_type();
+    mType = calc_type2(type1, type2);
+
+    // ただし opr2 は self-determined
+    opr2->set_reqsize(type2);
+  }
+
+  /// @brief デストラクタ
+  ~EiPowerOp() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 式の型
+  VlValueType mType;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiShiftOp EiBinaryOp.h "EiBinaryOp.h"
+/// @brief シフト演算子の基底クラス
+//////////////////////////////////////////////////////////////////////
+class EiShiftOp :
+  public EiBinaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiShiftOp(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1,	     ///< [in] オペランド1
+    ElbExpr* opr2	     ///< [in] オペランド2
+  ) : EiBinaryOp(ast_expr, opr1, opr2)
+  {
+    // シフト演算子は第1オペランドの型とサイズをそのまま引き継ぐ
+    mType = opr1->value_type();
+    if ( mType.is_real_type() ) {
+      throw std::logic_error{"mType.is_real_type()"};
+    }
+    if ( opr2->value_type().is_real_type() ) {
+      throw std::logic_error{"opr2->value_type().is_real_type()"};
+    }
+
+    // 第2オペランドのサイズは self determined
+    opr2->set_selfsize();
+  }
+
+  /// @brief デストラクタ
+  ~EiShiftOp() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 式の型
+  VlValueType mType;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // EIBINARYOP_H

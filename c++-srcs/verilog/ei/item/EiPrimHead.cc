@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiPrimHead.h"
+#include "EiPrimHead.h"
 
 #include "ym/vl/VlUdpDefn.h"
 #include "ym/vl/VlDelay.h"
@@ -69,20 +69,6 @@ EiFactory::new_CellHead(
 //////////////////////////////////////////////////////////////////////
 // クラス EiPrimHead
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiPrimHead::EiPrimHead(
-  const VlScope* parent,
-  const AstItem& ast_header
-) : mParent{parent},
-    mAstHead{ast_header}
-{
-}
-
-// @brief デストラクタ
-EiPrimHead::~EiPrimHead()
-{
-}
 
 // @brief このオブジェクトの属しているスコープを返す．
 const VlScope*
@@ -194,19 +180,6 @@ EiPrimHead::set_delay(
 // クラス EiPrimHeadD
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiPrimHeadD::EiPrimHeadD(
-  const VlScope* parent,
-  const AstItem& ast_header
-) : EiPrimHead(parent, ast_header)
-{
-}
-
-// @brief デストラクタ
-EiPrimHeadD::~EiPrimHeadD()
-{
-}
-
 // @brief 遅延式を得る．
 const VlDelay*
 EiPrimHeadD::delay() const
@@ -227,21 +200,6 @@ EiPrimHeadD::set_delay(
 //////////////////////////////////////////////////////////////////////
 // クラス EiPrimHeadU
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiPrimHeadU::EiPrimHeadU(
-  const VlScope* parent,
-  const AstItem& ast_header,
-  const VlUdpDefn* udp
-) : EiPrimHead(parent, ast_header),
-    mUdp{udp}
-{
-}
-
-// @brief デストラクタ
-EiPrimHeadU::~EiPrimHeadU()
-{
-}
 
 // @brief primitive type を返す．
 VpiPrimType
@@ -269,20 +227,6 @@ EiPrimHeadU::udp_defn() const
 // クラス EiPrimHeadUD
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiPrimHeadUD::EiPrimHeadUD(
-  const VlScope* parent,
-  const AstItem& ast_header,
-  const VlUdpDefn* udp
-) : EiPrimHeadU(parent, ast_header, udp)
-{
-}
-
-// @brief デストラクタ
-EiPrimHeadUD::~EiPrimHeadUD()
-{
-}
-
 // @brief 遅延式を得る．
 const VlDelay*
 EiPrimHeadUD::delay() const
@@ -303,21 +247,6 @@ EiPrimHeadUD::set_delay(
 //////////////////////////////////////////////////////////////////////
 // クラス EiPrimHeadC
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiPrimHeadC::EiPrimHeadC(
-  const VlScope* parent,
-  const AstItem& ast_header,
-  const ClibCell& cell
-) : EiPrimHead(parent, ast_header),
-    mCell{cell}
-{
-}
-
-// @brief デストラクタ
-EiPrimHeadC::~EiPrimHeadC()
-{
-}
 
 // @brief primitive type を返す．
 VpiPrimType

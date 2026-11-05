@@ -16,6 +16,7 @@
 #include "ym/vl/VlIODecl.h"
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbDecl.h"
+#include "elaborator/ElbDeclRef.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbExpr.h"
 #include "elaborator/RangeVal.h"
@@ -224,8 +225,9 @@ ModuleGen::instantiate_ports(
     else if ( n == 1 ) {
       // 単一の要素の場合
       auto ast_expr = ast_port.portref_list().front();
-      VpiDir dir;
-      auto low_conn = instantiate_portref(module, ast_expr, dir);
+      auto portref = instantiate_portref(module, ast_expr);
+      auto low_conn = portref.expr;
+      auto dir = portref.dir;
       module->add_port(ast_port, low_conn, dir);
     }
     else if ( n > 1 ) {
@@ -234,40 +236,26 @@ ModuleGen::instantiate_ports(
       expr_list.reserve(n);
       VpiDir dir = VpiDir::NoDirection;
       for ( auto ast_expr: ast_port.portref_list() ) {
-	VpiDir dir1;
-	auto expr = instantiate_portref(module, ast_expr, dir1);
-	if ( !expr ) {
-	  // エラーが起こった．
-	  return;
-	}
-	expr_list.push_back(expr);
+	auto portref = instantiate_portref(module, ast_expr);
+	expr_list.push_back(portref.expr);
 	if ( dir == VpiDir::NoDirection ) {
-	  dir = dir1;
+	  dir = portref.dir;
 	}
-	else {
+	else if ( dir != portref.dir ) {
 	  dir = VpiDir::MixedIO;
 	}
       }
-
-      // lhs_elem_array は expr_list の逆順にする．
-      std::vector<ElbExpr*> lhs_elem_array(n);
-      for ( SizeType i = 0; i < n; ++ i ) {
-	auto expr = expr_list[i];
-	lhs_elem_array[n - i - 1] = expr;
-      }
-
-      auto low_conn = elb_mgr().new_Lhs(ast_port.expr(), expr_list, lhs_elem_array);
+      auto low_conn = elb_mgr().new_ConcatOp(ast_port.expr(), expr_list);
       module->add_port(ast_port, low_conn, dir);
     }
   }
 }
 
-// AstPortRef から expression を生成する．
-ElbExpr*
+// @brief ポート参照式の生成を行う．
+ModuleGen::PortRefOut
 ModuleGen::instantiate_portref(
   ElbModule* module,
-  const AstExpr& ast_expr,
-  VpiDir& dir
+  const AstExpr& ast_expr
 )
 {
   auto name = ast_expr.name();
@@ -278,7 +266,7 @@ ModuleGen::instantiate_portref(
 			      ast_expr.file_region(), name);
   }
 
-  if ( handle->declarray() ) {
+  if ( handle->declarray() != nullptr ) {
     // 配列要素は IO ポートに使えない．
     log_mgr().error_array_in_port_connection(__FILE__, __LINE__,
 					     ast_expr.file_region());
@@ -291,15 +279,18 @@ ModuleGen::instantiate_portref(
 				 ast_expr.file_region());
 
   }
+
+  // 対応する入出力宣言を求める．
+  // 方向の取得のため
   auto io_decl = module->find_io(decl);
   if ( io_decl == nullptr ) {
     // 入出力宣言ではなかった．
     log_mgr().error_illegal_port(__FILE__, __LINE__,
 				 ast_expr.file_region());
   }
-  dir = io_decl->direction();
+  auto dir = io_decl->direction();
 
-  auto primary = elb_mgr().new_Primary(ast_expr, decl);
+  auto decl_ref = ElbDeclRef(decl);
 
   // 添字の部分を実体化する．
   AstExpr ast_index;
@@ -309,35 +300,49 @@ ModuleGen::instantiate_portref(
   if ( ast_index.is_valid() ) {
     int index_val = evaluate_int(module, ast_index);
     SizeType offset;
-    bool stat2 = decl->calc_bit_offset(index_val, offset);
-    if ( !stat2 ) {
+    bool stat = decl->calc_bit_offset(index_val, offset);
+    if ( !stat ) {
       // 添字が範囲外
       log_mgr().warning_index_out_of_range(__FILE__, __LINE__,
 					   ast_index.file_region());
     }
-    return elb_mgr().new_BitSelect(ast_expr, primary, ast_index, index_val);
+    auto expr = elb_mgr().new_ConstSelectPrimary(ast_expr, decl_ref, offset);
+    return PortRefOut{expr, dir};
   }
+
   auto ast_part = ast_expr.part();
   if ( ast_part.is_valid() ) {
     auto range = evaluate_range(module, ast_part);
-    SizeType offset;
-    bool stat1 = decl->calc_bit_offset(range.left, offset);
+    SizeType left_offset;
+    bool stat1 = decl->calc_bit_offset(range.left, left_offset);
     if ( !stat1 ) {
       // 左の添字が範囲外
       log_mgr().warning_left_index_out_of_range(__FILE__, __LINE__,
 						ast_part.left().file_region());
     }
-    bool stat2 = decl->calc_bit_offset(range.right, offset);
+    SizeType right_offset;
+    bool stat2 = decl->calc_bit_offset(range.right, right_offset);
     if ( !stat2 ) {
       // 右の添字が範囲外
       log_mgr().warning_right_index_out_of_range(__FILE__, __LINE__,
 						 ast_part.right().file_region());
     }
-    return elb_mgr().new_PartSelect(ast_expr, primary,
-				    ast_part.left(), ast_part.right(),
-				    range.left, range.right);
+    SizeType offset;
+    SizeType width;
+    if ( decl->is_big_endian() ) {
+      offset = left_offset;
+      width = right_offset - left_offset + 1;
+    }
+    else {
+      offset = right_offset;
+      width = left_offset - right_offset + 1;
+    }
+    auto expr = elb_mgr().new_ConstSelectPrimary(ast_expr, decl_ref, offset, width);
+    return PortRefOut{expr, dir};
   }
-  return primary;
+
+  auto expr = elb_mgr().new_Primary(ast_expr, decl_ref);
+  return PortRefOut{expr, dir};
 }
 
 // port の生成を行う．

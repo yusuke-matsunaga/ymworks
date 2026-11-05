@@ -215,6 +215,16 @@ ElbProxy::instantiate_lhs(
   return mExprGen->instantiate_lhs(parent, env, ast_expr);
 }
 
+// @brief AstExpr から継続的代入文の左辺式を生成する
+ElbExpr*
+ElbProxy::instantiate_net_lhs(
+  const VlScope* parent,
+  const AstExpr& ast_expr
+)
+{
+  return mExprGen->instantiate_net_lhs(parent, ast_expr);
+}
+
 // @brief AstExpr から右辺式を生成する
 ElbExpr*
 ElbProxy::instantiate_rhs(
@@ -225,10 +235,8 @@ ElbProxy::instantiate_rhs(
 )
 {
   auto expr = mExprGen->instantiate_expr(parent, env, ast_expr);
-  if ( expr ) {
-    // lhs の型を expr に設定する．
-    expr->set_reqsize(lhs->value_type());
-  }
+  // lhs の型を expr に設定する．
+  expr->set_reqsize(lhs->value_type());
   return expr;
 }
 

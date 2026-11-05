@@ -22,6 +22,8 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+class ElbDeclRef;
+
 //////////////////////////////////////////////////////////////////////
 /// @class ElbMgr ElbMgr.h "ElbMgr.h"
 /// @brief ElbMgr の実装クラス
@@ -410,6 +412,14 @@ public:
   new_IOHead(
     const VlTaskFunc* taskfunc, ///< [in] 親のタスク/関数
     const AstIOHead& ast_header ///< [in] パース木のIO宣言ヘッダ
+  );
+
+  /// @brief IO宣言要素を生成する．
+  const VlIODecl*
+  new_IODecl(
+    ElbIOHead* head,           ///< [in] ヘッダ
+    const AstIOItem& ast_item, ///< [in] パース木のIO宣言要素
+    const VlDecl* decl         ///< [in] 対応する宣言要素
   );
 
 
@@ -1002,57 +1012,52 @@ public:
     const std::vector<ElbExpr*>& opr_list ///< [in] オペランドのリスト
   );
 
-  /// @brief プライマリ式を生成する．
+  /// @brief 宣言要素に対応するプライマリ式を生成する．
   ElbExpr*
   new_Primary(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    const VlDecl* obj        ///< [in] 本体のオブジェクト
+    const AstExpr& ast_expr,   ///< [in] パース木の定義要素
+    const ElbDeclRef& decl_ref ///< [in] 宣言要素の参照
   );
 
-  /// @brief プライマリ式を生成する(portdecl用)．
+  /// @brief 固定部分選択に対応するプライマリ式を生成する．
+  ElbExpr*
+  new_ConstSelectPrimary(
+    const AstExpr& ast_expr,    ///< [in] パース木の定義要素
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    SizeType offset,            ///< [in] オフセット
+    SizeType width = 1          ///< [in] ビット幅
+  );
+
+  /// @brief 可変プラス部分選択に対応するプライマリ式を生成する．
+  ElbExpr*
+  new_PlusSelectPrimary(
+    const AstExpr& ast_expr,    ///< [in] パース木の定義要素
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const VlExpr* base_expr,    ///< [in] 基準位置を表すインデックス式
+    SizeType width = 1          ///< [in] ビット幅
+  );
+
+  /// @brief 可変マイナス部分選択に対応するプライマリ式を生成する．
+  ElbExpr*
+  new_MinusSelectPrimary(
+    const AstExpr& ast_expr,    ///< [in] パース木の定義要素
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const VlExpr* base_expr,    ///< [in] 基準位置を表すインデックス式
+    SizeType width = 1          ///< [in] ビット幅
+  );
+
+  /// @brief 宣言要素に対応するプライマリ式を生成する．
   ElbExpr*
   new_Primary(
-    const AstIOItem& ast_item, ///< [in] パース木の定義要素
-    const VlDecl* obj          ///< [in] 本体のオブジェクト
+    const AstDeclItem& ast_decl, ///< [in] パース木の定義要素
+    const VlDecl* decl           ///< [in] 宣言要素
   );
 
-  /// @brief プライマリ式を生成する(net decl の初期値用)．
+  /// @brief 宣言要素に対応するプライマリ式を生成する．
   ElbExpr*
   new_Primary(
-    const AstDeclItem& ast_item, ///< [in] パース木の定義要素
-    const VlDecl* obj            ///< [in] 本体のオブジェクト
-  );
-
-  /// @brief プライマリ式を生成する．
-  ElbExpr*
-  new_Primary(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbParameter* obj        ///< [in] 本体のオブジェクト
-  );
-
-  /// @brief プライマリ式を生成する(配列要素版)．
-  ElbExpr*
-  new_Primary(
-    const AstExpr& ast_expr,                ///< [in] パース木の定義要素
-    const VlDeclArray* obj,                 ///< [in] 本体のオブジェクト
-    const std::vector<ElbExpr*>& index_list ///< [in] インデックスのリスト
-  );
-
-  /// @brief プライマリ式を生成する(固定インデックスの配列要素版)．
-  ElbExpr*
-  new_Primary(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    const VlDeclArray* obj,  ///< [in] 本体のオブジェクト
-    int offset               ///< [in] オフセット
-  );
-
-  /// @brief 固定ビット選択式を生成する．
-  ElbExpr*
-  new_BitSelect(
-    const AstExpr& ast_expr,  ///< [in] パース木の定義要素
-    ElbExpr* expr,            ///< [in] 本体のオブジェクト
-    const AstExpr& bit_index, ///< [in] ビット選択式
-    int bit_index_val         ///< [in] ビット選択式の値
+    const AstIOItem& ast_decl, ///< [in] パース木の定義要素
+    const VlDecl* decl         ///< [in] 宣言要素
   );
 
   /// @brief 固定ビット選択式を生成する．
@@ -1060,26 +1065,7 @@ public:
   new_BitSelect(
     const AstExpr& ast_expr, ///< [in] パース木の定義要素
     ElbExpr* expr,           ///< [in] 本体の式
-    int bit_index_val        ///< [in] ビット選択式の値
-  );
-
-  /// @brief 可変ビット選択式を生成する．
-  ElbExpr*
-  new_BitSelect(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* expr,           ///< [in] 本体のオブジェクト
-    ElbExpr* bit_index       ///< [in] ビット選択式
-  );
-
-  /// @brief 固定部分選択式を生成する．
-  ElbExpr*
-  new_PartSelect(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* obj,            ///< [in] 本体のオブジェクト
-    const AstExpr& index1,   ///< [in] インデックス1の式
-    const AstExpr& index2,   ///< [in] インデックス2の式
-    int index1_val,          ///< [in] インデックス1の値
-    int index2_val           ///< [in] インデックス2の値
+    SizeType bit_offset      ///< [in] ビットのオフセット
   );
 
   /// @brief 固定部分選択式を生成する．
@@ -1087,28 +1073,8 @@ public:
   new_PartSelect(
     const AstExpr& ast_expr, ///< [in] パース木の定義要素
     ElbExpr* expr,           ///< [in] 本体の式
-    int index1,              ///< [in] インデックス1の値
-    int index2               ///< [in] インデックス2の値
-  );
-
-  /// @brief 可変部分選択式を生成する．
-  ElbExpr*
-  new_PlusPartSelect(
-    const AstExpr& ast_expr,   ///< [in] パース木の定義要素
-    ElbExpr* obj,              ///< [in] 本体のオブジェクト
-    ElbExpr* base,             ///< [in] 範囲のベースアドレスを表す式
-    const AstExpr& range_expr, ///< [in] 範囲を表す式
-    int range_val              ///< [in] 範囲の値
-  );
-
-  /// @brief 可変部分選択式を生成する．
-  ElbExpr*
-  new_MinusPartSelect(
-    const AstExpr& ast_expr,   ///< [in] パース木の定義要素
-    ElbExpr* obj,              ///< [in] 本体のオブジェクト
-    ElbExpr* base,             ///< [in] 範囲のベースアドレスを表す式
-    const AstExpr& range_expr, ///< [in] 範囲を表す式
-    int range_val              ///< [in] 範囲の値
+    SizeType select_width,   ///< [in] ビット幅
+    SizeType bit_offset      ///< [in] ビットのオフセット
   );
 
   /// @brief 定数式を生成する．
@@ -1161,14 +1127,6 @@ public:
     const VlDeclArray* arg   ///< [in] 引数本体
   );
 
-  /// @brief 連結演算子の左辺式を生成する．
-  ElbExpr*
-  new_Lhs(
-    const AstExpr& ast_expr,                    ///< [in] パース木の定義要素
-    const std::vector<ElbExpr*>& opr_array,     ///< [in] オペランドを格納する配列
-    const std::vector<ElbExpr*>& lhs_elem_array ///< [in] 左辺の要素の配列
-  );
-
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -1218,6 +1176,19 @@ private:
     return *mFactory;
   }
 
+  /// @brief 宣言ヘッダを生成する．
+  ElbDeclHead*
+  new_declhead(
+    std::function<ElbDeclHead*()> new_func ///< [in] 生成関数
+  );
+
+  /// @brief 宣言要素を生成する．
+  ElbDecl*
+  new_decl(
+    std::function<ElbDecl*(SizeType)> new_func, ///< [in] 生成関数
+    int tag                                     ///< [in] タグ
+  );
+
   /// @brief ヘッダを登録する．
   void
   reg_head(
@@ -1235,6 +1206,16 @@ private:
   {
     mObjList.push_back(std::unique_ptr<const VlObj>{obj});
   }
+
+  /// @brief continuous assignment の情報を登録する．
+  ///
+  /// 右辺式の offset から始まる部分が左辺式に接続する．
+  void
+  reg_ca(
+    const VlExpr* lhs, ///< [in] 左辺式
+    SizeType offset,   ///< [in] オフセット
+    const VlExpr* rhs  ///< [in] 右辺式
+  );
 
 
 private:
@@ -1269,8 +1250,14 @@ private:
   // 全てのオブジェクトのリスト(所有権の管理用)
   std::vector<std::unique_ptr<const VlObj>> mObjList;
 
+  // 要素番号
+  SizeType mDeclId{0};
+
   // タグをキーにした各スコープごとのオブジェクトのリストの辞書
   TagDict mTagDict;
+
+  // 宣言要素番号をキーにした継続的代入文のソースの辞書．
+  std::unordered_map<SizeType, std::vector<const VlCASrc*>> mCASrcDict;
 
   // 属性リストの辞書
   std::unordered_map<const VlObj*, std::vector<const VlAttribute*>> mAttrHash;

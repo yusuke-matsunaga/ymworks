@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiUdpIO.h"
+#include "EiUdpIO.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

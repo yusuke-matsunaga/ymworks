@@ -53,6 +53,7 @@ set ( elaborator_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/ExprGen_main.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ExprGen_operation.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ExprGen_primary.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/ExprGen_calhs.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ExprEval.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/FuncEval.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ItemGen_generate.cc

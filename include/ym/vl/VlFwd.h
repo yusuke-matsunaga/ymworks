@@ -52,6 +52,9 @@ class VlDefParam;
 // in VlContAssign.h
 class VlContAssign;
 
+// in VlCASrc.h
+class VlCASrc;
+
 // in VlTaskFunc.h
 class VlTaskFunc;
 
@@ -72,6 +75,9 @@ class VlControl;
 
 // in VlExpr.h
 class VlExpr;
+
+// in vlSelecter.h
+class VlSelecter;
 
 // in VlDelay.h
 class VlDelay;
@@ -115,6 +121,7 @@ using nsVerilog::VlStmt;
 using nsVerilog::VlCaseItem;
 using nsVerilog::VlControl;
 using nsVerilog::VlExpr;
+using nsVerilog::VlSelecter;
 using nsVerilog::VlDelay;
 using nsVerilog::VlRange;
 using nsVerilog::VlUdpDefn;

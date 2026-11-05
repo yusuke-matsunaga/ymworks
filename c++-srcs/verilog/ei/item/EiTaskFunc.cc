@@ -7,10 +7,9 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiTaskFunc.h"
-#include "ei/EiIODecl.h"
-#include "ei/EiDeclHead.h"
+#include "EiTaskFunc.h"
 #include "elaborator/ElbDecl.h"
+#include "ym/vl/VlIODecl.h"
 #include "ym/vl/VlTime.h"
 #include "ym/vl/VlStmt.h"
 #include "ym/vl/BitVector.h"
@@ -72,22 +71,6 @@ EiFactory::new_Task(
 // クラス EiTaskFunc
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiTaskFunc::EiTaskFunc(
-  const VlScope* parent,
-  const AstItem& ast_item,
-  SizeType io_num
-) : mParent{parent},
-    mAstItem{ast_item}
-{
-  mIODeclList.reserve(io_num);
-}
-
-// @brief デストラクタ
-EiTaskFunc::~EiTaskFunc()
-{
-}
-
 // @brief ファイル位置の取得
 FileRegion
 EiTaskFunc::file_region() const
@@ -129,7 +112,10 @@ EiTaskFunc::io(
   SizeType pos
 ) const
 {
-  return &mIODeclList[pos];
+  if ( pos >= io_num() ) {
+    throw std::out_of_range{"EiTaskFunc::io(pos): pos is out of range"};
+  }
+  return mIODeclList[pos].get();
 }
 
 // @brief 入出力のリストの取得
@@ -139,7 +125,7 @@ EiTaskFunc::io_list() const
   std::vector<const VlIODecl*> ans_list;
   ans_list.reserve(io_num());
   for ( auto& io: mIODeclList ) {
-    ans_list.push_back(&io);
+    ans_list.push_back(io.get());
   }
   return ans_list;
 }
@@ -154,12 +140,10 @@ EiTaskFunc::stmt() const
 // @brief 入出力の初期設定を行う．
 void
 EiTaskFunc::add_iodecl(
-  ElbIOHead* head,
-  const AstIOItem& ast_item,
-  const VlDecl* decl
+  const VlIODecl* io_decl
 )
 {
-  mIODeclList.push_back({head, ast_item, decl});
+  mIODeclList.push_back(std::unique_ptr<const VlIODecl>{io_decl});
 }
 
 // @brief 本体のステートメントをセットする．
@@ -175,20 +159,6 @@ EiTaskFunc::set_stmt(
 //////////////////////////////////////////////////////////////////////
 // クラス EiTask
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiTask::EiTask(
-  const VlScope* parent,
-  const AstItem& ast_item,
-  SizeType io_num
-) : EiTaskFunc(parent, ast_item, io_num)
-{
-}
-
-// @brief デストラクタ
-EiTask::~EiTask()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -283,22 +253,6 @@ EiTask::ovar() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiFunction
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiFunction::EiFunction(
-  const VlScope* parent,
-  const AstItem& ast_item,
-  SizeType io_num,
-  bool const_func
-) : EiTaskFunc(parent, ast_item, io_num),
-    mConstFunc{const_func}
-{
-}
-
-// @brief デストラクタ
-EiFunction::~EiFunction()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -430,24 +384,6 @@ EiFunction::ovar() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiFunctionV
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiFunctionV::EiFunctionV(
-  const VlScope* parent,
-  const AstItem& ast_item,
-  SizeType io_num,
-  const AstRange& ast_range,
-  const RangeVal& range,
-  bool const_func
-) : EiFunction(parent, ast_item, io_num, const_func),
-    mRange(ast_range, range)
-{
-}
-
-// @brief デストラクタ
-EiFunctionV::~EiFunctionV()
-{
-}
 
 // @brief 範囲指定を持つとき true を返す．
 bool

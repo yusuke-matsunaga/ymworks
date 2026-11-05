@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiImpNet.h"
+#include "EiImpNet.h"
 #include "ym/vl/BitVector.h"
 
 
@@ -22,32 +22,17 @@ ElbDecl*
 EiFactory::new_ImpNet(
   const VlScope* parent,
   const AstExpr& ast_expr,
-  VpiNetType net_type
+  VpiNetType net_type,
+  SizeType decl_id
 )
 {
-  return new EiImpNet(parent, ast_expr, net_type);
+  return new EiImpNet(parent, ast_expr, net_type, decl_id);
 }
 
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiImpNet
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiImpNet::EiImpNet(
-  const VlScope* parent,
-  const AstExpr& ast_expr,
-  VpiNetType net_type
-) : mParent{parent},
-    mAstExpr{ast_expr},
-    mNetType{net_type}
-{
-}
-
-// @brief デストラクタ
-EiImpNet::~EiImpNet()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -238,6 +223,13 @@ bool
 EiImpNet::is_local_param() const
 {
   return false;
+}
+
+// @brief 要素番号を返す．
+SizeType
+EiImpNet::decl_id() const
+{
+  return mDeclId;
 }
 
 // @brief 符号付きに補正する．

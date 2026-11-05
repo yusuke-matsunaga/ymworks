@@ -1,6 +1,8 @@
 ﻿#ifndef EILHS_H
 #define EILHS_H
 
+#error "obsolete"
+
 /// @file EiLhs.h
 /// @brief EiLhs のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)

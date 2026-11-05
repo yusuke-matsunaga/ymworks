@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiMiscStmt.h"
+#include "EiMiscStmt.h"
 
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbExpr.h"
@@ -34,8 +34,8 @@ EiFactory::new_EventStmt(
   ElbExpr* named_event
 )
 {
-  auto stmt = new EiEventStmt{parent, process, ast_stmt,
-			      named_event};
+  auto stmt = new EiEventStmt(parent, process, ast_stmt,
+			      named_event);
 
   return stmt;
 }
@@ -48,7 +48,7 @@ EiFactory::new_NullStmt(
   const AstStmt& ast_stmt
 )
 {
-  auto stmt = new EiNullStmt{parent, process, ast_stmt};
+  auto stmt = new EiNullStmt(parent, process, ast_stmt);
   return stmt;
 }
 
@@ -62,8 +62,8 @@ EiFactory::new_TaskCall(
   const std::vector<ElbExpr*>& arg_array
 )
 {
-  auto stmt = new EiTaskCall{parent, process, ast_stmt,
-			     task, arg_array};
+  auto stmt = new EiTaskCall(parent, process, ast_stmt,
+			     task, arg_array);
   return stmt;
 }
 
@@ -77,8 +77,8 @@ EiFactory::new_SysTaskCall(
   const std::vector<ElbExpr*>& arg_array
 )
 {
-  auto stmt = new EiSysTaskCall{parent, process, ast_stmt,
-				user_systf, arg_array};
+  auto stmt = new EiSysTaskCall(parent, process, ast_stmt,
+				user_systf, arg_array);
   return stmt;
 }
 
@@ -91,8 +91,8 @@ EiFactory::new_DisableStmt(
   const VlScope* target
 )
 {
-  auto stmt = new EiDisableStmt{parent, process, ast_stmt,
-				target};
+  auto stmt = new EiDisableStmt(parent, process, ast_stmt,
+				target);
   return stmt;
 }
 
@@ -106,8 +106,8 @@ EiFactory::new_CtrlStmt(
   const VlStmt* stmt
 )
 {
-  auto stmt1 = new EiCtrlStmt{parent, process, ast_stmt,
-			      control, stmt};
+  auto stmt1 = new EiCtrlStmt(parent, process, ast_stmt,
+			      control, stmt);
   return stmt1;
 }
 
@@ -115,22 +115,6 @@ EiFactory::new_CtrlStmt(
 //////////////////////////////////////////////////////////////////////
 // クラス EiEventStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiEventStmt::EiEventStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  ElbExpr* named_event
-) : EiStmtBase{parent, process, ast_stmt},
-    mEvent{named_event}
-{
-}
-
-// @brief デストラクタ
-EiEventStmt::~EiEventStmt()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -151,20 +135,6 @@ EiEventStmt::named_event() const
 // クラス EiNullStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiNullStmt::EiNullStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt
-) : EiStmtBase{parent, process, ast_stmt}
-{
-}
-
-// @brief デストラクタ
-EiNullStmt::~EiNullStmt()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiNullStmt::type() const
@@ -176,22 +146,6 @@ EiNullStmt::type() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiTcBase
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiTcBase::EiTcBase(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const std::vector<ElbExpr*>& arg_array
-) : EiStmtBase{parent, process, ast_stmt},
-    mArgumentList{arg_array}
-{
-}
-
-// @brief デストラクタ
-EiTcBase::~EiTcBase()
-{
-}
 
 // @brief 引数の数を返す．
 SizeType
@@ -224,23 +178,6 @@ EiTcBase::argument_list() const
 // クラス EiTaskCall
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiTaskCall::EiTaskCall(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlTaskFunc* task,
-  const std::vector<ElbExpr*>& arg_array
-) : EiTcBase{parent, process, ast_stmt, arg_array},
-    mTask{task}
-{
-}
-
-// @brief デストラクタ
-EiTaskCall::~EiTaskCall()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiTaskCall::type() const
@@ -259,23 +196,6 @@ EiTaskCall::task() const
 //////////////////////////////////////////////////////////////////////
 // クラス SysTaskCall
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiSysTaskCall::EiSysTaskCall(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlUserSystf* user_systf,
-  const std::vector<ElbExpr*>& arg_array
-) : EiTcBase{parent, process, ast_stmt, arg_array},
-    mUserSystf{user_systf}
-{
-}
-
-// @brief デストラクタ
-EiSysTaskCall::~EiSysTaskCall()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -296,22 +216,6 @@ EiSysTaskCall::user_systf() const
 // クラス EiDisableStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDisableStmt::EiDisableStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlScope* target
-) : EiStmtBase{parent, process, ast_stmt},
-    mExpr{target}
-{
-}
-
-// @brief デストラクタ
-EiDisableStmt::~EiDisableStmt()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiDisableStmt::type() const
@@ -330,24 +234,6 @@ EiDisableStmt::target_scope() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiCtrlStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiCtrlStmt::EiCtrlStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlControl* control,
-  const VlStmt* stmt
-) : EiStmtBase{parent, process, ast_stmt},
-    mControl{control},
-    mBodyStmt{stmt}
-{
-}
-
-// @brief デストラクタ
-EiCtrlStmt::~EiCtrlStmt()
-{
-}
 
 // @brief 型の取得
 VpiObjType

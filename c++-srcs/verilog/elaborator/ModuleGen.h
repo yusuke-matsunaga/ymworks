@@ -24,6 +24,15 @@ class ModuleGen :
 {
 public:
 
+  /// @brief ポート参照式の生成結果
+  struct PortRefOut {
+    ElbExpr* expr;    ///< 生成された式
+    VpiDir dir;       ///< 方向
+  };
+
+
+public:
+
   /// @brief コンストラクタ
   ModuleGen(
     Elaborator& elab ///< [in] 生成器
@@ -88,14 +97,11 @@ private:
     const AstPortList& ast_port_list ///< [in] ポート定義のリスト
   );
 
-  /// @brief AstPortRef から expression を生成する．
-  ///
-  /// 同時に向きを求める．
-  ElbExpr*
+  /// @brief ポート参照式の生成を行う．
+  PortRefOut
   instantiate_portref(
-    ElbModule* module,          ///< [in] 親のモジュール
-    const AstExpr& ast_portref, ///< [in] パース木の portref 定義
-    VpiDir& dir                 ///< [out] 向き
+    ElbModule* module,         ///< [in] 親のモジュール
+    const AstExpr& ast_portref ///< [in] パース木の portref 定義
   );
 
   /// @brief port の生成を行う(Verilog2001用)．

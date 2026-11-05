@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiPrimitive.h"
+#include "EiPrimitive.h"
 
 #include "ym/vl/VlUdpDefn.h"
 #include "ym/vl/VlDelay.h"
@@ -78,50 +78,6 @@ EiFactory::new_CellPrimitiveArray(
 //////////////////////////////////////////////////////////////////////
 // クラス EiPrimArray
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiPrimArray::EiPrimArray(
-  ElbPrimHead* head,
-  const AstInst& ast_inst,
-  const AstRange& ast_range,
-  const RangeVal& range
-) : mHead{head},
-    mAstInst{ast_inst},
-    mRange(ast_range, range),
-    mArray(mRange.calc_size())
-{
-  SizeType n = mRange.calc_size();
-  SizeType port_num = ast_inst.port_list().size();
-  for ( SizeType i = 0; i < n; ++ i ) {
-    SizeType index = mRange.index(i);
-    mArray[i].init(this, index, port_num);
-  }
-}
-
-// @brief コンストラクタ
-EiPrimArray::EiPrimArray(
-  ElbPrimHead* head,
-  const ClibCell& cell,
-  const AstInst& ast_inst,
-  const AstRange& ast_range,
-  const RangeVal& range
-) : mHead{head},
-    mAstInst{ast_inst},
-    mRange(ast_range, range),
-    mArray(mRange.calc_size())
-{
-  SizeType n = mRange.calc_size();
-  SizeType port_num = ast_inst.port_list().size();
-  for ( SizeType i = 0; i < n; ++ i ) {
-    SizeType index = mRange.index(i);
-    mArray[i].init(this, index, port_num);
-  }
-}
-
-// @brief デストラクタ
-EiPrimArray::~EiPrimArray()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -305,16 +261,6 @@ EiPrimArray::ast_inst() const
 // クラス EiPrimitive
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiPrimitive::EiPrimitive()
-{
-}
-
-// @brief デストラクタ
-EiPrimitive::~EiPrimitive()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiPrimitive::type() const
@@ -490,16 +436,6 @@ EiPrimitive::connect(
 // クラス EiPrimitive1
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiPrimitive1::EiPrimitive1()
-{
-}
-
-// @brief デストラクタ
-EiPrimitive1::~EiPrimitive1()
-{
-}
-
 // @brief 初期設定を行う．
 void
 EiPrimitive1::init(
@@ -557,32 +493,6 @@ EiPrimitive1::ast_inst() const
 // クラス EiPrimitive2
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiPrimitive2::EiPrimitive2(
-  ElbPrimHead* head,
-  const AstInst& ast_inst
-) : mHead{head},
-    mAstInst{ast_inst}
-{
-  init_port(ast_inst.port_list().size());
-}
-
-// @brief コンストラクタ
-EiPrimitive2::EiPrimitive2(
-  ElbPrimHead* head,
-  const ClibCell& cell,
-  const AstInst& ast_inst
-) : mHead{head},
-    mAstInst{ast_inst}
-{
-  init_port(ast_inst.port_list().size(), cell);
-}
-
-// @brief デストラクタ
-EiPrimitive2::~EiPrimitive2()
-{
-}
-
 // @brief 名前の取得
 std::string
 EiPrimitive2::name() const
@@ -608,16 +518,6 @@ EiPrimitive2::ast_inst() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiPrimTerm
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiPrimTerm::EiPrimTerm()
-{
-}
-
-// @brief デストラクタ
-EiPrimTerm::~EiPrimTerm()
-{
-}
 
 // @brief 型の取得
 VpiObjType

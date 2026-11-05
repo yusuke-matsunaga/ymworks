@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiAssignment.h"
+#include "EiAssignment.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/VlControl.h"
 #include "ym/vl/BitVector.h"
@@ -33,12 +33,12 @@ EiFactory::new_Assignment(
 {
   const VlStmt* stmt = nullptr;
   if ( block ) {
-    stmt = new EiAssignment{parent, process, ast_stmt,
-			    lhs, rhs, control};
+    stmt = new EiAssignment(parent, process, ast_stmt,
+			    lhs, rhs, control);
   }
   else {
-    stmt = new EiNbAssignment{parent, process, ast_stmt,
-			      lhs, rhs, control};
+    stmt = new EiNbAssignment(parent, process, ast_stmt,
+			      lhs, rhs, control);
   }
   return stmt;
 }
@@ -53,8 +53,8 @@ EiFactory::new_AssignStmt(
   const VlExpr* rhs
 )
 {
-  auto stmt = new EiAssignStmt{parent, process, ast_stmt,
-			       lhs, rhs};
+  auto stmt = new EiAssignStmt(parent, process, ast_stmt,
+			       lhs, rhs);
   return stmt;
 }
 
@@ -67,8 +67,8 @@ EiFactory::new_DeassignStmt(
   const VlExpr* lhs
 )
 {
-  auto stmt = new EiDeassignStmt{parent, process, ast_stmt,
-				 lhs};
+  auto stmt = new EiDeassignStmt(parent, process, ast_stmt,
+				 lhs);
 
   return stmt;
 }
@@ -83,8 +83,8 @@ EiFactory::new_ForceStmt(
   const VlExpr* rhs
 )
 {
-  auto stmt = new EiForceStmt{parent, process, ast_stmt,
-			      lhs, rhs};
+  auto stmt = new EiForceStmt(parent, process, ast_stmt,
+			      lhs, rhs);
   return stmt;
 }
 
@@ -97,8 +97,8 @@ EiFactory::new_ReleaseStmt(
   const VlExpr* lhs
 )
 {
-  auto stmt = new EiReleaseStmt{parent, process, ast_stmt,
-				lhs};
+  auto stmt = new EiReleaseStmt(parent, process, ast_stmt,
+				lhs);
   return stmt;
 }
 
@@ -106,24 +106,6 @@ EiFactory::new_ReleaseStmt(
 //////////////////////////////////////////////////////////////////////
 // クラス EiAssignBase
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiAssignBase::EiAssignBase(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* lhs,
-  const VlExpr* rhs
-) : EiStmtBase{parent, process, ast_stmt},
-    mLhs{lhs},
-    mRhs{rhs}
-{
-}
-
-// @brief デストラクタ
-EiAssignBase::~EiAssignBase()
-{
-}
 
 // @brief 左辺を返す．
 const VlExpr*
@@ -144,24 +126,6 @@ EiAssignBase::rhs() const
 // クラス EiNbAssignment
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiNbAssignment::EiNbAssignment(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* lhs,
-  const VlExpr* rhs,
-  const VlControl* control
-) : EiAssignBase{parent, process, ast_stmt, lhs, rhs},
-    mControl{control}
-{
-}
-
-// @brief デストラクタ
-EiNbAssignment::~EiNbAssignment()
-{
-}
-
 // @brief クラスの型の取得
 VpiObjType
 EiNbAssignment::type() const
@@ -181,23 +145,6 @@ EiNbAssignment::control() const
 // クラス EiAssignment
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiAssignment::EiAssignment(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* lhs,
-  const VlExpr* rhs,
-  const VlControl* control
-) : EiNbAssignment{parent, process, ast_stmt, lhs, rhs, control}
-{
-}
-
-// @brief デストラクタ
-EiAssignment::~EiAssignment()
-{
-}
-
 // @brief 代入のブロッキング/ノンブロッキングの区別の取得
 bool
 EiAssignment::is_blocking() const
@@ -209,22 +156,6 @@ EiAssignment::is_blocking() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiAssignStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiAssignStmt::EiAssignStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* lhs,
-  const VlExpr* rhs
-) : EiAssignBase{parent, process, ast_stmt, lhs, rhs}
-{
-}
-
-// @brief デストラクタ
-EiAssignStmt::~EiAssignStmt()
-{
-}
 
 // @brief このクラスの型を返す．
 VpiObjType
@@ -238,22 +169,6 @@ EiAssignStmt::type() const
 // クラス EiForceStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiForceStmt::EiForceStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* lhs,
-  const VlExpr* rhs
-) : EiAssignBase{parent, process, ast_stmt, lhs, rhs}
-{
-}
-
-// @brief デストラクタ
-EiForceStmt::~EiForceStmt()
-{
-}
-
 // @brief このクラスの型を返す．
 VpiObjType
 EiForceStmt::type() const
@@ -265,22 +180,6 @@ EiForceStmt::type() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeassignBase
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeassignBase::EiDeassignBase(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* lhs
-) : EiStmtBase{parent, process, ast_stmt},
-    mLhs{lhs}
-{
-}
-
-// @brief デストラクタ
-EiDeassignBase::~EiDeassignBase()
-{
-}
 
 // @brief 左辺を返す．
 const VlExpr*
@@ -294,21 +193,6 @@ EiDeassignBase::lhs() const
 // クラス EiDeassignStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDeassignStmt::EiDeassignStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* lhs
-) : EiDeassignBase{parent, process, ast_stmt, lhs}
-{
-}
-
-// @brief デストラクタ
-EiDeassignStmt::~EiDeassignStmt()
-{
-}
-
 // @brief このクラスの型を返す．
 VpiObjType
 EiDeassignStmt::type() const
@@ -320,21 +204,6 @@ EiDeassignStmt::type() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiReleaseStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiReleaseStmt::EiReleaseStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* lhs
-) : EiDeassignBase{parent, process, ast_stmt, lhs}
-{
-}
-
-// @brief デストラクタ
-EiReleaseStmt::~EiReleaseStmt()
-{
-}
 
 // @brief このクラスの型を返す．
 VpiObjType

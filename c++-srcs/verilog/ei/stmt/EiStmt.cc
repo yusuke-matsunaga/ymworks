@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiStmt.h"
+#include "EiStmt.h"
 #include "ym/vl/AstStmt.h"
 
 
@@ -15,13 +15,6 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 // クラス EiStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiStmt::EiStmt(
-  const VlProcess* process
-) : mProcess{process}
-{
-}
 
 // @brief 対象のスコープの取得
 const VlScope*
@@ -203,17 +196,6 @@ EiStmt::target_scope() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiStmtBase
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiStmtBase::EiStmtBase(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt
-) : EiStmt{process},
-    mParent{parent},
-    mAstStmt{ast_stmt}
-{
-}
 
 // @brief 親のスコープを返す．
 const VlScope*

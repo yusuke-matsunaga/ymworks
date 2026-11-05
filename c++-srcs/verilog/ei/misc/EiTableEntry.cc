@@ -6,7 +6,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiTableEntry.h"
+#include "EiTableEntry.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

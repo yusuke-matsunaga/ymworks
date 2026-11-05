@@ -7,10 +7,9 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiProcess.h"
+#include "EiProcess.h"
 
 #include "ym/vl/AstItem.h"
-
 #include "ym/vl/VlStmt.h"
 
 
@@ -27,7 +26,7 @@ EiFactory::new_Process(
   const AstItem& ast_item
 )
 {
-  auto process = new EiProcess{parent, ast_item};
+  auto process = new EiProcess(parent, ast_item);
   return process;
 }
 
@@ -35,20 +34,6 @@ EiFactory::new_Process(
 //////////////////////////////////////////////////////////////////////
 // クラス EiProcess
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiProcess::EiProcess(
-  const VlScope* parent,
-  const AstItem& ast_item
-) : mParent{parent},
-    mAstItem{ast_item}
-{
-}
-
-// @brief デストラクタ
-EiProcess::~EiProcess()
-{
-}
 
 // @brief クラスの型の取得
 VpiObjType

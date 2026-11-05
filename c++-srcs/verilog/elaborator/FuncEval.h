@@ -157,12 +157,10 @@ private:
   );
 
   /// @brief 左辺の要素を値を代入する．
-  ///
-  /// expr は primary か bit-select, part-select
   void
   assign_value(
-    const VlExpr* expr, ///< [in] 左辺式
-    const VlValue& val  ///< [in] 値
+    const VlExpr* lhs, ///< [in] 左辺式
+    const VlValue& val ///< [in] 値
   );
 
 
@@ -198,6 +196,24 @@ private:
   /// @brief プライマリに対して式の値を評価する．
   VlValue
   evaluate_primary(
+    const VlExpr* expr ///< [in] 対象の式
+  );
+
+  /// @brief 単独の宣言要素の値を評価する．
+  VlValue
+  evaluate_decl(
+    const VlExpr* expr ///< [in] 対象の式
+  );
+
+  /// @brief 固定インデックスの配列型要素の値を評価する．
+  VlValue
+  evaluate_const_decl_elem(
+    const VlExpr* expr ///< [in] 対象の式
+  );
+
+  /// @brief 可変インデックスの配列型要素の値を評価する．
+  VlValue
+  evaluate_var_decl_elem(
     const VlExpr* expr ///< [in] 対象の式
   );
 

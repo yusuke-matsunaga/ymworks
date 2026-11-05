@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiStmtBlockScope.h"
+#include "EiStmtBlockScope.h"
 #include "ym/vl/AstStmt.h"
 
 
@@ -28,23 +28,10 @@ EiFactory::new_StmtBlockScope(
   return scope;
 }
 
+
 //////////////////////////////////////////////////////////////////////
 // クラス EiStmtBlockScope
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiStmtBlockScope::EiStmtBlockScope(
-  const VlScope* parent,
-  const AstStmt& ast_stmt
-) : EiScope{parent},
-    mAstStmt{ast_stmt}
-{
-}
-
-// @brief デストラクタ
-EiStmtBlockScope::~EiStmtBlockScope()
-{
-}
 
 // @brief ファイル位置の取得
 FileRegion

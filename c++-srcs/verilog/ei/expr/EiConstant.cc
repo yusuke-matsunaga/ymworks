@@ -7,9 +7,10 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiConstant.h"
+#include "EiConstant.h"
 #include "ym/vl/VlValue.h"
 #include "ym/vl/AstExpr.h"
+#include "elaborator/ElbParameter.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -85,28 +86,33 @@ EiFactory::new_GenvarConstant(
   return new EiIntConst(ast_primary, val);
 }
 
+// @brief parameter の定数式を生成する．
+ElbExpr*
+EiFactory::new_ParamConstant(
+  const AstExpr& ast_expr,
+  ElbParameter* obj
+)
+{
+  return new EiParamConstant(ast_expr, obj);
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiConstant
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiConstant::EiConstant(
-  const AstExpr& ast_expr
-) : EiExprBase(ast_expr)
-{
-}
-
-// @brief デストラクタ
-EiConstant::~EiConstant()
-{
-}
 
 // @brief 型の取得
 VpiObjType
 EiConstant::type() const
 {
   return VpiObjType::Constant;
+}
+
+// @brief 式のタイプを返す．
+VlExprType
+EiConstant::expr_type() const
+{
+  return VlExprType::CONST;
 }
 
 // @brief 定数の時 true を返す．
@@ -130,20 +136,6 @@ EiConstant::_set_reqsize(
 //////////////////////////////////////////////////////////////////////
 // クラス EiIntConst
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiIntConst::EiIntConst(
-  const AstExpr& ast_expr,
-  std::int32_t value
-) : EiConstant(ast_expr),
-    mValue{value}
-{
-}
-
-// @brief デストラクタ
-EiIntConst::~EiIntConst()
-{
-}
 
 // @brief 式のタイプを返す．
 VlValueType
@@ -170,22 +162,6 @@ EiIntConst::constant_value() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiBitVectorConst
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiBitVectorConst::EiBitVectorConst(
-  const AstExpr& ast_expr,
-  VpiConstType const_type,
-  const BitVector& value
-) : EiConstant(ast_expr),
-    mConstType{const_type},
-    mValue{value}
-{
-}
-
-// @brief デストラクタ
-EiBitVectorConst::~EiBitVectorConst()
-{
-}
 
 // @brief 式のタイプを返す．
 VlValueType
@@ -215,20 +191,6 @@ EiBitVectorConst::constant_value() const
 // クラス EiRealConst
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiRealConst::EiRealConst(
-  const AstExpr& ast_expr,
-  double value
-) : EiConstant(ast_expr),
-    mValue{value}
-{
-}
-
-// @brief デストラクタ
-EiRealConst::~EiRealConst()
-{
-}
-
 // @brief 式のタイプを返す．
 VlValueType
 EiRealConst::value_type() const
@@ -255,20 +217,6 @@ EiRealConst::constant_value() const
 // クラス EiStringConst
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiStringConst::EiStringConst(
-  const AstExpr& ast_expr,
-  const std::string& value
-) : EiConstant(ast_expr),
-    mValue(value)
-{
-}
-
-// @brief デストラクタ
-EiStringConst::~EiStringConst()
-{
-}
-
 // @brief 式のタイプを返す．
 VlValueType
 EiStringConst::value_type() const
@@ -289,6 +237,32 @@ VlValue
 EiStringConst::constant_value() const
 {
   return VlValue(mValue);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiParamConstant
+//////////////////////////////////////////////////////////////////////
+
+// @brief 型の取得
+VpiObjType
+EiParamConstant::type() const
+{
+  return mObj->type();
+}
+
+// @brief 式のタイプを返す．
+VlValueType
+EiParamConstant::value_type() const
+{
+  return mObj->value_type();
+}
+
+// @brief 定数値を返す．
+VlValue
+EiParamConstant::constant_value() const
+{
+  return mObj->value();
 }
 
 END_NAMESPACE_YM_VERILOG

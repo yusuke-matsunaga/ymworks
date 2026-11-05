@@ -7,9 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiBlockStmt.h"
-#include "ym/vl/VlScope.h"
-#include "ym/vl/AstStmt.h"
+#include "EiBlockStmt.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -27,7 +25,7 @@ EiFactory::new_Begin(
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiBegin{parent, process, ast_stmt, stmt_list};
+  auto stmt = new EiBegin(parent, process, ast_stmt, stmt_list);
   return stmt;
 }
 
@@ -40,7 +38,7 @@ EiFactory::new_Fork(
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiFork{parent, process, ast_stmt, stmt_list};
+  auto stmt = new EiFork(parent, process, ast_stmt, stmt_list);
   return stmt;
 }
 
@@ -53,7 +51,7 @@ EiFactory::new_NamedBegin(
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiNamedBegin{block, process, ast_stmt, stmt_list};
+  auto stmt = new EiNamedBegin(block, process, ast_stmt, stmt_list);
   return stmt;
 }
 
@@ -66,7 +64,7 @@ EiFactory::new_NamedFork(
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiNamedFork{block, process, ast_stmt, stmt_list};
+  auto stmt = new EiNamedFork(block, process, ast_stmt, stmt_list);
   return stmt;
 }
 
@@ -74,22 +72,6 @@ EiFactory::new_NamedFork(
 //////////////////////////////////////////////////////////////////////
 // クラス EiBlockStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiBlockStmt::EiBlockStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const std::vector<const VlStmt*>& stmt_list
-) : EiStmtBase{parent, process, ast_stmt},
-    mStmtList{stmt_list}
-{
-}
-
-// @brief デストラクタ
-EiBlockStmt::~EiBlockStmt()
-{
-}
 
 // @brief 中身のステートメントのリストの要素数を返す．
 SizeType
@@ -122,21 +104,6 @@ EiBlockStmt::child_stmt_list() const
 // クラス EiBegin
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiBegin::EiBegin(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const std::vector<const VlStmt*>& stmt_list
-) : EiBlockStmt{parent, process, ast_stmt, stmt_list}
-{
-}
-
-// @brief デストラクタ
-EiBegin::~EiBegin()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiBegin::type() const
@@ -148,21 +115,6 @@ EiBegin::type() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiFork
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiFork::EiFork(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const std::vector<const VlStmt*>& stmt_list
-) : EiBlockStmt{parent, process, ast_stmt, stmt_list}
-{
-}
-
-// @brief デストラクタ
-EiFork::~EiFork()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -176,22 +128,6 @@ EiFork::type() const
 // クラス EiNamedBlockStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiNamedBlockStmt::EiNamedBlockStmt(
-  const VlScope* scope,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const std::vector<const VlStmt*>& stmt_list
-) : EiBlockStmt{scope->parent_scope(), process, ast_stmt, stmt_list},
-    mScope{scope}
-{
-}
-
-// @brief デストラクタ
-EiNamedBlockStmt::~EiNamedBlockStmt()
-{
-}
-
 // @brief 対応するスコープを返す．
 const VlScope*
 EiNamedBlockStmt::scope() const
@@ -204,21 +140,6 @@ EiNamedBlockStmt::scope() const
 // クラス EiNamedBegin
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiNamedBegin::EiNamedBegin(
-  const VlScope* block,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const std::vector<const VlStmt*>& stmt_list
-) : EiNamedBlockStmt{block, process, ast_stmt, stmt_list}
-{
-}
-
-// @brief デストラクタ
-EiNamedBegin::~EiNamedBegin()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiNamedBegin::type() const
@@ -230,21 +151,6 @@ EiNamedBegin::type() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiNamedFork
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiNamedFork::EiNamedFork(
-  const VlScope* block,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const std::vector<const VlStmt*>& stmt_list
-) : EiNamedBlockStmt{block, process, ast_stmt, stmt_list}
-{
-}
-
-// @brief デストラクタ
-EiNamedFork::~EiNamedFork()
-{
-}
 
 // @brief 型の取得
 VpiObjType

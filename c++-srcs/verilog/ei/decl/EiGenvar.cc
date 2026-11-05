@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiGenvar.h"
+#include "EiGenvar.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -31,23 +31,6 @@ EiFactory::new_Genvar(
 //////////////////////////////////////////////////////////////////////
 // genvar を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-EiGenvar::EiGenvar(
-  const VlScope* parent,
-  const AstDeclItem& ast_item,
-  int val
-) : mParent{parent},
-    mAstItem{ast_item},
-    mInUse{false},
-    mValue{val}
-{
-}
-
-// デストラクタ
-EiGenvar::~EiGenvar()
-{
-}
 
 // @brief 型の取得
 VpiObjType

@@ -103,9 +103,9 @@ private:
   /// @brief continous assignment に関連した式の名前解決を行う．
   void
   instantiate_cont_assign(
-    const VlScope* parent,                ///< [in] 親のスコープ
-    const AstContAssign& ast_cont_assign, ///< [in] パース木の定義
-    ElbCaHead* ca_head                    ///< [in] ヘッダ
+    const VlScope* parent,               ///< [in] 親のスコープ
+    const AstContAssign& ast_contassign, ///< [in] パース木の定義
+    ElbCaHead* ca_head                   ///< [in] ヘッダ
   );
 
   /// @brief process のスタブを作る．

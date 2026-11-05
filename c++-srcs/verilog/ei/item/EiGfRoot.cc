@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiGfRoot.h"
+#include "EiGfRoot.h"
 
 #include "ym/vl/AstItem.h"
 

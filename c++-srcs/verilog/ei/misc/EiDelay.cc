@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiDelay.h"
+#include "EiDelay.h"
 
 #include "elaborator/ElbExpr.h"
 

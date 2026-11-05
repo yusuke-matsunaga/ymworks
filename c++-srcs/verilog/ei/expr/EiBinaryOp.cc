@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiBinaryOp.h"
+#include "EiBinaryOp.h"
 #include "ym/vl/BitVector.h"
 
 
@@ -75,21 +75,6 @@ EiFactory::new_BinaryOp(
 // クラス EIBinaryOp
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiBinaryOp::EiBinaryOp(
-  const AstExpr& ast_expr,
-  ElbExpr* opr1,
-  ElbExpr* opr2
-) : EiOperation(ast_expr),
-    mOpr{opr1, opr2}
-{
-}
-
-// @brief デストラクタ
-EiBinaryOp::~EiBinaryOp()
-{
-}
-
 // @brief 定数の時 true を返す．
 bool
 EiBinaryOp::is_const() const
@@ -128,28 +113,6 @@ EiBinaryOp::operand_list() const
 // クラス EiCompareOp
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiCompareOp::EiCompareOp(
-  const AstExpr& ast_expr,
-  ElbExpr* opr1,
-  ElbExpr* opr2
-) : EiBinaryOp(ast_expr, opr1, opr2)
-{
-  // 比較演算は大きい方の型を用いる．
-  auto type1 = opr1->value_type();
-  auto type2 = opr2->value_type();
-
-  mOprType = calc_type(type1, type2);
-
-  opr1->set_reqsize(mOprType);
-  opr2->set_reqsize(mOprType);
-}
-
-// @brief デストラクタ
-EiCompareOp::~EiCompareOp()
-{
-}
-
 // @brief 式のタイプを返す．
 VlValueType
 EiCompareOp::value_type() const
@@ -172,27 +135,6 @@ EiCompareOp::_set_reqsize(
 // クラス EiBinaryLogOp
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiBinaryLogOp::EiBinaryLogOp(
-  const AstExpr& ast_expr,
-  ElbExpr* opr1,
-  ElbExpr* opr2
-) : EiBinaryOp(ast_expr, opr1, opr2)
-{
-  // 論理演算の場合はオペランドも1ビットスカラーのはずだが
-  // 仕様書には max(L(i), L(j)) なんて書いてある．
-  // これは == などと一緒に表記しているからだと思う．
-  // 実際には self determined で計算しておいて
-  // 評価時に true/false/X に分類する．
-  opr1->set_selfsize();
-  opr2->set_selfsize();
-}
-
-// @brief デストラクタ
-EiBinaryLogOp::~EiBinaryLogOp()
-{
-}
-
 // @brief 式のタイプを返す．
 VlValueType
 EiBinaryLogOp::value_type() const
@@ -214,29 +156,6 @@ EiBinaryLogOp::_set_reqsize(
 //////////////////////////////////////////////////////////////////////
 // クラス EiBinaryBitOp
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiBinaryBitOp::EiBinaryBitOp(
-  const AstExpr& ast_expr,
-  ElbExpr* opr1,
-  ElbExpr* opr2
-) : EiBinaryOp(ast_expr, opr1, opr2)
-{
-  // オペランドのサイズの大きい方で決まる．
-  auto type1 = opr1->value_type();
-  auto type2 = opr2->value_type();
-
-  mType = calc_type(type1, type2);
-
-  if ( mType.is_real_type() ) {
-    throw std::logic_error{"mType.is_real_type()"};
-  }
-}
-
-// @brief デストラクタ
-EiBinaryBitOp::~EiBinaryBitOp()
-{
-}
 
 // @brief 式のタイプを返す．
 VlValueType
@@ -261,25 +180,6 @@ EiBinaryBitOp::_set_reqsize(
 // クラス EiBinaryArithOp
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiBinaryArithOp::EiBinaryArithOp(
-  const AstExpr& ast_expr,
-  ElbExpr* opr1,
-  ElbExpr* opr2
-) : EiBinaryOp(ast_expr, opr1, opr2)
-{
-  // オペランドのサイズの大きい方で決まる．
-  auto type1 = opr1->value_type();
-  auto type2 = opr2->value_type();
-
-  mType = calc_type(type1, type2);
-}
-
-// @brief デストラクタ
-EiBinaryArithOp::~EiBinaryArithOp()
-{
-}
-
 // @brief 式のタイプを返す．
 VlValueType
 EiBinaryArithOp::value_type() const
@@ -302,28 +202,6 @@ EiBinaryArithOp::_set_reqsize(
 //////////////////////////////////////////////////////////////////////
 // クラス EiPowerOp
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiPowerOp::EiPowerOp(
-  const AstExpr& ast_expr,
-  ElbExpr* opr1,
-  ElbExpr* opr2
-) : EiBinaryOp(ast_expr, opr1, opr2)
-{
-  // 巾乗演算の場合, どちらかのオペランドが real, integer, signed
-  // なら結果は real, どちらも unsigned の時のみ unsigned となる．
-  auto type1 = opr1->value_type();
-  auto type2 = opr2->value_type();
-  mType = calc_type2(type1, type2);
-
-  // ただし opr2 は self-determined
-  opr2->set_reqsize(type2);
-}
-
-// @brief デストラクタ
-EiPowerOp::~EiPowerOp()
-{
-}
 
 // @brief 式のタイプを返す．
 VlValueType
@@ -350,31 +228,6 @@ EiPowerOp::_set_reqsize(
 //////////////////////////////////////////////////////////////////////
 // クラス EiShiftOp
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiShiftOp::EiShiftOp(
-  const AstExpr& ast_expr,
-  ElbExpr* opr1,
-  ElbExpr* opr2
-) : EiBinaryOp(ast_expr, opr1, opr2)
-{
-  // シフト演算子は第1オペランドの型とサイズをそのまま引き継ぐ
-  mType = opr1->value_type();
-  if ( mType.is_real_type() ) {
-    throw std::logic_error{"mType.is_real_type()"};
-  }
-  if ( opr2->value_type().is_real_type() ) {
-    throw std::logic_error{"opr2->value_type().is_real_type()"};
-  }
-
-  // 第2オペランドのサイズは self determined
-  opr2->set_selfsize();
-}
-
-// @brief デストラクタ
-EiShiftOp::~EiShiftOp()
-{
-}
 
 // @brief 式のタイプを返す．
 VlValueType

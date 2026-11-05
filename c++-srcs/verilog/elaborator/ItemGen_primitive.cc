@@ -390,6 +390,7 @@ ItemGen::link_prim_array(
       }
     }
     else {
+      // サイズが合わない．
       auto def_name = prim_array->head()->def_name();
       log_mgr().error_port_size_mismatch(__FILE__, __LINE__,
 					 ast_con.expr());

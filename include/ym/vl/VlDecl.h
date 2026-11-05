@@ -42,6 +42,11 @@ public:
   bool
   is_local_param() const = 0;
 
+  /// @brief 要素番号を返す．
+  virtual
+  SizeType
+  decl_id() const = 0;
+
 };
 
 END_NAMESPACE_YM_VERILOG

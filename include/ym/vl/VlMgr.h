@@ -267,6 +267,14 @@ public:
     return mCellLibrary;
   }
 
+  /// @brief 継続的代入文のソースを返す．
+  ///
+  /// decl_id がネットでない場合は空リストを返す．
+  std::vector<const VlCASrc*>
+  contassign_src(
+    SizeType decl_id ///< [in] 左辺の宣言要素番号
+  ) const;
+
 
 private:
   //////////////////////////////////////////////////////////////////////

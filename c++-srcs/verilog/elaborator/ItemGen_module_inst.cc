@@ -20,6 +20,7 @@
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbModuleArray.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbDeclRef.h"
 #include "elaborator/RangeVal.h"
 #include "elaborator/ElbError.h"
 
@@ -353,15 +354,7 @@ ItemGen::link_module_array(
 	}
 	// tmp を 分割する．
 	for ( SizeType i = 0; i < module_size; ++ i ) {
-	  ElbExpr* tmp1 = nullptr;
-	  if ( port_size == 1 ) {
-	    tmp1 = elb_mgr().new_BitSelect(ast_expr, tmp, i);
-	  }
-	  else {
-	    int lsb = i;
-	    int msb = lsb + port_size - 1;
-	    tmp1 = elb_mgr().new_PartSelect(ast_expr, tmp, msb, lsb);
-	  }
+	  auto tmp1 = elb_mgr().new_PartSelect(ast_expr, tmp, i, port_size);
 	  auto module = module_array->elem(i);
 	  module->set_port_high_conn(index, tmp1, conn_by_name);
 	}

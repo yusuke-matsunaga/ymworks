@@ -48,12 +48,6 @@ VlDumperImpl::put_expr(const char* label,
     if ( expr->is_primary() ) {
       nm = "Reference";
     }
-    else if ( expr->is_bitselect() ) {
-      nm = "BitSelect";
-    }
-    else if ( expr->is_partselect() ) {
-      nm = "PartSelect";
-    }
     break;
   }
 
@@ -88,6 +82,7 @@ VlDumperImpl::put_expr(const char* label,
     break;
 
   default:
+#if 0
     if ( expr->is_bitselect() ) {
       put_primary(mgr, expr);
       if ( expr->is_constant_select() ) {
@@ -123,17 +118,22 @@ VlDumperImpl::put_expr(const char* label,
     else {
       ASSERT_NOT_REACHED;
     }
+#endif
+#warning "TODO: VlDeclRef の内容を出力"
     break;
   }
 }
 
 // @brief 左辺式の内容を出力する関数
 void
-VlDumperImpl::put_lhs(const char* label,
-		      const VlMgr& mgr,
-		      const VlExpr* expr)
+VlDumperImpl::put_lhs(
+  const char* label,
+  const VlMgr& mgr,
+  const VlExpr* expr
+)
 {
   put_expr(label, mgr, expr);
+#if 0
   auto n = expr->lhs_elem_num();
   if ( n > 1 ) {
     VlDumpHeader x1(this, "vpiLhs", "LhsElemArray");
@@ -141,13 +141,17 @@ VlDumperImpl::put_lhs(const char* label,
       put_expr("vpiExpr", mgr, expr->lhs_elem(i));
     }
   }
+#endif
 }
 
 // @brief プライマリ式を出力する関数
 void
-VlDumperImpl::put_primary(const VlMgr& mgr,
-			  const VlExpr* expr)
+VlDumperImpl::put_primary(
+  const VlMgr& mgr,
+  const VlExpr* expr
+)
 {
+#if 0
   if ( expr->decl_obj() ) {
     put("decl_obj", expr->decl_obj()->full_name());
   }
@@ -174,13 +178,17 @@ VlDumperImpl::put_primary(const VlMgr& mgr,
   else {
     ASSERT_NOT_REACHED;
   }
+#endif
+#warning "TODO: declref の内容出力"
 }
 
 // @brief 遅延値を出力する関数
 void
-VlDumperImpl::put_delay(const char* label,
-			const VlMgr& mgr,
-			const VlDelay* delay)
+VlDumperImpl::put_delay(
+  const char* label,
+  const VlMgr& mgr,
+  const VlDelay* delay
+)
 {
   if ( delay == nullptr ) {
     if ( !nullptr_suppress_mode() ) {
@@ -197,9 +205,11 @@ VlDumperImpl::put_delay(const char* label,
 // range の内容を出力する関数
 // IEEE 1364-2001 p.644
 void
-VlDumperImpl::put_range(const char* label,
-			const VlMgr& mgr,
-			const VlRange* range)
+VlDumperImpl::put_range(
+  const char* label,
+  const VlMgr& mgr,
+  const VlRange* range
+)
 {
   if ( range == nullptr ) {
     if ( !nullptr_suppress_mode() ) {

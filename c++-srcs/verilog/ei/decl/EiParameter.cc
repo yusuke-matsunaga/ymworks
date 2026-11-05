@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiParameter.h"
+#include "EiParameter.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/BitVector.h"
 
@@ -72,20 +72,6 @@ EiFactory::new_Parameter(
 //////////////////////////////////////////////////////////////////////
 // クラス EiParamHead
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiParamHead::EiParamHead(
-  const VlScope* parent,
-  const AstDeclHead& ast_head
-) : mParent{parent},
-    mAstHead{ast_head}
-{
-}
-
-// @brief デストラクタ
-EiParamHead::~EiParamHead()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -305,22 +291,6 @@ EiParamHead::ast_head() const
 // クラス EiParamHeadV
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiParamHeadV::EiParamHeadV(
-  const VlScope* parent,
-  const AstDeclHead& ast_head,
-  const AstRange& ast_range,
-  const RangeVal& range
-) : EiParamHead(parent, ast_head),
-    mRange(ast_range, range)
-{
-}
-
-// @brief デストラクタ
-EiParamHeadV::~EiParamHeadV()
-{
-}
-
 // @brief 符号の取得
 bool
 EiParamHeadV::is_signed(
@@ -413,21 +383,6 @@ EiParamHeadV::value_type(
 //////////////////////////////////////////////////////////////////////
 // クラス EiParameter
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiParameter::EiParameter(
-  ElbParamHead* head,
-  const AstDeclItem& ast_item
-) : mHead{head},
-    mAstItem{ast_item},
-    mExpr{nullptr}
-{
-}
-
-// @brief デストラクタ
-EiParameter::~EiParameter()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -635,6 +590,13 @@ EiParameter::is_local_param() const
   return false;
 }
 
+// @brief 要素番号を返す．
+SizeType
+EiParameter::decl_id() const
+{
+  throw std::logic_error{"EiParameter::decl_id()"};
+}
+
 // @brief 式の取得
 AstExpr
 EiParameter::init_expr() const
@@ -664,19 +626,6 @@ EiParameter::set_init_expr(
 //////////////////////////////////////////////////////////////////////
 // クラス EiLocalParam
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiLocalParam::EiLocalParam(
-  ElbParamHead* head,
-  const AstDeclItem& ast_item
-) : EiParameter(head, ast_item)
-{
-}
-
-// @brief デストラクタ
-EiLocalParam::~EiLocalParam()
-{
-}
 
 // @brief localparam のときに true 返す．
 bool

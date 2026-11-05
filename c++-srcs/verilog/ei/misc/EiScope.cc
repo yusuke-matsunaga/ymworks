@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiScope.h"
+#include "EiScope.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -14,18 +14,6 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 // クラス EiScope
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiScope::EiScope(
-  const VlScope* parent
-) : mParent{parent}
-{
-}
-
-// @brief デストラクタ
-EiScope::~EiScope()
-{
-}
 
 // @brief 型の取得
 VpiObjType

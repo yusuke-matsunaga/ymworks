@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiParamAssign.h"
+#include "EiParamAssign.h"
 
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbExpr.h"

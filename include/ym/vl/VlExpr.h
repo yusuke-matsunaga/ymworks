@@ -1,5 +1,5 @@
-﻿#ifndef YM_VL_VEXPRR_H
-#define YM_VL_VEXPRR_H
+﻿#ifndef YM_VL_VEXPR_H
+#define YM_VL_VEXPR_H
 
 /// @file ym/vl/VlExpr.h
 /// @brief VlExpr のヘッダファイル
@@ -18,7 +18,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @class VlExpr VlExpr.h "ym/vl/VlExpr.h"
 /// @brief エラボレーション中の expression を表す基底クラス
 ///
-/// VpiObjType は以下のいずれか
+/// 一応 VlObj の継承クラスとして VpiObjType の値を持つ．
+/// 具体的には以下のいずれか
+/// - 定数系
 /// - primary 系
 ///   - IntegerVar
 ///   - Net
@@ -37,6 +39,15 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// - FuncCall
 /// - SysFuncCall
 /// - Operattion
+///
+/// ただし，これだと使い勝手が悪いので独自に VlExprType と VlPrimaryType
+/// という列挙型を用意する．
+/// 注意が必要なのはネットのビット選択等で，これはプライマリ型とする．
+/// これはビット指定のインデックス変換にそのネットの範囲情報が必要と
+/// なるため．
+/// それに対して式に対するビット選択は常に0から始まる固定オフセットを用いる．
+/// 同様に式に対する部分選択も常に固定オフセットを用いる．
+/// これらは配列型インスタンスの結線時にのみ用いられる．
 //////////////////////////////////////////////////////////////////////
 class VlExpr :
   public VlObj
@@ -73,33 +84,25 @@ public:
   SizeType
   bit_size() const = 0;
 
+  /// @brief 式のタイプを返す．
+  virtual
+  VlExprType
+  expr_type() const = 0;
+
   /// @brief 定数式の時 true を返す．
   virtual
   bool
   is_const() const = 0;
-
-  /// @brief 部分/ビット指定が定数の時 true を返す．
-  ///
-  /// kVpiPartSelect/kVpiBitSelect の時，意味を持つ．
-  /// それ以外では常に false を返す．
-  virtual
-  bool
-  is_constant_select() const = 0;
 
   /// @brief プライマリ(net/reg/variables/parameter)の時に true を返す．
   virtual
   bool
   is_primary() const = 0;
 
-  /// @brief ビット指定の時に true を返す．
+  /// @brief ビット/部分選択の時に true を返す．
   virtual
   bool
-  is_bitselect() const = 0;
-
-  /// @brief 範囲指定の時に true を返す．
-  virtual
-  bool
-  is_partselect() const = 0;
+  is_select() const = 0;
 
   /// @brief 演算子の時に true を返す．
   virtual
@@ -116,168 +119,185 @@ public:
   bool
   is_sysfunccall() const = 0;
 
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 定数系の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 定数型を返す．
+  ///
+  /// - is_const() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
+  virtual
+  VpiConstType
+  constant_type() const = 0;
+
+  /// @brief 定数値を返す．
+  ///
+  /// - is_const() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
+  virtual
+  VlValue
+  constant_value() const = 0;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // プライマリ系の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief プライマリの種類を返す．
+  ///
+  /// is_primary() == true の場合のみ意味を持つ．
+  virtual
+  VlPrimaryType
+  primary_type() const = 0;
+
   /// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
   ///
-  /// それ以外では nullptr を返す．
+  /// - primary_type() が DECL, DECLARRAY, CONST_DECL_ELEM, VAR_DECL_ELEM
+  ///   の場合のみ意味を持つ．
   virtual
   const VlDeclBase*
   decl_base() const = 0;
 
   /// @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
   ///
-  /// それ以外では nullptr を返す．
+  /// - primary_type() が DECL の場合のみ意味を持つ．
   virtual
   const VlDecl*
   decl_obj() const = 0;
 
   /// @brief 宣言要素の配列への参照の場合，対象のオブジェクトを返す．
   ///
-  /// それ以外では nullptr を返す．
+  /// - primary_type() が DECL_ARRAY, CONST_DECL_ELEM, VAR_DECL_ELEM
+  ///   の場合のみ意味を持つ．
   virtual
   const VlDeclArray*
   declarray_obj() const = 0;
 
-  /// @brief 配列型宣言要素への参照の場合，配列の次元を返す．
+  /// @brief 配列型宣言要素への参照の場合，配列のインデックスリストを返す．
   ///
-  /// それ以外では 0 を返す．
+  /// - primary_type() が CONST_DECL_ELEM, VAR_DECL_ELEM の場合のみ意味を持つ．
   virtual
-  SizeType
-  declarray_dimension() const = 0;
-
-  /// @brief 配列型宣言要素への参照の場合，配列のインデックスを返す．
-  ///
-  /// それ以外では nullptr を返す．
-  virtual
-  const VlExpr*
-  declarray_index(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < declarray_dimension() )
-  ) const = 0;
+  std::vector<const VlExpr*>
+  declarray_index_list() const = 0;
 
   /// @brief 配列型宣言要素への参照のオフセットを返す．
   ///
-  /// 固定インデックスの場合のみ意味を持つ．
+  /// - primary_type() が CONST_DECL_ARRAY の場合のみ意味を持つ．
   virtual
   SizeType
   declarray_offset() const = 0;
 
+  /// @brief 宣言要素に対するビット/部分選択を持つ時 true を返す．
+  ///
+  /// - expr_type() が PRIMARY かつ primary_type() が DECL,
+  ///   CONST_DECL_ARRAY, VAR_DECL_ARRAY の場合に意味を持つ．
+  virtual
+  bool
+  has_bit_select() const = 0;
+
+  /// @brief 宣言要素に対する部分選択のビット幅を返す．
+  ///
+  /// - has_bit_select() == true の時のみ意味を持つ．
+  /// - ビット選択の場合は 1 を返す．
+  virtual
+  SizeType
+  select_width() const = 0;
+
+  /// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
+  virtual
+  bool
+  has_const_bit_select() const = 0;
+
+  /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
+  ///
+  /// - has_const_bit_select() == true の場合のみ意味を持つ．
+  virtual
+  SizeType
+  bit_offset() const = 0;
+
+  /// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
+  ///
+  /// - has_bit_select() == true の場合のみ意味を持つ．
+  /// - 可変ビット選択の場合も true を返す．
+  virtual
+  bool
+  has_plus_bit_select() const = 0;
+
+  /// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
+  ///
+  /// - has_bit_select() == true の場合のみ意味を持つ．
+  virtual
+  bool
+  has_minus_bit_select() const = 0;
+
+  /// @brief 宣言要素に対する可変ビット/部分選択のインデックス式を返す．
+  ///
+  /// - has_plus_bit_select() か has_minus_bit_select() が true
+  ///   の場合のみ意味を持つ．
+  virtual
+  const VlExpr*
+  bit_index() const = 0;
+
   /// @brief スコープへの参照の場合，対象のオブジェクトを返す．
   ///
-  /// それ以外では nullptr を返す．
-  /// スコープへの参照が式で用いられるのはシステム関数/タスクの引数だけ
+  /// - primary_type() が SCOPE の時のみ意味を持つ．
+  /// - スコープへの参照が式で用いられるのはシステム関数/タスクの引数だけ
   virtual
   const VlScope*
   scope_obj() const = 0;
 
   /// @brief primitive への参照の場合，対象のオブジェクトを返す．
   ///
-  /// primitiveへの参照が式で用いられるのはシステム関数/タスクの引数だけ
+  /// - primary_type() が PRIMITIVE  の時のみ意味を持つ．
+  /// - primitiveへの参照が式で用いられるのはシステム関数/タスクの引数だけ
   virtual
   const VlPrimitive*
   primitive_obj() const = 0;
 
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ビット/部分選択系の関数
+  //////////////////////////////////////////////////////////////////////
+
   /// @brief 親の式を返す．
   ///
   /// 式に対するビット選択/範囲選択の時，意味を持つ．
-  /// それ以外では nullptr を返す．
   virtual
   const VlExpr*
   parent_expr() const = 0;
 
-  /// @brief インデックス式を返す．
-  ///
-  /// ビット選択の時，意味を持つ．
-  /// それ以外では nullptr を返す．
-  virtual
-  const VlExpr*
-  index() const = 0;
 
-  /// @brief インデックス値を返す．
-  ///
-  /// 固定ビット選択の時，意味を持つ．
-  /// それ以外では値は不定
-  virtual
-  int
-  index_val() const = 0;
-
-  /// @brief 範囲指定のモードを返す．
-  /// @retval kVpiNoRange 範囲指定なし
-  /// @retval kVpiConstRange 固定範囲
-  /// @retval kVpiPlusRange +: の可動範囲
-  /// @retval kVpiMinusRange -: の可動範囲
-  ///
-  /// is_partselect() == true の時のみ意味を持つ．
-  virtual
-  VpiRangeMode
-  range_mode() const = 0;
-
-  /// @brief 範囲の MSB の式を返す．
-  ///
-  /// 範囲選択の時，意味を持つ．
-  /// それ以外では nullptr を返す．
-  virtual
-  const VlExpr*
-  left_range() const = 0;
-
-  /// @brief 範囲の MSB の値を返す．
-  ///
-  /// 範囲選択の時，意味を持つ．
-  /// それ以外では値は不定
-  virtual
-  int
-  left_range_val() const = 0;
-
-  /// @brief 範囲の LSB の式を返す．
-  ///
-  /// 範囲選択の時，意味を持つ．
-  /// それ以外では nullptr を返す．
-  virtual
-  const VlExpr*
-  right_range() const = 0;
-
-  /// @brief 範囲の LSB の値を返す．
-  ///
-  /// 範囲選択の時，意味を持つ．
-  /// それ以外では値は不定
-  virtual
-  int
-  right_range_val() const = 0;
-
-  /// @brief 範囲のベースを表す式を返す．
-  ///
-  /// 可変範囲選択の時，意味を持つ．
-  /// それ以外では nullptr を返す．
-  virtual
-  const VlExpr*
-  base() const = 0;
-
-  /// @brief 範囲のビット幅を返す．
-  ///
-  /// 可変範囲選択の時，意味を持つ．
-  /// それ以外では値は不定
-  virtual
-  SizeType
-  range_width() const = 0;
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 演算子系の関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 演算子の型を返す．
   ///
-  /// kVpiOperation の時，意味を持つ．
-  /// それ以外では動作は不定
+  /// - is_operation() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
   virtual
   VpiOpType
   op_type() const = 0;
 
   /// @brief オペランド数を返す．
   ///
-  /// kVpiOperation の時，意味を持つ．
-  /// それ以外では 0 を返す．
+  /// - is_operation() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
   virtual
   SizeType
   operand_num() const = 0;
 
   /// @brief オペランドを返す．
   ///
-  /// kVpiOperation の時，意味を持つ．
-  /// それ以外では nullptr を返す．
+  /// - is_operation() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
+  /// - pos が範囲外の時，std::out_of_range 例外を送出する．
   virtual
   const VlExpr*
   operand(
@@ -286,64 +306,54 @@ public:
 
   /// @brief オペランドのリストを返す．
   ///
-  /// kVpiOperation の時，意味を持つ．
-  /// それ以外では nullptr を返す．
+  /// - is_operation() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
   virtual
   std::vector<const VlExpr*>
   operand_list() const = 0;
 
   /// @brief 繰り返し数を返す．
   ///
-  /// multiple concatenation の時のみ意味を持つ．
-  ///
-  /// multiple concatenation の時は operand(0) と等しい．
+  /// - multiple concatenation の時のみ意味を持つ．
+  /// - multiple concatenation の時は operand(0) と等しい．
   virtual
   SizeType
   rep_num() const = 0;
 
-  /// @brief 定数型を返す．
-  ///
-  /// is_const() = true の時，意味を持つ．
-  /// それ以外では動作は不定
-  virtual
-  VpiConstType
-  constant_type() const = 0;
 
-  /// @brief 定数値を返す．
-  ///
-  /// is_const() = true の時，意味を持つ．
-  /// それ以外では動作は不定
-  virtual
-  VlValue
-  constant_value() const = 0;
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 関数呼び出し系の関数
+  //////////////////////////////////////////////////////////////////////
 
   /// @brief 対象の関数を返す．
   ///
-  /// kVpiFuncCall の時，意味を持つ．
-  /// それ以外では nullptr を返す．
+  /// - is_funccall() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
   virtual
   const VlTaskFunc*
   function() const = 0;
 
   /// @brief 対象のシステム関数を返す．
   ///
-  /// kVpiSysFuncCall の時，意味を持つ．
-  /// それ以外では nullptr を返す．
+  /// - is_sysfunccall() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
   virtual
   const VlUserSystf*
   user_systf() const = 0;
 
   /// @brief 引数の数を返す．
   ///
-  /// kVpiFuncCall/kVpiSysFuncCall の時，意味を持つ．
+  /// - is_funccall() = true/is_sysfunccall() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
   virtual
   SizeType
   argument_num() const = 0;
 
   /// @brief 引数を返す．
   ///
-  /// kVpiFuncCall/kVpiSysFuncCall の時，意味を持つ．
-  /// それ以外では nullptr を返す．
+  /// - is_funccall() = true/is_sysfunccall() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
   virtual
   const VlExpr*
   argument(
@@ -352,38 +362,14 @@ public:
 
   /// @brief 引数のリストを返す．
   ///
-  /// kVpiFuncCall/kVpiSysFuncCall の時，意味を持つ．
-  /// それ以外では nullptr を返す．
+  /// - is_funccall() = true/is_sysfunccall() = true の時，意味を持つ．
+  /// - それ以外ではエラーとなる．
   virtual
   std::vector<const VlExpr*>
   argument_list() const = 0;
-
-  /// @brief 左辺式の要素数の取得
-  ///
-  /// 通常は1だが，連結演算子の場合はその子供の数となる．
-  /// ただし，連結演算の入れ子はすべて平坦化して考える．
-  virtual
-  SizeType
-  lhs_elem_num() const = 0;
-
-  /// @brief 左辺式の要素の取得
-  ///
-  /// 連結演算子の見かけと異なり LSB 側が0番めの要素となる．
-  virtual
-  const VlExpr*
-  lhs_elem(
-    SizeType pos ///< [in] 位置 ( 0 <= pos < lhs_elem_num() )
-  ) const = 0;
-
-  /// @brief 左辺式の要素のリストの取得
-  ///
-  /// 連結演算子の見かけと異なり LSB 側が0番めの要素となる．
-  virtual
-  std::vector<const VlExpr*>
-  lhs_elem_list() const = 0;
 
 };
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // YM_VL_VEXPRR_H
+#endif // YM_VL_VEXPR_H

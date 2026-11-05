@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiToplevel.h"
+#include "EiToplevel.h"
 
 #include "ym/FileRegion.h"
 
@@ -30,17 +30,6 @@ EiFactory::new_Toplevel()
 //////////////////////////////////////////////////////////////////////
 // elaboration 中の toplevel scope を表すクラス
 //////////////////////////////////////////////////////////////////////
-
-// コンストラクタ
-EiToplevel::EiToplevel(
-) : EiScope{nullptr}
-{
-}
-
-// デストラクタ
-EiToplevel::~EiToplevel()
-{
-}
 
 // @brief ファイル位置の取得
 FileRegion

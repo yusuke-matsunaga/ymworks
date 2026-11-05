@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiPort.h"
+#include "EiPort.h"
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/AstPort.h"

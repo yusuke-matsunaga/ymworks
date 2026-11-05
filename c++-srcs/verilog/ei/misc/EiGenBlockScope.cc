@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiGenBlockScope.h"
+#include "EiGenBlockScope.h"
 #include "ym/vl/AstItem.h"
 
 
@@ -43,20 +43,6 @@ EiFactory::new_GfBlock(
 // クラス EiGenBlockScope
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiGenBlockScope::EiGenBlockScope(
-  const VlScope* parent,
-  const AstItem& ast_item
-) : EiScope(parent),
-    mAstItem{ast_item}
-{
-}
-
-// @brief デストラクタ
-EiGenBlockScope::~EiGenBlockScope()
-{
-}
-
 // @brief ファイル位置の取得
 FileRegion
 EiGenBlockScope::file_region() const
@@ -75,21 +61,6 @@ EiGenBlockScope::name() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiGfBlockScope
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiGfBlockScope::EiGfBlockScope(
-  const VlScope* parent,
-  const AstItem& ast_item,
-  int index
-) : EiGenBlockScope(parent, ast_item),
-    mIndex{index}
-{
-}
-
-// @brief デストラクタ
-EiGfBlockScope::~EiGfBlockScope()
-{
-}
 
 // @brief 名前の取得
 std::string

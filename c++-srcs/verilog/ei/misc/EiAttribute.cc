@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiAttribute.h"
+#include "EiAttribute.h"
 #include "elaborator/ElbExpr.h"
 
 #include "ym/vl/AstAttrInst.h"

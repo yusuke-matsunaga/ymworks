@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiConcatOp.h"
+#include "EiConcatOp.h"
 #include "ym/vl/AstExpr.h"
 #include "ym/vl/BitVector.h"
 
@@ -44,34 +44,6 @@ EiFactory::new_MultiConcatOp(
 //////////////////////////////////////////////////////////////////////
 // クラス EiConcatOp
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiConcatOp::EiConcatOp(
-  const AstExpr& ast_expr,
-  const std::vector<ElbExpr*>& opr_list
-) : EiOperation(ast_expr),
-    mOprList{opr_list}
-{
-  mSize = 0;
-  for ( auto opr: mOprList ) {
-    auto type1 = opr->value_type();
-    if ( type1.is_real_type() ) {
-      throw std::logic_error{"type1.is_real_type()"};
-    }
-
-    SizeType size1 = type1.size();
-    mSize += size1;
-    // オペランドのサイズは self determined
-    opr->set_selfsize();
-  }
-  // 自分自身のサイズも self determined
-  set_selfsize();
-}
-
-// @brief デストラクタ
-EiConcatOp::~EiConcatOp()
-{
-}
 
 // @brief 式のタイプを返す．
 VlValueType
@@ -138,23 +110,6 @@ EiConcatOp::bit_size() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiMultiConcatOp
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiMultiConcatOp::EiMultiConcatOp(
-  const AstExpr& ast_expr,
-  SizeType rep_num,
-  ElbExpr* rep_expr,
-  const std::vector<ElbExpr*>& opr_list
-) : EiConcatOp(ast_expr, opr_list),
-    mRepNum{rep_num},
-    mRepExpr{rep_expr}
-{
-}
-
-// @brief デストラクタ
-EiMultiConcatOp::~EiMultiConcatOp()
-{
-}
 
 // @brief 式のタイプを返す．
 VlValueType

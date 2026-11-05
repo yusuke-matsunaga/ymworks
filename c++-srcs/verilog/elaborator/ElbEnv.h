@@ -35,7 +35,7 @@ class ElbEnv
 {
 public:
 
-  /// @brief コンストラクタ
+  /// @brief 空のコンストラクタ
   ElbEnv();
 
   /// @brief コピーコンストラクタ

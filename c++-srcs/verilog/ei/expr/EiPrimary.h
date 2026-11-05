@@ -1,0 +1,428 @@
+﻿#ifndef EIPRIMARY_H
+#define EIPRIMARY_H
+
+/// @file EiPrimary.h
+/// @brief EiPrimary のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "EiExpr.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiPrimaryBase EiPrimary.h "EiPrimary.h"
+/// @brief プライマリ式の基底クラス
+//////////////////////////////////////////////////////////////////////
+class EiPrimaryBase :
+  public EiExpr
+{
+public:
+
+  /// @brief コンストラクタ
+  EiPrimaryBase() = default;
+
+  /// @brief デストラクタ
+  ~EiPrimaryBase() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlExprType
+  expr_type() const override;
+
+  /// @brief プライマリ(net/reg/variables/parameter)の時に true を返す．
+  bool
+  is_primary() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiPrimaryExprBase EiPrimary.h "EiPrimary.h"
+/// @brief AstExpr を持つ EiPrimaryBase
+//////////////////////////////////////////////////////////////////////
+class EiPrimaryExprBase :
+  public EiExprBase
+{
+public:
+
+  /// @brief コンストラクタ
+  EiPrimaryExprBase(
+    const AstExpr& ast_expr ///< [in] パース木の定義要素
+  ) : EiExprBase(ast_expr)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiPrimaryExprBase() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlExprType
+  expr_type() const override;
+
+  /// @brief プライマリ(net/reg/variables/parameter)の時に true を返す．
+  bool
+  is_primary() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiDeclArrayPrimary EiPrimary.h "EiPrimary.h"
+/// @brief プライマリ式を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiDeclArrayPrimary :
+  public EiPrimaryExprBase
+{
+public:
+
+  /// @brief コンストラクタ
+  EiDeclArrayPrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDeclArray* obj   ///< [in] 本体のオブジェクト
+  ) : EiPrimaryExprBase(ast_expr),
+      mObj{obj}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiDeclArrayPrimary() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 型の取得
+  VpiObjType
+  type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
+  const VlDeclBase*
+  decl_base() const override;
+
+  /// @brief 宣言要素の配列への参照の場合，対象のオブジェクトを返す．
+  const VlDeclArray*
+  declarray_obj() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 対象の宣言要素
+  const VlDeclArray* mObj;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiDeclPrimary EiPrimary.h "EiPrimary.h"
+/// @brief プライマリ式を表すクラス(もとが AstIOItem)
+//////////////////////////////////////////////////////////////////////
+class EiIOPrimary :
+  public EiPrimaryBase
+{
+public:
+
+  /// @brief コンストラクタ
+  EiIOPrimary(
+    const AstIOItem& ast_item, ///< [in] パース木の定義要素
+    const VlDecl* obj          ///< [in] 本体のオブジェクト
+  ) : mAstObj{ast_item},
+      mObj{obj}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiIOPrimary() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 型の取得
+  VpiObjType
+  type() const override;
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
+  const VlDeclBase*
+  decl_base() const override;
+
+  /// @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
+  const VlDecl*
+  decl_obj() const override;
+
+  /// @brief Verilog-HDL の文字列を得る．
+  std::string
+  decompile() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // パース木の定義要素
+  AstIOItem mAstObj;
+
+  // 対象の宣言要素
+  const VlDecl* mObj;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiDeclPrimary EiPrimary.h "EiPrimary.h"
+/// @brief プライマリ式を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiDeclItemPrimary :
+  public EiPrimaryBase
+{
+public:
+
+  /// @brief コンストラクタ
+  EiDeclItemPrimary(
+    const AstDeclItem& ast_item, ///< [in] パース木の定義要素
+    const VlDecl* obj            ///< [in] 本体のオブジェクト
+  ) : mAstObj{ast_item},
+      mObj{obj}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiDeclItemPrimary() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 型の取得
+  VpiObjType
+  type() const override;
+
+  /// @brief ファイル位置を返す．
+  FileRegion
+  file_region() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
+  const VlDeclBase*
+  decl_base() const override;
+
+  /// @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
+  const VlDecl*
+  decl_obj() const override;
+
+  /// @brief Verilog-HDL の文字列を得る．
+  std::string
+  decompile() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // パース木の定義要素
+  AstDeclItem mAstObj;
+
+  // 対象の宣言要素
+  const VlDecl* mObj;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiScopePrimary EiPrimary.h "EiPrimary.h"
+/// @brief VlNamedObj のプライマリ式を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiScopePrimary :
+  public EiPrimaryExprBase
+{
+public:
+
+  /// @brief コンストラクタ
+  EiScopePrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlScope* obj       ///< [in] 本体のオブジェクト
+  ) : EiPrimaryExprBase(ast_expr),
+      mObj{obj}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiScopePrimary() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 型の取得
+  VpiObjType
+  type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 対象のオブジェクトを返す．
+  const VlScope*
+  scope_obj() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 対象のスコープ
+  const VlScope* mObj;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiPrimitivePrimary EiPrimary.h "EiPrimary.h"
+/// @brief VlPrimitive のプライマリ式を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiPrimitivePrimary :
+  public EiPrimaryExprBase
+{
+public:
+
+  /// @brief コンストラクタ
+  EiPrimitivePrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlPrimitive* obj   ///< [in] 本体のオブジェクト
+  ) : EiPrimaryExprBase{ast_expr},
+      mObj{obj}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiPrimitivePrimary() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 型の取得
+  VpiObjType
+  type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 対象のオブジェクトを返す．
+  const VlPrimitive*
+  primitive_obj() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 対象の宣言要素
+  const VlPrimitive* mObj;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // EIPRIMARY_H

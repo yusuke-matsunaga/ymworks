@@ -13,6 +13,7 @@
 #include "ym/vl/VlDeclArray.h"
 #include "ym/vl/VlStmt.h"
 #include "ym/vl/VlExpr.h"
+#include "ym/vl/VlLhs.h"
 #include "ym/Range.h"
 
 
@@ -189,24 +190,25 @@ FuncEval::evaluate_assign(
   auto rhs = stmt->rhs();
   auto val = evaluate_expr(rhs);
 
+#if 0
   // lhs に val を代入する．
   auto lhs = stmt->lhs();
-  SizeType nl{lhs->lhs_elem_num()};
+  auto nl = lhs.size();
   if ( nl == 1 ) {
-    assign_value(lhs, val);
+    assign_value(lhs[0], val);
   }
   else {
     // 左辺が連結式の場合
     auto bv = val.bitvector_value();
     SizeType base{0};
-    for ( SizeType i = 0; i < nl; ++ i ) {
-      auto expr = lhs->lhs_elem(i);
-      SizeType w{expr->bit_size()};
+    for ( auto lhs1: lhs ) {
+      auto w = lhs1->bit_size();
       auto part_val = bv.part_select_op(base + w - 1, base);
-      assign_value(expr, VlValue(part_val));
+      assign_value(lhs1, VlValue(part_val));
       base += w;
     }
   }
+#endif
 
   return nullptr;
 }
@@ -214,10 +216,13 @@ FuncEval::evaluate_assign(
 // @brief 左辺の要素を値を代入する．
 void
 FuncEval::assign_value(
-  const VlExpr* expr,
+  const VlExpr* lhs,
   const VlValue& val
 )
 {
+#if 1
+#warning "TODO"
+#else
   // 対象が
   // - 単独の要素
   // - 配列要素
@@ -285,6 +290,7 @@ FuncEval::assign_value(
       reg_val(declarray, offset, val, left_index, right_index);
     }
   }
+#endif
 }
 
 // @brief while 文の実行を行う．
@@ -470,15 +476,15 @@ FuncEval::evaluate_expr(
   const VlExpr* expr
 )
 {
-  switch ( expr->type() ) {
-  case VpiObjType::Operation:   return evaluate_opr(expr);
-  case VpiObjType::Constant:    return evaluate_const(expr);
-  case VpiObjType::FuncCall:    return evaluate_funccall(expr);
-  case VpiObjType::SysFuncCall: return VlValue(); // 定数式の中では無視
-  default: // ここに来たらプライマリ系
-           // bitselect, partselect も馥府．
-    return evaluate_primary(expr);
+  switch ( expr->expr_type() ) {
+  case VlExprType::CONST:       return evaluate_const(expr);
+  case VlExprType::PRIMARY:     return evaluate_primary(expr);
+  case VlExprType::OPERATION:   return evaluate_opr(expr);
+  case VlExprType::FUNCCALL:    return evaluate_funccall(expr);
+  case VlExprType::SYSFUNCCALL: return VlValue(); // 定数式の中では無視
+  default: break;
   }
+  // SELECT タイプは定数式の中では現れないはず．
   throw std::logic_error{"Should not be reached"};
 }
 
@@ -599,52 +605,105 @@ FuncEval::evaluate_primary(
   const VlExpr* expr
 )
 {
-  auto decl = expr->decl_obj();
-  auto declarray = expr->declarray_obj();
-  VlValue base_val;
-  if ( decl ) {
-    base_val = get_val(decl);
-  }
-  else if ( declarray ) {
-    // インデックスの値を求める．
-    SizeType n = expr->declarray_dimension();
-    std::vector<int> index_array(n);
-    for ( SizeType i = 0; i < n; ++ i ) {
-      auto index_expr = expr->declarray_index(i);
-      index_array[i] = evaluate_int(index_expr);
-    }
-
-    SizeType offset;
-    bool stat = declarray->calc_array_offset(index_array, offset);
-    if ( !stat ) {
-      throw std::logic_error{"!stat"};
-    }
-
-    base_val = get_val(declarray, offset);
-  }
-  else {
+  // 宣言要素の値を求める．
+  VlValue base_value;
+  switch ( expr->primary_type() ) {
+  case VlPrimaryType::DECL:
+    base_value = evaluate_decl(expr);
+    break;
+  case VlPrimaryType::CONST_DECL_ELEM:
+    base_value = evaluate_const_decl_elem(expr);
+    break;
+  case VlPrimaryType::VAR_DECL_ELEM:
+    base_value = evaluate_var_decl_elem(expr);
+    break;
+  default:
     throw std::logic_error{"Should not be reached"};
   }
 
-  if ( expr->is_primary() ) {
-    return base_val;
+  if ( expr->has_bit_select() ) {
+    // ビット/部分指定あり
+    auto width = expr->select_width();
+    if ( expr->has_const_bit_select() ) {
+      // 固定インデックス
+      auto bit_offset = expr->bit_offset();
+      auto msb = bit_offset + width - 1;
+      auto lsb = bit_offset;
+      auto bv = base_value.bitvector_value();
+      return VlValue(bv.part_select_op(msb, lsb));
+    }
+    // 可変インデックス
+    auto bit_index = expr->bit_index();
+    auto index_val = evaluate_int(bit_index);
+    SizeType lsb;
+    auto stat1 = expr->decl_base()->calc_bit_offset(index_val, lsb);
+    if ( !stat1 ) {
+#warning "TODO: エラー処理"
+    }
+    int index_val2;
+    if ( expr->has_plus_bit_select() ) {
+      index_val2 = index_val + width - 1;
+    }
+    else {
+      index_val2 = index_val - width - 1;
+    }
+    SizeType msb;
+    auto stat2 = expr->decl_base()->calc_bit_offset(index_val2, msb);
+    if ( !stat2 ) {
+#warning "TODO: エラー処理"
+    }
+    if ( lsb > msb ) {
+      std::swap(lsb, msb);
+    }
+    auto bv = base_value.bitvector_value();
+    return VlValue(bv.part_select_op(msb, lsb));
   }
-  else if ( expr->is_bitselect() ) {
-    auto index_expr = expr->index();
-    int index = evaluate_int(index_expr);
-    auto bv = base_val.bitvector_value();
-    return VlValue(bv.bit_select_op(index));
-  }
-  else if ( expr->is_partselect() ) {
-    auto left_expr = expr->left_range();
-    int left_index = evaluate_int(left_expr);
-    auto right_expr = expr->right_range();
-    int right_index = evaluate_int(right_expr);
-    auto bv = base_val.bitvector_value();
-    return VlValue(bv.part_select_op(left_index, right_index));
-  }
+  // 宣言要素そのものの値
+  return base_value;
+}
 
-  throw std::logic_error{"Should not be reached"};
+// @brief 単独の宣言要素の値を評価する．
+VlValue
+FuncEval::evaluate_decl(
+  const VlExpr* expr
+)
+{
+  auto decl = expr->decl_obj();
+  return get_val(decl);
+}
+
+// @brief 固定インデックスの配列型要素の値を評価する．
+VlValue
+FuncEval::evaluate_const_decl_elem(
+  const VlExpr* expr
+)
+{
+  auto declarray = expr->declarray_obj();
+  auto offset = expr->declarray_offset();
+  return get_val(declarray, offset);
+}
+
+// @brief 可変インデックスの配列型要素の値を評価する．
+VlValue
+FuncEval::evaluate_var_decl_elem(
+  const VlExpr* expr
+)
+{
+  auto declarray = expr->declarray_obj();
+  auto index_expr_list = expr->declarray_index_list();
+  auto n = index_expr_list.size();
+  std::vector<int> index_list;
+  index_list.reserve(n);
+  for ( auto index_expr: index_expr_list ) {
+    auto index = evaluate_int(index_expr);
+    index_list.push_back(index);
+  }
+  SizeType offset;
+  bool stat = declarray->calc_array_offset(index_list, offset);
+  if ( !stat ) {
+    throw std::logic_error{"!stat"};
+  }
+  return get_val(declarray, offset);
 }
 
 // @brief 関数呼び出しに対して式の値を評価する．

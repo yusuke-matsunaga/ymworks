@@ -6,8 +6,8 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiIOHead.h"
 #include "ei/EiFactory.h"
+#include "EiIOHead.h"
 #include "ym/vl/VlScope.h"
 #include "ym/vl/VlTaskFunc.h"
 
@@ -44,18 +44,6 @@ EiFactory::new_IOHead(
 // クラス EiIOHead
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiIOHead::EiIOHead(
-  const AstIOHead& ast_header
-) : mAstHead{ast_header}
-{
-}
-
-// @brief デストラクタ
-EiIOHead::~EiIOHead()
-{
-}
-
 // @brief 方向を返す．
 VpiDir
 EiIOHead::direction() const
@@ -89,20 +77,6 @@ EiIOHead::function() const
 // クラス EiModIOHead
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiModIOHead::EiModIOHead(
-  const VlModule* module,
-  const AstIOHead& ast_header
-) : EiIOHead(ast_header),
-    mModule{module}
-{
-}
-
-// @brief デストラクタ
-EiModIOHead::~EiModIOHead()
-{
-}
-
 // @brief 親のモジュールの取得
 const VlModule*
 EiModIOHead::module() const
@@ -115,20 +89,6 @@ EiModIOHead::module() const
 // クラス EiTaskIOHead
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiTaskIOHead::EiTaskIOHead(
-  const VlTaskFunc* task,
-  const AstIOHead& ast_header
-) : EiIOHead(ast_header),
-    mTask{task}
-{
-}
-
-// @brief デストラクタ
-EiTaskIOHead::~EiTaskIOHead()
-{
-}
-
 // @brief 親のタスクの取得
 const VlTaskFunc*
 EiTaskIOHead::task() const
@@ -140,20 +100,6 @@ EiTaskIOHead::task() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiFunctionIOHead
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiFunctionIOHead::EiFunctionIOHead(
-  const VlTaskFunc* func,
-  const AstIOHead& ast_header
-) : EiIOHead(ast_header),
-    mFunction{func}
-{
-}
-
-// @brief デストラクタ
-EiFunctionIOHead::~EiFunctionIOHead()
-{
-}
 
 // @brief 親の関数の取得
 const VlTaskFunc*

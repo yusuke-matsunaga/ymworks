@@ -1,0 +1,342 @@
+﻿#ifndef EICONSTANT_H
+#define EICONSTANT_H
+
+/// @file EiConstant.h
+/// @brief EiExpr のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "EiExpr.h"
+#include "ym/vl/BitVector.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiConstant EiConstant.h "EiConstant.h"
+/// @brief 定数を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiConstant :
+  public EiExprBase
+{
+protected:
+
+  /// @brief コンストラクタ
+  EiConstant(
+    const AstExpr& ast_expr ///< [in] パース木の定義要素
+  ) : EiExprBase(ast_expr)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiConstant() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 型の取得
+  VpiObjType
+  type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlExprType
+  expr_type() const override;
+
+  /// @brief 定数の時 true を返す．
+  bool
+  is_const() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // EiExpr の設定用の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiIntConst EiConstant.h "EiConstant.h"
+/// @brief 整数型の定数を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiIntConst :
+  public EiConstant
+{
+public:
+
+  /// @brief コンストラクタ
+  EiIntConst(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    std::int32_t value       ///< [in] 値
+  ) : EiConstant(ast_expr),
+      mValue{value}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiIntConst() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 定数の型を返す．
+  VpiConstType
+  constant_type() const override;
+
+  /// @brief 定数値を返す．
+  VlValue
+  constant_value() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  std::int32_t mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiBitVectorConst EiConstant.h "EiConstant.h"
+/// @brief ビットベクタ型の定数を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiBitVectorConst :
+  public EiConstant
+{
+public:
+
+  /// @brief コンストラクタ
+  EiBitVectorConst(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    VpiConstType const_type, ///< [in] 定数型
+    const BitVector& value   ///< [in] 値
+  ) : EiConstant(ast_expr),
+      mConstType{const_type},
+      mValue{value}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiBitVectorConst() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 定数の型を返す．
+  VpiConstType
+  constant_type() const override;
+
+  /// @brief 定数値を返す．
+  VlValue
+  constant_value() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 定数の型
+  VpiConstType mConstType;
+
+  // 値
+  BitVector mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiRealConst EiConstant.h "EiConstant.h"
+/// @brief 実数型の定数を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiRealConst :
+  public EiConstant
+{
+public:
+
+  /// @brief コンストラクタ
+  EiRealConst(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    double value             ///< [in] 値
+  ) : EiConstant(ast_expr),
+      mValue{value}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiRealConst() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 定数の型を返す．
+  VpiConstType
+  constant_type() const override;
+
+  /// @brief 定数値を返す．
+  VlValue
+  constant_value() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  double mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiStringConst EiConstant.h "EiConstant.h"
+/// @brief 文字列型の定数を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiStringConst :
+  public EiConstant
+{
+public:
+
+  /// @brief コンストラクタ
+  EiStringConst(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const std::string& value ///< [in] 値
+  ) : EiConstant(ast_expr),
+      mValue(value)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiStringConst() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 定数の型を返す．
+  VpiConstType
+  constant_type() const override;
+
+  /// @brief 定数値を返す．
+  VlValue
+  constant_value() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 値
+  BitVector mValue;
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiParamConstant EiConstant.h "EiConstant.h"
+/// @brief パラメータの定数を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiParamConstant :
+  public EiConstant
+{
+public:
+
+  /// @brief コンストラクタ
+  EiParamConstant(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbParameter* obj        ///< [in] 本体のオブジェクト
+  ) : EiConstant(ast_expr),
+      mObj{obj}
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiParamConstant() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlObj の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 型の取得
+  VpiObjType
+  type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+  /// @brief 定数値を返す．
+  VlValue
+  constant_value() const override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 対象の宣言要素
+  ElbParameter* mObj;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // EICONSTANT_H

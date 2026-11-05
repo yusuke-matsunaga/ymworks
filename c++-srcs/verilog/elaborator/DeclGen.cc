@@ -12,6 +12,7 @@
 #include "elaborator/ElbDeclHead.h"
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbDeclArray.h"
+#include "elaborator/ElbDeclRef.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbGenvar.h"
 #include "elaborator/ElbModule.h"
@@ -241,11 +242,12 @@ DeclGen::instantiate_iodecl(
 	decl = elb_mgr().new_Decl(tag, head, ast_item, init);
       }
 
+      auto io_decl = elb_mgr().new_IODecl(head, ast_item, decl);
       if ( module ) {
-	module->add_iodecl(head, ast_item, decl);
+	module->add_iodecl(io_decl);
       }
       else if ( taskfunc ) {
-	taskfunc->add_iodecl(head, ast_item, decl);
+	taskfunc->add_iodecl(io_decl);
       }
       else {
 	throw std::logic_error{"Should not be reached"};
@@ -528,9 +530,9 @@ DeclGen::link_net_assign(
   net->set_init(rhs);
 
   // 対応する continuous assign 文を作る．
-  auto module = scope->parent_module();
+  auto vl_module = scope->parent_module();
   auto loc = ast_item.file_region();
-  auto ca = elb_mgr().new_ContAssign(module, loc, lhs, rhs);
+  auto ca = elb_mgr().new_ContAssign(vl_module, loc, lhs, rhs);
 }
 
 // @brief reg をインスタンス化する．

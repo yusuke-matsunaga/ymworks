@@ -17,6 +17,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 class ElbEnv;
+class ElbDeclRef;
 
 //////////////////////////////////////////////////////////////////////
 /// @class ExprGen ExprGen.h "ExprGen.h"
@@ -95,6 +96,16 @@ public:
     const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
+  /// @brief AstExpr から継続的代入文の左辺式を生成する
+  /// @return 生成された ElbExpr のポインタを返す．
+  ///
+  /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
+  ElbExpr*
+  instantiate_net_lhs(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
+  );
+
   /// @brief AstExpr(primary) から named_event を生成する．
   ///
   /// 不適切な式ならば ElbError 例外を送出する．
@@ -156,7 +167,7 @@ private:
     std::vector<ElbExpr*>& elem_array ///< [out] 生成した左辺式の要素を格納するベクタ
   );
 
-  /// @brief AstPrimary から ElbExpr を生成する．
+  /// @brief プライマリ式の生成を行う．
   /// @return 生成された式を返す．
   ///
   /// 不適切な式ならば ElbError 例外を送出する．
@@ -165,6 +176,16 @@ private:
     const VlScope* parent,   ///< [in] 親のスコープ
     const ElbEnv& env,	     ///< [in] 生成時の環境
     const AstExpr& ast_expr  ///< [in] 式を表すパース木
+  );
+
+  /// @brief AstPrimary から ElbExpr を生成する．
+  /// @return 生成された式を返す．
+  ///
+  /// 不適切な式ならば ElbError 例外を送出する．
+  ElbExpr*
+  instantiate_net_primary(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
   /// @brief AstOpr から ElbExpr を生成する．
@@ -218,16 +239,86 @@ private:
     int val                  ///< [in] 値
   );
 
-  /// @brief 宣言要素のインスタンス化を行う．
-  ElbExpr*
-  instantiate_primary_sub(
+  /// @brief 宣言要素への参照を作る．
+  ElbDeclRef
+  instantiate_decl_ref(
     ObjHandle* handle,       ///< [in] オブジェクトハンドル
     const VlScope* parent,   ///< [in] 親のスコープ
-    const ElbEnv& env,       ///< [in] インスタンス化している環境
+    const ElbEnv& index_env, ///< [in] インデックス用の環境
     const AstExpr& ast_expr, ///< [in] 式を表すパース木
-    bool& is_array,          ///< [out] 対象が配列の時 true を返す．
-    bool& has_range_select,  ///< [out] 範囲指定を持っていたら true を返す．
-    bool& has_bit_select     ///< [out] ビット指定を持っていたら true を返す．
+    AstExpr& ast_bit         ///< [out] ビット選択式
+  );
+
+  /// @brief ビット選択式を作る．
+  ElbExpr*
+  instantiate_bitselect(
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstExpr& ast_expr,    ///< [in] 式を表すパース木
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const ElbEnv& index_env,    ///< [in] インデックス用の環境
+    const AstExpr& ast_bit,     ///< [in] ビット選択式
+    bool var_index              ///< [in] 可変インデックスを許可する時 true
+  );
+
+  /// @brief 範囲選択式を作る．
+  ElbExpr*
+  instantiate_partselect(
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstExpr& ast_expr,    ///< [in] 式を表すパース木
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const ElbEnv& index_env,    ///< [in] インデックス用の環境
+    const AstPart& ast_part,    ///< [in] 範囲選択式
+    bool var_index              ///< [in] 可変インデックスを許可する時 true
+  );
+
+  /// @brief 固定型の範囲選択式を作る．
+  ElbExpr*
+  instantiate_const_partselect(
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstExpr& ast_expr,    ///< [in] 式を表すパース木
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const AstExpr& ast_left,    ///< [in] 範囲選択式1
+    const AstExpr& ast_right    ///< [in] 範囲選択式2
+  );
+
+  /// @brief プラス型の範囲選択式を作る．
+  ElbExpr*
+  instantiate_plus_partselect(
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstExpr& ast_expr,    ///< [in] 式を表すパース木
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const ElbEnv& index_env,    ///< [in] インデックス用の環境
+    const AstExpr& ast_left,    ///< [in] 範囲選択式1
+    const AstExpr& ast_right,   ///< [in] 範囲選択式2
+    bool var_index              ///< [in] 可変インデックスを許可する時 true
+  );
+
+  /// @brief マイナス型の範囲選択式を作る．
+  ElbExpr*
+  instantiate_minus_partselect(
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstExpr& ast_expr,    ///< [in] 式を表すパース木
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const ElbEnv& index_env,    ///< [in] インデックス用の環境
+    const AstExpr& ast_left,    ///< [in] 範囲選択式1
+    const AstExpr& ast_right,   ///< [in] 範囲選択式2
+    bool var_index              ///< [in] 可変インデックスを許可する時 true
+  );
+
+  /// @brief システム関数/タスクの引数を返す．
+  ElbExpr*
+  instantiate_sytem_tf_arg(
+    ObjHandle* handle,      ///< [in] オブジェクトハンドル
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
+  );
+
+  /// @brief プライマリに対応するハンドルを求める．
+  ObjHandle*
+  find_handle(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const ElbEnv& env,      ///< [in] 環境
+    const AstExpr& ast_expr ///< [in] プライマリを表す式
   );
 
   /// @brief decl の型が適切がチェックする．

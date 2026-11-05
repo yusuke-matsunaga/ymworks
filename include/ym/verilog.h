@@ -1067,6 +1067,75 @@ operator<<(
   return s;
 }
 
+
+//////////////////////////////////////////////////////////////////////
+/// @brief 種類を表す列挙型
+//////////////////////////////////////////////////////////////////////
+enum class VlExprType : std::uint8_t {
+  NONE = 0,    ///< 不正値
+  CONST,       ///< 定数
+  PRIMARY,     ///< プライマリ
+  SELECT,      ///< ビット/部分選択
+  OPERATION,   ///< 演算
+  FUNCCALL,    ///< 関数呼び出し
+  SYSFUNCCALL  ///< システム関数呼び出し
+};
+
+/// @brief VlExprType のストリーム出力演算子
+inline
+std::ostream&
+operator<<(
+  std::ostream& s,
+  VlExprType val
+)
+{
+  switch ( val ) {
+  case VlExprType::NONE:        s << "NONE"; break;
+  case VlExprType::CONST:       s << "CONST"; break;
+  case VlExprType::PRIMARY:     s << "PRIMARY"; break;
+  case VlExprType::SELECT:      s << "SELECT"; break;
+  case VlExprType::OPERATION:   s << "OPERATION"; break;
+  case VlExprType::FUNCCALL:    s << "FUNCCALL"; break;
+  case VlExprType::SYSFUNCCALL: s << "SYSFUNCCALL"; break;
+  }
+  return s;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+/// @brief プライマリの種類を表す列挙型
+//////////////////////////////////////////////////////////////////////
+enum class VlPrimaryType : std::uint8_t {
+  NONE = 0,        ///< 不正値
+  DECL,            ///< 単一の宣言要素
+  DECLARRAY,       ///< 配列型宣言要素
+  CONST_DECL_ELEM, ///< 固定インデックス付き配列型宣言要素
+  VAR_DECL_ELEM,   ///< 可変インデックス付き配列型宣言要素
+  SCOPE,           ///< スコープ
+  PRIMITIVE        ///< プリミティブ
+};
+
+/// @brief VlPrimaryType のストリーム出力演算
+inline
+std::ostream&
+operator<<(
+  std::ostream& s,
+  VlPrimaryType val
+)
+{
+  switch ( val ) {
+  case VlPrimaryType::NONE:            s << "NONE"; break;
+  case VlPrimaryType::DECL:            s << "DECL"; break;
+  case VlPrimaryType::DECLARRAY:       s << "DECLARRAY"; break;
+  case VlPrimaryType::CONST_DECL_ELEM: s << "CONST_DECL_ELEM"; break;
+  case VlPrimaryType::VAR_DECL_ELEM:   s << "VAR_DECL_ELEM"; break;
+  case VlPrimaryType::SCOPE:           s << "SCOPE"; break;
+  case VlPrimaryType::PRIMITIVE:       s << "PRIMITIVE"; break;
+  }
+  return s;
+}
+
+
 //////////////////////////////////////////////////////////////////////
 /// @brief 代入の種類を表す列挙型
 //////////////////////////////////////////////////////////////////////

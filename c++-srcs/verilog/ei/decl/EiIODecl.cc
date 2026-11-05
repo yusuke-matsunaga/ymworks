@@ -6,31 +6,32 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiIODecl.h"
+#include "ei/EiFactory.h"
+#include "EiIODecl.h"
 #include "elaborator/ElbDecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiIODecl
+// クラス EiFactory
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiIODecl::EiIODecl(
+// @brief IO宣言要素を生成する．
+const VlIODecl*
+EiFactory::new_IODecl(
   ElbIOHead* head,
   const AstIOItem& ast_item,
   const VlDecl* decl
-) : mHead{head},
-    mAstItem{ast_item},
-    mDecl{decl}
+)
 {
+  return new EiIODecl(head, ast_item, decl);
 }
 
-// @brief デストラクタ
-EiIODecl::~EiIODecl()
-{
-}
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiIODecl
+//////////////////////////////////////////////////////////////////////
 
 // @brief 型の取得
 VpiObjType

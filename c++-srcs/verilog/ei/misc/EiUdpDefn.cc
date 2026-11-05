@@ -7,9 +7,9 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiUdpDefn.h"
-#include "ei/EiUdpIO.h"
-#include "ei/EiTableEntry.h"
+#include "EiUdpDefn.h"
+#include "EiUdpIO.h"
+#include "EiTableEntry.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -35,26 +35,6 @@ EiFactory::new_UdpDefn(
 //////////////////////////////////////////////////////////////////////
 // クラス EiUdpDefn
 //////////////////////////////////////////////////////////////////////
-
-// @param[in] ast_udp パース木の UDP 定義
-EiUdpDefn::EiUdpDefn(
-  const AstUdp& ast_udp,
-  bool is_protected,
-  SizeType io_num,
-  SizeType table_num
-) : mAstUdp{ast_udp},
-    mProtected{is_protected},
-    mInitExpr{nullptr},
-    mInitVal{VlScalarVal::x()}
-{
-  mIODeclList.reserve(io_num);
-  mTableEntryList.reserve(table_num);
-}
-
-// @brief デストラクタ
-EiUdpDefn::~EiUdpDefn()
-{
-}
 
 // @brief 型の取得
 VpiObjType

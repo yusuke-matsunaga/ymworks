@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiControl.h"
+#include "EiControl.h"
 
 #include "elaborator/ElbExpr.h"
 
@@ -54,18 +54,6 @@ EiFactory::new_RepeatControl(
 //////////////////////////////////////////////////////////////////////
 // クラス EiControl
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiControl::EiControl(
-  const AstControl& ast_control
-) : mAstControl{ast_control}
-{
-}
-
-// デストラクタ
-EiControl::~EiControl()
-{
-}
 
 // @brief ファイル位置を返す．
 FileRegion
@@ -116,20 +104,6 @@ EiControl::event_list() const
 /// クラス EiDelayControl
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDelayControl::EiDelayControl(
-  const AstControl& ast_control,
-  ElbExpr* delay
-) : EiControl(ast_control),
-    mDelay{delay}
-{
-}
-
-// デストラクタ
-EiDelayControl::~EiDelayControl()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiDelayControl::type() const
@@ -148,20 +122,6 @@ EiDelayControl::delay() const
 //////////////////////////////////////////////////////////////////////
 /// クラス EiEventControl EiControl.h "EiControl.h"
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiEventControl::EiEventControl(
-  const AstControl& ast_control,
-  const std::vector<ElbExpr*>& event_list
-) : EiControl(ast_control),
-    mEventList{event_list}
-{
-}
-
-// @brief デストラクタ
-EiEventControl::~EiEventControl()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -200,21 +160,6 @@ EiEventControl::event_list() const
 //////////////////////////////////////////////////////////////////////
 /// クラス EiRepeatControl EiControl.h "EiControl.h"
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiRepeatControl::EiRepeatControl(
-  const AstControl& ast_control,
-  ElbExpr* rep,
-  const std::vector<ElbExpr*>& event_list
-) : EiEventControl(ast_control, event_list),
-    mExpr{rep}
-{
-}
-
-// デストラクタ
-EiRepeatControl::~EiRepeatControl()
-{
-}
 
 // @brief 型の取得
 VpiObjType

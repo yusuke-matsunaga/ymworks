@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiCaHead.h"
+#include "EiCaHead.h"
 #include "ym/vl/VlDelay.h"
 #include "ym/vl/AstItem.h"
 
@@ -38,20 +38,6 @@ EiFactory::new_CaHead(
 //////////////////////////////////////////////////////////////////////
 // クラス EiCaHead
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiCaHead::EiCaHead(
-  const VlModule* module,
-  const AstItem& ast_head
-) : mModule{module},
-    mAstHead{ast_head}
-{
-}
-
-// @brief デストラクタ
-EiCaHead::~EiCaHead()
-{
-}
 
 // @brief 親のスコープを返す．
 const VlModule*
@@ -92,21 +78,6 @@ EiCaHead::delay() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiCaHeadD
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiCaHeadD::EiCaHeadD(
-  const VlModule* module,
-  const AstItem& ast_head,
-  const VlDelay* delay
-) : EiCaHead(module, ast_head),
-    mDelay{delay}
-{
-}
-
-// @brief デストラクタ
-EiCaHeadD::~EiCaHeadD()
-{
-}
 
 // @brief 遅延を表す式を返す．
 const VlDelay*

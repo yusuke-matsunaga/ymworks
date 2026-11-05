@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiContAssign.h"
+#include "EiContAssign.h"
 #include "ym/vl/VlExpr.h"
 #include "ym/vl/VlDelay.h"
 #include "elaborator/ElbCaHead.h"
@@ -47,22 +47,6 @@ EiFactory::new_ContAssign(
 //////////////////////////////////////////////////////////////////////
 // クラス EiContAssign
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiContAssign::EiContAssign(
-  const FileRegion& loc,
-  const VlExpr* lhs,
-  const VlExpr* rhs
-) : mFileRegion{loc},
-    mLhs{lhs},
-    mRhs{rhs}
-{
-}
-
-// @brief デストラクタ
-EiContAssign::~EiContAssign()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -104,22 +88,6 @@ EiContAssign::rhs() const
 // クラス EiContAssign1
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiContAssign1::EiContAssign1(
-  ElbCaHead* head,
-  const FileRegion& loc,
-  const VlExpr* lhs,
-  const VlExpr* rhs
-) : EiContAssign(loc, lhs, rhs),
-    mHead{head}
-{
-}
-
-// @brief デストラクタ
-EiContAssign1::~EiContAssign1()
-{
-}
-
 // @brief 親のスコープを返す．
 const VlModule*
 EiContAssign1::module() const
@@ -159,22 +127,6 @@ EiContAssign1::has_net_decl_assign() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiContAssign2
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiContAssign2::EiContAssign2(
-  const VlModule* module,
-  const FileRegion& loc,
-  const VlExpr* lhs,
-  const VlExpr* rhs
-) : EiContAssign(loc, lhs, rhs),
-    mModule{module}
-{
-}
-
-// @brief デストラクタ
-EiContAssign2::~EiContAssign2()
-{
-}
 
 // @brief 親のスコープを返す．
 const VlModule*

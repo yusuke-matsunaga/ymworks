@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiDecl.h"
+#include "EiDecl.h"
 #include "elaborator/ElbExpr.h"
 
 
@@ -22,14 +22,15 @@ ElbDecl*
 EiFactory::new_Decl(
   ElbDeclHead* head,
   const AstDeclItem& ast_item,
+  SizeType decl_id,
   const VlExpr* init
 )
 {
   if ( init != nullptr ) {
-    return new EiDeclI(head, ast_item, init);
+    return new EiDeclI(head, ast_item, decl_id, init);
   }
   else {
-    return new EiDecl(head, ast_item);
+    return new EiDecl(head, ast_item, decl_id);
   }
 }
 
@@ -38,14 +39,15 @@ ElbDecl*
 EiFactory::new_Decl(
   ElbDeclHead* head,
   const AstIOItem& ast_item,
+  SizeType decl_id,
   const VlExpr* init
 )
 {
   if ( init != nullptr ) {
-    return new EiDecl2I(head, ast_item, init);
+    return new EiDecl2I(head, ast_item, decl_id, init);
   }
   else {
-    return new EiDecl2(head, ast_item);
+    return new EiDecl2(head, ast_item, decl_id);
   }
 }
 
@@ -53,28 +55,17 @@ EiFactory::new_Decl(
 ElbDecl*
 EiFactory::new_Decl(
   ElbDeclHead* head,
-  const AstItem& ast_item
+  const AstItem& ast_item,
+  SizeType decl_id
 )
 {
-  return new EiDecl3(head, ast_item);
+  return new EiDecl3(head, ast_item, decl_id);
 }
 
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclBase
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeclBase::EiDeclBase(
-  ElbDeclHead* head
-) : mHead{head}
-{
-}
-
-// @brief デストラクタ
-EiDeclBase::~EiDeclBase()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -274,6 +265,13 @@ EiDeclBase::is_local_param() const
   return false;
 }
 
+// @brief 要素番号を返す．
+SizeType
+EiDeclBase::decl_id() const
+{
+  return mDeclId;
+}
+
 // @brief 符号付きに補正する．
 void
 EiDeclBase::set_signed()
@@ -321,20 +319,6 @@ EiDeclBase::set_assign_type(
 // クラス EiDecl
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDecl::EiDecl(
-  ElbDeclHead* head,
-  const AstDeclItem& ast_item
-) : EiDeclBase(head),
-    mAstItem{ast_item}
-{
-}
-
-// @brief デストラクタ
-EiDecl::~EiDecl()
-{
-}
-
 // @brief ファイル位置の取得
 FileRegion
 EiDecl::file_region() const
@@ -353,21 +337,6 @@ EiDecl::name() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclI
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeclI::EiDeclI(
-  ElbDeclHead* head,
-  const AstDeclItem& ast_item,
-  const VlExpr* init
-) : EiDecl(head, ast_item),
-    mInit{init}
-{
-}
-
-// @brief デストラクタ
-EiDeclI::~EiDeclI()
-{
-}
 
 // @brief 初期値の取得
 const VlExpr*
@@ -390,20 +359,6 @@ EiDeclI::set_init(
 // クラス EiDecl2
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDecl2::EiDecl2(
-  ElbDeclHead* head,
-  const AstIOItem& ast_item
-) : EiDeclBase(head),
-    mAstItem{ast_item}
-{
-}
-
-// @brief デストラクタ
-EiDecl2::~EiDecl2()
-{
-}
-
 // @brief ファイル位置の取得
 FileRegion
 EiDecl2::file_region() const
@@ -422,21 +377,6 @@ EiDecl2::name() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiDecl2I
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDecl2I::EiDecl2I(
-  ElbDeclHead* head,
-  const AstIOItem& ast_item,
-  const VlExpr* init
-) : EiDecl2(head, ast_item),
-    mInit{init}
-{
-}
-
-// @brief デストラクタ
-EiDecl2I::~EiDecl2I()
-{
-}
 
 // @brief 初期値の取得
 const VlExpr*
@@ -458,20 +398,6 @@ EiDecl2I::set_init(
 //////////////////////////////////////////////////////////////////////
 // クラス EiDecl3
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDecl3::EiDecl3(
-  ElbDeclHead* head,
-  const AstItem& ast_item
-) : EiDeclBase(head),
-    mAstItem{ast_item}
-{
-}
-
-// @brief デストラクタ
-EiDecl3::~EiDecl3()
-{
-}
 
 // @brief ファイル位置の取得
 FileRegion

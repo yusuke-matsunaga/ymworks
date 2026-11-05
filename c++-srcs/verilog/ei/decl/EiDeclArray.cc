@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiDeclArray.h"
+#include "EiDeclArray.h"
 
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbExpr.h"
@@ -24,7 +24,8 @@ const VlDeclArray*
 EiFactory::new_DeclArray(
   ElbDeclHead* head,
   const AstDeclItem& ast_item,
-  const std::vector<ElbRangeSrc>& range_src
+  const std::vector<ElbRangeSrc>& range_src,
+  SizeType decl_base
 )
 {
   auto dim_size = range_src.size();
@@ -33,29 +34,13 @@ EiFactory::new_DeclArray(
     range_array[i].set(range_src[i]);
   }
 
-  return new EiDeclArray(head, ast_item, range_array);
+  return new EiDeclArray(head, ast_item, range_array, decl_base);
 }
 
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclArray
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeclArray::EiDeclArray(
-  ElbDeclHead* head,
-  const AstDeclItem& ast_item,
-  const std::vector<EiRange>& range_array
-) : mHead{head},
-    mAstItem{ast_item},
-    mRangeList(range_array)
-{
-}
-
-// @brief デストラクタ
-EiDeclArray::~EiDeclArray()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -289,6 +274,15 @@ EiDeclArray::calc_array_offset(
 ) const
 {
   return mRangeList.calc_offset(index_list, offset);
+}
+
+// @brief 要素番号を返す．
+SizeType
+EiDeclArray::decl_id(
+  SizeType offset
+) const
+{
+  return mDeclBase + offset;
 }
 
 // @brief 代入タイプをセットする．

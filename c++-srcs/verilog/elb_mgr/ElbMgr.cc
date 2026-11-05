@@ -28,6 +28,7 @@
 #include "elaborator/ElbIOHead.h"
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbDeclHead.h"
+#include "elaborator/ElbDeclRef.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbGenvar.h"
 #include "elaborator/ElbCaHead.h"
@@ -430,6 +431,18 @@ ElbMgr::new_IOHead(
   return head;
 }
 
+// @brief IO宣言要素を生成する．
+const VlIODecl*
+ElbMgr::new_IODecl(
+  ElbIOHead* head,
+  const AstIOItem& ast_item,
+  const VlDecl* decl
+)
+{
+  auto io_decl = factory().new_IODecl(head, ast_item, decl);
+  return io_decl;
+}
+
 // @brief 宣言要素のヘッダを生成する．
 ElbDeclHead*
 ElbMgr::new_DeclHead(
@@ -483,10 +496,11 @@ ElbMgr::new_DeclHead(
   const RangeVal& range
 )
 {
-  auto head = factory().new_DeclHead(parent, ast_head, aux_type,
-				     ast_range, range);
-  reg_head(head);
-  return head;
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      return factory().new_DeclHead(parent, ast_head, aux_type,
+				    ast_range, range);
+    });
 }
 
 // @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
@@ -496,9 +510,10 @@ ElbMgr::new_DeclHead(
   const AstItem& ast_item
 )
 {
-  auto head = factory().new_DeclHead(parent, ast_item);
-  reg_head(head);
-  return head;
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      return factory().new_DeclHead(parent, ast_item);
+    });
 }
 
 // @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
@@ -510,7 +525,19 @@ ElbMgr::new_DeclHead(
   const RangeVal& range
 )
 {
-  auto head = factory().new_DeclHead(parent, ast_item, ast_range, range);
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      return factory().new_DeclHead(parent, ast_item, ast_range, range);
+    });
+}
+
+// @brief 宣言ヘッダを生成する．
+ElbDeclHead*
+ElbMgr::new_declhead(
+  std::function<ElbDeclHead*()> new_func
+)
+{
+  auto head = new_func();
   reg_head(head);
   return head;
 }
@@ -524,10 +551,10 @@ ElbMgr::new_Decl(
   const VlExpr* init
 )
 {
-  auto decl = factory().new_Decl(head, ast_item, init);
-  reg_obj(decl);
-  mObjDict.add(decl);
-  mTagDict.add_decl(tag, decl);
+  auto decl = new_decl(
+    [&](SizeType decl_id) -> ElbDecl* {
+      return factory().new_Decl(head, ast_item, decl_id, init);
+    }, tag);
   return decl;
 }
 
@@ -540,10 +567,10 @@ ElbMgr::new_Decl(
   const VlExpr* init
 )
 {
-  auto decl = factory().new_Decl(head, ast_item, init);
-  reg_obj(decl);
-  mObjDict.add(decl);
-  mTagDict.add_decl(tag, decl);
+  auto decl = new_decl(
+    [&](SizeType decl_id) -> ElbDecl* {
+      return factory().new_Decl(head, ast_item, decl_id, init);
+    }, tag);
   return decl;
 }
 
@@ -555,10 +582,10 @@ ElbMgr::new_Decl(
   const AstItem& ast_item
 )
 {
-  auto decl = factory().new_Decl(head, ast_item);
-  reg_obj(decl);
-  mObjDict.add(decl);
-  mTagDict.add_decl(tag, decl);
+  auto decl = new_decl(
+    [&](SizeType decl_id) -> ElbDecl* {
+      return factory().new_Decl(head, ast_item, decl_id);
+    }, tag);
   return decl;
 }
 
@@ -570,9 +597,10 @@ ElbMgr::new_ImpNet(
   VpiNetType net_type
 )
 {
-  auto decl = factory().new_ImpNet(parent, ast_expr, net_type);
-  reg_obj(decl);
-  mTagDict.add_decl(vpiNet, decl);
+  auto decl = new_decl(
+    [&](SizeType decl_id) -> ElbDecl* {
+      return factory().new_ImpNet(parent, ast_expr, net_type, decl_id);
+    }, vpiNet);
   return decl;
 }
 
@@ -585,14 +613,29 @@ ElbMgr::new_DeclArray(
   const std::vector<ElbRangeSrc>& range_src
 )
 {
-  auto decl = factory().new_DeclArray(head, ast_item, range_src);
-  reg_obj(decl);
-  mObjDict.add(decl);
   if ( tag == vpiVariables ) {
     // ちょっと汚い補正
     tag += 100;
   }
+  auto decl = factory().new_DeclArray(head, ast_item, range_src, mDeclId);
+  reg_obj(decl);
+  mObjDict.add(decl);
   mTagDict.add_declarray(tag, decl);
+  mDeclId += decl->array_size();
+  return decl;
+}
+
+// @brief 宣言要素を生成する．
+ElbDecl*
+ElbMgr::new_decl(
+  std::function<ElbDecl*(SizeType)> new_func,
+  int tag
+)
+{
+  auto decl = new_func(mDeclId);
+  reg_obj(decl);
+  mObjDict.add(decl);
+  mTagDict.add_decl(tag, decl);
   return decl;
 }
 
@@ -690,8 +733,30 @@ ElbMgr::new_ContAssign(
 {
   auto contassign = factory().new_ContAssign(module, loc, lhs, rhs);
   reg_obj(contassign);
+#if 0
+  SizeType offset = 0;
+  for ( auto lhs_elem: lhs->lhs_elem_list() ) {
+    reg_ca(lhs_elem, offset, rhs);
+    auto dst_bw = lhs_elem->bit_size();
+    offset += dst_bw;
+  }
+#endif
   mTagDict.add_contassign(contassign);
   return contassign;
+}
+
+// @brief continuous assignment の情報を登録する．
+void
+ElbMgr::reg_ca(
+  const VlExpr* lhs,
+  SizeType offset,
+  const VlExpr* rhs
+)
+{
+#if 0
+  auto decl = lhs->decl_obj();
+  if ( decl !=
+#endif
 }
 
 // @brief パラメータ割り当て文を生成する．
@@ -1372,10 +1437,129 @@ ElbMgr::new_MultiConcatOp(
 ElbExpr*
 ElbMgr::new_Primary(
   const AstExpr& ast_expr,
-  const VlDecl* obj
+  const ElbDeclRef& decl_ref
 )
 {
-  auto expr = factory().new_Primary(ast_expr, obj);
+  ElbExpr* expr = nullptr;
+  if ( decl_ref.is_decl() ) {
+    expr = factory().new_Primary(ast_expr, decl_ref.decl());
+  }
+  else if ( decl_ref.is_declarray() ) {
+    auto declarray = decl_ref.declarray();
+    if ( decl_ref.is_const_index() ) {
+      expr = factory().new_Primary(ast_expr, declarray,
+				   decl_ref.offset());
+    }
+    else {
+      expr = factory().new_Primary(ast_expr, declarray,
+				   decl_ref.index_list());
+    }
+  }
+  else {
+    throw std::logic_error{"never reached"};
+  }
+  reg_obj(expr);
+  return expr;
+}
+
+// @brief 固定部分選択に対応するプライマリ式を生成する．
+ElbExpr*
+ElbMgr::new_ConstSelectPrimary(
+  const AstExpr& ast_expr,
+  const ElbDeclRef& decl_ref,
+  SizeType bit_offset,
+  SizeType width
+)
+{
+  ElbExpr* expr = nullptr;
+  if ( decl_ref.is_decl() ) {
+    expr = factory().new_ConstSelectPrimary(ast_expr, decl_ref.decl(),
+					    bit_offset, width);
+  }
+  else if ( decl_ref.is_declarray() ) {
+    auto declarray = decl_ref.declarray();
+    if ( decl_ref.is_const_index() ) {
+      expr = factory().new_ConstSelectPrimary(ast_expr, declarray,
+					      decl_ref.offset(),
+					      bit_offset, width);
+    }
+    else {
+      expr = factory().new_ConstSelectPrimary(ast_expr, declarray,
+					      decl_ref.index_list(),
+					      bit_offset, width);
+    }
+  }
+  else {
+    throw std::logic_error{"never reached"};
+  }
+  reg_obj(expr);
+  return expr;
+}
+
+// @brief 可変プラス部分選択に対応するプライマリ式を生成する．
+ElbExpr*
+ElbMgr::new_PlusSelectPrimary(
+  const AstExpr& ast_expr,
+  const ElbDeclRef& decl_ref,
+  const VlExpr* bit_index,
+  SizeType width
+)
+{
+  ElbExpr* expr = nullptr;
+  if ( decl_ref.is_decl() ) {
+    expr = factory().new_PlusSelectPrimary(ast_expr, decl_ref.decl(),
+					   bit_index, width);
+  }
+  else if ( decl_ref.is_declarray() ) {
+    auto declarray = decl_ref.declarray();
+    if ( decl_ref.is_const_index() ) {
+      expr = factory().new_PlusSelectPrimary(ast_expr, declarray,
+					     decl_ref.offset(),
+					     bit_index, width);
+    }
+    else {
+      expr = factory().new_PlusSelectPrimary(ast_expr, declarray,
+					     decl_ref.index_list(),
+					     bit_index, width);
+    }
+  }
+  else {
+    throw std::logic_error{"never reached"};
+  }
+  reg_obj(expr);
+  return expr;
+}
+
+// @brief 可変マイナス部分選択に対応するプライマリ式を生成する．
+ElbExpr*
+ElbMgr::new_MinusSelectPrimary(
+  const AstExpr& ast_expr,
+  const ElbDeclRef& decl_ref,
+  const VlExpr* bit_index,
+  SizeType width
+)
+{
+  ElbExpr* expr = nullptr;
+  if ( decl_ref.is_decl() ) {
+    expr = factory().new_MinusSelectPrimary(ast_expr, decl_ref.decl(),
+					   bit_index, width);
+  }
+  else if ( decl_ref.is_declarray() ) {
+    auto declarray = decl_ref.declarray();
+    if ( decl_ref.is_const_index() ) {
+      expr = factory().new_MinusSelectPrimary(ast_expr, declarray,
+					     decl_ref.offset(),
+					     bit_index, width);
+    }
+    else {
+      expr = factory().new_MinusSelectPrimary(ast_expr, declarray,
+					     decl_ref.index_list(),
+					     bit_index, width);
+    }
+  }
+  else {
+    throw std::logic_error{"never reached"};
+  }
   reg_obj(expr);
   return expr;
 }
@@ -1384,60 +1568,22 @@ ElbMgr::new_Primary(
 ElbExpr*
 ElbMgr::new_Primary(
   const AstDeclItem& ast_item,
-  const VlDecl* obj
+  const VlDecl* decl
 )
 {
-  auto expr = factory().new_Primary(ast_item, obj);
+  auto expr = factory().new_Primary(ast_item, decl);
   reg_obj(expr);
   return expr;
 }
 
-// @brief プライマリ式を生成する(net decl の初期値用)．
+// @brief 宣言要素に対応するプライマリ式を生成する．
 ElbExpr*
 ElbMgr::new_Primary(
-  const AstIOItem& ast_item,
-  const VlDecl* obj
+  const AstIOItem& ast_decl,
+  const VlDecl* decl
 )
 {
-  auto expr = factory().new_Primary(ast_item, obj);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief プライマリ式を生成する．
-ElbExpr*
-ElbMgr::new_Primary(
-  const AstExpr& ast_expr,
-  ElbParameter* obj
-)
-{
-  auto expr = factory().new_Primary(ast_expr, obj);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief プライマリ式を生成する(配列要素版)．
-ElbExpr*
-ElbMgr::new_Primary(
-  const AstExpr& ast_expr,
-  const VlDeclArray* obj,
-  const std::vector<ElbExpr*>& index_list
-)
-{
-  auto expr = factory().new_Primary(ast_expr, obj, index_list);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief プライマリ式を生成する(固定インデックスの配列要素版)．
-ElbExpr*
-ElbMgr::new_Primary(
-  const AstExpr& ast_expr,
-  const VlDeclArray* obj,
-  int offset
-)
-{
-  auto expr = factory().new_Primary(ast_expr, obj, offset);
+  auto expr = factory().new_Primary(ast_decl, decl);
   reg_obj(expr);
   return expr;
 }
@@ -1447,56 +1593,10 @@ ElbExpr*
 ElbMgr::new_BitSelect(
   const AstExpr& ast_expr,
   ElbExpr* base,
-  const AstExpr& bit_index,
-  int bit_index_val
+  SizeType bit_offset
 )
 {
-  auto expr = factory().new_BitSelect(ast_expr, base,
-				      bit_index, bit_index_val);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief 固定ビット選択式を生成する．
-ElbExpr*
-ElbMgr::new_BitSelect(
-  const AstExpr& ast_expr,
-  ElbExpr* base,
-  int bit_index_val
-)
-{
-  auto expr = factory().new_BitSelect(ast_expr, base, bit_index_val);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief 可変ビット選択式を生成する．
-ElbExpr*
-ElbMgr::new_BitSelect(
-  const AstExpr& ast_expr,
-  ElbExpr* base,
-  ElbExpr* bit_index
-)
-{
-  auto expr = factory().new_BitSelect(ast_expr, base, bit_index);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief 固定部分選択式を生成する．
-ElbExpr*
-ElbMgr::new_PartSelect(
-  const AstExpr& ast_expr,
-  ElbExpr* obj,
-  const AstExpr& index1,
-  const AstExpr& index2,
-  int index1_val,
-  int index2_val
-)
-{
-  auto expr = factory().new_PartSelect(ast_expr, obj,
-				       index1, index2,
-				       index1_val, index2_val);
+  auto expr = factory().new_BitSelect(ast_expr, base, bit_offset);
   reg_obj(expr);
   return expr;
 }
@@ -1506,44 +1606,12 @@ ElbExpr*
 ElbMgr::new_PartSelect(
   const AstExpr& ast_expr,
   ElbExpr* base,
-  int index1,
-  int index2
+  SizeType select_width,
+  SizeType bit_offset
 )
 {
   auto expr = factory().new_PartSelect(ast_expr, base,
-				       index1, index2);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief 可変部分選択式を生成する．
-ElbExpr*
-ElbMgr::new_PlusPartSelect(
-  const AstExpr& ast_expr,
-  ElbExpr* obj,
-  ElbExpr* base,
-  const AstExpr& range_expr,
-  int range_val
-)
-{
-  auto expr = factory().new_PlusPartSelect(ast_expr, obj, base,
-					   range_expr, range_val);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief 可変部分選択式を生成する．
-ElbExpr*
-ElbMgr::new_MinusPartSelect(
-  const AstExpr& ast_expr,
-  ElbExpr* obj,
-  ElbExpr* base,
-  const AstExpr& range_expr,
-  int range_val
-)
-{
-  auto expr = factory().new_MinusPartSelect(ast_expr, obj, base,
-					    range_expr, range_val);
+				       select_width, bit_offset);
   reg_obj(expr);
   return expr;
 }
@@ -1630,19 +1698,6 @@ ElbMgr::new_ArgHandle(
 )
 {
   auto expr = factory().new_ArgHandle(ast_expr, arg);
-  reg_obj(expr);
-  return expr;
-}
-
-// @brief 連結演算子の左辺式を生成する．
-ElbExpr*
-ElbMgr::new_Lhs(
-  const AstExpr& ast_expr,
-  const std::vector<ElbExpr*>& opr_array,
-  const std::vector<ElbExpr*>& lhs_elem_array
-)
-{
-  auto expr = factory().new_Lhs(ast_expr, opr_array, lhs_elem_array);
   reg_obj(expr);
   return expr;
 }

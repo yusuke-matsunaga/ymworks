@@ -454,6 +454,16 @@ protected:
     const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
+  /// @brief AstExpr から継続的代入文の左辺式を生成する
+  /// @return 生成された ElbExpr のポインタを返す．
+  ///
+  /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
+  ElbExpr*
+  instantiate_net_lhs(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
+  );
+
   /// @brief AstExpr から右辺式を生成する
   /// @return 生成された ElbExpr のポインタを返す．
   ///

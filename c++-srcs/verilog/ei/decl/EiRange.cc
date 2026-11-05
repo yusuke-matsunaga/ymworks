@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiRange.h"
+#include "EiRange.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -15,16 +15,6 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 // クラス EiRange
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiRange::EiRange()
-{
-}
-
-// @brief デストラクタ
-EiRange::~EiRange()
-{
-}
 
 // @brief 値を設定する．
 void
@@ -139,23 +129,6 @@ EiRange::rindex(
 //////////////////////////////////////////////////////////////////////
 // EiRange の配列
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiRangeArray::EiRangeArray(
-  const std::vector<EiRange>& array
-) : mArray{array}
-{
-  // 要素数を計算する．
-  mElemSize = 1;
-  for ( const auto& range: mArray ) {
-    mElemSize *= range.size();
-  }
-}
-
-// デストラクタ
-EiRangeArray::~EiRangeArray()
-{
-}
 
 // @brief アドレス(オフセット)からインデックスの配列を作る．
 void

@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiFuncCall.h"
+#include "EiFuncCall.h"
 
 #include "ym/vl/VlTaskFunc.h"
 #include "ym/vl/VlUserSystf.h"
@@ -45,20 +45,6 @@ EiFactory::new_SysFuncCall(
 //////////////////////////////////////////////////////////////////////
 // クラス EiFcBase
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiFcBase::EiFcBase(
-  const AstExpr& ast_expr,
-  const std::vector<ElbExpr*>& arg_list
-) : EiExprBase(ast_expr),
-    mArgList{arg_list}
-{
-}
-
-// @brief デストラクタ
-EiFcBase::~EiFcBase()
-{
-}
 
 // @brief 引数の数を返す．
 SizeType
@@ -100,21 +86,6 @@ EiFcBase::_set_reqsize(
 // クラス EiFuncCall
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiFuncCall::EiFuncCall(
-  const AstExpr& ast_expr,
-  const VlTaskFunc* func,
-  const std::vector<ElbExpr*>& arg_list
-) : EiFcBase(ast_expr, arg_list),
-    mFunc{func}
-{
-}
-
-// @brief デストラクタ
-EiFuncCall::~EiFuncCall()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiFuncCall::type() const
@@ -149,19 +120,11 @@ EiFuncCall::value_type() const
   throw std::logic_error{"Should not be reached"};
 }
 
-// @brief 定数の時 true を返す．
-bool
-EiFuncCall::is_const() const
+// @brief 式のタイプを返す．
+VlExprType
+EiFuncCall::expr_type() const
 {
-  if ( mFunc->is_constant_function() ) {
-    for ( auto arg: mArgList ) {
-      if ( !arg->is_const() ) {
-	return false;
-      }
-    }
-    return true;
-  }
-  return false;
+  return VlExprType::FUNCCALL;
 }
 
 // @brief 関数呼び出しの時に true を返す．
@@ -182,21 +145,6 @@ EiFuncCall::function() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiSysFuncCall
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiSysFuncCall::EiSysFuncCall(
-  const AstExpr& ast_expr,
-  const VlUserSystf* user_systf,
-  const std::vector<ElbExpr*>& arg_list
-) : EiFcBase(ast_expr, arg_list),
-    mUserSystf{user_systf}
-{
-}
-
-// @brief デストラクタ
-EiSysFuncCall::~EiSysFuncCall()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -236,11 +184,11 @@ EiSysFuncCall::value_type() const
   throw std::logic_error{"Should not be reached"};
 }
 
-// @brief 定数の時 true を返す．
-bool
-EiSysFuncCall::is_const() const
+// @brief 式のタイプを返す．
+VlExprType
+EiSysFuncCall::expr_type() const
 {
-  return false;
+  return VlExprType::SYSFUNCCALL;
 }
 
 // @brief システム関数よびあどい時に true を返す．

@@ -138,6 +138,15 @@ public:
     const AstIOHead& ast_header ///< [in] パース木のIO宣言ヘッダ
   ) = 0;
 
+  /// @brief IO宣言要素を生成する．
+  virtual
+  const VlIODecl*
+  new_IODecl(
+    ElbIOHead* head,           ///< [in] ヘッダ
+    const AstIOItem& ast_item, ///< [in] パース木のIO宣言要素
+    const VlDecl* decl         ///< [in] 対応する宣言要素
+  ) = 0;
+
   /// @brief 宣言要素のヘッダを生成する．
   virtual
   ElbDeclHead*
@@ -202,6 +211,7 @@ public:
   new_Decl(
     ElbDeclHead* head,           ///< [in] ヘッダ
     const AstDeclItem& ast_item, ///< [in] パース木の宣言要素
+    SizeType decl_id,            ///< [in] 要素番号
     const VlExpr* init = nullptr ///< [in] 初期値
   ) = 0;
 
@@ -210,7 +220,8 @@ public:
   ElbDecl*
   new_Decl(
     ElbDeclHead* head,           ///< [in] ヘッダ
-    const AstIOItem& ast_item, ///< [in] パース木の宣言要素
+    const AstIOItem& ast_item,   ///< [in] パース木の宣言要素
+    SizeType decl_id,            ///< [in] 要素番号
     const VlExpr* init = nullptr ///< [in] 初期値
   ) = 0;
 
@@ -218,8 +229,9 @@ public:
   virtual
   ElbDecl*
   new_Decl(
-    ElbDeclHead* head,      ///< [in] ヘッダ
-    const AstItem& ast_item ///< [in] パース木の宣言要素
+    ElbDeclHead* head,       ///< [in] ヘッダ
+    const AstItem& ast_item, ///< [in] パース木の宣言要素
+    SizeType decl_id         ///< [in] 要素番号
   ) = 0;
 
   /// @brief 暗黙のネットを生成する．
@@ -228,16 +240,18 @@ public:
   new_ImpNet(
     const VlScope* parent,   ///< [in] 親のスコープ
     const AstExpr& ast_expr, ///< [in] パース木のプライマリ式
-    VpiNetType net_type      ///< [in] ネットの型
+    VpiNetType net_type,     ///< [in] ネットの型
+    SizeType decl_id         ///< [in] 要素番号
   ) = 0;
 
   /// @brief 宣言要素の配列を生成する．
   virtual
   const VlDeclArray*
   new_DeclArray(
-    ElbDeclHead* head,                        ///< [in] ヘッダ
-    const AstDeclItem& ast_item,              ///< [in] パース木の宣言要素
-    const std::vector<ElbRangeSrc>& range_src ///< [in] 範囲の配列
+    ElbDeclHead* head,                         ///< [in] ヘッダ
+    const AstDeclItem& ast_item,               ///< [in] パース木の宣言要素
+    const std::vector<ElbRangeSrc>& range_src, ///< [in] 範囲の配列
+    SizeType decl_id                           ///< [in] 要素番号
   ) = 0;
 
   /// @brief parameter 宣言のヘッダを生成する(範囲指定なし)．
@@ -776,12 +790,118 @@ public:
     const VlDecl* obj        ///< [in] 本体のオブジェクト
   ) = 0;
 
-  /// @brief プライマリ式を生成する(portdecl用)．
+  /// @brief プライマリ式を生成する(配列要素版)．
   virtual
   ElbExpr*
   new_Primary(
-    const AstIOItem& ast_item, ///< [in] パース木の定義要素
-    const VlDecl* obj            ///< [in] 本体のオブジェクト
+    const AstExpr& ast_expr,                           ///< [in] パース木の定義要素
+    const VlDeclArray* obj,                            ///< [in] 本体のオブジェクト
+    const std::vector<const VlExpr*>& array_index_list ///< [in] インデックスのリスト
+  ) = 0;
+
+  /// @brief プライマリ式を生成する(固定インデックスの配列要素版)．
+  virtual
+  ElbExpr*
+  new_Primary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDeclArray* obj,  ///< [in] 本体のオブジェクト
+    SizeType array_offset    ///< [in] オフセット
+  ) = 0;
+
+  /// @brief 固定部分選択に対応するプライマリ式を生成する．
+  virtual
+  ElbExpr*
+  new_ConstSelectPrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDecl* obj,       ///< [in] 本体のオブジェクト
+    SizeType bit_offset,     ///< [in] ビット位置のオフセット
+    SizeType width           ///< [in] 選択するビット幅
+  ) = 0;
+
+  /// @brief 固定部分選択に対応するプライマリ式を生成する(配列要素版)．
+  virtual
+  ElbExpr*
+  new_ConstSelectPrimary(
+    const AstExpr& ast_expr,                            ///< [in] パース木の定義要素
+    const VlDeclArray* obj,                             ///< [in] 本体のオブジェクト
+    const std::vector<const VlExpr*>& array_index_list, ///< [in] インデックスのリスト
+    SizeType bit_offset,    ///< [in] ビット位置のオフセット
+    SizeType width          ///< [in] 選択するビット幅
+  ) = 0;
+
+  /// @brief 固定部分選択に対応するプライマリ式を生成する(固定インデックスの配列要素版)．
+  virtual
+  ElbExpr*
+  new_ConstSelectPrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDeclArray* obj,  ///< [in] 本体のオブジェクト
+    SizeType array_offset,   ///< [in] オフセット
+    SizeType bit_offset,    ///< [in] ビット位置のオフセット
+    SizeType width           ///< [in] 選択するビット幅
+  ) = 0;
+
+  /// @brief プラス可変部分選択に対応するプライマリ式を生成する．
+  virtual
+  ElbExpr*
+  new_PlusSelectPrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDecl* obj,       ///< [in] 本体のオブジェクト
+    const VlExpr* bit_index, ///< [in] ビット位置のインデックス式
+    SizeType width           ///< [in] 選択するビット幅
+  ) = 0;
+
+  /// @brief プラス可変部分選択に対応するプライマリ式を生成する(配列要素版)．
+  virtual
+  ElbExpr*
+  new_PlusSelectPrimary(
+    const AstExpr& ast_expr,                            ///< [in] パース木の定義要素
+    const VlDeclArray* obj,                             ///< [in] 本体のオブジェクト
+    const std::vector<const VlExpr*>& array_index_list, ///< [in] インデックスのリスト
+    const VlExpr* bit_index, ///< [in] ビット位置のインデックス式
+    SizeType width           ///< [in] 選択するビット幅
+  ) = 0;
+
+  /// @brief プラス可変部分選択に対応するプライマリ式を生成する(固定インデックスの配列要素版)．
+  virtual
+  ElbExpr*
+  new_PlusSelectPrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDeclArray* obj,  ///< [in] 本体のオブジェクト
+    SizeType array_offset,   ///< [in] オフセット
+    const VlExpr* bit_index, ///< [in] ビット位置のインデックス式
+    SizeType width           ///< [in] 選択するビット幅
+  ) = 0;
+
+  /// @brief マイナス可変部分選択に対応するプライマリ式を生成する．
+  virtual
+  ElbExpr*
+  new_MinusSelectPrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDecl* obj,       ///< [in] 本体のオブジェクト
+    const VlExpr* bit_index, ///< [in] ビット位置のインデックス式
+    SizeType width           ///< [in] 選択するビット幅
+  ) = 0;
+
+  /// @brief マイナス可変部分選択に対応するプライマリ式を生成する(配列要素版)．
+  virtual
+  ElbExpr*
+  new_MinusSelectPrimary(
+    const AstExpr& ast_expr,                            ///< [in] パース木の定義要素
+    const VlDeclArray* obj,                             ///< [in] 本体のオブジェクト
+    const std::vector<const VlExpr*>& array_index_list, ///< [in] インデックスのリスト
+    const VlExpr* bit_index, ///< [in] ビット位置のインデックス式
+    SizeType width           ///< [in] 選択するビット幅
+  ) = 0;
+
+  /// @brief マイナス可変部分選択に対応するプライマリ式を生成する(固定インデックスの配列要素版)．
+  virtual
+  ElbExpr*
+  new_MinusSelectPrimary(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDeclArray* obj,  ///< [in] 本体のオブジェクト
+    SizeType array_offset,   ///< [in] オフセット
+    const VlExpr* bit_index, ///< [in] ビット位置のインデックス式
+    SizeType width           ///< [in] 選択するビット幅
   ) = 0;
 
   /// @brief プライマリ式を生成する(net decl の初期値用)．
@@ -792,40 +912,12 @@ public:
     const VlDecl* obj            ///< [in] 本体のオブジェクト
   ) = 0;
 
-  /// @brief プライマリ式を生成する．
+  /// @brief プライマリ式を生成する(portdecl用)．
   virtual
   ElbExpr*
   new_Primary(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbParameter* obj        ///< [in] 本体のオブジェクト
-  ) = 0;
-
-  /// @brief プライマリ式を生成する(配列要素版)．
-  virtual
-  ElbExpr*
-  new_Primary(
-    const AstExpr& ast_expr,           ///< [in] パース木の定義要素
-    const VlDeclArray* obj,            ///< [in] 本体のオブジェクト
-    const std::vector<ElbExpr*>& index_list ///< [in] インデックスのリスト
-  ) = 0;
-
-  /// @brief プライマリ式を生成する(固定インデックスの配列要素版)．
-  virtual
-  ElbExpr*
-  new_Primary(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    const VlDeclArray* obj,  ///< [in] 本体のオブジェクト
-    SizeType offset          ///< [in] オフセット
-  ) = 0;
-
-  /// @brief 固定ビット選択式を生成する．
-  virtual
-  ElbExpr*
-  new_BitSelect(
-    const AstExpr& ast_expr,  ///< [in] パース木の定義要素
-    ElbExpr* expr,            ///< [in] 本体のオブジェクト
-    const AstExpr& bit_index, ///< [in] ビット選択式
-    int bit_index_val         ///< [in] ビット選択式の値
+    const AstIOItem& ast_item, ///< [in] パース木の定義要素
+    const VlDecl* obj            ///< [in] 本体のオブジェクト
   ) = 0;
 
   /// @brief 固定ビット選択式を生成する．
@@ -833,8 +925,8 @@ public:
   ElbExpr*
   new_BitSelect(
     const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* expr,           ///< [in] 本体の式
-    int bit_index_val        ///< [in] ビット選択式の値
+    ElbExpr* expr,           ///< [in] 本体のオブジェクト
+    SizeType bit_offset      ///< [in] ビット位置のオフセット
   ) = 0;
 
   /// @brief 可変ビット選択式を生成する．
@@ -852,42 +944,8 @@ public:
   new_PartSelect(
     const AstExpr& ast_expr, ///< [in] パース木の定義要素
     ElbExpr* obj,            ///< [in] 本体のオブジェクト
-    const AstExpr& index1,   ///< [in] パート選択式のMSB
-    const AstExpr& index2,   ///< [in] パート選択式のLSB
-    int index1_val,          ///< [in] パート選択式のMSBの値
-    int index2_val           ///< [in] パート選択式のLSBの値
-  ) = 0;
-
-  /// @brief 固定部分選択式を生成する．
-  virtual
-  ElbExpr*
-  new_PartSelect(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* expr,           ///< [in] 本体の式
-    int index1,              ///< [in] パート選択式のMSB
-    int index2               ///< [in] パート選択式のLSB
-  ) = 0;
-
-  /// @brief 可変部分選択式を生成する．
-  virtual
-  ElbExpr*
-  new_PlusPartSelect(
-    const AstExpr& ast_expr,   ///< [in] パース木の定義要素
-    ElbExpr* obj,              ///< [in] 本体のオブジェクト
-    ElbExpr* base,             ///< [in] 範囲のベースアドレスを表す式
-    const AstExpr& range_expr, ///< [in] 範囲を表す式
-    SizeType range_val         ///< [in] 範囲の値
-  ) = 0;
-
-  /// @brief 可変部分選択式を生成する．
-  virtual
-  ElbExpr*
-  new_MinusPartSelect(
-    const AstExpr& ast_expr,   ///< [in] パース木の定義要素
-    ElbExpr* obj,              ///< [in] 本体のオブジェクト
-    ElbExpr* base,             ///< [in] 範囲のベースアドレスを表す式
-    const AstExpr& range_expr, ///< [in] 範囲を表す式
-    SizeType range_val         ///< [in] 範囲の値
+    SizeType select_width,   ///< [in] 選択するビット幅
+    SizeType bit_offset      ///< [in] ビット位置のオフセット
   ) = 0;
 
   /// @brief 定数式を生成する．
@@ -903,6 +961,14 @@ public:
   new_GenvarConstant(
     const AstExpr& ast_primary, ///< [in] パース木の定義要素
     int val                     ///< [in] 値
+  ) = 0;
+
+  /// @brief parameter の定数式を生成する．
+  virtual
+  ElbExpr*
+  new_ParamConstant(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbParameter* obj        ///< [in] 本体のオブジェクト
   ) = 0;
 
   /// @brief 関数呼び出し式を生成する．
@@ -945,15 +1011,6 @@ public:
   new_ArgHandle(
     const AstExpr& ast_expr, ///< [in] パース木中で参照している要素
     const VlDeclArray* arg   ///< [in] 引数本体(配列宣言)
-  ) = 0;
-
-  /// @brief 連結演算子の左辺式を生成する．
-  virtual
-  ElbExpr*
-  new_Lhs(
-    const AstExpr& ast_expr,                    ///< [in] パース木の定義要素
-    const std::vector<ElbExpr*>& opr_array,     ///< [in] オペランドを格納する配列
-    const std::vector<ElbExpr*>& lhs_elem_array ///< [in] 左辺の要素の配列
   ) = 0;
 
   /// @brief 遅延値を生成する．

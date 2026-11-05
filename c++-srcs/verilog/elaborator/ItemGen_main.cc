@@ -206,26 +206,37 @@ ItemGen::instantiate_cont_assign_head(
   auto delay = instantiate_delay(parent, ast_delay);
   auto ca_head = elb_mgr().new_CaHead(module, ast_header, delay);
 
-  ElbEnv env;
-  ElbNetLhsEnv env1(env);
   for ( auto ast_contassign: ast_header.contassign_list() ) {
-    try {
-      // 左辺式の生成
-      auto ast_lhs = ast_contassign.lhs();
-      auto lhs = instantiate_lhs(parent, env1, ast_lhs);
+    instantiate_cont_assign(parent, ast_contassign, ca_head);
+  }
+}
 
-      // 右辺式の生成
-      auto ast_rhs = ast_contassign.rhs();
-      auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
+// @brief continous assignment に関連した式の名前解決を行う．
+void
+ItemGen::instantiate_cont_assign(
+  const VlScope* parent,
+  const AstContAssign& ast_contassign,
+  ElbCaHead* ca_head
+)
+{
+  try {
+    ElbEnv env;
 
-      auto loc = ast_contassign.file_region();
-      auto ca = elb_mgr().new_ContAssign(ca_head, loc, lhs, rhs);
+    // 左辺式の生成
+    auto ast_lhs = ast_contassign.lhs();
+    auto lhs = instantiate_net_lhs(parent, ast_lhs);
 
-      log_mgr().info_contassign(__FILE__, __LINE__, ca);
-    }
-    catch ( const ElbError& error ) {
-      // 無視して処理を続ける．
-    }
+    // 右辺式の生成
+    auto ast_rhs = ast_contassign.rhs();
+    auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
+
+    auto loc = ast_contassign.file_region();
+    auto ca = elb_mgr().new_ContAssign(ca_head, loc, lhs, rhs);
+
+    log_mgr().info_contassign(__FILE__, __LINE__, ca);
+  }
+  catch ( const ElbError& error ) {
+    // 無視して処理を続ける．
   }
 }
 

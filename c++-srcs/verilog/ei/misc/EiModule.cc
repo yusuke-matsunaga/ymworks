@@ -7,11 +7,9 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiModule.h"
-#include "ei/EiPort.h"
-#include "ei/EiIODecl.h"
-#include "ei/EiDeclHead.h"
-#include "ei/EiExpr.h"
+#include "EiModule.h"
+#include "EiPort.h"
+#include "ym/vl/VlIODecl.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -51,24 +49,6 @@ EiFactory::new_ModuleArray(
 //////////////////////////////////////////////////////////////////////
 // クラス EiModuleHead
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiModuleHead::EiModuleHead(
-  const VlScope* parent,
-  const AstModule& ast_module,
-  const AstItem& ast_head,
-  const AstInst& ast_inst
-) : mParent{parent},
-    mAstModule{ast_module},
-    mAstHead{ast_head},
-    mAstInst{ast_inst}
-{
-}
-
-// @brief デストラクタ
-EiModuleHead::~EiModuleHead()
-{
-}
 
 // @brief このオブジェクトの属しているスコープを返す．
 const VlScope*
@@ -221,16 +201,6 @@ EiModuleHead::cell() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiModule
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiModule::EiModule()
-{
-}
-
-// @brief デストラクタ
-EiModule::~EiModule()
-{
-}
 
 // @brief ポート配列とIO配列を初期化する．
 void
@@ -407,7 +377,7 @@ EiModule::io(
 ) const
 {
   if ( pos >= io_num() ) {
-    throw std::out_of_range{"pos is out of range"};
+    throw std::out_of_range{"EiModule::io(pos): pos is out of range"};
   }
   return mIODeclList[pos].get();
 }
@@ -439,14 +409,11 @@ EiModule::find_io(
 // @brief 入出力を追加する．
 void
 EiModule::add_iodecl(
-  ElbIOHead* head,
-  const AstIOItem& ast_item,
-  const VlDecl* decl
+  const VlIODecl* io_decl
 )
 {
-  auto io_decl = new EiIODecl(head, ast_item, decl);
-  mIODeclList.push_back(std::unique_ptr<EiIODecl>{io_decl});
-  mIODict.emplace(decl, io_decl);
+  mIODeclList.push_back(std::unique_ptr<const VlIODecl>{io_decl});
+  mIODict.emplace(io_decl->decl(), io_decl);
 }
 
 // @brief ポートを追加する．
@@ -493,16 +460,6 @@ EiModule::set_port_high_conn(
 //////////////////////////////////////////////////////////////////////
 // クラス EiModule1
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiModule1::EiModule1()
-{
-}
-
-// @brief デストラクタ
-EiModule1::~EiModule1()
-{
-}
 
 // @brief 初期設定を行う．
 void
@@ -570,24 +527,6 @@ EiModule1::head()
 // クラス EiModule2
 //////////////////////////////////////////////////////////////////////
 
-// コンストラクタ
-EiModule2::EiModule2(
-  const VlScope* parent,
-  const AstModule& ast_module,
-  const AstItem& ast_head,
-  const AstInst& ast_inst
-) : mHead{parent, ast_module, ast_head, ast_inst}
-{
-  auto port_num = ast_module.port_list().size();
-  auto io_num = ast_module.iohead_list().size();
-  init(port_num, io_num);
-}
-
-// デストラクタ
-EiModule2::~EiModule2()
-{
-}
-
 // @brief 名前の取得
 std::string
 EiModule2::name() const
@@ -634,32 +573,6 @@ EiModule2::head()
 //////////////////////////////////////////////////////////////////////
 /// クラス EiModuleArray
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiModuleArray::EiModuleArray(
-  const VlScope* parent,
-  const AstModule& ast_module,
-  const AstItem& ast_head,
-  const AstInst& ast_inst,
-  const AstRange& ast_range,
-  const RangeVal& range
-) : mHead(parent, ast_module, ast_head, ast_inst),
-    mRange(ast_range, range),
-    mArray(mRange.calc_size())
-{
-  auto port_num = ast_module.port_list().size();
-  auto io_num = ast_module.iohead_list().size();
-  auto n = mArray.size();
-  for ( SizeType i = 0; i < n; ++ i ) {
-    int index = range.index(i);
-    mArray[i].init(port_num, io_num, this, index);
-  }
-}
-
-// @brief デストラクタ
-EiModuleArray::~EiModuleArray()
-{
-}
 
 // @brief 型の取得
 VpiObjType

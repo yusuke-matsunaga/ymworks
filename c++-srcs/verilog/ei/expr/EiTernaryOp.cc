@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiTernaryOp.h"
+#include "EiTernaryOp.h"
 #include "ym/vl/BitVector.h"
 
 

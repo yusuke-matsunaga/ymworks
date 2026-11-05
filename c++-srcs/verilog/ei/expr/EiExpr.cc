@@ -6,8 +6,8 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiExpr.h"
-#include "ei/EiOperation.h"
+#include "EiExpr.h"
+#include "EiOperation.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/VlTime.h"
 #include "ym/vl/VlValue.h"
@@ -20,26 +20,9 @@ BEGIN_NAMESPACE_YM_VERILOG
 // クラス EiExpr
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiExpr::EiExpr()
-{
-}
-
-// @brief デストラクタ
-EiExpr::~EiExpr()
-{
-}
-
 // @brief 定数の時 true を返す．
 bool
 EiExpr::is_const() const
-{
-  return false;
-}
-
-// @brief 固定選択子の時 true を返す．
-bool
-EiExpr::is_constant_select() const
 {
   return false;
 }
@@ -51,16 +34,9 @@ EiExpr::is_primary() const
   return false;
 }
 
-// @brief ビット指定の時に true を返す．
+// @brief ビット/部分指定の時に true を返す．
 bool
-EiExpr::is_bitselect() const
-{
-  return false;
-}
-
-// @brief 範囲指定の時に true を返す．
-bool
-EiExpr::is_partselect() const
+EiExpr::is_select() const
 {
   return false;
 }
@@ -86,146 +62,144 @@ EiExpr::is_sysfunccall() const
   return false;
 }
 
+// @brief 定数の型を返す．
+VpiConstType
+EiExpr::constant_type() const
+{
+  throw std::logic_error{"EiExpr::constant_type()"};
+}
+
+// @brief 定数値を返す．
+VlValue
+EiExpr::constant_value() const
+{
+  throw std::logic_error{"EiExpr::constant_value()"};
+}
+
+// @brief プライマリの種類を返す．
+VlPrimaryType
+EiExpr::primary_type() const
+{
+  throw std::logic_error{"EiExpr::primary_type()"};
+}
+
 // @brief 宣言要素もしくは配列型宣言要素への参照を返す．
 const VlDeclBase*
 EiExpr::decl_base() const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::decl_base()"};
 }
 
 // @brief 対象のオブジェクトを返す．
 const VlDecl*
 EiExpr::decl_obj() const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::decl_obj()"};
 }
 
-// @brief 宣言要素の配列への参照の場合，対象のオブジェクトを返す．
+// @brief 宣言要素の配列への参照の場合，対象のnオブジェクトを返す．
 const VlDeclArray*
 EiExpr::declarray_obj() const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::declarray_obj()"};
 }
 
-// @brief 配列型宣言要素への参照の場合，配列の次元を返す．
-SizeType
-EiExpr::declarray_dimension() const
+// @brief 配列型宣言要素への参照の場合，配列のインデックスリストを返す．
+std::vector<const VlExpr*>
+EiExpr::declarray_index_list() const
 {
-  return 0;
-}
-
-// @brief 配列型宣言要素への参照の場合，配列のインデックスを返す．
-const VlExpr*
-EiExpr::declarray_index(
-  SizeType pos
-) const
-{
-  return nullptr;
+  throw std::logic_error{"EiExpr::declarray_index_list()"};
 }
 
 // @brief 配列型宣言要素への参照のオフセットを返す．
 SizeType
 EiExpr::declarray_offset() const
 {
-  return 0;
+  throw std::logic_error{"EiExpr::declarray_offset()"};
+}
+
+// @brief 宣言要素に対するビット/部分選択を持つ時 true を返す．
+bool
+EiExpr::has_bit_select() const
+{
+  throw std::logic_error{"EiExpr::has_bit_select()"};
+}
+
+// @brief 宣言要素に対する部分選択のビット幅を返す．
+SizeType
+EiExpr::select_width() const
+{
+  throw std::logic_error{"EiExpr::select_width()"};
+}
+
+// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
+bool
+EiExpr::has_const_bit_select() const
+{
+  throw std::logic_error{"EiExpr::has_const_bit_select()"};
+}
+
+// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
+SizeType
+EiExpr::bit_offset() const
+{
+  throw std::logic_error{"EiExpr::bit_offset()"};
+}
+
+// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
+bool
+EiExpr::has_plus_bit_select() const
+{
+  throw std::logic_error{"EiExpr::has_plus_bit_select()"};
+}
+
+// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
+bool
+EiExpr::has_minus_bit_select() const
+{
+  throw std::logic_error{"EiExpr::has_minus_bit_select()"};
+}
+
+// @brief 宣言要素に対する可変ビット/部分選択のインデックス式を返す．
+const VlExpr*
+EiExpr::bit_index() const
+{
+  throw std::logic_error{"EiExpr::bit_index()"};
 }
 
 // @brief 対象のオブジェクトを返す．
 const VlScope*
 EiExpr::scope_obj() const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::scope_obj()"};
 }
 
 // @brief 対象のオブジェクトを返す．
 const VlPrimitive*
 EiExpr::primitive_obj() const
 {
-  return nullptr;
-}
-
-// @brief インデックス式を返す．
-const VlExpr*
-EiExpr::index() const
-{
-  return nullptr;
-}
-
-// @brief インデックス値を返す．
-int
-EiExpr::index_val() const
-{
-  return 0;
-}
-
-// @brief 範囲指定のモードを返す．
-VpiRangeMode
-EiExpr::range_mode() const
-{
-  return VpiRangeMode::No;
-}
-
-// @brief 範囲の MSB を返す．
-const VlExpr*
-EiExpr::left_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲の MSB の値を返す．
-int
-EiExpr::left_range_val() const
-{
-  return 0;
-}
-
-// @brief 範囲の LSB を返す．
-const VlExpr*
-EiExpr::right_range() const
-{
-  return nullptr;
-}
-
-// @brief 範囲の LSB の値を返す．
-int
-EiExpr::right_range_val() const
-{
-  return 0;
-}
-
-// @brief 範囲のベースを表す式を返す．
-const VlExpr*
-EiExpr::base() const
-{
-  return nullptr;
-}
-
-// @brief 範囲のビット幅を返す．
-SizeType
-EiExpr::range_width() const
-{
-  return 0;
+  throw std::logic_error{"EiExpr::primitive_obj()"};
 }
 
 // @brief 親の式を返す．
 const VlExpr*
 EiExpr::parent_expr() const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::parent_expr()"};
 }
 
 // @brief 演算子のタイプを返す．
 VpiOpType
 EiExpr::op_type() const
 {
-  return VpiOpType::Null;
+  throw std::logic_error{"EiExpr::op_type()"};
 }
 
 // @brief オペランド数を返す．
 SizeType
 EiExpr::operand_num() const
 {
-  return 0;
+  throw std::logic_error{"EiExpr::operand_num()"};
 }
 
 // @brief オペランドを返す．
@@ -234,57 +208,42 @@ EiExpr::operand(
   SizeType pos
 ) const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::operand(pos)"};
 }
 
 // @brief オペランドのリストを返す．
 std::vector<const VlExpr*>
 EiExpr::operand_list() const
 {
-  return {};
+  throw std::logic_error{"EiExpr::operand_list()"};
 }
 
 // @brief 繰り返し数を返す．
 SizeType
 EiExpr::rep_num() const
 {
-  return 0;
-}
-
-// @brief 定数の型を返す．
-VpiConstType
-EiExpr::constant_type() const
-{
-  // とは言っても何か返さなければならない．
-  return VpiConstType::Dec;
-}
-
-// @brief 定数値を返す．
-VlValue
-EiExpr::constant_value() const
-{
-  return VlValue();
+  throw std::logic_error{"EiExpr::rep_num()"};
 }
 
 // @brief 対象の関数を返す．
 const VlTaskFunc*
 EiExpr::function() const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::function()"};
 }
 
 // @brief 対象のシステム関数を返す．
 const VlUserSystf*
 EiExpr::user_systf() const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::user_systf()"};
 }
 
 // @brief 引数の数を返す．
 SizeType
 EiExpr::argument_num() const
 {
-  return 0;
+  throw std::logic_error{"EiExpr::argument_num()"};
 }
 
 // @brief 引数を返す．
@@ -293,55 +252,20 @@ EiExpr::argument(
   SizeType pos
 ) const
 {
-  return nullptr;
+  throw std::logic_error{"EiExpr::argument(pos)"};
 }
 
 // @brief 引数のリストを返す．
 std::vector<const VlExpr*>
 EiExpr::argument_list() const
 {
-  return {};
-}
-
-// @brief 左辺式の要素数の取得
-SizeType
-EiExpr::lhs_elem_num() const
-{
-  return 0;
-}
-
-// @brief 左辺式の要素の取得
-const VlExpr*
-EiExpr::lhs_elem(
-  SizeType pos
-) const
-{
-  return nullptr;
-}
-
-// @brief 左辺式の要素のリストの取得
-std::vector<const VlExpr*>
-EiExpr::lhs_elem_list() const
-{
-  return {};
+  throw std::logic_error{"EiExpr::argument_list()"};
 }
 
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiExprBase
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiExprBase::EiExprBase(
-  const AstExpr& ast_expr
-) : mAstExpr{ast_expr}
-{
-}
-
-// @brief デストラクタ
-EiExprBase::~EiExprBase()
-{
-}
 
 // @brief ファイル位置を返す．
 FileRegion
@@ -362,23 +286,18 @@ EiExprBase::decompile() const
 // クラス EiOperation
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiOperation::EiOperation(
-  const AstExpr& ast_expr
-) : EiExprBase{ast_expr}
-{
-}
-
-// @brief デストラクタ
-EiOperation::~EiOperation()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiOperation::type() const
 {
   return VpiObjType::Operation;
+}
+
+// @brief 式のタイプを返す．
+VlExprType
+EiOperation::expr_type() const
+{
+  return VlExprType::OPERATION;
 }
 
 // @brief 演算子の時に true を返す．

@@ -72,6 +72,13 @@ public:
     SizeType& offset                    ///< [out] index_list に対するオフセット値
   ) const = 0;
 
+  /// @brief 要素番号を返す．
+  virtual
+  SizeType
+  decl_id(
+    SizeType offset ///< [in] オフセット
+  ) const = 0;
+
 };
 
 END_NAMESPACE_YM_VERILOG

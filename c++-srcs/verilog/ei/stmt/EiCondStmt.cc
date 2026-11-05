@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiCondStmt.h"
+#include "EiCondStmt.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstStmt.h"
@@ -29,8 +29,8 @@ EiFactory::new_WhileStmt(
   const VlStmt* stmt
 )
 {
-  auto stmt1 = new EiWhileStmt{parent, process, ast_stmt,
-			       cond, stmt};
+  auto stmt1 = new EiWhileStmt(parent, process, ast_stmt,
+			       cond, stmt);
   return stmt1;
 }
 
@@ -44,8 +44,8 @@ EiFactory::new_RepeatStmt(
   const VlStmt* stmt
 )
 {
-  auto stmt1 = new EiRepeatStmt{parent, process, ast_stmt,
-				cond, stmt};
+  auto stmt1 = new EiRepeatStmt(parent, process, ast_stmt,
+				cond, stmt);
   return stmt1;
 }
 
@@ -59,8 +59,8 @@ EiFactory::new_WaitStmt(
   const VlStmt* stmt
 )
 {
-  auto stmt1 = new EiWaitStmt{parent, process, ast_stmt,
-			      cond, stmt};
+  auto stmt1 = new EiWaitStmt(parent, process, ast_stmt,
+			      cond, stmt);
   return stmt1;
 }
 
@@ -76,8 +76,8 @@ EiFactory::new_ForStmt(
   const VlStmt* stmt
 )
 {
-  auto stmt1 = new EiForStmt{parent, process, ast_stmt,
-			     cond, init_stmt, inc_stmt, stmt};
+  auto stmt1 = new EiForStmt(parent, process, ast_stmt,
+			     cond, init_stmt, inc_stmt, stmt);
   return stmt1;
 }
 
@@ -90,7 +90,7 @@ EiFactory::new_ForeverStmt(
   const VlStmt* stmt
 )
 {
-  auto stmt1 = new EiForeverStmt{parent, process, ast_stmt, stmt};
+  auto stmt1 = new EiForeverStmt(parent, process, ast_stmt, stmt);
 
   return stmt1;
 }
@@ -108,12 +108,12 @@ EiFactory::new_IfStmt(
 {
   const VlStmt* stmt1;
   if ( else_stmt ) {
-    stmt1 = new EiIfElseStmt{parent, process, ast_stmt,
-			     cond, stmt, else_stmt};
+    stmt1 = new EiIfElseStmt(parent, process, ast_stmt,
+			     cond, stmt, else_stmt);
   }
   else {
-    stmt1 = new EiIfStmt{parent, process, ast_stmt,
-			 cond, stmt};
+    stmt1 = new EiIfStmt(parent, process, ast_stmt,
+			 cond, stmt);
   }
   return stmt1;
 }
@@ -128,8 +128,8 @@ EiFactory::new_CaseStmt(
   const std::vector<const VlCaseItem*>& caseitem_list
 )
 {
-  auto stmt1 = new EiCaseStmt{parent, process, ast_stmt,
-			      expr, caseitem_list};
+  auto stmt1 = new EiCaseStmt(parent, process, ast_stmt,
+			      expr, caseitem_list);
   return stmt1;
 }
 
@@ -141,7 +141,7 @@ EiFactory::new_CaseItem(
   const VlStmt* body
 )
 {
-  auto caseitem = new EiCaseItem{ast_item, label_list, body};
+  auto caseitem = new EiCaseItem(ast_item, label_list, body);
   return caseitem;
 }
 
@@ -149,24 +149,6 @@ EiFactory::new_CaseItem(
 //////////////////////////////////////////////////////////////////////
 // クラス EiLoopStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiLoopStmt::EiLoopStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* cond,
-  const VlStmt* stmt
-) : EiStmtBase{parent, process, ast_stmt},
-    mCondition{cond},
-    mBodyStmt{stmt}
-{
-}
-
-// @brief デストラクタ
-EiLoopStmt::~EiLoopStmt()
-{
-}
 
 // @brief 条件式を返す．
 const VlExpr*
@@ -187,22 +169,6 @@ EiLoopStmt::body_stmt() const
 // クラス EiWhileStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiWhileStmt::EiWhileStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* cond,
-  const VlStmt* stmt
-) : EiLoopStmt{parent, process, ast_stmt, cond, stmt}
-{
-}
-
-// @brief デストラクタ
-EiWhileStmt::~EiWhileStmt()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiWhileStmt::type() const
@@ -214,22 +180,6 @@ EiWhileStmt::type() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiRepeatStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiRepeatStmt::EiRepeatStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* cond,
-  const VlStmt* stmt
-) : EiLoopStmt{parent, process, ast_stmt, cond, stmt}
-{
-}
-
-// @brief デストラクタ
-EiRepeatStmt::~EiRepeatStmt()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -243,22 +193,6 @@ EiRepeatStmt::type() const
 // クラス EiWaitStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiWaitStmt::EiWaitStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* cond,
-  const VlStmt* stmt
-) : EiLoopStmt{parent, process, ast_stmt, cond, stmt}
-{
-}
-
-// @brief デストラクタ
-EiWaitStmt::~EiWaitStmt()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiWaitStmt::type() const
@@ -270,26 +204,6 @@ EiWaitStmt::type() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiForStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiForStmt::EiForStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* cond,
-  const VlStmt* init_stmt,
-  const VlStmt* inc_stmt,
-  const VlStmt* stmt
-) : EiLoopStmt{parent, process, ast_stmt, cond, stmt},
-    mInitStmt{init_stmt},
-    mIncStmt{inc_stmt}
-{
-}
-
-// @brief デストラクタ
-EiForStmt::~EiForStmt()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -317,22 +231,6 @@ EiForStmt::inc_stmt() const
 // クラス EiForeverStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiForeverStmt::EiForeverStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlStmt* stmt
-) : EiStmtBase{parent, process, ast_stmt},
-    mBodyStmt{stmt}
-{
-}
-
-// @brief デストラクタ
-EiForeverStmt::~EiForeverStmt()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiForeverStmt::type() const
@@ -351,24 +249,6 @@ EiForeverStmt::body_stmt() const
 //////////////////////////////////////////////////////////////////////
 // クラス IfStmt
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiIfStmt::EiIfStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* cond,
-  const VlStmt* stmt
-) : EiStmtBase{parent, process, ast_stmt},
-    mCondition{cond},
-    mBodyStmt{stmt}
-{
-}
-
-// @brief デストラクタ
-EiIfStmt::~EiIfStmt()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -396,24 +276,6 @@ EiIfStmt::body_stmt() const
 // クラス EiIfElseStmt
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiIfElseStmt::EiIfElseStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* cond,
-  const VlStmt* stmt,
-  const VlStmt* else_stmt
-) : EiIfStmt{parent, process, ast_stmt, cond, stmt},
-    mElseStmt{else_stmt}
-{
-}
-
-// @brief デストラクタ
-EiIfElseStmt::~EiIfElseStmt()
-{
-}
-
 // @brief 型の取得
 VpiObjType
 EiIfElseStmt::type() const
@@ -432,22 +294,6 @@ EiIfElseStmt::else_stmt() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiCaseItem
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiCaseItem::EiCaseItem(
-  const AstCaseItem& ast_item,
-  const std::vector<ElbExpr*>& label_list,
-  const VlStmt* body
-) : mAstCaseItem{ast_item},
-    mExprList{label_list},
-    mBodyStmt{body}
-{
-}
-
-// @brief デストラクタ
-EiCaseItem::~EiCaseItem()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -500,24 +346,6 @@ EiCaseItem::body_stmt() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiCase
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiCaseStmt::EiCaseStmt(
-  const VlScope* parent,
-  const VlProcess* process,
-  const AstStmt& ast_stmt,
-  const VlExpr* expr,
-  const std::vector<const VlCaseItem*>& caseitem_list
-) : EiStmtBase{parent, process, ast_stmt},
-    mCondition{expr},
-    mCaseItemList{caseitem_list}
-{
-}
-
-// @brief デストラクタ
-EiCaseStmt::~EiCaseStmt()
-{
-}
 
 // @brief 型の取得
 VpiObjType

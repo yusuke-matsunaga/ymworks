@@ -7,7 +7,7 @@
 /// All rights reserved.
 
 #include "ei/EiFactory.h"
-#include "ei/EiDeclHead.h"
+#include "EiDeclHead.h"
 #include "ym/vl/VlValueType.h"
 
 
@@ -48,10 +48,10 @@ EiFactory::new_DeclHead(
 )
 {
   if ( delay ) {
-    return new EiDeclHeadAstD{parent, ast_head};
+    return new EiDeclHeadAstD(parent, ast_head);
   }
   else {
-    return new EiDeclHeadAst{parent, ast_head};
+    return new EiDeclHeadAst(parent, ast_head);
   }
 }
 
@@ -70,7 +70,7 @@ EiFactory::new_DeclHead(
   }
 
   return new EiDeclHeadAst2V(parent, ast_head, aux_type,
-			    ast_range, range);
+			     ast_range, range);
 }
 
 // @brief 宣言要素のヘッダを生成する．(IODecl 中の宣言用)
@@ -115,18 +115,6 @@ EiFactory::new_DeclHead(
 // クラス EiDeclHead
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDeclHead::EiDeclHead(
-  const VlScope* parent
-) : mParent{parent}
-{
-}
-
-// @brief デストラクタ
-EiDeclHead::~EiDeclHead()
-{
-}
-
 // @brief このオブジェクトの属しているスコープを返す．
 const VlScope*
 EiDeclHead::parent_scope() const
@@ -138,20 +126,6 @@ EiDeclHead::parent_scope() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclHeadAst
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeclHeadAst::EiDeclHeadAst(
-  const VlScope* parent,
-  const AstDeclHead& ast_header
-) : EiDeclHead{parent},
-    mAstHead{ast_header}
-{
-}
-
-// @brief デストラクタ
-EiDeclHeadAst::~EiDeclHeadAst()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -421,19 +395,6 @@ EiDeclHeadAst::set_delay(
 // クラス EiDeclHeadAstD
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDeclHeadAstD::EiDeclHeadAstD(
-  const VlScope* parent,
-  const AstDeclHead& ast_header
-) : EiDeclHeadAst{parent, ast_header}
-{
-}
-
-// @brief デストラクタ
-EiDeclHeadAstD::~EiDeclHeadAstD()
-{
-}
-
 // @brief 遅延式の取得
 const VlDelay*
 EiDeclHeadAstD::delay() const
@@ -454,22 +415,6 @@ EiDeclHeadAstD::set_delay(
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclHeadAstV
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeclHeadAstV::EiDeclHeadAstV(
-  const VlScope* parent,
-  const AstDeclHead& ast_header,
-  const AstRange& ast_range,
-  const RangeVal& range
-) : EiDeclHeadAst{parent, ast_header},
-    mRange(ast_range, range)
-{
-}
-
-// @brief デストラクタ
-EiDeclHeadAstV::~EiDeclHeadAstV()
-{
-}
 
 // @brief 範囲指定を持つとき true を返す．
 bool
@@ -542,22 +487,6 @@ EiDeclHeadAstV::calc_bit_offset(
 // クラス EiDeclHeadAstVD
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDeclHeadAstVD::EiDeclHeadAstVD(
-  const VlScope* parent,
-  const AstDeclHead& ast_header,
-  const AstRange& ast_range,
-  const RangeVal& range
-) : EiDeclHeadAstV(parent, ast_header, ast_range, range),
-    mDelay{nullptr}
-{
-}
-
-// @brief デストラクタ
-EiDeclHeadAstVD::~EiDeclHeadAstVD()
-{
-}
-
 // @brief delay の取得
 const VlDelay*
 EiDeclHeadAstVD::delay() const
@@ -578,22 +507,6 @@ EiDeclHeadAstVD::set_delay(
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclHeadAst2
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeclHeadAst2::EiDeclHeadAst2(
-  const VlScope* parent,
-  const AstIOHead& ast_header,
-  VpiAuxType aux_type
-) : EiDeclHead(parent),
-    mAstHead{ast_header},
-    mAuxType{aux_type}
-{
-}
-
-// @brief デストラクタ
-EiDeclHeadAst2::~EiDeclHeadAst2()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -776,23 +689,6 @@ EiDeclHeadAst2::set_delay(
 // クラス EiDeclHeadAst2V
 //////////////////////////////////////////////////////////////////////
 
-// @brief コンストラクタ
-EiDeclHeadAst2V::EiDeclHeadAst2V(
-  const VlScope* parent,
-  const AstIOHead& ast_header,
-  VpiAuxType aux_type,
-  const AstRange& ast_range,
-  const RangeVal& range
-) : EiDeclHeadAst2(parent, ast_header, aux_type),
-    mRange(ast_range, range)
-{
-}
-
-// @brief デストラクタ
-EiDeclHeadAst2V::~EiDeclHeadAst2V()
-{
-}
-
 // @brief 範囲指定を持つとき true を返す．
 bool
 EiDeclHeadAst2V::has_range() const
@@ -863,20 +759,6 @@ EiDeclHeadAst2V::calc_bit_offset(
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclHeadAst3
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeclHeadAst3::EiDeclHeadAst3(
-  const VlScope* parent,
-  const AstItem& ast_item
-) : EiDeclHead(parent),
-    mAstItem{ast_item}
-{
-}
-
-// @brief デストラクタ
-EiDeclHeadAst3::~EiDeclHeadAst3()
-{
-}
 
 // @brief 型の取得
 VpiObjType
@@ -1038,22 +920,6 @@ EiDeclHeadAst3::set_delay(
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclHeadAst3V
 //////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiDeclHeadAst3V::EiDeclHeadAst3V(
-  const VlScope* parent,
-  const AstItem& ast_item,
-  const AstRange& ast_range,
-  const RangeVal& range
-) : EiDeclHeadAst3(parent, ast_item),
-    mRange(ast_range, range)
-{
-}
-
-// @brief デストラクタ
-EiDeclHeadAst3V::~EiDeclHeadAst3V()
-{
-}
 
 // @brief 範囲指定を持つとき true を返す．
 bool
