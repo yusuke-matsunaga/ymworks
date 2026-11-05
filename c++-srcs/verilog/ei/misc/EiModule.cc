@@ -424,9 +424,9 @@ EiModule::add_port(
   VpiDir dir
 )
 {
-  auto port_index = mPortList.size();
-  auto port = new EiPort1(this, ast_port, port_index, low_conn, dir);
-  mPortList.push_back(std::unique_ptr<EiPortBase>(port));
+  add_port_sub([&](SizeType port_index) -> EiPortBase* {
+    return new EiPort1(this, ast_port, port_index, low_conn, dir);
+  });
 }
 
 // @brief ポートを追加する．
@@ -437,9 +437,9 @@ EiModule::add_port(
   VpiDir dir
 )
 {
-  auto port_index = mPortList.size();
-  auto port = new EiPort2(this, ast_ioitem, port_index, low_conn, dir);
-  mPortList.push_back(std::unique_ptr<EiPortBase>(port));
+  add_port_sub([&](SizeType port_index) -> EiPortBase* {
+    return new EiPort2(this, ast_ioitem, port_index, low_conn, dir);
+  });
 }
 
 // @brief ポートの high_conn を接続する．
