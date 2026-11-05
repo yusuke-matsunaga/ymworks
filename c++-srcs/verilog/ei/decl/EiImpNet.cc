@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiImpNet.h"
 #include "ym/vl/BitVector.h"
 
@@ -14,19 +14,22 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 暗黙のネットを生成する．
 ElbDecl*
-EiFactory::new_ImpNet(
+ElbMgr::new_ImpNet(
   const VlScope* parent,
   const AstExpr& ast_expr,
-  VpiNetType net_type,
-  SizeType decl_id
+  VpiNetType net_type
 )
 {
-  return new EiImpNet(parent, ast_expr, net_type, decl_id);
+  auto decl = new_decl(
+    [&](SizeType decl_id) -> ElbDecl* {
+      return new EiImpNet(parent, ast_expr, net_type, decl_id);
+    }, vpiNet);
+  return decl;
 }
 
 

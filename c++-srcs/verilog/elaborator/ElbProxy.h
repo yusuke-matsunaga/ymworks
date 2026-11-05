@@ -15,7 +15,6 @@
 #include "ym/ClibCell.h"
 #include "elaborator/Elaborator.h"
 #include "elaborator/ElbMgr.h"
-#include "elaborator/ElbFactory.h"
 #include "ElbStub.h"
 
 

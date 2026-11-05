@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiPrimary.h"
 #include "elaborator/ElbParameter.h"
 #include "ym/vl/VlDecl.h"
@@ -21,54 +21,69 @@ BEGIN_NAMESPACE_YM_VERILOG
 // クラス EiFactory
 //////////////////////////////////////////////////////////////////////
 
-// @brief プライマリ式を生成する．
+// @brief 宣言要素に対応するプライマリ式を生成する．
 ElbExpr*
-EiFactory::new_Primary(
-  const AstIOItem& ast_item,
-  const VlDecl* obj
+ElbMgr::new_Primary(
+  const AstIOItem& ast_decl,
+  const VlDecl* decl
 )
 {
-  return new EiIOPrimary(ast_item, obj);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiIOPrimary(ast_decl, decl);
+    });
 }
 
-// @brief プライマリ式を生成する．
+// @brief プライマリ式を生成する(net decl の初期値用)．
 ElbExpr*
-EiFactory::new_Primary(
+ElbMgr::new_Primary(
   const AstDeclItem& ast_item,
-  const VlDecl* obj
+  const VlDecl* decl
 )
 {
-  return new EiDeclItemPrimary(ast_item, obj);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiDeclItemPrimary(ast_item, decl);
+    });
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
-EiFactory::new_ArgHandle(
+ElbMgr::new_ArgHandle(
   const AstExpr& ast_expr,
   const VlScope* arg
 )
 {
-  return new EiScopePrimary(ast_expr, arg);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiScopePrimary(ast_expr, arg);
+    });
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
-EiFactory::new_ArgHandle(
+ElbMgr::new_ArgHandle(
   const AstExpr& ast_expr,
   const VlPrimitive* arg
 )
 {
-  return new EiPrimitivePrimary(ast_expr, arg);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiPrimitivePrimary(ast_expr, arg);
+    });
 }
 
 // @brief システム関数/システムタスクの引数を生成する．
 ElbExpr*
-EiFactory::new_ArgHandle(
+ElbMgr::new_ArgHandle(
   const AstExpr& ast_expr,
   const VlDeclArray* arg
 )
 {
-  return new EiDeclArrayPrimary(ast_expr, arg);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiDeclArrayPrimary(ast_expr, arg);
+    });
 }
 
 

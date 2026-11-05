@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiConcatOp.h"
 #include "ym/vl/AstExpr.h"
 #include "ym/vl/BitVector.h"
@@ -20,24 +20,30 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief 連結演算子を生成する．
 ElbExpr*
-EiFactory::new_ConcatOp(
+ElbMgr::new_ConcatOp(
   const AstExpr& ast_expr,
   const std::vector<ElbExpr*>& opr_list
 )
 {
-  return new EiConcatOp(ast_expr, opr_list);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiConcatOp(ast_expr, opr_list);
+    });
 }
 
 // @brief 反復連結演算子を生成する．
 ElbExpr*
-EiFactory::new_MultiConcatOp(
+ElbMgr::new_MultiConcatOp(
   const AstExpr& ast_expr,
   SizeType rep_num,
   ElbExpr* rep_expr,
   const std::vector<ElbExpr*>& opr_list
 )
 {
-  return new EiMultiConcatOp(ast_expr, rep_num, rep_expr, opr_list);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiMultiConcatOp(ast_expr, rep_num, rep_expr, opr_list);
+    });
 }
 
 

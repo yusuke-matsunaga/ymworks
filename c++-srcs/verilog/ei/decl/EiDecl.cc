@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiDecl.h"
 #include "elaborator/ElbExpr.h"
 
@@ -19,47 +19,59 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief 宣言要素を生成する．
 ElbDecl*
-EiFactory::new_Decl(
+ElbMgr::new_Decl(
+  int tag,
   ElbDeclHead* head,
   const AstDeclItem& ast_item,
-  SizeType decl_id,
   const VlExpr* init
 )
 {
-  if ( init != nullptr ) {
-    return new EiDeclI(head, ast_item, decl_id, init);
-  }
-  else {
-    return new EiDecl(head, ast_item, decl_id);
-  }
+  auto decl = new_decl(
+    [&](SizeType decl_id) -> ElbDecl* {
+      if ( init != nullptr ) {
+	return new EiDeclI(head, ast_item, decl_id, init);
+      }
+      else {
+	return new EiDecl(head, ast_item, decl_id);
+      }
+    }, tag);
+  return decl;
 }
 
 // @brief 宣言要素を生成する．
 ElbDecl*
-EiFactory::new_Decl(
+ElbMgr::new_Decl(
+  int tag,
   ElbDeclHead* head,
   const AstIOItem& ast_item,
-  SizeType decl_id,
   const VlExpr* init
 )
 {
-  if ( init != nullptr ) {
-    return new EiDecl2I(head, ast_item, decl_id, init);
-  }
-  else {
-    return new EiDecl2(head, ast_item, decl_id);
-  }
+  auto decl = new_decl(
+    [&](SizeType decl_id) -> ElbDecl* {
+      if ( init != nullptr ) {
+	return new EiDecl2I(head, ast_item, decl_id, init);
+      }
+      else {
+	return new EiDecl2(head, ast_item, decl_id);
+      }
+    }, tag);
+  return decl;
 }
 
 // @brief 宣言要素を生成する．
 ElbDecl*
-EiFactory::new_Decl(
+ElbMgr::new_Decl(
+  int tag,
   ElbDeclHead* head,
-  const AstItem& ast_item,
-  SizeType decl_id
+  const AstItem& ast_item
 )
 {
-  return new EiDecl3(head, ast_item, decl_id);
+  auto decl = new_decl(
+    [&](SizeType decl_id) -> ElbDecl* {
+      return new EiDecl3(head, ast_item, decl_id);
+    }, tag);
+  return decl;
 }
 
 

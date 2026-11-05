@@ -12,7 +12,6 @@
 #include "parser/AstMgr.h"
 #include "elaborator/Elaborator.h"
 #include "elaborator/ElbMgr.h"
-#include "elaborator/ElbFactory.h"
 #include "elaborator/ElbUserSystf.h"
 #include "common/LogMgr.h"
 

@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiConstant.h"
 #include "ym/vl/VlValue.h"
 #include "ym/vl/AstExpr.h"
@@ -21,71 +21,79 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief 定数式を生成する．
 ElbExpr*
-EiFactory::new_Constant(
+ElbMgr::new_Constant(
   const AstExpr& ast_expr
 )
 {
-  auto const_type = ast_expr.const_type();
-  auto size = ast_expr.const_size();
-  auto is_signed = false;
-  int base = 0;
-  switch ( const_type ) {
-  case VpiConstType::Int:
-    if ( ast_expr.const_str() == nullptr ) {
-      auto val = ast_expr.const_bitvect();
-      return new EiBitVectorConst(ast_expr, VpiConstType::Int, val);
-    }
-    break;
+  return new_expr(
+    [&]() -> ElbExpr* {
+      auto const_type = ast_expr.const_type();
+      auto size = ast_expr.const_size();
+      auto is_signed = false;
+      int base = 0;
+      switch ( const_type ) {
+      case VpiConstType::Int:
+	if ( ast_expr.const_str() == nullptr ) {
+	  auto val = ast_expr.const_bitvect();
+	  return new EiBitVectorConst(ast_expr, VpiConstType::Int, val);
+	}
+	break;
 
-  case VpiConstType::SignedBinary:
-    is_signed = true;
-  case VpiConstType::Binary:
-    base = 2;
-    break;
+      case VpiConstType::SignedBinary:
+	is_signed = true;
+      case VpiConstType::Binary:
+	base = 2;
+	break;
 
-  case VpiConstType::SignedOct:
-    is_signed = true;
-  case VpiConstType::Oct:
-    base = 8;
-    break;
+      case VpiConstType::SignedOct:
+	is_signed = true;
+      case VpiConstType::Oct:
+	base = 8;
+	break;
 
-  case VpiConstType::SignedDec:
-    is_signed = true;
-  case VpiConstType::Dec:
-    base = 10;
-    break;
+      case VpiConstType::SignedDec:
+	is_signed = true;
+      case VpiConstType::Dec:
+	base = 10;
+	break;
 
-  case VpiConstType::SignedHex:
-    is_signed = true;
-  case VpiConstType::Hex:
-    base = 16;
-    break;
+      case VpiConstType::SignedHex:
+	is_signed = true;
+      case VpiConstType::Hex:
+	base = 16;
+	break;
 
-  case VpiConstType::Real:
-    return new EiRealConst(ast_expr, ast_expr.const_real());
+      case VpiConstType::Real:
+	return new EiRealConst(ast_expr, ast_expr.const_real());
 
-  case VpiConstType::String:
-    return new EiStringConst(ast_expr, ast_expr.const_str());
+      case VpiConstType::String:
+	return new EiStringConst(ast_expr, ast_expr.const_str());
 
-  default:
-    throw std::logic_error{"Should not be reached"};
-  }
+      default:
+	throw std::logic_error{"Should not be reached"};
+      }
 
-  // ここに来たということはビットベクタ型
-  return new EiBitVectorConst(ast_expr, const_type,
-			      BitVector(size, is_signed, base, ast_expr.const_str()));
+      // ここに来たということはビットベクタ型
+      return new EiBitVectorConst(ast_expr, const_type,
+				  BitVector(size, is_signed, base,
+					    ast_expr.const_str()));
+    });
 }
 
 // @brief genvar 起因の定数式を生成する．
 ElbExpr*
-EiFactory::new_GenvarConstant(
+ElbMgr::new_GenvarConstant(
   const AstExpr& ast_primary,
   int val
 )
 {
-  return new EiIntConst(ast_primary, val);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiIntConst(ast_primary, val);
+    });
 }
 
+#if 0
 // @brief parameter の定数式を生成する．
 ElbExpr*
 EiFactory::new_ParamConstant(
@@ -95,6 +103,7 @@ EiFactory::new_ParamConstant(
 {
   return new EiParamConstant(ast_expr, obj);
 }
+#endif
 
 
 //////////////////////////////////////////////////////////////////////

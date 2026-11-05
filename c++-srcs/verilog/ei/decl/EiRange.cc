@@ -6,7 +6,6 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
 #include "EiRange.h"
 
 

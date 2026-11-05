@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiStmtBlockScope.h"
 #include "ym/vl/AstStmt.h"
 
@@ -17,14 +17,16 @@ BEGIN_NAMESPACE_YM_VERILOG
 // EiFactory の生成関数
 //////////////////////////////////////////////////////////////////////
 
-// @brief statement block を生成する．
+// @brief ステートメントブロックのスコープを生成する．
 const VlScope*
-EiFactory::new_StmtBlockScope(
+ElbMgr::new_StmtBlockScope(
   const VlScope* parent,
   const AstStmt& ast_stmt
 )
 {
   auto scope = new EiStmtBlockScope(parent, ast_stmt);
+  reg_obj(scope);
+  reg_internalscope(scope);
   return scope;
 }
 

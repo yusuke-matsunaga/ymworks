@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiTaskFunc.h"
 #include "elaborator/ElbDecl.h"
 #include "ym/vl/VlIODecl.h"
@@ -18,12 +18,27 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief function を生成する．
 ElbTaskFunc*
-EiFactory::new_Function(
+ElbMgr::new_Function(
+  const VlScope* parent,
+  const AstItem& ast_item,
+  bool const_func
+)
+{
+  // IO数を数え配列を初期化する．
+  auto io_num = ast_item.ioitem_num();
+  auto func = new EiFunction(parent, ast_item, io_num, const_func);
+  reg_func(func);
+  return func;
+}
+
+// @brief function を生成する．
+ElbTaskFunc*
+ElbMgr::new_Function(
   const VlScope* parent,
   const AstItem& ast_item,
   const AstRange& ast_range,
@@ -37,33 +52,26 @@ EiFactory::new_Function(
 
   // IO数を数え配列を初期化する．
   auto io_num = ast_item.ioitem_num();
-  return new EiFunctionV(parent, ast_item, io_num,
-			 ast_range, range, const_func);
-}
-
-// @brief function を生成する．
-ElbTaskFunc*
-EiFactory::new_Function(
-  const VlScope* parent,
-  const AstItem& ast_item,
-  bool const_func
-)
-{
-  // IO数を数え配列を初期化する．
-  auto io_num = ast_item.ioitem_num();
-  return new EiFunction(parent, ast_item, io_num, const_func);
+  auto func = new EiFunctionV(parent, ast_item, io_num,
+			      ast_range, range, const_func);
+  reg_func(func);
+  return func;
 }
 
 // @brief task を生成する．
 ElbTaskFunc*
-EiFactory::new_Task(
+ElbMgr::new_Task(
   const VlScope* parent,
   const AstItem& ast_item
 )
 {
   // IO数を数え配列を初期化する．
   auto io_num = ast_item.ioitem_num();
-  return new EiTask(parent, ast_item, io_num);
+  auto task = new EiTask(parent, ast_item, io_num);
+  reg_obj(task);
+  mObjDict.add(task);
+  mTagDict.add_task(task);
+  return task;
 }
 
 

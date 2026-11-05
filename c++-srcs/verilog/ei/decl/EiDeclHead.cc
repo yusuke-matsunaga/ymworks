@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiDeclHead.h"
 #include "ym/vl/VlValueType.h"
 
@@ -14,9 +14,121 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
+// @brief 宣言要素のヘッダを生成する．
+ElbDeclHead*
+ElbMgr::new_DeclHead(
+  const VlScope* parent,
+  const AstDeclHead& ast_head,
+  bool has_delay
+)
+{
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      if ( has_delay ) {
+	return new EiDeclHeadAstD(parent, ast_head);
+      }
+      else {
+	return new EiDeclHeadAst(parent, ast_head);
+      }
+    });
+}
+
+// @brief 宣言要素のヘッダを生成する．
+ElbDeclHead*
+ElbMgr::new_DeclHead(
+  const VlScope* parent,
+  const AstDeclHead& ast_head,
+  const AstRange& ast_range,
+  const RangeVal& range,
+  bool has_delay
+)
+{
+  if ( ast_range.is_invalid() ) {
+    throw std::logic_error{"ast_range.is_invalid()"};
+  }
+
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      if ( has_delay ) {
+	return new EiDeclHeadAstVD(parent, ast_head, ast_range, range);
+      }
+      else {
+	return new EiDeclHeadAstV(parent, ast_head, ast_range, range);
+      }
+  });
+}
+
+// @brief 宣言要素のヘッダを生成する．(IODecl 中の宣言用)
+ElbDeclHead*
+ElbMgr::new_DeclHead(
+  const VlScope* parent,
+  const AstIOHead& ast_head,
+  VpiAuxType aux_type
+)
+{
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      return new EiDeclHeadAst2(parent, ast_head, aux_type);
+    });
+}
+
+// @brief 宣言要素のヘッダを生成する．(IODecl 中の宣言用)
+ElbDeclHead*
+ElbMgr::new_DeclHead(
+  const VlScope* parent,
+  const AstIOHead& ast_head,
+  VpiAuxType aux_type,
+  const AstRange& ast_range,
+  const RangeVal& range
+)
+{
+  if ( ast_range.is_invalid() ) {
+    throw std::logic_error{"ast_range.is_invalid()"};
+  }
+
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      return new EiDeclHeadAst2V(parent, ast_head, aux_type,
+				 ast_range, range);
+    });
+}
+
+// @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
+ElbDeclHead*
+ElbMgr::new_DeclHead(
+  const VlScope* parent,
+  const AstItem& ast_item
+)
+{
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      return new EiDeclHeadAst3(parent, ast_item);
+    });
+}
+
+// @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
+ElbDeclHead*
+ElbMgr::new_DeclHead(
+  const VlScope* parent,
+  const AstItem& ast_item,
+  const AstRange& ast_range,
+  const RangeVal& range
+)
+{
+  if ( ast_range.is_invalid() ) {
+    throw std::logic_error{"ast_range.is_invalid()"};
+  }
+
+  return new_declhead(
+    [&]() -> ElbDeclHead* {
+      return new EiDeclHeadAst3V(parent, ast_item, ast_range, range);
+    });
+}
+
+#if 0
 // @brief 宣言要素のヘッダを生成する．
 ElbDeclHead*
 EiFactory::new_DeclHead(
@@ -60,55 +172,12 @@ ElbDeclHead*
 EiFactory::new_DeclHead(
   const VlScope* parent,
   const AstIOHead& ast_head,
-  VpiAuxType aux_type,
-  const AstRange& ast_range,
-  const RangeVal& range
-)
-{
-  if ( ast_range.is_invalid() ) {
-    throw std::logic_error{"ast_range.is_invalid()"};
-  }
-
-  return new EiDeclHeadAst2V(parent, ast_head, aux_type,
-			     ast_range, range);
-}
-
-// @brief 宣言要素のヘッダを生成する．(IODecl 中の宣言用)
-ElbDeclHead*
-EiFactory::new_DeclHead(
-  const VlScope* parent,
-  const AstIOHead& ast_head,
   VpiAuxType aux_type
 )
 {
   return new EiDeclHeadAst2(parent, ast_head, aux_type);
 }
-
-// @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
-ElbDeclHead*
-EiFactory::new_DeclHead(
-  const VlScope* parent,
-  const AstItem& ast_item,
-  const AstRange& ast_range,
-  const RangeVal& range
-)
-{
-  if ( ast_range.is_invalid() ) {
-    throw std::logic_error{"ast_range.is_invalid()"};
-  }
-
-  return new EiDeclHeadAst3V(parent, ast_item, ast_range, range);
-}
-
-// @brief 宣言要素のヘッダを生成する．(function の暗黙宣言用)
-ElbDeclHead*
-EiFactory::new_DeclHead(
-  const VlScope* parent,
-  const AstItem& ast_item
-)
-{
-  return new EiDeclHeadAst3(parent, ast_item);
-}
+#endif
 
 
 //////////////////////////////////////////////////////////////////////

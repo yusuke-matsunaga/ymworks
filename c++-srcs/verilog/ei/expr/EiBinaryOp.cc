@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiBinaryOp.h"
 #include "ym/vl/BitVector.h"
 
@@ -14,60 +14,63 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 2項演算子を生成する．
 ElbExpr*
-EiFactory::new_BinaryOp(
+ElbMgr::new_BinaryOp(
   const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr0,
   ElbExpr* opr1
 )
 {
-  switch( op_type ) {
-  case VpiOpType::BitAnd:
-  case VpiOpType::BitOr:
-  case VpiOpType::BitXNor:
-  case VpiOpType::BitXor:
-    return new EiBinaryBitOp(ast_expr, opr0, opr1);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      switch( op_type ) {
+      case VpiOpType::BitAnd:
+      case VpiOpType::BitOr:
+      case VpiOpType::BitXNor:
+      case VpiOpType::BitXor:
+	return new EiBinaryBitOp(ast_expr, opr0, opr1);
 
-  case VpiOpType::Add:
-  case VpiOpType::Sub:
-  case VpiOpType::Mult:
-  case VpiOpType::Div:
-  case VpiOpType::Mod:
-    return new EiBinaryArithOp(ast_expr, opr0, opr1);
+      case VpiOpType::Add:
+      case VpiOpType::Sub:
+      case VpiOpType::Mult:
+      case VpiOpType::Div:
+      case VpiOpType::Mod:
+	return new EiBinaryArithOp(ast_expr, opr0, opr1);
 
-  case VpiOpType::Power:
-    return new EiPowerOp(ast_expr, opr0, opr1);
+      case VpiOpType::Power:
+	return new EiPowerOp(ast_expr, opr0, opr1);
 
-  case VpiOpType::LShift:
-  case VpiOpType::RShift:
-  case VpiOpType::ArithLShift:
-  case VpiOpType::ArithRShift:
-    return new EiShiftOp(ast_expr, opr0, opr1);
+      case VpiOpType::LShift:
+      case VpiOpType::RShift:
+      case VpiOpType::ArithLShift:
+      case VpiOpType::ArithRShift:
+	return new EiShiftOp(ast_expr, opr0, opr1);
 
-  case VpiOpType::LogAnd:
-  case VpiOpType::LogOr:
-    return new EiBinaryLogOp(ast_expr, opr0, opr1);
+      case VpiOpType::LogAnd:
+      case VpiOpType::LogOr:
+	return new EiBinaryLogOp(ast_expr, opr0, opr1);
 
-  case VpiOpType::CaseEq:
-  case VpiOpType::CaseNeq:
-  case VpiOpType::Eq:
-  case VpiOpType::Neq:
-  case VpiOpType::Ge:
-  case VpiOpType::Gt:
-  case VpiOpType::Le:
-  case VpiOpType::Lt:
-    return new EiCompareOp(ast_expr, opr0, opr1);
+      case VpiOpType::CaseEq:
+      case VpiOpType::CaseNeq:
+      case VpiOpType::Eq:
+      case VpiOpType::Neq:
+      case VpiOpType::Ge:
+      case VpiOpType::Gt:
+      case VpiOpType::Le:
+      case VpiOpType::Lt:
+	return new EiCompareOp(ast_expr, opr0, opr1);
 
-  default:
-    break;
-  }
+      default:
+	break;
+      }
 
-  throw std::logic_error{"Should not be reached"};
+      throw std::logic_error{"Should not be reached"};
+    });
 }
 
 

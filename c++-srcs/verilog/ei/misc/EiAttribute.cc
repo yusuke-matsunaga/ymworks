@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiAttribute.h"
 #include "elaborator/ElbExpr.h"
 
@@ -17,18 +17,19 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief attribute instance のリストを生成する．
 const VlAttribute*
-EiFactory::new_Attribute(
+ElbMgr::new_Attribute(
   const AstAttrSpec& ast_attr,
   const VlExpr* expr,
   bool def
 )
 {
   auto attr = new EiAttribute(ast_attr, expr, def);
+  reg_obj(attr);
   return attr;
 }
 

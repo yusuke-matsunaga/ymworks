@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiToplevel.h"
 
 #include "ym/FileRegion.h"
@@ -15,15 +15,17 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief トップレベルのスコープを生成する
 const VlScope*
-EiFactory::new_Toplevel()
+ElbMgr::new_Toplevel()
 {
-  auto toplevel = new EiToplevel;
-  return toplevel;
+  auto scope = new EiToplevel;
+  reg_obj(scope);
+  mTopLevel = scope;
+  return scope;
 }
 
 

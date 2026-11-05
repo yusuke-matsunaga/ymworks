@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiBitSelect.h"
 #include "elaborator/ElbDecl.h"
 #include "ym/vl/BitVector.h"
@@ -21,24 +21,16 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief 固定ビット選択式を生成する．
 ElbExpr*
-EiFactory::new_BitSelect(
+ElbMgr::new_BitSelect(
   const AstExpr& ast_expr,
   ElbExpr* base_expr,
   SizeType bit_offset
 )
 {
-  return new EiConstBitSelect(ast_expr, base_expr, bit_offset);
-}
-
-// @brief 可変ビット選択式を生成する．
-ElbExpr*
-EiFactory::new_BitSelect(
-  const AstExpr& ast_expr,
-  ElbExpr* base_expr,
-  ElbExpr* index_expr
-)
-{
-  return new EiVarBitSelect(ast_expr, base_expr, index_expr);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiConstBitSelect(ast_expr, base_expr, bit_offset);
+    });
 }
 
 
@@ -121,25 +113,6 @@ SizeType
 EiConstBitSelect::bit_offset() const
 {
   return mOffset;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス EiVarBitSelect
-//////////////////////////////////////////////////////////////////////
-
-// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiVarBitSelect::has_plus_bit_select() const
-{
-  return true;
-}
-
-// @brief インデックス式を返す．
-const VlExpr*
-EiVarBitSelect::bit_index() const
-{
-  return mIndexExpr;
 }
 
 END_NAMESPACE_YM_VERILOG

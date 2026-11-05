@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiDeclArray.h"
 
 #include "elaborator/ElbDecl.h"
@@ -21,11 +21,11 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief 宣言要素の配列を生成する．
 const VlDeclArray*
-EiFactory::new_DeclArray(
+ElbMgr::new_DeclArray(
+  int tag,
   ElbDeclHead* head,
   const AstDeclItem& ast_item,
-  const std::vector<ElbRangeSrc>& range_src,
-  SizeType decl_base
+  const std::vector<ElbRangeSrc>& range_src
 )
 {
   auto dim_size = range_src.size();
@@ -33,8 +33,16 @@ EiFactory::new_DeclArray(
   for ( SizeType i = 0; i < dim_size; ++ i ) {
     range_array[i].set(range_src[i]);
   }
-
-  return new EiDeclArray(head, ast_item, range_array, decl_base);
+  auto decl = new EiDeclArray(head, ast_item, range_array, mDeclId);
+  reg_obj(decl);
+  mObjDict.add(decl);
+  if ( tag == vpiVariables ) {
+    // ちょっと汚い補正
+    tag += 100;
+  }
+  mTagDict.add_declarray(tag, decl);
+  mDeclId += decl->array_size();
+  return decl;
 }
 
 

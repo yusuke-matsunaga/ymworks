@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiGfRoot.h"
 
 #include "ym/vl/AstItem.h"
@@ -15,17 +15,20 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief GfBlock 検索用の親の名前付きオブジェクトを作る．
 ElbGfRoot*
-EiFactory::new_GfRoot(
+ElbMgr::new_GfRoot(
   const VlScope* parent,
   const AstItem& ast_item
 )
 {
-  return new EiGfRoot(parent, ast_item);
+  auto gfroot = new EiGfRoot(parent, ast_item);
+  reg_obj(gfroot);
+  mObjDict.add(gfroot);
+  return gfroot;
 }
 
 

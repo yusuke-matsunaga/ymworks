@@ -6,7 +6,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiCaHead.h"
 #include "ym/vl/VlDelay.h"
 #include "ym/vl/AstItem.h"
@@ -20,18 +20,21 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief continuous assignment のヘッダを生成する．
 ElbCaHead*
-EiFactory::new_CaHead(
+ElbMgr::new_CaHead(
   const VlModule* module,
   const AstItem& ast_head,
   const VlDelay* delay
 )
 {
-  if ( delay ) {
-    return new EiCaHeadD(module, ast_head, delay);
-  }
-  else {
-    return new EiCaHead(module, ast_head);
-  }
+  return new_cahead(
+    [&]() -> ElbCaHead* {
+      if ( delay ) {
+	return new EiCaHeadD(module, ast_head, delay);
+      }
+      else {
+	return new EiCaHead(module, ast_head);
+      }
+    });
 }
 
 

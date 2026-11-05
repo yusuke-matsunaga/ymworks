@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiDelay.h"
 
 #include "elaborator/ElbExpr.h"
@@ -18,17 +18,19 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 遅延値を生成する．
 const VlDelay*
-EiFactory::new_Delay(
-  const FileRegion& file_region,
+ElbMgr::new_Delay(
+  const FileRegion& loc,
   const std::vector<ElbExpr*>& expr_list
 )
 {
-  return new EiDelay(file_region, expr_list);
+  auto delay = new EiDelay(loc, expr_list);
+  reg_obj(delay);
+  return delay;
 }
 
 

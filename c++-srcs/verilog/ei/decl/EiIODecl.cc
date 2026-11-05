@@ -6,7 +6,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiIODecl.h"
 #include "elaborator/ElbDecl.h"
 
@@ -19,13 +19,14 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief IO宣言要素を生成する．
 const VlIODecl*
-EiFactory::new_IODecl(
+ElbMgr::new_IODecl(
   ElbIOHead* head,
   const AstIOItem& ast_item,
   const VlDecl* decl
 )
 {
-  return new EiIODecl(head, ast_item, decl);
+  auto io_decl = new EiIODecl(head, ast_item, decl);
+  return io_decl;
 }
 
 

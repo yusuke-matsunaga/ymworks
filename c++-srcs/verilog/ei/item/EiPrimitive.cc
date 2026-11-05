@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiPrimitive.h"
 
 #include "ym/vl/VlUdpDefn.h"
@@ -25,45 +25,54 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief プリミティブインスタンスを生成する．
 ElbPrimitive*
-EiFactory::new_Primitive(
+ElbMgr::new_Primitive(
   ElbPrimHead* head,
   const AstInst& ast_inst
 )
 {
-  return new EiPrimitive2(head, ast_inst);
+  auto prim = new EiPrimitive2(head, ast_inst);
+  reg_obj(prim);
+  mObjDict.add(prim);
+  mTagDict.add_primitive(prim);
+  return prim;
 }
 
 // @brief プリミティブ配列インスタンスを生成する．
 ElbPrimArray*
-EiFactory::new_PrimitiveArray(
+ElbMgr::new_PrimitiveArray(
   ElbPrimHead* head,
   const AstInst& ast_inst,
   const AstRange& ast_range,
   const RangeVal& range
 )
 {
-  return new EiPrimArray(head, ast_inst, ast_range, range);
+  auto prim = new EiPrimArray(head, ast_inst, ast_range, range);
+  reg_obj(prim);
+  mTagDict.add_primarray(prim);
+  return prim;
 }
 
 // @brief セルプリミティブインスタンスを生成する．
 ElbPrimitive*
-EiFactory::new_CellPrimitive(
+ElbMgr::new_CellPrimitive(
   ElbPrimHead* head,
   const ClibCell& cell,
   const AstInst& ast_inst
 )
 {
-  return new EiPrimitive2(head, cell, ast_inst);
+  auto prim = new EiPrimitive2(head, cell, ast_inst);
+  reg_obj(prim);
+  return prim;
 }
 
 // @brief セルプリミティブ配列インスタンスを生成する．
 ElbPrimArray*
-EiFactory::new_CellPrimitiveArray(
+ElbMgr::new_CellPrimitiveArray(
   ElbPrimHead* head,
   const ClibCell& cell,
   const AstInst& ast_inst,
@@ -71,7 +80,9 @@ EiFactory::new_CellPrimitiveArray(
   const RangeVal& range
 )
 {
-  return new EiPrimArray(head, cell, ast_inst, ast_range, range);
+  auto prim = new EiPrimArray(head, cell, ast_inst, ast_range, range);
+  reg_obj(prim);
+  return prim;
 }
 
 

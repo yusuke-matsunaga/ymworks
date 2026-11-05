@@ -6,48 +6,53 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiControl.h"
 
 #include "elaborator/ElbExpr.h"
 
 
-
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 遅延コントロールを生成する．
 const VlControl*
-EiFactory::new_DelayControl(
+ElbMgr::new_DelayControl(
   const AstControl& ast_control,
   ElbExpr* delay
 )
 {
-  return new EiDelayControl(ast_control, delay);
+  auto control = new EiDelayControl(ast_control, delay);
+  reg_obj(control);
+  return control;
 }
 
 // @brief イベントコントロールを生成する．
 const VlControl*
-EiFactory::new_EventControl(
+ElbMgr::new_EventControl(
   const AstControl& ast_control,
   const std::vector<ElbExpr*>& event_list
 )
 {
-  return new EiEventControl(ast_control, event_list);
+  auto control = new EiEventControl(ast_control, event_list);
+  reg_obj(control);
+  return control;
 }
 
 // @brief リピートコントロールを生成する．
 const VlControl*
-EiFactory::new_RepeatControl(
+ElbMgr::new_RepeatControl(
   const AstControl& ast_control,
   ElbExpr* rep,
   const std::vector<ElbExpr*>& event_list
 )
 {
-  return new EiRepeatControl(ast_control, rep, event_list);
+  auto control = new EiRepeatControl(ast_control, rep, event_list);
+  reg_obj(control);
+  return control;
 }
 
 

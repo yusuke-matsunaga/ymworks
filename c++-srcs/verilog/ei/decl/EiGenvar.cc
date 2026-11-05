@@ -6,25 +6,28 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiGenvar.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief genvar を生成する．
 ElbGenvar*
-EiFactory::new_Genvar(
+ElbMgr::new_Genvar(
   const VlScope* parent,
   const AstDeclItem& ast_item,
   int val
 )
 {
-  return new EiGenvar(parent, ast_item, val);
+  auto genvar = new EiGenvar(parent, ast_item, val);
+  reg_obj(genvar);
+  mObjDict.add(genvar);
+  return genvar;
 }
 
 

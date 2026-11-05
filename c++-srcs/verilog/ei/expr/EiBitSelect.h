@@ -152,7 +152,7 @@ private:
 
 };
 
-
+#if 0
 //////////////////////////////////////////////////////////////////////
 /// @class EiVarBitSelect EiBitSelect.h "EiBitSelect.h"
 /// @brief 可変ビット選択式を表すクラス
@@ -202,6 +202,7 @@ private:
   ElbExpr* mIndexExpr;
 
 };
+#endif
 
 END_NAMESPACE_YM_VERILOG
 

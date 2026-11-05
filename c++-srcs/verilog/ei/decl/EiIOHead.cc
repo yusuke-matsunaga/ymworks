@@ -6,7 +6,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiIOHead.h"
 #include "ym/vl/VlScope.h"
 #include "ym/vl/VlTaskFunc.h"
@@ -14,29 +14,39 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+
+//////////////////////////////////////////////////////////////////////
+// クラス ElbMgr
+//////////////////////////////////////////////////////////////////////
+
 // @brief module IO ヘッダを生成する．
 ElbIOHead*
-EiFactory::new_IOHead(
-  const VlModule* module,
-  const AstIOHead& ast_header
+ElbMgr::new_IOHead(
+  const VlModule* mod,
+  const AstIOHead& ast_head
 )
 {
-  return new EiModIOHead(module, ast_header);
+  return new_iohead(
+    [&]() -> ElbIOHead* {
+    return new EiModIOHead(mod, ast_head);
+  });
 }
 
-// @brief タスク/関数 IO ヘッダを生成する．
+// @brief タスク/関数用の IO ヘッダを生成する．
 ElbIOHead*
-EiFactory::new_IOHead(
+ElbMgr::new_IOHead(
   const VlTaskFunc* taskfunc,
-  const AstIOHead& ast_header
+  const AstIOHead& ast_head
 )
 {
-  if ( taskfunc->type() == VpiObjType::Task ) {
-    return new EiTaskIOHead(taskfunc, ast_header);
-  }
-  else { // VpiObjType::Function
-    return new EiFunctionIOHead(taskfunc, ast_header);
-  }
+  return new_iohead([&]() -> ElbIOHead* {
+    if ( taskfunc->type() == VpiObjType::Task ) {
+      return new EiTaskIOHead(taskfunc, ast_head);
+    }
+    else { // VpiObjType::Function
+      return new EiFunctionIOHead(taskfunc, ast_head);
+    }
+  });
 }
 
 

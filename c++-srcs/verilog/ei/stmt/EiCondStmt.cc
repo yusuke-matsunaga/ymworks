@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiCondStmt.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/BitVector.h"
@@ -16,111 +16,123 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief while 文を生成する．
 const VlStmt*
-EiFactory::new_WhileStmt(
+ElbMgr::new_WhileStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlExpr* cond,
-  const VlStmt* stmt
+  const VlStmt* body
 )
 {
-  auto stmt1 = new EiWhileStmt(parent, process, ast_stmt,
-			       cond, stmt);
-  return stmt1;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiWhileStmt(parent, process, ast_stmt,
+			     cond, body);
+    });
 }
 
 // @brief repeat 文を生成する．
 const VlStmt*
-EiFactory::new_RepeatStmt(
+ElbMgr::new_RepeatStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlExpr* cond,
-  const VlStmt* stmt
+  const VlStmt* body
 )
 {
-  auto stmt1 = new EiRepeatStmt(parent, process, ast_stmt,
-				cond, stmt);
-  return stmt1;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiRepeatStmt(parent, process, ast_stmt,
+			      cond, body);
+    });
 }
 
 // @brief wait 文を生成する．
 const VlStmt*
-EiFactory::new_WaitStmt(
+ElbMgr::new_WaitStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlExpr* cond,
-  const VlStmt* stmt
+  const VlStmt* body
 )
 {
-  auto stmt1 = new EiWaitStmt(parent, process, ast_stmt,
-			      cond, stmt);
-  return stmt1;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiWaitStmt(parent, process, ast_stmt,
+			      cond, body);
+    });
 }
 
 // @brief for 文を生成する．
 const VlStmt*
-EiFactory::new_ForStmt(
+ElbMgr::new_ForStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlExpr* cond,
   const VlStmt* init_stmt,
   const VlStmt* inc_stmt,
-  const VlStmt* stmt
+  const VlStmt* body
 )
 {
-  auto stmt1 = new EiForStmt(parent, process, ast_stmt,
-			     cond, init_stmt, inc_stmt, stmt);
-  return stmt1;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiForStmt(parent, process, ast_stmt,
+			   cond, init_stmt, inc_stmt,
+			   body);
+    });
 }
 
 // @brief forever 文を生成する．
 const VlStmt*
-EiFactory::new_ForeverStmt(
+ElbMgr::new_ForeverStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
-  const VlStmt* stmt
+  const VlStmt* body
 )
 {
-  auto stmt1 = new EiForeverStmt(parent, process, ast_stmt, stmt);
-
-  return stmt1;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiForeverStmt(parent, process, ast_stmt,
+			       body);
+    });
 }
 
 // @brief if 文を生成する．
 const VlStmt*
-EiFactory::new_IfStmt(
+ElbMgr::new_IfStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlExpr* cond,
-  const VlStmt* stmt,
+  const VlStmt* then_stmt,
   const VlStmt* else_stmt
 )
 {
-  const VlStmt* stmt1;
-  if ( else_stmt ) {
-    stmt1 = new EiIfElseStmt(parent, process, ast_stmt,
-			     cond, stmt, else_stmt);
-  }
-  else {
-    stmt1 = new EiIfStmt(parent, process, ast_stmt,
-			 cond, stmt);
-  }
-  return stmt1;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      if ( else_stmt != nullptr ) {
+	return new EiIfElseStmt(parent, process, ast_stmt,
+				cond, then_stmt, else_stmt);
+      }
+      else {
+	return new EiIfStmt(parent, process, ast_stmt,
+			    cond, then_stmt);
+      }
+    });
 }
 
 // @brief case 文を生成する．
 const VlStmt*
-EiFactory::new_CaseStmt(
+ElbMgr::new_CaseStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
@@ -128,20 +140,23 @@ EiFactory::new_CaseStmt(
   const std::vector<const VlCaseItem*>& caseitem_list
 )
 {
-  auto stmt1 = new EiCaseStmt(parent, process, ast_stmt,
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiCaseStmt(parent, process, ast_stmt,
 			      expr, caseitem_list);
-  return stmt1;
+    });
 }
 
 // @brief caseitem を生成する．
 const VlCaseItem*
-EiFactory::new_CaseItem(
+ElbMgr::new_CaseItem(
   const AstCaseItem& ast_item,
   const std::vector<ElbExpr*>& label_list,
   const VlStmt* body
 )
 {
   auto caseitem = new EiCaseItem(ast_item, label_list, body);
+  reg_obj(caseitem);
   return caseitem;
 }
 

@@ -6,7 +6,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiUdpDefn.h"
 #include "EiUdpIO.h"
 #include "EiTableEntry.h"
@@ -20,15 +20,19 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief UDP定義を生成する．
 ElbUdpDefn*
-EiFactory::new_UdpDefn(
+ElbMgr::new_UdpDefn(
   const AstUdp& ast_udp,
   bool is_protected
 )
 {
   auto io_num = ast_udp.io_num();
   auto table_size = ast_udp.table_list().size();
-  return new EiUdpDefn(ast_udp, is_protected,
-		       io_num, table_size);
+  auto udp = new EiUdpDefn(ast_udp, is_protected,
+			   io_num, table_size);
+  reg_obj(udp);
+  mUdpList.push_back(udp);
+  mUdpHash[ast_udp.name()] = udp;
+  return udp;
 }
 
 

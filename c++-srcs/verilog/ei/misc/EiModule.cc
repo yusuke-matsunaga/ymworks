@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiModule.h"
 #include "EiPort.h"
 #include "ym/vl/VlIODecl.h"
@@ -15,24 +15,32 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief module を生成する．
 ElbModule*
-EiFactory::new_Module(
+ElbMgr::new_Module(
   const VlScope* parent,
   const AstModule& ast_module,
   const AstItem& ast_head,
   const AstInst& ast_inst
 )
 {
-  return new EiModule2(parent, ast_module, ast_head, ast_inst);
+  auto mod = new EiModule2(parent, ast_module, ast_head, ast_inst);
+  reg_obj(mod);
+  mObjDict.add(mod);
+  mModuleDefDict.add(mod);
+  mTagDict.add_module(mod);
+  if ( parent == mTopLevel ) {
+    mTopmoduleList.push_back(mod);
+  }
+  return mod;
 }
 
 // @brief module array を生成する．
 ElbModuleArray*
-EiFactory::new_ModuleArray(
+ElbMgr::new_ModuleArray(
   const VlScope* parent,
   const AstModule& ast_module,
   const AstItem& ast_head,
@@ -41,8 +49,12 @@ EiFactory::new_ModuleArray(
   const RangeVal& range
 )
 {
-  return new EiModuleArray(parent, ast_module, ast_head,
-			   ast_inst, ast_range, range);
+  auto mod_array = new EiModuleArray(parent, ast_module, ast_head,
+				       ast_inst, ast_range, range);
+  reg_obj(mod_array);
+  mObjDict.add(mod_array);
+  mTagDict.add_modulearray(mod_array);
+  return mod_array;
 }
 
 

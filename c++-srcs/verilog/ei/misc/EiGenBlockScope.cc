@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiGenBlockScope.h"
 #include "ym/vl/AstItem.h"
 
@@ -19,23 +19,29 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief generate block を生成する．
 const VlScope*
-EiFactory::new_GenBlock(
+ElbMgr::new_GenBlock(
   const VlScope* parent,
   const AstItem& ast_item
 )
 {
-  return new EiGenBlockScope(parent, ast_item);
+  auto scope = new EiGenBlockScope(parent, ast_item);
+  reg_obj(scope);
+  reg_internalscope(scope);
+  return scope;
 }
 
 // @brief generate for block を生成する．
 const VlScope*
-EiFactory::new_GfBlock(
+ElbMgr::new_GfBlock(
   const VlScope* parent,
   const AstItem& ast_item,
   int gvi
 )
 {
-  return new EiGfBlockScope(parent, ast_item, gvi);
+  auto gfblock = new EiGfBlockScope(parent, ast_item, gvi);
+  reg_obj(gfblock);
+  reg_internalscope(gfblock);
+  return gfblock;
 }
 
 

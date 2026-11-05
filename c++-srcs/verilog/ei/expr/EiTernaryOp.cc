@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiTernaryOp.h"
 #include "ym/vl/BitVector.h"
 
@@ -14,12 +14,12 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 3項演算子を生成する．
 ElbExpr*
-EiFactory::new_TernaryOp(
+ElbMgr::new_TernaryOp(
   const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr0,
@@ -27,17 +27,20 @@ EiFactory::new_TernaryOp(
   ElbExpr* opr2
 )
 {
-  switch ( op_type ) {
-  case VpiOpType::Condition:
-    return new EiConditionOp(ast_expr, opr0, opr1, opr2);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      switch ( op_type ) {
+      case VpiOpType::Condition:
+	return new EiConditionOp(ast_expr, opr0, opr1, opr2);
 
-  case VpiOpType::MinTypMax:
-    return new EiMinTypMaxOp(ast_expr, opr0, opr1, opr2);
+      case VpiOpType::MinTypMax:
+	return new EiMinTypMaxOp(ast_expr, opr0, opr1, opr2);
 
-  default:
-    break;
-  }
-  throw std::logic_error{"Should not be reached"};
+      default:
+	break;
+      }
+      throw std::logic_error{"Should not be reached"};
+    });
 }
 
 

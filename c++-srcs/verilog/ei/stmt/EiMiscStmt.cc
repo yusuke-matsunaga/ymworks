@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiMiscStmt.h"
 
 #include "elaborator/ElbDecl.h"
@@ -22,39 +22,42 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief イベント文を生成する．
 const VlStmt*
-EiFactory::new_EventStmt(
+ElbMgr::new_EventStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   ElbExpr* named_event
 )
 {
-  auto stmt = new EiEventStmt(parent, process, ast_stmt,
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiEventStmt(parent, process, ast_stmt,
 			      named_event);
-
-  return stmt;
+    });
 }
 
 // @brief nullptr ステートメントを生成する．
 const VlStmt*
-EiFactory::new_NullStmt(
+ElbMgr::new_NullStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt
 )
 {
-  auto stmt = new EiNullStmt(parent, process, ast_stmt);
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiNullStmt(parent, process, ast_stmt);
+    });
 }
 
 // @brief タスクコール文を生成する．
 const VlStmt*
-EiFactory::new_TaskCall(
+ElbMgr::new_TaskCall(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
@@ -62,14 +65,16 @@ EiFactory::new_TaskCall(
   const std::vector<ElbExpr*>& arg_array
 )
 {
-  auto stmt = new EiTaskCall(parent, process, ast_stmt,
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiTaskCall(parent, process, ast_stmt,
 			     task, arg_array);
-  return stmt;
+    });
 }
 
 // @brief システムタスクコール文を生成する．
 const VlStmt*
-EiFactory::new_SysTaskCall(
+ElbMgr::new_SysTaskCall(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
@@ -77,38 +82,44 @@ EiFactory::new_SysTaskCall(
   const std::vector<ElbExpr*>& arg_array
 )
 {
-  auto stmt = new EiSysTaskCall(parent, process, ast_stmt,
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiSysTaskCall(parent, process, ast_stmt,
 				user_systf, arg_array);
-  return stmt;
+    });
 }
 
 // @brief disable 文を生成する．
 const VlStmt*
-EiFactory::new_DisableStmt(
+ElbMgr::new_DisableStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlScope* target
 )
 {
-  auto stmt = new EiDisableStmt(parent, process, ast_stmt,
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiDisableStmt(parent, process, ast_stmt,
 				target);
-  return stmt;
+    });
 }
 
 // @brief コントロール文を生成する．
 const VlStmt*
-EiFactory::new_CtrlStmt(
+ElbMgr::new_CtrlStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlControl* control,
-  const VlStmt* stmt
+  const VlStmt* body
 )
 {
-  auto stmt1 = new EiCtrlStmt(parent, process, ast_stmt,
-			      control, stmt);
-  return stmt1;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiCtrlStmt(parent, process, ast_stmt,
+			    control, body);
+    });
 }
 
 

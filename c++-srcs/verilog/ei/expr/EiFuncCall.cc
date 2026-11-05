@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiFuncCall.h"
 
 #include "ym/vl/VlTaskFunc.h"
@@ -16,29 +16,35 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 関数呼び出し式を生成する．
 ElbExpr*
-EiFactory::new_FuncCall(
+ElbMgr::new_FuncCall(
   const AstExpr& ast_expr,
   const VlTaskFunc* func,
   const std::vector<ElbExpr*>& arg_list
 )
 {
-  return new EiFuncCall(ast_expr, func, arg_list);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiFuncCall(ast_expr, func, arg_list);
+    });
 }
 
 // @brief システム関数呼び出し式を生成する．
 ElbExpr*
-EiFactory::new_SysFuncCall(
+ElbMgr::new_SysFuncCall(
   const AstExpr& ast_expr,
   const VlUserSystf* user_systf,
   const std::vector<ElbExpr*>& arg_list
 )
 {
-  return new EiSysFuncCall(ast_expr, user_systf, arg_list);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiSysFuncCall(ast_expr, user_systf, arg_list);
+    });
 }
 
 

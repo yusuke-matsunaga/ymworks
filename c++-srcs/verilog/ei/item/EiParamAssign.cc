@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiParamAssign.h"
 
 #include "elaborator/ElbParameter.h"
@@ -19,12 +19,12 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief パラメータ割り当て文を生成する．
 const VlParamAssign*
-EiFactory::new_ParamAssign(
+ElbMgr::new_ParamAssign(
   const VlModule* module,
   const FileRegion& loc,
   ElbParameter* param,
@@ -32,12 +32,16 @@ EiFactory::new_ParamAssign(
   const VlValue& rhs_value
 )
 {
-  return new EiParamAssign(module, loc, param, rhs_expr, rhs_value);
+  auto pa = new EiParamAssign(module, loc, param,
+			      rhs_expr, rhs_value);
+  reg_obj(pa);
+  mTagDict.add_paramassign(pa);
+  return pa;
 }
 
 // @brief 名前によるパラメータ割り当て文を生成する．
 const VlParamAssign*
-EiFactory::new_NamedParamAssign(
+ElbMgr::new_NamedParamAssign(
   const VlModule* module,
   const FileRegion& loc,
   ElbParameter* param,
@@ -45,12 +49,16 @@ EiFactory::new_NamedParamAssign(
   const VlValue& rhs_value
 )
 {
-  return new EiParamAssign2(module, loc, param, rhs_expr, rhs_value);
+  auto paramassign = new EiParamAssign2(module, loc, param,
+					rhs_expr, rhs_value);
+  reg_obj(paramassign);
+  mTagDict.add_paramassign(paramassign);
+  return paramassign;
 }
 
 // @brief defparam 文を生成する．
 const VlDefParam*
-EiFactory::new_DefParam(
+ElbMgr::new_DefParam(
   const VlModule* module,
   const AstItem& ast_header,
   const AstDefParam& ast_defparam,
@@ -59,8 +67,11 @@ EiFactory::new_DefParam(
   const VlValue& rhs_value
 )
 {
-  return new EiDefParam(module, ast_header, ast_defparam,
-			param, rhs_expr, rhs_value);
+  auto defparam = new EiDefParam(module, ast_header, ast_defparam,
+				 param, rhs_expr, rhs_value);
+  reg_obj(defparam);
+  mTagDict.add_defparam(defparam);
+  return defparam;
 }
 
 

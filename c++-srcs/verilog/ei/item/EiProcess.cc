@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiProcess.h"
 
 #include "ym/vl/AstItem.h"
@@ -16,17 +16,19 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief プロセス文を生成する．
 ElbProcess*
-EiFactory::new_Process(
+ElbMgr::new_Process(
   const VlScope* parent,
   const AstItem& ast_item
 )
 {
   auto process = new EiProcess(parent, ast_item);
+  reg_obj(process);
+  mTagDict.add_process(process);
   return process;
 }
 

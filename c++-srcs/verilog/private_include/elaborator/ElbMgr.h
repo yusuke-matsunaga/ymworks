@@ -10,10 +10,17 @@
 
 #include "ym/vl/Ast.h"
 #include "ym/vl/VlFwd.h"
+#include "ym/vl/VlStmt.h"
 #include "ym/clib.h"
 
-#include "elaborator/ElbFactory.h"
-#include "elaborator/ElbHead.h"
+#include "elaborator/ElbDeclHead.h"
+#include "elaborator/ElbIOHead.h"
+#include "elaborator/ElbParameter.h"
+#include "elaborator/ElbCaHead.h"
+#include "elaborator/ElbContAssign.h"
+#include "elaborator/ElbPrimHead.h"
+#include "elaborator/ElbExpr.h"
+#include "elaborator/RangeVal.h"
 #include "elaborator/ObjDict.h"
 #include "elaborator/ModDefDict.h"
 #include "elaborator/TagDict.h"
@@ -1169,33 +1176,107 @@ private:
   // 内部で用いられる関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief Elbオブジェクト用のファクトリを返す．
-  ElbFactory&
-  factory()
-  {
-    return *mFactory;
-  }
-
   /// @brief 宣言ヘッダを生成する．
   ElbDeclHead*
   new_declhead(
     std::function<ElbDeclHead*()> new_func ///< [in] 生成関数
-  );
+  )
+  {
+    auto head = new_func();
+    mHeadList.push_back(std::unique_ptr<const ElbHead>{head});
+    return head;
+  }
 
   /// @brief 宣言要素を生成する．
   ElbDecl*
   new_decl(
     std::function<ElbDecl*(SizeType)> new_func, ///< [in] 生成関数
     int tag                                     ///< [in] タグ
-  );
-
-  /// @brief ヘッダを登録する．
-  void
-  reg_head(
-    const ElbHead* head
   )
   {
+    auto decl = new_func(mDeclId);
+    reg_obj(decl);
+    mObjDict.add(decl);
+    mTagDict.add_decl(tag, decl);
+    return decl;
+  }
+
+  /// @brief IOヘッダを生成する．
+  ElbIOHead*
+  new_iohead(
+    std::function<ElbIOHead*()> new_func ///< [in] 生成関数
+  )
+  {
+    auto head = new_func();
     mHeadList.push_back(std::unique_ptr<const ElbHead>{head});
+    return head;
+  }
+
+  /// @brief パラメータヘッダを生成する．
+  ElbParamHead*
+  new_paramhead(
+    std::function<ElbParamHead*()> new_func ///< [in] 生成関数
+  )
+  {
+    auto head = new_func();
+    mHeadList.push_back(std::unique_ptr<const ElbHead>{head});
+    return head;
+  }
+
+  /// @brief 継続的代入文のヘッダを生成する．
+  ElbCaHead*
+  new_cahead(
+    std::function<ElbCaHead*()> new_func ///< [in] 生成関数
+  )
+  {
+    auto head = new_func();
+    mHeadList.push_back(std::unique_ptr<const ElbHead>{head});
+    return head;
+  }
+
+  /// @brief 継続的代入文を生成する．
+  const VlContAssign*
+  new_contassign(
+    std::function<const VlContAssign*()> new_func ///< [in] 生成関数
+  )
+  {
+    auto contassign = new_func();
+    reg_obj(contassign);
+    mTagDict.add_contassign(contassign);
+    return contassign;
+  }
+
+  /// @brief プリミティブのヘッダを生成する．
+  ElbPrimHead*
+  new_primhead(
+    std::function<ElbPrimHead*()> new_func ///< [in] 生成関数
+  )
+  {
+    auto head = new_func();
+    mHeadList.push_back(std::unique_ptr<const ElbHead>{head});
+    return head;
+  }
+
+  /// @brief ステートメントを生成する．
+  const VlStmt*
+  new_stmt(
+    std::function<const VlStmt*()> new_func ///< [in] 生成関数
+  )
+  {
+    auto stmt = new_func();
+    reg_obj(stmt);
+    return stmt;
+  }
+
+  /// @brief 式を生成する．
+  ElbExpr*
+  new_expr(
+    std::function<ElbExpr*()> new_func ///< [in] 生成関数
+  )
+  {
+    auto expr = new_func();
+    reg_obj(expr);
+    return expr;
   }
 
   /// @brief オブジェクトを登録する．
@@ -1222,9 +1303,6 @@ private:
   //////////////////////////////////////////////////////////////////////
   // データメンバ
   //////////////////////////////////////////////////////////////////////
-
-  // オブジェクト生成用のファクトリクラス
-  std::unique_ptr<ElbFactory> mFactory;
 
   // UDP のリスト
   std::vector<const VlUdpDefn*> mUdpList;

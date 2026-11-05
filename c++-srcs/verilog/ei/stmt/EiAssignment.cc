@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiAssignment.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/VlControl.h"
@@ -16,12 +16,12 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 代入文を生成する．
 const VlStmt*
-EiFactory::new_Assignment(
+ElbMgr::new_Assignment(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
@@ -31,21 +31,22 @@ EiFactory::new_Assignment(
   const VlControl* control
 )
 {
-  const VlStmt* stmt = nullptr;
-  if ( block ) {
-    stmt = new EiAssignment(parent, process, ast_stmt,
-			    lhs, rhs, control);
-  }
-  else {
-    stmt = new EiNbAssignment(parent, process, ast_stmt,
-			      lhs, rhs, control);
-  }
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      if ( block ) {
+	return new EiAssignment(parent, process, ast_stmt,
+				lhs, rhs, control);
+      }
+      else {
+	return new EiNbAssignment(parent, process, ast_stmt,
+				  lhs, rhs, control);
+      }
+    });
 }
 
 // @brief assign ステートメントを生成する．
 const VlStmt*
-EiFactory::new_AssignStmt(
+ElbMgr::new_AssignStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
@@ -53,29 +54,32 @@ EiFactory::new_AssignStmt(
   const VlExpr* rhs
 )
 {
-  auto stmt = new EiAssignStmt(parent, process, ast_stmt,
-			       lhs, rhs);
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiAssignStmt(parent, process, ast_stmt,
+			      lhs, rhs);
+    });
 }
 
 // @brief deassign ステートメントを生成する．
 const VlStmt*
-EiFactory::new_DeassignStmt(
+ElbMgr::new_DeassignStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlExpr* lhs
 )
 {
-  auto stmt = new EiDeassignStmt(parent, process, ast_stmt,
-				 lhs);
-
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiDeassignStmt(parent, process, ast_stmt,
+				lhs);
+    });
 }
 
 // @brief force ステートメントを生成する．
 const VlStmt*
-EiFactory::new_ForceStmt(
+ElbMgr::new_ForceStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
@@ -83,23 +87,27 @@ EiFactory::new_ForceStmt(
   const VlExpr* rhs
 )
 {
-  auto stmt = new EiForceStmt(parent, process, ast_stmt,
-			      lhs, rhs);
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiForceStmt(parent, process, ast_stmt,
+			     lhs, rhs);
+    });
 }
 
 // @brief release ステートメントを生成する．
 const VlStmt*
-EiFactory::new_ReleaseStmt(
+ElbMgr::new_ReleaseStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const VlExpr* lhs
 )
 {
-  auto stmt = new EiReleaseStmt(parent, process, ast_stmt,
-				lhs);
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiReleaseStmt(parent, process, ast_stmt,
+			       lhs);
+    });
 }
 
 

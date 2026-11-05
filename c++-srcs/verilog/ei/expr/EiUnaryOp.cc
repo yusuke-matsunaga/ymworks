@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiUnaryOp.h"
 #include "ym/vl/BitVector.h"
 
@@ -14,46 +14,49 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 単項演算子を生成する．
 ElbExpr*
-EiFactory::new_UnaryOp(
+ElbMgr::new_UnaryOp(
   const AstExpr& ast_expr,
   VpiOpType op_type,
   ElbExpr* opr1
 )
 {
-  switch ( op_type ) {
-  case VpiOpType::Posedge:
-  case VpiOpType::Negedge:
-    return new EiEventEdgeOp(ast_expr, opr1);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      switch ( op_type ) {
+      case VpiOpType::Posedge:
+      case VpiOpType::Negedge:
+	return new EiEventEdgeOp(ast_expr, opr1);
 
-  case VpiOpType::BitNeg:
-    return new EiBitNegOp(ast_expr, opr1);
-    break;
+      case VpiOpType::BitNeg:
+	return new EiBitNegOp(ast_expr, opr1);
+	break;
 
-  case VpiOpType::Plus:
-  case VpiOpType::Minus:
-    return new EiUnaryArithOp(ast_expr, opr1);
+      case VpiOpType::Plus:
+      case VpiOpType::Minus:
+	return new EiUnaryArithOp(ast_expr, opr1);
 
-  case VpiOpType::UnaryAnd:
-  case VpiOpType::UnaryNand:
-  case VpiOpType::UnaryOr:
-  case VpiOpType::UnaryNor:
-  case VpiOpType::UnaryXor:
-  case VpiOpType::UnaryXNor:
-    return new EiReductionOp(ast_expr, opr1);
+      case VpiOpType::UnaryAnd:
+      case VpiOpType::UnaryNand:
+      case VpiOpType::UnaryOr:
+      case VpiOpType::UnaryNor:
+      case VpiOpType::UnaryXor:
+      case VpiOpType::UnaryXNor:
+	return new EiReductionOp(ast_expr, opr1);
 
-  case VpiOpType::Not:
-    return new EiNotOp(ast_expr, opr1);
+      case VpiOpType::Not:
+	return new EiNotOp(ast_expr, opr1);
 
-  default:
-    break;
-  }
+      default:
+	break;
+      }
 
-  throw std::logic_error{"Should not be reached"};
+      throw std::logic_error{"Should not be reached"};
+    });
 }
 
 

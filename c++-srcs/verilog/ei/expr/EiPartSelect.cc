@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiPartSelect.h"
 #include "ym/vl/AstExpr.h"
 #include "ym/vl/BitVector.h"
@@ -15,20 +15,23 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief 固定部分選択式を生成する．
 ElbExpr*
-EiFactory::new_PartSelect(
+ElbMgr::new_PartSelect(
   const AstExpr& ast_expr,
   ElbExpr* parent_expr,
   SizeType select_width,
   SizeType bit_offset
 )
 {
-  return new EiConstPartSelect(ast_expr, parent_expr,
-			       select_width, bit_offset);
+  return new_expr(
+    [&]() -> ElbExpr* {
+      return new EiConstPartSelect(ast_expr, parent_expr,
+				   select_width, bit_offset);
+    });
 }
 
 

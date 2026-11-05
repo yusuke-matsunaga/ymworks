@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiContAssign.h"
 #include "ym/vl/VlExpr.h"
 #include "ym/vl/VlDelay.h"
@@ -16,31 +16,37 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-// EiFactory の生成関数
+// クラス ElbMgr
 //////////////////////////////////////////////////////////////////////
 
 // @brief continuous assignment を生成する．
 const VlContAssign*
-EiFactory::new_ContAssign(
+ElbMgr::new_ContAssign(
   ElbCaHead* head,
   const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  return  new EiContAssign1(head, loc, lhs, rhs);
+  return new_contassign(
+    [&]() -> const VlContAssign* {
+      return new EiContAssign1(head, loc, lhs, rhs);
+    });
 }
 
 // @brief net 宣言中の continuous assignment を生成する．
 const VlContAssign*
-EiFactory::new_ContAssign(
+ElbMgr::new_ContAssign(
   const VlModule* module,
   const FileRegion& loc,
   const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
-  return new EiContAssign2(module, loc, lhs, rhs);
+  return new_contassign(
+    [&]() -> const VlContAssign* {
+      return new EiContAssign2(module, loc, lhs, rhs);
+    });
 }
 
 

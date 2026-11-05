@@ -6,7 +6,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiPrimHead.h"
 
 #include "ym/vl/VlUdpDefn.h"
@@ -23,46 +23,54 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief ゲートプリミティブのヘッダを生成する．
 ElbPrimHead*
-EiFactory::new_PrimHead(
+ElbMgr::new_PrimHead(
   const VlScope* parent,
   const AstItem& ast_header,
   bool has_delay
 )
 {
-  if ( has_delay ) {
-    return new EiPrimHeadD(parent, ast_header);
-  }
-  else {
-    return new EiPrimHead(parent, ast_header);
-  }
+  return new_primhead(
+    [&]() -> ElbPrimHead* {
+      if ( has_delay ) {
+	return new EiPrimHeadD(parent, ast_header);
+      }
+      else {
+	return new EiPrimHead(parent, ast_header);
+      }
+    });
 }
 
 // @brief UDPプリミティブのヘッダを生成する．
 ElbPrimHead*
-EiFactory::new_UdpHead(
+ElbMgr::new_UdpHead(
   const VlScope* parent,
   const AstItem& ast_header,
   const VlUdpDefn* udp,
   bool has_delay
 )
 {
-  if ( has_delay ) {
-    return new EiPrimHeadUD(parent, ast_header, udp);
-  }
-  else {
-    return new EiPrimHeadU(parent, ast_header, udp);
-  }
+  return new_primhead(
+    [&]() -> ElbPrimHead* {
+      if ( has_delay ) {
+	return new EiPrimHeadUD(parent, ast_header, udp);
+      }
+      else {
+	return new EiPrimHeadU(parent, ast_header, udp);
+      }
+    });
 }
 
 // @brief セルプリミティブのヘッダを生成する．
 ElbPrimHead*
-EiFactory::new_CellHead(
+ElbMgr::new_CellHead(
   const VlScope* parent,
   const AstItem& ast_header,
   const ClibCell& cell
 )
 {
-  return new EiPrimHeadC(parent, ast_header, cell);
+  auto head = new EiPrimHeadC(parent, ast_header, cell);
+  mHeadList.push_back(std::unique_ptr<const ElbHead>{head});
+  return head;
 }
 
 

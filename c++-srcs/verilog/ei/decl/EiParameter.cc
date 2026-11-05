@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiParameter.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/BitVector.h"
@@ -20,17 +20,20 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief parameter 宣言のヘッダを生成する(範囲指定なし)．
 ElbParamHead*
-EiFactory::new_ParamHead(
+ElbMgr::new_ParamHead(
   const VlScope* parent,
   const AstDeclHead& ast_head
 )
 {
-  return new EiParamHead(parent, ast_head);
+  return new_paramhead(
+    [&]() -> ElbParamHead* {
+      return new EiParamHead(parent, ast_head);
+    });
 }
 
-// @brief parameter 宣言のヘッダを生成する．
+// @brief parameter 宣言のヘッダを生成する(範囲指定あり)．
 ElbParamHead*
-EiFactory::new_ParamHead(
+ElbMgr::new_ParamHead(
   const VlScope* parent,
   const AstDeclHead& ast_head,
   const AstRange& ast_range,
@@ -40,32 +43,40 @@ EiFactory::new_ParamHead(
   if ( ast_range.is_invalid() ) {
     throw std::logic_error{"ast_range.is_invalid()"};
   }
-  return new EiParamHeadV(parent, ast_head, ast_range, range);
+  return new_paramhead(
+    [&]() -> ElbParamHead* {
+      return new EiParamHeadV(parent, ast_head, ast_range, range);
+    });
 }
 
 // @brief parameter 宣言を生成する．
 ElbParameter*
-EiFactory::new_Parameter(
+ElbMgr::new_Parameter(
   ElbParamHead* head,
   const AstDeclItem& ast_item,
   bool is_local
 )
 {
+  ElbParameter* param = nullptr;
   switch ( head->type() ) {
   case VpiObjType::Parameter:
   case VpiObjType::SpecParam:
     if ( is_local ) {
-      return new EiLocalParam(head, ast_item);
+      param = new EiLocalParam(head, ast_item);
     }
     else {
-      return new EiParameter(head, ast_item);
+      param = new EiParameter(head, ast_item);
     }
     break;
 
   default:
+    throw std::logic_error{"Should not be reached"};
     break;
   }
-  throw std::logic_error{"Should not be reached"};
+  reg_obj(param);
+  mObjDict.add(param);
+  mTagDict.add_decl(vpiParameter, param);
+  return param;
 }
 
 

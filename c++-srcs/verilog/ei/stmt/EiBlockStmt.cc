@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ei/EiFactory.h"
+#include "elaborator/ElbMgr.h"
 #include "EiBlockStmt.h"
 
 
@@ -18,54 +18,62 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief begin ブロックを生成する．
 const VlStmt*
-EiFactory::new_Begin(
+ElbMgr::new_Begin(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiBegin(parent, process, ast_stmt, stmt_list);
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiBegin(parent, process, ast_stmt, stmt_list);
+    });
 }
 
 // @brief fork ブロックを生成する．
 const VlStmt*
-EiFactory::new_Fork(
+ElbMgr::new_Fork(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiFork(parent, process, ast_stmt, stmt_list);
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiFork(parent, process, ast_stmt, stmt_list);
+    });
 }
 
 // @brief 名前付き begin ブロックを生成する．
 const VlStmt*
-EiFactory::new_NamedBegin(
+ElbMgr::new_NamedBegin(
   const VlScope* block,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiNamedBegin(block, process, ast_stmt, stmt_list);
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiNamedBegin(block, process, ast_stmt, stmt_list);
+    });
 }
 
 // @brief 名前付き fork ブロックを生成する．
 const VlStmt*
-EiFactory::new_NamedFork(
+ElbMgr::new_NamedFork(
   const VlScope* block,
   const VlProcess* process,
   const AstStmt& ast_stmt,
   const std::vector<const VlStmt*>& stmt_list
 )
 {
-  auto stmt = new EiNamedFork(block, process, ast_stmt, stmt_list);
-  return stmt;
+  return new_stmt(
+    [&]() -> const VlStmt* {
+      return new EiNamedFork(block, process, ast_stmt, stmt_list);
+    });
 }
 
 
