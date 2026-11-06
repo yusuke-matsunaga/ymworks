@@ -53,54 +53,6 @@ public:
   ~ElbEnv() = default;
 
 
-protected:
-  //////////////////////////////////////////////////////////////////////
-  // ElbEnv の状態を設定する関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 定数式を要求する．
-  void
-  set_constant();
-
-  /// @brief 親の function を設定する．
-  void
-  set_constant_function(
-    const VlScope* function ///< [in] 設定する function
-  );
-
-  /// @brief 親の function を設定する．
-  void
-  set_function();
-
-  /// @brief 親の task を設定する．
-  void
-  set_task();
-
-  /// @brief system task/system function の引数の印をつける．
-  void
-  set_system_tf_arg();
-
-  /// @brief イベント式の印をつける．
-  void
-  set_event_expr();
-
-  /// @brief net 型の左辺式の印をつける．
-  void
-  set_net_lhs();
-
-  /// @brief reg/var 型の左辺式の印をつける．
-  void
-  set_var_lhs();
-
-  /// @brief pca 代入文の左辺式の印をつける．
-  void
-  set_pca_lhs();
-
-  /// @brief force 代入文の左辺式の印をつける．
-  void
-  set_force_lhs();
-
-
 public:
   //////////////////////////////////////////////////////////////////////
   // ElbEnv の状態を取得する関数
@@ -149,6 +101,54 @@ public:
   /// @brief force 代入文の左辺式の時に true を返す．
   bool
   is_force_lhs() const;
+
+
+protected:
+  //////////////////////////////////////////////////////////////////////
+  // ElbEnv の状態を設定する関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 定数式を要求する．
+  void
+  set_constant();
+
+  /// @brief 親の function を設定する．
+  void
+  set_constant_function(
+    const VlScope* function ///< [in] 設定する function
+  );
+
+  /// @brief 親の function を設定する．
+  void
+  set_function();
+
+  /// @brief 親の task を設定する．
+  void
+  set_task();
+
+  /// @brief system task/system function の引数の印をつける．
+  void
+  set_system_tf_arg();
+
+  /// @brief イベント式の印をつける．
+  void
+  set_event_expr();
+
+  /// @brief net 型の左辺式の印をつける．
+  void
+  set_net_lhs();
+
+  /// @brief reg/var 型の左辺式の印をつける．
+  void
+  set_var_lhs();
+
+  /// @brief pca 代入文の左辺式の印をつける．
+  void
+  set_pca_lhs();
+
+  /// @brief force 代入文の左辺式の印をつける．
+  void
+  set_force_lhs();
 
 
 private:

@@ -222,13 +222,6 @@ private:
     const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
-  /// @brief 定数識別子を探す．
-  ObjHandle*
-  find_const_handle(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstExpr& ast_expr ///< [in] 式を表すパース木
-  );
-
   /// @brief genvar に対応した定数を生成する．
   ///
   /// ast_expr に添字が付いていたらエラーとなる．
@@ -307,7 +300,7 @@ private:
 
   /// @brief システム関数/タスクの引数を返す．
   ElbExpr*
-  instantiate_sytem_tf_arg(
+  instantiate_system_tf_arg(
     ObjHandle* handle,      ///< [in] オブジェクトハンドル
     const VlScope* parent,  ///< [in] 親のスコープ
     const AstExpr& ast_expr ///< [in] 式を表すパース木
@@ -321,16 +314,21 @@ private:
     const AstExpr& ast_expr ///< [in] プライマリを表す式
   );
 
+  /// @brief 定数識別子を探す．
+  ObjHandle*
+  find_const_handle(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
+  );
+
   /// @brief decl の型が適切がチェックする．
   ///
   /// 不適切な場合，例外が送出される．
   void
   check_decl(
-    const ElbEnv& env,       ///< [in] インスタンス化している環境
-    const AstExpr& ast_expr, ///< [in] 式を表すパース木
-    VpiObjType decl_type,    ///< [in] 対象の宣言要素の型
-    bool is_array,           ///< [in] 対象が配列の時 true を渡す．
-    bool has_select         ///< [in] ビット/範囲指定を持つ時 true を渡す．
+    const ElbEnv& env,         ///< [in] 環境
+    const AstExpr& ast_expr,   ///< [in] 式を表すパース木
+    const ElbDeclRef& decl_ref ///< [in] 宣言要素の参照
   );
 
 };

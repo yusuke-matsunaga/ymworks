@@ -16,7 +16,6 @@
 #include "ym/vl/VlModule.h"
 #include "ym/vl/VlDecl.h"
 #include "ym/vl/VlDeclArray.h"
-#include "ym/vl/VlDeclRef.h"
 #include "ym/vl/VlRange.h"
 
 #include "elaborator/ElbDecl.h"
@@ -55,37 +54,23 @@ ExprGen::instantiate_primary(
   const AstExpr& ast_expr
 )
 {
-  // 識別子の階層
-  auto has_hname = (ast_expr.namebranch_list().size() > 0);
-  if ( has_hname ) {
-    if ( env.is_constant() ) {
-      // 階層つき識別子はだめ
-      log_mgr().error_hname_in_ce(__FILE__, __LINE__, ast_expr);
-    }
-    if ( env.inside_constant_function() ) {
-      // 階層つき識別子はだめ
-      log_mgr().error_hname_in_cf(__FILE__, __LINE__, ast_expr);
-    }
-  }
-
   // 名前に対応したオブジェクトのハンドルを取り出す．
   auto handle = find_handle(parent, env, ast_expr);
 
-#if 0
-  // 識別子の添字の次元
-  auto ast_index_list = ast_expr.index_list().to_vector();
-  auto isize = ast_index_list.size();
-#endif
-
   if ( env.is_system_tf_arg() ) {
     // システム関数/タスクの引数の場合
-
+    // 配列そのものやプリミティブ，スコープなどの特別な場合を処理する．
+    // 該当しない場合は nullptr を返す．
+    auto expr = instantiate_system_tf_arg(handle, parent, ast_expr);
+    if ( expr != nullptr ) {
+      return expr;
+    }
   }
 
   if ( !env.is_lhs() ) {
-    // 対象のオブジェクトが genvar の場合
     auto genvar = handle->genvar();
     if ( genvar != nullptr ) {
+      // 対象のオブジェクトが genvar の場合
       return instantiate_genvar(parent, ast_expr, genvar->value());
     }
   }
@@ -104,6 +89,9 @@ ExprGen::instantiate_primary(
   AstExpr ast_bit;
   auto decl_ref = instantiate_decl_ref(handle, parent, index_env,
 				       ast_expr, ast_bit);
+
+  // 宣言要素のタイプをチェックする．
+  check_decl(env, ast_expr, decl_ref);
 
   if ( ast_bit.is_valid() ) {
     // ビット選択ありのプライマリ式
@@ -149,53 +137,27 @@ ExprGen::instantiate_namedevent(
     env0 = ElbConstantEnv();
   }
 
-#if 0
-  auto decl_ref = instantiate_decl_ref(handle, parent, env0, ast_expr);
+  AstExpr ast_bit;
+  auto decl_ref = instantiate_decl_ref(handle, parent, env0,
+				       ast_expr, ast_bit);
 
-  auto decl_base = decl_ref->decl_base();
-  if ( decl_base == nullptr ) {
+  auto declbase = decl_ref.declbase();
+  if ( declbase == nullptr ) {
+    // そもそも宣言要素ですらなかった．
+#warning "TODO: エラーメッセージ"
     throw std::logic_error{"decl_base == nullptr"};
   }
-  auto decl_type = decl_base->type();
+  auto decl_type = declbase->type();
   if ( decl_type != VpiObjType::NamedEvent ) {
     // 型が違う
     log_mgr().error_not_a_namedevent(__FILE__, __LINE__, ast_expr);
   }
-  if ( has_range_select || has_bit_select ) {
+  if ( ast_bit.is_valid() ) {
     // 部分選択，ビット選択は使えない．
     log_mgr().error_select_for_namedevent(__FILE__, __LINE__, ast_expr);
   }
 
-  return primary;
-#else
-#warning "TODO: 未完"
-  return nullptr;
-#endif
-}
-
-// @brief 定数識別子を探す．
-ObjHandle*
-ExprGen::find_const_handle(
-  const VlScope* parent,
-  const AstExpr& ast_expr
-)
-{
-  // モジュール内の識別子を探索する．
-  auto handle = elb_mgr().find_obj_up(parent, ast_expr, parent->parent_module());
-  if ( handle == nullptr ) {
-    // 見つからなかった．
-    log_mgr().error_not_found(__FILE__, __LINE__,
-			      ast_expr.file_region(),
-			      ast_expr.name());
-  }
-
-  // handle が持つオブジェクトは genvar か parameter でなければならない．
-  if ( handle->genvar() == nullptr &&
-       handle->parameter() == nullptr ) {
-    log_mgr().error_not_a_parameter(__FILE__, __LINE__, ast_expr);
-  }
-
-  return handle;
+  return elb_mgr().new_Primary(ast_expr, decl_ref);
 }
 
 // @brief genvar に対応した定数を生成する．
@@ -234,7 +196,7 @@ ExprGen::instantiate_genvar(
 
 // @brief システム関数/タスクの引数を返す．
 ElbExpr*
-ExprGen::instantiate_sytem_tf_arg(
+ExprGen::instantiate_system_tf_arg(
   ObjHandle* handle,
   const VlScope* parent,
   const AstExpr& ast_expr
@@ -248,7 +210,6 @@ ExprGen::instantiate_sytem_tf_arg(
     // 添字なし
     // - スコープ
     // - プリミティブ
-    // - 宣言要素
     // - 宣言配列
     auto scope = handle->scope();
     if ( scope != nullptr ) {
@@ -258,12 +219,6 @@ ExprGen::instantiate_sytem_tf_arg(
     auto primitive = handle->primitive();
     if ( primitive != nullptr ) {
       return elb_mgr().new_ArgHandle(ast_expr, primitive);
-    }
-
-    auto decl = handle->decl();
-    if ( decl != nullptr ) {
-      auto decl_ref = ElbDeclRef(decl);
-      return elb_mgr().new_Primary(ast_expr, decl_ref);
     }
 
     auto declarray = handle->declarray();
@@ -291,8 +246,7 @@ ExprGen::instantiate_sytem_tf_arg(
       }
     }
   }
-  log_mgr().error_illegal_object(__FILE__, __LINE__, ast_expr);
-  // ダミー
+  // 該当なし．
   return nullptr;
 }
 
@@ -616,19 +570,118 @@ ExprGen::instantiate_minus_partselect(
   return nullptr;
 }
 
+// @brief プライマリに対応するハンドルを求める．
+ObjHandle*
+ExprGen::find_handle(
+  const VlScope* parent,
+  const ElbEnv& env,
+  const AstExpr& ast_expr
+)
+{
+  // 階層付き識別子の時 true
+  auto has_hname = (ast_expr.namebranch_list().size() > 0);
+
+  if ( env.is_constant() ) {
+    // 定数式の場合
+    // [A]
+    if ( has_hname ) {
+      // 階層つき識別子はだめ
+      log_mgr().error_hname_in_ce(__FILE__, __LINE__, ast_expr);
+    }
+    return find_const_handle(parent, ast_expr);
+  }
+  if ( env.inside_constant_function() ) {
+    if ( has_hname ) {
+      // 階層つき識別子はだめ
+      log_mgr().error_hname_in_cf(__FILE__, __LINE__, ast_expr);
+    }
+    // まず関数内の識別子を探索する．
+    auto handle = elb_mgr().find_obj_up(parent, ast_expr,
+					env.constant_function());
+    if ( handle != nullptr ) {
+      return handle;
+    }
+    if ( !env.is_lhs() ) {
+      // 右辺ならモジュール内の定数識別子を探索する．
+      // なんか [A] と共通にできそうな気がする．
+      handle = find_const_handle(parent, ast_expr);
+    }
+    return handle;
+  }
+
+  // 通常のスコープで探索する．
+  // たぶんモジュール内でいいはず．
+  auto handle = elb_mgr().find_obj_up(parent, ast_expr,
+				      parent->parent_module());
+  if ( handle != nullptr ) {
+    return handle;
+  }
+
+  // 見つからなくてもデフォルトネットタイプが kVpiNone でないかぎり
+  // 暗黙の1ビットネット宣言を行う．
+  // ただし識別子に添字がついていたらだめ
+  auto isize = ast_expr.index_list().size();
+  auto parent_module = parent->parent_module();
+  auto def_nettype = parent_module->def_net_type();
+  if ( ast_expr.is_simple() &&
+       !has_hname &&
+       isize == 0 &&
+       def_nettype != VpiNetType::None ) {
+    auto decl = elb_mgr().new_ImpNet(parent, ast_expr, def_nettype);
+
+    auto name = ast_expr.name();
+    handle = elb_mgr().find_obj(parent, name);
+    // 今作ったはずなので絶対見つかるはず．
+    if ( handle == nullptr ) {
+      throw std::logic_error{"handle == nullptr"};
+    }
+    return handle;
+  }
+  log_mgr().error_not_found(__FILE__, __LINE__,
+			    ast_expr.file_region(),
+			    ast_expr.name());
+  return nullptr;
+}
+
+// @brief 定数識別子を探す．
+ObjHandle*
+ExprGen::find_const_handle(
+  const VlScope* parent,
+  const AstExpr& ast_expr
+)
+{
+  // モジュール内の識別子を探索する．
+  auto handle = elb_mgr().find_obj_up(parent, ast_expr, parent->parent_module());
+  if ( handle == nullptr ) {
+    // 見つからなかった．
+    log_mgr().error_not_found(__FILE__, __LINE__,
+			      ast_expr.file_region(),
+			      ast_expr.name());
+  }
+
+  // handle が持つオブジェクトは genvar か parameter でなければならない．
+  if ( handle->genvar() == nullptr &&
+       handle->parameter() == nullptr ) {
+    log_mgr().error_not_a_parameter(__FILE__, __LINE__, ast_expr);
+  }
+
+  return handle;
+}
+
 // @brief decl の型が適切がチェックする．
 void
 ExprGen::check_decl(
   const ElbEnv& env,
   const AstExpr& ast_expr,
-  VpiObjType decl_type,
-  bool is_array,
-  bool has_select
+  const ElbDeclRef& decl_ref
 )
 {
+  bool has_index = ast_expr.index_list().size() > 0;
+  bool has_select = ast_expr.part().is_valid();
+  auto decl_type = decl_ref.declbase()->type();
   if ( env.is_pca_lhs() ) {
     // procedural continuous assignment 文の左辺式
-    if ( is_array ) {
+    if ( has_index ) {
       // 配列要素はダメ
       log_mgr().error_array_in_pca(__FILE__, __LINE__, ast_expr);
     }
@@ -646,7 +699,7 @@ ExprGen::check_decl(
   }
   else if ( env.is_force_lhs() ) {
     // force 文の左辺式
-    if ( is_array ) {
+    if ( has_index ) {
       // 配列要素はダメ
       log_mgr().error_array_in_force(__FILE__, __LINE__, ast_expr);
     }
@@ -665,14 +718,14 @@ ExprGen::check_decl(
   }
   else if ( env.is_net_lhs() ) {
     if ( decl_type != VpiObjType::Net &&
-	 (decl_type != VpiObjType::NetArray || !is_array) ) {
+	 (decl_type != VpiObjType::NetArray || !has_index) ) {
       // net 以外はダメ
       log_mgr().error_illegal_object(__FILE__, __LINE__, ast_expr);
     }
   }
   else if ( env.is_var_lhs() ) {
     if ( decl_type != VpiObjType::Reg &&
-	 (decl_type != VpiObjType::RegArray || !is_array) &&
+	 (decl_type != VpiObjType::RegArray || !has_index) &&
 	 decl_type != VpiObjType::IntegerVar &&
 	 decl_type != VpiObjType::RealVar &&
 	 decl_type != VpiObjType::TimeVar &&
@@ -702,68 +755,6 @@ ExprGen::check_decl(
       log_mgr().error_illegal_object(__FILE__, __LINE__, ast_expr);
     }
   }
-}
-
-// @brief プライマリに対応するハンドルを求める．
-ObjHandle*
-ExprGen::find_handle(
-  const VlScope* parent,
-  const ElbEnv& env,
-  const AstExpr& ast_expr
-)
-{
-  if ( env.is_constant() ) {
-    // 定数式の場合
-    // [A]
-    return find_const_handle(parent, ast_expr);
-  }
-  if ( env.inside_constant_function() ) {
-    // まず関数内の識別子を探索する．
-    auto handle = elb_mgr().find_obj_up(parent, ast_expr,
-					env.constant_function());
-    if ( handle != nullptr ) {
-      return handle;
-    }
-    if ( !env.is_lhs() ) {
-      // 右辺ならモジュール内の定数識別子を探索する．
-      // なんか [A] と共通にできそうな気がする．
-      handle = find_const_handle(parent, ast_expr);
-    }
-    return handle;
-  }
-
-  // 通常のスコープで探索する．
-  // たぶんモジュール内でいいはず．
-  auto handle = elb_mgr().find_obj_up(parent, ast_expr,  parent->parent_module());
-  if ( handle != nullptr ) {
-    return handle;
-  }
-
-  // 見つからなくてもデフォルトネットタイプが kVpiNone でないかぎり
-  // 暗黙の1ビットネット宣言を行う．
-  // ただし識別子に添字がついていたらだめ
-  auto has_hname = (ast_expr.namebranch_list().size() > 0);
-  auto isize = ast_expr.index_list().size();
-  auto parent_module = parent->parent_module();
-  auto def_nettype = parent_module->def_net_type();
-  if ( ast_expr.is_simple() &&
-       !has_hname &&
-       isize == 0 &&
-       def_nettype != VpiNetType::None ) {
-    auto decl = elb_mgr().new_ImpNet(parent, ast_expr, def_nettype);
-
-    auto name = ast_expr.name();
-    handle = elb_mgr().find_obj(parent, name);
-    // 今作ったはずなので絶対見つかるはず．
-    if ( handle == nullptr ) {
-      throw std::logic_error{"handle == nullptr"};
-    }
-    return handle;
-  }
-  log_mgr().error_not_found(__FILE__, __LINE__,
-			    ast_expr.file_region(),
-			    ast_expr.name());
-  return nullptr;
 }
 
 END_NAMESPACE_YM_VERILOG
