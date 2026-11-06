@@ -8,7 +8,17 @@
 
 #include "elaborator/ElbMgr.h"
 #include "EiDeclPrimary.h"
-#include "EiDeclElemPrimary.h"
+#include "EiDeclConstSelect.h"
+#include "EiDeclPlusSelect.h"
+#include "EiDeclMinusSelect.h"
+#include "EiConstDeclElemPrimary.h"
+#include "EiConstDeclElemConstSelect.h"
+#include "EiConstDeclElemPlusSelect.h"
+#include "EiConstDeclElemMinusSelect.h"
+#include "EiVarDeclElemPrimary.h"
+#include "EiVarDeclElemConstSelect.h"
+#include "EiVarDeclElemPlusSelect.h"
+#include "EiVarDeclElemMinusSelect.h"
 #include "elaborator/ElbDeclRef.h"
 #include "ym/vl/VlDeclArray.h"
 
@@ -142,6 +152,7 @@ ElbMgr::new_MinusSelectPrimary(
       throw std::logic_error{"never reached"};
     });
 }
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclPrimary

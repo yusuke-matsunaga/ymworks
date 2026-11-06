@@ -7,7 +7,8 @@
 /// All rights reserved.
 
 #include "elaborator/ElbMgr.h"
-#include "EiTaskFunc.h"
+#include "EiTask.h"
+#include "EiFunction.h"
 #include "elaborator/ElbDecl.h"
 #include "ym/vl/VlIODecl.h"
 #include "ym/vl/VlTime.h"

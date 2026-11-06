@@ -1,0 +1,57 @@
+﻿#ifndef EICONSTDECLELEMMINUSSELECT_H
+#define EICONSTDECLELEMMINUSSELECT_H
+
+/// @file EiConstDeclElemVarSelect.h
+/// @brief EiConstDeclElemVarSelect のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "EiConstDeclElemVarSelect.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiConstDeclElemMinusSelect EiConstDeclElemMinusSelect.h "EiConstDeclElemMinusSelect.h"
+/// @brief 可変インデックスを持つ部分選択を表すクラス
+//////////////////////////////////////////////////////////////////////
+class EiConstDeclElemMinusSelect :
+  public EiConstDeclElemVarSelect
+{
+public:
+
+  /// @brief コンストラクタ
+  EiConstDeclElemMinusSelect(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    const VlDeclArray* obj,  ///< [in] 本体のオブジェクト
+    SizeType array_offset,   ///< [in] 配列位置のオフセット
+    const VlExpr* bit_index, ///< [in] ビット位置のインデックス式
+    SizeType width           ///< [in] 選択するビット幅
+  ) : EiConstDeclElemVarSelect(ast_expr, obj, array_offset,
+			       bit_index, width)
+  {
+  }
+
+  /// @brief デストラクタ
+  ~EiConstDeclElemMinusSelect() = default;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 外部インターフェイス
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
+  ///
+  /// - has_bit_select() == true の場合のみ意味を持つ．
+  /// - 可変ビット選択の場合も true を返す．
+  bool
+  has_minus_bit_select() const override;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // EICONSTDECLELEMMINUSSELECT_H

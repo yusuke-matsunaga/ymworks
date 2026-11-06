@@ -8,6 +8,7 @@
 
 #include "elaborator/ElbMgr.h"
 #include "EiModule.h"
+#include "EiModuleArray.h"
 #include "EiPort.h"
 #include "ym/vl/VlIODecl.h"
 
@@ -27,7 +28,7 @@ ElbMgr::new_Module(
   const AstInst& ast_inst
 )
 {
-  auto mod = new EiModule2(parent, ast_module, ast_head, ast_inst);
+  auto mod = new EiModule(parent, ast_module, ast_head, ast_inst);
   reg_obj(mod);
   mObjDict.add(mod);
   mModuleDefDict.add(mod);
@@ -211,12 +212,12 @@ EiModuleHead::cell() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiModule
+// クラス EiModuleBase
 //////////////////////////////////////////////////////////////////////
 
 // @brief ポート配列とIO配列を初期化する．
 void
-EiModule::init(
+EiModuleBase::init(
   SizeType port_num,
   SizeType io_num
 )
@@ -227,133 +228,133 @@ EiModule::init(
 
 // @brief 型の取得
 VpiObjType
-EiModule::type() const
+EiModuleBase::type() const
 {
   return VpiObjType::Module;
 }
 
 // @brief ファイル位置の取得
 FileRegion
-EiModule::file_region() const
+EiModuleBase::file_region() const
 {
   return head().file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
 const VlScope*
-EiModule::parent_scope() const
+EiModuleBase::parent_scope() const
 {
   return head().parent();
 }
 
 // @brief definition location を返す．
 FileRegion
-EiModule::def_file_region() const
+EiModuleBase::def_file_region() const
 {
   return head().def_file_region();
 }
 
 // @brief definition name を返す．
 std::string
-EiModule::def_name() const
+EiModuleBase::def_name() const
 {
   return head().def_name();
 }
 
 // @brief cell instance のチェック
 bool
-EiModule::is_cell_instance() const
+EiModuleBase::is_cell_instance() const
 {
   return head().is_cell_instance();
 }
 
 // @brief protect のチェック
 bool
-EiModule::is_protected() const
+EiModuleBase::is_protected() const
 {
   return head().is_protected();
 }
 
 // @brief top module の時 true を返す．
 bool
-EiModule::is_top_module() const
+EiModuleBase::is_top_module() const
 {
   return head().is_top_module();
 }
 
 // @brief time unit を返す．
 int
-EiModule::time_unit() const
+EiModuleBase::time_unit() const
 {
   return head().time_unit();
 }
 
 // @brief time precision を返す．
 int
-EiModule::time_precision() const
+EiModuleBase::time_precision() const
 {
   return head().time_precision();
 }
 
 // @brief default net type を返す．
 VpiNetType
-EiModule::def_net_type() const
+EiModuleBase::def_net_type() const
 {
   return head().def_net_type();
 }
 
 // @brief unconnected drive を返す．
 VpiUnconnDrive
-EiModule::unconn_drive() const
+EiModuleBase::unconn_drive() const
 {
   return head().unconn_drive();
 }
 
 // @brief default delay mode を返す．
 VpiDefDelayMode
-EiModule::def_delay_mode() const
+EiModuleBase::def_delay_mode() const
 {
   return head().def_delay_mode();
 }
 
 // @brief default decay time を返す．
 int
-EiModule::def_decay_time() const
+EiModuleBase::def_decay_time() const
 {
   return head().def_decay_time();
 }
 
 // @brief config 情報を返す．
 std::string
-EiModule::config() const
+EiModuleBase::config() const
 {
   return head().config();
 }
 
 // @brief library 情報を返す．
 std::string
-EiModule::library() const
+EiModuleBase::library() const
 {
   return head().library();
 }
 
 // @brief cell 情報を返す．
 std::string
-EiModule::cell() const
+EiModuleBase::cell() const
 {
   return head().cell();
 }
 
 // @brief ポート数を返す．
 SizeType
-EiModule::port_num() const
+EiModuleBase::port_num() const
 {
   return head().port_num();
 }
 
 // @brief ポートの取得
 const VlPort*
-EiModule::port(
+EiModuleBase::port(
   SizeType pos
 ) const
 {
@@ -365,7 +366,7 @@ EiModule::port(
 
 // @brief ポートのリストの取得
 std::vector<const VlPort*>
-EiModule::port_list() const
+EiModuleBase::port_list() const
 {
   std::vector<const VlPort*> ans_list;
   ans_list.reserve(port_num());
@@ -377,26 +378,26 @@ EiModule::port_list() const
 
 // @brief 入出力数を得る．
 SizeType
-EiModule::io_num() const
+EiModuleBase::io_num() const
 {
   return head().io_num();
 }
 
 // @brief 入出力の取得
 const VlIODecl*
-EiModule::io(
+EiModuleBase::io(
   SizeType pos
 ) const
 {
   if ( pos >= io_num() ) {
-    throw std::out_of_range{"EiModule::io(pos): pos is out of range"};
+    throw std::out_of_range{"EiModuleBase::io(pos): pos is out of range"};
   }
   return mIODeclList[pos].get();
 }
 
 // @brief 入出力のリストの取得
 std::vector<const VlIODecl*>
-EiModule::io_list() const
+EiModuleBase::io_list() const
 {
   std::vector<const VlIODecl*> ans_list;
   ans_list.reserve(io_num());
@@ -408,7 +409,7 @@ EiModule::io_list() const
 
 // @brief 宣言要素に対応する入出力を得る．
 const VlIODecl*
-EiModule::find_io(
+EiModuleBase::find_io(
   const VlDecl* decl
 ) const
 {
@@ -420,7 +421,7 @@ EiModule::find_io(
 
 // @brief 入出力を追加する．
 void
-EiModule::add_iodecl(
+EiModuleBase::add_iodecl(
   const VlIODecl* io_decl
 )
 {
@@ -430,7 +431,7 @@ EiModule::add_iodecl(
 
 // @brief ポートを追加する．
 void
-EiModule::add_port(
+EiModuleBase::add_port(
   const AstPort& ast_port,
   ElbExpr* low_conn,
   VpiDir dir
@@ -443,7 +444,7 @@ EiModule::add_port(
 
 // @brief ポートを追加する．
 void
-EiModule::add_port(
+EiModuleBase::add_port(
   const AstIOItem& ast_ioitem,
   ElbExpr* low_conn,
   VpiDir dir
@@ -456,7 +457,7 @@ EiModule::add_port(
 
 // @brief ポートの high_conn を接続する．
 void
-EiModule::set_port_high_conn(
+EiModuleBase::set_port_high_conn(
   SizeType index,
   ElbExpr* high_conn,
   bool conn_by_name
@@ -470,19 +471,19 @@ EiModule::set_port_high_conn(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiModule1
+// クラス EiModuleElem
 //////////////////////////////////////////////////////////////////////
 
 // @brief 初期設定を行う．
 void
-EiModule1::init(
+EiModuleElem::init(
   SizeType port_num,
   SizeType io_num,
   EiModuleArray* module_array,
   int index
 )
 {
-  EiModule::init(port_num, io_num);
+  EiModuleBase::init(port_num, io_num);
 
   mModuleArray = module_array;
   mIndex = index;
@@ -492,7 +493,7 @@ EiModule1::init(
 
 // @brief 名前の取得
 std::string
-EiModule1::name() const
+EiModuleElem::name() const
 {
   std::ostringstream buf;
   buf << mModuleArray->name() << "[" << mIndex << "]";
@@ -501,82 +502,82 @@ EiModule1::name() const
 
 // @brief 配列要素の時 true を返す．
 bool
-EiModule1::is_array() const
+EiModuleElem::is_array() const
 {
   return true;
 }
 
 // @brief インデックスの値を返す．
 int
-EiModule1::index() const
+EiModuleElem::index() const
 {
   return mIndex;
 }
 
 // @brief 親の配列を返す．
 const VlModuleArray*
-EiModule1::module_array() const
+EiModuleElem::module_array() const
 {
   return mModuleArray;
 }
 
 // @brief ヘッダ情報を返す．
 const EiModuleHead&
-EiModule1::head() const
+EiModuleElem::head() const
 {
   return mModuleArray->head();
 }
 
 // @brief ヘッダ情報を返す．
 EiModuleHead&
-EiModule1::head()
+EiModuleElem::head()
 {
   return mModuleArray->head();
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiModule2
+// クラス EiModule
 //////////////////////////////////////////////////////////////////////
 
 // @brief 名前の取得
 std::string
-EiModule2::name() const
+EiModule::name() const
 {
   return mHead.name();
 }
 
 // @brief 配列要素の時 true を返す．
 bool
-EiModule2::is_array() const
+EiModule::is_array() const
 {
   return false;
 }
 
 // @brief インデックスの値を返す．
 int
-EiModule2::index() const
+EiModule::index() const
 {
   return 0;
 }
 
 // @brief 親の配列を返す．
 const VlModuleArray*
-EiModule2::module_array() const
+EiModule::module_array() const
 {
   return nullptr;
 }
 
 // @brief ヘッダ情報を返す．
 const EiModuleHead&
-EiModule2::head() const
+EiModule::head() const
 {
   return mHead;
 }
 
 // @brief ヘッダ情報を返す．
 EiModuleHead&
-EiModule2::head()
+EiModule::head()
 {
   return mHead;
 }

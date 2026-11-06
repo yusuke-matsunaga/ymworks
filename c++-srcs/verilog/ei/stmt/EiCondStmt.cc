@@ -7,7 +7,14 @@
 /// All rights reserved.
 
 #include "elaborator/ElbMgr.h"
-#include "EiCondStmt.h"
+#include "EiWhileStmt.h"
+#include "EiRepeatStmt.h"
+#include "EiWaitStmt.h"
+#include "EiForStmt.h"
+#include "EiForeverStmt.h"
+#include "EiIfStmt.h"
+#include "EiCaseStmt.h"
+#include "EiCaseItem.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/BitVector.h"
 #include "ym/vl/AstStmt.h"

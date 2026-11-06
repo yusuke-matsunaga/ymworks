@@ -29,8 +29,8 @@ ElbMgr::new_PartSelect(
 {
   return new_expr(
     [&]() -> ElbExpr* {
-      return new EiConstPartSelect(ast_expr, parent_expr,
-				   select_width, bit_offset);
+      return new EiPartSelect(ast_expr, parent_expr,
+			      select_width, bit_offset);
     });
 }
 
@@ -81,6 +81,20 @@ EiPartSelect::select_width() const
   return mWidth;
 }
 
+// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
+bool
+EiPartSelect::has_const_bit_select() const
+{
+  return true;
+}
+
+// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
+SizeType
+EiPartSelect::bit_offset() const
+{
+  return mOffset;
+}
+
 // @brief 親の式を返す．
 const VlExpr*
 EiPartSelect::parent_expr() const
@@ -95,25 +109,6 @@ EiPartSelect::_set_reqsize(
 )
 {
   // なにもしない．
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス EiConstPartSelect
-//////////////////////////////////////////////////////////////////////
-
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiConstPartSelect::has_const_bit_select() const
-{
-  return true;
-}
-
-// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
-SizeType
-EiConstPartSelect::bit_offset() const
-{
-  return mOffset;
 }
 
 END_NAMESPACE_YM_VERILOG

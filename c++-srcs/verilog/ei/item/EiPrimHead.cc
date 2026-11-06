@@ -8,6 +8,10 @@
 
 #include "elaborator/ElbMgr.h"
 #include "EiPrimHead.h"
+#include "EiPrimHeadD.h"
+#include "EiPrimHeadU.h"
+#include "EiPrimHeadUD.h"
+#include "EiPrimHeadC.h"
 
 #include "ym/vl/VlUdpDefn.h"
 #include "ym/vl/VlDelay.h"

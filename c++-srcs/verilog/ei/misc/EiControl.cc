@@ -7,7 +7,9 @@
 /// All rights reserved.
 
 #include "elaborator/ElbMgr.h"
-#include "EiControl.h"
+#include "EiDelayControl.h"
+#include "EiEventControl.h"
+#include "EiRepeatControl.h"
 
 #include "elaborator/ElbExpr.h"
 

@@ -8,6 +8,11 @@
 
 #include "elaborator/ElbMgr.h"
 #include "EiUnaryOp.h"
+#include "EiNotOp.h"
+#include "EiBitNegOp.h"
+#include "EiReductionOp.h"
+#include "EiUnaryArithOp.h"
+#include "EiEventEdgeOp.h"
 #include "ym/vl/BitVector.h"
 
 

@@ -7,8 +7,11 @@
 /// All rights reserved.
 
 #include "elaborator/ElbMgr.h"
-#include "EiPrimary.h"
-#include "elaborator/ElbParameter.h"
+#include "EiIOPrimary.h"
+#include "EiDeclItemPrimary.h"
+#include "EiScopePrimary.h"
+#include "EiPrimitivePrimary.h"
+#include "EiDeclArrayPrimary.h"
 #include "ym/vl/VlDecl.h"
 #include "ym/vl/VlDeclArray.h"
 #include "ym/vl/VlPrimitive.h"

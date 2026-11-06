@@ -8,75 +8,10 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiExpr.h"
+#include "EiFcBase.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
-
-//////////////////////////////////////////////////////////////////////
-/// @class EiFcBase EiFuncCall.h "EiFuncCall.h"
-/// @brief function call/system-function call に共通な基底クラス
-//////////////////////////////////////////////////////////////////////
-class EiFcBase :
-  public EiExprBase
-{
-public:
-
-  /// @brief コンストラクタ
-  EiFcBase(
-    const AstExpr& ast_expr,              ///< [in] パース木の定義要素
-    const std::vector<ElbExpr*>& arg_list ///< [in] 引数のリスト
-  ) : EiExprBase(ast_expr),
-      mArgList{arg_list}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~EiFcBase() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // ElbExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 引数の数を返す．
-  SizeType
-  argument_num() const override;
-
-  /// @brief 引数の取得
-  const VlExpr*
-  argument(
-    SizeType pos ///< [in] 位置番号 ( 0 <= pos < argument_num() )
-  ) const override;
-
-  /// @brief 引数のリストの取得
-  std::vector<const VlExpr*>
-  argument_list() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // ElbExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 要求される式の型を計算してセットする．
-  void
-  _set_reqsize(
-    const VlValueType& type ///< [in] 要求される式の型
-  ) override;
-
-
-protected:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // 引数の配列
-  std::vector<ElbExpr*> mArgList;
-
-};
-
 
 //////////////////////////////////////////////////////////////////////
 /// @class EiFuncCall EiFuncCall.h "EiFuncCall.h"
@@ -140,72 +75,6 @@ private:
 
   // 関数
   const VlTaskFunc* mFunc;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class EiSysFuncCall EiFuncCall.h "EiFuncCall.h"
-/// @brief システム関数呼び出しを表すクラス
-//////////////////////////////////////////////////////////////////////
-class EiSysFuncCall :
-  public EiFcBase
-{
-public:
-
-  /// @brief コンストラクタ
-  EiSysFuncCall(
-    const AstExpr& ast_expr,              ///< [in] パース木の定義要素
-    const VlUserSystf* user_systf,        ///< [in] システム関数
-    const std::vector<ElbExpr*>& arg_list ///< [in] 引数のリスト
-  ) : EiFcBase(ast_expr, arg_list),
-      mUserSystf{user_systf}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~EiSysFuncCall() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // VlObj の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 型の取得
-  VpiObjType
-  type() const override;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // VlExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 式のタイプを返す．
-  VlValueType
-  value_type() const override;
-
-  /// @brief 式のタイプを返す．
-  VlExprType
-  expr_type() const override;
-
-  /// @brief システム関数の時に true を返す．
-  bool
-  is_sysfunccall() const override;
-
-  /// @brief 対象のシステム関数を返す．
-  const VlUserSystf*
-  user_systf() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // システム関数
-  const VlUserSystf* mUserSystf;
 
 };
 

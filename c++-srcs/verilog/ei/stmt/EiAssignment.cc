@@ -7,7 +7,12 @@
 /// All rights reserved.
 
 #include "elaborator/ElbMgr.h"
-#include "EiAssignment.h"
+#include "EiNbAssignment.h"
+#include "EiBlkAssignment.h"
+#include "EiAssignStmt.h"
+#include "EiForceStmt.h"
+#include "EiDeassignStmt.h"
+#include "EiReleaseStmt.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/VlControl.h"
 #include "ym/vl/BitVector.h"
@@ -34,8 +39,8 @@ ElbMgr::new_Assignment(
   return new_stmt(
     [&]() -> const VlStmt* {
       if ( block ) {
-	return new EiAssignment(parent, process, ast_stmt,
-				lhs, rhs, control);
+	return new EiBlkAssignment(parent, process, ast_stmt,
+				   lhs, rhs, control);
       }
       else {
 	return new EiNbAssignment(parent, process, ast_stmt,
@@ -150,12 +155,12 @@ EiNbAssignment::control() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiAssignment
+// クラス EiBlkAssignment
 //////////////////////////////////////////////////////////////////////
 
 // @brief 代入のブロッキング/ノンブロッキングの区別の取得
 bool
-EiAssignment::is_blocking() const
+EiBlkAssignment::is_blocking() const
 {
   return true;
 }

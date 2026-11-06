@@ -8,6 +8,12 @@
 
 #include "elaborator/ElbMgr.h"
 #include "EiBinaryOp.h"
+#include "EiCompareOp.h"
+#include "EiBinLogOp.h"
+#include "EiBinBitOp.h"
+#include "EiBinArithOp.h"
+#include "EiPowerOp.h"
+#include "EiShiftOp.h"
 #include "ym/vl/BitVector.h"
 
 
@@ -33,14 +39,14 @@ ElbMgr::new_BinaryOp(
       case VpiOpType::BitOr:
       case VpiOpType::BitXNor:
       case VpiOpType::BitXor:
-	return new EiBinaryBitOp(ast_expr, opr0, opr1);
+	return new EiBinBitOp(ast_expr, opr0, opr1);
 
       case VpiOpType::Add:
       case VpiOpType::Sub:
       case VpiOpType::Mult:
       case VpiOpType::Div:
       case VpiOpType::Mod:
-	return new EiBinaryArithOp(ast_expr, opr0, opr1);
+	return new EiBinArithOp(ast_expr, opr0, opr1);
 
       case VpiOpType::Power:
 	return new EiPowerOp(ast_expr, opr0, opr1);
@@ -53,7 +59,7 @@ ElbMgr::new_BinaryOp(
 
       case VpiOpType::LogAnd:
       case VpiOpType::LogOr:
-	return new EiBinaryLogOp(ast_expr, opr0, opr1);
+	return new EiBinLogOp(ast_expr, opr0, opr1);
 
       case VpiOpType::CaseEq:
       case VpiOpType::CaseNeq:
@@ -135,12 +141,12 @@ EiCompareOp::_set_reqsize(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiBinaryLogOp
+// クラス EiBinLogOp
 //////////////////////////////////////////////////////////////////////
 
 // @brief 式のタイプを返す．
 VlValueType
-EiBinaryLogOp::value_type() const
+EiBinLogOp::value_type() const
 {
   // 常に1ビット符号なし
   return VlValueType{false, true, 1};
@@ -148,7 +154,7 @@ EiBinaryLogOp::value_type() const
 
 // @brief 要求される式の型を計算してセットする．
 void
-EiBinaryLogOp::_set_reqsize(
+EiBinLogOp::_set_reqsize(
   const VlValueType& type
 )
 {
@@ -157,19 +163,19 @@ EiBinaryLogOp::_set_reqsize(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiBinaryBitOp
+// クラス EiBinBitOp
 //////////////////////////////////////////////////////////////////////
 
 // @brief 式のタイプを返す．
 VlValueType
-EiBinaryBitOp::value_type() const
+EiBinBitOp::value_type() const
 {
   return mType;
 }
 
 // @brief 要求される式の型を計算してセットする．
 void
-EiBinaryBitOp::_set_reqsize(
+EiBinBitOp::_set_reqsize(
   const VlValueType& type
 )
 {
@@ -180,19 +186,19 @@ EiBinaryBitOp::_set_reqsize(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiBinaryArithOp
+// クラス EiBinArithOp
 //////////////////////////////////////////////////////////////////////
 
 // @brief 式のタイプを返す．
 VlValueType
-EiBinaryArithOp::value_type() const
+EiBinArithOp::value_type() const
 {
   return mType;
 }
 
 // @brief 要求される式の型を計算してセットする．
 void
-EiBinaryArithOp::_set_reqsize(
+EiBinArithOp::_set_reqsize(
   const VlValueType& type
 )
 {

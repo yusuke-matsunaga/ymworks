@@ -7,8 +7,12 @@
 /// All rights reserved.
 
 #include "elaborator/ElbMgr.h"
-#include "EiMiscStmt.h"
-
+#include "EiEventStmt.h"
+#include "EiNullStmt.h"
+#include "EiTaskCall.h"
+#include "EiSysTaskCall.h"
+#include "EiDisableStmt.h"
+#include "EiCtrlStmt.h"
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbExpr.h"
 

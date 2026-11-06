@@ -1,0 +1,69 @@
+﻿#ifndef EIBITNEGOP_H
+#define EIBITNEGOP_H
+
+/// @file EiBitNegOp.h
+/// @brief EiBitNegOp のヘッダファイル
+/// @author Yusuke Matsunaga (松永 裕介)
+///
+/// Copyright (C) 2025 Yusuke Matsunaga
+/// All rights reserved.
+
+#include "EiUnaryOp.h"
+
+
+BEGIN_NAMESPACE_YM_VERILOG
+
+//////////////////////////////////////////////////////////////////////
+/// @class EiBitNegOp EiBitNegOp.h "EiBitNegOp.h"
+/// @brief ビットワイズ反転演算子
+//////////////////////////////////////////////////////////////////////
+class EiBitNegOp :
+  public EiUnaryOp
+{
+public:
+
+  /// @brief コンストラクタ
+  EiBitNegOp(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbExpr* opr1            ///< [in] オペランド
+  );
+
+  /// @brief デストラクタ
+  ~EiBitNegOp();
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // VlbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 式のタイプを返す．
+  VlValueType
+  value_type() const override;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の設定用の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要求される式の型を計算してセットする．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
+
+
+private:
+  //////////////////////////////////////////////////////////////////////
+  // データメンバ
+  //////////////////////////////////////////////////////////////////////
+
+  // 式の型
+  VlValueType mType;
+
+};
+
+END_NAMESPACE_YM_VERILOG
+
+#endif // EIBITNEGOP_H

@@ -8,6 +8,7 @@
 
 #include "elaborator/ElbMgr.h"
 #include "EiFuncCall.h"
+#include "EiSysFuncCall.h"
 
 #include "ym/vl/VlTaskFunc.h"
 #include "ym/vl/VlUserSystf.h"

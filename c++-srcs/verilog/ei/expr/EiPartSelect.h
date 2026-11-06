@@ -20,16 +20,18 @@ BEGIN_NAMESPACE_YM_VERILOG
 class EiPartSelect :
   public EiExprBase
 {
-protected:
+public:
 
   /// @brief コンストラクタ
   EiPartSelect(
     const AstExpr& ast_expr, ///< [in] パース木の定義要素
     ElbExpr* parent_expr,    ///< [in] 対象の式
-    SizeType select_width    ///< [in] 選択するビット幅
+    SizeType select_width,   ///< [in] 選択するビット幅
+    SizeType bit_offset      ///< [in] ビット位置のオフセット
   ) : EiExprBase(ast_expr),
       mParentExpr{parent_expr},
-      mWidth{select_width}
+      mWidth{select_width},
+      mOffset{bit_offset}
   {
   }
 
@@ -77,6 +79,16 @@ public:
   SizeType
   select_width() const override;
 
+  /// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
+  bool
+  has_const_bit_select() const override;
+
+  /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
+  ///
+  /// - has_const_bit_select() == true の場合のみ意味を持つ．
+  SizeType
+  bit_offset() const override;
+
   /// @brief 親の式を返す．
   const VlExpr*
   parent_expr() const override;
@@ -104,54 +116,6 @@ private:
 
   // 選択するビット幅
   SizeType mWidth;
-
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class EiConstPartSelectPart EiPartSelect.h "EiPartSelect.h"
-/// @brief 固定パート選択式を表すクラス
-//////////////////////////////////////////////////////////////////////
-class EiConstPartSelect :
-  public EiPartSelect
-{
-public:
-
-  /// @brief コンストラクタ
-  EiConstPartSelect(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* parent_expr,    ///< [in] 対象の式
-    SizeType select_width,   ///< [in] 選択するビット幅
-    SizeType bit_offset      ///< [in] ビット位置のオフセット
-  ) : EiPartSelect(ast_expr, parent_expr, select_width),
-      mOffset{bit_offset}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~EiConstPartSelect() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // VlExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-  bool
-  has_const_bit_select() const override;
-
-  /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
-  ///
-  /// - has_const_bit_select() == true の場合のみ意味を持つ．
-  SizeType
-  bit_offset() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
 
   // ビット位置のオフセット
   SizeType mOffset;

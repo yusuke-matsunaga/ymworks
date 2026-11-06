@@ -8,6 +8,8 @@
 
 #include "elaborator/ElbMgr.h"
 #include "EiPrimitive.h"
+#include "EiPrimArray.h"
+#include "EiPrimTerm.h"
 
 #include "ym/vl/VlUdpDefn.h"
 #include "ym/vl/VlDelay.h"
@@ -35,7 +37,7 @@ ElbMgr::new_Primitive(
   const AstInst& ast_inst
 )
 {
-  auto prim = new EiPrimitive2(head, ast_inst);
+  auto prim = new EiPrimitive(head, ast_inst);
   reg_obj(prim);
   mObjDict.add(prim);
   mTagDict.add_primitive(prim);
@@ -65,7 +67,7 @@ ElbMgr::new_CellPrimitive(
   const AstInst& ast_inst
 )
 {
-  auto prim = new EiPrimitive2(head, cell, ast_inst);
+  auto prim = new EiPrimitive(head, cell, ast_inst);
   reg_obj(prim);
   return prim;
 }
@@ -269,12 +271,12 @@ EiPrimArray::ast_inst() const
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiPrimitive
+// クラス EiPrimBase
 //////////////////////////////////////////////////////////////////////
 
 // @brief 型の取得
 VpiObjType
-EiPrimitive::type() const
+EiPrimBase::type() const
 {
   if ( udp_defn() ) {
     return VpiObjType::Udp;
@@ -286,77 +288,77 @@ EiPrimitive::type() const
 
 // @brief ファイル位置の取得
 FileRegion
-EiPrimitive::file_region() const
+EiPrimBase::file_region() const
 {
   return ast_inst().file_region();
 }
 
 // @brief このオブジェクトの属しているスコープを返す．
 const VlScope*
-EiPrimitive::parent_scope() const
+EiPrimBase::parent_scope() const
 {
   return head()->parent_scope();
 }
 
 // @brief primitive type を返す．
 VpiPrimType
-EiPrimitive::prim_type() const
+EiPrimBase::prim_type() const
 {
   return head()->prim_type();
 }
 
 // @brief プリミティブの定義名を返す．
 std::string
-EiPrimitive::def_name() const
+EiPrimBase::def_name() const
 {
   return head()->def_name();
 }
 
 // @brief UPD 定義を返す．
 const VlUdpDefn*
-EiPrimitive::udp_defn() const
+EiPrimBase::udp_defn() const
 {
   return head()->udp_defn();
 }
 
 // @brief セル番号を返す．
 ClibCell
-EiPrimitive::cell() const
+EiPrimBase::cell() const
 {
   return head()->cell();
 }
 
 // @brief 0 の強さを得る．
 VpiStrength
-EiPrimitive::drive0() const
+EiPrimBase::drive0() const
 {
   return head()->drive0();
 }
 
 // @brief 1 の強さを得る．
 VpiStrength
-EiPrimitive::drive1() const
+EiPrimBase::drive1() const
 {
   return head()->drive1();
 }
 
 // @brief 遅延式を得る．
 const VlDelay*
-EiPrimitive::delay() const
+EiPrimBase::delay() const
 {
   return head()->delay();
 }
 
 // @brief ポート数を得る．
 SizeType
-EiPrimitive::port_num() const
+EiPrimBase::port_num() const
 {
   return ast_inst().port_list().size();
 }
 
 // @brief ポート端子を得る．
 const VlPrimTerm*
-EiPrimitive::prim_term(
+EiPrimBase::prim_term(
   SizeType pos
 ) const
 {
@@ -365,7 +367,7 @@ EiPrimitive::prim_term(
 
 // @brief ポート端子のリストを得る．
 std::vector<const VlPrimTerm*>
-EiPrimitive::prim_term_list() const
+EiPrimBase::prim_term_list() const
 {
   std::vector<const VlPrimTerm*> term_list;
   term_list.reserve(port_num());
@@ -377,7 +379,7 @@ EiPrimitive::prim_term_list() const
 
 // @brief ポート配列を初期化する．
 void
-EiPrimitive::init_port(
+EiPrimBase::init_port(
   SizeType port_num
 )
 {
@@ -406,7 +408,7 @@ EiPrimitive::init_port(
 
 // @brief ポート配列を初期化する．
 void
-EiPrimitive::init_port(
+EiPrimBase::init_port(
   SizeType port_num,
   const ClibCell& cell
 )
@@ -434,7 +436,7 @@ EiPrimitive::init_port(
 
 // @brief 接続する．
 void
-EiPrimitive::connect(
+EiPrimBase::connect(
   SizeType pos,
   const VlExpr* expr
 )
@@ -444,12 +446,12 @@ EiPrimitive::connect(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiPrimitive1
+// クラス EiPrimElem
 //////////////////////////////////////////////////////////////////////
 
 // @brief 初期設定を行う．
 void
-EiPrimitive1::init(
+EiPrimElem::init(
   EiPrimArray* prim_array,
   SizeType index,
   SizeType port_num
@@ -463,7 +465,7 @@ EiPrimitive1::init(
 
 // @brief 初期設定を行う．
 void
-EiPrimitive1::init(
+EiPrimElem::init(
   EiPrimArray* prim_array,
   SizeType index,
   SizeType port_num,
@@ -478,7 +480,7 @@ EiPrimitive1::init(
 
 // @brief 名前の取得
 std::string
-EiPrimitive1::name() const
+EiPrimElem::name() const
 {
   std::ostringstream buf;
   buf << mPrimArray->name() << "[" << mIndex << "]";
@@ -487,40 +489,40 @@ EiPrimitive1::name() const
 
 // @brief ヘッダを得る．
 ElbPrimHead*
-EiPrimitive1::head() const
+EiPrimElem::head() const
 {
   return mPrimArray->head();
 }
 
 // @brief パース木のインスタンス定義を得る．
 AstInst
-EiPrimitive1::ast_inst() const
+EiPrimElem::ast_inst() const
 {
   return mPrimArray->ast_inst();
 }
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiPrimitive2
+// クラス EiPrimitive
 //////////////////////////////////////////////////////////////////////
 
 // @brief 名前の取得
 std::string
-EiPrimitive2::name() const
+EiPrimitive::name() const
 {
   return mAstInst.name();
 }
 
 // @brief ヘッダを得る．
 ElbPrimHead*
-EiPrimitive2::head() const
+EiPrimitive::head() const
 {
   return mHead;
 }
 
 // @brief パース木のインスタンス定義を得る．
 AstInst
-EiPrimitive2::ast_inst() const
+EiPrimitive::ast_inst() const
 {
   return mAstInst;
 }

@@ -16,18 +16,23 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 /// @class EiBitSelect EiBitSelect.h "EiBitSelect.h"
 /// @brief ビット選択式を表す基底クラス
+///
+/// 式に対するビット選択はモジュール/プリミティブ配列に対する
+/// 結線のみなので常に固定インデックスとなる．
 //////////////////////////////////////////////////////////////////////
 class EiBitSelect :
   public EiExprBase
 {
-protected:
+public:
 
   /// @brief コンストラクタ
   EiBitSelect(
     const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* base_expr       ///< [in] 対象の式
+    ElbExpr* base_expr,      ///< [in] 対象の式
+    SizeType bit_offset      ///< [in] ビット位置のオフセット
   ) : EiExprBase(ast_expr),
-    mBaseExpr{base_expr}
+      mBaseExpr{base_expr},
+      mOffset{bit_offset}
   {
   }
 
@@ -75,6 +80,16 @@ public:
   SizeType
   select_width() const override;
 
+  /// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
+  bool
+  has_const_bit_select() const override;
+
+  /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
+  ///
+  /// - has_const_bit_select() == true の場合のみ意味を持つ．
+  SizeType
+  bit_offset() const override;
+
   /// @brief 親の式を返す．
   const VlExpr*
   parent_expr() const override;
@@ -100,109 +115,10 @@ private:
   // 対象の式
   ElbExpr* mBaseExpr;
 
-};
-
-
-//////////////////////////////////////////////////////////////////////
-/// @class EiConstBitSelect EiBitSelect.h "EiBitSelect.h"
-/// @brief 固定ビット選択式を表すクラス
-//////////////////////////////////////////////////////////////////////
-class EiConstBitSelect :
-  public EiBitSelect
-{
-public:
-
-  /// @brief コンストラクタ
-  EiConstBitSelect(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* base_expr,      ///< [in] 対象の式
-    SizeType bit_offset      ///< [in] ビット位置のオフセット
-  ) : EiBitSelect(ast_expr, base_expr),
-      mOffset{bit_offset}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~EiConstBitSelect() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // VlExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-  bool
-  has_const_bit_select() const override;
-
-  /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
-  ///
-  /// - has_const_bit_select() == true の場合のみ意味を持つ．
-  SizeType
-  bit_offset() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
   // オフセット
   SizeType mOffset;
 
 };
-
-#if 0
-//////////////////////////////////////////////////////////////////////
-/// @class EiVarBitSelect EiBitSelect.h "EiBitSelect.h"
-/// @brief 可変ビット選択式を表すクラス
-//////////////////////////////////////////////////////////////////////
-class EiVarBitSelect :
-  public EiBitSelect
-{
-public:
-
-  /// @brief コンストラクタ
-  EiVarBitSelect(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* base_expr,      ///< [in] 対象の式
-    ElbExpr* index_expr      ///< [in] ビット選択式
-  ) : EiBitSelect(ast_expr, base_expr),
-    mIndexExpr{index_expr}
-  {
-  }
-
-  /// @brief デストラクタ
-  ~EiVarBitSelect() = default;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // VlExpr の仮想関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-  ///
-  /// - has_bit_select() == true の場合のみ意味を持つ．
-  /// - 可変ビット選択の場合も true を返す．
-  bool
-  has_plus_bit_select() const override;
-
-  /// @brief インデックス式を返す．
-  const VlExpr*
-  bit_index() const override;
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // データメンバ
-  //////////////////////////////////////////////////////////////////////
-
-  // インデックス式
-  ElbExpr* mIndexExpr;
-
-};
-#endif
 
 END_NAMESPACE_YM_VERILOG
 
