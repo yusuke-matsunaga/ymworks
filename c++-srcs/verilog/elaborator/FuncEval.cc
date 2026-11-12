@@ -61,8 +61,7 @@ FuncEval::operator()(
 
   // 出力結果を得る．
   auto ovar = mFunction->ovar();
-  auto ovar_id = ovar->decl_id();
-  auto val = get_val(ovar_id);
+  auto val = get_val(ovar);
 
   return val;
 }
@@ -197,7 +196,7 @@ FuncEval::evaluate_assign(
   auto nl = lhs->elem_num();
   if ( nl == 1 ) {
     auto primary = lhs->elem(0);
-    assign_value(primary, val);
+    assign_primary(primary, val);
   }
   else {
     // 左辺が連結式の場合
@@ -207,7 +206,7 @@ FuncEval::evaluate_assign(
       auto primary = lhs->elem(i);
       auto w = primary->bit_size();
       auto part_val = bv.part_select_op(base + w - 1, base);
-      assign_value(primary, VlValue(part_val));
+      assign_primary(primary, VlValue(part_val));
       base += w;
     }
   }
@@ -215,9 +214,9 @@ FuncEval::evaluate_assign(
   return nullptr;
 }
 
-// @brief 左辺の要素を値を代入する．
+// @brief プライマリに値を代入する．
 void
-FuncEval::assign_value(
+FuncEval::assign_primary(
   const VlExpr* expr,
   const VlValue& val
 )
@@ -233,19 +232,68 @@ FuncEval::assign_value(
   // の3通りがある．
 
   SizeType decl_id = get_decl_id(expr);
-  switch ( expr->select_type() ) {
-  case VlSelectType::NONE:
+  auto stype = expr->select_type();
+  if ( stype ==VlSelectType::NONE ) {
     reg_val(decl_id, val);
-    break;
-  case VlSelectType::CONST:
-    reg_val_const_select(decl_id, val, expr);
-    break;
-  case VlSelectType::PLUS:
-    reg_val_plus_select(decl_id, val, expr);
-    break;
-  case VlSelectType::MINUS:
-    reg_val_minus_select(decl_id, val, expr);
-    break;
+  }
+  else {
+    // ビット/部分選択あり
+    auto decl = expr->decl_base();
+    auto width = expr->bit_size();
+    // 元の値を取り出す．
+    // 初期化が必要なので get_val() は使えない．
+    BitVector bv0;
+    if ( mValMap.count(decl_id) == 0 ) {
+      // 未定義なので X で初期化する．
+      // decl が real type ならエラー
+#warning "TODO: エラー処理"
+      bv0 = BitVector(VlScalarVal::x(), decl->bit_size());
+    }
+    else {
+      auto val0 = mValMap.at(decl_id);
+      if ( !val0.is_bitvector_compat() ) {
+#warning "TODO: エラー処理"
+      }
+      bv0 = val0.bitvector_value();
+    }
+    int lsb, msb;
+    if ( stype == VlSelectType::CONST ) {
+      // 固定インデックス
+      auto offset = expr->bit_offset();
+      lsb = offset;
+      msb = lsb + width - 1;
+    }
+    else {
+      // 可変インデックス
+      auto decl = expr->decl_base();
+      auto index = expr->bit_index();
+      auto index_val = evaluate_int(index);
+      SizeType offset1;
+      if ( !decl->calc_bit_offset(index_val, offset1) ) {
+#warning "TODO: エラー処理"
+      }
+      if ( stype == VlSelectType::PLUS ) {
+	index_val += width - 1;
+      }
+      else { // stype == VlSelectType::MINUS
+	index_val -= width - 1;
+      }
+      SizeType offset2;
+      if ( !decl->calc_bit_offset(index_val, offset2) ) {
+#warning "TODO: エラー処理"
+      }
+      if ( offset1 < offset2 ) {
+	lsb = offset1;
+	msb = offset2;
+      }
+      else {
+	lsb = offset2;
+	msb = offset1;
+      }
+    }
+    bv0.part_select_op(msb, lsb, val.bitvector_value());
+    auto val1 = VlValue(bv0);
+    reg_val(decl_id, val1);
   }
 }
 
@@ -561,79 +609,56 @@ FuncEval::evaluate_primary(
   const VlExpr* expr
 )
 {
+  auto decl_id = get_decl_id(expr);
   // 宣言要素の値を求める．
-  VlValue base_value;
-  switch ( expr->primary_type() ) {
-  case VlPrimaryType::DECL:
-    base_value = evaluate_decl(expr);
-    break;
-  case VlPrimaryType::CONST_DECL_ELEM:
-    base_value = evaluate_const_decl_elem(expr);
-    break;
-  case VlPrimaryType::VAR_DECL_ELEM:
-    base_value = evaluate_var_decl_elem(expr);
-    break;
-  default:
-    throw std::logic_error{"Should not be reached"};
-  }
-#warning "TODO: 未完"
-  switch ( expr->select_type() ) {
-  case VlSelectType::NONE:
+  auto base_value = _get_val(decl_id);
+  auto stype = expr->select_type();
+  if ( stype == VlSelectType::NONE ) {
+    // そのまま
     return base_value;
-  case VlSelectType::CONST:
-    break;
-  case VlSelectType::PLUS:
-    break;
-  case VlSelectType::MINUS:
-    break;
   }
-}
 
-// @brief 単独の宣言要素の値を評価する．
-VlValue
-FuncEval::evaluate_decl(
-  const VlExpr* expr
-)
-{
-  auto decl = expr->decl_obj();
-  auto key = decl->decl_id();
-  return get_val(key);
-}
-
-// @brief 固定インデックスの配列型要素の値を評価する．
-VlValue
-FuncEval::evaluate_const_decl_elem(
-  const VlExpr* expr
-)
-{
-  auto declarray = expr->declarray_obj();
-  auto offset = expr->declarray_offset();
-  auto key = declarray->decl_id(offset);
-  return get_val(key);
-}
-
-// @brief 可変インデックスの配列型要素の値を評価する．
-VlValue
-FuncEval::evaluate_var_decl_elem(
-  const VlExpr* expr
-)
-{
-  auto declarray = expr->declarray_obj();
-  auto index_expr_list = expr->declarray_index_list();
-  auto n = index_expr_list.size();
-  std::vector<int> index_list;
-  index_list.reserve(n);
-  for ( auto index_expr: index_expr_list ) {
-    auto index = evaluate_int(index_expr);
-    index_list.push_back(index);
+  // ビット/部分選択の場合はビットベクタ型に変換する．
+  if ( !base_value.is_bitvector_compat() ) {
+    throw std::logic_error{"src_value.is_bitvector_compat() == false"};
   }
-  SizeType offset;
-  bool stat = declarray->calc_array_offset(index_list, offset);
-  if ( !stat ) {
-    throw std::logic_error{"!stat"};
+  auto decl = expr->decl_base(); // オフセット変換用
+  auto bv = base_value.bitvector_value();
+  auto width = expr->bit_size();
+  int msb, lsb;
+  if ( stype == VlSelectType::CONST ) {
+    auto offset = expr->bit_offset();
+    lsb = offset;
+    msb = lsb + width - 1;
   }
-  auto key = declarray->decl_id(offset);
-  return get_val(key);
+  else {
+    auto index = expr->bit_index();
+    auto index_val = evaluate_int(index);
+    SizeType offset1;
+    if ( !decl->calc_bit_offset(index_val, offset1) ) {
+      throw std::out_of_range{"index out of range"};
+    }
+    if ( stype == VlSelectType::PLUS ) {
+      index_val += width - 1;
+    }
+    else { // stype == VlSelectType::MINUS
+      index_val -= width - 1;
+    }
+    SizeType offset2;
+    if ( !decl->calc_bit_offset(index_val, offset2) ) {
+      throw std::out_of_range{"index out of range"};
+    }
+    if ( offset1 < offset2 ) {
+      lsb = offset1;
+      msb = offset2;
+    }
+    else {
+      lsb = offset2;
+      msb = offset1;
+    }
+  }
+  auto bv1 = bv.part_select_op(msb, lsb);
+  return VlValue(bv1);
 }
 
 // @brief 関数呼び出しに対して式の値を評価する．
@@ -738,6 +763,7 @@ FuncEval::reg_val(
   mValMap.emplace(key, val);
 }
 
+#if 0
 // @brief 値を登録する．
 void
 FuncEval::reg_val_const_select(
@@ -835,10 +861,21 @@ FuncEval::_reg_val(
   bv.part_select_op(msb, lsb, val.bitvector_value());
   mValMap.emplace(key, VlValue(bv));
 }
+#endif
 
 // @brief 値を取り出す．
 VlValue
 FuncEval::get_val(
+  const VlDecl* obj
+) const
+{
+  auto key = obj->decl_id();
+  return _get_val(key);
+}
+
+// @brief 値を取り出す．
+VlValue
+FuncEval::_get_val(
   SizeType key
 ) const
 {

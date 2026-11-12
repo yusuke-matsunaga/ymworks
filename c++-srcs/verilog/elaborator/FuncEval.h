@@ -152,11 +152,11 @@ private:
     const VlCaseItem* caseitem ///< [in] 対象の caseitem
   );
 
-  /// @brief 左辺の要素を値を代入する．
+  /// @brief プライマリに値を代入する．
   void
-  assign_value(
-    const VlExpr* lhs, ///< [in] 左辺式
-    const VlValue& val ///< [in] 値
+  assign_primary(
+    const VlExpr* expr, ///< [in] プライマリ式
+    const VlValue& val  ///< [in] 値
   );
 
 
@@ -250,6 +250,7 @@ private:
     const VlValue& val ///< [in] 値
   );
 
+#if 0
   /// @brief 値を登録する．
   ///
   /// 固定インデックスのビット/部分選択つき
@@ -288,10 +289,17 @@ private:
     SizeType msb,
     SizeType lsb
   );
+#endif
 
   /// @brief 値を取り出す．
   VlValue
   get_val(
+    const VlDecl* obj ///< [in] 宣言要素
+  ) const;
+
+  /// @brief 値を取り出す．
+  VlValue
+  _get_val(
     SizeType key ///< [in] キー
   ) const;
 
