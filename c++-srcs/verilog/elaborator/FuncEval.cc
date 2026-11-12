@@ -61,7 +61,8 @@ FuncEval::operator()(
 
   // 出力結果を得る．
   auto ovar = mFunction->ovar();
-  auto val = get_val(ovar);
+  auto ovar_id = ovar->decl_id();
+  auto val = get_val(ovar_id);
 
   return val;
 }
@@ -611,7 +612,7 @@ FuncEval::evaluate_primary(
 {
   auto decl_id = get_decl_id(expr);
   // 宣言要素の値を求める．
-  auto base_value = _get_val(decl_id);
+  auto base_value = get_val(decl_id);
   auto stype = expr->select_type();
   if ( stype == VlSelectType::NONE ) {
     // そのまま
@@ -763,119 +764,9 @@ FuncEval::reg_val(
   mValMap.emplace(key, val);
 }
 
-#if 0
-// @brief 値を登録する．
-void
-FuncEval::reg_val_const_select(
-  SizeType key,
-  const VlValue& val,
-  const VlExpr* expr
-)
-{
-  auto offset = expr->bit_offset();
-  auto width = expr->bit_size();
-  auto msb = offset + width - 1;
-  auto lsb = offset;
-  _reg_val(key, val, msb, lsb);
-}
-
-// @brief 値を登録する．
-void
-FuncEval::reg_val_plus_select(
-  SizeType key,
-  const VlValue& val,
-  const VlExpr* expr
-)
-{
-  auto decl = expr->decl_base();
-  auto index_expr = expr->bit_index();
-  auto index1_val = evaluate_int(index_expr);
-  SizeType offset1;
-  if ( !decl->calc_bit_offset(index1_val, offset1) ) {
-    throw std::out_of_range{"index out of rnage"};
-  }
-  auto width = expr->bit_size();
-  auto index2_val = index1_val + width;
-  SizeType offset2;
-  if ( !decl->calc_bit_offset(index2_val, offset2) ) {
-    throw std::out_of_range{"index out of rnage"};
-  }
-  // :+ とエンディアンは別ものなので補正する．
-  if ( offset1 > offset2 ) {
-    std::swap(offset1, offset2);
-  }
-  _reg_val(key, val, offset2, offset1);
-}
-
-// @brief 値を登録する．
-void
-FuncEval::reg_val_minus_select(
-  SizeType key,
-  const VlValue& val,
-  const VlExpr* expr
-)
-{
-  auto decl = expr->decl_base();
-  auto index_expr = expr->bit_index();
-  auto index1_val = evaluate_int(index_expr);
-  SizeType offset1;
-  if ( !decl->calc_bit_offset(index1_val, offset1) ) {
-    throw std::out_of_range{"index out of rnage"};
-  }
-  auto width = expr->bit_size();
-  auto index2_val = index1_val - width + 1;
-  SizeType offset2;
-  if ( !decl->calc_bit_offset(index2_val, offset2) ) {
-    throw std::out_of_range{"index out of rnage"};
-  }
-  // :- とエンディアンは別ものなので補正する．
-  if ( offset1 > offset2 ) {
-    std::swap(offset1, offset2);
-  }
-  _reg_val(key, val, offset2, offset1);
-}
-
-// @brief reg_val() の下請け関数
-void
-FuncEval::_reg_val(
-  SizeType key,
-  const VlValue& val,
-  SizeType msb,
-  SizeType lsb
-)
-{
-  BitVector bv;
-  if ( mValMap.count(key) > 0 ) {
-    auto val0 = mValMap.at(key);
-    if ( !val0.is_bitvector_compat() ) {
-      throw std::logic_error{"!val0.is_bitvector_compat()"};
-    }
-    bv = val0.bitvector_value();
-  }
-  else {
-#warning "Xの初期値を用意する必要がある．"
-    // そのためにはビット幅がわからないといけない．
-    //bv = BitVector(VlScalarVal::x(), obj->bit_size());
-  }
-
-  bv.part_select_op(msb, lsb, val.bitvector_value());
-  mValMap.emplace(key, VlValue(bv));
-}
-#endif
-
 // @brief 値を取り出す．
 VlValue
 FuncEval::get_val(
-  const VlDecl* obj
-) const
-{
-  auto key = obj->decl_id();
-  return _get_val(key);
-}
-
-// @brief 値を取り出す．
-VlValue
-FuncEval::_get_val(
   SizeType key
 ) const
 {

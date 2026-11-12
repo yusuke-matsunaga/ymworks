@@ -250,56 +250,9 @@ private:
     const VlValue& val ///< [in] 値
   );
 
-#if 0
-  /// @brief 値を登録する．
-  ///
-  /// 固定インデックスのビット/部分選択つき
-  void
-  reg_val_const_select(
-    SizeType key,       ///< [in] キー
-    const VlValue& val, ///< [in] 値
-    const VlExpr* expr  ///< [in] 対象の式
-  );
-
-  /// @brief 値を登録する．
-  ///
-  /// 可変プラスインデックスのビット/部分選択つき
-  void
-  reg_val_plus_select(
-    SizeType key,       ///< [in] キー
-    const VlValue& val, ///< [in] 値
-    const VlExpr* expr  ///< [in] 対象の式
-  );
-
-  /// @brief 値を登録する．
-  ///
-  /// 可変プラスインデックスのビット/部分選択つき
-  void
-  reg_val_minus_select(
-    SizeType key,       ///< [in] キー
-    const VlValue& val, ///< [in] 値
-    const VlExpr* expr  ///< [in] 対象の式
-  );
-
-  /// @brief reg_val() の下請け関数
-  void
-  _reg_val(
-    SizeType key,
-    const VlValue& val,
-    SizeType msb,
-    SizeType lsb
-  );
-#endif
-
   /// @brief 値を取り出す．
   VlValue
   get_val(
-    const VlDecl* obj ///< [in] 宣言要素
-  ) const;
-
-  /// @brief 値を取り出す．
-  VlValue
-  _get_val(
     SizeType key ///< [in] キー
   ) const;
 
