@@ -73,20 +73,6 @@ EiBitSelect::is_select() const
   return true;
 }
 
-// @brief 宣言要素に対する部分選択のビット幅を返す．
-SizeType
-EiBitSelect::select_width() const
-{
-  return 1;
-}
-
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiBitSelect::has_const_bit_select() const
-{
-  return true;
-}
-
 // @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
 SizeType
 EiBitSelect::bit_offset() const

@@ -17,6 +17,7 @@
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbDeclRef.h"
+#include "elaborator/ElbSelecter.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbExpr.h"
 #include "elaborator/RangeVal.h"
@@ -220,24 +221,26 @@ ModuleGen::instantiate_ports(
     auto n = ast_port.portref_list().size();
     if ( n == 0 ) {
       // 空のポートの場合
-      module->add_port(AstPort(), nullptr, VpiDir::NoDirection);
+      module->add_port(FileRegion{}, nullptr, nullptr, VpiDir::NoDirection);
     }
     else if ( n == 1 ) {
       // 単一の要素の場合
       auto ast_expr = ast_port.portref_list().front();
       auto portref = instantiate_portref(module, ast_expr);
-      auto low_conn = portref.expr;
+      auto expr = elb_mgr().new_Primary(portref.primary);
+      auto low_conn = elb_mgr().new_Term(expr);
       auto dir = portref.dir;
-      module->add_port(ast_port, low_conn, dir);
+      module->add_port(ast_port.file_region(), ast_port.ext_name(),
+		       low_conn, dir);
     }
     else if ( n > 1 ) {
       // 複数要素の結合の場合
-      std::vector<ElbExpr*> expr_list;
-      expr_list.reserve(n);
+      std::vector<ElbPrimary> primary_list;
+      primary_list.reserve(n);
       VpiDir dir = VpiDir::NoDirection;
       for ( auto ast_expr: ast_port.portref_list() ) {
 	auto portref = instantiate_portref(module, ast_expr);
-	expr_list.push_back(portref.expr);
+	primary_list.push_back(portref.primary);
 	if ( dir == VpiDir::NoDirection ) {
 	  dir = portref.dir;
 	}
@@ -245,8 +248,9 @@ ModuleGen::instantiate_ports(
 	  dir = VpiDir::MixedIO;
 	}
       }
-      auto low_conn = elb_mgr().new_ConcatOp(ast_port.expr(), expr_list);
-      module->add_port(ast_port, low_conn, dir);
+      auto low_conn = elb_mgr().new_Term(primary_list);
+      module->add_port(ast_port.file_region(), ast_port.ext_name(),
+		       low_conn, dir);
     }
   }
 }
@@ -288,30 +292,42 @@ ModuleGen::instantiate_portref(
     log_mgr().error_illegal_port(__FILE__, __LINE__,
 				 ast_expr.file_region());
   }
-  auto dir = io_decl->direction();
-
   auto decl_ref = ElbDeclRef(decl);
+  auto selecter = instantiate_selecter(module, ast_expr, decl);
+  auto primary = ElbPrimary(ast_expr, decl_ref, selecter);
+  auto dir = io_decl->direction();
+  return PortRefOut{primary, dir};
+}
 
-  // 添字の部分を実体化する．
-  AstExpr ast_index;
+// @brief ポート参照式のビット/部分選択子を作る．
+ElbSelecter
+ModuleGen::instantiate_selecter(
+  const VlModule* module,
+  const AstExpr& ast_expr,
+  const VlDecl* decl
+)
+{
+  // ビット選択子
+  AstExpr ast_bit;
   if ( !ast_expr.index_list().empty() ) {
-    ast_index = ast_expr.index_list().front();
+    ast_bit = ast_expr.index_list().front();
   }
-  if ( ast_index.is_valid() ) {
-    int index_val = evaluate_int(module, ast_index);
+  if ( ast_bit.is_valid() ) {
+    // ビット選択
+    int index_val = evaluate_int(module, ast_bit);
     SizeType offset;
     bool stat = decl->calc_bit_offset(index_val, offset);
     if ( !stat ) {
       // 添字が範囲外
       log_mgr().warning_index_out_of_range(__FILE__, __LINE__,
-					   ast_index.file_region());
+					   ast_bit.file_region());
     }
-    auto expr = elb_mgr().new_ConstSelectPrimary(ast_expr, decl_ref, offset);
-    return PortRefOut{expr, dir};
+    return ElbSelecter::new_CONST(1, offset);
   }
 
   auto ast_part = ast_expr.part();
   if ( ast_part.is_valid() ) {
+    // 部分選択
     auto range = evaluate_range(module, ast_part);
     SizeType left_offset;
     bool stat1 = decl->calc_bit_offset(range.left, left_offset);
@@ -337,12 +353,11 @@ ModuleGen::instantiate_portref(
       offset = right_offset;
       width = left_offset - right_offset + 1;
     }
-    auto expr = elb_mgr().new_ConstSelectPrimary(ast_expr, decl_ref, offset, width);
-    return PortRefOut{expr, dir};
+    return ElbSelecter::new_CONST(width, offset);
   }
 
-  auto expr = elb_mgr().new_Primary(ast_expr, decl_ref);
-  return PortRefOut{expr, dir};
+  // 選択なし
+  return ElbSelecter();
 }
 
 // port の生成を行う．
@@ -382,8 +397,10 @@ ModuleGen::instantiate_ports(
 	throw std::logic_error{"decl == nullptr"};
       }
 
-      auto low_conn = elb_mgr().new_Primary(ast_ioitem, decl);
-      module->add_port(ast_ioitem, low_conn, dir);
+      auto expr = elb_mgr().new_Primary(ast_ioitem, decl);
+      auto low_conn = elb_mgr().new_Term(expr);
+      module->add_port(ast_ioitem.file_region(), ast_ioitem.name(),
+		       low_conn, dir);
     }
   }
 }

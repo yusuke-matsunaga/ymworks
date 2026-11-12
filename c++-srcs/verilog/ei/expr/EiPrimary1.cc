@@ -19,7 +19,7 @@
 #include "EiVarDeclElemConstSelect.h"
 #include "EiVarDeclElemPlusSelect.h"
 #include "EiVarDeclElemMinusSelect.h"
-#include "elaborator/ElbDeclRef.h"
+#include "elaborator/ElbPrimary.h"
 #include "ym/vl/VlDeclArray.h"
 
 
@@ -32,121 +32,93 @@ BEGIN_NAMESPACE_YM_VERILOG
 // @brief プライマリ式を生成する．
 ElbExpr*
 ElbMgr::new_Primary(
-  const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref
+  const ElbPrimary& primary
 )
 {
-  return new_expr(
-    [&]() -> ElbExpr* {
-      if ( decl_ref.is_decl() ) {
-	auto decl = decl_ref.decl();
-	return new EiDeclPrimary(ast_expr, decl);
-      }
-      if ( decl_ref.is_declarray() ) {
-	auto declarray = decl_ref.declarray();
-	if ( decl_ref.is_const_index() ) {
-	  return new EiConstDeclElemPrimary(ast_expr, declarray,
-					    decl_ref.offset());
-	}
-	else {
-	  return new EiVarDeclElemPrimary(ast_expr, declarray,
-					  decl_ref.index_list());
-	}
-      }
-      throw std::logic_error{"never reached"};
-    });
+  // ElbDeclRef と ElbSelecter の2次元マトリックスになっている．
+  auto& ast_expr = primary.ast_expr();
+  auto& decl_ref = primary.decl_ref();
+  auto& selecter = primary.selecter();
+
+  return new_Primary(ast_expr, decl_ref, selecter);
 }
 
-// @brief 固定部分選択に対応するプライマリ式を生成する．
+// @brief プライマリ式を生成する．
 ElbExpr*
-ElbMgr::new_ConstSelectPrimary(
+ElbMgr::new_Primary(
   const AstExpr& ast_expr,
   const ElbDeclRef& decl_ref,
-  SizeType bit_offset,
-  SizeType width
+  const ElbSelecter& selecter
 )
 {
   return new_expr(
     [&]() -> ElbExpr* {
       if ( decl_ref.is_decl() ) {
 	auto decl = decl_ref.decl();
-	return new EiDeclConstSelect(ast_expr, decl, bit_offset, width);
+	switch ( selecter.type() ) {
+	case VlSelectType::NONE:
+	  return new EiDeclPrimary(ast_expr, decl);
+	case VlSelectType::CONST:
+	  return new EiDeclConstSelect(ast_expr, decl,
+				       selecter.bit_offset(),
+				       selecter.select_width());
+	case VlSelectType::PLUS:
+	  return new EiDeclPlusSelect(ast_expr, decl,
+				      selecter.bit_index_expr(),
+				      selecter.select_width());
+	case VlSelectType::MINUS:
+	  return new EiDeclMinusSelect(ast_expr, decl,
+				       selecter.bit_index_expr(),
+				       selecter.select_width());
+	}
       }
       if ( decl_ref.is_declarray() ) {
 	auto declarray = decl_ref.declarray();
 	if ( decl_ref.is_const_index() ) {
-	  return new EiConstDeclElemConstSelect(ast_expr, declarray,
-						decl_ref.offset(),
-						bit_offset, width);
+	  auto array_offset = decl_ref.offset();
+	  switch ( selecter.type() ) {
+	  case VlSelectType::NONE:
+	    return new EiConstDeclElemPrimary(ast_expr, declarray,
+					      array_offset);
+	  case VlSelectType::CONST:
+	    return new EiConstDeclElemConstSelect(ast_expr, declarray,
+						  array_offset,
+						  selecter.bit_offset(),
+						  selecter.select_width());
+	  case VlSelectType::PLUS:
+	    return new EiConstDeclElemPlusSelect(ast_expr, declarray,
+						 array_offset,
+						 selecter.bit_index_expr(),
+						 selecter.select_width());
+	  case VlSelectType::MINUS:
+	    return new EiConstDeclElemMinusSelect(ast_expr, declarray,
+						  array_offset,
+						  selecter.bit_index_expr(),
+						  selecter.select_width());
+	  }
 	}
 	else {
-	  return new EiVarDeclElemConstSelect(ast_expr, declarray,
-					      decl_ref.index_list(),
-					      bit_offset, width);
-	}
-      }
-      throw std::logic_error{"never reached"};
-    });
-}
-
-// @brief 可変プラス部分選択に対応するプライマリ式を生成する．
-ElbExpr*
-ElbMgr::new_PlusSelectPrimary(
-  const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref,
-  const VlExpr* bit_index,
-  SizeType width
-)
-{
-  return new_expr(
-    [&]() -> ElbExpr* {
-      if ( decl_ref.is_decl() ) {
-	auto decl = decl_ref.decl();
-	return new EiDeclPlusSelect(ast_expr, decl, bit_index, width);
-      }
-      if ( decl_ref.is_declarray() ) {
-	auto declarray = decl_ref.declarray();
-	if ( decl_ref.is_const_index() ) {
-	  return new EiConstDeclElemPlusSelect(ast_expr, declarray,
-					       decl_ref.offset(),
-					       bit_index, width);
-	}
-	else {
-	  return new EiVarDeclElemPlusSelect(ast_expr, declarray,
-					     decl_ref.index_list(),
-					     bit_index, width);
-	}
-      }
-      throw std::logic_error{"never reached"};
-    });
-}
-
-// @brief 可変マイナス部分選択に対応するプライマリ式を生成する．
-ElbExpr*
-ElbMgr::new_MinusSelectPrimary(
-  const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref,
-  const VlExpr* bit_index,
-  SizeType width
-)
-{
-  return new_expr(
-    [&]() -> ElbExpr* {
-      if ( decl_ref.is_decl() ) {
-	auto decl = decl_ref.decl();
-	return new EiDeclMinusSelect(ast_expr, decl, bit_index, width);
-      }
-      if ( decl_ref.is_declarray() ) {
-	auto declarray = decl_ref.declarray();
-	if ( decl_ref.is_const_index() ) {
-	  return new EiConstDeclElemMinusSelect(ast_expr, declarray,
-						decl_ref.offset(),
-						bit_index, width);
-	}
-	else {
-	  return new EiVarDeclElemMinusSelect(ast_expr, declarray,
-					      decl_ref.index_list(),
-					      bit_index, width);
+	  auto index_list = decl_ref.index_list();
+	  switch ( selecter.type() ) {
+	  case VlSelectType::NONE:
+	    return new EiVarDeclElemPrimary(ast_expr, declarray,
+					    index_list);
+	  case VlSelectType::CONST:
+	    return new EiVarDeclElemConstSelect(ast_expr, declarray,
+						index_list,
+						selecter.bit_offset(),
+						selecter.select_width());
+	  case VlSelectType::PLUS:
+	    return new EiVarDeclElemPlusSelect(ast_expr, declarray,
+					       index_list,
+					       selecter.bit_index_expr(),
+					       selecter.select_width());
+	  case VlSelectType::MINUS:
+	    return new EiVarDeclElemMinusSelect(ast_expr, declarray,
+						index_list,
+						selecter.bit_index_expr(),
+						selecter.select_width());
+	  }
 	}
       }
       throw std::logic_error{"never reached"};
@@ -186,42 +158,28 @@ EiDeclPrimary::decl_obj() const
   return mObj;
 }
 
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiDeclPrimary::select_type() const
+{
+  return VlSelectType::NONE;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclSelect
 //////////////////////////////////////////////////////////////////////
 
-/// @brief 宣言要素に対するビット/部分選択を持つ時 true を返す．
-bool
-EiDeclSelect::has_bit_select() const
+// @brief 式のタイプを返す．
+VlValueType
+EiDeclSelect::value_type() const
 {
-  return true;
+  return VlValueType(false, true, mWidth);
 }
 
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiDeclSelect::has_const_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiDeclSelect::has_plus_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiDeclSelect::has_minus_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対する部分選択のビット幅を返す．
+// @brief 式のビット幅を返す．
 SizeType
-EiDeclSelect::select_width() const
+EiDeclSelect::bit_size() const
 {
   return mWidth;
 }
@@ -231,11 +189,11 @@ EiDeclSelect::select_width() const
 // クラス EiDeclConstSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiDeclConstSelect::has_const_bit_select() const
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiDeclConstSelect::select_type() const
 {
-  return true;
+  return VlSelectType::CONST;
 }
 
 // @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
@@ -262,11 +220,12 @@ EiDeclVarSelect::bit_index() const
 // クラス EiDeclPlusSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiDeclPlusSelect::has_plus_bit_select() const
+
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiDeclPlusSelect::select_type() const
 {
-  return true;
+  return VlSelectType::PLUS;
 }
 
 
@@ -274,11 +233,11 @@ EiDeclPlusSelect::has_plus_bit_select() const
 // クラス EiDeclMinusSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiDeclMinusSelect::has_minus_bit_select() const
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiDeclMinusSelect::select_type() const
 {
-  return true;
+  return VlSelectType::MINUS;
 }
 
 
@@ -331,37 +290,16 @@ EiConstDeclElemPrimary::declarray_offset() const
 // クラス EiConstDeclElemSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対するビット/部分選択を持つ時 true を返す．
-bool
-EiConstDeclElemSelect::has_bit_select() const
+// @brief 式のタイプを返す．
+VlValueType
+EiConstDeclElemSelect::value_type() const
 {
-  return true;
+  return VlValueType(false, true, mWidth);
 }
 
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiConstDeclElemSelect::has_const_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiConstDeclElemSelect::has_plus_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiConstDeclElemSelect::has_minus_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対する部分選択のビット幅を返す．
+// @brief 式のビット幅を返す．
 SizeType
-EiConstDeclElemSelect::select_width() const
+EiConstDeclElemSelect::bit_size() const
 {
   return mWidth;
 }
@@ -371,11 +309,11 @@ EiConstDeclElemSelect::select_width() const
 // クラス EiConstDeclElemConstSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiConstDeclElemConstSelect::has_const_bit_select() const
+/// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiConstDeclElemConstSelect::select_type() const
 {
-  return true;
+  return VlSelectType::CONST;
 }
 
 // @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
@@ -402,11 +340,11 @@ EiConstDeclElemVarSelect::bit_index() const
 // クラス EiConstDeclElemPlusSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiConstDeclElemPlusSelect::has_plus_bit_select() const
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiConstDeclElemPlusSelect::select_type() const
 {
-  return true;
+  return VlSelectType::PLUS;
 }
 
 
@@ -414,11 +352,11 @@ EiConstDeclElemPlusSelect::has_plus_bit_select() const
 // クラス EiConstDeclElemMinusSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiConstDeclElemMinusSelect::has_minus_bit_select() const
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiConstDeclElemMinusSelect::select_type() const
 {
-  return true;
+  return VlSelectType::MINUS;
 }
 
 
@@ -438,37 +376,16 @@ EiVarDeclElemPrimary::declarray_index_list() const
 // クラス EiVarDeclElemSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対するビット/部分選択を持つ時 true を返す．
-bool
-EiVarDeclElemSelect::has_bit_select() const
+// @brief 式のタイプを返す．
+VlValueType
+EiVarDeclElemSelect::value_type() const
 {
-  return true;
+  return VlValueType(false, true, mWidth);
 }
 
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiVarDeclElemSelect::has_const_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiVarDeclElemSelect::has_plus_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiVarDeclElemSelect::has_minus_bit_select() const
-{
-  return false;
-}
-
-// @brief 宣言要素に対する部分選択のビット幅を返す．
+// @brief 式のビット幅を返す．
 SizeType
-EiVarDeclElemSelect::select_width() const
+EiVarDeclElemSelect::bit_size() const
 {
   return mWidth;
 }
@@ -478,11 +395,11 @@ EiVarDeclElemSelect::select_width() const
 // クラス EiVarDeclElemConstSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiVarDeclElemConstSelect::has_const_bit_select() const
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiVarDeclElemConstSelect::select_type() const
 {
-  return true;
+  return VlSelectType::CONST;
 }
 
 // @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
@@ -509,11 +426,11 @@ EiVarDeclElemVarSelect::bit_index() const
 // クラス EiVarDeclElemPlusSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiVarDeclElemPlusSelect::has_plus_bit_select() const
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiVarDeclElemPlusSelect::select_type() const
 {
-  return true;
+  return VlSelectType::PLUS;
 }
 
 
@@ -521,11 +438,11 @@ EiVarDeclElemPlusSelect::has_plus_bit_select() const
 // クラス EiVarDeclElemMinusSelect
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiVarDeclElemMinusSelect::has_minus_bit_select() const
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiVarDeclElemMinusSelect::select_type() const
 {
-  return true;
+  return VlSelectType::MINUS;
 }
 
 END_NAMESPACE_YM_VERILOG

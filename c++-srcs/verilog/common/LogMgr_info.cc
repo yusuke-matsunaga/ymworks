@@ -16,6 +16,7 @@
 #include "ym/vl/VlContAssign.h"
 #include "ym/vl/VlDeclArray.h"
 #include "ym/vl/VlExpr.h"
+#include "ym/vl/VlTerm.h"
 #include "ym/vl/VlModule.h"
 
 

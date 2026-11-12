@@ -67,14 +67,19 @@ public:
   SizeType
   port_index() const = 0;
 
-  /// @brief 上位の接続先を返す．
+  /// @brief 上位の接続先を返す(入力ポート用)．
   virtual
   const VlExpr*
-  high_conn() const = 0;
+  high_conn_expr() const = 0;
+
+  /// @brief 上位の接続先を返す(出力ポート用)．
+  virtual
+  const VlTerm*
+  high_conn_term() const = 0;
 
   /// @brief 下位の接続先を返す．
   virtual
-  const VlExpr*
+  const VlTerm*
   low_conn() const = 0;
 
 };

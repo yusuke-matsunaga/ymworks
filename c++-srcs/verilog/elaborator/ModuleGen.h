@@ -10,6 +10,7 @@
 
 #include "ym/verilog.h"
 #include "ym/vl/Ast.h"
+#include "elaborator/ElbPrimary.h"
 #include "ElbProxy.h"
 
 
@@ -26,8 +27,8 @@ public:
 
   /// @brief ポート参照式の生成結果
   struct PortRefOut {
-    ElbExpr* expr;    ///< 生成された式
-    VpiDir dir;       ///< 方向
+    ElbPrimary primary; ///< プライマリ
+    VpiDir dir;         ///< 方向
   };
 
 
@@ -102,6 +103,14 @@ private:
   instantiate_portref(
     ElbModule* module,         ///< [in] 親のモジュール
     const AstExpr& ast_portref ///< [in] パース木の portref 定義
+  );
+
+  /// @brief ポート参照式のビット/部分選択子を作る．
+  ElbSelecter
+  instantiate_selecter(
+    const VlModule* module,  ///< [in] 親のモジュール
+    const AstExpr& ast_expr, ///< [in] ポート参照式
+    const VlDecl* decl       ///< [in] 対象の宣言要素
   );
 
   /// @brief port の生成を行う(Verilog2001用)．

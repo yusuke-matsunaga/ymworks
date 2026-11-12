@@ -17,7 +17,9 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 class ElbEnv;
+class ElbPrimary;
 class ElbDeclRef;
+class ElbSelecter;
 
 //////////////////////////////////////////////////////////////////////
 /// @class ExprGen ExprGen.h "ExprGen.h"
@@ -86,10 +88,10 @@ public:
   );
 
   /// @brief AstExpr から左辺式を生成する
-  /// @return 生成された ElbExpr のポインタを返す．
+  /// @return 生成された ElbPrimary (のリスト)を返す．
   ///
-  /// 不適切な式ならば ElbError 例外を送出する．
-  ElbExpr*
+  /// - 不適切な式ならば ElbError 例外を送出する．
+  std::vector<ElbPrimary>
   instantiate_lhs(
     const VlScope* parent,  ///< [in] 親のスコープ
     const ElbEnv& env,	    ///< [in] 生成時の環境
@@ -97,10 +99,11 @@ public:
   );
 
   /// @brief AstExpr から継続的代入文の左辺式を生成する
-  /// @return 生成された ElbExpr のポインタを返す．
+  /// @return 生成された ElbPrimary (のリスト)を返す．
   ///
-  /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
-  ElbExpr*
+  /// - 不適切な式ならばエラーメッセージを出力し nullptr を返す．
+  /// - instantiate_lhs() との違いは可変インデックスを許さないこと．
+  std::vector<ElbPrimary>
   instantiate_net_lhs(
     const VlScope* parent,  ///< [in] 親のスコープ
     const AstExpr& ast_expr ///< [in] 式を表すパース木
@@ -155,18 +158,6 @@ private:
   // 下請け関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief AstExpr から左辺式を生成する
-  /// @return 生成した式を返す．
-  ///
-  /// 不適切な式ならば ElbError 例外を送出する．
-  ElbExpr*
-  instantiate_lhs_sub(
-    const VlScope* parent,       ///< [in] 親のスコープ
-    const ElbEnv& env,           ///< [in] 生成時の環境
-    const AstExpr& ast_expr,     ///< [in] 式を表すパース木
-    std::vector<ElbExpr*>& elem_array ///< [out] 生成した左辺式の要素を格納するベクタ
-  );
-
   /// @brief プライマリ式の生成を行う．
   /// @return 生成された式を返す．
   ///
@@ -178,11 +169,22 @@ private:
     const AstExpr& ast_expr  ///< [in] 式を表すパース木
   );
 
-  /// @brief AstPrimary から ElbExpr を生成する．
-  /// @return 生成された式を返す．
+  /// @brief 左辺のプライマリ式の生成を行う．
+  /// @return 生成された ElbPrimary を返す．
   ///
   /// 不適切な式ならば ElbError 例外を送出する．
-  ElbExpr*
+  ElbPrimary
+  instantiate_lhs_primary(
+    const VlScope* parent,  ///< [in] 親のスコープ
+    const ElbEnv& env,	    ///< [in] 生成時の環境
+    const AstExpr& ast_expr ///< [in] 式を表すパース木
+  );
+
+  /// @brief 継続的代入文の左辺のプライマリ式の生成を行う．
+  /// @return 生成された ElbPrimary を返す．
+  ///
+  /// 不適切な式ならば ElbError 例外を送出する．
+  ElbPrimary
   instantiate_net_primary(
     const VlScope* parent,  ///< [in] 親のスコープ
     const AstExpr& ast_expr ///< [in] 式を表すパース木
@@ -242,44 +244,55 @@ private:
     AstExpr& ast_bit         ///< [out] ビット選択式
   );
 
+  /// @brief ビット選択/部分選択の情報を実体化する．
+  ElbSelecter
+  instantiate_selecter(
+    const VlScope* parent,      ///< [in] 親のスコープ
+    const AstExpr& ast_expr,    ///< [in] 式を表すパース木
+    const VlDeclBase* declbase, ///< [in] 対象の宣言要素
+    const ElbEnv& index_env,    ///< [in] インデックス用の環境
+    const AstExpr& ast_bit,     ///< [in] ビット選択式
+    bool var_index              ///< [in] 可変インデックスを許可する時 true
+  );
+
   /// @brief ビット選択式を作る．
-  ElbExpr*
+  ElbSelecter
   instantiate_bitselect(
     const VlScope* parent,      ///< [in] 親のスコープ
     const AstExpr& ast_expr,    ///< [in] 式を表すパース木
-    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const VlDeclBase* declbase, ///< [in] 対象の宣言要素
     const ElbEnv& index_env,    ///< [in] インデックス用の環境
     const AstExpr& ast_bit,     ///< [in] ビット選択式
     bool var_index              ///< [in] 可変インデックスを許可する時 true
   );
 
   /// @brief 範囲選択式を作る．
-  ElbExpr*
+  ElbSelecter
   instantiate_partselect(
     const VlScope* parent,      ///< [in] 親のスコープ
     const AstExpr& ast_expr,    ///< [in] 式を表すパース木
-    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const VlDeclBase* declbase, ///< [in] 対象の宣言要素
     const ElbEnv& index_env,    ///< [in] インデックス用の環境
     const AstPart& ast_part,    ///< [in] 範囲選択式
     bool var_index              ///< [in] 可変インデックスを許可する時 true
   );
 
   /// @brief 固定型の範囲選択式を作る．
-  ElbExpr*
+  ElbSelecter
   instantiate_const_partselect(
     const VlScope* parent,      ///< [in] 親のスコープ
     const AstExpr& ast_expr,    ///< [in] 式を表すパース木
-    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const VlDeclBase* declbase, ///< [in] 対象の宣言要素
     const AstExpr& ast_left,    ///< [in] 範囲選択式1
     const AstExpr& ast_right    ///< [in] 範囲選択式2
   );
 
   /// @brief プラス型の範囲選択式を作る．
-  ElbExpr*
+  ElbSelecter
   instantiate_plus_partselect(
     const VlScope* parent,      ///< [in] 親のスコープ
     const AstExpr& ast_expr,    ///< [in] 式を表すパース木
-    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const VlDeclBase* declbase, ///< [in] 対象の宣言要素
     const ElbEnv& index_env,    ///< [in] インデックス用の環境
     const AstExpr& ast_left,    ///< [in] 範囲選択式1
     const AstExpr& ast_right,   ///< [in] 範囲選択式2
@@ -287,11 +300,11 @@ private:
   );
 
   /// @brief マイナス型の範囲選択式を作る．
-  ElbExpr*
+  ElbSelecter
   instantiate_minus_partselect(
     const VlScope* parent,      ///< [in] 親のスコープ
     const AstExpr& ast_expr,    ///< [in] 式を表すパース木
-    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    const VlDeclBase* declbase, ///< [in] 対象の宣言要素
     const ElbEnv& index_env,    ///< [in] インデックス用の環境
     const AstExpr& ast_left,    ///< [in] 範囲選択式1
     const AstExpr& ast_right,   ///< [in] 範囲選択式2

@@ -62,6 +62,13 @@ public:
   const VlDecl*
   decl_obj() const override;
 
+  /// @brief 宣言要素に対するビット/部分選択の種類を返す．
+  ///
+  /// - expr_type() が PRIMARY かつ primary_type() が DECL,
+  ///   CONST_DECL_ARRAY, VAR_DECL_ARRAY の場合に意味を持つ．
+  VlSelectType
+  select_type() const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////

@@ -20,7 +20,7 @@
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbModuleArray.h"
 #include "elaborator/ElbExpr.h"
-#include "elaborator/ElbDeclRef.h"
+#include "elaborator/ElbPrimary.h"
 #include "elaborator/RangeVal.h"
 #include "elaborator/ElbError.h"
 
@@ -323,80 +323,7 @@ ItemGen::link_module_array(
       continue;
     }
 
-    SizeType port_size = port->bit_size();
-    if ( port->direction() == VpiDir::Input ) {
-      // 入力ポートには任意の式を接続できる．
-      auto tmp = instantiate_expr(parent, env, ast_expr);
-      auto type = tmp->value_type();
-      // ただし real 型は駄目
-      if ( type.is_real_type() ) {
-	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-      }
-
-      SizeType expr_size = type.size();
-      if ( expr_size == 0 ) {
-	// もともとサイズがなければ port_size に合わせる．
-	tmp->set_reqsize(VlValueType(false, true, port_size));
-	expr_size = port_size;
-      }
-
-      // 配列型インスタンスの場合 expr_size に制限がある．
-      if ( port_size == expr_size ) {
-	// サイズが等しい場合はそのまま接続する．
-	for ( SizeType i = 0; i < module_size; ++ i ) {
-	  auto module = module_array->elem(i);
-	  module->set_port_high_conn(index, tmp, conn_by_name);
-	}
-      }
-      else if ( port_size * module_size == expr_size ) {
-	if ( module_size <= 1 ) {
-	  throw std::logic_error{"module_size <= 1"};
-	}
-	// tmp を 分割する．
-	for ( SizeType i = 0; i < module_size; ++ i ) {
-	  auto tmp1 = elb_mgr().new_PartSelect(ast_expr, tmp, i, port_size);
-	  auto module = module_array->elem(i);
-	  module->set_port_high_conn(index, tmp1, conn_by_name);
-	}
-      }
-      else {
-	log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
-      }
-    }
-    else {
-      // それ以外の場合には左辺式のみが接続できる．
-      auto tmp = instantiate_lhs(parent, env, ast_expr);
-      auto type = tmp->value_type();
-      if ( type.is_real_type() ) {
-	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-      }
-
-      auto expr_size = type.size();
-      if ( expr_size == port_size ) {
-	// 式のサイズとポートサイズが等しければ全部のモジュールに
-	// 同一の式を接続する．
-	// 普通に考えていいアイデアとは思えない．
-	for ( SizeType i = 0; i < module_size; ++ i ) {
-	  auto module = module_array->elem(i);
-	  module->set_port_high_conn(index, tmp, conn_by_name);
-	}
-      }
-      else if ( expr_size == port_size * module_size ) {
-	// 式を分割する．
-	// 0番目のモジュールがLSB側になる．
-	for ( SizeType i = 0; i < module_size; ++ i ) {
-	  auto module = module_array->elem(i);
-	  int index1 = i * port_size;
-	  int index2 = index2 + port_size - 1;
-	  auto expr1 = elb_mgr().new_PartSelect(ast_expr, tmp, index1, index2);
-	  module->set_port_high_conn(index, expr1, conn_by_name);
-	}
-      }
-      else {
-	// サイズが合わない．
-	log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
-      }
-    }
+    link_module_array_port(module_array, index, ast_expr, conn_by_name);
 
     // attribute instance の設定
     for ( SizeType i = 0; i < module_size; ++ i ) {
@@ -406,6 +333,93 @@ ItemGen::link_module_array(
       // attribute instance の生成
       auto attr_list = attribute_list(ast_con);
       elb_mgr().reg_attr(port, attr_list);
+    }
+  }
+}
+
+// @brief module array のポートの結合を行う．
+void
+ItemGen::link_module_array_port(
+  ElbModuleArray* module_array,
+  SizeType index,
+  const AstExpr& ast_expr,
+  bool conn_by_name
+)
+{
+  auto parent = module_array->parent_scope();
+
+  auto module_size = module_array->elem_num();
+  auto module0 = module_array->elem_by_offset(0);
+  auto port = module0->port(index);
+  auto port_size = port->bit_size();
+  ElbEnv env;
+  if ( port->direction() == VpiDir::Input ) {
+    // 入力ポートには任意の式を接続できる．
+    auto tmp = instantiate_expr(parent, env, ast_expr);
+    auto type = tmp->value_type();
+    // ただし real 型は駄目
+    if ( type.is_real_type() ) {
+      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
+    }
+
+    SizeType expr_size = type.size();
+    if ( expr_size == 0 ) {
+      // もともとサイズがなければ port_size に合わせる．
+      tmp->set_reqsize(VlValueType(false, true, port_size));
+      expr_size = port_size;
+    }
+
+    // 配列型インスタンスの場合 expr_size に制限がある．
+    if ( port_size == expr_size ) {
+      // サイズが等しい場合はそのまま接続する．
+      for ( SizeType i = 0; i < module_size; ++ i ) {
+	auto module = module_array->elem(i);
+	module->set_port_high_conn(index, tmp, conn_by_name);
+      }
+    }
+    else if ( port_size * module_size == expr_size ) {
+      if ( module_size <= 1 ) {
+	throw std::logic_error{"module_size <= 1"};
+      }
+      // tmp を 分割する．
+      for ( SizeType i = 0; i < module_size; ++ i ) {
+	auto tmp1 = elb_mgr().new_PartSelect(ast_expr, tmp, i, port_size);
+	auto module = module_array->elem(i);
+	module->set_port_high_conn(index, tmp1, conn_by_name);
+      }
+    }
+    else {
+      log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
+    }
+  }
+  else {
+    // それ以外の場合には左辺式のみが接続できる．
+    auto primary_list = instantiate_lhs(parent, env, ast_expr);
+
+#if 0
+    auto type = tmp->value_type();
+    if ( type.is_real_type() ) {
+      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
+    }
+#else
+  #warning "TODO: primary_list の中に real タイプの宣言要素が含まれていないかチェック"
+#endif
+
+    SizeType expr_size = 0;
+    for ( auto& primary: primary_list ) {
+      expr_size += primary.bit_width();
+    }
+    if ( expr_size != port_size * module_size ) {
+      // サイズが合わない．
+      log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
+    }
+    // 式を分割する．
+    // 0番目のモジュールがLSB側になる．
+    for ( SizeType i = 0; i < module_size; ++ i ) {
+      auto module = module_array->elem(i);
+      int index = i * port_size;
+      auto term = elb_mgr().new_Term(primary_list, index, port_size);
+      module->set_port_high_conn(index, term, conn_by_name);
     }
   }
 }
@@ -530,13 +544,18 @@ ItemGen::link_module(
     }
     else {
       // それ以外のポートに接続できるのは左辺式だけ．
-      auto tmp = instantiate_lhs(parent, env, ast_expr);
+      auto primary_list = instantiate_lhs(parent, env, ast_expr);
+#if 0
       auto type = tmp->value_type();
       if ( type.is_real_type() ) {
 	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
       }
+#else
+#warning "TODO: primary_list に real タイプの宣言要素が含まれていないかチェック"
+#endif
+      auto lhs = elb_mgr().new_Term(primary_list);
       // 左辺はサイズの補正をしても意味がないのでそのまま接続する．
-      module->set_port_high_conn(index, tmp, conn_by_name);
+      module->set_port_high_conn(index, lhs, conn_by_name);
     }
 
     // attribute instance の生成

@@ -178,7 +178,7 @@ public:
   ///  - kVpiRelease
   ///
   /// このクラスでは nullptr を返す．
-  const VlExpr*
+  const VlTerm*
   lhs() const override;
 
   /// @brief 右辺式の取得

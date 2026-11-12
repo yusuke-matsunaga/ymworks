@@ -12,6 +12,7 @@
 #include "ym/vl/VlDelay.h"
 #include "ym/vl/VlScope.h"
 #include "ym/vl/VlExpr.h"
+#include "ym/vl/VlTerm.h"
 #include "ym/vl/VlTaskFunc.h"
 #include "ym/vl/VlUserSystf.h"
 #include "ym/vl/VlDecl.h"
@@ -126,22 +127,19 @@ VlDumperImpl::put_expr(const char* label,
 
 // @brief 左辺式の内容を出力する関数
 void
-VlDumperImpl::put_lhs(
+VlDumperImpl::put_term(
   const char* label,
   const VlMgr& mgr,
-  const VlExpr* expr
+  const VlTerm* expr
 )
 {
-  put_expr(label, mgr, expr);
-#if 0
-  auto n = expr->lhs_elem_num();
+  auto n = expr->elem_num();
   if ( n > 1 ) {
     VlDumpHeader x1(this, "vpiLhs", "LhsElemArray");
     for ( int i = 0; i < n; ++ i) {
-      put_expr("vpiExpr", mgr, expr->lhs_elem(i));
+      put_expr("vpiExpr", mgr, expr->elem(i));
     }
   }
-#endif
 }
 
 // @brief プライマリ式を出力する関数

@@ -184,20 +184,13 @@ public:
     const VlIODecl* io_decl ///< [in] 入出力宣言要素
   ) override;
 
-  /// @brief ポートを追加する．
+  /// @brief 名前付きポートを追加する．
   void
   add_port(
-    const AstPort& ast_port, ///< [in] パース木のポート定義
-    ElbExpr* low_conn,       ///< [in] 下位の接続
-    VpiDir dir               ///< [in] 向き
-  ) override;
-
-  /// @brief ポートを追加する．
-  void
-  add_port(
-    const AstIOItem& ast_ioitem, ///< [in] パース木のポート定義
-    ElbExpr* low_conn,           ///< [in] 下位の接続
-    VpiDir dir                   ///< [in] 向き
+    const FileRegion& loc,  ///< [in] ファイル位置
+    const char* name,       ///< [in] 名前
+    const VlTerm* low_conn, ///< [in] 下位の接続
+    VpiDir dir              ///< [in] 向き
   ) override;
 
   /// @brief ポートの high_conn を接続する．
@@ -206,6 +199,14 @@ public:
     SizeType index,     ///< [in] ポート番号
     ElbExpr* high_conn, ///< [in] 上位の接続の式
     bool conn_by_name   ///< [in] 名前による割り当て時に true とするフラグ
+  ) override;
+
+  /// @brief ポートの high_conn を接続する．
+  void
+  set_port_high_conn(
+    SizeType index,          ///< [in] ポート番号
+    const VlTerm* high_conn, ///< [in] 上位の接続の式
+    bool conn_by_name        ///< [in] 名前による割り当て時に true とするフラグ
   ) override;
 
 

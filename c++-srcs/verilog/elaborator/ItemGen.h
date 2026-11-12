@@ -294,6 +294,15 @@ private:
     const AstInst& ast_inst       ///< [in] インスタンス定義
   );
 
+  /// @brief module array のポートの結合を行う．
+  void
+  link_module_array_port(
+    ElbModuleArray* module_array, ///< [in] モジュール配列
+    SizeType index,               ///< [in] ポート番号
+    const AstExpr& ast_expr,      ///< [in] 接続する式
+    bool conn_by_name             ///< [in] 名前による結合の場合 true にする．
+  );
+
   /// @brief link_module() 用のスタブを作る．
   ElbStub*
   make_link_module_stub(
@@ -474,6 +483,30 @@ private:
     const AstInst& ast_inst   ///< [in] インスタンス定義
   );
 
+  /// @brief プリミティブ配列のポートの結合を行う．
+  void
+  link_prim_array_port(
+    ElbPrimArray* prim_array, ///< [in] プリミティブ配列
+    SizeType index,           ///< [in] ポート番号
+    const AstExpr& ast_expr   ///< [in] 結合する式
+  );
+
+  /// @brief プリミティブ配列の入力ポートの結合を行う．
+  void
+  link_prim_array_input_port(
+    ElbPrimArray* prim_array, ///< [in] プリミティブ配列
+    SizeType index,           ///< [in] ポート番号
+    const AstExpr& ast_expr   ///< [in] 結合する式
+  );
+
+  /// @brief プリミティブ配列の出力ポートの結合を行う．
+  void
+  link_prim_array_output_port(
+    ElbPrimArray* prim_array, ///< [in] プリミティブ配列
+    SizeType index,           ///< [in] ポート番号
+    const AstExpr& ast_expr   ///< [in] 結合する式
+  );
+
   /// @brief link_primitive 用のスタブを作る．
   ElbStub*
   make_primitive_stub(
@@ -496,6 +529,14 @@ private:
     const AstInst& ast_inst  ///< [in] インスタンス定義
   );
 
+  /// @brief プリミティブのポートの結合を行う．
+  void
+  link_primitive_port(
+    ElbPrimitive* primitive, ///< [in] プリミティブ
+    SizeType index,          ///< [in] ポート番号
+    const AstExpr& ast_expr  ///< [in] 結合する式
+  );
+
   /// @brief link_cell_array() 用のスタブを作る．
   ElbStub*
   make_cell_array_stub(
@@ -516,6 +557,14 @@ private:
   link_cell_array(
     ElbPrimArray* prim_array, ///< [in] プリミティブ配列
     const AstInst& ast_inst   ///< [in]インスタンス定義
+  );
+
+  /// @brief セル配列の入力ポートの結合を行う．
+  void
+  link_cell_array_input_port(
+    ElbPrimArray* prim_array, ///< [in] プリミティブ配列
+    SizeType index,           ///< [in] ポート番号
+    const AstExpr& ast_expr   ///< [in] 結合する式
   );
 
   /// @brief link_cell() 用のスタブを作る．

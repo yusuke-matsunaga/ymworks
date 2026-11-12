@@ -9,6 +9,7 @@
 #include "elaborator/ElbMgr.h"
 #include "EiContAssign.h"
 #include "ym/vl/VlExpr.h"
+#include "ym/vl/VlTerm.h"
 #include "ym/vl/VlDelay.h"
 #include "elaborator/ElbCaHead.h"
 
@@ -24,7 +25,7 @@ const VlContAssign*
 ElbMgr::new_ContAssign(
   ElbCaHead* head,
   const FileRegion& loc,
-  const VlExpr* lhs,
+  const VlTerm* lhs,
   const VlExpr* rhs
 )
 {
@@ -39,7 +40,7 @@ const VlContAssign*
 ElbMgr::new_ContAssign(
   const VlModule* module,
   const FileRegion& loc,
-  const VlExpr* lhs,
+  const VlTerm* lhs,
   const VlExpr* rhs
 )
 {
@@ -76,7 +77,7 @@ EiContAssign::bit_size() const
 }
 
 // @brief 左辺を返す．
-const VlExpr*
+const VlTerm*
 EiContAssign::lhs() const
 {
   return mLhs;

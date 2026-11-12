@@ -24,9 +24,9 @@ protected:
 
   /// @brief コンストラクタ
   EiContAssign(
-    const FileRegion& loc,  ///< [in] ファイル位置
-    const VlExpr* lhs,      ///< [in] 左辺式
-    const VlExpr* rhs       ///< [in] 右辺式
+    const FileRegion& loc, ///< [in] ファイル位置
+    const VlTerm* lhs,     ///< [in] 左辺式
+    const VlExpr* rhs      ///< [in] 右辺式
   ) : mFileRegion{loc},
       mLhs{lhs},
       mRhs{rhs}
@@ -61,7 +61,7 @@ public:
   bit_size() const override;
 
   /// @brief 左辺を返す．
-  const VlExpr*
+  const VlTerm*
   lhs() const override;
 
   /// @brief 右辺を返す．
@@ -78,7 +78,7 @@ private:
   FileRegion mFileRegion;
 
   // 左辺式
-  const VlExpr* mLhs;
+  const VlTerm* mLhs;
 
   // 右辺式
   const VlExpr* mRhs;
@@ -99,7 +99,7 @@ public:
   EiContAssign1(
     ElbCaHead* head,        ///< [in] ヘッダ
     const FileRegion& loc,  ///< [in] ファイル位置
-    const VlExpr* lhs,      ///< [in] 左辺式
+    const VlTerm* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   ) : EiContAssign(loc, lhs, rhs),
       mHead{head}
@@ -160,7 +160,7 @@ public:
   EiContAssign2(
     const VlModule* module, ///< [in] 親のモジュール
     const FileRegion& loc,  ///< [in] ファイル位置
-    const VlExpr* lhs,      ///< [in] 左辺式
+    const VlTerm* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   ) : EiContAssign(loc, lhs, rhs),
       mModule{module}

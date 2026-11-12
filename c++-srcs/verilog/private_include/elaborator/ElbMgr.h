@@ -20,6 +20,7 @@
 #include "elaborator/ElbContAssign.h"
 #include "elaborator/ElbPrimHead.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbPrimary.h"
 #include "elaborator/RangeVal.h"
 #include "elaborator/ObjDict.h"
 #include "elaborator/ModDefDict.h"
@@ -28,8 +29,6 @@
 
 
 BEGIN_NAMESPACE_YM_VERILOG
-
-class ElbDeclRef;
 
 //////////////////////////////////////////////////////////////////////
 /// @class ElbMgr ElbMgr.h "ElbMgr.h"
@@ -583,7 +582,7 @@ public:
   new_ContAssign(
     ElbCaHead* head,        ///< [in] ヘッダ
     const FileRegion& loc,  ///< [in] ファイル位置
-    const VlExpr* lhs,      ///< [in] 左辺式
+    const VlTerm* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   );
 
@@ -592,7 +591,7 @@ public:
   new_ContAssign(
     const VlModule* module, ///< [in] 親のモジュール
     const FileRegion& loc,  ///< [in] ファイル位置
-    const VlExpr* lhs,      ///< [in] 左辺式
+    const VlTerm* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   );
 
@@ -730,7 +729,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlExpr* lhs,        ///< [in] 左辺の式
+    const VlTerm* lhs,        ///< [in] 左辺の式
     const VlExpr* rhs,        ///< [in] 右辺の式
     bool block,               ///< [in] ブロッキング代入の時 true
     const VlControl* control  ///< [in] コントロール
@@ -743,7 +742,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlExpr* lhs,        ///< [in] 左辺の式
+    const VlTerm* lhs,        ///< [in] 左辺の式
     const VlExpr* rhs         ///< [in] 右辺の式
   );
 
@@ -753,7 +752,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlExpr* lhs         ///< [in] 左辺の式
+    const VlTerm* lhs         ///< [in] 左辺の式
   );
 
   /// @brief force ステートメントを生成する．
@@ -762,7 +761,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlExpr* lhs,        ///< [in] 左辺の式
+    const VlTerm* lhs,        ///< [in] 左辺の式
     const VlExpr* rhs         ///< [in] 右辺の式
   );
 
@@ -772,7 +771,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlExpr* lhs         ///< [in] 左辺の式
+    const VlTerm* lhs         ///< [in] 左辺の式
   );
 
   /// @brief begin ブロックを生成する．
@@ -1019,6 +1018,52 @@ public:
     const std::vector<ElbExpr*>& opr_list ///< [in] オペランドのリスト
   );
 
+  /// @brief プライマリ式を生成する．
+  ElbExpr*
+  new_Primary(
+    const ElbPrimary& primary ///< [in] プライマリの情報
+  );
+
+  /// @brief プライマリ式を生成する．
+  ElbExpr*
+  new_Primary(
+    const AstExpr& ast_expr,         ///< [in] パース木の定義要素
+    const ElbDeclRef& decl_ref,      ///< [in] 宣言要素への参照
+    const ElbSelecter& selecter = {} ///< [in] ビット/部分選択子
+  );
+
+  /// @brief 端子を生成する．
+  const VlTerm*
+  new_Term(
+    ElbExpr* expr ///< [in] プライマリ式
+  );
+
+  /// @brief 端子を生成する．
+  const VlTerm*
+  new_Term(
+    const std::vector<ElbPrimary>& primary_list ///< [in] プライマリのリスト
+  );
+
+  /// @brief 端子を生成する．
+  ///
+  /// [base: base - width - 1] の部分選択を表す式を生成する．
+  const VlTerm*
+  new_Term(
+    const std::vector<ElbPrimary>& primary_list, ///< [in] プライマリのリスト
+    SizeType base,                               ///< [in] ベースのオフセット
+    SizeType width                               ///< [in] ビット幅
+  );
+
+  /// @brief 左辺式を生成する．
+  ///
+  /// ネットの初期値に対応する継続的代入文で用いる．
+  const VlTerm*
+  new_Term(
+    const AstDeclItem& ast_decl, ///< [in] パース木の定義要素
+    const VlDecl* decl           ///< [in] 宣言要素
+  );
+
+#if 0
   /// @brief 宣言要素に対応するプライマリ式を生成する．
   ElbExpr*
   new_Primary(
@@ -1052,6 +1097,7 @@ public:
     const VlExpr* base_expr,    ///< [in] 基準位置を表すインデックス式
     SizeType width = 1          ///< [in] ビット幅
   );
+#endif
 
   /// @brief 宣言要素に対応するプライマリ式を生成する．
   ElbExpr*

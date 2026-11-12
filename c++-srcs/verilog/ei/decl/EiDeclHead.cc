@@ -128,57 +128,6 @@ ElbMgr::new_DeclHead(
     });
 }
 
-#if 0
-// @brief 宣言要素のヘッダを生成する．
-ElbDeclHead*
-EiFactory::new_DeclHead(
-  const VlScope* parent,
-  const AstDeclHead& ast_head,
-  const AstRange& ast_range,
-  const RangeVal& range,
-  bool has_delay
-)
-{
-  if ( ast_range.is_invalid() ) {
-    throw std::logic_error{"ast_range.is_invalid()"};
-  }
-
-  if ( has_delay ) {
-    return new EiDeclHeadAstVD(parent, ast_head, ast_range, range);
-  }
-  else {
-    return new EiDeclHeadAstV(parent, ast_head, ast_range, range);
-  }
-}
-
-// @brief 宣言要素のヘッダを生成する．
-ElbDeclHead*
-EiFactory::new_DeclHead(
-  const VlScope* parent,
-  const AstDeclHead& ast_head,
-  bool delay
-)
-{
-  if ( delay ) {
-    return new EiDeclHeadAstD(parent, ast_head);
-  }
-  else {
-    return new EiDeclHeadAst(parent, ast_head);
-  }
-}
-
-// @brief 宣言要素のヘッダを生成する．(IODecl 中の宣言用)
-ElbDeclHead*
-EiFactory::new_DeclHead(
-  const VlScope* parent,
-  const AstIOHead& ast_head,
-  VpiAuxType aux_type
-)
-{
-  return new EiDeclHeadAst2(parent, ast_head, aux_type);
-}
-#endif
-
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclHead

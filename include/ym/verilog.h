@@ -1137,6 +1137,37 @@ operator<<(
 
 
 //////////////////////////////////////////////////////////////////////
+/// @brief ビット/部分選択の種類を表す列挙型
+///
+/// ビット選択はビット幅が1の部分選択と見なす．
+/// 可変ビット選択は可変プラス範囲選択で表す．
+//////////////////////////////////////////////////////////////////////
+enum class VlSelectType : std::uint8_t {
+  NONE = 0, ///< 選択なし
+  CONST,    ///< 固定選択
+  PLUS,     ///< 可変プラス範囲選択
+  MINUS     ///< 可変マイナス範囲選択
+};
+
+/// @brief VlSelectType のストリーム出力演算
+inline
+std::ostream&
+operator<<(
+  std::ostream& s,
+  VlSelectType val
+)
+{
+  switch ( val ) {
+  case VlSelectType::NONE:  s << "NONE"; break;
+  case VlSelectType::CONST: s << "CONST"; break;
+  case VlSelectType::PLUS:  s << "PLUS"; break;
+  case VlSelectType::MINUS: s << "MINUS"; break;
+  }
+  return s;
+}
+
+
+//////////////////////////////////////////////////////////////////////
 /// @brief 代入の種類を表す列挙型
 //////////////////////////////////////////////////////////////////////
 enum class VlAssignType : std::uint8_t {

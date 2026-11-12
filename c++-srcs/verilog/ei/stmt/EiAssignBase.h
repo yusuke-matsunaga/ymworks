@@ -34,7 +34,7 @@ protected:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlExpr* lhs,        ///< [in] 左辺の式
+    const VlTerm* lhs,        ///< [in] 左辺の式
     const VlExpr* rhs         ///< [in] 右辺の式
   ) : EiStmtBase(parent, process, ast_stmt),
       mLhs{lhs},
@@ -52,7 +52,7 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 左辺を返す．
-  const VlExpr*
+  const VlTerm*
   lhs() const override;
 
   /// @brief 右辺を返す．
@@ -66,7 +66,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // 左辺
-  const VlExpr* mLhs;
+  const VlTerm* mLhs;
 
   // 右辺
   const VlExpr* mRhs;

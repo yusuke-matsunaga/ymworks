@@ -19,7 +19,6 @@
 #include "ym/vl/VlRange.h"
 
 #include "elaborator/ElbDecl.h"
-#include "elaborator/ElbDeclRef.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbPrimitive.h"
 #include "elaborator/ElbExpr.h"
@@ -93,19 +92,9 @@ ExprGen::instantiate_primary(
   // 宣言要素のタイプをチェックする．
   check_decl(env, ast_expr, decl_ref);
 
-  if ( ast_bit.is_valid() ) {
-    // ビット選択ありのプライマリ式
-    return instantiate_bitselect(parent, ast_expr, decl_ref,
-				 index_env, ast_bit, true);
-  }
-  auto ast_part = ast_expr.part();
-  if ( ast_part.is_valid() ) {
-    // 範囲選択ありのプライマリ式
-    return instantiate_partselect(parent, ast_expr, decl_ref,
-				  index_env, ast_part, true);
-  }
-  // 単純なプライマリ式
-  return elb_mgr().new_Primary(ast_expr, decl_ref);
+  auto sel = instantiate_selecter(parent, ast_expr, decl_ref.declbase(),
+				  index_env, ast_bit, true);
+  return elb_mgr().new_Primary(ast_expr, decl_ref, sel);
 }
 
 // @brief AstExpr(primary) から named_event を生成する．
@@ -355,18 +344,44 @@ ExprGen::instantiate_decl_ref(
   return ElbDeclRef();
 }
 
-// @brief ビット選択式を作る．
-ElbExpr*
-ExprGen::instantiate_bitselect(
+// @brief ビット選択/部分選択の情報を実体化する．
+ElbSelecter
+ExprGen::instantiate_selecter(
   const VlScope* parent,
   const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref,
+  const VlDeclBase* declbase,
   const ElbEnv& index_env,
   const AstExpr& ast_bit,
   bool var_index
 )
 {
-  if ( decl_ref.declbase()->value_type().is_real_type() ) {
+  if ( ast_bit.is_valid() ) {
+    // ビット選択あり
+    return instantiate_bitselect(parent, ast_expr, declbase,
+				 index_env, ast_bit, var_index);
+  }
+  auto ast_part = ast_expr.part();
+  if ( ast_part.is_valid() ) {
+    // 部分選択あり
+    return instantiate_partselect(parent, ast_expr, declbase,
+				  index_env, ast_part, var_index);
+  }
+  // 単純なプライマリ式
+  return ElbSelecter();
+}
+
+// @brief ビット選択式を作る．
+ElbSelecter
+ExprGen::instantiate_bitselect(
+  const VlScope* parent,
+  const AstExpr& ast_expr,
+  const VlDeclBase* declbase,
+  const ElbEnv& index_env,
+  const AstExpr& ast_bit,
+  bool var_index
+)
+{
+  if ( declbase->value_type().is_real_type() ) {
     // real type でのビット指定はエラー
     log_mgr().error_select_for_real(__FILE__, __LINE__, ast_expr);
   }
@@ -375,50 +390,50 @@ ExprGen::instantiate_bitselect(
   if ( is_const ) {
     // 固定インデックスだった．
     SizeType bit_offset = 0;
-    auto stat = decl_ref.declbase()->calc_bit_offset(index_val, bit_offset);
+    auto stat = declbase->calc_bit_offset(index_val, bit_offset);
     if ( !stat ) {
       // インデックスが範囲外
       // ただ値が X になるだけでエラーにはならないそうだ．
       log_mgr().warning_index_out_of_range(__FILE__, __LINE__,
 					   ast_bit.file_region());
     }
-    return elb_mgr().new_ConstSelectPrimary(ast_expr, decl_ref, bit_offset);
+    return ElbSelecter::new_CONST(1, bit_offset);
   }
   if ( var_index ) {
     // 可変インデックスだった．
     auto index = instantiate_expr(parent, index_env, ast_bit);
-    return elb_mgr().new_PlusSelectPrimary(ast_expr, decl_ref, index);
+    return ElbSelecter::new_PLUS(1, index);
   }
   // 固定インデックス以外はエラー
 #warning "TODO: エラーメッセージ"
-  return nullptr;
+  throw std::logic_error{"Never reached"};
 }
 
 // @brief 範囲選択式を作る．
-ElbExpr*
+ElbSelecter
 ExprGen::instantiate_partselect(
   const VlScope* parent,
   const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref,
+  const VlDeclBase* declbase,
   const ElbEnv& index_env,
   const AstPart& ast_part,
   bool var_index
 )
 {
-  if ( decl_ref.declbase()->value_type().is_real_type() ) {
+  if ( declbase->value_type().is_real_type() ) {
     // real type での範囲指定はエラー
     log_mgr().error_select_for_real(__FILE__, __LINE__, ast_expr);
   }
   switch ( ast_part.mode() ) {
   case VpiRangeMode::Const:
-    return instantiate_const_partselect(parent, ast_expr, decl_ref,
+    return instantiate_const_partselect(parent, ast_expr, declbase,
 					ast_part.left(), ast_part.right());
   case VpiRangeMode::Plus:
-    return instantiate_plus_partselect(parent, ast_expr, decl_ref, index_env,
+    return instantiate_plus_partselect(parent, ast_expr, declbase, index_env,
 				       ast_part.left(), ast_part.right(),
 				       var_index);
   case VpiRangeMode::Minus:
-    return instantiate_minus_partselect(parent, ast_expr, decl_ref, index_env,
+    return instantiate_minus_partselect(parent, ast_expr, declbase, index_env,
 					ast_part.left(), ast_part.right(),
 					var_index);
   default:
@@ -427,16 +442,15 @@ ExprGen::instantiate_partselect(
 }
 
 // @brief 固定型の範囲選択式を作る．
-ElbExpr*
+ElbSelecter
 ExprGen::instantiate_const_partselect(
   const VlScope* parent,
   const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref,
+  const VlDeclBase* declbase,
   const AstExpr& ast_left,
   const AstExpr& ast_right
 )
 {
-  auto declbase = decl_ref.declbase();
   auto index1_val = evaluate_int(parent, ast_left);
   auto index2_val = evaluate_int(parent, ast_right);
   auto big = (index1_val >= index2_val);
@@ -473,22 +487,21 @@ ExprGen::instantiate_const_partselect(
     offset = offset2;
     width = offset1 - offset2 + 1;
   }
-  return elb_mgr().new_ConstSelectPrimary(ast_expr, decl_ref, offset, width);
+  return ElbSelecter::new_CONST(width, offset);
 }
 
 // @brief プラス型の範囲選択式を作る．
-ElbExpr*
+ElbSelecter
 ExprGen::instantiate_plus_partselect(
   const VlScope* parent,
   const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref,
+  const VlDeclBase* declbase,
   const ElbEnv& index_env,
   const AstExpr& ast_left,
   const AstExpr& ast_right,
   bool var_index
 )
 {
-  auto declbase = decl_ref.declbase();
   auto range_val = evaluate_int(parent, ast_right);
   bool is_const;
   auto base_val = evaluate_int_if_const(parent, ast_left, is_const);
@@ -510,32 +523,31 @@ ExprGen::instantiate_plus_partselect(
       log_mgr().warning_index_out_of_range(__FILE__, __LINE__,
 					   ast_expr.file_region());
     }
-    return elb_mgr().new_ConstSelectPrimary(ast_expr, decl_ref, offset, range_val);
+    return ElbSelecter::new_CONST(range_val, offset);
   }
   if ( var_index ) {
     // 可変インデックスだった
 #warning "TODO: エンディアンを考慮する必要ある？"
     auto base = instantiate_expr(parent, index_env, ast_left);
-    return elb_mgr().new_PlusSelectPrimary(ast_expr, decl_ref, base, range_val);
+    return ElbSelecter::new_PLUS(range_val, base);
   }
   // 可変インデックスはエラー
 #warning "TODO: エラーメッセージ"
-  return nullptr;
+  throw std::logic_error{"Never reached"};
 }
 
 // @brief マイナス型の範囲選択式を作る．
-ElbExpr*
+ElbSelecter
 ExprGen::instantiate_minus_partselect(
   const VlScope* parent,
   const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref,
+  const VlDeclBase* declbase,
   const ElbEnv& index_env,
   const AstExpr& ast_left,
   const AstExpr& ast_right,
   bool var_index
 )
 {
-  auto declbase = decl_ref.declbase();
   auto range_val = evaluate_int(parent, ast_right);
   bool is_const;
   auto base_val = evaluate_int_if_const(parent, ast_left, is_const);
@@ -557,17 +569,17 @@ ExprGen::instantiate_minus_partselect(
       log_mgr().warning_index_out_of_range(__FILE__, __LINE__,
 					   ast_expr.file_region());
     }
-    return elb_mgr().new_ConstSelectPrimary(ast_expr, decl_ref, offset, range_val);
+    return ElbSelecter::new_CONST(range_val, offset);
   }
   if ( var_index ) {
     // 可変インデックスだった
 #warning "エンディアンを考慮する必要ある？"
     auto base = instantiate_expr(parent, index_env, ast_left);
-    return elb_mgr().new_MinusSelectPrimary(ast_expr, decl_ref, base, range_val);
+    return ElbSelecter::new_MINUS(range_val, base);
   }
   // 可変インデックスはエラー
 #warning "TODO: エラーメッセージ"
-  return nullptr;
+  throw std::logic_error{"Never reached"};
 }
 
 // @brief プライマリに対応するハンドルを求める．

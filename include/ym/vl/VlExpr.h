@@ -119,6 +119,12 @@ public:
   bool
   is_sysfunccall() const = 0;
 
+  /// @brief 左辺値の場合に要素のリストに分解する．
+  ///
+  /// 結果はプライマリタイプの式のみのリストとなる．
+  std::vector<const VlExpr*>
+  lhs_decompose() const;
+
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -191,53 +197,25 @@ public:
   SizeType
   declarray_offset() const = 0;
 
-  /// @brief 宣言要素に対するビット/部分選択を持つ時 true を返す．
+  /// @brief 宣言要素に対するビット/部分選択の種類を返す．
   ///
   /// - expr_type() が PRIMARY かつ primary_type() が DECL,
   ///   CONST_DECL_ARRAY, VAR_DECL_ARRAY の場合に意味を持つ．
   virtual
-  bool
-  has_bit_select() const = 0;
-
-  /// @brief 宣言要素に対する部分選択のビット幅を返す．
-  ///
-  /// - has_bit_select() == true の時のみ意味を持つ．
-  /// - ビット選択の場合は 1 を返す．
-  virtual
-  SizeType
-  select_width() const = 0;
-
-  /// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-  virtual
-  bool
-  has_const_bit_select() const = 0;
+  VlSelectType
+  select_type() const = 0;
 
   /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
   ///
-  /// - has_const_bit_select() == true の場合のみ意味を持つ．
+  /// - select_type() が CONST の場合に意味を持つ．
+  /// - expr_type() が SELECT の場合に意味を持つ．
   virtual
   SizeType
   bit_offset() const = 0;
 
-  /// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-  ///
-  /// - has_bit_select() == true の場合のみ意味を持つ．
-  /// - 可変ビット選択の場合も true を返す．
-  virtual
-  bool
-  has_plus_bit_select() const = 0;
-
-  /// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
-  ///
-  /// - has_bit_select() == true の場合のみ意味を持つ．
-  virtual
-  bool
-  has_minus_bit_select() const = 0;
-
   /// @brief 宣言要素に対する可変ビット/部分選択のインデックス式を返す．
   ///
-  /// - has_plus_bit_select() か has_minus_bit_select() が true
-  ///   の場合のみ意味を持つ．
+  /// - select_type() が PLUS/MINUS の場合のみ意味を持つ．
   virtual
   const VlExpr*
   bit_index() const = 0;

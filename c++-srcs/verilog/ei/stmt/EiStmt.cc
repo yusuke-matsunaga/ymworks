@@ -82,7 +82,7 @@ EiStmt::expr() const
 }
 
 // @brief 左辺式の取得
-const VlExpr*
+const VlTerm*
 EiStmt::lhs() const
 {
   return nullptr;

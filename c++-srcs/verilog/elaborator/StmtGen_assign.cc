@@ -10,6 +10,7 @@
 #include "ElbEnv.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/AstStmt.h"
+#include "ym/vl/VlTerm.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -31,10 +32,10 @@ StmtGen::instantiate_assign(
   ElbVarLhsEnv env1{env};
 
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
+  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
 
   auto ast_rhs = ast_stmt.rhs();
-  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
+  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs->value_type());
 
   auto ast_control = ast_stmt.control();
   auto control = instantiate_control(parent, env, ast_control);
@@ -55,10 +56,10 @@ StmtGen::instantiate_pca(
   ElbPcaLhsEnv env1{env};
 
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
+  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
 
   auto ast_rhs = ast_stmt.rhs();
-  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
+  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs->value_type());
 
   return elb_mgr().new_AssignStmt(parent, process, ast_stmt, lhs, rhs);
 }
@@ -75,7 +76,7 @@ StmtGen::instantiate_deassign(
   ElbPcaLhsEnv env1{env};
 
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
+  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
 
   return elb_mgr().new_DeassignStmt(parent, process, ast_stmt, lhs);
 }
@@ -92,10 +93,10 @@ StmtGen::instantiate_force(
   ElbForceLhsEnv env1{env};
 
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
+  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
 
   auto ast_rhs = ast_stmt.rhs();
-  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
+  auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs->value_type());
 
   return elb_mgr().new_ForceStmt(parent, process, ast_stmt, lhs, rhs);
 }
@@ -112,7 +113,7 @@ StmtGen::instantiate_release(
   ElbForceLhsEnv env1{env};
 
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
+  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
 
   return elb_mgr().new_ReleaseStmt(parent, process, ast_stmt, lhs);
 }

@@ -58,12 +58,8 @@ public:
   bit_size() const = 0;
 
   /// @brief 左辺を返す．
-  ///
-  /// 生成されるのは以下の種類のみ
-  /// - プライマリ(ビット指定，範囲指定も含む)
-  /// - 連結演算
   virtual
-  const VlExpr*
+  const VlTerm*
   lhs() const = 0;
 
   /// @brief 右辺を返す．

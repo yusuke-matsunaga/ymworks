@@ -93,18 +93,6 @@ ElbMgr::new_GenvarConstant(
     });
 }
 
-#if 0
-// @brief parameter の定数式を生成する．
-ElbExpr*
-EiFactory::new_ParamConstant(
-  const AstExpr& ast_expr,
-  ElbParameter* obj
-)
-{
-  return new EiParamConstant(ast_expr, obj);
-}
-#endif
-
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiConstant

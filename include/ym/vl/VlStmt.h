@@ -157,12 +157,8 @@ public:
   ///  - kVpiDeassign
   ///  - kVpiForce
   ///  - kVpiRelease
-  ///
-  /// 生成されるのは以下の種類のみ
-  /// - プライマリ(ビット指定，範囲指定も含む)
-  /// - 連結演算
   virtual
-  const VlExpr*
+  const VlTerm*
   lhs() const = 0;
 
   /// @brief 右辺式の取得

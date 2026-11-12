@@ -41,12 +41,12 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
+  /// @brief 宣言要素に対するビット/部分選択の種類を返す．
   ///
-  /// - has_bit_select() == true の場合のみ意味を持つ．
-  /// - 可変ビット選択の場合も true を返す．
-  bool
-  has_plus_bit_select() const override;
+  /// - expr_type() が PRIMARY かつ primary_type() が DECL,
+  ///   CONST_DECL_ARRAY, VAR_DECL_ARRAY の場合に意味を持つ．
+  VlSelectType
+  select_type() const override;
 
 };
 

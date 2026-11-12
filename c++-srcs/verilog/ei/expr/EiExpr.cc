@@ -118,25 +118,11 @@ EiExpr::declarray_offset() const
   throw std::logic_error{"EiExpr::declarray_offset()"};
 }
 
-// @brief 宣言要素に対するビット/部分選択を持つ時 true を返す．
-bool
-EiExpr::has_bit_select() const
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiExpr::select_type() const
 {
-  throw std::logic_error{"EiExpr::has_bit_select()"};
-}
-
-// @brief 宣言要素に対する部分選択のビット幅を返す．
-SizeType
-EiExpr::select_width() const
-{
-  throw std::logic_error{"EiExpr::select_width()"};
-}
-
-// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-bool
-EiExpr::has_const_bit_select() const
-{
-  throw std::logic_error{"EiExpr::has_const_bit_select()"};
+  throw std::logic_error{"EiExpr::select_type()"};
 }
 
 // @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
@@ -144,20 +130,6 @@ SizeType
 EiExpr::bit_offset() const
 {
   throw std::logic_error{"EiExpr::bit_offset()"};
-}
-
-// @brief 宣言要素に対するプラス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiExpr::has_plus_bit_select() const
-{
-  throw std::logic_error{"EiExpr::has_plus_bit_select()"};
-}
-
-// @brief 宣言要素に対するマイナス可変ビット/部分選択を持つ時 true を返す．
-bool
-EiExpr::has_minus_bit_select() const
-{
-  throw std::logic_error{"EiExpr::has_minus_bit_select()"};
 }
 
 // @brief 宣言要素に対する可変ビット/部分選択のインデックス式を返す．

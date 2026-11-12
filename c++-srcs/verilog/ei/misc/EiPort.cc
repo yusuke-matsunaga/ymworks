@@ -6,9 +6,12 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiPort.h"
-#include "elaborator/ElbModule.h"
+#include "EiInputPort.h"
+#include "EiNamedInputPort.h"
+#include "EiOutputPort.h"
+#include "EiNamedOutputPort.h"
 #include "elaborator/ElbExpr.h"
+#include "ym/vl/VlTerm.h"
 #include "ym/vl/AstPort.h"
 
 
@@ -20,28 +23,23 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief コンストラクタ
 EiPortBase::EiPortBase(
+  const FileRegion& loc,
   const VlModule* module,
   SizeType index,
-  ElbExpr* low_conn,
+  const VlTerm* low_conn,
   VpiDir dir
-) : mModule{module},
-    mIndex{index},
-    mHighConn{nullptr},
-    mLowConn{low_conn},
-    mDirection{dir},
-    mConnByName{false}
+) : mFileRegion{loc},
+    mModule{module},
+    mLowConn{low_conn}
 {
-}
-
-// @brief high_conn を接続する．
-void
-EiPortBase::set_high_conn(
-  ElbExpr* high_conn,
-  bool conn_by_name
-)
-{
-  mHighConn = high_conn;
-  mConnByName = conn_by_name;
+  mChunk = (index << 1);
+  switch ( dir ) {
+  case VpiDir::Input:       mChunk |= 0; break;
+  case VpiDir::Output:      mChunk |= 1; break;
+  case VpiDir::Inout:       mChunk |= 2; break;
+  case VpiDir::MixedIO:     mChunk |= 3; break;
+  case VpiDir::NoDirection: mChunk |= 0; break;
+  }
 }
 
 // @brief 型の取得
@@ -51,11 +49,26 @@ EiPortBase::type() const
   return VpiObjType::Port;
 }
 
+// @brief ファイル位置の取得
+FileRegion
+EiPortBase::file_region() const
+{
+  return mFileRegion;
+}
+
 // @brief 入出力の区別を得る．
 VpiDir
 EiPortBase::direction() const
 {
-  return mDirection;
+  auto val = (mChunk >> 1) & 3;
+  switch ( val ) {
+  case 0: return VpiDir::Input;
+  case 1: return VpiDir::Output;
+  case 2: return VpiDir::Inout;
+  case 3: return VpiDir::MixedIO;
+  }
+  // ダミー
+  return VpiDir::NoDirection;
 }
 
 // @brief ビット幅を返す．
@@ -69,7 +82,21 @@ EiPortBase::bit_size() const
 bool
 EiPortBase::is_conn_by_name() const
 {
-  return mConnByName;
+  return static_cast<bool>(mChunk & 1);
+}
+
+// @brief 明示的に名前がついているとき true を返す．
+bool
+EiPortBase::has_explicit_name() const
+{
+  return false;
+}
+
+// @brief 名前を返す．
+std::string
+EiPortBase::name() const
+{
+  return "";
 }
 
 // @brief 親のモジュールを取出す
@@ -83,97 +110,132 @@ EiPortBase::module() const
 SizeType
 EiPortBase::port_index() const
 {
-  return mIndex;
+  return mChunk >> 3;
 }
 
-// @brief 上位の接続先を返す．
+// @brief 上位の接続先を返す(入力ポート用)．
 const VlExpr*
-EiPortBase::high_conn() const
+EiPortBase::high_conn_expr() const
 {
-  return mHighConn;
+  throw std::logic_error{"EiPortBase::high_conn_expr()"};
+}
+
+// @brief 上位の接続先を返す(出力ポート用)．
+const VlTerm*
+EiPortBase::high_conn_term() const
+{
+  throw std::logic_error{"EiPortBase::high_conn_term()"};
 }
 
 // @brief 下位の接続先を返す．
-const VlExpr*
+const VlTerm*
 EiPortBase::low_conn() const
 {
   return mLowConn;
 }
 
-
-//////////////////////////////////////////////////////////////////////
-// クラス EiPort1
-//////////////////////////////////////////////////////////////////////
-
-/// @brief コンストラクタ
-EiPort1::EiPort1(
-  const VlModule* module,
-  const AstPort& ast_port,
-  SizeType index,
-  ElbExpr* low_conn,
-  VpiDir dir
-) : EiPortBase(module, index, low_conn, dir),
-    mAstPort{ast_port}
+// @brief high_conn を接続する．
+void
+EiPortBase::set_high_conn(
+  ElbExpr* high_conn,
+  bool conn_by_name
+)
 {
+  throw std::logic_error{"EiPortBase::set_high_conn()"};
 }
 
-// @brief ファイル位置の取得
-FileRegion
-EiPort1::file_region() const
+// @brief high_conn を接続する．
+void
+EiPortBase::set_high_conn(
+  const VlTerm* high_conn,
+  bool conn_by_name
+)
 {
-  return mAstPort.file_region();
+  throw std::logic_error{"EiPortBase::set_high_conn()"};
 }
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiInputPort
+//////////////////////////////////////////////////////////////////////
+
+// @brief 上位の接続先を返す(入力ポート用)．
+const VlExpr*
+EiInputPort::high_conn_expr() const
+{
+  return mHighConn;
+}
+
+// @brief high_conn を接続する．
+void
+EiInputPort::set_high_conn(
+  ElbExpr* high_conn,
+  bool conn_by_name
+)
+{
+  mHighConn = high_conn;
+  set_conn_by_name(conn_by_name);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiNamedInputPort
+//////////////////////////////////////////////////////////////////////
 
 // @brief 明示的に名前がついているとき true を返す．
 bool
-EiPort1::has_explicit_name() const
-{
-  return mAstPort.ext_name() != nullptr;
-}
-
-// @brief 名前を返す．
-std::string
-EiPort1::name() const
-{
-  return mAstPort.ext_name();
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス EiPort2
-//////////////////////////////////////////////////////////////////////
-
-// @brief コンストラクタ
-EiPort2::EiPort2(
-  const VlModule* module,
-  const AstIOItem& ast_ioitem,
-  SizeType index,
-  ElbExpr* low_conn,
-  VpiDir dir
-) : EiPortBase(module, index, low_conn, dir),
-    mAstIOItem{ast_ioitem}
-{
-}
-
-// @brief ファイル位置の取得
-FileRegion
-EiPort2::file_region() const
-{
-  return mAstIOItem.file_region();
-}
-
-// @brief 明示的に名前がついているとき true を返す．
-bool
-EiPort2::has_explicit_name() const
+EiNamedInputPort::has_explicit_name() const
 {
   return true;
 }
 
 // @brief 名前を返す．
 std::string
-EiPort2::name() const
+EiNamedInputPort::name() const
 {
-  return mAstIOItem.name();
+  return mName;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiOutput
+//////////////////////////////////////////////////////////////////////
+
+// @brief 上位の接続先を返す．
+const VlTerm*
+EiOutputPort::high_conn_term() const
+{
+  return mHighConn;
+}
+
+// @brief high_conn を接続する．
+void
+EiOutputPort::set_high_conn(
+  const VlTerm* high_conn,
+  bool conn_by_name
+)
+{
+  mHighConn = high_conn;
+  set_conn_by_name(conn_by_name);
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス EiNamedOutputPort
+//////////////////////////////////////////////////////////////////////
+
+// @brief 明示的に名前がついているとき true を返す．
+bool
+EiNamedOutputPort::has_explicit_name() const
+{
+  return true;
+}
+
+// @brief 名前を返す．
+std::string
+EiNamedOutputPort::name() const
+{
+  return mName;
 }
 
 END_NAMESPACE_YM_VERILOG

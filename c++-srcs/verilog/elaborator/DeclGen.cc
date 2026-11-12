@@ -8,7 +8,7 @@
 
 #include "DeclGen.h"
 #include "ElbEnv.h"
-
+#include "ym/vl/VlTerm.h"
 #include "elaborator/ElbDeclHead.h"
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbDeclArray.h"
@@ -519,10 +519,11 @@ DeclGen::link_net_assign(
 )
 {
   // 実体は左辺が net の代入文を作る．
-  auto lhs = elb_mgr().new_Primary(ast_item, net);
+  auto expr = elb_mgr().new_Primary(ast_item, net);
+  auto lhs = elb_mgr().new_Term(expr);
   auto scope = net->parent_scope();
   auto ast_init = ast_item.init_value();
-  auto rhs = instantiate_rhs(scope, ElbEnv(), ast_init, lhs);
+  auto rhs = instantiate_rhs(scope, ElbEnv(), ast_init, lhs->value_type());
   if ( !rhs ) {
     return;
   }

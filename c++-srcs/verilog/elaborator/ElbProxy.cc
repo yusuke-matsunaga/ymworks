@@ -19,6 +19,7 @@
 
 #include "elaborator/ElbModule.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbPrimary.h"
 #include "ym/vl/AstExpr.h"
 
 
@@ -205,7 +206,7 @@ ElbProxy::instantiate_arg(
 }
 
 // @brief AstExpr から左辺式を生成する
-ElbExpr*
+std::vector<ElbPrimary>
 ElbProxy::instantiate_lhs(
   const VlScope* parent,
   const ElbEnv& env,
@@ -215,8 +216,20 @@ ElbProxy::instantiate_lhs(
   return mExprGen->instantiate_lhs(parent, env, ast_expr);
 }
 
+// @brief AstExpr から左辺式を生成する
+const VlTerm*
+ElbProxy::instantiate_lhs_term(
+  const VlScope* parent,
+  const ElbEnv& env,
+  const AstExpr& ast_expr
+)
+{
+  auto primary_list = instantiate_lhs(parent, env, ast_expr);
+  return elb_mgr().new_Term(primary_list);
+}
+
 // @brief AstExpr から継続的代入文の左辺式を生成する
-ElbExpr*
+std::vector<ElbPrimary>
 ElbProxy::instantiate_net_lhs(
   const VlScope* parent,
   const AstExpr& ast_expr
@@ -225,18 +238,29 @@ ElbProxy::instantiate_net_lhs(
   return mExprGen->instantiate_net_lhs(parent, ast_expr);
 }
 
+// @brief AstExpr から継続的代入文の左辺式を生成する
+const VlTerm*
+ElbProxy::instantiate_net_lhs_term(
+  const VlScope* parent,
+  const AstExpr& ast_expr
+)
+{
+  auto primary_list = instantiate_net_lhs(parent, ast_expr);
+  return elb_mgr().new_Term(primary_list);
+}
+
 // @brief AstExpr から右辺式を生成する
 ElbExpr*
 ElbProxy::instantiate_rhs(
   const VlScope* parent,
   const ElbEnv& env,
   const AstExpr& ast_expr,
-  ElbExpr* lhs
+  const VlValueType& lhs_type
 )
 {
   auto expr = mExprGen->instantiate_expr(parent, env, ast_expr);
   // lhs の型を expr に設定する．
-  expr->set_reqsize(lhs->value_type());
+  expr->set_reqsize(lhs_type);
   return expr;
 }
 

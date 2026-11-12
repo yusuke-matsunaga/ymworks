@@ -72,20 +72,7 @@ public:
   bool
   is_select() const override;
 
-  /// @brief 宣言要素に対する部分選択のビット幅を返す．
-  ///
-  /// - is_select() == true または has_bit_select() == true の時のみ意味を持つ．
-  /// - ビット選択の場合は 1 を返す．
-  SizeType
-  select_width() const override;
-
-  /// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-  bool
-  has_const_bit_select() const override;
-
   /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
-  ///
-  /// - has_const_bit_select() == true の場合のみ意味を持つ．
   SizeType
   bit_offset() const override;
 

@@ -353,10 +353,10 @@ public:
 
   /// @brief 左辺式の内容を出力する関数
   void
-  put_lhs(
+  put_term(
     const char* label, ///< [in] ラベル
     const VlMgr& mgr,  ///< [in] VlMgr
-    const VlExpr* expr ///< [in] オブジェクト
+    const VlTerm* term ///< [in] オブジェクト
   );
 
   /// @brief プライマリ式を出力する関数

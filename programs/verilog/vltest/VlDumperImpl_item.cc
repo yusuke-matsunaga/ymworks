@@ -279,7 +279,7 @@ VlDumperImpl::put_contassign(
   put("vpiStrength1", ca->drive1() );
   put("vpiDelay", ca->delay() );
 
-  put_lhs("vpiLhs", mgr, ca->lhs() );
+  put_term("vpiLhs", mgr, ca->lhs() );
 
   put_expr("vpiRhs", mgr, ca->rhs() );
 

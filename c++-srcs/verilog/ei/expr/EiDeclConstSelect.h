@@ -42,9 +42,12 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 宣言要素に対する固定ビット/部分選択を持つ時 true を返す．
-  bool
-  has_const_bit_select() const override;
+  /// @brief 宣言要素に対するビット/部分選択の種類を返す．
+  ///
+  /// - expr_type() が PRIMARY かつ primary_type() が DECL,
+  ///   CONST_DECL_ARRAY, VAR_DECL_ARRAY の場合に意味を持つ．
+  VlSelectType
+  select_type() const override;
 
   /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
   ///

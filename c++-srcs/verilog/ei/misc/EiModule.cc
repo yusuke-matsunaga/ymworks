@@ -9,7 +9,10 @@
 #include "elaborator/ElbMgr.h"
 #include "EiModule.h"
 #include "EiModuleArray.h"
-#include "EiPort.h"
+#include "EiInputPort.h"
+#include "EiOutputPort.h"
+#include "EiNamedInputPort.h"
+#include "EiNamedOutputPort.h"
 #include "ym/vl/VlIODecl.h"
 
 
@@ -429,29 +432,36 @@ EiModuleBase::add_iodecl(
   mIODict.emplace(io_decl->decl(), io_decl);
 }
 
-// @brief ポートを追加する．
+// @brief 名前付きポートを追加する．
 void
 EiModuleBase::add_port(
-  const AstPort& ast_port,
-  ElbExpr* low_conn,
+  const FileRegion& loc,
+  const char* name,
+  const VlTerm* low_conn,
   VpiDir dir
 )
 {
   add_port_sub([&](SizeType port_index) -> EiPortBase* {
-    return new EiPort1(this, ast_port, port_index, low_conn, dir);
-  });
-}
-
-// @brief ポートを追加する．
-void
-EiModuleBase::add_port(
-  const AstIOItem& ast_ioitem,
-  ElbExpr* low_conn,
-  VpiDir dir
-)
-{
-  add_port_sub([&](SizeType port_index) -> EiPortBase* {
-    return new EiPort2(this, ast_ioitem, port_index, low_conn, dir);
+    if ( dir == VpiDir::Input ) {
+      if ( name == nullptr ) {
+	return new EiInputPort(loc, this, port_index,
+			       low_conn, dir);
+      }
+      else {
+	return new EiNamedInputPort(loc, this, name, port_index,
+				    low_conn, dir);
+      }
+    }
+    else {
+      if ( name == nullptr ) {
+	return new EiOutputPort(loc, this, port_index,
+				low_conn, dir);
+      }
+      else {
+	return new EiNamedOutputPort(loc, this, name, port_index,
+				     low_conn, dir);
+      }
+    }
   });
 }
 
@@ -460,6 +470,20 @@ void
 EiModuleBase::set_port_high_conn(
   SizeType index,
   ElbExpr* high_conn,
+  bool conn_by_name
+)
+{
+  if ( index >= port_num() ) {
+    throw std::out_of_range{"index is out of range"};
+  }
+  mPortList[index]->set_high_conn(high_conn, conn_by_name);
+}
+
+// @brief ポートの high_conn を接続する．
+void
+EiModuleBase::set_port_high_conn(
+  SizeType index,
+  const VlTerm* high_conn,
   bool conn_by_name
 )
 {

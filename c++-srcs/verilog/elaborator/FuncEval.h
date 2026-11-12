@@ -27,11 +27,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// しかし再帰呼び出しはないので一つの変数に対するオブジェクトは
 /// 唯一に定まる．
 /// そこで，変数に対する値割り当てを unordered_map で保持する．
-///
-/// 注意が必要なのは変数の中には配列型のものがあるということ．
-/// 一括して扱うために単独の変数も要素数１でオフセットが０の配列
-/// 要素とみなす．
-/// ただし，これは値の割り当てマップのなかだけの話．
+/// キーは decl_id()
 //////////////////////////////////////////////////////////////////////
 class FuncEval
 {
@@ -229,6 +225,18 @@ private:
     const VlExpr* expr ///< [in] 対象の式
   );
 
+  /// @brief インデックス式を評価する．
+  std::vector<int>
+  evaluate_index(
+    const std::vector<const VlExpr*>& index_list
+  );
+
+  /// @brief プライマリ式から宣言要素の番号を取り出す．
+  SizeType
+  get_decl_id(
+    const VlExpr* expr
+  );
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -236,124 +244,56 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief 値を登録する．
-  ///
-  /// 単独のオブジェクト用
   void
   reg_val(
-    const VlDeclBase* obj, ///< [in] 対象のオブジェクト
-    const VlValue& val     ///< [in] 値
+    SizeType key,      ///< [in] キー
+    const VlValue& val ///< [in] 値
   );
 
   /// @brief 値を登録する．
   ///
-  /// 配列要素用
+  /// 固定インデックスのビット/部分選択つき
   void
-  reg_val(
-    const VlDeclBase* obj, ///< [in] 対象のオブジェクト
-    SizeType offset,       ///< [in] オフセット
-    const VlValue& val     ///< [in] 値
+  reg_val_const_select(
+    SizeType key,       ///< [in] キー
+    const VlValue& val, ///< [in] 値
+    const VlExpr* expr  ///< [in] 対象の式
   );
 
   /// @brief 値を登録する．
   ///
-  /// 単独のオブジェクト用
+  /// 可変プラスインデックスのビット/部分選択つき
   void
-  reg_val(
-    const VlDeclBase* obj, ///< [in] 対象のオブジェクト
-    const VlValue& val,    ///< [in] 値
-    int index              ///< [in] ビット選択インデックス
+  reg_val_plus_select(
+    SizeType key,       ///< [in] キー
+    const VlValue& val, ///< [in] 値
+    const VlExpr* expr  ///< [in] 対象の式
   );
 
   /// @brief 値を登録する．
   ///
-  /// 配列要素用
+  /// 可変プラスインデックスのビット/部分選択つき
   void
-  reg_val(
-    const VlDeclBase* obj, ///< [in] 対象のオブジェクト
-    SizeType offset,	   ///< [in] オフセット
-    const VlValue& val,	   ///< [in] 値
-    int intdex             ///< [in] ビット選択インデックス
+  reg_val_minus_select(
+    SizeType key,       ///< [in] キー
+    const VlValue& val, ///< [in] 値
+    const VlExpr* expr  ///< [in] 対象の式
   );
 
-  /// @brief 値を登録する．
-  ///
-  /// 単独のオブジェクト用
+  /// @brief reg_val() の下請け関数
   void
-  reg_val(
-    const VlDeclBase* obj, ///< [in] 対象のオブジェクト
-    const VlValue& val,	   ///< [in] 値
-    int left,              ///< [in] 範囲選択の左のインデックス
-    int right              ///< [in] 範囲選択の右のインデックス
-  );
-
-  /// @brief 値を登録する．
-  ///
-  /// 配列要素用
-  void
-  reg_val(
-    const VlDeclBase* obj, ///< [in] 対象のオブジェクト
-    SizeType offset,	   ///< [in] オフセット
-    const VlValue& val,	   ///< [in] 値
-    int left,              ///< [in] 範囲選択の左のインデックス
-    int right		   ///< [in] 範囲選択の右のインデックス
+  _reg_val(
+    SizeType key,
+    const VlValue& val,
+    SizeType msb,
+    SizeType lsb
   );
 
   /// @brief 値を取り出す．
-  ///
-  /// 単独のオブジェクト用
   VlValue
   get_val(
-    const VlDeclBase* obj ///< [in] 対象のオブジェクト
-  );
-
-  /// @brief 値を取り出す．
-  ///
-  /// 配列要素用
-  VlValue
-  get_val(
-    const VlDeclBase* obj, ///< [in] 対象のオブジェクト
-    SizeType offset        ///< [in] オフセット
-  );
-
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられるデータ構造
-  //////////////////////////////////////////////////////////////////////
-
-  // キーを表すクラス
-  // 単体の場合と配列+オフセットの2通りがある．
-  struct Key
-  {
-    const VlDeclBase* mObj{nullptr};
-    SizeType mOffset{0};
-  };
-
-  // ハッシュ関数を表すクラス
-  struct Hash
-  {
-    SizeType
-    operator()(
-      const Key& key
-    ) const
-    {
-      auto tmp = reinterpret_cast<SizeType>(key.mObj);
-      return ((tmp * tmp) >> 18) ^ key.mOffset;
-    }
-  };
-
-  // 等価比較を行うクラス
-  struct Eq
-  {
-    bool
-    operator()(
-      const Key& key1,
-      const Key& key2
-    ) const
-    {
-      return key1.mObj == key2.mObj && key1.mOffset == key2.mOffset;
-    }
-  };
+    SizeType key ///< [in] キー
+  ) const;
 
 
 private:
@@ -368,7 +308,7 @@ private:
   const VlTaskFunc* mFunction;
 
   // 値割り当ての辞書
-  std::unordered_map<Key, VlValue, Hash, Eq> mValMap;
+  std::unordered_map<SizeType, VlValue> mValMap;
 
 };
 

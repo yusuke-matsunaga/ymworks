@@ -76,8 +76,8 @@ class VlControl;
 // in VlExpr.h
 class VlExpr;
 
-// in vlSelecter.h
-class VlSelecter;
+// in VlTerm.h
+class VlTerm;
 
 // in VlDelay.h
 class VlDelay;
@@ -121,7 +121,7 @@ using nsVerilog::VlStmt;
 using nsVerilog::VlCaseItem;
 using nsVerilog::VlControl;
 using nsVerilog::VlExpr;
-using nsVerilog::VlSelecter;
+using nsVerilog::VlTerm;
 using nsVerilog::VlDelay;
 using nsVerilog::VlRange;
 using nsVerilog::VlUdpDefn;

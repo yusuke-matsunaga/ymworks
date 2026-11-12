@@ -11,9 +11,11 @@
 #include "ElbEnv.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstContAssign.h"
+#include "ym/vl/VlTerm.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbProcess.h"
 #include "elaborator/ElbExpr.h"
+#include "elaborator/ElbPrimary.h"
 #include "elaborator/ElbError.h"
 
 
@@ -224,11 +226,11 @@ ItemGen::instantiate_cont_assign(
 
     // 左辺式の生成
     auto ast_lhs = ast_contassign.lhs();
-    auto lhs = instantiate_net_lhs(parent, ast_lhs);
+    auto lhs = instantiate_net_lhs_term(parent, ast_lhs);
 
     // 右辺式の生成
     auto ast_rhs = ast_contassign.rhs();
-    auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs);
+    auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs->value_type());
 
     auto loc = ast_contassign.file_region();
     auto ca = elb_mgr().new_ContAssign(ca_head, loc, lhs, rhs);
