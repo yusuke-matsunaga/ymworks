@@ -33,9 +33,9 @@ num_suffix(
 )
 {
   switch ( num ) {
-  case 1: return "st";
-  case 2: return "nd";
-  case 3: return "rd";
+  case 1:  return "st";
+  case 2:  return "nd";
+  case 3:  return "rd";
   default: return "th";
   }
 }
@@ -342,6 +342,112 @@ ItemGen::link_prim_array(
   }
 }
 
+// @brief UDP/primitive instance で使われている式の名前解決を行う．
+void
+ItemGen::link_primitive(
+  ElbPrimitive* primitive,
+  const AstInst& ast_inst
+)
+{
+  SizeType index{0};
+  for ( auto ast_con: ast_inst.port_list() ) {
+    // UDP instance の場合には ai_list は無視する．
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_valid() ) {
+      link_primitive_port(primitive, index, ast_expr);
+    }
+    ++ index;
+  }
+}
+
+// @brief cell array instance で使われている式の名前解決を行う．
+void
+ItemGen::link_cell_array(
+  ElbPrimArray* prim_array,
+  const AstInst& ast_inst
+)
+{
+  auto parent = prim_array->parent_scope();
+  SizeType arraysize = prim_array->elem_num();
+
+  // ポートの情報を得るために先頭の要素を取り出す．
+  auto prim = prim_array->elem_by_offset(0);
+
+  // YACC の文法から一つでも named_con なら全部そう
+  bool conn_by_name = (ast_inst.port_list().front().name() != nullptr);
+
+  auto cell = prim->cell();
+
+  SizeType pos{0};
+  for ( auto ast_con: ast_inst.port_list() ) {
+    int index;
+    if ( conn_by_name ) {
+      auto pin = cell.pin(ast_con.name());
+      if ( pin.is_invalid() ) {
+	log_mgr().error_pin_name_not_found(__FILE__, __LINE__, ast_con);
+      }
+      index = pin.pin_id();
+    }
+    else {
+      index = pos;
+      ++ pos;
+    }
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_invalid() ) {
+      // 空の接続式は許されない．
+      log_mgr().error_empty_port_expression(__FILE__, __LINE__, ast_con);
+    }
+
+    auto term = prim->prim_term(index);
+    if ( term->direction() == VpiDir::Input ) {
+      // 入力ポートの接続を作る．
+      link_prim_array_input_port(prim_array, index, ast_expr);
+    }
+    else {
+      // それ以外のポートに対する接続を作る．
+      link_prim_array_output_port(prim_array, index, ast_expr);
+    }
+  }
+}
+
+// @brief cell instance で使われている式の名前解決を行う．
+void
+ItemGen::link_cell(
+  ElbPrimitive* primitive,
+  const AstInst& ast_inst
+)
+{
+  auto parent = primitive->parent_scope();
+
+  // YACC の文法から一つでも named_con なら全部そう
+  bool conn_by_name = (ast_inst.port_list().front().name() != nullptr);
+
+  auto cell = primitive->cell();
+
+  SizeType pos{0};
+  for ( auto ast_con: ast_inst.port_list() ) {
+    SizeType index;
+    if ( conn_by_name ) {
+      auto pin = cell.pin(ast_con.name());
+      if ( pin.is_invalid() ) {
+	log_mgr().error_pin_name_not_found(__FILE__, __LINE__, ast_con);
+      }
+      index = pin.pin_id();
+    }
+    else {
+      index = pos;
+      ++ pos;
+    }
+    // ai_list は無視する．
+    auto ast_expr = ast_con.expr();
+    if ( ast_expr.is_invalid() ) {
+      continue;
+    }
+
+    link_primitive_port(primitive, index, ast_expr);
+  }
+}
+
 // @brief プリミティブ配列のポートの結合を行う．
 void
 ItemGen::link_prim_array_port(
@@ -428,14 +534,12 @@ ItemGen::link_prim_array_output_port(
   auto parent = prim_array->parent_scope();
   SizeType arraysize = prim_array->elem_num();
 
-  // 入力以外は左辺式
+  // 入力以外はネット型の左辺式でなければならない．
   auto primary_list = instantiate_net_lhs(parent, ast_expr);
   if ( primary_list.empty() ) {
     // 空の式はエラーではなくスキップする．
     return;
   }
-
-  #warning "TODO: primary_list の中に real タイプの宣言要素が含まれていないかチェック"
 
   SizeType expr_size = 0;
   for ( auto& primary: primary_list ) {
@@ -449,32 +553,19 @@ ItemGen::link_prim_array_output_port(
   }
 
   // primary_list を 1 ビットずつに分割して接続する．
+  SizeType offset = 0;
+  SizeType cur = 0;
   for ( SizeType i = 0; i < arraysize; ++ i ) {
     auto prim = prim_array->_primitive_by_offset(i);
-#if 0
-    auto bit = elb_mgr().new_BitSelect(ast_expr, tmp, i);
-    prim->connect(index, bit);
-#else
-#warning "TODO: primary_list から1ビットずつ切り出す．"
-#endif
-  }
-}
-
-// @brief UDP/primitive instance で使われている式の名前解決を行う．
-void
-ItemGen::link_primitive(
-  ElbPrimitive* primitive,
-  const AstInst& ast_inst
-)
-{
-  SizeType index{0};
-  for ( auto ast_con: ast_inst.port_list() ) {
-    // UDP instance の場合には ai_list は無視する．
-    auto ast_expr = ast_con.expr();
-    if ( ast_expr.is_valid() ) {
-      link_primitive_port(primitive, index, ast_expr);
+    auto& primary = primary_list[cur];
+    auto primary1 = primary.slice(offset, 1);
+    auto bit_expr = elb_mgr().new_Primary(primary1);
+    prim->connect(index, bit_expr);
+    ++ offset;
+    if ( offset == primary.bit_width() ) {
+      offset = 0;
+      ++ cur;
     }
-    ++ index;
   }
 }
 
@@ -486,128 +577,66 @@ ItemGen::link_primitive_port(
   const AstExpr& ast_expr
 )
 {
-  auto parent = primitive->parent_scope();
-  ElbEnv env1;
-  ElbNetLhsEnv env2(env1);
-  ElbExpr* tmp{nullptr};
   auto term = primitive->prim_term(index);
   if ( term->direction() == VpiDir::Input ) {
-    // 入力に接続するのは通常の右辺式
-    tmp = instantiate_expr(parent, env1, ast_expr);
-
-    auto type = tmp->value_type();
-    if ( type.is_real_type() ) {
-      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-    }
-
-    SizeType expr_size = type.size();
-    if ( expr_size == 0 ) {
-      // サイズがなければ1ビットに直してから接続する．
-      tmp->set_reqsize(VlValueType(false, true, 1));
-    }
-    if ( expr_size != 1 ) {
-      // サイズが等しくない．
-      auto def_name = primitive->head()->def_name();
-      log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
-    }
-#warning "TODO: 未完"
+    // 入力ポートの接続を作る．
+    link_primitive_input_port(primitive, index, ast_expr);
   }
   else {
-    // それ以外は左辺式
-    auto primary_list = instantiate_lhs(parent, env2, ast_expr);
-    auto tmp = elb_mgr().new_Term(primary_list);
-#warning "TODO: 未完"
+    // それ以外のポートに対する接続を作る．
+    link_primitive_output_port(primitive, index, ast_expr);
   }
 }
 
-// @brief cell array instance で使われている式の名前解決を行う．
+// @brief プリミティブの入力ポートの結合を行う．
 void
-ItemGen::link_cell_array(
-  ElbPrimArray* prim_array,
-  const AstInst& ast_inst
-)
-{
-  auto parent = prim_array->parent_scope();
-  SizeType arraysize = prim_array->elem_num();
-
-  // ポートの情報を得るために先頭の要素を取り出す．
-  auto prim = prim_array->elem_by_offset(0);
-
-  // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (ast_inst.port_list().front().name() != nullptr);
-
-  auto cell = prim->cell();
-
-  SizeType pos{0};
-  for ( auto ast_con: ast_inst.port_list() ) {
-    int index;
-    if ( conn_by_name ) {
-      auto pin = cell.pin(ast_con.name());
-      if ( pin.is_invalid() ) {
-	log_mgr().error_pin_name_not_found(__FILE__, __LINE__, ast_con);
-      }
-      index = pin.pin_id();
-    }
-    else {
-      index = pos;
-      ++ pos;
-    }
-    auto ast_expr = ast_con.expr();
-    if ( ast_expr.is_invalid() ) {
-      // 空の接続式は許されない．
-      log_mgr().error_empty_port_expression(__FILE__, __LINE__, ast_con);
-    }
-
-    auto term = prim->prim_term(index);
-    if ( term->direction() == VpiDir::Input ) {
-      // 入力ポートの接続を作る．
-      link_prim_array_input_port(prim_array, index, ast_expr);
-    }
-    else {
-      // それ以外のポートに対する接続を作る．
-      link_prim_array_output_port(prim_array, index, ast_expr);
-    }
-  }
-}
-
-// @brief cell instance で使われている式の名前解決を行う．
-void
-ItemGen::link_cell(
+ItemGen::link_primitive_input_port(
   ElbPrimitive* primitive,
-  const AstInst& ast_inst
+  SizeType index,
+  const AstExpr& ast_expr
 )
 {
   auto parent = primitive->parent_scope();
 
-  // YACC の文法から一つでも named_con なら全部そう
-  bool conn_by_name = (ast_inst.port_list().front().name() != nullptr);
-
-  auto cell = primitive->cell();
-
+  // 入力に接続するのは通常の右辺式
   ElbEnv env1;
-  ElbNetLhsEnv env2(env1);
-  SizeType pos{0};
-  for ( auto ast_con: ast_inst.port_list() ) {
-    SizeType index;
-    if ( conn_by_name ) {
-      auto pin = cell.pin(ast_con.name());
-      if ( pin.is_invalid() ) {
-	log_mgr().error_pin_name_not_found(__FILE__, __LINE__, ast_con);
-      }
-      index = pin.pin_id();
-    }
-    else {
-      index = pos;
-      ++ pos;
-    }
-    // ai_list は無視する．
-    auto ast_expr = ast_con.expr();
-    if ( ast_expr.is_invalid() ) {
-      continue;
-    }
-
-    link_primitive_port(primitive, index, ast_expr);
+  auto tmp = instantiate_expr(parent, env1, ast_expr);
+  auto type = tmp->value_type();
+  if ( type.is_real_type() ) {
+    log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
   }
+
+  auto expr_size = type.size();
+  if ( expr_size == 0 ) {
+    // サイズがなければ1ビットに直してから接続する．
+    tmp->set_reqsize(VlValueType(false, true, 1));
+  }
+  if ( expr_size != 1 ) {
+    // サイズが等しくない．
+    auto def_name = primitive->head()->def_name();
+    log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
+  }
+  primitive->connect(index, tmp);
+}
+
+// @brief プリミティブの出力ポートの結合を行う．
+void
+ItemGen::link_primitive_output_port(
+  ElbPrimitive* primitive,
+  SizeType index,
+  const AstExpr& ast_expr
+)
+{
+  auto parent = primitive->parent_scope();
+
+  auto primary_list = instantiate_net_lhs(parent, ast_expr);
+  if ( primary_list.size() != 1 || primary_list.front().bit_width() != 1 ) {
+    // 1ビットでなければいけない．
+    log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
+  }
+  auto& primary = primary_list.front();
+  auto tmp = elb_mgr().new_Primary(primary);
+  primitive->connect(index, tmp);
 }
 
 END_NAMESPACE_YM_VERILOG

@@ -53,7 +53,7 @@ StmtGen::instantiate_pca(
   const AstStmt& ast_stmt
 )
 {
-  ElbPcaLhsEnv env1{env};
+  ElbPcaLhsEnv env1;
 
   auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
@@ -73,7 +73,7 @@ StmtGen::instantiate_deassign(
   const AstStmt& ast_stmt
 )
 {
-  ElbPcaLhsEnv env1{env};
+  ElbPcaLhsEnv env1;
 
   auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
@@ -90,7 +90,7 @@ StmtGen::instantiate_force(
   const AstStmt& ast_stmt
 )
 {
-  ElbForceLhsEnv env1{env};
+  ElbForceLhsEnv env1;
 
   auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
@@ -110,7 +110,7 @@ StmtGen::instantiate_release(
   const AstStmt& ast_stmt
 )
 {
-  ElbForceLhsEnv env1{env};
+  ElbForceLhsEnv env1;
 
   auto ast_lhs = ast_stmt.lhs();
   auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);

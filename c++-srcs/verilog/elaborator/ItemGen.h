@@ -537,6 +537,22 @@ private:
     const AstExpr& ast_expr  ///< [in] 結合する式
   );
 
+  /// @brief プリミティブの入力ポートの結合を行う．
+  void
+  link_primitive_input_port(
+    ElbPrimitive* primitive, ///< [in] プリミティブ
+    SizeType index,          ///< [in] ポート番号
+    const AstExpr& ast_expr  ///< [in] 結合する式
+  );
+
+  /// @brief プリミティブの出力ポートの結合を行う．
+  void
+  link_primitive_output_port(
+    ElbPrimitive* primitive, ///< [in] プリミティブ
+    SizeType index,          ///< [in] ポート番号
+    const AstExpr& ast_expr  ///< [in] 結合する式
+  );
+
   /// @brief link_cell_array() 用のスタブを作る．
   ElbStub*
   make_cell_array_stub(

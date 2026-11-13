@@ -66,12 +66,10 @@ ExprGen::instantiate_primary(
     }
   }
 
-  if ( !env.is_lhs() ) {
-    auto genvar = handle->genvar();
-    if ( genvar != nullptr ) {
-      // 対象のオブジェクトが genvar の場合
-      return instantiate_genvar(parent, ast_expr, genvar->value());
-    }
+  auto genvar = handle->genvar();
+  if ( genvar != nullptr ) {
+    // 対象のオブジェクトが genvar の場合
+    return instantiate_genvar(parent, ast_expr, genvar->value());
   }
 
   // 添字には constant/constant function 以外の情報は引き継がない
@@ -90,63 +88,23 @@ ExprGen::instantiate_primary(
 				       ast_expr, ast_bit);
 
   // 宣言要素のタイプをチェックする．
-  check_decl(env, ast_expr, decl_ref);
+  check_decl(env, ast_expr, decl_ref, ast_bit.is_valid());
 
   auto sel = instantiate_selecter(parent, ast_expr, decl_ref.declbase(),
 				  index_env, ast_bit, true);
   return elb_mgr().new_Primary(ast_expr, decl_ref, sel);
 }
 
-// @brief AstExpr(primary) から named_event を生成する．
+// @brief イベント式用のプライマリ式の生成を行う．
 ElbExpr*
-ExprGen::instantiate_namedevent(
+ExprGen::instantiate_event_primary(
   const VlScope* parent,
+  const ElbEnv& env,
   const AstExpr& ast_expr
 )
 {
-  if ( ast_expr.type() != AstExpr::Primary ) {
-    throw std::logic_error{"ast_expr->type() != AstExpr::Primary"};
-  }
-  if ( ast_expr.part().is_valid() ) {
-    throw std::logic_error{"ast_expr->part() != nullptr"};
-  }
-
-  // 名前に対応したオブジェクトのハンドルを求める．
-  auto handle = elb_mgr().find_obj_up(parent, ast_expr, nullptr);
-  if ( handle == nullptr ) {
-    // 見つからなかった．
-    log_mgr().error_not_found(__FILE__, __LINE__,
-			      ast_expr.file_region(),
-			      ast_expr.name());
-  }
-
-  // 配列要素などの処理を行う．
-  ElbEnv env0;
-  if ( ast_expr.is_const_index() ) {
-    env0 = ElbConstantEnv();
-  }
-
-  AstExpr ast_bit;
-  auto decl_ref = instantiate_decl_ref(handle, parent, env0,
-				       ast_expr, ast_bit);
-
-  auto declbase = decl_ref.declbase();
-  if ( declbase == nullptr ) {
-    // そもそも宣言要素ですらなかった．
-#warning "TODO: エラーメッセージ"
-    throw std::logic_error{"decl_base == nullptr"};
-  }
-  auto decl_type = declbase->type();
-  if ( decl_type != VpiObjType::NamedEvent ) {
-    // 型が違う
-    log_mgr().error_not_a_namedevent(__FILE__, __LINE__, ast_expr);
-  }
-  if ( ast_bit.is_valid() ) {
-    // 部分選択，ビット選択は使えない．
-    log_mgr().error_select_for_namedevent(__FILE__, __LINE__, ast_expr);
-  }
-
-  return elb_mgr().new_Primary(ast_expr, decl_ref);
+  ElbEventExprEnv env1(env);
+  return instantiate_primary(parent, env1, ast_expr);
 }
 
 // @brief genvar に対応した定数を生成する．
@@ -620,6 +578,13 @@ ExprGen::find_handle(
     }
     return handle;
   }
+  if ( env.is_net_lhs() ) {
+    if ( has_hname ) {
+      // 階層つき識別子はだめ
+      //log_mgr().error_hname_in_net_assign(__FILE__, __LINE__, ast_expr);
+#warning "TODO: エラー処理"
+    }
+  }
 
   // 通常のスコープで探索する．
   // たぶんモジュール内でいいはず．
@@ -685,11 +650,12 @@ void
 ExprGen::check_decl(
   const ElbEnv& env,
   const AstExpr& ast_expr,
-  const ElbDeclRef& decl_ref
+  const ElbDeclRef& decl_ref,
+  bool has_bit_select
 )
 {
   bool has_index = ast_expr.index_list().size() > 0;
-  bool has_select = ast_expr.part().is_valid();
+  bool has_select = ast_expr.part().is_valid() || has_bit_select;
   auto decl_type = decl_ref.declbase()->type();
   if ( env.is_pca_lhs() ) {
     // procedural continuous assignment 文の左辺式

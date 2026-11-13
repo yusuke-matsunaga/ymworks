@@ -45,6 +45,8 @@
 set ( elaborator_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/AttrGen.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/DeclGen.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/DeclGen_io.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/DeclGen_net.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Elaborator.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ElbEnv.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/ElbProxy.cc

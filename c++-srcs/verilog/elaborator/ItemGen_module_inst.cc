@@ -393,17 +393,8 @@ ItemGen::link_module_array_port(
     }
   }
   else {
-    // それ以外の場合には左辺式のみが接続できる．
-    auto primary_list = instantiate_lhs(parent, env, ast_expr);
-
-#if 0
-    auto type = tmp->value_type();
-    if ( type.is_real_type() ) {
-      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-    }
-#else
-  #warning "TODO: primary_list の中に real タイプの宣言要素が含まれていないかチェック"
-#endif
+    // それ以外の場合にはネット型の左辺式のみが接続できる．
+    auto primary_list = instantiate_net_lhs(parent, ast_expr);
 
     SizeType expr_size = 0;
     for ( auto& primary: primary_list ) {
@@ -543,16 +534,9 @@ ItemGen::link_module(
       module->set_port_high_conn(index, tmp, conn_by_name);
     }
     else {
-      // それ以外のポートに接続できるのは左辺式だけ．
-      auto primary_list = instantiate_lhs(parent, env, ast_expr);
-#if 0
-      auto type = tmp->value_type();
-      if ( type.is_real_type() ) {
-	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-      }
-#else
-#warning "TODO: primary_list に real タイプの宣言要素が含まれていないかチェック"
-#endif
+      // それ以外のポートに接続できるのはネット型の左辺式だけ．
+      auto primary_list = instantiate_net_lhs(parent, ast_expr);
+
       auto lhs = elb_mgr().new_Term(primary_list);
       // 左辺はサイズの補正をしても意味がないのでそのまま接続する．
       module->set_port_high_conn(index, lhs, conn_by_name);

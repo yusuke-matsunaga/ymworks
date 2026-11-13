@@ -300,9 +300,7 @@ class ElbNetLhsEnv :
 public:
 
   /// @brief コンストラクタ
-  ElbNetLhsEnv(
-    const ElbEnv& env ///< [in] 親の環境
-  );
+  ElbNetLhsEnv();
 
 };
 
@@ -334,9 +332,7 @@ class ElbPcaLhsEnv :
 public:
 
   /// @brief コンストラクタ
-  ElbPcaLhsEnv(
-    const ElbEnv& env ///< [in] 親の環境
-  );
+  ElbPcaLhsEnv();
 
 };
 
@@ -351,9 +347,7 @@ class ElbForceLhsEnv :
 public:
 
   /// @brief コンストラクタ
-  ElbForceLhsEnv(
-    const ElbEnv& env ///< [in] 親の環境
-  );
+  ElbForceLhsEnv();
 
 };
 

@@ -133,10 +133,7 @@ ExprGen::instantiate_event_expr(
 
   case AstExpr::Primary:
     // 通常の識別子に加えて named event も扱う．
-    {
-      ElbEventExprEnv env1(env);
-      return instantiate_primary(parent, env1, ast_expr);
-    }
+    return instantiate_event_primary(parent, env, ast_expr);
 
   case AstExpr::Const:
     // イベント式の根元には定数は使えない．
@@ -158,6 +155,58 @@ ExprGen::instantiate_event_expr(
   }
 
   throw std::logic_error{"Should not be reached"};
+}
+
+// @brief AstExpr(primary) から named_event を生成する．
+ElbExpr*
+ExprGen::instantiate_namedevent(
+  const VlScope* parent,
+  const AstExpr& ast_expr
+)
+{
+  if ( ast_expr.type() != AstExpr::Primary ) {
+    throw std::logic_error{"ast_expr->type() != AstExpr::Primary"};
+  }
+  if ( ast_expr.part().is_valid() ) {
+    throw std::logic_error{"ast_expr->part() != nullptr"};
+  }
+
+  // 名前に対応したオブジェクトのハンドルを求める．
+  auto handle = elb_mgr().find_obj_up(parent, ast_expr, nullptr);
+  if ( handle == nullptr ) {
+    // 見つからなかった．
+    log_mgr().error_not_found(__FILE__, __LINE__,
+			      ast_expr.file_region(),
+			      ast_expr.name());
+  }
+
+  // 配列要素などの処理を行う．
+  ElbEnv index_env;
+  if ( ast_expr.is_const_index() ) {
+    index_env = ElbConstantEnv();
+  }
+
+  AstExpr ast_bit;
+  auto decl_ref = instantiate_decl_ref(handle, parent, index_env,
+				       ast_expr, ast_bit);
+
+  auto declbase = decl_ref.declbase();
+  if ( declbase == nullptr ) {
+    // そもそも宣言要素ですらなかった．
+#warning "TODO: エラーメッセージ"
+    throw std::logic_error{"decl_base == nullptr"};
+  }
+  auto decl_type = declbase->type();
+  if ( decl_type != VpiObjType::NamedEvent ) {
+    // 型が違う
+    log_mgr().error_not_a_namedevent(__FILE__, __LINE__, ast_expr);
+  }
+  if ( ast_bit.is_valid() ) {
+    // 部分選択，ビット選択は使えない．
+    log_mgr().error_select_for_namedevent(__FILE__, __LINE__, ast_expr);
+  }
+
+  return elb_mgr().new_Primary(ast_expr, decl_ref);
 }
 
 // @brief AstExpr からシステム関数の引数を生成する．

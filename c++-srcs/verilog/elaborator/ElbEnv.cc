@@ -257,9 +257,7 @@ ElbEventExprEnv::ElbEventExprEnv(
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-ElbNetLhsEnv::ElbNetLhsEnv(
-  const ElbEnv& env
-) : ElbEnv{env}
+ElbNetLhsEnv::ElbNetLhsEnv()
 {
   set_net_lhs();
 }
@@ -283,9 +281,7 @@ ElbVarLhsEnv::ElbVarLhsEnv(
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-ElbPcaLhsEnv::ElbPcaLhsEnv(
-  const ElbEnv& env
-) : ElbEnv{env}
+ElbPcaLhsEnv::ElbPcaLhsEnv()
 {
   set_pca_lhs();
 }
@@ -296,9 +292,7 @@ ElbPcaLhsEnv::ElbPcaLhsEnv(
 //////////////////////////////////////////////////////////////////////
 
 // @brief コンストラクタ
-ElbForceLhsEnv::ElbForceLhsEnv(
-  const ElbEnv& env
-) : ElbEnv{env}
+ElbForceLhsEnv::ElbForceLhsEnv()
 {
   set_force_lhs();
 }

@@ -169,6 +169,17 @@ private:
     const AstExpr& ast_expr  ///< [in] 式を表すパース木
   );
 
+  /// @brief イベント式用のプライマリ式の生成を行う．
+  /// @return 生成された式を返す．
+  ///
+  /// 不適切な式ならば ElbError 例外を送出する．
+  ElbExpr*
+  instantiate_event_primary(
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const ElbEnv& env,	     ///< [in] 生成時の環境
+    const AstExpr& ast_expr  ///< [in] 式を表すパース木
+  );
+
   /// @brief 左辺のプライマリ式の生成を行う．
   /// @return 生成された ElbPrimary を返す．
   ///
@@ -177,16 +188,6 @@ private:
   instantiate_lhs_primary(
     const VlScope* parent,  ///< [in] 親のスコープ
     const ElbEnv& env,	    ///< [in] 生成時の環境
-    const AstExpr& ast_expr ///< [in] 式を表すパース木
-  );
-
-  /// @brief 継続的代入文の左辺のプライマリ式の生成を行う．
-  /// @return 生成された ElbPrimary を返す．
-  ///
-  /// 不適切な式ならば ElbError 例外を送出する．
-  ElbPrimary
-  instantiate_net_primary(
-    const VlScope* parent,  ///< [in] 親のスコープ
     const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
@@ -339,9 +340,10 @@ private:
   /// 不適切な場合，例外が送出される．
   void
   check_decl(
-    const ElbEnv& env,         ///< [in] 環境
-    const AstExpr& ast_expr,   ///< [in] 式を表すパース木
-    const ElbDeclRef& decl_ref ///< [in] 宣言要素の参照
+    const ElbEnv& env,          ///< [in] 環境
+    const AstExpr& ast_expr,    ///< [in] 式を表すパース木
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
+    bool has_bit_select         ///< [in] ビット選択の有無
   );
 
 };
