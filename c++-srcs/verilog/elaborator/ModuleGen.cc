@@ -357,7 +357,7 @@ ModuleGen::instantiate_selecter(
   }
 
   // 選択なし
-  return ElbSelecter();
+  return ElbSelecter::new_NONE(decl->bit_size());
 }
 
 // port の生成を行う．

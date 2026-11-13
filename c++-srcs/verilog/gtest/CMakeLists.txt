@@ -39,6 +39,8 @@
 
 add_subdirectory ( pt_test )
 add_subdirectory ( parser_test )
+add_subdirectory ( rangeval_test )
+add_subdirectory ( elbselecter_test )
 add_subdirectory ( elb_test )
 
 

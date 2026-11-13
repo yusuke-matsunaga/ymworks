@@ -94,14 +94,14 @@ public:
 
   /// @brief 固定インデックスの配列型の宣言要素の時 true を返す．
   bool
-  is_const_index() const
+  is_const_elem() const
   {
     return is_declarray() && mIndexList.empty();
   }
 
   /// @brief 可変インデックスの配列がの宣言要素の時 true を返す．
   bool
-  is_var_index() const
+  is_var_elem() const
   {
     return is_declarray() && !mIndexList.empty();
   }
@@ -128,6 +128,8 @@ public:
   }
 
   /// @brief 固定インデックスのオフセットを返す．
+  ///
+  /// - is_const_elem() == true の時のみ意味を持つ．
   SizeType
   offset() const
   {
@@ -135,6 +137,8 @@ public:
   }
 
   /// @brief 可変インデックスのインデックス式を返す．
+  ///
+  /// - is_var_elem() == true の時のみ意味を持つ．
   const std::vector<const VlExpr*>&
   index_list() const
   {

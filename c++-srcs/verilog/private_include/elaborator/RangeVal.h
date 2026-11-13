@@ -131,18 +131,22 @@ public:
     }
   }
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief big endian の時に true を返す．
+  ///
+  /// 1ビットの場合はどちらも成り立つので背反ではない．
   bool
   is_big_endian() const
   {
-    return left >= right;
+    return left <= right;
   }
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief little endian の時に true を返す．
+  ///
+  /// 1ビットの場合はどちらも成り立つので背反ではない．
   bool
   is_little_endian() const
   {
-    return right >= left;
+    return left >= right;
   }
 
 };

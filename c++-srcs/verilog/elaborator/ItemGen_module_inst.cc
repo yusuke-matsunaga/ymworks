@@ -323,7 +323,8 @@ ItemGen::link_module_array(
       continue;
     }
 
-    link_module_array_port(module_array, index, ast_expr, conn_by_name);
+    link_module_array_port(module_array, port,
+			   ast_expr, conn_by_name);
 
     // attribute instance の設定
     for ( SizeType i = 0; i < module_size; ++ i ) {
@@ -341,7 +342,7 @@ ItemGen::link_module_array(
 void
 ItemGen::link_module_array_port(
   ElbModuleArray* module_array,
-  SizeType index,
+  const VlPort* port,
   const AstExpr& ast_expr,
   bool conn_by_name
 )
@@ -349,8 +350,6 @@ ItemGen::link_module_array_port(
   auto parent = module_array->parent_scope();
 
   auto module_size = module_array->elem_num();
-  auto module0 = module_array->elem_by_offset(0);
-  auto port = module0->port(index);
   auto port_size = port->bit_size();
   ElbEnv env;
   if ( port->direction() == VpiDir::Input ) {
@@ -374,7 +373,7 @@ ItemGen::link_module_array_port(
       // サイズが等しい場合はそのまま接続する．
       for ( SizeType i = 0; i < module_size; ++ i ) {
 	auto module = module_array->elem(i);
-	module->set_port_high_conn(index, tmp, conn_by_name);
+	module->set_port_high_conn(port->port_index(), tmp, conn_by_name);
       }
     }
     else if ( port_size * module_size == expr_size ) {
@@ -383,9 +382,11 @@ ItemGen::link_module_array_port(
       }
       // tmp を 分割する．
       for ( SizeType i = 0; i < module_size; ++ i ) {
-	auto tmp1 = elb_mgr().new_PartSelect(ast_expr, tmp, i, port_size);
+	SizeType width = port_size;
+	SizeType base = i * port_size;
+	auto tmp1 = elb_mgr().new_PartSelect(ast_expr, tmp, width, base);
 	auto module = module_array->elem(i);
-	module->set_port_high_conn(index, tmp1, conn_by_name);
+	module->set_port_high_conn(port->port_index(), tmp1, conn_by_name);
       }
     }
     else {
@@ -407,10 +408,11 @@ ItemGen::link_module_array_port(
     // 式を分割する．
     // 0番目のモジュールがLSB側になる．
     for ( SizeType i = 0; i < module_size; ++ i ) {
+      SizeType width = port_size;
+      SizeType base = i * port_size;
+      auto term = elb_mgr().new_Term(primary_list, width, base);
       auto module = module_array->elem(i);
-      int index = i * port_size;
-      auto term = elb_mgr().new_Term(primary_list, index, port_size);
-      module->set_port_high_conn(index, term, conn_by_name);
+      module->set_port_high_conn(port->port_index(), term, conn_by_name);
     }
   }
 }
@@ -423,7 +425,6 @@ ItemGen::link_module(
   const AstInst& ast_inst
 )
 {
-  auto parent = module->parent_scope();
   SizeType port_num = module->port_num();
   auto port_list = ast_inst.port_list();
   SizeType n = port_list.size();
@@ -462,7 +463,6 @@ ItemGen::link_module(
   }
 
   // ポートに接続する式を生成する．
-  ElbEnv env;
   SizeType pos{0};
   for ( auto ast_con: ast_inst.port_list() ) {
     auto ast_expr = ast_con.expr();
@@ -471,7 +471,7 @@ ItemGen::link_module(
     }
 
     // この式に対応するポート番号を求める．
-    int index{-1};
+    int index = -1;
     if ( conn_by_name ) {
       // 名前による割り当ての場合はポート名で探す．
       auto port_name = ast_con.name();
@@ -495,56 +495,70 @@ ItemGen::link_module(
       }
       ++ pos;
     }
-
     auto port = module->port(index);
-    if ( !port ) {
+    if ( port == nullptr ) {
       // このポートはダミー
       continue;
     }
 
-    SizeType port_size = port->bit_size();
-    if ( port->direction() == VpiDir::Input ) {
-      // 入力ポートには任意の式を接続できる．
-      auto tmp = instantiate_expr(parent, env, ast_expr);
-      auto type = tmp->value_type();
-      if ( type.is_real_type() ) {
-	// ただし real 型は駄目
-	log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-      }
-
-      SizeType expr_size = type.size();
-
-      // 単独のインスタンスの場合 expr のサイズは補正される．
-      // ... でいいんだよね．
-      if ( port_size != expr_size ) {
-	if ( expr_size != 0 ) {
-	  {
-	    std::ostringstream buf;
-	    buf << "port_size: " << port_size << ", expr_size: " << expr_size;
-	    MsgMgr::put_msg(__FILE__, __LINE__,
-			    ast_expr.file_region(),
-			    MsgType::Debug,
-			    "ELAB",
-			    buf.str());
-	  }
-	  log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
-	}
-	tmp->set_reqsize(VlValueType(false, true, port_size));
-      }
-      module->set_port_high_conn(index, tmp, conn_by_name);
-    }
-    else {
-      // それ以外のポートに接続できるのはネット型の左辺式だけ．
-      auto primary_list = instantiate_net_lhs(parent, ast_expr);
-
-      auto lhs = elb_mgr().new_Term(primary_list);
-      // 左辺はサイズの補正をしても意味がないのでそのまま接続する．
-      module->set_port_high_conn(index, lhs, conn_by_name);
-    }
+    // ポートの接続を行う本体
+    link_module_port(module, port, ast_expr, conn_by_name);
 
     // attribute instance の生成
     auto attr_list = attribute_list(ast_con);
     elb_mgr().reg_attr(port, attr_list);
+  }
+}
+
+// @brief module instance のポートの結合を行う．
+void
+ItemGen::link_module_port(
+  ElbModule* module,
+  const VlPort* port,
+  const AstExpr& ast_expr,
+  bool conn_by_name
+)
+{
+  auto parent = module->parent_scope();
+  auto port_size = port->bit_size();
+  if ( port->direction() == VpiDir::Input ) {
+    // 入力ポートには任意の式を接続できる．
+    ElbEnv env;
+    auto tmp = instantiate_expr(parent, env, ast_expr);
+    auto type = tmp->value_type();
+    if ( type.is_real_type() ) {
+      // ただし real 型は駄目
+      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
+    }
+
+    SizeType expr_size = type.size();
+
+    // 単独のインスタンスの場合 expr のサイズは補正される．
+    // ... でいいんだよね．
+    if ( port_size != expr_size ) {
+      if ( expr_size != 0 ) {
+	{
+	  std::ostringstream buf;
+	  buf << "port_size: " << port_size << ", expr_size: " << expr_size;
+	  MsgMgr::put_msg(__FILE__, __LINE__,
+			  ast_expr.file_region(),
+			  MsgType::Debug,
+			  "ELAB",
+			  buf.str());
+	}
+	log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
+      }
+      tmp->set_reqsize(VlValueType(false, true, port_size));
+    }
+    module->set_port_high_conn(port->port_index(), tmp, conn_by_name);
+  }
+  else {
+    // それ以外のポートに接続できるのはネット型の左辺式だけ．
+    auto primary_list = instantiate_net_lhs(parent, ast_expr);
+
+    auto lhs = elb_mgr().new_Term(primary_list);
+    // 左辺はサイズの補正をしても意味がないのでそのまま接続する．
+    module->set_port_high_conn(port->port_index(), lhs, conn_by_name);
   }
 }
 

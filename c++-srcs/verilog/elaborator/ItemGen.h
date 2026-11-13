@@ -298,7 +298,7 @@ private:
   void
   link_module_array_port(
     ElbModuleArray* module_array, ///< [in] モジュール配列
-    SizeType index,               ///< [in] ポート番号
+    const VlPort* port,           ///< [in] ポート
     const AstExpr& ast_expr,      ///< [in] 接続する式
     bool conn_by_name             ///< [in] 名前による結合の場合 true にする．
   );
@@ -327,6 +327,15 @@ private:
     ElbModule* module,           ///< [in] モジュール
     const AstModule& ast_module, ///< [in] モジュール定義
     const AstInst& ast_inst      ///< [in] インスタンス定義
+  );
+
+  /// @brief module instance のポートの結合を行う．
+  void
+  link_module_port(
+    ElbModule* module,       ///< [in] モジュール
+    const VlPort* port,      ///< [in] ポート
+    const AstExpr& ast_expr, ///< [in] 接続する式
+    bool conn_by_name        ///< [in] 名前による結合の場合 true にする．
   );
 
   /// @brief gate instance ヘッダの生成を行う

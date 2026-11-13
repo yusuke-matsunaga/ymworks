@@ -325,7 +325,7 @@ ExprGen::instantiate_selecter(
 				  index_env, ast_part, var_index);
   }
   // 単純なプライマリ式
-  return ElbSelecter();
+  return ElbSelecter::new_NONE(declbase->bit_size());
 }
 
 // @brief ビット選択式を作る．

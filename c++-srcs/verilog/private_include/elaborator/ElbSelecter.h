@@ -9,6 +9,8 @@
 /// All rights reserved.
 
 #include "ym/verilog.h"
+#include "ym/vl/VlFwd.h"
+
 
 BEGIN_NAMESPACE_YM_VERILOG
 
@@ -20,10 +22,15 @@ class ElbSelecter
 {
 public:
 
-  /// @brief 空のコンストラクタ
-  ///
-  /// - NONE となる．
-  ElbSelecter() = default;
+  /// @brief 選択なしタイプのオブジェクトを作る．
+  static
+  ElbSelecter
+  new_NONE(
+    SizeType width ///< [in] ビット幅
+  )
+  {
+    return ElbSelecter(VlSelectType::NONE, width, 0, nullptr);
+  }
 
   /// @brief 固定選択のオブジェクトを作る．
   static
@@ -100,8 +107,8 @@ public:
   /// もともとのタイプが NONE/CONST の時のみ有効
   ElbSelecter
   slice(
-    SizeType offset, ///< [in] 開始位置のオフセット
-    SizeType width   ///< [in] 選択する幅
+    SizeType width, ///< [in] 選択する幅
+    SizeType offset ///< [in] 開始位置のオフセット
   ) const
   {
     switch ( mType ) {

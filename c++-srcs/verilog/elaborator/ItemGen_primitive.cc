@@ -558,7 +558,7 @@ ItemGen::link_prim_array_output_port(
   for ( SizeType i = 0; i < arraysize; ++ i ) {
     auto prim = prim_array->_primitive_by_offset(i);
     auto& primary = primary_list[cur];
-    auto primary1 = primary.slice(offset, 1);
+    auto primary1 = primary.slice(1, offset);
     auto bit_expr = elb_mgr().new_Primary(primary1);
     prim->connect(index, bit_expr);
     ++ offset;

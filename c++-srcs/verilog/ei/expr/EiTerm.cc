@@ -58,12 +58,13 @@ ElbMgr::new_Term(
   return term;
 }
 
+
 // @brief 端子を生成する．
 const VlTerm*
 ElbMgr::new_Term(
   const std::vector<ElbPrimary>& primary_list,
-  SizeType base,
-  SizeType width
+  SizeType width,
+  SizeType base
 )
 {
   SizeType n = primary_list.size();
@@ -88,7 +89,7 @@ ElbMgr::new_Term(
 
   if ( index1 == index2 ) {
     auto& primary = primary_list[index1];
-    auto primary1 = primary.slice(offset1, width);
+    auto primary1 = primary.slice(width, offset1);
     auto expr = new_Primary(primary1);
     return new_Term(expr);
   }
@@ -96,14 +97,16 @@ ElbMgr::new_Term(
     std::vector<ElbPrimary> tmp_list;
     tmp_list.reserve(index2 - index1 + 1);
     auto& primary1 = primary_list[index1];
-    auto new_primary1 = primary1.slice(offset1, primary1.bit_width() - offset1);
+    auto width = primary1.bit_width() - offset1;
+    auto new_primary1 = primary1.slice(width, offset1);
     tmp_list.push_back(new_primary1);
     for ( SizeType i = index1 + 1; i < index2; ++ i ) {
       auto& primary1 = primary_list[i];
       tmp_list.push_back(primary1);
     }
     auto& primary2 = primary_list[index2];
-    auto new_primary2 = primary2.slice(0, offset2);
+    // offset2 は幅
+    auto new_primary2 = primary2.slice(offset2, 0);
     tmp_list.push_back(new_primary2);
     return new_Term(tmp_list);
   }

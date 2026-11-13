@@ -47,6 +47,18 @@ ElbMgr::new_Primary(
 ElbExpr*
 ElbMgr::new_Primary(
   const AstExpr& ast_expr,
+  const ElbDeclRef& decl_ref
+)
+{
+  auto width = decl_ref.declbase()->bit_size();
+  return new_Primary(ast_expr, decl_ref,
+		     ElbSelecter::new_NONE(width));
+}
+
+// @brief プライマリ式を生成する．
+ElbExpr*
+ElbMgr::new_Primary(
+  const AstExpr& ast_expr,
   const ElbDeclRef& decl_ref,
   const ElbSelecter& selecter
 )
@@ -74,7 +86,7 @@ ElbMgr::new_Primary(
       }
       if ( decl_ref.is_declarray() ) {
 	auto declarray = decl_ref.declarray();
-	if ( decl_ref.is_const_index() ) {
+	if ( decl_ref.is_const_elem() ) {
 	  auto array_offset = decl_ref.offset();
 	  switch ( selecter.type() ) {
 	  case VlSelectType::NONE:

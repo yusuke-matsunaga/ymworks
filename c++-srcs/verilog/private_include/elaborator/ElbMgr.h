@@ -1027,9 +1027,30 @@ public:
   /// @brief プライマリ式を生成する．
   ElbExpr*
   new_Primary(
-    const AstExpr& ast_expr,         ///< [in] パース木の定義要素
-    const ElbDeclRef& decl_ref,      ///< [in] 宣言要素への参照
-    const ElbSelecter& selecter = {} ///< [in] ビット/部分選択子
+    const AstExpr& ast_expr,   ///< [in] パース木の定義要素
+    const ElbDeclRef& decl_ref ///< [in] 宣言要素への参照
+  );
+
+  /// @brief プライマリ式を生成する．
+  ElbExpr*
+  new_Primary(
+    const AstExpr& ast_expr,    ///< [in] パース木の定義要素
+    const ElbDeclRef& decl_ref, ///< [in] 宣言要素への参照
+    const ElbSelecter& selecter ///< [in] ビット/部分選択子
+  );
+
+  /// @brief 宣言要素に対応するプライマリ式を生成する．
+  ElbExpr*
+  new_Primary(
+    const AstDeclItem& ast_decl, ///< [in] パース木の定義要素
+    const VlDecl* decl           ///< [in] 宣言要素
+  );
+
+  /// @brief 宣言要素に対応するプライマリ式を生成する．
+  ElbExpr*
+  new_Primary(
+    const AstIOItem& ast_decl, ///< [in] パース木の定義要素
+    const VlDecl* decl         ///< [in] 宣言要素
   );
 
   /// @brief 端子を生成する．
@@ -1046,71 +1067,12 @@ public:
 
   /// @brief 端子を生成する．
   ///
-  /// [base: base - width - 1] の部分選択を表す式を生成する．
+  /// base_offset 〜 base_offset + width - 1 の部分選択を表す式を生成する．
   const VlTerm*
   new_Term(
     const std::vector<ElbPrimary>& primary_list, ///< [in] プライマリのリスト
-    SizeType base,                               ///< [in] ベースのオフセット
-    SizeType width                               ///< [in] ビット幅
-  );
-
-  /// @brief 左辺式を生成する．
-  ///
-  /// ネットの初期値に対応する継続的代入文で用いる．
-  const VlTerm*
-  new_Term(
-    const AstDeclItem& ast_decl, ///< [in] パース木の定義要素
-    const VlDecl* decl           ///< [in] 宣言要素
-  );
-
-#if 0
-  /// @brief 宣言要素に対応するプライマリ式を生成する．
-  ElbExpr*
-  new_Primary(
-    const AstExpr& ast_expr,   ///< [in] パース木の定義要素
-    const ElbDeclRef& decl_ref ///< [in] 宣言要素の参照
-  );
-
-  /// @brief 固定部分選択に対応するプライマリ式を生成する．
-  ElbExpr*
-  new_ConstSelectPrimary(
-    const AstExpr& ast_expr,    ///< [in] パース木の定義要素
-    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
-    SizeType offset,            ///< [in] オフセット
-    SizeType width = 1          ///< [in] ビット幅
-  );
-
-  /// @brief 可変プラス部分選択に対応するプライマリ式を生成する．
-  ElbExpr*
-  new_PlusSelectPrimary(
-    const AstExpr& ast_expr,    ///< [in] パース木の定義要素
-    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
-    const VlExpr* base_expr,    ///< [in] 基準位置を表すインデックス式
-    SizeType width = 1          ///< [in] ビット幅
-  );
-
-  /// @brief 可変マイナス部分選択に対応するプライマリ式を生成する．
-  ElbExpr*
-  new_MinusSelectPrimary(
-    const AstExpr& ast_expr,    ///< [in] パース木の定義要素
-    const ElbDeclRef& decl_ref, ///< [in] 宣言要素の参照
-    const VlExpr* base_expr,    ///< [in] 基準位置を表すインデックス式
-    SizeType width = 1          ///< [in] ビット幅
-  );
-#endif
-
-  /// @brief 宣言要素に対応するプライマリ式を生成する．
-  ElbExpr*
-  new_Primary(
-    const AstDeclItem& ast_decl, ///< [in] パース木の定義要素
-    const VlDecl* decl           ///< [in] 宣言要素
-  );
-
-  /// @brief 宣言要素に対応するプライマリ式を生成する．
-  ElbExpr*
-  new_Primary(
-    const AstIOItem& ast_decl, ///< [in] パース木の定義要素
-    const VlDecl* decl         ///< [in] 宣言要素
+    SizeType width,                              ///< [in] ビット幅
+    SizeType base_offset                         ///< [in] ベースのオフセット
   );
 
   /// @brief 固定ビット選択式を生成する．

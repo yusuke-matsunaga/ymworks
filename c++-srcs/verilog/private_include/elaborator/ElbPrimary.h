@@ -26,10 +26,22 @@ class ElbPrimary
 public:
 
   /// @brief コンストラクタ
+  ///
+  /// ビット/部分選択なし
+  ElbPrimary(
+    const AstExpr& ast_expr,   ///< [in] パース木の構文要素
+    const ElbDeclRef& decl_ref ///< [in] 宣言用への参照
+  ) : mAstExpr{ast_expr},
+      mDeclRef{decl_ref},
+      mSelecter{ElbSelecter::new_NONE(decl_ref.declbase()->bit_size())}
+  {
+  }
+
+  /// @brief コンストラクタ
   ElbPrimary(
     const AstExpr& ast_expr,    ///< [in] パース木の構文要素
     const ElbDeclRef& decl_ref, ///< [in] 宣言用への参照
-    const ElbSelecter& sel = {} ///< [in] ビット/部分選択の情報
+    const ElbSelecter& sel      ///< [in] ビット/部分選択の情報
   ) : mAstExpr{ast_expr},
       mDeclRef{decl_ref},
       mSelecter{sel}
@@ -79,11 +91,11 @@ public:
   /// @brief ビット/部分選択した結果を返す．
   ElbPrimary
   slice(
-    SizeType offset, ///< [in] 開始位置のオフセット
-    SizeType width   ///< [in] 選択する幅
+    SizeType width, ///< [in] 選択する幅
+    SizeType offset ///< [in] 開始位置のオフセット
   ) const
   {
-    auto new_selecter = mSelecter.slice(offset, width);
+    auto new_selecter = mSelecter.slice(width, offset);
     return ElbPrimary(mAstExpr, mDeclRef, new_selecter);
   }
 
