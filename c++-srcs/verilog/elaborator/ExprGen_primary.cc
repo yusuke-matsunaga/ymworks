@@ -411,7 +411,7 @@ ExprGen::instantiate_const_partselect(
 {
   auto index1_val = evaluate_int(parent, ast_left);
   auto index2_val = evaluate_int(parent, ast_right);
-  auto big = (index1_val >= index2_val);
+  auto big = (index1_val <= index2_val);
   if ( big ^ declbase->is_big_endian() ) {
     // 範囲の順番が逆
     log_mgr().error_range_order(__FILE__, __LINE__, ast_expr);
@@ -437,7 +437,7 @@ ExprGen::instantiate_const_partselect(
 
   SizeType offset;
   SizeType width;
-  if ( big ) {
+  if ( offset1 <= offset2 ) {
     offset = offset1;
     width = offset2 - offset1 + 1;
   }
@@ -485,7 +485,6 @@ ExprGen::instantiate_plus_partselect(
   }
   if ( var_index ) {
     // 可変インデックスだった
-#warning "TODO: エンディアンを考慮する必要ある？"
     auto base = instantiate_expr(parent, index_env, ast_left);
     return ElbSelecter::new_PLUS(range_val, base);
   }
@@ -531,7 +530,6 @@ ExprGen::instantiate_minus_partselect(
   }
   if ( var_index ) {
     // 可変インデックスだった
-#warning "エンディアンを考慮する必要ある？"
     auto base = instantiate_expr(parent, index_env, ast_left);
     return ElbSelecter::new_MINUS(range_val, base);
   }
@@ -550,39 +548,22 @@ ExprGen::find_handle(
 {
   // 階層付き識別子の時 true
   auto has_hname = (ast_expr.namebranch_list().size() > 0);
-
-  if ( env.is_constant() ) {
-    // 定数式の場合
-    // [A]
-    if ( has_hname ) {
-      // 階層つき識別子はだめ
-      log_mgr().error_hname_in_ce(__FILE__, __LINE__, ast_expr);
-    }
-    return find_const_handle(parent, ast_expr);
+  if ( has_hname ) {
+    env.check_hname(ast_expr, log_mgr());
   }
+
   if ( env.inside_constant_function() ) {
-    if ( has_hname ) {
-      // 階層つき識別子はだめ
-      log_mgr().error_hname_in_cf(__FILE__, __LINE__, ast_expr);
-    }
     // まず関数内の識別子を探索する．
     auto handle = elb_mgr().find_obj_up(parent, ast_expr,
 					env.constant_function());
     if ( handle != nullptr ) {
       return handle;
     }
-    if ( !env.is_lhs() ) {
-      // 右辺ならモジュール内の定数識別子を探索する．
-      // なんか [A] と共通にできそうな気がする．
-      handle = find_const_handle(parent, ast_expr);
-    }
-    return handle;
-  }
-  if ( env.is_net_lhs() ) {
-    if ( has_hname ) {
-      // 階層つき識別子はだめ
-      //log_mgr().error_hname_in_net_assign(__FILE__, __LINE__, ast_expr);
-#warning "TODO: エラー処理"
+    if ( env.is_lhs() ) {
+      // 左辺ならこれ以外の探索はなし．
+      log_mgr().error_not_found(__FILE__, __LINE__,
+				ast_expr.file_region(),
+				ast_expr.name());
     }
   }
 
@@ -591,6 +572,14 @@ ExprGen::find_handle(
   auto handle = elb_mgr().find_obj_up(parent, ast_expr,
 				      parent->parent_module());
   if ( handle != nullptr ) {
+    if ( env.is_constant() || env.inside_constant_function() ) {
+      // 定数型の識別子でなければならない．
+      if ( handle->genvar() == nullptr &&
+	   handle->parameter() == nullptr ) {
+	//log_mgr().error_not_a_constant(__FILE__, __LINE__, ast_expr);
+#warning "TODO: エラーメッセージ"
+      }
+    }
     return handle;
   }
 
@@ -614,35 +603,11 @@ ExprGen::find_handle(
     }
     return handle;
   }
+
   log_mgr().error_not_found(__FILE__, __LINE__,
 			    ast_expr.file_region(),
 			    ast_expr.name());
   return nullptr;
-}
-
-// @brief 定数識別子を探す．
-ObjHandle*
-ExprGen::find_const_handle(
-  const VlScope* parent,
-  const AstExpr& ast_expr
-)
-{
-  // モジュール内の識別子を探索する．
-  auto handle = elb_mgr().find_obj_up(parent, ast_expr, parent->parent_module());
-  if ( handle == nullptr ) {
-    // 見つからなかった．
-    log_mgr().error_not_found(__FILE__, __LINE__,
-			      ast_expr.file_region(),
-			      ast_expr.name());
-  }
-
-  // handle が持つオブジェクトは genvar か parameter でなければならない．
-  if ( handle->genvar() == nullptr &&
-       handle->parameter() == nullptr ) {
-    log_mgr().error_not_a_parameter(__FILE__, __LINE__, ast_expr);
-  }
-
-  return handle;
 }
 
 // @brief decl の型が適切がチェックする．
@@ -657,6 +622,13 @@ ExprGen::check_decl(
   bool has_index = ast_expr.index_list().size() > 0;
   bool has_select = ast_expr.part().is_valid() || has_bit_select;
   auto decl_type = decl_ref.declbase()->type();
+  if ( env.is_bitvect() ) {
+    if ( decl_type != VpiObjType::Reg &&
+	 decl_type != VpiObjType::Net ) {
+      // ビットベクタ型ではない．
+      log_mgr().error_illegal_object(__FILE__, __LINE__, ast_expr);
+    }
+  }
   if ( env.is_pca_lhs() ) {
     // procedural continuous assignment 文の左辺式
     if ( has_index ) {

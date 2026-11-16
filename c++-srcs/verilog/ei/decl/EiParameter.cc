@@ -176,16 +176,20 @@ EiParamHead::right_range_string() const
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiParamHead::is_big_endian() const
+EiParamHead::is_big_endian(
+  const VlValue& val
+) const
 {
-  return true;
+  // デフォルトでは little endian だが 1ビットの時は
+  // big endian とも言える．
+  return bit_size(val) == 1;
 }
 
 // @brief left_range <= right_range の時に true を返す．
 bool
 EiParamHead::is_little_endian() const
 {
-  return false;
+  return true;
 }
 
 // @brief ビット幅を返す．
@@ -348,8 +352,11 @@ EiParamHeadV::right_range_string() const
 
 // @brief left_range >= right_range の時に true を返す．
 bool
-EiParamHeadV::is_big_endian() const
+EiParamHeadV::is_big_endian(
+  const VlValue& val
+) const
 {
+  // val は無用
   return mRange.is_big_endian();
 }
 
@@ -497,7 +504,7 @@ EiParameter::right_range_string() const
 bool
 EiParameter::is_big_endian() const
 {
-  return mHead->is_big_endian();
+  return mHead->is_big_endian(mValue);
 }
 
 // @brief left_range <= right_range の時に true を返す．
@@ -571,13 +578,6 @@ const VlDelay*
 EiParameter::delay() const
 {
   return nullptr;
-}
-
-// @brief この要素に対する代入のタイプを返す．
-VlAssignType
-EiParameter::assign_type() const
-{
-  return VlAssignType::NONE;
 }
 
 // @brief 定数値を持つ型のときに true を返す．

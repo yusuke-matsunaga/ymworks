@@ -1078,7 +1078,8 @@ enum class VlExprType : std::uint8_t {
   SELECT,      ///< ビット/部分選択
   OPERATION,   ///< 演算
   FUNCCALL,    ///< 関数呼び出し
-  SYSFUNCCALL  ///< システム関数呼び出し
+  SYSFUNCCALL, ///< システム関数呼び出し
+  LHS          ///< 左辺式
 };
 
 /// @brief VlExprType のストリーム出力演算子
@@ -1097,6 +1098,7 @@ operator<<(
   case VlExprType::OPERATION:   s << "OPERATION"; break;
   case VlExprType::FUNCCALL:    s << "FUNCCALL"; break;
   case VlExprType::SYSFUNCCALL: s << "SYSFUNCCALL"; break;
+  case VlExprType::LHS:         s << "LHS"; break;
   }
   return s;
 }

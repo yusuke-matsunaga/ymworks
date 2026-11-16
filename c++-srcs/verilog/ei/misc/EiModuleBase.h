@@ -14,7 +14,7 @@
 BEGIN_NAMESPACE_YM_VERILOG
 
 class EiModuleHead;
-class EiPortBase;
+class EiPort;
 
 //////////////////////////////////////////////////////////////////////
 /// @class EiModuleBase EiModuleBase.h "EiModuleBase.h"
@@ -189,23 +189,15 @@ public:
   add_port(
     const FileRegion& loc,  ///< [in] ファイル位置
     const char* name,       ///< [in] 名前
-    const VlTerm* low_conn, ///< [in] 下位の接続
+    const VlExpr* low_conn, ///< [in] 下位の接続
     VpiDir dir              ///< [in] 向き
   ) override;
 
   /// @brief ポートの high_conn を接続する．
   void
   set_port_high_conn(
-    SizeType index,     ///< [in] ポート番号
-    ElbExpr* high_conn, ///< [in] 上位の接続の式
-    bool conn_by_name   ///< [in] 名前による割り当て時に true とするフラグ
-  ) override;
-
-  /// @brief ポートの high_conn を接続する．
-  void
-  set_port_high_conn(
     SizeType index,          ///< [in] ポート番号
-    const VlTerm* high_conn, ///< [in] 上位の接続の式
+    const VlExpr* high_conn, ///< [in] 上位の接続の式
     bool conn_by_name        ///< [in] 名前による割り当て時に true とするフラグ
   ) override;
 
@@ -234,12 +226,12 @@ private:
   /// @brief add_port() の共通処理
   void
   add_port_sub(
-    std::function<EiPortBase*(SizeType)> new_func
+    std::function<EiPort*(SizeType)> new_func
   )
   {
     auto port_index = mPortList.size();
     auto port = new_func(port_index);
-    mPortList.push_back(std::unique_ptr<EiPortBase>(port));
+    mPortList.push_back(std::unique_ptr<EiPort>(port));
   }
 
 
@@ -249,7 +241,7 @@ private:
   //////////////////////////////////////////////////////////////////////
 
   // ポートの配列
-  std::vector<std::unique_ptr<EiPortBase>> mPortList;
+  std::vector<std::unique_ptr<EiPort>> mPortList;
 
   // 入出力の配列
   std::vector<std::unique_ptr<const VlIODecl>> mIODeclList;

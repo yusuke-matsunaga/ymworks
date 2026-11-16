@@ -1,43 +1,42 @@
-﻿#ifndef EIINPUTPORT_H
-#define EIINPUTPORT_H
+﻿#ifndef EINAMEDPORT_H
+#define EINAMEDPORT_H
 
-/// @file EiInputPort.h
-/// @brief EiInputPort のヘッダファイル
+/// @file EiNamedPort.h
+/// @brief EiNamedPort のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiPortBase.h"
+#include "EiPort.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiInputPort EiInputPort.h "EiInputPort.h"
-/// @brief 入力タイプの EiPortBase
-///
-/// high_conn が ElbExpr*
+/// @class EiNamedPort EiNamedPort.h "EiNamedPort.h"
+/// @brief 名前を持つ EiPort
 //////////////////////////////////////////////////////////////////////
-class EiInputPort :
-  public EiPortBase
+class EiNamedPort :
+  public EiPort
 {
 public:
 
   /// @brief コンストラクタ
-  EiInputPort(
+  EiNamedPort(
     const FileRegion& loc,  ///< [in] ファイル位置
     const VlModule* parent, ///< [in] 親のモジュール
+    const char* name,       ///< [in] 名前
     SizeType index,         ///< [in] ポート番号
-    const VlTerm* low_conn, ///< [in] 下位の接続
+    const VlExpr* low_conn, ///< [in] 下位の接続
     VpiDir dir              ///< [in] 向き
-  ) : EiPortBase(loc, parent, index, low_conn, dir),
-      mHighConn{nullptr}
+  ) : EiPort(loc, parent, index, low_conn, dir),
+      mName{name}
   {
   }
 
   /// @brief デストラクタ
-  ~EiInputPort() {}
+  ~EiNamedPort() {}
 
 
 public:
@@ -45,22 +44,13 @@ public:
   // VlPort の仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief 上位の接続先を返す(入力ポート用)．
-  const VlExpr*
-  high_conn_expr() const override;
+  /// @brief 明示的に名前がついているとき true を返す．
+  bool
+  has_explicit_name() const override;
 
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // EiPortBaseの関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief high_conn を接続する．
-  void
-  set_high_conn(
-    ElbExpr* high_conn,
-    bool conn_by_name
-  ) override;
+  /// @brief 名前を返す．
+  std::string
+  name() const override;
 
 
 private:
@@ -68,11 +58,12 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // 上位の接続先
-  ElbExpr* mHighConn;
+  // 名前
+  // この文字列領域は AstMgr が管理しているはず
+  const char* mName;
 
 };
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // EIINPUTPORT_H
+#endif // EINAMEDPORT_H

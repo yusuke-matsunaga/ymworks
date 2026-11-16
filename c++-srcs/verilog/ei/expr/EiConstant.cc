@@ -8,6 +8,11 @@
 
 #include "elaborator/ElbMgr.h"
 #include "EiConstant.h"
+#include "EiIntConstant.h"
+#include "EiBitVectorConstant.h"
+#include "EiRealConstant.h"
+#include "EiStringConstant.h"
+#include "EiParamConstant.h"
 #include "ym/vl/VlValue.h"
 #include "ym/vl/AstExpr.h"
 #include "elaborator/ElbParameter.h"

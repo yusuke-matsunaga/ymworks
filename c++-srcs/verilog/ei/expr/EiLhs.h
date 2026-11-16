@@ -1,36 +1,36 @@
-#ifndef EITERM2_H
-#define EITERM2_H
+#ifndef EILHS_H
+#define EILHS_H
 
-/// @file EiTerm2.h
-/// @brief EiTerm2 のヘッダファイル
+/// @file EiLhs.h
+/// @brief EiLhs のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ym/vl/VlTerm.h"
+#include "EiExpr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiTerm2 EiTerm2.h "EiTerm2.h"
-/// @brief 単一要素の EiTerm
+/// @class EiLhs EiLhs.h "EiLhs.h"
+/// @brief 複数要素の左辺式を表す VlExpr
 //////////////////////////////////////////////////////////////////////
-class EiTerm2 :
-  public VlTerm
+class EiLhs :
+  public EiExpr
 {
 public:
 
   /// @brief コンストラクタ
-  EiTerm2(
-    const std::vector<const VlExpr*>& primary_list ///< [in] プライマリのリスト
-  ) : mPrimaryList{primary_list}
+  EiLhs(
+    const std::vector<const VlExpr*>& expr_list ///< [in] 要素のリスト
+  ) : mElemList{expr_list}
   {
   }
 
   /// @brief デストラクタ
-  ~EiTerm2() = default;
+  ~EiLhs() = default;
 
 
 public:
@@ -42,19 +42,15 @@ public:
   VpiObjType
   type() const override;
 
-  /// @brief ファイル位置の取得
+  /// @brief ファイル位置を返す．
   FileRegion
   file_region() const override;
 
 
 public:
   //////////////////////////////////////////////////////////////////////
-  // VlTerm の仮想関数
+  // VlExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
-
-  /// @brief Verilog-HDL の文字列を得る．
-  std::string
-  decompile() const override;
 
   /// @brief 式の値のタイプを返す．
   ///
@@ -62,21 +58,47 @@ public:
   VlValueType
   value_type() const override;
 
+  /// @brief Verilog-HDL の文字列を得る．
+  std::string
+  decompile() const override;
+
   /// @brief 式のビット幅を返す．
   ///
   /// value_type().size() を同じ
   SizeType
   bit_size() const override;
 
+  /// @brief 式のタイプを返す．
+  VlExprType
+  expr_type() const override;
+
+  /// @brief 左辺式の時に true を返す．
+  bool
+  is_lhs() const override;
+
   /// @brief 要素数を返す．
   SizeType
-  elem_num() const override;
+  lhs_elem_num() const override;
 
   /// @brief 要素を返す．
   const VlExpr*
-  elem(
+  lhs_elem(
     SizeType index ///< [in] インデックス ( 0 <= index < elem_num() )
   ) const override;
+
+
+protected:
+  //////////////////////////////////////////////////////////////////////
+  // ElbExpr の仮想関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief set_reqsize() の下請け関数
+  ///
+  /// 必要であればオペランドに対して再帰的に処理を行なう．
+  void
+  _set_reqsize(
+    const VlValueType& type ///< [in] 要求される式の型
+  ) override;
 
 
 private:
@@ -84,11 +106,11 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // プライマリのリスト
-  std::vector<const VlExpr*> mPrimaryList;
+  // 要素のリスト
+  std::vector<const VlExpr*> mElemList;
 
 };
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // EITERM2_H
+#endif // EILHS_H

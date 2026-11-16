@@ -18,6 +18,13 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @class VlContAssign VlContAssign.h "ym/vl/VlContAssign.h"
 /// @brief 継続的代入文を表すクラス
 /// IEEE Std 1364-2001 26.6.24 Continuous assignment
+///
+/// 実はオリジナルとちょっと意味が変わっていて左辺は常に
+/// 単一の宣言要素(もしくはそのビット/部分選択)となっている．
+/// もともとが複数要素の連結だった場合は右辺を分割する．
+///
+/// ただし単独の宣言要素の場合と配列型の宣言要素の固定インデックス
+/// の場合がある．
 //////////////////////////////////////////////////////////////////////
 class VlContAssign :
   public VlObj
@@ -52,14 +59,9 @@ public:
   bool
   has_net_decl_assign() const = 0;
 
-  /// @brief ビット幅を返す．
+  /// @brief 左辺式を返す．
   virtual
-  int
-  bit_size() const = 0;
-
-  /// @brief 左辺を返す．
-  virtual
-  const VlTerm*
+  const VlExpr*
   lhs() const = 0;
 
   /// @brief 右辺を返す．

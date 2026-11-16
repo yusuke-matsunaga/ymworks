@@ -8,7 +8,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiPrimary.h"
+#include "EiPrimaryExprBase.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG

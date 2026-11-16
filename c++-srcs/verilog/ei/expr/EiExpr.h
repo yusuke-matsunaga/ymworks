@@ -43,10 +43,6 @@ public:
   bool
   is_primary() const override;
 
-  /// @brief ビット/部分選択の時に true を返す．
-  bool
-  is_select() const override;
-
   /// @brief 演算子の時に true を返す．
   bool
   is_operation() const override;
@@ -58,6 +54,10 @@ public:
   /// @brief システム関数よびあどい時に true を返す．
   bool
   is_sysfunccall() const override;
+
+  /// @brief 左辺式の時に true を返す．
+  bool
+  is_lhs() const override;
 
   /// @brief 定数の型を返す．
   VpiConstType
@@ -95,6 +95,10 @@ public:
   SizeType
   declarray_offset() const override;
 
+  /// @brief 宣言要素の番号を返す．
+  SizeType
+  decl_id() const override;
+
   /// @brief 宣言要素に対するビット/部分選択の種類を返す．
   ///
   /// - expr_type() が PRIMARY かつ primary_type() が DECL,
@@ -122,10 +126,6 @@ public:
   /// @brief primitive への参照の場合，対象のオブジェクトを返す．
   const VlPrimitive*
   primitive_obj() const override;
-
-  /// @brief 親の式を返す．
-  const VlExpr*
-  parent_expr() const override;
 
   /// @brief 演算子のタイプを返す．
   VpiOpType
@@ -170,6 +170,16 @@ public:
   /// @brief 引数のリストを返す．
   std::vector<const VlExpr*>
   argument_list() const override;
+
+  /// @brief 要素数を返す．
+  SizeType
+  lhs_elem_num() const override;
+
+  /// @brief 要素を返す．
+  const VlExpr*
+  lhs_elem(
+    SizeType index ///< [in] インデックス ( 0 <= index < lhs_elem_num() )
+  ) const override;
 
 };
 

@@ -75,12 +75,12 @@ public:
   std::string
   right_range_string() const = 0;
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief left_range <= right_range の時に true を返す．
   virtual
   bool
   is_big_endian() const = 0;
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief left_range >= right_range の時に true を返す．
   virtual
   bool
   is_little_endian() const = 0;
@@ -152,11 +152,6 @@ public:
   virtual
   const VlDelay*
   delay() const = 0;
-
-  /// @brief この要素に対する代入のタイプを返す．
-  virtual
-  VlAssignType
-  assign_type() const = 0;
 
 };
 

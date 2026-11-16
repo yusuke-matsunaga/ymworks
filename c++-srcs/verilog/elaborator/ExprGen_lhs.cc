@@ -23,35 +23,52 @@ BEGIN_NAMESPACE_YM_VERILOG
 //////////////////////////////////////////////////////////////////////
 
 // @brief AstExpr から左辺式を生成する
-std::vector<ElbPrimary>
+const VlExpr*
 ExprGen::instantiate_lhs(
   const VlScope* parent,
   const ElbEnv& env,
   const AstExpr& ast_expr
 )
 {
+  std::vector<const VlExpr*> lhs_list;
+  instantiate_lhs_sub(parent, env, ast_expr, lhs_list);
+  if ( lhs_list.size() == 1 ) {
+    return lhs_list.front();
+  }
+  auto expr = elb_mgr().new_Lhs(lhs_list);
+  return expr;
+}
+
+// @brief instantiate_lhs() の下請け関数
+void
+ExprGen::instantiate_lhs_sub(
+  const VlScope* parent,
+  const ElbEnv& env,
+  const AstExpr& ast_expr,
+  std::vector<const VlExpr*>& expr_list
+)
+{
   switch ( ast_expr.type() ) {
   case AstExpr::Opr:
     // 左辺では concatination しか適当でない．
     if ( ast_expr.op_type() == VpiOpType::Concat ) {
-      std::vector<ElbPrimary> lhs_list;
       auto ast_opr_list = ast_expr.operand_list().to_vector();
       auto opr_size = ast_opr_list.size();
       for ( SizeType i = 0; i < opr_size; ++ i ) {
 	// 現れた順は上位ビットからなので位置が逆になる．
 	SizeType pos = opr_size - i - 1;
 	auto ast_expr1 = ast_opr_list[pos];
-	auto tmp_list = instantiate_lhs(parent, env, ast_expr1);
-	lhs_list.insert(lhs_list.end(), tmp_list.begin(), tmp_list.end());
+	instantiate_lhs_sub(parent, env, ast_expr1, expr_list);
       }
-      return lhs_list;
+      return;
     }
     // それ以外の演算子はエラー
     log_mgr().error_illegal_operator_in_lhs(__FILE__, __LINE__, ast_expr);
     break;
 
   case AstExpr::Primary:
-    return std::vector<ElbPrimary>{instantiate_lhs_primary(parent, env, ast_expr)};
+    instantiate_lhs_primary(parent, env, ast_expr, expr_list);
+    break;
 
   case AstExpr::Const:
     log_mgr().error_illegal_constant_in_lhs(__FILE__, __LINE__, ast_expr);
@@ -70,11 +87,12 @@ ExprGen::instantiate_lhs(
 }
 
 // @brief 左辺のプライマリ式の生成を行う．
-ElbPrimary
+void
 ExprGen::instantiate_lhs_primary(
   const VlScope* parent,
   const ElbEnv& env,
-  const AstExpr& ast_expr
+  const AstExpr& ast_expr,
+  std::vector<const VlExpr*>& expr_list
 )
 {
   // 名前に対応したオブジェクトのハンドルを取り出す．
@@ -101,11 +119,12 @@ ExprGen::instantiate_lhs_primary(
   auto var_index = !env.is_net_lhs();
   auto sel = instantiate_selecter(parent, ast_expr, decl_ref.declbase(),
 				  index_env, ast_bit, var_index);
-  return ElbPrimary(ast_expr, decl_ref, sel);
+  auto expr = elb_mgr().new_Primary(ast_expr, decl_ref, sel);
+  expr_list.push_back(expr);
 }
 
 // @brief AstExpr から継続的代入文の左辺式を生成する
-std::vector<ElbPrimary>
+const VlExpr*
 ExprGen::instantiate_net_lhs(
   const VlScope* parent,
   const AstExpr& ast_expr

@@ -35,12 +35,14 @@ public:
   ) = 0;
 
   /// @brief ポートを追加する．
+  ///
+  /// low_conn が複数の const VlExpr* の連結の場合
   virtual
   void
   add_port(
     const FileRegion& loc,   ///< [in] ファイル位置
     const char* name,        ///< [in] 名前
-    const VlTerm* low_conn,  ///< [in] 下位の接続
+    const VlExpr* low_conn,  ///< [in] 下位の接続
     VpiDir dir               ///< [in] 向き
   ) = 0;
 
@@ -48,17 +50,8 @@ public:
   virtual
   void
   set_port_high_conn(
-    SizeType index,     ///< [in] ポート番号
-    ElbExpr* high_conn, ///< [in] 上位の接続の式
-    bool conn_by_name   ///< [in] 名前による割り当て時に true とするフラグ
-  ) = 0;
-
-  /// @brief ポートの high_conn を接続する．
-  virtual
-  void
-  set_port_high_conn(
     SizeType index,          ///< [in] ポート番号
-    const VlTerm* high_conn, ///< [in] 上位の接続の式
+    const VlExpr* high_conn, ///< [in] 上位の接続の式
     bool conn_by_name        ///< [in] 名前による割り当て時に true とするフラグ
   ) = 0;
 

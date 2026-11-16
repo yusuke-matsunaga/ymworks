@@ -1,42 +1,42 @@
-﻿#ifndef EINAMEDINPUTPORT_H
-#define EINAMEDINPUTPORT_H
+﻿#ifndef EINAMEDPORT2_H
+#define EINAMEDPORT2_H
 
-/// @file EiNamedInputPort.h
-/// @brief EiNamedInputPort のヘッダファイル
+/// @file EiNamedPort2.h
+/// @brief EiNamedPort2 のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiInputPort.h"
+#include "EiPort2.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiNamedInputPort EiNamedInputPort.h "EiNamedInputPort.h"
-/// @brief 名前を持つ入力ポート
+/// @class EiNamedPort2 EiNamedPort2.h "EiNamedPort2.h"
+/// @brief 名前を持つ EiPort2
 //////////////////////////////////////////////////////////////////////
-class EiNamedInputPort :
-  public EiInputPort
+class EiNamedPort2 :
+  public EiPort2
 {
 public:
 
   /// @brief コンストラクタ
-  EiNamedInputPort(
-    const FileRegion& loc,  ///< [in] ファイル位置
-    const VlModule* parent, ///< [in] 親のモジュール
-    const char* name,       ///< [in] 名前
-    SizeType index,         ///< [in] ポート番号
-    const VlTerm* low_conn, ///< [in] 下位の接続
-    VpiDir dir              ///< [in] 向き
-  ) : EiInputPort(loc, parent, index, low_conn, dir),
+  EiNamedPort2(
+    const FileRegion& loc,                      ///< [in] ファイル位置
+    const VlModule* parent,                     ///< [in] 親のモジュール
+    const char* name,                           ///< [in] 名前
+    SizeType index,                             ///< [in] ポート番号
+    const std::vector<const VlExpr*>& low_conn, ///< [in] 下位の接続
+    VpiDir dir                                  ///< [in] 向き
+  ) : EiPort2(loc, parent, index, low_conn, dir),
       mName{name}
   {
   }
 
   /// @brief デストラクタ
-  ~EiNamedInputPort() {}
+  ~EiNamedPort2() {}
 
 
 public:
@@ -66,4 +66,4 @@ private:
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // EINAMEDINPUTPORT_H
+#endif // EINAMEDPORT_H

@@ -206,7 +206,7 @@ ElbProxy::instantiate_arg(
 }
 
 // @brief AstExpr から左辺式を生成する
-std::vector<ElbPrimary>
+const VlExpr*
 ElbProxy::instantiate_lhs(
   const VlScope* parent,
   const ElbEnv& env,
@@ -216,37 +216,14 @@ ElbProxy::instantiate_lhs(
   return mExprGen->instantiate_lhs(parent, env, ast_expr);
 }
 
-// @brief AstExpr から左辺式を生成する
-const VlTerm*
-ElbProxy::instantiate_lhs_term(
-  const VlScope* parent,
-  const ElbEnv& env,
-  const AstExpr& ast_expr
-)
-{
-  auto primary_list = instantiate_lhs(parent, env, ast_expr);
-  return elb_mgr().new_Term(primary_list);
-}
-
 // @brief AstExpr から継続的代入文の左辺式を生成する
-std::vector<ElbPrimary>
+const VlExpr*
 ElbProxy::instantiate_net_lhs(
   const VlScope* parent,
   const AstExpr& ast_expr
 )
 {
   return mExprGen->instantiate_net_lhs(parent, ast_expr);
-}
-
-// @brief AstExpr から継続的代入文の左辺式を生成する
-const VlTerm*
-ElbProxy::instantiate_net_lhs_term(
-  const VlScope* parent,
-  const AstExpr& ast_expr
-)
-{
-  auto primary_list = instantiate_net_lhs(parent, ast_expr);
-  return elb_mgr().new_Term(primary_list);
 }
 
 // @brief AstExpr から右辺式を生成する

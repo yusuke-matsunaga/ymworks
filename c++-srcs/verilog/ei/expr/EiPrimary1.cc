@@ -137,6 +137,19 @@ ElbMgr::new_Primary(
     });
 }
 
+#if 0
+// @brief プライマリ式を生成する．
+ElbExpr*
+ElbMgr::new_Primary(
+  const VlExpr* primary,
+  SizeType width,
+  SizeType offset
+)
+{
+  return nullptr;
+}
+#endif
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclPrimary
@@ -168,6 +181,13 @@ const VlDecl*
 EiDeclPrimary::decl_obj() const
 {
   return mObj;
+}
+
+// @brief 宣言要素の番号を返す．
+SizeType
+EiDeclPrimary::decl_id() const
+{
+  return mObj->decl_id();
 }
 
 // @brief 宣言要素に対するビット/部分選択の種類を返す．
@@ -295,6 +315,13 @@ SizeType
 EiConstDeclElemPrimary::declarray_offset() const
 {
   return mOffset;
+}
+
+// @brief 宣言要素の番号を返す．
+SizeType
+EiConstDeclElemPrimary::decl_id() const
+{
+  return declarray_obj()->decl_id(mOffset);
 }
 
 

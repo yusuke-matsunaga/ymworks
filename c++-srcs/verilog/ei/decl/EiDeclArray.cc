@@ -217,13 +217,6 @@ EiDeclArray::delay() const
   return mHead->delay();
 }
 
-// @brief この要素に対する代入のタイプを返す．
-VlAssignType
-EiDeclArray::assign_type() const
-{
-  return mAssignType;
-}
-
 // @brief 配列型オブジェクトの時に true を返す．
 bool
 EiDeclArray::is_array() const
@@ -291,15 +284,6 @@ EiDeclArray::decl_id(
 ) const
 {
   return mDeclBase + offset;
-}
-
-// @brief 代入タイプをセットする．
-void
-EiDeclArray::set_assign_type(
-  VlAssignType assign_type
-)
-{
-  mAssignType = assign_type;
 }
 
 END_NAMESPACE_YM_VERILOG

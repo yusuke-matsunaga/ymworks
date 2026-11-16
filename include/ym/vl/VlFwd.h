@@ -52,8 +52,8 @@ class VlDefParam;
 // in VlContAssign.h
 class VlContAssign;
 
-// in VlCASrc.h
-class VlCASrc;
+// in VlNetSrc.h
+class VlNetSrc;
 
 // in VlTaskFunc.h
 class VlTaskFunc;
@@ -75,9 +75,6 @@ class VlControl;
 
 // in VlExpr.h
 class VlExpr;
-
-// in VlTerm.h
-class VlTerm;
 
 // in VlDelay.h
 class VlDelay;
@@ -112,6 +109,7 @@ using nsVerilog::VlIODecl;
 using nsVerilog::VlParamAssign;
 using nsVerilog::VlDefParam;
 using nsVerilog::VlContAssign;
+using nsVerilog::VlNetSrc;
 using nsVerilog::VlTaskFunc;
 using nsVerilog::VlPrimitive;
 using nsVerilog::VlPrimArray;
@@ -121,7 +119,6 @@ using nsVerilog::VlStmt;
 using nsVerilog::VlCaseItem;
 using nsVerilog::VlControl;
 using nsVerilog::VlExpr;
-using nsVerilog::VlTerm;
 using nsVerilog::VlDelay;
 using nsVerilog::VlRange;
 using nsVerilog::VlUdpDefn;

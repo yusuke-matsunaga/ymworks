@@ -109,6 +109,13 @@ ElbEnv::set_force_lhs()
   mFlags[LHS] = true;
 }
 
+// @brief ビットベクタ型の印を付ける．
+void
+ElbEnv::set_bitvect()
+{
+  mFlags[BITVECT] = true;
+}
+
 // @brief 定数式が要求されている時に true を返す．
 bool
 ElbEnv::is_constant() const
@@ -186,6 +193,35 @@ ElbEnv::is_force_lhs() const
   return mFlags[FORCE];
 }
 
+// @brief ビットベクタ型の時に true を返す．
+bool
+ElbEnv::is_bitvect() const
+{
+  return mFlags[BITVECT];
+}
+
+// @brief 階層付き識別子に関するチェック
+void
+ElbEnv::check_hname(
+  const AstExpr& ast_expr,
+  LogMgr& log_mgr
+) const
+{
+  if ( is_constant() ) {
+    // 定数式
+    log_mgr.error_hname_in_ce(__FILE__, __LINE__, ast_expr);
+  }
+  if ( inside_constant_function() ) {
+    // 定数関数内の式
+    log_mgr.error_hname_in_cf(__FILE__, __LINE__, ast_expr);
+  }
+  if ( is_net_lhs() ) {
+    // ネット型の左辺式
+    //log_mgr.error_hname_in_net_assign(__FILE__, __LINE__, ast_expr);
+#warning "TODO: エラー処理"
+  }
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス ElbConstantEnv
@@ -260,6 +296,7 @@ ElbEventExprEnv::ElbEventExprEnv(
 ElbNetLhsEnv::ElbNetLhsEnv()
 {
   set_net_lhs();
+  set_bitvect();
 }
 
 
@@ -295,6 +332,17 @@ ElbPcaLhsEnv::ElbPcaLhsEnv()
 ElbForceLhsEnv::ElbForceLhsEnv()
 {
   set_force_lhs();
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// クラス ElbBitvectEnv
+//////////////////////////////////////////////////////////////////////
+
+// @brief コンストラクタ
+ElbBitvectEnv::ElbBitvectEnv()
+{
+  set_bitvect();
 }
 
 END_NAMESPACE_YM_VERILOG

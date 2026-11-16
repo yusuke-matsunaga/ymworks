@@ -108,6 +108,18 @@ private:
     bool block                ///< [in] ブロッキング代入の時 true
   );
 
+  /// @brief instantiate_assign() の下請け関数
+  void
+  instantiate_assign_sub(
+    const VlScope* parent,    ///< [in] 親のスコープ
+    const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
+    const AstStmt& ast_stmt,  ///< [in] 対象のステートメント
+    const VlExpr* lhs,        ///< [in] 左辺式
+    const VlExpr* rhs,        ///< [in] 右辺式
+    bool block,               ///< [in] ブロッキング代入の時 true
+    const VlControl* control  ///< [in] コントロール
+  );
+
   /// @brief コントロールを生成する．
   const VlControl*
   instantiate_control(

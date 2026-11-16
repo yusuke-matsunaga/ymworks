@@ -8,18 +8,11 @@
 
 #include "DeclGen.h"
 #include "ElbEnv.h"
-#include "ym/vl/VlTerm.h"
 #include "elaborator/ElbDeclHead.h"
-#include "elaborator/ElbDecl.h"
 #include "elaborator/ElbDeclArray.h"
 #include "elaborator/ElbDeclRef.h"
-//#include "elaborator/ElbParameter.h"
-//#include "elaborator/ElbGenvar.h"
-#include "elaborator/ElbModule.h"
-//#include "elaborator/ElbTaskFunc.h"
 #include "elaborator/ElbRange.h"
 #include "elaborator/ElbExpr.h"
-#include "elaborator/RangeVal.h"
 #include "elaborator/ElbError.h"
 
 
@@ -158,12 +151,11 @@ DeclGen::link_net_assign(
 )
 {
   // 実体は左辺が net の代入文を作る．
-  auto expr = elb_mgr().new_Primary(ast_item, net);
-  auto lhs = elb_mgr().new_Term(expr);
   auto scope = net->parent_scope();
   auto ast_init = ast_item.init_value();
-  auto rhs = instantiate_rhs(scope, ElbEnv(), ast_init, lhs->value_type());
-  if ( !rhs ) {
+  auto value_type = net->value_type();
+  auto rhs = instantiate_rhs(scope, ElbEnv(), ast_init, value_type);
+  if ( rhs == nullptr ) {
     return;
   }
 
@@ -172,6 +164,7 @@ DeclGen::link_net_assign(
   // 対応する continuous assign 文を作る．
   auto vl_module = scope->parent_module();
   auto loc = ast_item.file_region();
+  auto lhs = elb_mgr().new_Primary(loc, net);
   auto ca = elb_mgr().new_ContAssign(vl_module, loc, lhs, rhs);
 }
 

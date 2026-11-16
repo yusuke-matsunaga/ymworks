@@ -92,11 +92,11 @@ public:
   std::string
   right_range_string() const override;
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief left_range <= right_range の時に true を返す．
   bool
   is_big_endian() const override;
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief left_range >= right_range の時に true を返す．
   bool
   is_little_endian() const override;
 
@@ -156,10 +156,6 @@ public:
   const VlDelay*
   delay() const override;
 
-  /// @brief この要素に対する代入のタイプを返す．
-  VlAssignType
-  assign_type() const override;
-
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -200,12 +196,6 @@ public:
     const VlExpr* expr ///< [in] 初期値
   ) override;
 
-  /// @brief 代入タイプをセットする．
-  void
-  set_assign_type(
-    VlAssignType assign_type ///< [in] 代入タイプ
-  ) override;
-
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -220,8 +210,7 @@ private:
 
   // 種々のフラグ
   // 0:   aux_sign
-  // 1-2: assign_type
-  std::bitset<3> mFlags{0};
+  std::bitset<1> mFlags{0};
 
 };
 

@@ -13,7 +13,6 @@
 #include "ym/vl/VlDeclArray.h"
 #include "ym/vl/VlStmt.h"
 #include "ym/vl/VlExpr.h"
-#include "ym/vl/VlTerm.h"
 #include "ym/Range.h"
 
 
@@ -194,17 +193,16 @@ FuncEval::evaluate_assign(
 
   // lhs に val を代入する．
   auto lhs = stmt->lhs();
-  auto nl = lhs->elem_num();
-  if ( nl == 1 ) {
-    auto primary = lhs->elem(0);
-    assign_primary(primary, val);
+  if ( lhs->is_primary() ) {
+    assign_primary(lhs, val);
   }
   else {
     // 左辺が連結式の場合
+    auto nl = lhs->lhs_elem_num();
     auto bv = val.bitvector_value();
     SizeType base{0};
     for ( SizeType i = 0; i < nl; ++ i ) {
-      auto primary = lhs->elem(i);
+      auto primary = lhs->lhs_elem(i);
       auto w = primary->bit_size();
       auto part_val = bv.part_select_op(base + w - 1, base);
       assign_primary(primary, VlValue(part_val));

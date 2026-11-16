@@ -39,6 +39,7 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// - FuncCall
 /// - SysFuncCall
 /// - Operattion
+/// - 左辺式系
 ///
 /// ただし，これだと使い勝手が悪いので独自に VlExprType と VlPrimaryType
 /// という列挙型を用意する．
@@ -99,11 +100,6 @@ public:
   bool
   is_primary() const = 0;
 
-  /// @brief ビット/部分選択の時に true を返す．
-  virtual
-  bool
-  is_select() const = 0;
-
   /// @brief 演算子の時に true を返す．
   virtual
   bool
@@ -119,11 +115,10 @@ public:
   bool
   is_sysfunccall() const = 0;
 
-  /// @brief 左辺値の場合に要素のリストに分解する．
-  ///
-  /// 結果はプライマリタイプの式のみのリストとなる．
-  std::vector<const VlExpr*>
-  lhs_decompose() const;
+  /// @brief 左辺式の時に true を返す．
+  virtual
+  bool
+  is_lhs() const = 0;
 
 
 public:
@@ -197,6 +192,11 @@ public:
   SizeType
   declarray_offset() const = 0;
 
+  /// @brief 宣言要素の番号を返す．
+  virtual
+  SizeType
+  decl_id() const = 0;
+
   /// @brief 宣言要素に対するビット/部分選択の種類を返す．
   ///
   /// - expr_type() が PRIMARY かつ primary_type() が DECL,
@@ -208,7 +208,6 @@ public:
   /// @brief 宣言要素に対する固定ビット/部分選択のオフセットを返す．
   ///
   /// - select_type() が CONST の場合に意味を持つ．
-  /// - expr_type() が SELECT の場合に意味を持つ．
   virtual
   SizeType
   bit_offset() const = 0;
@@ -235,19 +234,6 @@ public:
   virtual
   const VlPrimitive*
   primitive_obj() const = 0;
-
-
-public:
-  //////////////////////////////////////////////////////////////////////
-  // ビット/部分選択系の関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief 親の式を返す．
-  ///
-  /// 式に対するビット選択/範囲選択の時，意味を持つ．
-  virtual
-  const VlExpr*
-  parent_expr() const = 0;
 
 
 public:
@@ -345,6 +331,24 @@ public:
   virtual
   std::vector<const VlExpr*>
   argument_list() const = 0;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 左辺式系の関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 要素数を返す．
+  virtual
+  SizeType
+  lhs_elem_num() const = 0;
+
+  /// @brief 要素を返す．
+  virtual
+  const VlExpr*
+  lhs_elem(
+    SizeType index ///< [in] インデックス ( 0 <= index < lhs_elem_num() )
+  ) const = 0;
 
 };
 

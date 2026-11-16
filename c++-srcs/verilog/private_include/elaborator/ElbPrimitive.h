@@ -114,6 +114,14 @@ public:
     int index ///< [in] インデックス
   ) = 0;;
 
+  /// @brief 接続する．
+  virtual
+  void
+  connect(
+    SizeType pos,      ///< [in] ポート番号 (0 から始まる)
+    const VlExpr* expr ///< [in] 接続する式
+  ) = 0;
+
   /// @brief ヘッダを得る．
   virtual
   ElbPrimHead*

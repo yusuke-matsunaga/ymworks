@@ -8,7 +8,6 @@
 
 #include "DeclGen.h"
 #include "ElbEnv.h"
-#include "ym/vl/VlTerm.h"
 #include "elaborator/ElbDeclHead.h"
 #include "elaborator/ElbDecl.h"
 #include "elaborator/ElbDeclArray.h"

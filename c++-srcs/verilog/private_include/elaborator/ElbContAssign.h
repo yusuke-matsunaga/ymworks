@@ -1,6 +1,8 @@
 #ifndef ELBCONTASSIGN_H
 #define ELBCONTASSIGN_H
 
+#warning "obsolete"
+
 /// @file ElbContAssign.h
 /// @brief ElbContAssign のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)

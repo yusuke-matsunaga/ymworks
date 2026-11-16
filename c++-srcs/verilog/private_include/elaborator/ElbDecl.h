@@ -51,13 +51,6 @@ public:
     const VlExpr* expr ///< [in] 初期値
   ) = 0;
 
-  /// @brief 代入タイプをセットする．
-  virtual
-  void
-  set_assign_type(
-    VlAssignType assign_type ///< [in] 代入タイプ
-  ) = 0;
-
 };
 
 END_NAMESPACE_YM_VERILOG

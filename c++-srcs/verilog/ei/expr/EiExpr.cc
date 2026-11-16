@@ -34,13 +34,6 @@ EiExpr::is_primary() const
   return false;
 }
 
-// @brief ビット/部分指定の時に true を返す．
-bool
-EiExpr::is_select() const
-{
-  return false;
-}
-
 // @brief 演算子の時に true を返す．
 bool
 EiExpr::is_operation() const
@@ -58,6 +51,13 @@ EiExpr::is_funccall() const
 // @brief システム関数よびあどい時に true を返す．
 bool
 EiExpr::is_sysfunccall() const
+{
+  return false;
+}
+
+// @brief 左辺式の時に true を返す．
+bool
+EiExpr::is_lhs() const
 {
   return false;
 }
@@ -118,6 +118,13 @@ EiExpr::declarray_offset() const
   throw std::logic_error{"EiExpr::declarray_offset()"};
 }
 
+// @brief 宣言要素の番号を返す．
+SizeType
+EiExpr::decl_id() const
+{
+  throw std::logic_error{"EiExpr::decl_id()"};
+}
+
 // @brief 宣言要素に対するビット/部分選択の種類を返す．
 VlSelectType
 EiExpr::select_type() const
@@ -151,13 +158,6 @@ const VlPrimitive*
 EiExpr::primitive_obj() const
 {
   throw std::logic_error{"EiExpr::primitive_obj()"};
-}
-
-// @brief 親の式を返す．
-const VlExpr*
-EiExpr::parent_expr() const
-{
-  throw std::logic_error{"EiExpr::parent_expr()"};
 }
 
 // @brief 演算子のタイプを返す．
@@ -232,6 +232,22 @@ std::vector<const VlExpr*>
 EiExpr::argument_list() const
 {
   throw std::logic_error{"EiExpr::argument_list()"};
+}
+
+// @brief 要素数を返す．
+SizeType
+EiExpr::lhs_elem_num() const
+{
+  throw std::logic_error{"EiExpr::lhs_elem_num()"};
+}
+
+// @brief 要素を返す．
+const VlExpr*
+EiExpr::lhs_elem(
+  SizeType index
+) const
+{
+  throw std::logic_error{"EiExpr::lhs_elem()"};
 }
 
 

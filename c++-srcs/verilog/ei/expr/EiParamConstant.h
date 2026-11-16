@@ -1,38 +1,38 @@
-﻿#ifndef EIIOPRIMARY_H
-#define EIIOPRIMARY_H
+﻿#ifndef EIPARAMCONSTANT_H
+#define EIPARAMCONSTANT_H
 
-/// @file EiIOPrimary.h
-/// @brief EiIOPrimary のヘッダファイル
+/// @file EiParamConstant.h
+/// @brief EiParamConstant のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiPrimary.h"
+#include "EiConstant.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiIOPrimary EiIOPrimary.h "EiIOPrimary.h"
-/// @brief プライマリ式を表すクラス(もとが AstIOItem)
+/// @class EiParamConstant EiParamConstant.h "EiParamConstant.h"
+/// @brief パラメータの定数を表すクラス
 //////////////////////////////////////////////////////////////////////
-class EiIOPrimary :
-  public EiPrimaryBase
+class EiParamConstant :
+  public EiConstant
 {
 public:
 
   /// @brief コンストラクタ
-  EiIOPrimary(
-    const AstIOItem& ast_item, ///< [in] パース木の定義要素
-    const VlDecl* obj          ///< [in] 本体のオブジェクト
-  ) : mAstObj{ast_item},
+  EiParamConstant(
+    const AstExpr& ast_expr, ///< [in] パース木の定義要素
+    ElbParameter* obj        ///< [in] 本体のオブジェクト
+  ) : EiConstant(ast_expr),
       mObj{obj}
   {
   }
 
   /// @brief デストラクタ
-  ~EiIOPrimary() = default;
+  ~EiParamConstant() = default;
 
 
 public:
@@ -44,10 +44,6 @@ public:
   VpiObjType
   type() const override;
 
-  /// @brief ファイル位置を返す．
-  FileRegion
-  file_region() const override;
-
 
 public:
   //////////////////////////////////////////////////////////////////////
@@ -58,17 +54,9 @@ public:
   VlValueType
   value_type() const override;
 
-  /// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
-  const VlDeclBase*
-  decl_base() const override;
-
-  /// @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
-  const VlDecl*
-  decl_obj() const override;
-
-  /// @brief Verilog-HDL の文字列を得る．
-  std::string
-  decompile() const override;
+  /// @brief 定数値を返す．
+  VlValue
+  constant_value() const override;
 
 
 private:
@@ -76,14 +64,11 @@ private:
   // データメンバ
   //////////////////////////////////////////////////////////////////////
 
-  // パース木の定義要素
-  AstIOItem mAstObj;
-
   // 対象の宣言要素
-  const VlDecl* mObj;
+  ElbParameter* mObj;
 
 };
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // EIIOPRIMARY_H
+#endif // EIPARAMCONSTANT_H

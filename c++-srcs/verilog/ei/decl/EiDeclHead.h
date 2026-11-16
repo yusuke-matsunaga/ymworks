@@ -112,11 +112,11 @@ public:
   std::string
   right_range_string() const override;
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief left_range <= right_range の時に true を返す．
   bool
   is_big_endian() const override;
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief left_range >= right_range の時に true を返す．
   bool
   is_little_endian() const override;
 
@@ -299,11 +299,11 @@ public:
   std::string
   right_range_string() const override;
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief left_range <= right_range の時に true を返す．
   bool
   is_big_endian() const override;
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief left_range >= right_range の時に true を返す．
   bool
   is_little_endian() const override;
 
@@ -451,11 +451,11 @@ public:
   std::string
   right_range_string() const override;
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief left_range <= right_range の時に true を返す．
   bool
   is_big_endian() const override;
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief left_range >= right_range の時に true を返す．
   bool
   is_little_endian() const override;
 
@@ -561,11 +561,11 @@ public:
   std::string
   right_range_string() const override;
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief left_range <= right_range の時に true を返す．
   bool
   is_big_endian() const override;
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief left_range >= right_range の時に true を返す．
   bool
   is_little_endian() const override;
 
@@ -652,11 +652,11 @@ public:
   std::string
   right_range_string() const override;
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief left_range <= right_range の時に true を返す．
   bool
   is_big_endian() const override;
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief left_range >= right_range の時に true を返す．
   bool
   is_little_endian() const override;
 
@@ -760,11 +760,11 @@ public:
   std::string
   right_range_string() const override;
 
-  /// @brief left_range >= right_range の時に true を返す．
+  /// @brief left_range <= right_range の時に true を返す．
   bool
   is_big_endian() const override;
 
-  /// @brief left_range <= right_range の時に true を返す．
+  /// @brief left_range >= right_range の時に true を返す．
   bool
   is_little_endian() const override;
 

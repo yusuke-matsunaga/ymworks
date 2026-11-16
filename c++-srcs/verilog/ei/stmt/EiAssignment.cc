@@ -30,7 +30,7 @@ ElbMgr::new_Assignment(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
-  const VlTerm* lhs,
+  const VlExpr* lhs,
   const VlExpr* rhs,
   bool block,
   const VlControl* control
@@ -55,7 +55,7 @@ ElbMgr::new_AssignStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
-  const VlTerm* lhs,
+  const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
@@ -72,7 +72,7 @@ ElbMgr::new_DeassignStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
-  const VlTerm* lhs
+  const VlExpr* lhs
 )
 {
   return new_stmt(
@@ -88,7 +88,7 @@ ElbMgr::new_ForceStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
-  const VlTerm* lhs,
+  const VlExpr* lhs,
   const VlExpr* rhs
 )
 {
@@ -105,7 +105,7 @@ ElbMgr::new_ReleaseStmt(
   const VlScope* parent,
   const VlProcess* process,
   const AstStmt& ast_stmt,
-  const VlTerm* lhs
+  const VlExpr* lhs
 )
 {
   return new_stmt(
@@ -121,7 +121,7 @@ ElbMgr::new_ReleaseStmt(
 //////////////////////////////////////////////////////////////////////
 
 // @brief 左辺を返す．
-const VlTerm*
+const VlExpr*
 EiAssignBase::lhs() const
 {
   return mLhs;
@@ -195,7 +195,7 @@ EiForceStmt::type() const
 //////////////////////////////////////////////////////////////////////
 
 // @brief 左辺を返す．
-const VlTerm*
+const VlExpr*
 EiDeassignBase::lhs() const
 {
   return mLhs;

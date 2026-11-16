@@ -18,6 +18,12 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// @class VlPort VlPort.h "ym/vl/VlPort.h"
 /// @brief ポートを表すクラス
 /// IEEE Std 1364-2001 26.6.5 Ports
+///
+/// ポートには内部の接続を表す low_conn と外部の接続を表す high_conn
+/// がある．
+/// どちらも const VlExpr* だが，実際にはプライマリ型のみが用いられる．
+/// もしも元の記述が連結演算などを用いていた場合にはその演算結果を
+/// 表す暗黙のネットを生成し，そのネットが接続していると見なす．
 //////////////////////////////////////////////////////////////////////
 class VlPort :
   public VlObj
@@ -67,19 +73,14 @@ public:
   SizeType
   port_index() const = 0;
 
-  /// @brief 上位の接続先を返す(入力ポート用)．
+  /// @brief 上位の接続先を返す．
   virtual
   const VlExpr*
-  high_conn_expr() const = 0;
+  high_conn() const = 0;
 
-  /// @brief 上位の接続先を返す(出力ポート用)．
+  /// @brief 下位の接続を返す．
   virtual
-  const VlTerm*
-  high_conn_term() const = 0;
-
-  /// @brief 下位の接続先を返す．
-  virtual
-  const VlTerm*
+  const VlExpr*
   low_conn() const = 0;
 
 };

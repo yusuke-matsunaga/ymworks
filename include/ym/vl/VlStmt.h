@@ -158,7 +158,7 @@ public:
   ///  - kVpiForce
   ///  - kVpiRelease
   virtual
-  const VlTerm*
+  const VlExpr*
   lhs() const = 0;
 
   /// @brief 右辺式の取得

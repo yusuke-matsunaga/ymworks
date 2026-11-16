@@ -115,7 +115,7 @@ VlDumperImpl::put_stmt(
 
   case VpiObjType::Assignment:
     put("vpiBlocking", stmt->is_blocking() );
-    put_term("vpiLhs", mgr, stmt->lhs() );
+    put_expr("vpiLhs", mgr, stmt->lhs() );
     put_expr("vpiRhs", mgr, stmt->rhs() );
     put_control("control", mgr, stmt->control() );
     break;
@@ -174,13 +174,13 @@ VlDumperImpl::put_stmt(
 
   case VpiObjType::AssignStmt:
   case VpiObjType::Force:
-    put_term("vpiLhs", mgr, stmt->lhs() );
+    put_expr("vpiLhs", mgr, stmt->lhs() );
     put_expr("vpiRhs", mgr, stmt->rhs() );
     break;
 
   case VpiObjType::Deassign:
   case VpiObjType::Release:
-    put_term("vpiLhs", mgr, stmt->lhs() );
+    put_expr("vpiLhs", mgr, stmt->lhs() );
     break;
 
   case VpiObjType::TaskCall:

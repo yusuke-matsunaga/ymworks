@@ -447,40 +447,19 @@ protected:
   /// @return 生成された ElbPrimary のリストを返す．
   ///
   /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
-  std::vector<ElbPrimary>
+  const VlExpr*
   instantiate_lhs(
     const VlScope* parent,  ///< [in] 親のスコープ
     const ElbEnv& env,      ///< [in] 生成時の環境
     const AstExpr& ast_expr ///< [in] 式を表すパース木
   );
 
-  /// @brief AstExpr から左辺式を生成する
-  /// @return 生成された ElbPrimary のリストを返す．
-  ///
-  /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
-  const VlTerm*
-  instantiate_lhs_term(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const ElbEnv& env,      ///< [in] 生成時の環境
-    const AstExpr& ast_expr ///< [in] 式を表すパース木
-  );
-
   /// @brief AstExpr から継続的代入文の左辺式を生成する
   /// @return 生成された ElbPrimary のリストを返す．
   ///
   /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
-  std::vector<ElbPrimary>
+  const VlExpr*
   instantiate_net_lhs(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const AstExpr& ast_expr ///< [in] 式を表すパース木
-  );
-
-  /// @brief AstExpr から継続的代入文の左辺式を生成する
-  /// @return 生成された ElbPrimary のリストを返す．
-  ///
-  /// 不適切な式ならばエラーメッセージを出力し nullptr を返す．
-  const VlTerm*
-  instantiate_net_lhs_term(
     const VlScope* parent,  ///< [in] 親のスコープ
     const AstExpr& ast_expr ///< [in] 式を表すパース木
   );

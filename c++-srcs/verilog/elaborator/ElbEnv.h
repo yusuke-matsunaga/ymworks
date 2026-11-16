@@ -10,6 +10,8 @@
 
 #include "ym/verilog.h"
 #include "ym/vl/VlFwd.h"
+#include "ym/vl/AstExpr.h"
+#include "common/LogMgr.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -28,8 +30,23 @@ BEGIN_NAMESPACE_YM_VERILOG
 /// - reg/variables 型の左辺式
 /// - procedural continuous assignment 文の左辺式
 /// - force 文の左辺式
+/// - 継続的代入文の右辺式
+/// - モジュール/プリミティブインスタンスのポート結合式(右辺)
 /// の種類がある．
-/// 実際にはそれぞれの環境に対応した派生クラスを用いる．
+///
+/// 具体的なチェック項目としては
+/// - 階層付き識別子を認めるか
+/// - 定数識別子(パラメータ，genvar)を認めるか
+/// - 配列要素を認めるか
+/// - 配列要素の可変インデックスを認めるか
+/// - ビット/部分選択を認めるか
+/// - 可変のビット/部分選択を認めるか
+/// - real 型を認めるか
+/// - event 型を認めるか
+/// - scope を認めるか
+/// - primitive を認めるか
+/// - 配列本体を認めるか
+/// がある．
 //////////////////////////////////////////////////////////////////////
 class ElbEnv
 {
@@ -102,6 +119,24 @@ public:
   bool
   is_force_lhs() const;
 
+  /// @brief ビットベクタ型の時に true を返す．
+  bool
+  is_bitvect() const;
+
+
+public:
+  //////////////////////////////////////////////////////////////////////
+  // 判定を行う関数
+  //////////////////////////////////////////////////////////////////////
+
+  /// @brief 階層付き識別子に関するチェック
+  void
+  check_hname(
+    const AstExpr& ast_expr, ///< [in] 対象の式
+    LogMgr& log_mgr          ///< [in] ログマネージャ
+  ) const;
+
+
 
 protected:
   //////////////////////////////////////////////////////////////////////
@@ -150,6 +185,10 @@ protected:
   void
   set_force_lhs();
 
+  /// @brief ビットベクタ型の印を付ける．
+  void
+  set_bitvect();
+
 
 private:
   //////////////////////////////////////////////////////////////////////
@@ -189,8 +228,11 @@ private:
   // FORCE の環境
   static const int FORCE = 10;
 
+  // ビットベクタ型
+  static const int BITVECT = 11;
+
   // フラグ数
-  static const int NUM_FLAG = FORCE + 1;
+  static const int NUM_FLAG = BITVECT + 1;
 
 
 private:
@@ -202,7 +244,7 @@ private:
   std::bitset<NUM_FLAG> mFlags;
 
   // constant function
-  const VlScope* mCf;
+  const VlScope* mCf{nullptr};
 
 };
 
@@ -348,6 +390,21 @@ public:
 
   /// @brief コンストラクタ
   ElbForceLhsEnv();
+
+};
+
+
+//////////////////////////////////////////////////////////////////////
+/// @class ElbBitvectEnv ElbEnv.h "ElbEnv.h"
+/// @brief ビットベクタ型を表す環境
+//////////////////////////////////////////////////////////////////////
+class ElbBitvectEnv :
+  public ElbEnv
+{
+public:
+
+  /// @brief コンストラクタ
+  ElbBitvectEnv();
 
 };
 

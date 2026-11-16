@@ -11,13 +11,13 @@
 #include "ym/vl/Ast.h"
 #include "ym/vl/VlFwd.h"
 #include "ym/vl/VlStmt.h"
+#include "ym/vl/VlContAssign.h"
 #include "ym/clib.h"
 
 #include "elaborator/ElbDeclHead.h"
 #include "elaborator/ElbIOHead.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbCaHead.h"
-#include "elaborator/ElbContAssign.h"
 #include "elaborator/ElbPrimHead.h"
 #include "elaborator/ElbExpr.h"
 #include "elaborator/ElbPrimary.h"
@@ -520,6 +520,14 @@ public:
     VpiNetType net_type      ///< [in] ネットタイプ
   );
 
+  /// @brief 暗黙のネットを生成する．
+  ElbDecl*
+  new_ImpNet(
+    const VlScope* parent, ///< [in] 親のスコープ
+    const FileRegion& loc, ///< [in] ファイル位置
+    SizeType width         ///< [in] ビット幅
+  );
+
   /// @brief 宣言要素の配列を生成する．
   const VlDeclArray*
   new_DeclArray(
@@ -580,18 +588,20 @@ public:
   /// @brief continuous assignment を生成する．
   const VlContAssign*
   new_ContAssign(
-    ElbCaHead* head,        ///< [in] ヘッダ
-    const FileRegion& loc,  ///< [in] ファイル位置
-    const VlTerm* lhs,      ///< [in] 左辺式
-    const VlExpr* rhs       ///< [in] 右辺式
+    ElbCaHead* head,       ///< [in] ヘッダ
+    const FileRegion& loc, ///< [in] ファイル位置
+    const VlExpr* lhs,     ///< [in] 左辺式
+    const VlExpr* rhs      ///< [in] 右辺式
   );
 
   /// @brief net 宣言中の continuous assignment を生成する．
+  ///
+  /// この場合，左辺は必ず単体のネット全体となる．
   const VlContAssign*
   new_ContAssign(
     const VlModule* module, ///< [in] 親のモジュール
     const FileRegion& loc,  ///< [in] ファイル位置
-    const VlTerm* lhs,      ///< [in] 左辺式
+    const VlExpr* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
   );
 
@@ -729,7 +739,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlTerm* lhs,        ///< [in] 左辺の式
+    const VlExpr* lhs,        ///< [in] 左辺の式
     const VlExpr* rhs,        ///< [in] 右辺の式
     bool block,               ///< [in] ブロッキング代入の時 true
     const VlControl* control  ///< [in] コントロール
@@ -742,7 +752,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlTerm* lhs,        ///< [in] 左辺の式
+    const VlExpr* lhs,        ///< [in] 左辺の式
     const VlExpr* rhs         ///< [in] 右辺の式
   );
 
@@ -752,7 +762,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlTerm* lhs         ///< [in] 左辺の式
+    const VlExpr* lhs         ///< [in] 左辺の式
   );
 
   /// @brief force ステートメントを生成する．
@@ -761,7 +771,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlTerm* lhs,        ///< [in] 左辺の式
+    const VlExpr* lhs,        ///< [in] 左辺の式
     const VlExpr* rhs         ///< [in] 右辺の式
   );
 
@@ -771,7 +781,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlTerm* lhs         ///< [in] 左辺の式
+    const VlExpr* lhs         ///< [in] 左辺の式
   );
 
   /// @brief begin ブロックを生成する．
@@ -1042,54 +1052,8 @@ public:
   /// @brief 宣言要素に対応するプライマリ式を生成する．
   ElbExpr*
   new_Primary(
-    const AstDeclItem& ast_decl, ///< [in] パース木の定義要素
-    const VlDecl* decl           ///< [in] 宣言要素
-  );
-
-  /// @brief 宣言要素に対応するプライマリ式を生成する．
-  ElbExpr*
-  new_Primary(
-    const AstIOItem& ast_decl, ///< [in] パース木の定義要素
-    const VlDecl* decl         ///< [in] 宣言要素
-  );
-
-  /// @brief 端子を生成する．
-  const VlTerm*
-  new_Term(
-    ElbExpr* expr ///< [in] プライマリ式
-  );
-
-  /// @brief 端子を生成する．
-  const VlTerm*
-  new_Term(
-    const std::vector<ElbPrimary>& primary_list ///< [in] プライマリのリスト
-  );
-
-  /// @brief 端子を生成する．
-  ///
-  /// base_offset 〜 base_offset + width - 1 の部分選択を表す式を生成する．
-  const VlTerm*
-  new_Term(
-    const std::vector<ElbPrimary>& primary_list, ///< [in] プライマリのリスト
-    SizeType width,                              ///< [in] ビット幅
-    SizeType base_offset                         ///< [in] ベースのオフセット
-  );
-
-  /// @brief 固定ビット選択式を生成する．
-  ElbExpr*
-  new_BitSelect(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* expr,           ///< [in] 本体の式
-    SizeType bit_offset      ///< [in] ビットのオフセット
-  );
-
-  /// @brief 固定部分選択式を生成する．
-  ElbExpr*
-  new_PartSelect(
-    const AstExpr& ast_expr, ///< [in] パース木の定義要素
-    ElbExpr* expr,           ///< [in] 本体の式
-    SizeType select_width,   ///< [in] ビット幅
-    SizeType bit_offset      ///< [in] ビットのオフセット
+    const FileRegion& loc, ///< [in] ファイル位置
+    const VlDecl* decl     ///< [in] 宣言要素
   );
 
   /// @brief 定数式を生成する．
@@ -1140,6 +1104,12 @@ public:
   new_ArgHandle(
     const AstExpr& ast_expr, ///< [in] パース木中で参照している要素
     const VlDeclArray* arg   ///< [in] 引数本体
+  );
+
+  /// @brief 左辺式を生成する．
+  const VlExpr*
+  new_Lhs(
+    const std::vector<const VlExpr*>& expr_list ///< [in] 要素のリスト
   );
 
 
@@ -1343,7 +1313,7 @@ private:
   TagDict mTagDict;
 
   // 宣言要素番号をキーにした継続的代入文のソースの辞書．
-  std::unordered_map<SizeType, std::vector<const VlCASrc*>> mCASrcDict;
+  std::unordered_map<SizeType, std::vector<const VlNetSrc*>> mNetSrcDict;
 
   // 属性リストの辞書
   std::unordered_map<const VlObj*, std::vector<const VlAttribute*>> mAttrHash;

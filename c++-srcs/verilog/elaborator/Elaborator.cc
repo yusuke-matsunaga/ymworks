@@ -283,6 +283,9 @@ Elaborator::operator()(
 
   mPhase3StubList.eval();
 
+  // ブロッキング代入とノンブロッキング代入の混在がないかチェックする．
+  //DriverChecker dc
+
   return log_mgr().error_num() == 0;
 }
 

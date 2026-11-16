@@ -188,13 +188,8 @@ VlDumperImpl::put_port(
 #endif
   put("vpiSize", port->bit_size() );
 
-  if ( port->direction() == VpiDir::Input ) {
-    put_expr("vpiHighConn", mgr, port->high_conn_expr());
-  }
-  else {
-    put_term("vpiHighConn", mgr, port->high_conn_term() );
-  }
-  put_term("vpiLowConn",  mgr, port->low_conn() );
+  put_expr("vpiHighConn", mgr, port->high_conn());
+  put_expr("vpiLowConn",  mgr, port->low_conn() );
 
 #if 0
   if ( mBitExpandMode ) {

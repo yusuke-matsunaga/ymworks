@@ -8,7 +8,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "EiPrimary.h"
+#include "EiPrimaryExprBase.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -61,6 +61,10 @@ public:
   /// @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
   const VlDecl*
   decl_obj() const override;
+
+  /// @brief 宣言要素の番号を返す．
+  SizeType
+  decl_id() const override;
 
   /// @brief 宣言要素に対するビット/部分選択の種類を返す．
   ///

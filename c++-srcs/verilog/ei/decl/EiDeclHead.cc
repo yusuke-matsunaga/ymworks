@@ -228,7 +228,9 @@ EiDeclHeadAst::right_range_string() const
 bool
 EiDeclHeadAst::is_big_endian() const
 {
-  return true;
+  // デフォルトでは little endian だが1ビットなら big endian
+  // であるとも言える．
+  return bit_size() == 1;
 }
 
 // @brief left_range <= right_range の時に true を返す．
@@ -591,14 +593,16 @@ EiDeclHeadAst2::right_range_string() const
   return {};
 }
 
-// @brief left_range >= right_range の時に true を返す．
+// @brief left_range <= right_range の時に true を返す．
 bool
 EiDeclHeadAst2::is_big_endian() const
 {
-  return true;
+  // デフォルトは little endian だがビット幅が 1 の時は big endian
+  // とも言える．
+  return bit_size() == 1;
 }
 
-// @brief left_range <= right_range の時に true を返す．
+// @brief left_range >= right_range の時に true を返す．
 bool
 EiDeclHeadAst2::is_little_endian() const
 {
@@ -840,7 +844,9 @@ EiDeclHeadAst3::right_range_string() const
 bool
 EiDeclHeadAst3::is_big_endian() const
 {
-  return true;
+  // デフォルトは little endian だが1ビットの時だけ
+  // big endian とも言える．
+  return bit_size() == 1;
 }
 
 // @brief left_range <= right_range の時に true を返す．

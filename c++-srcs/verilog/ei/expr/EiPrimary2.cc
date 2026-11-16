@@ -7,8 +7,7 @@
 /// All rights reserved.
 
 #include "elaborator/ElbMgr.h"
-#include "EiIOPrimary.h"
-#include "EiDeclItemPrimary.h"
+#include "EiAuxPrimary.h"
 #include "EiScopePrimary.h"
 #include "EiPrimitivePrimary.h"
 #include "EiDeclArrayPrimary.h"
@@ -24,29 +23,16 @@ BEGIN_NAMESPACE_YM_VERILOG
 // クラス EiFactory
 //////////////////////////////////////////////////////////////////////
 
-// @brief 宣言要素に対応するプライマリ式を生成する．
-ElbExpr*
-ElbMgr::new_Primary(
-  const AstIOItem& ast_decl,
-  const VlDecl* decl
-)
-{
-  return new_expr(
-    [&]() -> ElbExpr* {
-      return new EiIOPrimary(ast_decl, decl);
-    });
-}
-
 // @brief プライマリ式を生成する(net decl の初期値用)．
 ElbExpr*
 ElbMgr::new_Primary(
-  const AstDeclItem& ast_item,
+  const FileRegion& loc,
   const VlDecl* decl
 )
 {
   return new_expr(
     [&]() -> ElbExpr* {
-      return new EiDeclItemPrimary(ast_item, decl);
+      return new EiAuxPrimary(loc, decl);
     });
 }
 
@@ -147,96 +133,49 @@ EiPrimaryExprBase::_set_reqsize(
 
 
 //////////////////////////////////////////////////////////////////////
-// クラス EiIOPrimary
+// クラス EiAuxPrimary
 //////////////////////////////////////////////////////////////////////
 
 // @brief 型の取得
 VpiObjType
-EiIOPrimary::type() const
+EiAuxPrimary::type() const
 {
   return mObj->type();
 }
 
 // @brief ファイル位置を返す．
 FileRegion
-EiIOPrimary::file_region() const
+EiAuxPrimary::file_region() const
 {
-  return mAstObj.file_region();
+  return mFileRegion;
 }
 
 // @brief 式のタイプを返す．
 VlValueType
-EiIOPrimary::value_type() const
+EiAuxPrimary::value_type() const
 {
   return mObj->value_type();
 }
 
 // @brief 宣言要素もしくは配列型宣言要素への参照を返す．
 const VlDeclBase*
-EiIOPrimary::decl_base() const
+EiAuxPrimary::decl_base() const
 {
-  return mObj;;
+  return mObj;
 }
 
 // @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
 const VlDecl*
-EiIOPrimary::decl_obj() const
+EiAuxPrimary::decl_obj() const
 {
   return mObj;
 }
 
 // @brief Verilog-HDL の文字列を得る．
 std::string
-EiIOPrimary::decompile() const
+EiAuxPrimary::decompile() const
 {
-  return mAstObj.name();
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// クラス EiDeclItemPrimary
-//////////////////////////////////////////////////////////////////////
-
-// @brief 型の取得
-VpiObjType
-EiDeclItemPrimary::type() const
-{
-  return mObj->type();
-}
-
-// @brief ファイル位置を返す．
-FileRegion
-EiDeclItemPrimary::file_region() const
-{
-  return mAstObj.file_region();
-}
-
-// @brief 式のタイプを返す．
-VlValueType
-EiDeclItemPrimary::value_type() const
-{
-  return mObj->value_type();
-}
-
-// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
-const VlDeclBase*
-EiDeclItemPrimary::decl_base() const
-{
-  return mObj;;
-}
-
-// @brief 宣言要素への参照の場合，対象のオブジェクトを返す．
-const VlDecl*
-EiDeclItemPrimary::decl_obj() const
-{
-  return mObj;
-}
-
-// @brief Verilog-HDL の文字列を得る．
-std::string
-EiDeclItemPrimary::decompile() const
-{
-  return mAstObj.name();
+  return mObj->name();
 }
 
 

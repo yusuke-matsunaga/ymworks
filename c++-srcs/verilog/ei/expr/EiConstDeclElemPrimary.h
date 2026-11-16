@@ -45,6 +45,10 @@ public:
   SizeType
   declarray_offset() const override;
 
+  /// @brief 宣言要素の番号を返す．
+  SizeType
+  decl_id() const override;
+
 
 private:
   //////////////////////////////////////////////////////////////////////

@@ -1,41 +1,39 @@
-﻿#ifndef EIPORTBASE_H
-#define EIPORTBASE_H
+﻿#ifndef EIPORT_H
+#define EIPORT_H
 
-/// @file EiPortBase.h
-/// @brief EiPortBase のヘッダファイル
+/// @file EiPort.h
+/// @brief EiPort のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
 #include "ym/vl/VlPort.h"
-#include "ym/vl/AstPort.h"
-#include "ym/vl/AstIOItem.h"
 #include "elaborator/ElbFwd.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiPortBase EiPortBase.h "EiPortBase.h"
+/// @class EiPort EiPort.h "EiPort.h"
 /// @brief VlPort の実装クラスの基底クラス
 //////////////////////////////////////////////////////////////////////
-class EiPortBase :
+class EiPort :
   public VlPort
 {
 public:
 
   /// @brief コンストラクタ
-  EiPortBase(
+  EiPort(
     const FileRegion& loc,  ///< [in] ファイル位置
     const VlModule* parent, ///< [in] 親のモジュール
     SizeType index,         ///< [in] ポート番号
-    const VlTerm* low_conn, ///< [in] 下位の接続
+    const VlExpr* low_conn, ///< [in] 下位の接続
     VpiDir dir              ///< [in] 向き
   );
 
   /// @brief デストラクタ
-  ~EiPortBase() {}
+  ~EiPort() {}
 
 
 public:
@@ -87,14 +85,10 @@ public:
 
   /// @brief 上位の接続先を返す(入力ポート用)．
   const VlExpr*
-  high_conn_expr() const override;
-
-  /// @brief 上位の接続先を返す(出力ポート用)．
-  const VlTerm*
-  high_conn_term() const override;
+  high_conn() const override;
 
   /// @brief 下位の接続先を返す．
-  const VlTerm*
+  const VlExpr*
   low_conn() const override;
 
 
@@ -104,37 +98,11 @@ public:
   //////////////////////////////////////////////////////////////////////
 
   /// @brief high_conn を接続する．
-  virtual
   void
   set_high_conn(
-    ElbExpr* high_conn,
+    const VlExpr* high_conn,
     bool conn_by_name
   );
-
-  /// @brief high_conn を接続する．
-  virtual
-  void
-  set_high_conn(
-    const VlTerm* high_conn,
-    bool conn_by_name
-  );
-
-
-protected:
-  //////////////////////////////////////////////////////////////////////
-  // 継承クラスから用いられる関数
-  //////////////////////////////////////////////////////////////////////
-
-  /// @brief conn_by_name 属性を設定する．
-  void
-  set_conn_by_name(
-    bool conn_by_name
-  )
-  {
-    if ( conn_by_name ) {
-      mChunk |= 1ULL;
-    }
-  }
 
 
 private:
@@ -154,11 +122,14 @@ private:
   // 3-63: インデックス
   std::uint64_t mChunk{0};
 
+  // 上位の接続先
+  const VlExpr* mHighConn;
+
   // 下位の接続先
-  const VlTerm* mLowConn;
+  const VlExpr* mLowConn;
 
 };
 
 END_NAMESPACE_YM_VERILOG
 
-#endif // EIPORTBASE_H
+#endif // EIPORT_H

@@ -91,7 +91,7 @@ public:
   /// @return 生成された ElbPrimary (のリスト)を返す．
   ///
   /// - 不適切な式ならば ElbError 例外を送出する．
-  std::vector<ElbPrimary>
+  const VlExpr*
   instantiate_lhs(
     const VlScope* parent,  ///< [in] 親のスコープ
     const ElbEnv& env,	    ///< [in] 生成時の環境
@@ -103,7 +103,7 @@ public:
   ///
   /// - 不適切な式ならばエラーメッセージを出力し nullptr を返す．
   /// - instantiate_lhs() との違いは可変インデックスを許さないこと．
-  std::vector<ElbPrimary>
+  const VlExpr*
   instantiate_net_lhs(
     const VlScope* parent,  ///< [in] 親のスコープ
     const AstExpr& ast_expr ///< [in] 式を表すパース木
@@ -180,15 +180,25 @@ private:
     const AstExpr& ast_expr  ///< [in] 式を表すパース木
   );
 
+  /// @brief instantiate_lhs() の下請け関数
+  void
+  instantiate_lhs_sub(
+    const VlScope* parent,                ///< [in] 親のスコープ
+    const ElbEnv& env,	                  ///< [in] 生成時の環境
+    const AstExpr& ast_expr,              ///< [in] 式を表すパース木
+    std::vector<const VlExpr*>& expr_list ///< [out] 結果を格納するリスト
+  );
+
   /// @brief 左辺のプライマリ式の生成を行う．
   /// @return 生成された ElbPrimary を返す．
   ///
   /// 不適切な式ならば ElbError 例外を送出する．
-  ElbPrimary
+  void
   instantiate_lhs_primary(
-    const VlScope* parent,  ///< [in] 親のスコープ
-    const ElbEnv& env,	    ///< [in] 生成時の環境
-    const AstExpr& ast_expr ///< [in] 式を表すパース木
+    const VlScope* parent,                ///< [in] 親のスコープ
+    const ElbEnv& env,        	          ///< [in] 生成時の環境
+    const AstExpr& ast_expr,              ///< [in] 式を表すパース木
+    std::vector<const VlExpr*>& expr_list ///< [out] 結果を格納するリスト
   );
 
   /// @brief AstOpr から ElbExpr を生成する．

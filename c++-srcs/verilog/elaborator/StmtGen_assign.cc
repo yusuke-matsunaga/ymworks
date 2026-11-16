@@ -10,7 +10,6 @@
 #include "ElbEnv.h"
 #include "elaborator/ElbExpr.h"
 #include "ym/vl/AstStmt.h"
-#include "ym/vl/VlTerm.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
@@ -29,10 +28,10 @@ StmtGen::instantiate_assign(
   bool block
 )
 {
-  ElbVarLhsEnv env1{env};
+  ElbVarLhsEnv env1(env);
 
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
 
   auto ast_rhs = ast_stmt.rhs();
   auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs->value_type());
@@ -53,10 +52,9 @@ StmtGen::instantiate_pca(
   const AstStmt& ast_stmt
 )
 {
-  ElbPcaLhsEnv env1;
-
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
+  ElbPcaLhsEnv env1;
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
 
   auto ast_rhs = ast_stmt.rhs();
   auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs->value_type());
@@ -73,10 +71,9 @@ StmtGen::instantiate_deassign(
   const AstStmt& ast_stmt
 )
 {
-  ElbPcaLhsEnv env1;
-
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
+  ElbPcaLhsEnv env1;
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
 
   return elb_mgr().new_DeassignStmt(parent, process, ast_stmt, lhs);
 }
@@ -90,10 +87,9 @@ StmtGen::instantiate_force(
   const AstStmt& ast_stmt
 )
 {
-  ElbForceLhsEnv env1;
-
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
+  ElbForceLhsEnv env1;
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
 
   auto ast_rhs = ast_stmt.rhs();
   auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs->value_type());
@@ -110,10 +106,9 @@ StmtGen::instantiate_release(
   const AstStmt& ast_stmt
 )
 {
-  ElbForceLhsEnv env1;
-
   auto ast_lhs = ast_stmt.lhs();
-  auto lhs = instantiate_lhs_term(parent, env1, ast_lhs);
+  ElbForceLhsEnv env1;
+  auto lhs = instantiate_lhs(parent, env1, ast_lhs);
 
   return elb_mgr().new_ReleaseStmt(parent, process, ast_stmt, lhs);
 }

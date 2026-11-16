@@ -12,7 +12,6 @@
 #include "ym/vl/VlDelay.h"
 #include "ym/vl/VlScope.h"
 #include "ym/vl/VlExpr.h"
-#include "ym/vl/VlTerm.h"
 #include "ym/vl/VlTaskFunc.h"
 #include "ym/vl/VlUserSystf.h"
 #include "ym/vl/VlDecl.h"
@@ -122,23 +121,6 @@ VlDumperImpl::put_expr(const char* label,
 #endif
 #warning "TODO: VlDeclRef の内容を出力"
     break;
-  }
-}
-
-// @brief 左辺式の内容を出力する関数
-void
-VlDumperImpl::put_term(
-  const char* label,
-  const VlMgr& mgr,
-  const VlTerm* expr
-)
-{
-  auto n = expr->elem_num();
-  if ( n > 1 ) {
-    VlDumpHeader x1(this, "vpiLhs", "LhsElemArray");
-    for ( int i = 0; i < n; ++ i) {
-      put_expr("vpiExpr", mgr, expr->elem(i));
-    }
   }
 }
 

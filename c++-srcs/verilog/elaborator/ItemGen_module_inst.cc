@@ -348,23 +348,20 @@ ItemGen::link_module_array_port(
 )
 {
   auto parent = module_array->parent_scope();
+  auto parent_module = parent->parent_module();
+  auto expr_loc = ast_expr.file_region();
 
   auto module_size = module_array->elem_num();
   auto port_size = port->bit_size();
-  ElbEnv env;
   if ( port->direction() == VpiDir::Input ) {
-    // 入力ポートには任意の式を接続できる．
-    auto tmp = instantiate_expr(parent, env, ast_expr);
-    auto type = tmp->value_type();
-    // ただし real 型は駄目
-    if ( type.is_real_type() ) {
-      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-    }
-
-    SizeType expr_size = type.size();
+    // 入力ポートにはビットベクタ型の任意の式を接続できる．
+    ElbBitvectEnv env;
+    auto expr = instantiate_expr(parent, env, ast_expr);
+    auto type = expr->value_type();
+    SizeType expr_size = expr->bit_size();
     if ( expr_size == 0 ) {
       // もともとサイズがなければ port_size に合わせる．
-      tmp->set_reqsize(VlValueType(false, true, port_size));
+      expr->set_reqsize(VlValueType(false, true, port_size));
       expr_size = port_size;
     }
 
@@ -373,20 +370,24 @@ ItemGen::link_module_array_port(
       // サイズが等しい場合はそのまま接続する．
       for ( SizeType i = 0; i < module_size; ++ i ) {
 	auto module = module_array->elem(i);
-	module->set_port_high_conn(port->port_index(), tmp, conn_by_name);
+	module->set_port_high_conn(port->port_index(), expr, conn_by_name);
       }
     }
     else if ( port_size * module_size == expr_size ) {
       if ( module_size <= 1 ) {
 	throw std::logic_error{"module_size <= 1"};
       }
-      // tmp を 分割する．
+      // expr を表す暗黙のネットを作る．
+      auto net = new_dst_net(parent, ast_expr, expr);
+      auto net_ref = ElbDeclRef(net);
+      // net を 分割する．
       for ( SizeType i = 0; i < module_size; ++ i ) {
 	SizeType width = port_size;
 	SizeType base = i * port_size;
-	auto tmp1 = elb_mgr().new_PartSelect(ast_expr, tmp, width, base);
+	auto sel = ElbSelecter::new_CONST(width, base);
+	auto high_conn = elb_mgr().new_Primary(ast_expr, net_ref, sel);
 	auto module = module_array->elem(i);
-	module->set_port_high_conn(port->port_index(), tmp1, conn_by_name);
+	module->set_port_high_conn(port->port_index(), high_conn, conn_by_name);
       }
     }
     else {
@@ -395,24 +396,26 @@ ItemGen::link_module_array_port(
   }
   else {
     // それ以外の場合にはネット型の左辺式のみが接続できる．
-    auto primary_list = instantiate_net_lhs(parent, ast_expr);
-
-    SizeType expr_size = 0;
-    for ( auto& primary: primary_list ) {
-      expr_size += primary.bit_width();
-    }
+    auto lhs = instantiate_net_lhs(parent, ast_expr);
+    SizeType expr_size = lhs->bit_size();
     if ( expr_size != port_size * module_size ) {
       // サイズが合わない．
       log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
     }
-    // 式を分割する．
+
+    // lhs に接続する暗黙のネットを作る．
+    auto net = new_src_net(parent, ast_expr, lhs);
+
+    // net を分割する．
     // 0番目のモジュールがLSB側になる．
+    auto net_ref = ElbDeclRef(net);
     for ( SizeType i = 0; i < module_size; ++ i ) {
+      auto module = module_array->elem(i);
       SizeType width = port_size;
       SizeType base = i * port_size;
-      auto term = elb_mgr().new_Term(primary_list, width, base);
-      auto module = module_array->elem(i);
-      module->set_port_high_conn(port->port_index(), term, conn_by_name);
+      auto sel = ElbSelecter::new_CONST(width, base);
+      auto high_conn = elb_mgr().new_Primary(ast_expr, net_ref, sel);
+      module->set_port_high_conn(port->port_index(), high_conn, conn_by_name);
     }
   }
 }
@@ -523,16 +526,9 @@ ItemGen::link_module_port(
   auto port_size = port->bit_size();
   if ( port->direction() == VpiDir::Input ) {
     // 入力ポートには任意の式を接続できる．
-    ElbEnv env;
-    auto tmp = instantiate_expr(parent, env, ast_expr);
-    auto type = tmp->value_type();
-    if ( type.is_real_type() ) {
-      // ただし real 型は駄目
-      log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-    }
-
-    SizeType expr_size = type.size();
-
+    ElbBitvectEnv env;
+    auto expr = instantiate_expr(parent, env, ast_expr);
+    auto expr_size = expr->bit_size();
     // 単独のインスタンスの場合 expr のサイズは補正される．
     // ... でいいんだよね．
     if ( port_size != expr_size ) {
@@ -548,18 +544,74 @@ ItemGen::link_module_port(
 	}
 	log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
       }
-      tmp->set_reqsize(VlValueType(false, true, port_size));
+      expr->set_reqsize(VlValueType(false, true, port_size));
     }
-    module->set_port_high_conn(port->port_index(), tmp, conn_by_name);
+    // expr を表す暗黙のネットを作る．
+    auto net = new_dst_net(parent, ast_expr, expr);
+    auto net_ref = ElbDeclRef(net);
+    auto high_conn = elb_mgr().new_Primary(ast_expr, net_ref);
+    module->set_port_high_conn(port->port_index(), high_conn, conn_by_name);
   }
   else {
     // それ以外のポートに接続できるのはネット型の左辺式だけ．
-    auto primary_list = instantiate_net_lhs(parent, ast_expr);
-
-    auto lhs = elb_mgr().new_Term(primary_list);
+    auto lhs = instantiate_net_lhs(parent, ast_expr);
     // 左辺はサイズの補正をしても意味がないのでそのまま接続する．
     module->set_port_high_conn(port->port_index(), lhs, conn_by_name);
   }
+}
+
+// @brief rhs が接続する暗黙のネットを作る．
+const VlDecl*
+ItemGen::new_dst_net(
+  const VlScope* parent,
+  const AstExpr& ast_expr,
+  const VlExpr* rhs
+)
+{
+  auto parent_module = parent->parent_module();
+  auto loc = ast_expr.file_region();
+  auto expr_size = rhs->bit_size();
+  auto net = elb_mgr().new_ImpNet(parent, loc, expr_size);
+  auto net_ref = ElbDeclRef(net);
+  auto net_expr = elb_mgr().new_Primary(ast_expr, net_ref);
+  elb_mgr().new_ContAssign(parent_module, loc, net_expr, rhs);
+  return net;
+}
+
+// @brief lhs に接続する暗黙のネットを作る．
+const VlDecl*
+ItemGen::new_src_net(
+  const VlScope* parent,
+  const AstExpr& ast_expr,
+  const VlExpr* lhs
+)
+{
+  auto parent_module = parent->parent_module();
+  auto loc = ast_expr.file_region();
+  auto expr_size = lhs->bit_size();
+  auto net = elb_mgr().new_ImpNet(parent, loc, expr_size);
+  auto net_ref = ElbDeclRef(net);
+  // lhs が単純なプライマリの場合には冗長になるが
+  // 場合分けをするのも面倒なので
+  if ( lhs->is_primary() ) {
+    // net と lhs を接続する．
+    auto net_expr = elb_mgr().new_Primary(ast_expr, net_ref);
+    elb_mgr().new_ContAssign(parent_module, loc, lhs, net_expr);
+  }
+  else {
+    // net を分割する．
+    auto n = lhs->lhs_elem_num();
+    SizeType base = 0;
+    for ( SizeType i = 0; i < n; ++ i ) {
+      auto lhs1 = lhs->lhs_elem(n - i - 1);
+      auto width = lhs1->bit_size();
+      auto sel = ElbSelecter::new_CONST(width, base);
+      auto net_expr = elb_mgr().new_Primary(ast_expr, net_ref, sel);
+      elb_mgr().new_ContAssign(parent_module, loc, lhs1, net_expr);
+      base += width;
+    }
+  }
+  return net;
 }
 
 // @brief パラメータ割り当て情報を作る．

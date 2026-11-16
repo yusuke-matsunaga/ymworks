@@ -351,14 +351,6 @@ public:
     const VlExpr* expr ///< [in] オブジェクト
   );
 
-  /// @brief 左辺式の内容を出力する関数
-  void
-  put_term(
-    const char* label, ///< [in] ラベル
-    const VlMgr& mgr,  ///< [in] VlMgr
-    const VlTerm* term ///< [in] オブジェクト
-  );
-
   /// @brief プライマリ式を出力する関数
   void
   put_primary(

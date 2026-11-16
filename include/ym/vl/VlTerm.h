@@ -1,6 +1,8 @@
 #ifndef YM_VL_VLTERM_H
 #define YM_VL_VLTERM_H
 
+#error "obsolete"
+
 /// @file ym/vl/VlTerm.h
 /// @brief VlTerm のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
@@ -8,6 +10,7 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
+#include "ym/vl/VlObj.h"
 #include "ym/vl/VlFwd.h"
 
 
@@ -67,6 +70,15 @@ public:
   elem(
     SizeType index ///< [in] インデックス ( 0 <= index < elem_num() )
   ) const = 0;
+
+  /// @brief elem() の別名
+  const VlExpr*
+  operator[](
+    SizeType index ///< [in] インデックス ( 0 <= index < elem_num() )
+  ) const
+  {
+    return elem(index);
+  }
 
 };
 

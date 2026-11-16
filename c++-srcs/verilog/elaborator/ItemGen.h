@@ -338,6 +338,22 @@ private:
     bool conn_by_name        ///< [in] 名前による結合の場合 true にする．
   );
 
+  /// @brief rhs が接続する暗黙のネットを作る．
+  const VlDecl*
+  new_dst_net(
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstExpr& ast_expr, ///< [in] 元の構文木要素
+    const VlExpr* rhs        ///< [in] 右辺式
+  );
+
+  /// @brief lhs に接続する暗黙のネットを作る．
+  const VlDecl*
+  new_src_net(
+    const VlScope* parent,   ///< [in] 親のスコープ
+    const AstExpr& ast_expr, ///< [in] 元の構文木要素
+    const VlExpr* lhs        ///< [in] 左辺式
+  );
+
   /// @brief gate instance ヘッダの生成を行う
   void
   instantiate_gateheader(

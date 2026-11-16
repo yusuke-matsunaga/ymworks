@@ -417,7 +417,8 @@ ExprEval::evaluate_primary(
   }
 
   // モジュール内の識別子を探索する．
-  auto handle = elb_mgr().find_obj_up(parent, ast_expr, parent->parent_module());
+  auto handle = elb_mgr().find_obj_up(parent, ast_expr,
+				      parent->parent_module());
   if ( handle == nullptr ) {
     // 見つからなかった．
     log_mgr().error_not_found(__FILE__, __LINE__,
@@ -433,7 +434,7 @@ ExprEval::evaluate_primary(
       auto bv = BitVector(genvar->value());
       return VlValue{bv.bit_select_op(index1)};
     }
-    else if ( has_range_select ) {
+    if ( has_range_select ) {
       // 範囲選択
       auto bv = BitVector(genvar->value());
       if ( index1 < index2 ) {
@@ -441,9 +442,7 @@ ExprEval::evaluate_primary(
       }
       return VlValue(bv.part_select_op(index1, index2));
     }
-    else {
-      return VlValue(genvar->value());
-    }
+    return VlValue(genvar->value());
   }
 
   // それ以外の宣言要素の場合
@@ -476,41 +475,30 @@ ExprEval::evaluate_primary(
       }
       return VlValue(val.bitvector_value().bit_select_op(offset));
     }
-    else if ( has_range_select ) {
+    if ( has_range_select ) {
       if ( !val.is_bitvector_compat() ) {
 	log_mgr().error_illegal_real_type(__FILE__, __LINE__, ast_expr);
       }
+
       switch ( ast_part.mode() ) {
       case VpiRangeMode::Const:
-	{
-	  bool big = (index1 >= index2);
+        {
+	  bool big = (index1 <= index2);
 	  if ( big ^ param->is_big_endian() ) {
+            // もともとの範囲の方向と向きが異なる場合はエラー
 	    log_mgr().error_range_order(__FILE__, __LINE__, ast_expr);
 	  }
 	}
 	break;
 
+	// +:/-: の場合は実際の範囲と endian は無関係
+	// わかりにくいがこれらのケースでは index2 がビット幅となっている．
       case VpiRangeMode::Plus:
-	if ( param->is_big_endian() ) {
-	  auto range = index2;
-	  index2 = index1;
-	  index1 = index1 + range - 1;
-	}
-	else {
-	  index2 = index1 + index2 - 1;
-	}
+	index2 = index1 + index2 - 1;
 	break;
 
       case VpiRangeMode::Minus:
-	if ( param->is_big_endian() ) {
-	  index2 = index1 - index2 + 1;
-	}
-	else {
-	  auto range = index2;
-	  index2 = index1;
-	  index1 = index1 - range + 1;
-	}
-	ASSERT_NOT_REACHED;
+	index2 = index1 - index2 + 1;
 	break;
 
       case VpiRangeMode::No:
@@ -523,9 +511,14 @@ ExprEval::evaluate_primary(
       bool stat1 = param->calc_bit_offset(index1, msb_offset);
       bool stat2 = param->calc_bit_offset(index2, lsb_offset);
       if ( stat1 && stat2 ) {
+	if ( msb_offset < lsb_offset ) {
+	  std::swap(msb_offset, lsb_offset);
+	}
 	return VlValue(val.bitvector_value().part_select_op(msb_offset, lsb_offset));
       }
 
+      // どちらかが範囲外だった．
+      // 結果は X となる．
       SizeType bw;
       if ( index1 < index2 ) {
 	bw = index2 - index1 + 1;

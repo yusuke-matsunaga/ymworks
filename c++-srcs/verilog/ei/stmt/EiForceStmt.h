@@ -35,7 +35,7 @@ public:
     const VlScope* parent,    ///< [in] 親のスコープ
     const VlProcess* process, ///< [in] 親のプロセス (or nullptr)
     const AstStmt& ast_stmt,  ///< [in] パース木のステートメント定義
-    const VlTerm* lhs,	      ///< [in] 左辺の式
+    const VlExpr* lhs,	      ///< [in] 左辺の式
     const VlExpr* rhs	      ///< [in] 右辺の式
   ) : EiAssignBase(parent, process, ast_stmt, lhs, rhs)
   {

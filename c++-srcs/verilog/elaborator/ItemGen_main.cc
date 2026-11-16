@@ -11,7 +11,6 @@
 #include "ElbEnv.h"
 #include "ym/vl/AstItem.h"
 #include "ym/vl/AstContAssign.h"
-#include "ym/vl/VlTerm.h"
 #include "elaborator/ElbParameter.h"
 #include "elaborator/ElbProcess.h"
 #include "elaborator/ElbExpr.h"
@@ -209,7 +208,12 @@ ItemGen::instantiate_cont_assign_head(
   auto ca_head = elb_mgr().new_CaHead(module, ast_header, delay);
 
   for ( auto ast_contassign: ast_header.contassign_list() ) {
-    instantiate_cont_assign(parent, ast_contassign, ca_head);
+    try {
+      instantiate_cont_assign(parent, ast_contassign, ca_head);
+    }
+    catch ( const ElbError& error ) {
+      // 無視して処理を続ける．
+    }
   }
 }
 
@@ -221,25 +225,20 @@ ItemGen::instantiate_cont_assign(
   ElbCaHead* ca_head
 )
 {
-  try {
-    ElbEnv env;
+  ElbEnv env;
 
-    // 左辺式の生成
-    auto ast_lhs = ast_contassign.lhs();
-    auto lhs = instantiate_net_lhs_term(parent, ast_lhs);
+  // 左辺式の生成
+  auto ast_lhs = ast_contassign.lhs();
+  auto lhs = instantiate_net_lhs(parent, ast_lhs);
 
-    // 右辺式の生成
-    auto ast_rhs = ast_contassign.rhs();
-    auto rhs = instantiate_rhs(parent, env, ast_rhs, lhs->value_type());
+  // 右辺式の生成
+  auto ast_rhs = ast_contassign.rhs();
+  auto value_type = lhs->value_type();
+  auto rhs = instantiate_rhs(parent, env, ast_rhs, value_type);
 
-    auto loc = ast_contassign.file_region();
-    auto ca = elb_mgr().new_ContAssign(ca_head, loc, lhs, rhs);
-
-    log_mgr().info_contassign(__FILE__, __LINE__, ca);
-  }
-  catch ( const ElbError& error ) {
-    // 無視して処理を続ける．
-  }
+  auto loc = ast_contassign.file_region();
+  auto ca = elb_mgr().new_ContAssign(ca_head, loc, lhs, rhs);
+  log_mgr().info_contassign(__FILE__, __LINE__, ca);
 }
 
 // @brief process 文の生成を行う．

@@ -279,11 +279,10 @@ VlDumperImpl::put_contassign(
   put("vpiStrength1", ca->drive1() );
   put("vpiDelay", ca->delay() );
 
-  put_term("vpiLhs", mgr, ca->lhs() );
+  put_expr("vpiLhs", mgr, ca->lhs() );
 
   put_expr("vpiRhs", mgr, ca->rhs() );
 
-  put("vpiSize", ca->bit_size() );
 #if 0
   if ( mBitExpandMode ) {
     put("vpiBit", handle.get_iterate(vpiBit));

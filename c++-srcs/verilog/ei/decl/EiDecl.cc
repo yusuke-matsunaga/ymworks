@@ -248,14 +248,6 @@ EiDeclBase::delay() const
   return mHead->delay();
 }
 
-// @brief この要素に対する代入のタイプを返す．
-VlAssignType
-EiDeclBase::assign_type() const
-{
-  int val = mFlags[1] | (mFlags[2] << 1);
-  return static_cast<VlAssignType>(val);
-}
-
 // @brief 定数値を持つ型のときに true を返す．
 bool
 EiDeclBase::is_consttype() const
@@ -298,32 +290,6 @@ EiDeclBase::set_init(
 )
 {
   throw std::logic_error{"EiDeclBase::set_init()"};
-}
-
-// @brief 代入タイプをセットする．
-void
-EiDeclBase::set_assign_type(
-  VlAssignType assign_type
-)
-{
-  switch ( assign_type ) {
-  case VlAssignType::NONE:
-    mFlags.reset(1);
-    mFlags.reset(2);
-    break;
-  case VlAssignType::CONT:
-    mFlags.set(1);
-    mFlags.reset(2);
-    break;
-  case VlAssignType::BLOCK:
-    mFlags.reset(1);
-    mFlags.set(2);
-    break;
-  case VlAssignType::NONBLOCK:
-    mFlags.set(1);
-    mFlags.set(2);
-    break;
-  }
 }
 
 

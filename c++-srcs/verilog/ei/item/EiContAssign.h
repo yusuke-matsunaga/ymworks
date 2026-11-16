@@ -8,24 +8,24 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "elaborator/ElbContAssign.h"
+#include "ym/vl/VlContAssign.h"
 
 
 BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiContAssign EiContAssign.h "ei/EiContAssign.h"
-/// @brief 継続的代入文の実装クラス
+/// @class EiCaBase EiContAssign.h "ei/EiContAssign.h"
+/// @brief 継続的代入文の実装クラスの基底クラス
 //////////////////////////////////////////////////////////////////////
-class EiContAssign :
-  public ElbContAssign
+class EiCaBase :
+  public VlContAssign
 {
 protected:
 
   /// @brief コンストラクタ
-  EiContAssign(
+  EiCaBase(
     const FileRegion& loc, ///< [in] ファイル位置
-    const VlTerm* lhs,     ///< [in] 左辺式
+    const VlExpr* lhs,     ///< [in] 左辺式
     const VlExpr* rhs      ///< [in] 右辺式
   ) : mFileRegion{loc},
       mLhs{lhs},
@@ -34,7 +34,7 @@ protected:
   }
 
   /// @brief デストラクタ
-  ~EiContAssign() = default;
+  ~EiCaBase() = default;
 
 
 public:
@@ -56,12 +56,8 @@ public:
   // VlContAssign の派生クラスに共通な仮想関数
   //////////////////////////////////////////////////////////////////////
 
-  /// @brief ビット幅を返す．
-  int
-  bit_size() const override;
-
-  /// @brief 左辺を返す．
-  const VlTerm*
+  /// @brief 左辺式を返す．
+  const VlExpr*
   lhs() const override;
 
   /// @brief 右辺を返す．
@@ -78,7 +74,7 @@ private:
   FileRegion mFileRegion;
 
   // 左辺式
-  const VlTerm* mLhs;
+  const VlExpr* mLhs;
 
   // 右辺式
   const VlExpr* mRhs;
@@ -88,26 +84,26 @@ private:
 
 //////////////////////////////////////////////////////////////////////
 /// @class EiContAssign EiContAssign.h "ei/EiContAssign.h"
-/// @brief 継続的代入文の実装クラス
+/// @brief ElbCaHead を持つクラスの基底クラス
 //////////////////////////////////////////////////////////////////////
-class EiContAssign1 :
-  public EiContAssign
+class EiContAssign :
+  public EiCaBase
 {
 public:
 
   /// @brief コンストラクタ
-  EiContAssign1(
-    ElbCaHead* head,        ///< [in] ヘッダ
-    const FileRegion& loc,  ///< [in] ファイル位置
-    const VlTerm* lhs,      ///< [in] 左辺式
-    const VlExpr* rhs       ///< [in] 右辺式
-  ) : EiContAssign(loc, lhs, rhs),
+  EiContAssign(
+    ElbCaHead* head,       ///< [in] ヘッダ
+    const FileRegion& loc, ///< [in] ファイル位置
+    const VlExpr* lhs,     ///< [in] 左辺式
+    const VlExpr* rhs      ///< [in] 右辺式
+  ) : EiCaBase(loc, lhs, rhs),
       mHead{head}
   {
   }
 
   /// @brief デストラクタ
-  ~EiContAssign1() = default;
+  ~EiContAssign() = default;
 
 
 public:
@@ -148,27 +144,27 @@ private:
 
 
 //////////////////////////////////////////////////////////////////////
-/// @class EiContAssign2 EiContAssign.h "ei/EiContAssign.h"
+/// @class EiCa_Net EiContAssign.h "ei/EiContAssign.h"
 /// @brief net 宣言中の継続的代入文
 //////////////////////////////////////////////////////////////////////
-class EiContAssign2 :
-  public EiContAssign
+class EiCa_Net :
+  public EiCaBase
 {
 public:
 
   /// @brief コンストラクタ
-  EiContAssign2(
+  EiCa_Net(
     const VlModule* module, ///< [in] 親のモジュール
     const FileRegion& loc,  ///< [in] ファイル位置
-    const VlTerm* lhs,      ///< [in] 左辺式
+    const VlExpr* lhs,      ///< [in] 左辺式
     const VlExpr* rhs       ///< [in] 右辺式
-  ) : EiContAssign(loc, lhs, rhs),
+  ) : EiCaBase(loc, lhs, rhs),
       mModule{module}
   {
   }
 
   /// @brief デストラクタ
-  ~EiContAssign2() = default;
+  ~EiCa_Net() = default;
 
 
 public:

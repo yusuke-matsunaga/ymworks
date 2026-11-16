@@ -481,19 +481,14 @@ ItemGen::link_prim_array_input_port(
   SizeType arraysize = prim_array->elem_num();
 
   // 入力に接続するのは通常の右辺式
-  ElbEnv env1;
-  auto expr = instantiate_expr(parent, env1, ast_expr);
+  ElbBitvectEnv env;
+  auto expr = instantiate_expr(parent, env, ast_expr);
   if ( expr == nullptr ) {
     // 空の式はエラーではなくスキップする．
     return;
   }
 
   auto type = expr->value_type();
-  if ( type.is_real_type() ) {
-    // real タイプは結合不可
-    log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-  }
-
   auto expr_size = expr->bit_size();
   if ( expr_size == 0 ) {
     // サイズがなければ1ビットに直してから接続する．
@@ -508,11 +503,14 @@ ItemGen::link_prim_array_input_port(
     }
   }
   else if ( expr_size == arraysize ) {
-    // tmp を 1 ビットずつに分割して接続する．
+    // expr を 1 ビットずつに分割して接続する．
+    auto net = new_dst_net(parent, ast_expr, expr);
+    auto net_ref = ElbDeclRef(net);
     for ( SizeType i = 0; i < arraysize; ++ i ) {
       auto prim = prim_array->_primitive_by_offset(i);
-      auto bit = elb_mgr().new_BitSelect(ast_expr, expr, i);
-      prim->connect(index, bit);
+      auto sel = ElbSelecter::new_CONST(1, i);
+      auto rhs = elb_mgr().new_Primary(ast_expr, net_ref, sel);
+      prim->connect(index, rhs);
     }
   }
   else {
@@ -535,16 +533,13 @@ ItemGen::link_prim_array_output_port(
   SizeType arraysize = prim_array->elem_num();
 
   // 入力以外はネット型の左辺式でなければならない．
-  auto primary_list = instantiate_net_lhs(parent, ast_expr);
-  if ( primary_list.empty() ) {
+  auto lhs = instantiate_net_lhs(parent, ast_expr);
+  if ( lhs == nullptr ) {
     // 空の式はエラーではなくスキップする．
     return;
   }
 
-  SizeType expr_size = 0;
-  for ( auto& primary: primary_list ) {
-    expr_size += primary.bit_width();
-  }
+  SizeType expr_size = lhs->bit_size();
   if ( expr_size != arraysize ) {
     // サイズが合わない．
     auto def_name = prim_array->head()->def_name();
@@ -552,20 +547,15 @@ ItemGen::link_prim_array_output_port(
 				       ast_expr);
   }
 
-  // primary_list を 1 ビットずつに分割して接続する．
-  SizeType offset = 0;
-  SizeType cur = 0;
+  // lhs に接続するネットを作る．
+  auto net = new_src_net(parent, ast_expr, lhs);
+  auto net_ref = ElbDeclRef(net);
+  // net を 1 ビットずつに分割して接続する．
   for ( SizeType i = 0; i < arraysize; ++ i ) {
     auto prim = prim_array->_primitive_by_offset(i);
-    auto& primary = primary_list[cur];
-    auto primary1 = primary.slice(1, offset);
-    auto bit_expr = elb_mgr().new_Primary(primary1);
-    prim->connect(index, bit_expr);
-    ++ offset;
-    if ( offset == primary.bit_width() ) {
-      offset = 0;
-      ++ cur;
-    }
+    auto sel = ElbSelecter::new_CONST(1, i);
+    auto net_expr = elb_mgr().new_Primary(ast_expr, net_ref, sel);
+    prim->connect(index, net_expr);
   }
 }
 
@@ -599,13 +589,9 @@ ItemGen::link_primitive_input_port(
   auto parent = primitive->parent_scope();
 
   // 入力に接続するのは通常の右辺式
-  ElbEnv env1;
-  auto tmp = instantiate_expr(parent, env1, ast_expr);
+  ElbBitvectEnv env;
+  auto tmp = instantiate_expr(parent, env, ast_expr);
   auto type = tmp->value_type();
-  if ( type.is_real_type() ) {
-    log_mgr().error_real_type_in_port_list(__FILE__, __LINE__, ast_expr);
-  }
-
   auto expr_size = type.size();
   if ( expr_size == 0 ) {
     // サイズがなければ1ビットに直してから接続する．
@@ -629,14 +615,13 @@ ItemGen::link_primitive_output_port(
 {
   auto parent = primitive->parent_scope();
 
-  auto primary_list = instantiate_net_lhs(parent, ast_expr);
-  if ( primary_list.size() != 1 || primary_list.front().bit_width() != 1 ) {
+  // 出力に接続するのはネット型の左辺式
+  auto lhs = instantiate_net_lhs(parent, ast_expr);
+  if ( lhs->bit_size() != 1 ) {
     // 1ビットでなければいけない．
     log_mgr().error_port_size_mismatch(__FILE__, __LINE__, ast_expr);
   }
-  auto& primary = primary_list.front();
-  auto tmp = elb_mgr().new_Primary(primary);
-  primitive->connect(index, tmp);
+  primitive->connect(index, lhs);
 }
 
 END_NAMESPACE_YM_VERILOG
