@@ -60,6 +60,10 @@ public:
   VlValueType
   value_type() const override;
 
+  /// @brief Verilog-HDL の文字列を得る．
+  std::string
+  decompile() const override;
+
   /// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
   const VlDeclBase*
   decl_base() const override;
@@ -68,9 +72,16 @@ public:
   const VlDecl*
   decl_obj() const override;
 
-  /// @brief Verilog-HDL の文字列を得る．
-  std::string
-  decompile() const override;
+  /// @brief 宣言要素の番号を返す．
+  SizeType
+  decl_id() const override;
+
+  /// @brief 宣言要素に対するビット/部分選択の種類を返す．
+  ///
+  /// - expr_type() が PRIMARY かつ primary_type() が DECL,
+  ///   CONST_DECL_ARRAY, VAR_DECL_ARRAY の場合に意味を持つ．
+  VlSelectType
+  select_type() const override;
 
 
 private:

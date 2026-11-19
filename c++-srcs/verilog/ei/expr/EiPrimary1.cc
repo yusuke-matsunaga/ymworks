@@ -137,19 +137,6 @@ ElbMgr::new_Primary(
     });
 }
 
-#if 0
-// @brief プライマリ式を生成する．
-ElbExpr*
-ElbMgr::new_Primary(
-  const VlExpr* primary,
-  SizeType width,
-  SizeType offset
-)
-{
-  return nullptr;
-}
-#endif
-
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiDeclPrimary

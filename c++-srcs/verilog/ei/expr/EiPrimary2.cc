@@ -157,6 +157,13 @@ EiAuxPrimary::value_type() const
   return mObj->value_type();
 }
 
+// @brief Verilog-HDL の文字列を得る．
+std::string
+EiAuxPrimary::decompile() const
+{
+  return mObj->name();
+}
+
 // @brief 宣言要素もしくは配列型宣言要素への参照を返す．
 const VlDeclBase*
 EiAuxPrimary::decl_base() const
@@ -171,11 +178,18 @@ EiAuxPrimary::decl_obj() const
   return mObj;
 }
 
-// @brief Verilog-HDL の文字列を得る．
-std::string
-EiAuxPrimary::decompile() const
+// @brief 宣言要素の番号を返す．
+SizeType
+EiAuxPrimary::decl_id() const
 {
-  return mObj->name();
+  return mObj->decl_id();
+}
+
+// @brief 宣言要素に対するビット/部分選択の種類を返す．
+VlSelectType
+EiAuxPrimary::select_type() const
+{
+  return VlSelectType::NONE;
 }
 
 
