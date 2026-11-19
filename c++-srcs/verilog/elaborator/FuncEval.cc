@@ -131,7 +131,7 @@ FuncEval::evaluate_stmt(
 
   default:
     // 上記以外はエラー
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"FuncEval::evaluate_stmt(): wrong ast_stmt.type()"};
     break;
   }
 
@@ -457,7 +457,7 @@ FuncEval::match(
       eq_val = eq_with_xz(val, label_val);
     }
     else {
-      throw std::logic_error{"Should not be reached"};
+      throw std::logic_error{"FuncEval::match(): wrong case_type"};
     }
     return eq_val.logic_value().to_bool();
   }
@@ -485,10 +485,9 @@ FuncEval::evaluate_expr(
   case VlExprType::OPERATION:   return evaluate_opr(expr);
   case VlExprType::FUNCCALL:    return evaluate_funccall(expr);
   case VlExprType::SYSFUNCCALL: return VlValue(); // 定数式の中では無視
-  default: break;
+  default: break; // NONE と LHS
   }
-  // SELECT タイプは定数式の中では現れないはず．
-  throw std::logic_error{"Should not be reached"};
+  throw std::logic_error{"FuncEval::evalueate_expr(): wrong expr_type"};
 }
 
 // @brief 演算子に対して式の値を評価する．
@@ -589,7 +588,7 @@ FuncEval::evaluate_opr(
   case VpiOpType::Posedge:
   case VpiOpType::Negedge:
     // これらは使えない．
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"FuncEval::evaluate_opr(): wrong expr->op_type()"};
   }
 }
 

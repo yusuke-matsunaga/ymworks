@@ -54,6 +54,12 @@ public:
   VlValueType
   value_type() const override;
 
+  /// @brief プライマリの種類を返す．
+  ///
+  /// is_primary() == true の場合のみ意味を持つ．
+  VlPrimaryType
+  primary_type() const override;
+
   /// @brief 宣言要素もしくは配列型宣言要素への参照を返す．
   const VlDeclBase*
   decl_base() const override;

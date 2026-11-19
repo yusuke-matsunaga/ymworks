@@ -363,7 +363,6 @@ ExprEval::evaluate_opr(
 
   case VpiOpType::MinTypMax:
     // 本当はエラー
-    throw std::logic_error{"Should not be reached"};
     break;
 
   case VpiOpType::Concat:
@@ -373,7 +372,7 @@ ExprEval::evaluate_opr(
     return multi_concat(val);
 
   default:
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"ExprEval::evaluate_opr(): wrong ast_expr.op_type()"};
     break;
   }
 
@@ -502,7 +501,7 @@ ExprEval::evaluate_primary(
 	break;
 
       case VpiRangeMode::No:
-	throw std::logic_error{"Should not be reached"};
+	throw std::logic_error{"ExprEval::evaluate_primary(): wrong ast_part.mode()"};
 	break;
       }
 
@@ -587,7 +586,7 @@ ExprEval::evaluate_const(
     return VlValue(BitVector(ast_expr.const_str()));
 
   default:
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"ExprEval::evaluate_const(): wrong ast_expr.const_type()"};
     break;
   }
 

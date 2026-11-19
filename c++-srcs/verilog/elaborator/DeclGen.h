@@ -87,6 +87,14 @@ private:
     const AstIOHeadList& ast_head_array ///< [in] IO宣言ヘッダのリスト
   );
 
+  /// @brief IOHead を作る．
+  ElbIOHead*
+  instantiate_iohead(
+    ElbModule* module,        ///< [in] 親のモジュール
+    ElbTaskFunc* taskfunc,    ///< [in] 親のタスク/関数
+    const AstIOHead& ast_head ///< [in] IO宣言ヘッダ
+  );
+
   /// @brief パラメータ用の instantiate 関数
   void
   instantiate_param_head(

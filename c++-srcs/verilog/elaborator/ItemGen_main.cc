@@ -122,7 +122,7 @@ ItemGen::phase1_item(
     break;
 
   default:
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"ItemGen::phase1_item(): wrong ast_item.type()"};
     break;
   }
 }

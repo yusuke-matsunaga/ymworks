@@ -68,7 +68,7 @@ ExprGen::instantiate_lhs_sub(
 
   case AstExpr::Primary:
     instantiate_lhs_primary(parent, env, ast_expr, expr_list);
-    break;
+    return;
 
   case AstExpr::Const:
     log_mgr().error_illegal_constant_in_lhs(__FILE__, __LINE__, ast_expr);
@@ -83,7 +83,7 @@ ExprGen::instantiate_lhs_sub(
     break;
   }
 
-  throw std::logic_error{"Should not be reached"};
+  throw std::logic_error{"ExprGen::instantiate_lhs_sub(): wrong ast_expr.type()"};
 }
 
 // @brief 左辺のプライマリ式の生成を行う．

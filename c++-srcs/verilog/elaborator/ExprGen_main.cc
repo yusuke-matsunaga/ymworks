@@ -73,7 +73,7 @@ ExprGen::instantiate_expr(
     return instantiate_primary(parent, env, ast_expr);
 
   default:
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"ExprGen::instantiate_expr(): wrong ast_expr.type()"};
   }
 
   // コンパイラを騙すためのダミー
@@ -154,7 +154,7 @@ ExprGen::instantiate_event_expr(
     break;
   }
 
-  throw std::logic_error{"Should not be reached"};
+  throw std::logic_error{"ExprGen::instantiate_event_expr(): wrong ast_expr.type()"};
 }
 
 // @brief AstExpr(primary) から named_event を生成する．

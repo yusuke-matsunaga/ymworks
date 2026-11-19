@@ -41,6 +41,12 @@ public:
   // VlExpr の仮想関数
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief プライマリの種類を返す．
+  ///
+  /// is_primary() == true の場合のみ意味を持つ．
+  VlPrimaryType
+  primary_type() const override;
+
   /// @brief 配列型宣言要素への参照のオフセットを返す．
   SizeType
   declarray_offset() const override;

@@ -119,7 +119,7 @@ StmtGen::phase1_stmt(
     break;
 
   default:
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"StmtGen::phase1_stmt(): wrong ast_stmt.type()"};
   }
 }
 
@@ -274,7 +274,7 @@ StmtGen::instantiate_stmt(
     break;
 
   default:
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"StmtGen::instantiate_stmt(): wrong ast_stmt.type()"};
   }
   if ( stmt ) {
     // attribute instance の生成

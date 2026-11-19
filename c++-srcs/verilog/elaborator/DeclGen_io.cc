@@ -26,6 +26,26 @@
 
 BEGIN_NAMESPACE_YM_VERILOG
 
+BEGIN_NONAMESPACE
+
+inline
+const VlScope*
+get_scope(
+  ElbModule* module,
+  ElbTaskFunc* taskfunc
+)
+{
+  if ( module != nullptr ) {
+    return module;
+  }
+  if ( taskfunc != nullptr ) {
+    return taskfunc;
+  }
+  throw std::logic_error{"get_scope(): module == nullptr && task == nullptr"};
+}
+
+END_NONAMESPACE
+
 //////////////////////////////////////////////////////////////////////
 // クラス DeclGen
 //////////////////////////////////////////////////////////////////////
@@ -38,17 +58,7 @@ DeclGen::instantiate_iodecl(
   const AstIOHeadList& ast_head_list
 )
 {
-  const VlScope* scope = nullptr;
-  if ( module != nullptr ) {
-    scope = module;
-  }
-  else if ( taskfunc != nullptr ) {
-    scope = taskfunc;
-  }
-  else {
-    throw std::logic_error{"module == nullptr && task == nullptr"};
-  }
-
+  auto scope = get_scope(module, taskfunc);
   for ( auto ast_head: ast_head_list ) {
     auto def_aux_type = ast_head.aux_type();
     auto sign = ast_head.is_signed();
@@ -63,16 +73,7 @@ DeclGen::instantiate_iodecl(
 
     // ヘッダ情報の生成
     // ちなみに IOHead は範囲の情報を持たない．
-    ElbIOHead* head = nullptr;
-    if ( module != nullptr ) {
-      head = elb_mgr().new_IOHead(module, ast_head);
-    }
-    else if ( taskfunc != nullptr ) {
-      head = elb_mgr().new_IOHead(taskfunc, ast_head);
-    }
-    else {
-      throw std::logic_error{"module == nullptr && taskfunc == nullptr"};
-    }
+    auto head = instantiate_iohead(module, taskfunc, ast_head);
 
     for ( auto ast_item: ast_head.item_list() ) {
       // IO定義と変数/ネット定義が一致しているか調べる．
@@ -196,7 +197,7 @@ DeclGen::instantiate_iodecl(
 	else {
 	  // task/function の IO 宣言には初期値はない．
 	  if ( ast_init.is_valid() ) {
-	    throw std::logic_error{"ast_init != nullptr"};
+	    throw std::logic_error{"DeclGen::instantiate_iodecl(): ast_init != nullptr"};
 	  }
 	}
 
@@ -206,7 +207,7 @@ DeclGen::instantiate_iodecl(
 	case VpiAuxType::Reg: tag = vpiReg; break;
 	case VpiAuxType::Var: tag = vpiVariables; break;
 	default:
-	  throw std::logic_error{"Should not be reached"};
+	  throw std::logic_error{"DeclGen::instantiate_iodecl(): wrong aux_type"};
 	}
 	decl = elb_mgr().new_Decl(tag, head, ast_item, init);
       }
@@ -218,13 +219,27 @@ DeclGen::instantiate_iodecl(
       else if ( taskfunc ) {
 	taskfunc->add_iodecl(io_decl);
       }
-      else {
-	throw std::logic_error{"Should not be reached"};
-      }
 
       log_mgr().info_iodecl(__FILE__, __LINE__, ast_item, scope);
     }
   }
+}
+
+// @brief IOHead を作る．
+ElbIOHead*
+DeclGen::instantiate_iohead(
+  ElbModule* module,
+  ElbTaskFunc* taskfunc,
+  const AstIOHead& ast_head
+)
+{
+  if ( module != nullptr ) {
+    return elb_mgr().new_IOHead(module, ast_head);
+  }
+  if ( taskfunc != nullptr ) {
+    return elb_mgr().new_IOHead(taskfunc, ast_head);
+  }
+  throw std::logic_error{"DeclGen::instantiate_iohead(): module == nullptr && taskfunc == nullptr"};
 }
 
 END_NAMESPACE_YM_VERILOG

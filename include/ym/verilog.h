@@ -1075,7 +1075,6 @@ enum class VlExprType : std::uint8_t {
   NONE = 0,    ///< 不正値
   CONST,       ///< 定数
   PRIMARY,     ///< プライマリ
-  SELECT,      ///< ビット/部分選択
   OPERATION,   ///< 演算
   FUNCCALL,    ///< 関数呼び出し
   SYSFUNCCALL, ///< システム関数呼び出し
@@ -1094,7 +1093,6 @@ operator<<(
   case VlExprType::NONE:        s << "NONE"; break;
   case VlExprType::CONST:       s << "CONST"; break;
   case VlExprType::PRIMARY:     s << "PRIMARY"; break;
-  case VlExprType::SELECT:      s << "SELECT"; break;
   case VlExprType::OPERATION:   s << "OPERATION"; break;
   case VlExprType::FUNCCALL:    s << "FUNCCALL"; break;
   case VlExprType::SYSFUNCCALL: s << "SYSFUNCCALL"; break;

@@ -169,6 +169,13 @@ EiDeclPrimary::value_type() const
   return mObj->value_type();
 }
 
+// @brief プライマリの種類を返す．
+VlPrimaryType
+EiDeclPrimary::primary_type() const
+{
+  return VlPrimaryType::DECL;
+}
+
 // @brief 宣言要素もしくは配列型宣言要素への参照を返す．
 const VlDeclBase*
 EiDeclPrimary::decl_base() const
@@ -310,6 +317,13 @@ EiDeclElemPrimary::declarray_obj() const
 // クラス EiConstDeclElemPrimary
 //////////////////////////////////////////////////////////////////////
 
+// @brief プライマリの種類を返す．
+VlPrimaryType
+EiConstDeclElemPrimary::primary_type() const
+{
+  return VlPrimaryType::CONST_DECL_ELEM;
+}
+
 // @brief 配列型宣言要素への参照のオフセットを返す．
 SizeType
 EiConstDeclElemPrimary::declarray_offset() const
@@ -402,6 +416,13 @@ EiConstDeclElemMinusSelect::select_type() const
 //////////////////////////////////////////////////////////////////////
 // クラス EiVarDeclElemPrimary
 //////////////////////////////////////////////////////////////////////
+
+// @brief プライマリの種類を返す．
+VlPrimaryType
+EiVarDeclElemPrimary::primary_type() const
+{
+  return VlPrimaryType::VAR_DECL_ELEM;
+}
 
 // @brief 配列型宣言要素への参照の場合，配列のインデックスリストを返す．
 std::vector<const VlExpr*>

@@ -140,7 +140,7 @@ ExprGen::instantiate_opr(
     break;
 
   default:
-    throw std::logic_error{"Should not be reached"};
+    throw std::logic_error{"ExprGen::instantiate_opr(): wrong ast_expr.op_type()"};
   }
 
   // attribute instance の生成
