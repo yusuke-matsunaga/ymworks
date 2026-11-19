@@ -11,7 +11,7 @@
 
 include_directories (
   include
-  ../../c++-srcs/verilog/private_include
+  ../private_include
   )
 
 

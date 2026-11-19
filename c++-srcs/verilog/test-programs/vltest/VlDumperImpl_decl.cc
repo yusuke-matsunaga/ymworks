@@ -116,6 +116,7 @@ VlDumperImpl::put_decl(
 
   put("FileRegion", decl->file_region() );
   put("vpiFullName", decl->full_name() );
+  put("decl_id", decl->decl_id());
 #if 0
   put("vpiExpanded", decl->is_expanded() );
 #else
@@ -267,6 +268,7 @@ VlDumperImpl::put_declarray(
 
   put("FileRegion", decl->file_region() );
   put("vpiFullName", decl->full_name() );
+  put("decl_id(0)", decl->decl_id(0));
 #if 0
   put("vpiExpanded", decl->is_expanded() );
 #else

@@ -9,9 +9,8 @@
 # インクルードパスの設定
 # ===================================================================
 include_directories (
-  ../../../c++-srcs/verilog/scanner
-  ../include
-  ${CMAKE_CURRENT_BINARY_DIR}/../../../c++-srcs/verilog
+  ../../scanner
+  #${CMAKE_CURRENT_BINARY_DIR}/../../../c++-srcs/verilog
   )
 
 

@@ -92,9 +92,10 @@ VlDumper::bitexpand_mode() const
 }
 
 // @brief VlMgr の持っている内容を出力する
-// @param[in] mgr VlMgr
 void
-VlDumper::operator()(const VlMgr& mgr)
+VlDumper::operator()(
+  const VlMgr& mgr
+)
 {
   mImpl->put(mgr);
 }

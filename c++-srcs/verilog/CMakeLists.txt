@@ -61,7 +61,7 @@ add_subdirectory ( ei/misc )
 add_subdirectory ( ei/stmt )
 
 add_subdirectory ( gtest )
-#add_subdirectory ( tests/programs )
+add_subdirectory ( test-programs )
 
 
 # ===================================================================

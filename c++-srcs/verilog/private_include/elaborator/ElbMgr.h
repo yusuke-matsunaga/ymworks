@@ -1173,6 +1173,7 @@ private:
   )
   {
     auto decl = new_func(mDeclId);
+    ++ mDeclId;
     reg_obj(decl);
     mObjDict.add(decl);
     mTagDict.add_decl(tag, decl);

@@ -875,8 +875,66 @@ AstDumper::put(
 #endif
 
       put("mOprType", expr.op_type());
-      for ( auto expr1: expr.operand_list() ) {
-	put("mOperand",  expr1);
+      switch ( expr.op_type() ) {
+      case VpiOpType::Minus:
+      case VpiOpType::Plus:
+      case VpiOpType::Not:
+      case VpiOpType::BitNeg:
+      case VpiOpType::UnaryAnd:
+      case VpiOpType::UnaryNand:
+      case VpiOpType::UnaryOr:
+      case VpiOpType::UnaryNor:
+      case VpiOpType::UnaryXor:
+      case VpiOpType::UnaryXNor:
+      case VpiOpType::Null:
+	put("mOperand0", expr.operand0());
+	break;
+
+      case VpiOpType::Sub:
+      case VpiOpType::Div:
+      case VpiOpType::Mod:
+      case VpiOpType::Eq:
+      case VpiOpType::Neq:
+      case VpiOpType::CaseEq:
+      case VpiOpType::CaseNeq:
+      case VpiOpType::Gt:
+      case VpiOpType::Ge:
+      case VpiOpType::Lt:
+      case VpiOpType::Le:
+      case VpiOpType::LShift:
+      case VpiOpType::RShift:
+      case VpiOpType::Add:
+      case VpiOpType::Mult:
+      case VpiOpType::LogAnd:
+      case VpiOpType::LogOr:
+      case VpiOpType::BitAnd:
+      case VpiOpType::BitOr:
+      case VpiOpType::BitXor:
+      case VpiOpType::BitXNor:
+      case VpiOpType::EventOr:
+      case VpiOpType::Posedge:
+      case VpiOpType::Negedge:
+      case VpiOpType::ArithLShift:
+      case VpiOpType::ArithRShift:
+      case VpiOpType::Power:
+	put("mOperand0", expr.operand0());
+	put("mOperand1", expr.operand1());
+	break;
+
+      case VpiOpType::Condition:
+      case VpiOpType::MinTypMax:
+	put("mOperand0", expr.operand0());
+	put("mOperand1", expr.operand1());
+	put("mOperand2", expr.operand2());
+	break;
+
+      case VpiOpType::Concat:
+      case VpiOpType::MultiConcat:
+      case VpiOpType::List:
+	for ( auto expr1: expr.operand_list() ) {
+	  put("mOperand",  expr1);
+	}
+	break;
       }
     }
     break;

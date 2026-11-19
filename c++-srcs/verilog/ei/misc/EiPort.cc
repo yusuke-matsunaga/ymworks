@@ -27,6 +27,7 @@ EiPort::EiPort(
   VpiDir dir
 ) : mFileRegion{loc},
     mModule{module},
+    mHighConn{nullptr},
     mLowConn{low_conn}
 {
   mChunk = (index << 1);

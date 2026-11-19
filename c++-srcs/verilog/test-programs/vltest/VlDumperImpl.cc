@@ -104,8 +104,12 @@ VlDumperImpl::bitexpand_mode() const
 // @brief VlMgr の持っている内容を出力する
 // @param[in] mgr VlMgr
 void
-VlDumperImpl::put(const VlMgr& mgr)
+VlDumperImpl::put(
+  const VlMgr& mgr
+)
 {
+  std::cout << "VlDumpverImpl::put()" << std::endl;
+
   // UDP を出力する．
   for ( auto udp: mgr.udp_list() ) {
     put_udp_defn("UDP", mgr, udp);

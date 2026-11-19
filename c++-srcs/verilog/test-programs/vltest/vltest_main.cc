@@ -167,7 +167,7 @@ main(
 
   ClibCellLibrary cell_library;
   std::vector<std::string> filename_list;
-  for ( int i = 1; i < argc; ++ i ) {
+  for ( int i = 0; i < argc; ++ i ) {
     auto arg = argv[i];
     if ( strcmp(arg, "--liberty") == 0 ) {
       if ( i + 1 >= argc ) {
@@ -198,6 +198,13 @@ main(
     }
   }
 
+  {
+    std::cout << "filename_list = ";
+    for ( auto& name: filename_list ) {
+      std::cout << " " << name;
+    }
+    std::cout << std::endl;
+  }
   switch ( mode ) {
   case 3:
     parse_mode(filename_list,

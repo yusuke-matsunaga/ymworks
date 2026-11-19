@@ -27,9 +27,11 @@ BEGIN_NAMESPACE_YM_VERILOG
 
 // @brief 式の内容を出力する関数
 void
-VlDumperImpl::put_expr(const char* label,
-		       const VlMgr& mgr,
-		       const VlExpr* expr)
+VlDumperImpl::put_expr(
+  const char* label,
+  const VlMgr& mgr,
+  const VlExpr* expr
+)
 {
   if ( expr == nullptr ) {
     if ( !nullptr_suppress_mode() ) {

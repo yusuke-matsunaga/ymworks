@@ -36,9 +36,15 @@
 # サブディレクトリの設定
 # ===================================================================
 
-foreach ( submodule ${YM_SUBMODULE_LIST} )
-  add_subdirectory( ${submodule} )
-endforeach ()
+add_subdirectory( aig )
+add_subdirectory( bn )
+add_subdirectory( clib )
+add_subdirectory( combopt )
+add_subdirectory( exsyn )
+add_subdirectory( fraig )
+add_subdirectory( logic )
+add_subdirectory( misc )
+add_subdirectory( sat )
 
 
 # ===================================================================

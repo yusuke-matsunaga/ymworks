@@ -34,7 +34,9 @@ ElbMgr::new_Module(
   mObjDict.add(mod);
   mModuleDefDict.add(mod);
   mTagDict.add_module(mod);
+  std::cout << "ElbMgr::new_Module: " << ast_module.name() << std::endl;
   if ( parent == mTopLevel ) {
+    std::cout << "  top module" << std::endl;
     mTopmoduleList.push_back(mod);
   }
   return mod;
