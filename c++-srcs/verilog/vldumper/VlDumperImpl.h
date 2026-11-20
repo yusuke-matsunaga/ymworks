@@ -96,7 +96,7 @@ public:
 
   /// @brief module の内容を出力する関数
   void
-  put_module(
+  put(
     const char* label,     ///< [in] ラベル
     const VlMgr& mgr,      ///< [in] VlMgr
     const VlModule* module ///< [in] オブジェクト
@@ -104,7 +104,7 @@ public:
 
   /// @brief module array の内容を出力する関数
   void
-  put_modulearray(
+  put(
     const char* label,               ///< [in] ラベル
     const VlMgr& mgr,                ///< [in] VlMgr
     const VlModuleArray* modulearray ///< [in] オブジェクト
@@ -112,16 +112,21 @@ public:
 
   /// @brief module array のリストの内容を出力する関数
   void
-  put_modulearray_list(
+  put(
     const char* label, ///< [in] ラベル
     const VlMgr& mgr,  ///< [in] VlMgr
     const std::vector<const VlModuleArray*>& module_array_list
                        ///< [in] オブジェクト
-  );
+  )
+  {
+    for ( auto module_array: module_array_list ) {
+      put(label, mgr, module_array);
+    }
+  }
 
   /// @brief scope の内容を出力する関数
   void
-  put_scope(
+  put(
     const char* label,   ///< [in] ラベル
     const VlMgr& mgr,	 ///< [in] VlMgr
     const VlScope* scope ///< [in] オブジェクト
@@ -135,111 +140,149 @@ public:
 
   /// @brief io decl の内容を出力する関数
   void
-  put_iodecl(
+  put(
     const char* label,     ///< [in] ラベル
-    const VlMgr& mgr,	   ///< [in] VlMgr
     const VlIODecl* iodecl ///< [in] オブジェクト
   );
 
   /// @brief port の内容を出力する関数
   void
-  put_port(
+  put(
     const char* label, ///< [in] ラベル
-    const VlMgr& mgr,  ///< [in] VlMgr
     const VlPort* port ///< [in] オブジェクト
   );
 
   /// @brief 宣言要素の内容を出力する関数
   void
-  put_decl(
+  put(
     const char* label, ///< [in] ラベル
-    const VlMgr& mgr,  ///< [in] VlMgr
     const VlDecl* decl ///< [in] オブジェクト
   );
 
   /// @brief 宣言要素の内容を出力する関数
   void
-  put_declarray(
+  put(
     const char* label,           ///< [in] ラベル
-    const VlMgr& mgr,		 ///< [in] VlMgr
     const VlDeclArray* declarray ///< [in] オブジェクト
   );
 
   /// @brief 宣言要素のリストの内容を出力する関数
   void
-  put_decl_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlDecl*>& decl_list
                         ///< [in] オブジェクト
-  );
+  )
+  {
+    for ( auto decl: decl_list ) {
+      put(label, decl);
+    }
+  }
 
   /// @brief 宣言要素のリストの内容を出力する関数
   void
-  put_declarray_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlDeclArray*>& decl_list
                         ///< [in] オブジェクト
+  )
+  {
+    for ( auto decl: decl_list ) {
+      put(label, decl);
+    }
+  }
+
+  /// @brief def param の内容を出力する関数
+  void
+  put(
+    const char* label,  ///< [in] ラベル
+    const VlDefParam* defparam ///< [in] オブジェクト
   );
 
   /// @brief def param のリストの内容を出力する関数
   void
-  put_defparam_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlDefParam*>& defparam_list
                         ///< [in] オブジェクト
+  )
+  {
+    for ( auto defparam: defparam_list ) {
+      put(label, defparam);
+    }
+  }
+
+  /// @brief param assign のリストの内容を出力する関数
+  void
+  put(
+    const char* label,  ///< [in] ラベル
+    const VlParamAssign* paramassign ///< [in] オブジェクト
   );
 
   /// @brief param assign のリストの内容を出力する関数
   void
-  put_paramassign_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlParamAssign*>& paramassign_list
                         ///< [in] オブジェクト
+  )
+  {
+    for ( auto paramassign: paramassign_list ) {
+      put(label, paramassign);
+    }
+  }
+
+  /// @brief primitive array の内容を出力する関数
+  void
+  put(
+    const char* label,  ///< [in] ラベル
+    const VlPrimArray* primarray ///< [in] オブジェクト
   );
 
   /// @brief primitive array のリストの内容を出力する関数
   void
-  put_primarray_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlPrimArray*>& primarray_list
                         ///< [in] オブジェクト
-  );
+  )
+  {
+    for ( auto primarray: primarray_list ) {
+      put(label, primarray);
+    }
+  }
 
   /// @brief primitive の内容を出力する関数
   void
-  put_primitive(
+  put(
     const char* label,           ///< [in] ラベル
-    const VlMgr& mgr,		 ///< [in] VlMgr
     const VlPrimitive* primitive ///< [in] オブジェクト
   );
 
   /// @brief primitive のリスト内容を出力する関数
   void
-  put_primitive_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlPrimitive*>& primitive_list
                         ///< [in] オブジェクト
-  );
+  )
+  {
+    for ( auto primitive: primitive_list ) {
+      put(label, primitive);
+    }
+  }
 
   /// @brief prim term の内容を出力する関数
   void
-  put_primterm(
+  put(
     const char* label,         ///< [in] ラベル
-    const VlMgr& mgr,	       ///< [in] VlMgr
     const VlPrimTerm* primterm ///< [in] オブジェクト
   );
 
   /// @brief udp defn の内容を出力する関数
   void
-  put_udp_defn(
+  put(
     const char* label,   ///< [in] ラベル
-    const VlMgr& mgr,	 ///< [in] VlMgr
     const VlUdpDefn* udp ///< [in] オブジェクト
   );
 
@@ -247,7 +290,7 @@ public:
   void
   put_task(
     const char* label,     ///< [in] ラベル
-    const VlMgr& mgr,	   ///< [in] VlMgr
+    const VlMgr& mgr,      ///< [in] VlMgr
     const VlTaskFunc* task ///< [in] オブジェクト
   );
 
@@ -255,122 +298,107 @@ public:
   void
   put_function(
     const char* label,        ///< [in] ラベル
-    const VlMgr& mgr,	      ///< [in] VlMgr
+    const VlMgr& mgr,      ///< [in] VlMgr
     const VlTaskFunc* taskfun ///< [in] オブジェクトc
   );
 
-#if 0
-  /// @brief frame の内容を出力する関数
-  void
-  put_frame(
-    const char* label,
-    const VlHandle& handle
-  );
-#endif
-
   /// @brief continuous assignment の内容を出力する関数
   void
-  put_contassign(
+  put(
     const char* label,             ///< [in] ラベル
-    const VlMgr& mgr,		   ///< [in] VlMgr
     const VlContAssign* contassign ///< [in] オブジェクト
   );
 
   /// @brief continuous assignment のリストの内容を出力する関数
   void
-  put_contassign_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlContAssign*>& ca_list
-                        ///< [in] オブジェクト
-  );
+    ///< [in] オブジェクト
+  )
+  {
+    for ( auto ca: ca_list ) {
+      put(label, ca);
+    }
+  }
 
   /// @brief initial/always の内容を出力する関数
   void
-  put_process(
+  put(
     const char* label,       ///< [in] ラベル
-    const VlMgr& mgr,	     ///< [in] VlMgr
     const VlProcess* process ///< [in] オブジェクト
   );
 
   /// @brief initial/always のリストの内容を出力する関数
   void
-  put_process_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlProcess*>& process_list
                         ///< [in] オブジェクト
-  );
+  )
+  {
+    for ( auto process: process_list ) {
+      put(label, process);
+    }
+  }
 
   /// @brief statement の内容を出力する関数
   void
-  put_stmt(
+  put(
     const char* label, ///< [in] ラベル
-    const VlMgr& mgr,  ///< [in] VlMgr
     const VlStmt* stmt ///< [in] オブジェクト
   );
 
   /// @brief statement のリストの内容を出力する関数
   void
-  put_stmt_list(
+  put(
     const char* label,  ///< [in] ラベル
-    const VlMgr& mgr,   ///< [in] VlMgr
     const std::vector<const VlStmt*>& stmt_list
                         ///< [in] オブジェクト
-  );
+  )
+  {
+    for ( auto stmt: stmt_list ) {
+      put(label, stmt);
+    }
+  }
 
   /// @brief delay/event/repeat control の内容を出力する関数
   void
-  put_control(
+  put(
     const char* label,   ///< [in] ラベル
-    const VlMgr& mgr,	 ///< [in] VlMgr
     const VlControl* obj ///< [in] オブジェクト
-  );
-
-  /// @brief ブロック内の stmt リストを出力する関数
-  void
-  put_child_stmt_list(
-    const char* label, ///< [in] ラベル
-    const VlMgr& mgr,  ///< [in] VlMgr
-    const VlStmt* stmt ///< [in] オブジェクト
-  );
-
-  /// @brief 引数のリストを出力する関数
-  void
-  put_argument_list(
-    const char* label, ///< [in] ラベル
-    const VlMgr& mgr,  ///< [in] VlMgr
-    const VlStmt* stmt ///< [in] オブジェクト
   );
 
   /// @brief 式の内容を出力する関数
   void
-  put_expr(
+  put(
     const char* label, ///< [in] ラベル
-    const VlMgr& mgr,  ///< [in] VlMgr
     const VlExpr* expr ///< [in] オブジェクト
   );
 
-  /// @brief プライマリ式を出力する関数
+  /// @brief 式のリストの内容を出力する関数
   void
-  put_primary(
-    const VlMgr& mgr,  ///< [in] VlMgr
-    const VlExpr* expr ///< [in] オブジェクト
-  );
+  put(
+    const char* label, ///< [in] ラベル
+    const std::vector<const VlExpr*>& expr_list ///< [in] オブジェクト
+  )
+  {
+    for ( auto expr: expr_list ) {
+      put(label, expr);
+    }
+  }
 
   /// @brief 遅延値を出力する関数
   void
-  put_delay(
+  put(
     const char* label,   ///< [in] ラベル
-    const VlMgr& mgr,	 ///< [in] VlMgr
     const VlDelay* delay ///< [in] オブジェクト
   );
 
   /// @brief range の内容を出力する関数
   void
-  put_range(
+  put(
     const char* label, ///< [in] ラベル
-    const VlMgr& mgr,  ///< [in] VlMgr
     const VlRange* obj ///< [in] オブジェクト
   );
 
@@ -384,6 +412,13 @@ public:
   put(
     const char* label,   ///< [in] ラベル
     const VlValue& value ///< [in] 値
+  );
+
+  /// @brief VlValueType の出力
+  void
+  put(
+    const char* label,       ///< [in] ラベル
+    const VlValueType& vtype ///< [in] 値
   );
 
   /// @brief FileLoc の情報を出力する．
@@ -445,9 +480,9 @@ public:
   /// @brief strength を出力する関数
   void
   put(
-    const char* label,      ///< [in] ラベル
-    VpiStrength str,        ///< [in] 信号強度
-    bool put_on_null = true ///< [in] true の時, 空でも出力する．
+    const char* label,       ///< [in] ラベル
+    VpiStrength str,         ///< [in] 信号強度
+    bool put_on_null = false ///< [in] true の時, 空でも出力する．
   );
 
   /// @brief unconnected drive の出力
@@ -469,6 +504,27 @@ public:
   put(
     const char* label,  ///< [in] ラベル
     VpiNetType net_type ///< [in] ネット型
+  );
+
+  /// @brief VlExprType の出力
+  void
+  put(
+    const char* label, ///< [in] ラベル
+    VlExprType  val    ///< [in] 値
+  );
+
+  /// @brief VlPrimaryType の出力
+  void
+  put(
+    const char* label, ///< [in] ラベル
+    VlPrimaryType  val ///< [in] 値
+  );
+
+  /// @brief VlSelectType の出力
+  void
+  put(
+    const char* label, ///< [in] ラベル
+    VlSelectType  val  ///< [in] 値
   );
 
   /// @brief ブール値の出力

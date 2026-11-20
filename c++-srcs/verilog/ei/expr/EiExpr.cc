@@ -250,6 +250,13 @@ EiExpr::lhs_elem(
   throw std::logic_error{"EiExpr::lhs_elem()"};
 }
 
+// @brief 要素のリストを返す．
+std::vector<const VlExpr*>
+EiExpr::lhs_elem_list() const
+{
+  throw std::logic_error{"EiExpr::lhs_elem_list()"};
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // クラス EiExprBase

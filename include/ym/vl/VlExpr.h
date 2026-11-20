@@ -197,6 +197,22 @@ public:
   SizeType
   decl_id() const = 0;
 
+  /// @brief スコープへの参照の場合，対象のオブジェクトを返す．
+  ///
+  /// - primary_type() が SCOPE の時のみ意味を持つ．
+  /// - スコープへの参照が式で用いられるのはシステム関数/タスクの引数だけ
+  virtual
+  const VlScope*
+  scope_obj() const = 0;
+
+  /// @brief primitive への参照の場合，対象のオブジェクトを返す．
+  ///
+  /// - primary_type() が PRIMITIVE  の時のみ意味を持つ．
+  /// - primitiveへの参照が式で用いられるのはシステム関数/タスクの引数だけ
+  virtual
+  const VlPrimitive*
+  primitive_obj() const = 0;
+
   /// @brief 宣言要素に対するビット/部分選択の種類を返す．
   ///
   /// - expr_type() が PRIMARY かつ primary_type() が DECL,
@@ -218,22 +234,6 @@ public:
   virtual
   const VlExpr*
   bit_index() const = 0;
-
-  /// @brief スコープへの参照の場合，対象のオブジェクトを返す．
-  ///
-  /// - primary_type() が SCOPE の時のみ意味を持つ．
-  /// - スコープへの参照が式で用いられるのはシステム関数/タスクの引数だけ
-  virtual
-  const VlScope*
-  scope_obj() const = 0;
-
-  /// @brief primitive への参照の場合，対象のオブジェクトを返す．
-  ///
-  /// - primary_type() が PRIMITIVE  の時のみ意味を持つ．
-  /// - primitiveへの参照が式で用いられるのはシステム関数/タスクの引数だけ
-  virtual
-  const VlPrimitive*
-  primitive_obj() const = 0;
 
 
 public:
@@ -349,6 +349,11 @@ public:
   lhs_elem(
     SizeType index ///< [in] インデックス ( 0 <= index < lhs_elem_num() )
   ) const = 0;
+
+  /// @brief 要素のリストを返す．
+  virtual
+  std::vector<const VlExpr*>
+  lhs_elem_list() const = 0;
 
 };
 

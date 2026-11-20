@@ -108,11 +108,9 @@ VlDumperImpl::put(
   const VlMgr& mgr
 )
 {
-  std::cout << "VlDumpverImpl::put()" << std::endl;
-
   // UDP を出力する．
   for ( auto udp: mgr.udp_list() ) {
-    put_udp_defn("UDP", mgr, udp);
+    put("UDP", udp);
   }
 
   // トップモジュールから順にモジュールを出力する．
@@ -123,7 +121,7 @@ VlDumperImpl::put(
   while ( !tmp_queue.empty() ) {
     auto module = tmp_queue.front();
     tmp_queue.pop();
-    put_module("MODULE", mgr, module);
+    put("MODULE", mgr, module);
 
     auto module_list = mgr.find_module_list(module);
     for ( auto module1: module_list ) {
@@ -139,118 +137,6 @@ VlDumperImpl::put(
     }
   }
 }
-
-#if 0
-// @brief VlObj* を出力する関数
-// @param[in] label ラベル
-// @param[in] obj オブジェクト
-void
-VlDumperImpl::put(
-  const char* label,
-  const VlMgr& mgr,
-  const VlObj* obj
-)
-{
-  if ( obj == nullptr ) {
-    if ( !nullptr_suppress_mode() ) {
-      VlDumpHeader x(*this, label, "null-pointer");
-    }
-    return;
-  }
-
-  switch ( obj->type() ) {
-  case kVpiModule:          put_module(label, mgr, obj); break;
-  case kVpiModuleArray:     put_module_array(label, mgr, obj); break;
-  case kVpiScope:           put_scope(label, mgr, obj); break;
-
-  case kVpiGateArray:
-  case kVpiSwitchArray:
-  case kVpiUdpArray:        put_prim_array(label, mgr, obj); break;
-
-  case kVpiNet:             put_decl(label, mgr, obj); break;
-  case kVpiNetArray:        put_decl(label, mgr, obj); break;
-  case kVpiReg:             put_decl(label, mgr, obj); break;
-  case kVpiRegArray:        put_decl(label, mgr, obj); break;
-  case kVpiIntegerVar:
-  case kVpiRealVar:
-  case kVpiTimeVar:
-  case kVpiVarSelect:       put_decl(label, mgr, obj); break;
-  case kVpiNamedEvent:      put_decl(label, mgr, obj); break;
-  case kVpiNamedEventArray: put_decl(label, mgr, obj); break;
-  case kVpiParameter:       put_decl(label, mgr, obj); break;
-  case kVpiSpecParam:       put_decl(label, mgr, obj); break;
-  case kVpiDefParam:        put_def_param(label, mgr, obj); break;
-  case kVpiParamAssign:     put_param_assign(label, mgr, obj); break;
-
-  case kVpiRange:           put_range(label, mgr, obj); break;
-
-  case kVpiGate:
-  case kVpiSwitch:
-  case kVpiUdp:             put_primitive(label, mgr, obj); break;
-  case kVpiPrimTerm:        put_prim_term(label, mgr, obj); break;
-
-  case kVpiUdpDefn:         put_udp_defn(label, mgr, obj); break;
-
-  case kVpiTask:            put_task(label, mgr, obj); break;
-  case kVpiFunction:        put_function(label, mgr, obj); break;
-
-#if 0
-  case kVpiFrame:           put_frame(label, mgr, obj); break;
-#endif
-  case kVpiContAssign:      put_cont_assign(label, mgr, obj); break;
-#if 0
-  case kVpiContAssignBit:   put_cont_assign_bit(label, mgr, obj); break;
-#endif
-
-  case kVpiInitial:         put_process(label, mgr, obj); break;
-  case kVpiAlways:          put_process(label, mgr, obj); break;
-
-  case kVpiBegin:           put_stmt(label, mgr, obj); break;
-  case kVpiFork:            put_stmt(label, mgr, obj); break;
-  case kVpiNamedBegin:      put_stmt(label, mgr, obj); break;
-  case kVpiNamedFork:       put_stmt(label, mgr, obj); break;
-  case kVpiNullStmt:        put_stmt(label, mgr, obj); break;
-  case kVpiEventStmt:       put_stmt(label, mgr, obj); break;
-  case kVpiAssignment:      put_stmt(label, mgr, obj); break;
-  case kVpiWhile:           put_stmt(label, mgr, obj); break;
-  case kVpiRepeat:          put_stmt(label, mgr, obj); break;
-  case kVpiWait:            put_stmt(label, mgr, obj); break;
-  case kVpiFor:             put_stmt(label, mgr, obj); break;
-  case kVpiForever:         put_stmt(label, mgr, obj); break;
-  case kVpiIf:              put_stmt(label, mgr, obj); break;
-  case kVpiIfElse:          put_stmt(label, mgr, obj); break;
-  case kVpiCase:            put_stmt(label, mgr, obj); break;
-  case kVpiForce:           put_stmt(label, mgr, obj); break;
-  case kVpiAssignStmt:      put_stmt(label, mgr, obj); break;
-  case kVpiDeassign:        put_stmt(label, mgr, obj); break;
-  case kVpiRelease:         put_stmt(label, mgr, obj); break;
-  case kVpiTaskCall:        put_stmt(label, mgr, obj); break;
-  case kVpiSysTaskCall:     put_stmt(label, mgr, obj); break;
-  case kVpiDisable:         put_stmt(label, mgr, obj); break;
-
-#if 0
-  case kVpiDelayControl:    put_control(label, mgr, obj); break;
-  case kVpiEventControl:    put_control(label, mgr, obj); break;
-  case kVpiRepeatControl:   put_control(label, mgr, obj); break;
-#endif
-
-  case kVpiFuncCall:
-  case kVpiSysFuncCall:
-  case kVpiBitSelect:
-  case kVpiPartSelect:
-  case kVpiOperation:
-  case kVpiConstant:
-    {
-      const VlExpr* expr = dynamic_cast<const VlExpr*>(obj);
-      ASSERT_COND( expr  );
-      put_expr(label, mgr, expr);
-    }
-    break;
-
-  default: put("illegal type", obj->type() );
-  }
-}
-#endif
 
 
 //////////////////////////////////////////////////////////////////////
@@ -286,6 +172,23 @@ VlDumperImpl::put(
   else if ( value.is_error() ) {
     mStream << "ErrorType";
   }
+}
+
+// @brief VlValueType の出力
+void
+VlDumperImpl::put(
+  const char* label,
+  const VlValueType& vtype
+)
+{
+  VlDumpHeader x(this, label, "VlValueType");
+  put("is_no_type()", vtype.is_no_type());
+  put("is_int_type()", vtype.is_int_type());
+  put("is_time_type()", vtype.is_time_type());
+  put("is_bitvector_type()", vtype.is_bitvector_type());
+  put("is_real_type()", vtype.is_real_type());
+  put("is_signed()", vtype.is_signed());
+  put("size", vtype.size());
 }
 
 // @brief FileLoc の情報を出力する．
@@ -626,6 +529,39 @@ VlDumperImpl::put(
   case VpiNetType::Wor:     mStream << "wor"; break;
   case VpiNetType::None:    mStream << "none"; break;
   }
+}
+
+// @brief VlExprType の出力
+void
+VlDumperImpl::put(
+  const char* label,
+  VlExprType val
+)
+{
+  VlDumpHeader x(this, label, "ExprType", false);
+  mStream << val;
+}
+
+// @brief VlPrimaryType の出力
+void
+VlDumperImpl::put(
+  const char* label,
+  VlPrimaryType val
+)
+{
+  VlDumpHeader x(this, label, "PrimaryType", false);
+  mStream << val;
+}
+
+// @brief VlSelectType の出力
+void
+VlDumperImpl::put(
+  const char* label,
+  VlSelectType val
+)
+{
+  VlDumpHeader x(this, label, "SelectType", false);
+  mStream << val;
 }
 
 // @brief ブール値の出力

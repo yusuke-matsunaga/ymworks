@@ -9,7 +9,7 @@
 #include "ym/Timer.h"
 #include "VlTestLineWatcher.h"
 #include "ym/vl/VlMgr.h"
-#include "VlDumper.h"
+#include "ym/vl/VlDumper.h"
 #include "ym/clib.h"
 #include "ym/MsgMgr.h"
 #include "ym/StreamMsgHandler.h"
@@ -91,6 +91,7 @@ elaborate_mode(
 
 	if ( MsgMgr::error_num() == 0 && dump_vpi ) {
 	  VlDumper dumper(std::cout);
+	  dumper.disable_nullptr_suppress_mode();
 	  dumper(vlmgr);
 	}
       }

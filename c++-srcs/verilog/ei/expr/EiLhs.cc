@@ -124,6 +124,13 @@ EiLhs::lhs_elem(
   return mElemList[index];
 }
 
+// @brief 要素のリストを返す．
+std::vector<const VlExpr*>
+EiLhs::lhs_elem_list() const
+{
+  return mElemList;
+}
+
 // @brief set_reqsize() の下請け関数
 void
 EiLhs::_set_reqsize(

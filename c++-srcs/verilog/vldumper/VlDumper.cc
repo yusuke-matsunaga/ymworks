@@ -6,7 +6,7 @@
 /// Copyright (C) 2025 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "VlDumper.h"
+#include "ym/vl/VlDumper.h"
 #include "VlDumperImpl.h"
 
 

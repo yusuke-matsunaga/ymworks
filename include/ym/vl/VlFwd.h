@@ -92,6 +92,9 @@ class VlUserSystf;
 // in VlAttribute.h
 class VlAttribute;
 
+// in VlDumper.h
+class VlDumper;
+
 END_NAMESPACE_YM_VERILOG
 
 BEGIN_NAMESPACE_YM
@@ -125,6 +128,7 @@ using nsVerilog::VlUdpDefn;
 using nsVerilog::VlTableEntry;
 using nsVerilog::VlUserSystf;
 using nsVerilog::VlAttribute;
+using nsVerilog::VlDumper;
 
 END_NAMESPACE_YM
 

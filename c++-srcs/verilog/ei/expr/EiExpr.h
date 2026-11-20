@@ -181,6 +181,10 @@ public:
     SizeType index ///< [in] インデックス ( 0 <= index < lhs_elem_num() )
   ) const override;
 
+  /// @brief 要素のリストを返す．
+  std::vector<const VlExpr*>
+  lhs_elem_list() const override;
+
 };
 
 

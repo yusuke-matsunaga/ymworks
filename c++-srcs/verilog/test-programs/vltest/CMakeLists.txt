@@ -28,14 +28,6 @@ include_directories (
 # ===================================================================
 
 set ( vltest_SOURCES
-  VlDumper.cc
-  VlDumperImpl.cc
-  VlDumperImpl_decl.cc
-  VlDumperImpl_expr.cc
-  VlDumperImpl_item.cc
-  VlDumperImpl_module.cc
-  VlDumperImpl_scope.cc
-  VlDumperImpl_stmt.cc
   vltest_elaborate.cc
   vltest_main.cc
   vltest_parse.cc

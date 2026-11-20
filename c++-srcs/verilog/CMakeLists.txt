@@ -59,6 +59,7 @@ add_subdirectory ( ei/expr )
 add_subdirectory ( ei/item )
 add_subdirectory ( ei/misc )
 add_subdirectory ( ei/stmt )
+add_subdirectory ( vldumper )
 
 add_subdirectory ( gtest )
 add_subdirectory ( test-programs )
@@ -113,5 +114,6 @@ ym_add_object_library ( ym_verilog
   ${ei_misc_SOURCES}
   ${ei_stmt_SOURCES}
   ${alloc_SOURCES}
+  ${vldumper_SOURCES}
   ${CMAKE_CURRENT_BINARY_DIR}/verilog_grammer.cc
   )

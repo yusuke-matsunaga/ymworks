@@ -24,9 +24,8 @@ BEGIN_NAMESPACE_YM_VERILOG
 // initial/always の内容を出力する関数
 // IEEE 1364-2001 p.656
 void
-VlDumperImpl::put_process(
+VlDumperImpl::put(
   const char* label,
-  const VlMgr& mgr,
   const VlProcess* process
 )
 {
@@ -39,30 +38,14 @@ VlDumperImpl::put_process(
   VlDumpHeader x(this, label, nm);
 
   put("FileRegion", process->file_region() );
-  put("vpiModule", process->parent_scope()->parent_module()->full_name() );
-  put_stmt("vpiStmt", mgr, process->stmt() );
-}
-
-// @brief initial/always のリストの内容を出力する関数
-void
-VlDumperImpl::put_process_list(
-  const char* label,
-  const VlMgr& mgr,
-  const std::vector<const VlProcess*>& process_list
-)
-{
-  VlDumpHeader x(this, label, "ProcessList");
-
-  for ( auto process: process_list ) {
-    put_process(label, mgr, process);
-  }
+  put("Module", process->parent_scope()->parent_module()->full_name() );
+  put("Stmt", process->stmt() );
 }
 
 // statement の内容を出力する関数
 void
-VlDumperImpl::put_stmt(
+VlDumperImpl::put(
   const char* label,
-  const VlMgr& mgr,
   const VlStmt* stmt
 )
 {
@@ -106,7 +89,7 @@ VlDumperImpl::put_stmt(
     // スコープとしての内容は別に出力されている．
   case VpiObjType::Begin:
   case VpiObjType::Fork:
-    put_child_stmt_list("vpiStmt", mgr, stmt);
+    put("ChildStmt", stmt->child_stmt_list());
     break;
 
   case VpiObjType::EventStmt:
@@ -114,78 +97,78 @@ VlDumperImpl::put_stmt(
     break;
 
   case VpiObjType::Assignment:
-    put("vpiBlocking", stmt->is_blocking() );
-    put_expr("vpiLhs", mgr, stmt->lhs() );
-    put_expr("vpiRhs", mgr, stmt->rhs() );
-    put_control("control", mgr, stmt->control() );
+    put("Blocking", stmt->is_blocking() );
+    put("Lhs", stmt->lhs() );
+    put("Rhs", stmt->rhs() );
+    put("control", stmt->control() );
     break;
 
   case VpiObjType::While:
-    put_expr("vpiCondition", mgr, stmt->expr() );
-    put_stmt("vpiStmt", mgr, stmt->body_stmt() );
+    put("Condition", stmt->expr() );
+    put("vpiStmt", stmt->body_stmt() );
     break;
 
   case VpiObjType::Repeat:
-    put_expr("vpiCondition", mgr, stmt->expr() );
-    put_stmt("vpiStmt", mgr, stmt->body_stmt() );
+    put("Condition", stmt->expr() );
+    put("vpiStmt", stmt->body_stmt() );
     break;
 
   case VpiObjType::Wait:
-    put_expr("vpiCondition", mgr, stmt->expr() );
-    put_stmt("vpiStmt", mgr, stmt->body_stmt() );
+    put("Condition", stmt->expr() );
+    put("vpiStmt", stmt->body_stmt() );
     break;
 
   case VpiObjType::For:
-    put_stmt("vpiForInitStmt", mgr, stmt->init_stmt() );
-    put_expr("vpiCondition", mgr, stmt->expr() );
-    put_stmt("vpiForIncStmt", mgr, stmt->inc_stmt() );
-    put_stmt("vpiStmt", mgr, stmt->body_stmt() );
+    put("vpiForInitStmt", stmt->init_stmt() );
+    put("Condition", stmt->expr() );
+    put("vpiForIncStmt", stmt->inc_stmt() );
+    put("vpiStmt", stmt->body_stmt() );
     break;
 
   case VpiObjType::Forever:
-    put_stmt("vpiStmt", mgr, stmt->body_stmt() );
+    put("vpiStmt", stmt->body_stmt() );
     break;
 
   case VpiObjType::If:
-    put_expr("vpiCondition", mgr, stmt->expr() );
-    put_stmt("vpiStmt", mgr, stmt->body_stmt() );
+    put("Condition", stmt->expr() );
+    put("vpiStmt", stmt->body_stmt() );
     break;
 
   case VpiObjType::IfElse:
-    put_expr("vpiCondition", mgr, stmt->expr() );
-    put_stmt("vpiStmt", mgr, stmt->body_stmt() );
-    put_stmt("vpiElseStmt", mgr, stmt->else_stmt() );
+    put("Condition", stmt->expr() );
+    put("vpiStmt", stmt->body_stmt() );
+    put("vpiElseStmt", stmt->else_stmt() );
     break;
 
   case VpiObjType::Case:
-    put("vpiCaseType", stmt->case_type() );
-    put_expr("vpiCondition", mgr, stmt->expr() );
+    put("CaseType", stmt->case_type() );
+    put("Condition", stmt->expr() );
     for ( int i = 0; i < stmt->caseitem_num(); ++ i ) {
       auto ci = stmt->caseitem(i);
       VlDumpHeader x(this, "vpiCaseItem", "CaseItem");
       put("FileRegion", ci->file_region() );
       for ( int i = 0; i < ci->expr_num(); ++ i ) {
 	auto expr = ci->expr(i);
-	put_expr("vpiExpr", mgr, expr);
+	put("Expr", expr);
       }
-      put_stmt("vpiStmt", mgr, ci->body_stmt() );
+      put("vpiStmt", ci->body_stmt() );
     }
     break;
 
   case VpiObjType::AssignStmt:
   case VpiObjType::Force:
-    put_expr("vpiLhs", mgr, stmt->lhs() );
-    put_expr("vpiRhs", mgr, stmt->rhs() );
+    put("Lhs", stmt->lhs() );
+    put("Rhs", stmt->rhs() );
     break;
 
   case VpiObjType::Deassign:
   case VpiObjType::Release:
-    put_expr("vpiLhs", mgr, stmt->lhs() );
+    put("Lhs", stmt->lhs() );
     break;
 
   case VpiObjType::TaskCall:
-    put("vpiTask", stmt->task()->full_name() );
-    put_argument_list("vpiArgument", mgr, stmt);
+    put("Task", stmt->task()->full_name() );
+    put("Argument", stmt->argument_list());
     break;
 
   case VpiObjType::SysTaskCall:
@@ -194,8 +177,8 @@ VlDumperImpl::put_stmt(
 #else
 #warning "TODO: SystemTaskCall の userDefn"
 #endif
-    put("vpiUserSystf", stmt->user_systf()->name() );
-    put_argument_list("vpiArgument", mgr, stmt);
+    put("UserSystf", stmt->user_systf()->name() );
+    put("Argument", stmt->argument_list());
     break;
 
   case VpiObjType::Disable:
@@ -204,8 +187,8 @@ VlDumperImpl::put_stmt(
 
   case VpiObjType::DelayControl:
   case VpiObjType::EventControl:
-    put_control("control", mgr, stmt->control() );
-    put_stmt("vpiStmt", mgr, stmt->body_stmt() );
+    put("control", stmt->control() );
+    put("vpiStmt", stmt->body_stmt() );
     break;
 
   default:
@@ -213,26 +196,10 @@ VlDumperImpl::put_stmt(
   }
 }
 
-// @brief statement のリストの内容を出力する関数
-void
-VlDumperImpl::put_stmt_list(
-  const char* label,
-  const VlMgr& mgr,
-  const std::vector<const VlStmt*>& stmt_list
-)
-{
-  VlDumpHeader x(this, label, "StmtList");
-
-  for ( auto stmt: stmt_list ) {
-    put_stmt(label, mgr, stmt);
-  }
-}
-
 // @brief delay/event/repeat control の内容を出力する関数
 void
-VlDumperImpl::put_control(
+VlDumperImpl::put(
   const char* label,
-  const VlMgr& mgr,
   const VlControl* control
 )
 {
@@ -251,44 +218,17 @@ VlDumperImpl::put_control(
   else if ( control->expr() ) {
     VlDumpHeader x(this, label, "RepeatControl");
     put("FileRegion", control->file_region() );
-    put_expr("vpiExpr", mgr, control->expr() );
+    put("Expr", control->expr() );
     for ( int i = 0; i < control->event_num(); ++ i ) {
-      put_expr("vpiCondition", mgr, control->event(i) );
+      put("Condition", control->event(i) );
     }
   }
   else {
     VlDumpHeader x(this, label, "EventControl");
     put("FileRegion", control->file_region() );
     for ( int i = 0; i < control->event_num(); ++ i ) {
-      put_expr("vpiCondition", mgr, control->event(i) );
+      put("Condition", control->event(i) );
     }
-  }
-}
-
-// @brief 子供のステートメントの内容を出力する関数
-void
-VlDumperImpl::put_child_stmt_list(
-  const char* label,
-  const VlMgr& mgr,
-  const VlStmt* stmt
-)
-{
-  auto n = stmt->child_stmt_num();
-  for ( int i = 0; i < n; ++ i ) {
-    put_stmt(label, mgr, stmt->child_stmt(i) );
-  }
-}
-
-// @brief 引数のリストを出力する関数
-void
-VlDumperImpl::put_argument_list(
-  const char* label,
-  const VlMgr& mgr,
-  const VlStmt* stmt
-)
-{
-  for ( auto arg: stmt->argument_list() ) {
-    put_expr(label, mgr, arg );
   }
 }
 
