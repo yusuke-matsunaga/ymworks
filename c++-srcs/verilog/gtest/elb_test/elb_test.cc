@@ -6,45 +6,36 @@
 /// Copyright (C) 2026 Yusuke Matsunaga
 /// All rights reserved.
 
-#include "ElbTest.h"
+#include "ElaboratorTest.h"
 
 
-BEGIN_NAMESPACE_YM
+BEGIN_NAMESPACE_YM_VERILOG
 
-TEST_F(ElbTest, elb_udp1)
+TEST_F(ElaboratorTest, elb_udp1)
 {
   auto data_dir = std::filesystem::path{DATA_DIR} / "verilog";
-  auto filename = data_dir / "udp1.v";
+  auto src_filename = data_dir / "udp1.v";
+  auto ref_filename = data_dir / "udp1.vldump";
 
-  auto r = vlmgr.read_file(filename);
-  ASSERT_TRUE( r );
-
-  auto nerr = vlmgr.elaborate();
-  ASSERT_TRUE( nerr == 0 );
+  check(src_filename, ref_filename);
 }
 
-TEST_F(ElbTest, elb_and1)
+TEST_F(ElaboratorTest, elb_and1)
 {
   auto data_dir = std::filesystem::path{DATA_DIR} / "verilog";
-  auto filename = data_dir / "and1.v";
+  auto src_filename = data_dir / "and1.v";
+  auto ref_filename = data_dir / "and1.vldump";
 
-  auto r = vlmgr.read_file(filename);
-  ASSERT_TRUE( r );
-
-  auto nerr = vlmgr.elaborate();
-  ASSERT_TRUE( nerr == 0 );
+  check(src_filename, ref_filename);
 }
 
-TEST_F(ElbTest, elb_and2)
+TEST_F(ElaboratorTest, elb_and2)
 {
   auto data_dir = std::filesystem::path{DATA_DIR} / "verilog";
-  auto filename = data_dir / "and2.v";
+  auto src_filename = data_dir / "and2.v";
+  auto ref_filename = data_dir / "and2.vldump";
 
-  auto r = vlmgr.read_file(filename);
-  ASSERT_TRUE( r );
-
-  auto nerr = vlmgr.elaborate();
-  ASSERT_TRUE( nerr == 0 );
+  check(src_filename, ref_filename);
 }
 
-END_NAMESPACE_YM
+END_NAMESPACE_YM_VERILOG

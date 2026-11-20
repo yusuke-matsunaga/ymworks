@@ -198,13 +198,6 @@ main(
     }
   }
 
-  {
-    std::cout << "filename_list = ";
-    for ( auto& name: filename_list ) {
-      std::cout << " " << name;
-    }
-    std::cout << std::endl;
-  }
   switch ( mode ) {
   case 3:
     parse_mode(filename_list,

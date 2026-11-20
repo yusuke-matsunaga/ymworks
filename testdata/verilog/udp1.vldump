@@ -1,0 +1,128 @@
+<UDP type = "UdpDefn">
+  <DefName type = "string">udp_comb1995_1</DefName>
+  <PrimType type = "vpiPrimiType">vpiCombPrim</PrimType>
+  <Protected type = "bool">true</Protected>
+  <PortNum type = "SizeType">2</PortNum>
+  <IODecl type = "Output">
+    <Name type = "string">output1</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb1995_1</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <IODecl type = "Input">
+    <Name type = "string">input1</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb1995_1</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <Initial type = "string"></Initial>
+  <vpiTableEntry type = "Iterator">
+    <TableEntry type = "string">0 : 1</TableEntry>
+    <TableEntry type = "string">1 : 0</TableEntry>
+  </vpiTableEntry>
+</UDP>
+<UDP type = "UdpDefn">
+  <DefName type = "string">udp_comb1995_2</DefName>
+  <PrimType type = "vpiPrimiType">vpiCombPrim</PrimType>
+  <Protected type = "bool">true</Protected>
+  <PortNum type = "SizeType">3</PortNum>
+  <IODecl type = "Output">
+    <Name type = "string">output1</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb1995_2</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <IODecl type = "Input">
+    <Name type = "string">input1</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb1995_2</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <IODecl type = "Input">
+    <Name type = "string">input2</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb1995_2</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <Initial type = "string"></Initial>
+  <vpiTableEntry type = "Iterator">
+    <TableEntry type = "string">0 0 : 1</TableEntry>
+    <TableEntry type = "string">0 1 : 1</TableEntry>
+    <TableEntry type = "string">1 0 : 1</TableEntry>
+    <TableEntry type = "string">1 1 : 0</TableEntry>
+  </vpiTableEntry>
+</UDP>
+<UDP type = "UdpDefn">
+  <DefName type = "string">udp_comb2001_1</DefName>
+  <PrimType type = "vpiPrimiType">vpiCombPrim</PrimType>
+  <Protected type = "bool">true</Protected>
+  <PortNum type = "SizeType">2</PortNum>
+  <IODecl type = "Output">
+    <Name type = "string">output1</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb2001_1</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <IODecl type = "Input">
+    <Name type = "string">input1</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb2001_1</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <Initial type = "string"></Initial>
+  <vpiTableEntry type = "Iterator">
+    <TableEntry type = "string">0 : 1</TableEntry>
+    <TableEntry type = "string">1 : 0</TableEntry>
+  </vpiTableEntry>
+</UDP>
+<UDP type = "UdpDefn">
+  <DefName type = "string">udp_comb2001_2</DefName>
+  <PrimType type = "vpiPrimiType">vpiCombPrim</PrimType>
+  <Protected type = "bool">true</Protected>
+  <PortNum type = "SizeType">3</PortNum>
+  <IODecl type = "Output">
+    <Name type = "string">output1</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb2001_2</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <IODecl type = "Input">
+    <Name type = "string">input1</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb2001_2</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <IODecl type = "Input">
+    <Name type = "string">input2</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <UdpDefn type = "string">udp_comb2001_2</UdpDefn>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <Initial type = "string"></Initial>
+  <vpiTableEntry type = "Iterator">
+    <TableEntry type = "string">0 0 : 1</TableEntry>
+    <TableEntry type = "string">0 1 : 1</TableEntry>
+    <TableEntry type = "string">1 0 : 1</TableEntry>
+    <TableEntry type = "string">1 1 : 0</TableEntry>
+  </vpiTableEntry>
+</UDP>

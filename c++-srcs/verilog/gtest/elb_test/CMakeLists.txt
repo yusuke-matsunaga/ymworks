@@ -24,6 +24,7 @@
 
 ym_add_gtest ( verilog_elb_test
   elb_test.cc
+  ElaboratorTest.cc
   $<TARGET_OBJECTS:ym_misc_obj_d>
   $<TARGET_OBJECTS:ym_logic_obj_d>
   $<TARGET_OBJECTS:ym_clib_obj_d>

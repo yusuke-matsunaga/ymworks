@@ -1,8 +1,8 @@
-#ifndef ELBTEST_H
-#define ELBTEST_H
+#ifndef ELABORATORTEST_H
+#define ELABORATORTEST_H
 
-/// @file ElbTest.h
-/// @brief ElbTest のヘッダファイル
+/// @file ElaboratorTest.h
+/// @brief ElaboratorTest のヘッダファイル
 /// @author Yusuke Matsunaga (松永 裕介)
 ///
 /// Copyright (C) 2026 Yusuke Matsunaga
@@ -12,22 +12,22 @@
 #include "ym/vl/VlMgr.h"
 
 
-BEGIN_NAMESPACE_YM
+BEGIN_NAMESPACE_YM_VERILOG
 
 //////////////////////////////////////////////////////////////////////
-/// @class ElbTest ElbTest.h "ElbTest.h"
+/// @class ElaboratorTest ElaboratorTest.h "ElaboratorTest.h"
 /// @brief VlMgr::elaborate() のテスト環境
 //////////////////////////////////////////////////////////////////////
-class ElbTest :
+class ElaboratorTest :
   public ::testing::Test
 {
 public:
 
   /// @brief コンストラクタ
-  ElbTest() = default;
+  ElaboratorTest() = default;
 
   /// @brief デストラクタ
-  ~ElbTest() = default;
+  ~ElaboratorTest() = default;
 
 
 public:
@@ -35,11 +35,11 @@ public:
   // 外部インターフェイス
   //////////////////////////////////////////////////////////////////////
 
-
-private:
-  //////////////////////////////////////////////////////////////////////
-  // 内部で用いられる関数
-  //////////////////////////////////////////////////////////////////////
+  void
+  check(
+    const std::string& src_filename, ///< [in] Verilog-HDL のファイル名
+    const std::string& ref_filename  ///< [in] VlDumper の結果の参照ファイル
+  );
 
 
 public:
@@ -51,6 +51,6 @@ public:
 
 };
 
-END_NAMESPACE_YM
+END_NAMESPACE_YM_VERILOG
 
-#endif // ELBTEST_H
+#endif // ELABORATORTEST_H

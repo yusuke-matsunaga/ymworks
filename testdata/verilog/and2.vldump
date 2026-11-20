@@ -1,0 +1,163 @@
+<MODULE type = "Module">
+  <DefName type = "string">and2</DefName>
+  <FullName type = "string">.and2</FullName>
+  <Array type = "bool">false</Array>
+  <TopModule type = "bool">true</TopModule>
+  <CellInstance type = "bool">false</CellInstance>
+  <Protected type = "bool">false</Protected>
+  <DefNetType type = "net_type">wire</DefNetType>
+  <UnconnDrive type = "unconn_drive">high-Z</UnconnDrive>
+  <DefDelayMode type = "def_delay_mode">none</DefDelayMode>
+  <DefDecayTime type = "int">-1</DefDecayTime>
+  <Config type = "string"></Config>
+  <Library type = "string"></Library>
+  <Cell type = "string"></Cell>
+  <IODecl type = "Input">
+    <Name type = "string">a</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <Module type = "string">.and2</Module>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <IODecl type = "Input">
+    <Name type = "string">b</Name>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <Module type = "string">.and2</Module>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </IODecl>
+  <Net type = "Net">
+    <FullName type = "string">.and2.a</FullName>
+    <decl_id type = "SizeType">0</decl_id>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <Module type = "string">.and2</Module>
+    <Scope type = "string">.and2</Scope>
+    <Delay type = "null-pointer"></Delay>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </Net>
+  <Net type = "Net">
+    <FullName type = "string">.and2.b</FullName>
+    <decl_id type = "SizeType">1</decl_id>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <Module type = "string">.and2</Module>
+    <Scope type = "string">.and2</Scope>
+    <Delay type = "null-pointer"></Delay>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </Net>
+  <Net type = "Net">
+    <FullName type = "string">.and2.o</FullName>
+    <decl_id type = "SizeType">2</decl_id>
+    <Signed type = "bool">false</Signed>
+    <Size type = "SizeType">1</Size>
+    <Module type = "string">.and2</Module>
+    <Scope type = "string">.and2</Scope>
+    <Delay type = "null-pointer"></Delay>
+    <LeftRange type = "int">0</LeftRange>
+    <RightRange type = "int">0</RightRange>
+  </Net>
+  <ContAssign type = "ContAssign">
+    <NetDeclAssign type = "bool">false</NetDeclAssign>
+    <vpiModule type = "string">.and2</vpiModule>
+    <Delay type = "null-pointer"></Delay>
+    <Lhs type = "Expr">
+      <ValueType type = "VlValueType">
+        <is_no_type() type = "bool">false</is_no_type()>
+        <is_int_type() type = "bool">false</is_int_type()>
+        <is_time_type() type = "bool">false</is_time_type()>
+        <is_bitvector_type() type = "bool">true</is_bitvector_type()>
+        <is_real_type() type = "bool">false</is_real_type()>
+        <is_signed() type = "bool">false</is_signed()>
+        <size type = "SizeType">1</size>
+      </ValueType>
+      <ReqType type = "VlValueType">
+        <is_no_type() type = "bool">false</is_no_type()>
+        <is_int_type() type = "bool">false</is_int_type()>
+        <is_time_type() type = "bool">false</is_time_type()>
+        <is_bitvector_type() type = "bool">true</is_bitvector_type()>
+        <is_real_type() type = "bool">false</is_real_type()>
+        <is_signed() type = "bool">false</is_signed()>
+        <size type = "SizeType">1</size>
+      </ReqType>
+      <ExprType type = "ExprType">PRIMARY</ExprType>
+      <PrimaryType type = "PrimaryType">DECL</PrimaryType>
+      <Decl type = "string">o</Decl>
+      <SelectType type = "SelectType">NONE</SelectType>
+    </Lhs>
+    <Rhs type = "Expr">
+      <ValueType type = "VlValueType">
+        <is_no_type() type = "bool">false</is_no_type()>
+        <is_int_type() type = "bool">false</is_int_type()>
+        <is_time_type() type = "bool">false</is_time_type()>
+        <is_bitvector_type() type = "bool">true</is_bitvector_type()>
+        <is_real_type() type = "bool">false</is_real_type()>
+        <is_signed() type = "bool">false</is_signed()>
+        <size type = "SizeType">1</size>
+      </ValueType>
+      <ReqType type = "VlValueType">
+        <is_no_type() type = "bool">false</is_no_type()>
+        <is_int_type() type = "bool">false</is_int_type()>
+        <is_time_type() type = "bool">false</is_time_type()>
+        <is_bitvector_type() type = "bool">true</is_bitvector_type()>
+        <is_real_type() type = "bool">false</is_real_type()>
+        <is_signed() type = "bool">false</is_signed()>
+        <size type = "SizeType">1</size>
+      </ReqType>
+      <ExprType type = "ExprType">OPERATION</ExprType>
+      <OpType type = "vpiOpType">vpiBitAndOp</OpType>
+      <Operand type = "Expr">
+        <ValueType type = "VlValueType">
+          <is_no_type() type = "bool">false</is_no_type()>
+          <is_int_type() type = "bool">false</is_int_type()>
+          <is_time_type() type = "bool">false</is_time_type()>
+          <is_bitvector_type() type = "bool">true</is_bitvector_type()>
+          <is_real_type() type = "bool">false</is_real_type()>
+          <is_signed() type = "bool">false</is_signed()>
+          <size type = "SizeType">1</size>
+        </ValueType>
+        <ReqType type = "VlValueType">
+          <is_no_type() type = "bool">false</is_no_type()>
+          <is_int_type() type = "bool">false</is_int_type()>
+          <is_time_type() type = "bool">false</is_time_type()>
+          <is_bitvector_type() type = "bool">true</is_bitvector_type()>
+          <is_real_type() type = "bool">false</is_real_type()>
+          <is_signed() type = "bool">false</is_signed()>
+          <size type = "SizeType">1</size>
+        </ReqType>
+        <ExprType type = "ExprType">PRIMARY</ExprType>
+        <PrimaryType type = "PrimaryType">DECL</PrimaryType>
+        <Decl type = "string">a</Decl>
+        <SelectType type = "SelectType">NONE</SelectType>
+      </Operand>
+      <Operand type = "Expr">
+        <ValueType type = "VlValueType">
+          <is_no_type() type = "bool">false</is_no_type()>
+          <is_int_type() type = "bool">false</is_int_type()>
+          <is_time_type() type = "bool">false</is_time_type()>
+          <is_bitvector_type() type = "bool">true</is_bitvector_type()>
+          <is_real_type() type = "bool">false</is_real_type()>
+          <is_signed() type = "bool">false</is_signed()>
+          <size type = "SizeType">1</size>
+        </ValueType>
+        <ReqType type = "VlValueType">
+          <is_no_type() type = "bool">false</is_no_type()>
+          <is_int_type() type = "bool">false</is_int_type()>
+          <is_time_type() type = "bool">false</is_time_type()>
+          <is_bitvector_type() type = "bool">true</is_bitvector_type()>
+          <is_real_type() type = "bool">false</is_real_type()>
+          <is_signed() type = "bool">false</is_signed()>
+          <size type = "SizeType">1</size>
+        </ReqType>
+        <ExprType type = "ExprType">PRIMARY</ExprType>
+        <PrimaryType type = "PrimaryType">DECL</PrimaryType>
+        <Decl type = "string">b</Decl>
+        <SelectType type = "SelectType">NONE</SelectType>
+      </Operand>
+    </Rhs>
+  </ContAssign>
+</MODULE>
