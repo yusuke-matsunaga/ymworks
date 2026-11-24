@@ -63,14 +63,24 @@ ClibCellPtr::~ClibCellPtr()
 ClibCellLibrary
 ClibCell::library() const
 {
-  return ClibCellLibrary{_impl()->library()};
+  _check_valid();
+  return ClibCellLibrary(_impl()->library());
 }
 
 // @brief 親のセルグループの取得
 ClibCellGroup
 ClibCell::group() const
 {
-  return ClibCellGroup{_impl()->group()};
+  _check_valid();
+  return ClibCellGroup(_impl()->group());
+}
+
+// @brief セルの種類を返す．
+ClibCellType
+ClibCell::cell_type() const
+{
+  _check_valid();
+  return _impl()->group()->cell_type();
 }
 
 // @brief 名前の取得

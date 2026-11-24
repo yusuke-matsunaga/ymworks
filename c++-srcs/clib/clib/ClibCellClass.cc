@@ -36,6 +36,14 @@ ClibCellClass::~ClibCellClass()
   }
 }
 
+// @brief セルの種類を返す．
+ClibCellType
+ClibCellClass::cell_type() const
+{
+  _check_valid();
+  return mImpl->cell_type();
+}
+
 // @brief 同位体変換の個数を得る．
 SizeType
 ClibCellClass::idmap_num() const

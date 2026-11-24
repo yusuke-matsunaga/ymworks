@@ -65,6 +65,12 @@ public:
   ClibCellGroup
   group() const;
 
+  /// @brief セルの種類を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellType
+  ClibCellType
+  cell_type() const;
+
   /// @brief 名前の取得
   /// @exception std::logic_error is_valid() = false の場合
   std::string

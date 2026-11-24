@@ -46,6 +46,12 @@ public:
   /// @{
   //////////////////////////////////////////////////////////////////////
 
+  /// @brief セルの種類を返す．
+  /// @exception std::logic_error is_valid() = false の場合
+  /// @sa ClibCellType
+  ClibCellType
+  cell_type() const;
+
   /// @brief 同位体変換の個数を得る．
   /// @exception std::logic_error is_valid() = false の場合
   ///
